@@ -19,9 +19,10 @@ public class PaginationTest extends TephraTestSupport {
     public void getPageSize() {
         mockHelper.mock("/pagination");
         Assert.assertEquals(0, pagination.getPageSize());
-
         mockHelper.getRequest().addParameter("page-size", "1");
+        Assert.assertEquals(0, pagination.getPageSize());
         mockHelper.getRequest().addParameter("pagesize", "2");
+        Assert.assertEquals(0, pagination.getPageSize());
         mockHelper.getRequest().addParameter("pageSize", "3");
         Assert.assertEquals(3, pagination.getPageSize());
     }
@@ -32,7 +33,9 @@ public class PaginationTest extends TephraTestSupport {
         Assert.assertEquals(0, pagination.getPageNum());
 
         mockHelper.getRequest().addParameter("page-num", "1");
+        Assert.assertEquals(0, pagination.getPageNum());
         mockHelper.getRequest().addParameter("pagenum", "2");
+        Assert.assertEquals(0, pagination.getPageNum());
         mockHelper.getRequest().addParameter("pageNum", "3");
         Assert.assertEquals(3, pagination.getPageNum());
     }
