@@ -82,14 +82,38 @@ public class ClassifyServiceImpl implements ClassifyService, DateJob {
         return null;
     }
 
+    @SuppressWarnings({"unchecked"})
     @Override
-    public JSONObject getJsons(String[] ids) {
+    public JSONObject getJsons(String[] ids, boolean links) {
         JSONObject object = new JSONObject();
         if (validator.isEmpty(ids))
             return object;
 
-        for (String id : ids)
-            object.put(id, getJson(id, null, Recycle.No));
+        for (String id : ids) {
+            JSONObject json = getJson(id, null, Recycle.No);
+            if (json.isEmpty())
+                continue;
+
+            object.put(id, json);
+            if (links && json.has("label")) {
+                Object obj = json.get("label");
+                if (!(obj instanceof JSONObject))
+                    continue;
+
+                JSONObject label = (JSONObject) obj;
+                if (label.has("links") && label.getBoolean("links")) {
+                    label.keySet().forEach(key -> {
+                        String name = (String) key;
+                        if (name.equals("links"))
+                            return;
+
+                        JSONObject link = getJson(name, null, Recycle.No);
+                        if (!link.isEmpty())
+                            object.put(name, link);
+                    });
+                }
+            }
+        }
 
         return object;
     }

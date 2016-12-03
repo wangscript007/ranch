@@ -26,10 +26,11 @@ public interface ClassifyService {
     /**
      * 查找分类信息。
      *
-     * @param ids ID集。
+     * @param ids   ID集。
+     * @param links 是否解析链接分类。
      * @return 分类信息，如果不存在则返回空JSON。
      */
-    JSONObject getJsons(String[] ids);
+    JSONObject getJsons(String[] ids, boolean links);
 
     /**
      * 创建新分类。
