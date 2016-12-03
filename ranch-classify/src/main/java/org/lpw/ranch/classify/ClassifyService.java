@@ -1,5 +1,6 @@
 package org.lpw.ranch.classify;
 
+import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
 /**
@@ -20,7 +21,7 @@ public interface ClassifyService {
      * @param code 编码前缀。
      * @return 分类信息树。
      */
-    JSONObject tree(String code);
+    JSONArray tree(String code);
 
     /**
      * 查找分类信息。
@@ -57,4 +58,23 @@ public interface ClassifyService {
      * @param id ID值。
      */
     void delete(String id);
+
+    /**
+     * 检索回收站分类信息集。
+     *
+     * @return 分类信息集。
+     */
+    JSONObject recycle();
+
+    /**
+     * （从回收站）还原分类数据。
+     *
+     * @param id ID值。
+     */
+    void restore(String id);
+
+    /**
+     * 刷新缓存。
+     */
+    void refresh();
 }

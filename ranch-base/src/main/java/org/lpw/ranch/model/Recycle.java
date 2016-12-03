@@ -16,11 +16,11 @@ public enum Recycle {
     No(0);
 
     private int value;
-    private String where;
+    private String sql;
 
     Recycle(int value) {
         this.value = value;
-        where = "c_recycle=" + value;
+        sql = "c_recycle=" + value;
     }
 
     /**
@@ -33,11 +33,11 @@ public enum Recycle {
     }
 
     /**
-     * 获取WHERE条件。
+     * 获取SQL表达式。
      *
-     * @return WHERE条件。
+     * @return SQL表达式。
      */
-    public String getWhere() {
-        return where;
+    public String getSql() {
+        return sql;
     }
 }

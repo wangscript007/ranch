@@ -35,6 +35,19 @@ public class ClassifyCtrl {
     }
 
     /**
+     * 检索分类信息树。
+     * code 编码前缀，会自动匹配【code+%】。
+     *
+     * @return [ClassifyModel]。
+     */
+    @Execute(name = "tree", validates = {
+            @Validate(validator = Validators.NOT_EMPTY, parameter = "code", failureCode = 2)
+    })
+    public Object tree() {
+        return classifyService.tree(request.get("code"));
+    }
+
+    /**
      * 获取分类信息。
      * ids 分类信息ID集。
      *
@@ -95,6 +108,50 @@ public class ClassifyCtrl {
     })
     public Object delete() {
         classifyService.delete(request.get("id"));
+
+        return "";
+    }
+
+    /**
+     * 检索分类信息集。
+     * pageSize 每页显示最大记录数。
+     * pageNum 当前显示页码。
+     *
+     * @return {PageList}。
+     */
+    @Execute(name = "recycle", validates = {
+            @Validate(validator = Validators.SIGN, failureCode = 91)
+    })
+    public Object recycle() {
+        return classifyService.recycle();
+    }
+
+    /**
+     * （从回收站）还原分类数据。
+     * id ID值。
+     *
+     * @return ""。
+     */
+    @Execute(name = "restore", validates = {
+            @Validate(validator = Validators.ID, parameter = "id", failureCode = 1),
+            @Validate(validator = Validators.SIGN, failureCode = 91)
+    })
+    public Object restore() {
+        classifyService.restore(request.get("id"));
+
+        return "";
+    }
+
+    /**
+     * 刷新缓存信息。
+     *
+     * @return ""。
+     */
+    @Execute(name = "refresh", validates = {
+            @Validate(validator = Validators.SIGN, failureCode = 91)
+    })
+    public Object refresh() {
+        classifyService.refresh();
 
         return "";
     }
