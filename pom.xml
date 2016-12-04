@@ -12,6 +12,7 @@
         <module>ranch-base</module>
         <module>ranch-gps</module>
         <module>ranch-classify</module>
+        <module>ranch-web</module>
     </modules>
 
     <build>

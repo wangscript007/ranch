@@ -30,7 +30,7 @@ public class GpsCtrlTest extends TephraTestSupport {
         mockHelper.mock("/gps/address");
         JSONObject object = mockHelper.getResponse().asJson();
         Assert.assertEquals(1101, object.getInt("code"));
-        Assert.assertEquals(message.get(Validators.PREFIX+"not-match-regex", message.get(GpsModel.NAME + ".lat"), "^-?\\d{1,3}\\.\\d+$"),
+        Assert.assertEquals(message.get(Validators.PREFIX + "not-match-regex", message.get(GpsModel.NAME + ".lat"), "^-?\\d{1,3}\\.\\d+$"),
                 object.getString("message"));
 
         mockHelper.reset();
@@ -38,7 +38,7 @@ public class GpsCtrlTest extends TephraTestSupport {
         mockHelper.mock("/gps/address");
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(1101, object.getInt("code"));
-        Assert.assertEquals(message.get(Validators.PREFIX+"not-match-regex", message.get(GpsModel.NAME + ".lat"), "^-?\\d{1,3}\\.\\d+$"),
+        Assert.assertEquals(message.get(Validators.PREFIX + "not-match-regex", message.get(GpsModel.NAME + ".lat"), "^-?\\d{1,3}\\.\\d+$"),
                 object.getString("message"));
 
         mockHelper.reset();
@@ -46,7 +46,7 @@ public class GpsCtrlTest extends TephraTestSupport {
         mockHelper.mock("/gps/address");
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(1102, object.getInt("code"));
-        Assert.assertEquals(message.get(Validators.PREFIX+"not-match-regex", message.get(GpsModel.NAME + ".lng"), "^\\d{1,3}\\.\\d+$"),
+        Assert.assertEquals(message.get(Validators.PREFIX + "not-match-regex", message.get(GpsModel.NAME + ".lng"), "^\\d{1,3}\\.\\d+$"),
                 object.getString("message"));
 
         mockHelper.reset();
@@ -55,7 +55,7 @@ public class GpsCtrlTest extends TephraTestSupport {
         mockHelper.mock("/gps/address");
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(1102, object.getInt("code"));
-        Assert.assertEquals(message.get(Validators.PREFIX+"not-match-regex", message.get(GpsModel.NAME + ".lng"), "^\\d{1,3}\\.\\d+$"),
+        Assert.assertEquals(message.get(Validators.PREFIX + "not-match-regex", message.get(GpsModel.NAME + ".lng"), "^\\d{1,3}\\.\\d+$"),
                 object.getString("message"));
 
         mockHelper.reset();
@@ -64,7 +64,7 @@ public class GpsCtrlTest extends TephraTestSupport {
         mockHelper.mock("/gps/address");
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(1102, object.getInt("code"));
-        Assert.assertEquals(message.get(Validators.PREFIX+"not-match-regex", message.get(GpsModel.NAME + ".lng"), "^\\d{1,3}\\.\\d+$"),
+        Assert.assertEquals(message.get(Validators.PREFIX + "not-match-regex", message.get(GpsModel.NAME + ".lng"), "^\\d{1,3}\\.\\d+$"),
                 object.getString("message"));
 
         mockHelper.reset();
@@ -82,6 +82,7 @@ public class GpsCtrlTest extends TephraTestSupport {
         Assert.assertEquals("东城区", component.getString("district"));
         Assert.assertEquals("东华门大街", component.getString("street"));
         Assert.assertEquals("", component.getString("street_number"));
+        Assert.assertEquals("110101", data.getString("adcode"));
 
         Field field = GpsServiceImpl.class.getDeclaredField("qqlbsKey");
         field.setAccessible(true);

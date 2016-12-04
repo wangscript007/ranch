@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 /**
  * @author lpw
  */
-@Service("ranch.model.recycle.service")
+@Service(TestModel.NAME + ".service")
 public class TestRecycleServiceImpl implements TestRecycleService {
     private String deleteId;
     private JSONObject recycle;
