@@ -7,13 +7,13 @@ package org.lpw.ranch.model;
  */
 public enum Recycle {
     /**
-     * 回收站数据。
-     */
-    Yes(1),
-    /**
      * 非回收站数据。
      */
-    No(0);
+    No(0),
+    /**
+     * 回收站数据。
+     */
+    Yes(1);
 
     private int value;
     private String sql;

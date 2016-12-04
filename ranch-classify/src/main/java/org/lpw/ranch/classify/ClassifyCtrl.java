@@ -1,5 +1,7 @@
 package org.lpw.ranch.classify;
 
+import org.lpw.ranch.model.RecycleCtrlSupport;
+import org.lpw.ranch.model.RecycleService;
 import org.lpw.tephra.ctrl.context.Request;
 import org.lpw.tephra.ctrl.execute.Execute;
 import org.lpw.tephra.ctrl.template.Templates;
@@ -13,9 +15,7 @@ import org.springframework.stereotype.Controller;
  */
 @Controller(ClassifyModel.NAME + ".ctrl")
 @Execute(name = "/classify/", key = ClassifyModel.NAME, code = "12")
-public class ClassifyCtrl {
-    @Autowired
-    protected Request request;
+public class ClassifyCtrl extends RecycleCtrlSupport{
     @Autowired
     protected Templates templates;
     @Autowired
@@ -98,52 +98,6 @@ public class ClassifyCtrl {
     }
 
     /**
-     * 删除分类信息。
-     * id ID值。
-     *
-     * @return ""。
-     */
-    @Execute(name = "delete", validates = {
-            @Validate(validator = Validators.ID, parameter = "id", failureCode = 1),
-            @Validate(validator = Validators.SIGN, failureCode = 91)
-    })
-    public Object delete() {
-        classifyService.delete(request.get("id"));
-
-        return "";
-    }
-
-    /**
-     * 检索分类信息集。
-     * pageSize 每页显示最大记录数。
-     * pageNum 当前显示页码。
-     *
-     * @return {PageList}。
-     */
-    @Execute(name = "recycle", validates = {
-            @Validate(validator = Validators.SIGN, failureCode = 91)
-    })
-    public Object recycle() {
-        return classifyService.recycle();
-    }
-
-    /**
-     * （从回收站）还原分类数据。
-     * id ID值。
-     *
-     * @return ""。
-     */
-    @Execute(name = "restore", validates = {
-            @Validate(validator = Validators.ID, parameter = "id", failureCode = 1),
-            @Validate(validator = Validators.SIGN, failureCode = 91)
-    })
-    public Object restore() {
-        classifyService.restore(request.get("id"));
-
-        return "";
-    }
-
-    /**
      * 刷新缓存信息。
      *
      * @return ""。
@@ -155,5 +109,10 @@ public class ClassifyCtrl {
         classifyService.refresh();
 
         return "";
+    }
+
+    @Override
+    protected RecycleService getRecycleService() {
+        return classifyService;
     }
 }

@@ -7,7 +7,7 @@ import org.lpw.tephra.test.mock.MockHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
- * @auth lpw
+ * @author lpw
  */
 public class PaginationTest extends TephraTestSupport {
     @Autowired

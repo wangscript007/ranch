@@ -2,11 +2,12 @@ package org.lpw.ranch.classify;
 
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
+import org.lpw.ranch.model.RecycleService;
 
 /**
  * @author lpw
  */
-public interface ClassifyService {
+public interface ClassifyService extends RecycleService {
     /**
      * 检索分类信息集。
      *
@@ -52,27 +53,6 @@ public interface ClassifyService {
      * @return 分类JSON格式数据。
      */
     JSONObject modify(String id, String code, String name, String label);
-
-    /**
-     * 删除分类信息。
-     *
-     * @param id ID值。
-     */
-    void delete(String id);
-
-    /**
-     * 检索回收站分类信息集。
-     *
-     * @return 分类信息集。
-     */
-    JSONObject recycle();
-
-    /**
-     * （从回收站）还原分类数据。
-     *
-     * @param id ID值。
-     */
-    void restore(String id);
 
     /**
      * 刷新缓存。

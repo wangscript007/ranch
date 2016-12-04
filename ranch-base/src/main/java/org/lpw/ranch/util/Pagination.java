@@ -3,7 +3,7 @@ package org.lpw.ranch.util;
 /**
  * 分页。
  *
- * @auth lpw
+ * @author lpw
  */
 public interface Pagination {
     /**

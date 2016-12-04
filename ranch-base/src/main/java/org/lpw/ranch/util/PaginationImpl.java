@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 /**
- * @auth lpw
+ * @author lpw
  */
 @Controller("ranch.util.pagination")
 public class PaginationImpl implements Pagination {
