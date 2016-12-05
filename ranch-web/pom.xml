@@ -22,6 +22,11 @@
             <version>1.0.0-RELEASE</version>
         </dependency>
         <dependency>
+            <groupId>org.lpw.ranch</groupId>
+            <artifactId>ranch-comment</artifactId>
+            <version>1.0.0-RELEASE</version>
+        </dependency>
+        <dependency>
             <groupId>org.lpw.tephra</groupId>
             <artifactId>tephra-web</artifactId>
             <version>1.0.0-RELEASE</version>

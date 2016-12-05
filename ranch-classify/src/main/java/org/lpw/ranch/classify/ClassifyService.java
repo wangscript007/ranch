@@ -2,7 +2,7 @@ package org.lpw.ranch.classify;
 
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
-import org.lpw.ranch.model.RecycleService;
+import org.lpw.ranch.recycle.RecycleService;
 
 /**
  * @author lpw

@@ -1,6 +1,6 @@
 package org.lpw.ranch.classify;
 
-import org.lpw.ranch.model.ModelSupport;
+import org.lpw.ranch.recycle.RecycleModelSupport;
 import org.lpw.tephra.dao.model.Jsonable;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.Scope;
@@ -17,7 +17,7 @@ import javax.persistence.Table;
 @Scope(BeanDefinition.SCOPE_PROTOTYPE)
 @Entity(name = ClassifyModel.NAME)
 @Table(name = "t_classify")
-public class ClassifyModel extends ModelSupport {
+public class ClassifyModel extends RecycleModelSupport {
     static final String NAME = "ranch.classify";
 
     private String code; // 编码

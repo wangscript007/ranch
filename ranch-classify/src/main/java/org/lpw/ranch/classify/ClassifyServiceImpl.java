@@ -2,7 +2,7 @@ package org.lpw.ranch.classify;
 
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
-import org.lpw.ranch.model.Recycle;
+import org.lpw.ranch.recycle.Recycle;
 import org.lpw.ranch.util.Pagination;
 import org.lpw.tephra.cache.Cache;
 import org.lpw.tephra.dao.orm.PageList;

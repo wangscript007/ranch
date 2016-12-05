@@ -1,6 +1,6 @@
 package org.lpw.ranch.classify;
 
-import org.lpw.ranch.model.Recycle;
+import org.lpw.ranch.recycle.Recycle;
 import org.lpw.tephra.dao.jdbc.DataSource;
 import org.lpw.tephra.dao.orm.PageList;
 import org.lpw.tephra.dao.orm.lite.LiteOrm;
