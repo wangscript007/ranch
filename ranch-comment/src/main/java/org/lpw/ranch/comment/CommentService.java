@@ -1,9 +1,11 @@
 package org.lpw.ranch.comment;
 
+import org.lpw.ranch.audit.AuditService;
+
 /**
  * @author lpw
  */
-public interface CommentService {
+public interface CommentService extends AuditService {
     /**
      * 创建新评论。
      *

@@ -1,5 +1,7 @@
 package org.lpw.ranch.comment;
 
+import org.lpw.ranch.audit.AuditCtrlSupport;
+import org.lpw.ranch.audit.AuditService;
 import org.lpw.tephra.ctrl.context.Request;
 import org.lpw.tephra.ctrl.execute.Execute;
 import org.lpw.tephra.ctrl.validate.Validate;
@@ -12,7 +14,7 @@ import org.springframework.stereotype.Controller;
  */
 @Controller(CommentModel.NAME + ".ctrl")
 @Execute(name = "/comment/", key = CommentModel.NAME, code = "13")
-public class CommentCtrl {
+public class CommentCtrl extends AuditCtrlSupport {
     @Autowired
     protected Request request;
     @Autowired
@@ -42,5 +44,10 @@ public class CommentCtrl {
     })
     public Object create() {
         return commentService.create(request.setToModel(new CommentModel()));
+    }
+
+    @Override
+    protected AuditService getAuditService() {
+        return commentService;
     }
 }
