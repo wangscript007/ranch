@@ -3,7 +3,6 @@ package org.lpw.ranch.classify;
 import net.sf.json.JSONObject;
 import org.junit.Assert;
 import org.junit.Test;
-import org.lpw.tephra.dao.orm.lite.LiteQuery;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +14,7 @@ public class GetTest extends TestSupport {
     @Test
     public void get() {
         mockScheduler.pause();
-        liteOrm.delete(new LiteQuery(ClassifyModel.class), null);
+        clean();
         List<ClassifyModel> list = new ArrayList<>();
         for (int i = 0; i < 5; i++)
             list.add(create(i, null, i % 2 == 0));

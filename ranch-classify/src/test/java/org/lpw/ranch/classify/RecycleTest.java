@@ -5,15 +5,14 @@ import net.sf.json.JSONObject;
 import org.junit.Assert;
 import org.junit.Test;
 import org.lpw.tephra.ctrl.validate.Validators;
-import org.lpw.tephra.dao.orm.lite.LiteQuery;
 
 /**
  * @author lpw
  */
-public class RecycleTest extends TestSupport{
+public class RecycleTest extends TestSupport {
     @Test
     public void recycle() {
-        liteOrm.delete(new LiteQuery(ClassifyModel.class), null);
+        clean();
         for (int i = 0; i < 20; i++)
             create(10 + i, i % 2 == 0);
 

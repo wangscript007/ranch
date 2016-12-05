@@ -4,7 +4,6 @@ import net.sf.json.JSONObject;
 import org.junit.Assert;
 import org.junit.Test;
 import org.lpw.tephra.ctrl.validate.Validators;
-import org.lpw.tephra.dao.orm.lite.LiteQuery;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,10 +11,10 @@ import java.util.List;
 /**
  * @author lpw
  */
-public class ModifyTest extends TestSupport{
+public class ModifyTest extends TestSupport {
     @Test
     public void modify() {
-        liteOrm.delete(new LiteQuery(ClassifyModel.class), null);
+        clean();
         List<ClassifyModel> list = new ArrayList<>();
         for (int i = 0; i < 2; i++)
             list.add(create(i, false));

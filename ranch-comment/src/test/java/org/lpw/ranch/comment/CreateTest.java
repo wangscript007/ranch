@@ -140,7 +140,7 @@ public class CreateTest extends TestSupport {
         Assert.assertEquals("label", data.getString("label"));
         Assert.assertEquals("content", data.getString("content"));
         Assert.assertEquals(3, data.getInt("score"));
-        Assert.assertEquals(0, data.getInt("audit"));
+        Assert.assertEquals(2, data.getInt("audit"));
         Assert.assertTrue(System.currentTimeMillis() - converter.toDate(data.getString("time"), "yyyy-MM-dd HH:mm:ss").getTime() < 2000L);
     }
 }

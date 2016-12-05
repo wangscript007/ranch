@@ -4,7 +4,6 @@ import net.sf.json.JSONObject;
 import org.junit.Assert;
 import org.junit.Test;
 import org.lpw.tephra.ctrl.validate.Validators;
-import org.lpw.tephra.dao.orm.lite.LiteQuery;
 
 /**
  * @author lpw
@@ -12,7 +11,7 @@ import org.lpw.tephra.dao.orm.lite.LiteQuery;
 public class CreateTest extends TestSupport {
     @Test
     public void create() {
-        liteOrm.delete(new LiteQuery(ClassifyModel.class), null);
+        clean();
         mockHelper.reset();
         mockHelper.mock("/classify/create");
         JSONObject object = mockHelper.getResponse().asJson();

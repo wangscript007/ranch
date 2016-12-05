@@ -5,7 +5,6 @@ import net.sf.json.JSONObject;
 import org.junit.Assert;
 import org.junit.Test;
 import org.lpw.ranch.recycle.Recycle;
-import org.lpw.tephra.dao.orm.lite.LiteQuery;
 
 /**
  * @author lpw
@@ -13,7 +12,7 @@ import org.lpw.tephra.dao.orm.lite.LiteQuery;
 public class QueryTest extends TestSupport {
     @Test
     public void query() {
-        liteOrm.delete(new LiteQuery(ClassifyModel.class), null);
+        clean();
         for (int i = 0; i < 20; i++) {
             ClassifyModel classify = new ClassifyModel();
             classify.setCode("code " + converter.toString(i, "00"));

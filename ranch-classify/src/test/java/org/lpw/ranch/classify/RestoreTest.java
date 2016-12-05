@@ -5,7 +5,6 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.lpw.ranch.recycle.Recycle;
 import org.lpw.tephra.ctrl.validate.Validators;
-import org.lpw.tephra.dao.orm.lite.LiteQuery;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,10 +12,10 @@ import java.util.List;
 /**
  * @author lpw
  */
-public class RestoreTest extends TestSupport{
+public class RestoreTest extends TestSupport {
     @Test
     public void restore() {
-        liteOrm.delete(new LiteQuery(ClassifyModel.class), null);
+        clean();
         List<ClassifyModel> list = new ArrayList<>();
         for (int i = 0; i < 20; i++)
             list.add(create(i, true));

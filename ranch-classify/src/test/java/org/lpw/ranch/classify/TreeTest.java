@@ -6,17 +6,16 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.lpw.ranch.recycle.Recycle;
 import org.lpw.tephra.ctrl.validate.Validators;
-import org.lpw.tephra.dao.orm.lite.LiteQuery;
 
 /**
  * @author lpw
  */
-public class TreeTest extends TestSupport{
+public class TreeTest extends TestSupport {
     @Test
     public void tree() {
         mockScheduler.pause();
         cache.remove(ClassifyModel.NAME + ".service.tree:");
-        liteOrm.delete(new LiteQuery(ClassifyModel.class), null);
+        clean();
         ClassifyModel classify1a = create(1, false);
         ClassifyModel classify1b = create(1, false);
         create(1, true);
