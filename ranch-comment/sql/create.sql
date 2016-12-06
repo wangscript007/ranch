@@ -13,6 +13,7 @@ CREATE TABLE t_comment
   c_audit INT DEFAULT 0 COMMENT '审核：0-待审核；1-审核通过；2-审核不通过',
 
   PRIMARY KEY pk_comment(c_id),
-  KEY k_comment_owner(c_audit,c_owner,c_time),
+  KEY k_comment_audit(c_audit,c_time),
+  KEY k_comment_audit_owner(c_audit,c_owner,c_time),
   KEY k_comment_author(c_author,c_time)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

@@ -36,10 +36,14 @@ public class TestSupport extends TephraTestSupport {
     }
 
     protected CommentModel create(int i, Audit audit) {
+        return create(i, "owner " + i, "author " + i, audit);
+    }
+
+    protected CommentModel create(int i, String owner, String author, Audit audit) {
         CommentModel comment = new CommentModel();
         comment.setKey("key " + i);
-        comment.setOwner("owner " + i);
-        comment.setAuthor("author " + i);
+        comment.setOwner(owner);
+        comment.setAuthor(author);
         comment.setSubject("subject " + i);
         comment.setLabel("label " + i);
         comment.setContent("content " + i);
@@ -51,7 +55,7 @@ public class TestSupport extends TephraTestSupport {
         return comment;
     }
 
-    protected CommentModel findById(String id){
-        return liteOrm.findById(CommentModel.class,id);
+    protected CommentModel findById(String id) {
+        return liteOrm.findById(CommentModel.class, id);
     }
 }

@@ -21,6 +21,52 @@ public class CommentCtrl extends AuditCtrlSupport {
     protected CommentService commentService;
 
     /**
+     * 检索评论集。
+     * audit 审核状态。
+     * pageSize 每页显示记录数。
+     * pageNum 当前显示页数。
+     *
+     * @return {PageList}。
+     */
+    @Execute(name = "query", validates = {
+            @Validate(validator = Validators.BETWEEN, number = {0, 2}, parameter = "audit", failureCode = 9),
+            @Validate(validator = Validators.SIGN, failureCode = 91)
+    })
+    public Object query() {
+        return commentService.query(request.getAsInt("audit"));
+    }
+
+    /**
+     * 检索评论集。
+     * owner 所有者ID。
+     * pageSize 每页显示记录数。
+     * pageNum 当前显示页数。
+     *
+     * @return {PageList}。
+     */
+    @Execute(name = "query-by-owner", validates = {
+            @Validate(validator = Validators.ID, parameter = "owner", failureCode = 3)
+    })
+    public Object queryByOwner() {
+        return commentService.queryByOwner(request.get("owner"));
+    }
+
+    /**
+     * 检索评论集。
+     * owner 作者ID。
+     * pageSize 每页显示记录数。
+     * pageNum 当前显示页数。
+     *
+     * @return {PageList}。
+     */
+    @Execute(name = "query-by-author", validates = {
+            @Validate(validator = Validators.ID, parameter = "author", failureCode = 4)
+    })
+    public Object queryByAuthor() {
+        return commentService.queryByAuthor(request.get("author"));
+    }
+
+    /**
      * 创建新回复。
      * key 服务key。
      * owner 所有者ID。
