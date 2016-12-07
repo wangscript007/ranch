@@ -71,7 +71,7 @@ public class ClassifyCtrl extends RecycleCtrlSupport{
             @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "code", failureCode = 3),
             @Validate(validator = Validators.NOT_EMPTY, parameter = "name", failureCode = 4),
             @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "name", failureCode = 5),
-            @Validate(validator = Validators.SIGN, failureCode = 91)
+            @Validate(validator = Validators.SIGN)
     })
     public Object create() {
         return templates.get().success(classifyService.create(request.get("code"), request.get("name"), request.get("label")), null);
@@ -90,7 +90,7 @@ public class ClassifyCtrl extends RecycleCtrlSupport{
             @Validate(validator = Validators.ID, parameter = "id", failureCode = 1),
             @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "code", failureCode = 3),
             @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "name", failureCode = 5),
-            @Validate(validator = Validators.SIGN, failureCode = 91)
+            @Validate(validator = Validators.SIGN)
     })
     public Object modify() {
         return templates.get().success(classifyService.modify(request.get("id"), request.get("code"), request.get("name"), request.get("label")), null);
@@ -102,7 +102,7 @@ public class ClassifyCtrl extends RecycleCtrlSupport{
      * @return ""。
      */
     @Execute(name = "refresh", validates = {
-            @Validate(validator = Validators.SIGN, failureCode = 91)
+            @Validate(validator = Validators.SIGN)
     })
     public Object refresh() {
         classifyService.refresh();

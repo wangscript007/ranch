@@ -23,7 +23,7 @@ public abstract class RecycleCtrlSupport {
      */
     @Execute(name = "delete", validates = {
             @Validate(validator = Validators.ID, parameter = "id", failureCode = 1),
-            @Validate(validator = Validators.SIGN, failureCode = 91)
+            @Validate(validator = Validators.SIGN)
     })
     public Object delete() {
         getRecycleService().delete(request.get("id"));
@@ -39,7 +39,7 @@ public abstract class RecycleCtrlSupport {
      * @return {PageList}。
      */
     @Execute(name = "recycle", validates = {
-            @Validate(validator = Validators.SIGN, failureCode = 91)
+            @Validate(validator = Validators.SIGN)
     })
     public Object recycle() {
         return getRecycleService().recycle();
@@ -53,7 +53,7 @@ public abstract class RecycleCtrlSupport {
      */
     @Execute(name = "restore", validates = {
             @Validate(validator = Validators.ID, parameter = "id", failureCode = 1),
-            @Validate(validator = Validators.SIGN, failureCode = 91)
+            @Validate(validator = Validators.SIGN)
     })
     public Object restore() {
         getRecycleService().restore(request.get("id"));

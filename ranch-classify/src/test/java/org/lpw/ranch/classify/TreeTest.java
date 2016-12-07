@@ -15,7 +15,6 @@ public class TreeTest extends TestSupport {
     public void tree() {
         mockScheduler.pause();
         cache.remove(ClassifyModel.NAME + ".service.tree:");
-        clean();
         ClassifyModel classify1a = create(1, false);
         ClassifyModel classify1b = create(1, false);
         create(1, true);

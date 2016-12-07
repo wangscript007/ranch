@@ -16,7 +16,6 @@ import java.util.List;
 public class QueryByOwnerTest extends TestSupport {
     @Test
     public void queryByOwner() {
-        clean();
         String[] owners = new String[]{generator.uuid(), generator.uuid()};
         List<CommentModel> list = new ArrayList<>();
         for (int i = 0; i < 20; i++)

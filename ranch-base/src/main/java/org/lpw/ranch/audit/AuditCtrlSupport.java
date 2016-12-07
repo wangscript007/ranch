@@ -21,7 +21,7 @@ public abstract class AuditCtrlSupport {
      *
      * @return ""。
      */
-    @Execute(name = "pass", validates = {@Validate(validator = Validators.SIGN, failureCode = 91)})
+    @Execute(name = "pass", validates = {@Validate(validator = Validators.SIGN)})
     public Object pass() {
         getAuditService().pass(request.getAsArray("ids"));
 
@@ -34,7 +34,7 @@ public abstract class AuditCtrlSupport {
      *
      * @return ""。
      */
-    @Execute(name = "refuse", validates = {@Validate(validator = Validators.SIGN, failureCode = 91)})
+    @Execute(name = "refuse", validates = {@Validate(validator = Validators.SIGN)})
     public Object refuse() {
         getAuditService().refuse(request.getAsArray("ids"));
 

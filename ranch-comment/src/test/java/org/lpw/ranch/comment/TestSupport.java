@@ -1,9 +1,9 @@
 package org.lpw.ranch.comment;
 
 import org.lpw.ranch.audit.Audit;
+import org.lpw.ranch.audit.AuditTesterDao;
 import org.lpw.tephra.ctrl.context.Request;
 import org.lpw.tephra.dao.orm.lite.LiteOrm;
-import org.lpw.tephra.dao.orm.lite.LiteQuery;
 import org.lpw.tephra.test.TephraTestSupport;
 import org.lpw.tephra.test.mock.MockHelper;
 import org.lpw.tephra.util.Converter;
@@ -17,7 +17,7 @@ import java.sql.Timestamp;
 /**
  * @author lpw
  */
-public class TestSupport extends TephraTestSupport {
+public class TestSupport extends TephraTestSupport implements AuditTesterDao<CommentModel> {
     @Autowired
     protected Message message;
     @Autowired
@@ -31,11 +31,7 @@ public class TestSupport extends TephraTestSupport {
     @Autowired
     protected MockHelper mockHelper;
 
-    protected void clean() {
-        liteOrm.delete(new LiteQuery(CommentModel.class), null);
-    }
-
-    protected CommentModel create(int i, Audit audit) {
+    public CommentModel create(int i, Audit audit) {
         return create(i, "owner " + i, "author " + i, audit);
     }
 
@@ -55,7 +51,7 @@ public class TestSupport extends TephraTestSupport {
         return comment;
     }
 
-    protected CommentModel findById(String id) {
+    public CommentModel findById(String id) {
         return liteOrm.findById(CommentModel.class, id);
     }
 }

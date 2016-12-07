@@ -16,7 +16,6 @@ import java.util.List;
 public class QueryTest extends TestSupport {
     @Test
     public void query() {
-        clean();
         List<CommentModel> list = new ArrayList<>();
         for (int i = 0; i < 10; i++)
             list.add(create(i, Audit.values()[i % 3]));

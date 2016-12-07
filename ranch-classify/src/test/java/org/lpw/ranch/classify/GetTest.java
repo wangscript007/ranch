@@ -14,7 +14,6 @@ public class GetTest extends TestSupport {
     @Test
     public void get() {
         mockScheduler.pause();
-        clean();
         List<ClassifyModel> list = new ArrayList<>();
         for (int i = 0; i < 5; i++)
             list.add(create(i, null, i % 2 == 0));

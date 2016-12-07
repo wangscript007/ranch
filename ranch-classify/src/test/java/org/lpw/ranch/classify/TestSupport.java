@@ -6,7 +6,6 @@ import org.lpw.ranch.recycle.Recycle;
 import org.lpw.tephra.cache.Cache;
 import org.lpw.tephra.ctrl.context.Request;
 import org.lpw.tephra.dao.orm.lite.LiteOrm;
-import org.lpw.tephra.dao.orm.lite.LiteQuery;
 import org.lpw.tephra.test.MockScheduler;
 import org.lpw.tephra.test.TephraTestSupport;
 import org.lpw.tephra.test.mock.MockHelper;
@@ -37,10 +36,6 @@ public class TestSupport extends TephraTestSupport {
     protected MockScheduler mockScheduler;
     @Autowired
     protected ClassifyService classifyService;
-
-    protected void clean() {
-        liteOrm.delete(new LiteQuery(ClassifyModel.class), null);
-    }
 
     protected void equalsCodeName(JSONObject object, String code, String name) {
         Assert.assertEquals(code, object.getString("code"));

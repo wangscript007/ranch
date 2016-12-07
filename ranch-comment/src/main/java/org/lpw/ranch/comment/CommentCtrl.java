@@ -30,7 +30,7 @@ public class CommentCtrl extends AuditCtrlSupport {
      */
     @Execute(name = "query", validates = {
             @Validate(validator = Validators.BETWEEN, number = {0, 2}, parameter = "audit", failureCode = 9),
-            @Validate(validator = Validators.SIGN, failureCode = 91)
+            @Validate(validator = Validators.SIGN)
     })
     public Object query() {
         return commentService.query(request.getAsInt("audit"));

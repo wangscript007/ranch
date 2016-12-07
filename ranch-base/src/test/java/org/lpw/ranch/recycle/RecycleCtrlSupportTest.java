@@ -32,7 +32,7 @@ public class RecycleCtrlSupportTest extends TephraTestSupport {
         mockHelper.mock("/recycle/delete");
         JSONObject object = mockHelper.getResponse().asJson();
         Assert.assertEquals(9901, object.getInt("code"));
-        Assert.assertEquals(message.get(Validators.PREFIX + "illegal-id", message.get(TestRecycleModel.NAME+".id")), object.getString("message"));
+        Assert.assertEquals(message.get(Validators.PREFIX + "illegal-id", message.get(TestRecycleModel.NAME + ".id")), object.getString("message"));
         Assert.assertNull(recycleService.getDeleteId());
 
         mockHelper.reset();
@@ -40,7 +40,7 @@ public class RecycleCtrlSupportTest extends TephraTestSupport {
         mockHelper.mock("/recycle/delete");
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(9901, object.getInt("code"));
-        Assert.assertEquals(message.get(Validators.PREFIX + "illegal-id", message.get(TestRecycleModel.NAME+".id")), object.getString("message"));
+        Assert.assertEquals(message.get(Validators.PREFIX + "illegal-id", message.get(TestRecycleModel.NAME + ".id")), object.getString("message"));
         Assert.assertNull(recycleService.getDeleteId());
 
         String id = generator.uuid();
@@ -89,7 +89,7 @@ public class RecycleCtrlSupportTest extends TephraTestSupport {
         mockHelper.mock("/recycle/restore");
         JSONObject object = mockHelper.getResponse().asJson();
         Assert.assertEquals(9901, object.getInt("code"));
-        Assert.assertEquals(message.get(Validators.PREFIX + "illegal-id", message.get(TestRecycleModel.NAME+".id")), object.getString("message"));
+        Assert.assertEquals(message.get(Validators.PREFIX + "illegal-id", message.get(TestRecycleModel.NAME + ".id")), object.getString("message"));
         Assert.assertNull(recycleService.getRestoreId());
 
         mockHelper.reset();
@@ -97,7 +97,7 @@ public class RecycleCtrlSupportTest extends TephraTestSupport {
         mockHelper.mock("/recycle/restore");
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(9901, object.getInt("code"));
-        Assert.assertEquals(message.get(Validators.PREFIX + "illegal-id", message.get(TestRecycleModel.NAME+".id")), object.getString("message"));
+        Assert.assertEquals(message.get(Validators.PREFIX + "illegal-id", message.get(TestRecycleModel.NAME + ".id")), object.getString("message"));
         Assert.assertNull(recycleService.getRestoreId());
 
         String id = generator.uuid();

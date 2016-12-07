@@ -15,7 +15,6 @@ import java.util.List;
 public class RestoreTest extends TestSupport {
     @Test
     public void restore() {
-        clean();
         List<ClassifyModel> list = new ArrayList<>();
         for (int i = 0; i < 20; i++)
             list.add(create(i, true));

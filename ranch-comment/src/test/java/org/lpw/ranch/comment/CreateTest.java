@@ -12,7 +12,6 @@ import org.lpw.tephra.dao.orm.lite.LiteQuery;
 public class CreateTest extends TestSupport {
     @Test
     public void create() {
-        liteOrm.delete(new LiteQuery(CommentModel.class), null);
         mockHelper.reset();
         mockHelper.mock("/comment/create");
         JSONObject object = mockHelper.getResponse().asJson();

@@ -12,7 +12,6 @@ import org.lpw.tephra.ctrl.validate.Validators;
 public class RecycleTest extends TestSupport {
     @Test
     public void recycle() {
-        clean();
         for (int i = 0; i < 20; i++)
             create(10 + i, i % 2 == 0);
 

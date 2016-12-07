@@ -14,7 +14,6 @@ import java.util.List;
 public class ModifyTest extends TestSupport {
     @Test
     public void modify() {
-        clean();
         List<ClassifyModel> list = new ArrayList<>();
         for (int i = 0; i < 2; i++)
             list.add(create(i, false));

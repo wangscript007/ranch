@@ -12,7 +12,6 @@ import org.lpw.ranch.recycle.Recycle;
 public class QueryTest extends TestSupport {
     @Test
     public void query() {
-        clean();
         for (int i = 0; i < 20; i++) {
             ClassifyModel classify = new ClassifyModel();
             classify.setCode("code " + converter.toString(i, "00"));

@@ -11,7 +11,6 @@ import org.lpw.tephra.ctrl.validate.Validators;
 public class CreateTest extends TestSupport {
     @Test
     public void create() {
-        clean();
         mockHelper.reset();
         mockHelper.mock("/classify/create");
         JSONObject object = mockHelper.getResponse().asJson();

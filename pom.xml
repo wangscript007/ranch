@@ -13,7 +13,9 @@
         <module>ranch-gps</module>
         <module>ranch-classify</module>
         <module>ranch-comment</module>
+        <module>ranch-doc</module>
         <module>ranch-web</module>
+        <module>ranch-test</module>
     </modules>
 
     <build>
