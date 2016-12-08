@@ -6,8 +6,10 @@ import org.lpw.tephra.cache.Cache;
 import org.lpw.tephra.dao.model.ModelHelper;
 import org.lpw.tephra.scheduler.DateJob;
 import org.lpw.tephra.scheduler.MinuteJob;
+import org.lpw.tephra.util.Converter;
 import org.lpw.tephra.util.DateTime;
 import org.lpw.tephra.util.Generator;
+import org.lpw.tephra.util.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -32,6 +34,10 @@ public class DocServiceImpl implements DocService, MinuteJob, DateJob {
     @Autowired
     protected Generator generator;
     @Autowired
+    protected Validator validator;
+    @Autowired
+    protected Converter converter;
+    @Autowired
     protected DateTime dateTime;
     @Autowired
     protected ModelHelper modelHelper;
@@ -49,6 +55,18 @@ public class DocServiceImpl implements DocService, MinuteJob, DateJob {
             cache.put(key, doc = docDao.findById(id), false);
 
         return doc;
+    }
+
+    @Override
+    public JSONObject get(String[] ids) {
+        JSONObject object = new JSONObject();
+        for (String id : ids) {
+            JSONObject doc = getJson(id, null, false);
+            if (!doc.isEmpty())
+                object.put(id, doc);
+        }
+
+        return object;
     }
 
     @Override
@@ -70,22 +88,39 @@ public class DocServiceImpl implements DocService, MinuteJob, DateJob {
         model.setAudit(defaultAudit);
         docDao.save(model);
 
-        return getJson(model.getId(), model);
+        return getJson(model.getId(), model, true);
     }
 
-    protected JSONObject getJson(String id, DocModel doc) {
-        String key = getCacheKey(CACHE_JSON, id);
+    protected JSONObject getJson(String id, DocModel doc, boolean full) {
+        String key = getCacheKey(CACHE_JSON, id + full);
         JSONObject object = cache.get(key);
         if (object == null) {
+            object = new JSONObject();
             if (doc == null)
                 doc = findById(id);
-            if (doc == null) {
-                cache.put(key, object = new JSONObject(), false);
-
-                return object;
+            if (doc != null) {
+                if (full)
+                    object = modelHelper.toJson(doc);
+                else if (doc.getAudit() == Audit.Passed.getValue()) {
+                    object.put("id", doc.getId());
+                    object.put("author", doc.getAuthor());
+                    object.put("subject", doc.getSubject());
+                    if (!validator.isEmpty(doc.getImage()))
+                        object.put("image", doc.getImage());
+                    if (!validator.isEmpty(doc.getThumbnail()))
+                        object.put("thumbnail", doc.getThumbnail());
+                    if (!validator.isEmpty(doc.getSummary()))
+                        object.put("summary", doc.getSummary());
+                    if (!validator.isEmpty(doc.getLabel()))
+                        object.put("label", doc.getLabel());
+                    object.put("read", doc.getRead());
+                    object.put("favorite", doc.getFavorite());
+                    object.put("comment", doc.getComment());
+                    object.put("score", doc.getScore());
+                    object.put("time", converter.toString(doc.getTime()));
+                }
             }
-
-            cache.put(key, object = modelHelper.toJson(doc), false);
+            cache.put(key, object, false);
         }
 
         return object;

@@ -21,6 +21,14 @@ public interface DocService extends AuditService {
     DocModel findById(String id);
 
     /**
+     * 获取指定ID的文档信息集。
+     *
+     * @param ids ID集。
+     * @return 文档信息集。
+     */
+    JSONObject get(String[] ids);
+
+    /**
      * 保存文档信息。
      *
      * @param doc 文档信息。

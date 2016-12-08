@@ -14,7 +14,7 @@ import org.springframework.stereotype.Controller;
  */
 @Controller(ClassifyModel.NAME + ".ctrl")
 @Execute(name = "/classify/", key = ClassifyModel.NAME, code = "12")
-public class ClassifyCtrl extends RecycleCtrlSupport{
+public class ClassifyCtrl extends RecycleCtrlSupport {
     @Autowired
     protected Templates templates;
     @Autowired

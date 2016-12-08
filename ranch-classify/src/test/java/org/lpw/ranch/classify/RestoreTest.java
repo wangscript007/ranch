@@ -41,7 +41,7 @@ public class RestoreTest extends TestSupport {
 
         mockHelper.reset();
         mockHelper.getRequest().addParameter("id", generator.uuid());
-        request.putSign(mockHelper.getRequest().getMap());
+        sign.put(mockHelper.getRequest().getMap(), null);
         mockHelper.mock("/classify/restore");
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(0, object.getInt("code"));
@@ -52,7 +52,7 @@ public class RestoreTest extends TestSupport {
         cache.remove(cacheKey);
         mockHelper.reset();
         mockHelper.getRequest().addParameter("id", list.get(10).getId());
-        request.putSign(mockHelper.getRequest().getMap());
+        sign.put(mockHelper.getRequest().getMap(), null);
         mockHelper.mock("/classify/restore");
         String random = cache.get(cacheKey);
         Assert.assertEquals(32, random.length());

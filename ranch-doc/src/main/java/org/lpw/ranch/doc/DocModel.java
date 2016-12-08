@@ -149,7 +149,6 @@ public class DocModel extends AuditModelSupport {
         this.label = label;
     }
 
-    @Jsonable
     @Column(name = "c_content")
     public String getContent() {
         return content;

@@ -63,7 +63,7 @@ public class ModifyTest extends TestSupport {
         mockHelper.getRequest().addParameter("code", "new code");
         mockHelper.getRequest().addParameter("name", "new name");
         mockHelper.getRequest().addParameter("label", "new label");
-        request.putSign(mockHelper.getRequest().getMap());
+        sign.put(mockHelper.getRequest().getMap(), null);
         mockHelper.mock("/classify/modify");
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(0, object.getInt("code"));
@@ -75,7 +75,7 @@ public class ModifyTest extends TestSupport {
         mockHelper.getRequest().addParameter("code", "new code");
         mockHelper.getRequest().addParameter("name", "new name");
         mockHelper.getRequest().addParameter("label", "new label");
-        request.putSign(mockHelper.getRequest().getMap());
+        sign.put(mockHelper.getRequest().getMap(), null);
         mockHelper.mock("/classify/modify");
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(0, object.getInt("code"));
@@ -94,7 +94,7 @@ public class ModifyTest extends TestSupport {
 
         mockHelper.reset();
         mockHelper.getRequest().addParameter("id", list.get(0).getId());
-        request.putSign(mockHelper.getRequest().getMap());
+        sign.put(mockHelper.getRequest().getMap(), null);
         mockHelper.mock("/classify/modify");
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(0, object.getInt("code"));

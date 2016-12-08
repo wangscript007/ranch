@@ -50,7 +50,7 @@ public class CreateTest extends TestSupport {
         mockHelper.reset();
         mockHelper.getRequest().addParameter("code", "code 1");
         mockHelper.getRequest().addParameter("name", "name 1");
-        request.putSign(mockHelper.getRequest().getMap());
+        sign.put(mockHelper.getRequest().getMap(), null);
         mockHelper.mock("/classify/create");
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(0, object.getInt("code"));
@@ -63,7 +63,7 @@ public class CreateTest extends TestSupport {
         mockHelper.getRequest().addParameter("code", "code 2");
         mockHelper.getRequest().addParameter("name", "name 2");
         mockHelper.getRequest().addParameter("label", "label 2");
-        request.putSign(mockHelper.getRequest().getMap());
+        sign.put(mockHelper.getRequest().getMap(), null);
         mockHelper.mock("/classify/create");
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(0, object.getInt("code"));
@@ -76,7 +76,7 @@ public class CreateTest extends TestSupport {
         mockHelper.getRequest().addParameter("code", "code 3");
         mockHelper.getRequest().addParameter("name", "name 3");
         mockHelper.getRequest().addParameter("label", "{\"id\":\"id\",\"name\":\"name\"}");
-        request.putSign(mockHelper.getRequest().getMap());
+        sign.put(mockHelper.getRequest().getMap(), null);
         mockHelper.mock("/classify/create");
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(0, object.getInt("code"));

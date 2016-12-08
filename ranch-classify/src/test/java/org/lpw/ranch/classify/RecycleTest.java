@@ -24,7 +24,7 @@ public class RecycleTest extends TestSupport {
         mockHelper.reset();
         mockHelper.getRequest().addParameter("pageSize", "20");
         mockHelper.getRequest().addParameter("pageNum", "1");
-        request.putSign(mockHelper.getRequest().getMap());
+        sign.put(mockHelper.getRequest().getMap(), null);
         mockHelper.mock("/classify/recycle");
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(0, object.getInt("code"));

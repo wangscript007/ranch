@@ -2,7 +2,7 @@ package org.lpw.ranch.audit;
 
 import net.sf.json.JSONObject;
 import org.junit.Assert;
-import org.lpw.tephra.ctrl.context.Request;
+import org.lpw.tephra.crypto.Sign;
 import org.lpw.tephra.ctrl.validate.Validators;
 import org.lpw.tephra.test.mock.MockHelper;
 import org.lpw.tephra.util.Message;
@@ -20,7 +20,7 @@ public class PassTesterImpl implements PassTester {
     @Autowired
     protected Message message;
     @Autowired
-    protected Request request;
+    protected Sign sign;
     @Autowired
     protected MockHelper mockHelper;
 
@@ -39,7 +39,7 @@ public class PassTesterImpl implements PassTester {
 
         mockHelper.reset();
         mockHelper.getRequest().addParameter("ids", "");
-        request.putSign(mockHelper.getRequest().getMap());
+        sign.put(mockHelper.getRequest().getMap(), null);
         mockHelper.mock("/" + name + "/pass");
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(0, object.getInt("code"));
@@ -49,7 +49,7 @@ public class PassTesterImpl implements PassTester {
 
         mockHelper.reset();
         mockHelper.getRequest().addParameter("ids", list.get(0).getId() + "," + list.get(2).getId());
-        request.putSign(mockHelper.getRequest().getMap());
+        sign.put(mockHelper.getRequest().getMap(), null);
         mockHelper.mock("/" + name + "/pass");
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(0, object.getInt("code"));

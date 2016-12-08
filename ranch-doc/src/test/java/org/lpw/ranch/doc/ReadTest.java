@@ -33,7 +33,7 @@ public class ReadTest extends TestSupport {
 
         mockHelper.reset();
         mockHelper.getRequest().addParameter("id", generator.uuid());
-        request.putSign(mockHelper.getRequest().getMap());
+        sign.put(mockHelper.getRequest().getMap(), null);
         mockHelper.mock("/doc/read");
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(1412, object.getInt("code"));

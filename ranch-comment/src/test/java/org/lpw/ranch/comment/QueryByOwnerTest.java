@@ -38,7 +38,7 @@ public class QueryByOwnerTest extends TestSupport {
         mockHelper.getRequest().addParameter("owner", owners[0]);
         mockHelper.getRequest().addParameter("pageSize", "20");
         mockHelper.getRequest().addParameter("pageNum", "0");
-        request.putSign(mockHelper.getRequest().getMap());
+        sign.put(mockHelper.getRequest().getMap(), null);
         mockHelper.mock("/comment/query-by-owner");
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(0, object.getInt("code"));
@@ -57,7 +57,7 @@ public class QueryByOwnerTest extends TestSupport {
             mockHelper.getRequest().addParameter("audit", "" + audit.getValue());
             mockHelper.getRequest().addParameter("pageSize", "20");
             mockHelper.getRequest().addParameter("pageNum", "0");
-            request.putSign(mockHelper.getRequest().getMap());
+            sign.put(mockHelper.getRequest().getMap(), null);
             mockHelper.mock("/comment/query-by-owner");
             object = mockHelper.getResponse().asJson();
             Assert.assertEquals(0, object.getInt("code"));

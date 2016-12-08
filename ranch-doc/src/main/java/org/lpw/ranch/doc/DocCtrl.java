@@ -25,6 +25,19 @@ public class DocCtrl extends AuditCtrlSupport {
     protected DocService docService;
 
     /**
+     * 获取指定ID的文档信息集。
+     * ids ID集。
+     *
+     * @return {id:{DocModel}}。
+     */
+    @Execute(name = "get", validates = {
+            @Validate(validator = Validators.NOT_EMPTY, parameter = "ids", failureCode = 13)
+    })
+    public Object get() {
+        return docService.get(request.getAsArray("ids"));
+    }
+
+    /**
      * 创建新回复。
      * key 服务key。
      * owner 所有者ID。

@@ -3,7 +3,7 @@ package org.lpw.ranch.recycle;
 import net.sf.json.JSONObject;
 import org.junit.Assert;
 import org.junit.Test;
-import org.lpw.tephra.ctrl.context.Request;
+import org.lpw.tephra.crypto.Sign;
 import org.lpw.tephra.ctrl.validate.Validators;
 import org.lpw.tephra.test.TephraTestSupport;
 import org.lpw.tephra.test.mock.MockHelper;
@@ -20,7 +20,7 @@ public class RecycleCtrlSupportTest extends TephraTestSupport {
     @Autowired
     private Generator generator;
     @Autowired
-    private Request request;
+    private Sign sign;
     @Autowired
     private MockHelper mockHelper;
     @Autowired
@@ -54,7 +54,7 @@ public class RecycleCtrlSupportTest extends TephraTestSupport {
 
         mockHelper.reset();
         mockHelper.getRequest().addParameter("id", id);
-        request.putSign(mockHelper.getRequest().getMap());
+        sign.put(mockHelper.getRequest().getMap(), null);
         mockHelper.mock("/recycle/delete");
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(0, object.getInt("code"));
@@ -75,7 +75,7 @@ public class RecycleCtrlSupportTest extends TephraTestSupport {
         Assert.assertEquals(message.get(Validators.PREFIX + "illegal-sign"), object.getString("message"));
 
         mockHelper.reset();
-        request.putSign(mockHelper.getRequest().getMap());
+        sign.put(mockHelper.getRequest().getMap(), null);
         mockHelper.mock("/recycle/recycle");
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(0, object.getInt("code"));
@@ -111,7 +111,7 @@ public class RecycleCtrlSupportTest extends TephraTestSupport {
 
         mockHelper.reset();
         mockHelper.getRequest().addParameter("id", id);
-        request.putSign(mockHelper.getRequest().getMap());
+        sign.put(mockHelper.getRequest().getMap(), null);
         mockHelper.mock("/recycle/restore");
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(0, object.getInt("code"));

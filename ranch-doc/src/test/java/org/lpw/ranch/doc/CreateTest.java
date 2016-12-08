@@ -146,7 +146,7 @@ public class CreateTest extends TestSupport {
         Assert.assertEquals("image", data.getString("image"));
         Assert.assertEquals("thumbnail", data.getString("thumbnail"));
         Assert.assertEquals("label", data.getString("label"));
-        Assert.assertEquals("content", data.getString("content"));
+        Assert.assertFalse(data.has("content"));
         Assert.assertEquals(0, data.getInt("read"));
         Assert.assertEquals(0, data.getInt("favorite"));
         Assert.assertEquals(0, data.getInt("comment"));

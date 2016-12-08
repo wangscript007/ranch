@@ -4,11 +4,11 @@ import net.sf.json.JSONObject;
 import org.junit.Assert;
 import org.lpw.ranch.recycle.Recycle;
 import org.lpw.tephra.cache.Cache;
-import org.lpw.tephra.ctrl.context.Request;
+import org.lpw.tephra.crypto.Sign;
 import org.lpw.tephra.dao.orm.lite.LiteOrm;
-import org.lpw.tephra.test.MockScheduler;
 import org.lpw.tephra.test.TephraTestSupport;
 import org.lpw.tephra.test.mock.MockHelper;
+import org.lpw.tephra.test.mock.MockScheduler;
 import org.lpw.tephra.util.Converter;
 import org.lpw.tephra.util.Generator;
 import org.lpw.tephra.util.Message;
@@ -29,7 +29,7 @@ public class TestSupport extends TephraTestSupport {
     @Autowired
     protected LiteOrm liteOrm;
     @Autowired
-    protected Request request;
+    protected Sign sign;
     @Autowired
     protected MockHelper mockHelper;
     @Autowired

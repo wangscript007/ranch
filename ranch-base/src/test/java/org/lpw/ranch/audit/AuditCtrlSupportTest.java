@@ -3,7 +3,7 @@ package org.lpw.ranch.audit;
 import net.sf.json.JSONObject;
 import org.junit.Assert;
 import org.junit.Test;
-import org.lpw.tephra.ctrl.context.Request;
+import org.lpw.tephra.crypto.Sign;
 import org.lpw.tephra.ctrl.validate.Validators;
 import org.lpw.tephra.test.TephraTestSupport;
 import org.lpw.tephra.test.mock.MockHelper;
@@ -17,7 +17,7 @@ public class AuditCtrlSupportTest extends TephraTestSupport {
     @Autowired
     private Message message;
     @Autowired
-    private Request request;
+    private Sign sign;
     @Autowired
     private MockHelper mockHelper;
     @Autowired
@@ -35,7 +35,7 @@ public class AuditCtrlSupportTest extends TephraTestSupport {
 
         mockHelper.reset();
         mockHelper.getRequest().addParameter("ids", "id1,id2");
-        request.putSign(mockHelper.getRequest().getMap());
+        sign.put(mockHelper.getRequest().getMap(), null);
         mockHelper.mock("/audit/pass");
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(0, object.getInt("code"));
@@ -55,7 +55,7 @@ public class AuditCtrlSupportTest extends TephraTestSupport {
 
         mockHelper.reset();
         mockHelper.getRequest().addParameter("ids", "id1,id2");
-        request.putSign(mockHelper.getRequest().getMap());
+        sign.put(mockHelper.getRequest().getMap(), null);
         mockHelper.mock("/audit/refuse");
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(0, object.getInt("code"));

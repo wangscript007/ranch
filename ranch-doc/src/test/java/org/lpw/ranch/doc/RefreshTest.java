@@ -21,7 +21,7 @@ public class RefreshTest extends TestSupport {
         Assert.assertNull(cache.get(cacheKey));
 
         mockHelper.reset();
-        request.putSign(mockHelper.getRequest().getMap());
+        sign.put(mockHelper.getRequest().getMap(), null);
         mockHelper.mock("/doc/refresh");
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(0, object.getInt("code"));

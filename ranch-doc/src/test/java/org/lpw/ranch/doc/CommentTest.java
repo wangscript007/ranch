@@ -3,10 +3,8 @@ package org.lpw.ranch.doc;
 import net.sf.json.JSONObject;
 import org.junit.Assert;
 import org.junit.Test;
-import org.lpw.ranch.audit.Audit;
 import org.lpw.tephra.ctrl.validate.Validators;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -39,7 +37,7 @@ public class CommentTest extends TestSupport {
 
         mockHelper.reset();
         mockHelper.getRequest().addParameter("id", generator.uuid());
-        request.putSign(mockHelper.getRequest().getMap());
+        sign.put(mockHelper.getRequest().getMap(), null);
         mockHelper.mock("/doc/comment");
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(1412, object.getInt("code"));
@@ -47,7 +45,7 @@ public class CommentTest extends TestSupport {
 
         mockHelper.reset();
         mockHelper.getRequest().addParameter("id", list.get(0).getId());
-        request.putSign(mockHelper.getRequest().getMap());
+        sign.put(mockHelper.getRequest().getMap(), null);
         mockHelper.mock("/doc/comment");
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(0, object.getInt("code"));
@@ -58,7 +56,7 @@ public class CommentTest extends TestSupport {
         mockHelper.reset();
         mockHelper.getRequest().addParameter("id", list.get(0).getId());
         mockHelper.getRequest().addParameter("comment", "5");
-        request.putSign(mockHelper.getRequest().getMap());
+        sign.put(mockHelper.getRequest().getMap(), null);
         mockHelper.mock("/doc/comment");
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(0, object.getInt("code"));
@@ -69,7 +67,7 @@ public class CommentTest extends TestSupport {
         mockHelper.reset();
         mockHelper.getRequest().addParameter("id", list.get(1).getId());
         mockHelper.getRequest().addParameter("comment", "-5");
-        request.putSign(mockHelper.getRequest().getMap());
+        sign.put(mockHelper.getRequest().getMap(), null);
         mockHelper.mock("/doc/comment");
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(0, object.getInt("code"));

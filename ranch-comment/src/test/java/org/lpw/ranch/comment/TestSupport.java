@@ -2,7 +2,7 @@ package org.lpw.ranch.comment;
 
 import org.lpw.ranch.audit.Audit;
 import org.lpw.ranch.audit.AuditTesterDao;
-import org.lpw.tephra.ctrl.context.Request;
+import org.lpw.tephra.crypto.Sign;
 import org.lpw.tephra.dao.orm.lite.LiteOrm;
 import org.lpw.tephra.test.TephraTestSupport;
 import org.lpw.tephra.test.mock.MockHelper;
@@ -27,7 +27,7 @@ public class TestSupport extends TephraTestSupport implements AuditTesterDao<Com
     @Autowired
     protected LiteOrm liteOrm;
     @Autowired
-    protected Request request;
+    protected Sign sign;
     @Autowired
     protected MockHelper mockHelper;
 

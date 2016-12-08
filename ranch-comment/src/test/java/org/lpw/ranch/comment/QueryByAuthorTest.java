@@ -38,7 +38,7 @@ public class QueryByAuthorTest extends TestSupport {
         mockHelper.getRequest().addParameter("author", authors[0]);
         mockHelper.getRequest().addParameter("pageSize", "20");
         mockHelper.getRequest().addParameter("pageNum", "0");
-        request.putSign(mockHelper.getRequest().getMap());
+        sign.put(mockHelper.getRequest().getMap(), null);
         mockHelper.mock("/comment/query-by-author");
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(0, object.getInt("code"));

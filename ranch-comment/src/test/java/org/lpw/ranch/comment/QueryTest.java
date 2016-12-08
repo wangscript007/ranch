@@ -43,7 +43,7 @@ public class QueryTest extends TestSupport {
         mockHelper.reset();
         mockHelper.getRequest().addParameter("pageSize", "20");
         mockHelper.getRequest().addParameter("pageNum", "0");
-        request.putSign(mockHelper.getRequest().getMap());
+        sign.put(mockHelper.getRequest().getMap(), null);
         mockHelper.mock("/comment/query");
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(0, object.getInt("code"));
@@ -60,7 +60,7 @@ public class QueryTest extends TestSupport {
         mockHelper.getRequest().addParameter("audit", "1");
         mockHelper.getRequest().addParameter("pageSize", "20");
         mockHelper.getRequest().addParameter("pageNum", "0");
-        request.putSign(mockHelper.getRequest().getMap());
+        sign.put(mockHelper.getRequest().getMap(), null);
         mockHelper.mock("/comment/query");
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(0, object.getInt("code"));
@@ -77,7 +77,7 @@ public class QueryTest extends TestSupport {
         mockHelper.getRequest().addParameter("audit", "2");
         mockHelper.getRequest().addParameter("pageSize", "20");
         mockHelper.getRequest().addParameter("pageNum", "0");
-        request.putSign(mockHelper.getRequest().getMap());
+        sign.put(mockHelper.getRequest().getMap(), null);
         mockHelper.mock("/comment/query");
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(0, object.getInt("code"));
