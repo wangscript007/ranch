@@ -1,7 +1,7 @@
-# 检索作者者评论
+# 检索所有者评论
 
 参数
-- owner 作者ID值。
+- owner 所有者ID值。
 - pageSize 每页显示记录数。
 - pageNum 当前显示页数。
 
