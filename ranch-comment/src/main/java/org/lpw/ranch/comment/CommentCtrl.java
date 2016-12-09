@@ -76,7 +76,7 @@ public class CommentCtrl extends AuditCtrlSupport {
      * content 内容。
      * score 评分。
      *
-     * @return ""。
+     * @return {CommentModel}。
      */
     @Execute(name = "create", validates = {
             @Validate(validator = Validators.NOT_EMPTY, parameter = "key", failureCode = 1),

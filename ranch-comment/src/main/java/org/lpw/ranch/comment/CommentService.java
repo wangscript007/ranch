@@ -37,5 +37,5 @@ public interface CommentService extends AuditService {
      * @param comment 评论信息。
      * @return 评论实例。
      */
-    CommentModel create(CommentModel comment);
+    JSONObject create(CommentModel comment);
 }

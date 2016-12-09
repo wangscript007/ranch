@@ -34,11 +34,21 @@ public class QueryByAuthorTest extends TestSupport {
         Assert.assertEquals(1304, object.getInt("code"));
         Assert.assertEquals(message.get(Validators.PREFIX + "illegal-id", message.get(CommentModel.NAME + ".author")), object.getString("message"));
 
+        mockCarousel.reset();
+        for (int i = 0; i < list.size(); i++) {
+            mockCarousel.register("key " + i + ".get", "{\n" +
+                    "  \"code\":0,\n" +
+                    "  \"data\":{\n" +
+                    "    \"owner " + i + "\":{\n" +
+                    "      \"key\":\"owner key " + i + "\"\n" +
+                    "    }\n" +
+                    "  }\n" +
+                    "}");
+        }
         mockHelper.reset();
         mockHelper.getRequest().addParameter("author", authors[0]);
         mockHelper.getRequest().addParameter("pageSize", "20");
         mockHelper.getRequest().addParameter("pageNum", "0");
-        sign.put(mockHelper.getRequest().getMap(), null);
         mockHelper.mock("/comment/query-by-author");
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(0, object.getInt("code"));
@@ -48,7 +58,22 @@ public class QueryByAuthorTest extends TestSupport {
         Assert.assertEquals(1, data.getInt("number"));
         JSONArray array = data.getJSONArray("list");
         Assert.assertEquals(10, array.size());
-        for (int i = 0; i < array.size(); i++)
-            Assert.assertEquals(list.get(2 * i).getId(), array.getJSONObject(i).getString("id"));
+        for (int i = 0; i < array.size(); i++) {
+            JSONObject obj = array.getJSONObject(i);
+            CommentModel comment = list.get(2 * i);
+            Assert.assertEquals(comment.getId(), obj.getString("id"));
+            Assert.assertFalse(obj.has("key"));
+            JSONObject owner = obj.getJSONObject("owner");
+            Assert.assertEquals("owner " + (i * 2), owner.getString("id"));
+            Assert.assertEquals("owner key " + (i * 2), owner.getString("key"));
+            Assert.assertFalse(obj.has("author"));
+            Assert.assertEquals(comment.getSubject(), obj.getString("subject"));
+            Assert.assertEquals(comment.getLabel(), obj.getString("label"));
+            Assert.assertEquals(comment.getContent(), obj.getString("content"));
+            Assert.assertEquals(comment.getScore(), obj.getInt("score"));
+            Assert.assertFalse(obj.has("audit"));
+            Assert.assertEquals(converter.toString(comment.getTime()), obj.getString("time"));
+            Assert.assertFalse(obj.has("children"));
+        }
     }
 }

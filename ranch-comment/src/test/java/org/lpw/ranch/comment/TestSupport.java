@@ -5,6 +5,7 @@ import org.lpw.ranch.audit.AuditTesterDao;
 import org.lpw.tephra.crypto.Sign;
 import org.lpw.tephra.dao.orm.lite.LiteOrm;
 import org.lpw.tephra.test.TephraTestSupport;
+import org.lpw.tephra.test.mock.MockCarousel;
 import org.lpw.tephra.test.mock.MockHelper;
 import org.lpw.tephra.util.Converter;
 import org.lpw.tephra.util.Generator;
@@ -30,6 +31,8 @@ public class TestSupport extends TephraTestSupport implements AuditTesterDao<Com
     protected Sign sign;
     @Autowired
     protected MockHelper mockHelper;
+    @Autowired
+    protected MockCarousel mockCarousel;
 
     public CommentModel create(int i, Audit audit) {
         return create(i, "owner " + i, "author " + i, audit);

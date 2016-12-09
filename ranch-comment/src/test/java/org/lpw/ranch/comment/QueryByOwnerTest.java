@@ -20,6 +20,7 @@ public class QueryByOwnerTest extends TestSupport {
         List<CommentModel> list = new ArrayList<>();
         for (int i = 0; i < 20; i++)
             list.add(create(i, owners[i % owners.length], "author " + i, Audit.values()[i % 3]));
+        CommentModel child = create(101, list.get(1).getId(), "author 1", Audit.Passed);
 
         mockHelper.reset();
         mockHelper.mock("/comment/query-by-owner");
@@ -34,6 +35,15 @@ public class QueryByOwnerTest extends TestSupport {
         Assert.assertEquals(1303, object.getInt("code"));
         Assert.assertEquals(message.get(Validators.PREFIX + "illegal-id", message.get(CommentModel.NAME + ".owner")), object.getString("message"));
 
+        mockCarousel.reset();
+        mockCarousel.register("ranch.user.get", (key, header, parameter, cacheable) -> "{\n" +
+                "  \"code\":0,\n" +
+                "  \"data\":{\n" +
+                "    \"" + parameter.get("id") + "\":{\n" +
+                "      \"key\":\"owner key\"\n" +
+                "    }\n" +
+                "  }\n" +
+                "}");
         mockHelper.reset();
         mockHelper.getRequest().addParameter("owner", owners[0]);
         mockHelper.getRequest().addParameter("pageSize", "20");
@@ -49,7 +59,7 @@ public class QueryByOwnerTest extends TestSupport {
         JSONArray array = data.getJSONArray("list");
         Assert.assertEquals(3, array.size());
         for (int i = 0; i < array.size(); i++)
-            Assert.assertEquals(list.get(6 * (i + 1) - 2).getId(), array.getJSONObject(i).getString("id"));
+            equals(list.get(6 * (i + 1) - 2), array.getJSONObject(i), 6 * (i + 1) - 2, child);
 
         for (Audit audit : Audit.values()) {
             mockHelper.reset();
@@ -68,7 +78,28 @@ public class QueryByOwnerTest extends TestSupport {
             array = data.getJSONArray("list");
             Assert.assertEquals(4, array.size());
             for (int i = 0; i < array.size(); i++)
-                Assert.assertEquals(list.get(6 * (i + 1) - 5).getId(), array.getJSONObject(i).getString("id"));
+                equals(list.get(6 * (i + 1) - 5), array.getJSONObject(i), 6 * (i + 1) - 5, child);
         }
+    }
+
+    protected void equals(CommentModel comment, JSONObject obj, int i, CommentModel child) {
+        Assert.assertEquals(comment.getId(), obj.getString("id"));
+        Assert.assertFalse(obj.has("key"));
+        Assert.assertFalse(obj.has("owner"));
+        JSONObject author = obj.getJSONObject("author");
+        Assert.assertEquals(comment.getAuthor(), author.getString("id"));
+        Assert.assertEquals("owner key", author.getString("key"));
+        Assert.assertEquals(comment.getSubject(), obj.getString("subject"));
+        Assert.assertEquals(comment.getLabel(), obj.getString("label"));
+        Assert.assertEquals(comment.getContent(), obj.getString("content"));
+        Assert.assertEquals(comment.getScore(), obj.getInt("score"));
+        Assert.assertFalse(obj.has("audit"));
+        Assert.assertEquals(converter.toString(comment.getTime()), obj.getString("time"));
+        if (i == 1) {
+            JSONArray children = obj.getJSONArray("children");
+            Assert.assertEquals(1, children.size());
+            equals(child, children.getJSONObject(0), 101, null);
+        } else
+            Assert.assertFalse(obj.has("children"));
     }
 }

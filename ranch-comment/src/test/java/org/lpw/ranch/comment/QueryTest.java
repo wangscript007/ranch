@@ -40,6 +40,25 @@ public class QueryTest extends TestSupport {
         Assert.assertEquals(1391, object.getInt("code"));
         Assert.assertEquals(message.get(Validators.PREFIX + "illegal-sign"), object.getString("message"));
 
+        mockCarousel.reset();
+        mockCarousel.register("ranch.user.get", (key, header, parameter, cacheable) -> "{\n" +
+                "  \"code\":0,\n" +
+                "  \"data\":{\n" +
+                "    \"" + parameter.get("id") + "\":{\n" +
+                "      \"key\":\"owner key\"\n" +
+                "    }\n" +
+                "  }\n" +
+                "}");
+        for (int i = 0; i < list.size(); i++) {
+            mockCarousel.register("key " + i + ".get", "{\n" +
+                    "  \"code\":0,\n" +
+                    "  \"data\":{\n" +
+                    "    \"owner " + i + "\":{\n" +
+                    "      \"key\":\"owner key " + i + "\"\n" +
+                    "    }\n" +
+                    "  }\n" +
+                    "}");
+        }
         mockHelper.reset();
         mockHelper.getRequest().addParameter("pageSize", "20");
         mockHelper.getRequest().addParameter("pageNum", "0");
@@ -54,7 +73,7 @@ public class QueryTest extends TestSupport {
         JSONArray array = data.getJSONArray("list");
         Assert.assertEquals(4, array.size());
         for (int i = 0; i < array.size(); i++)
-            Assert.assertEquals(list.get(3 * i).getId(), array.getJSONObject(i).getString("id"));
+            equals(list.get(3 * i), array.getJSONObject(i), 3 * i);
 
         mockHelper.reset();
         mockHelper.getRequest().addParameter("audit", "1");
@@ -71,7 +90,7 @@ public class QueryTest extends TestSupport {
         array = data.getJSONArray("list");
         Assert.assertEquals(3, array.size());
         for (int i = 0; i < array.size(); i++)
-            Assert.assertEquals(list.get(3 * i + 1).getId(), array.getJSONObject(i).getString("id"));
+            equals(list.get(3 * i + 1), array.getJSONObject(i), 3 * i + 1);
 
         mockHelper.reset();
         mockHelper.getRequest().addParameter("audit", "2");
@@ -88,6 +107,24 @@ public class QueryTest extends TestSupport {
         array = data.getJSONArray("list");
         Assert.assertEquals(3, array.size());
         for (int i = 0; i < array.size(); i++)
-            Assert.assertEquals(list.get(3 * i + 2).getId(), array.getJSONObject(i).getString("id"));
+            equals(list.get(3 * i + 2), array.getJSONObject(i), 3 * i + 2);
+    }
+
+    protected void equals(CommentModel comment, JSONObject obj, int i) {
+        Assert.assertEquals(comment.getId(), obj.getString("id"));
+        Assert.assertEquals("key " + i, obj.getString("key"));
+        JSONObject owner = obj.getJSONObject("owner");
+        Assert.assertEquals("owner " + i, owner.getString("id"));
+        Assert.assertEquals("owner key " + i, owner.getString("key"));
+        JSONObject author = obj.getJSONObject("author");
+        Assert.assertEquals(comment.getAuthor(), author.getString("id"));
+        Assert.assertEquals("owner key", author.getString("key"));
+        Assert.assertEquals(comment.getSubject(), obj.getString("subject"));
+        Assert.assertEquals(comment.getLabel(), obj.getString("label"));
+        Assert.assertEquals(comment.getContent(), obj.getString("content"));
+        Assert.assertEquals(comment.getScore(), obj.getInt("score"));
+        Assert.assertFalse(obj.has("audit"));
+        Assert.assertEquals(converter.toString(comment.getTime()), obj.getString("time"));
+        Assert.assertFalse(obj.has("children"));
     }
 }
