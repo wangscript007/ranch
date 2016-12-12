@@ -1,7 +1,7 @@
 package org.lpw.ranch.comment;
 
-import org.lpw.ranch.audit.AuditModelSupport;
 import org.lpw.tephra.dao.model.Jsonable;
+import org.lpw.ranch.audit.AuditModelSupport;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+
 import java.sql.Timestamp;
 
 /**
@@ -28,6 +29,7 @@ public class CommentModel extends AuditModelSupport {
     private String label; // 标签
     private String content; // 内容
     private int score; // 评分
+    private int praise; // 点赞数
     private Timestamp time; // 时间
 
     @Jsonable
@@ -98,6 +100,16 @@ public class CommentModel extends AuditModelSupport {
 
     public void setScore(int score) {
         this.score = score;
+    }
+
+    @Jsonable
+    @Column(name = "c_praise")
+    public int getPraise() {
+        return praise;
+    }
+
+    public void setPraise(int praise) {
+        this.praise = praise;
     }
 
     @Jsonable

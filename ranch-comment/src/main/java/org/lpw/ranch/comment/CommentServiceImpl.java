@@ -64,12 +64,19 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public JSONObject create(CommentModel comment) {
-        comment.setId(null);
-        comment.setTime(dateTime.now());
-        comment.setAudit(defaultAudit);
-        commentDao.save(comment);
+        CommentModel model = new CommentModel();
+        model.setKey(comment.getKey());
+        model.setOwner(comment.getOwner());
+        model.setAuthor(comment.getAuthor());
+        model.setSubject(comment.getSubject());
+        model.setLabel(comment.getLabel());
+        model.setContent(comment.getContent());
+        model.setScore(comment.getScore());
+        model.setTime(dateTime.now());
+        model.setAudit(defaultAudit);
+        commentDao.save(model);
 
-        return getJson(comment, false, true, false, false);
+        return getJson(model, false, true, false, false);
     }
 
     protected JSONObject getJson(CommentModel comment, boolean key, boolean owner, boolean author, boolean child) {
@@ -90,6 +97,7 @@ public class CommentServiceImpl implements CommentService {
                 object.put("label", comment.getLabel());
             object.put("content", comment.getContent());
             object.put("score", comment.getScore());
+            object.put("praise", comment.getPraise());
             object.put("time", converter.toString(comment.getTime()));
             if (child)
                 getChildren(object, comment);

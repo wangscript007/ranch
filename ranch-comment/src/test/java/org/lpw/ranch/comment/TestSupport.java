@@ -47,6 +47,7 @@ public class TestSupport extends TephraTestSupport implements AuditTesterDao<Com
         comment.setLabel("label " + i);
         comment.setContent("content " + i);
         comment.setScore(i);
+        comment.setPraise(10 + i);
         comment.setTime(new Timestamp(System.currentTimeMillis() - i * TimeUnit.Hour.getTime()));
         comment.setAudit(audit.getValue());
         liteOrm.save(comment);

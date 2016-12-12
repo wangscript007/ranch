@@ -133,6 +133,7 @@ public class CreateTest extends TestSupport {
         mockHelper.getRequest().addParameter("label", "label");
         mockHelper.getRequest().addParameter("content", "content");
         mockHelper.getRequest().addParameter("score", "3");
+        mockHelper.getRequest().addParameter("praise", "4");
         mockHelper.getRequest().addParameter("audit", "1");
         mockHelper.getRequest().addParameter("time", "2016-01-02 03:04:05");
         mockHelper.mock("/comment/create");
@@ -149,6 +150,7 @@ public class CreateTest extends TestSupport {
         Assert.assertEquals("label", data.getString("label"));
         Assert.assertEquals("content", data.getString("content"));
         Assert.assertEquals(3, data.getInt("score"));
+        Assert.assertEquals(0, data.getInt("praise"));
         Assert.assertFalse(data.has("audit"));
         Assert.assertTrue(System.currentTimeMillis() - converter.toDate(data.getString("time"), "yyyy-MM-dd HH:mm:ss").getTime() < 2000L);
         Assert.assertFalse(data.has("children"));
@@ -159,6 +161,7 @@ public class CreateTest extends TestSupport {
         mockHelper.getRequest().addParameter("author", authorId);
         mockHelper.getRequest().addParameter("content", "content");
         mockHelper.getRequest().addParameter("score", "3");
+        mockHelper.getRequest().addParameter("praise", "4");
         mockHelper.getRequest().addParameter("audit", "1");
         mockHelper.getRequest().addParameter("time", "2016-01-02 03:04:05");
         mockHelper.mock("/comment/create");
@@ -175,6 +178,7 @@ public class CreateTest extends TestSupport {
         Assert.assertFalse(data.has("label"));
         Assert.assertEquals("content", data.getString("content"));
         Assert.assertEquals(3, data.getInt("score"));
+        Assert.assertEquals(0, data.getInt("praise"));
         Assert.assertFalse(data.has("audit"));
         Assert.assertTrue(System.currentTimeMillis() - converter.toDate(data.getString("time"), "yyyy-MM-dd HH:mm:ss").getTime() < 2000L);
         Assert.assertFalse(data.has("children"));

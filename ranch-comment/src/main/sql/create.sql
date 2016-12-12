@@ -9,6 +9,7 @@ CREATE TABLE t_comment
   c_label VARCHAR(255) DEFAULT NULL COMMENT '标签',
   c_content TEXT DEFAULT NULL COMMENT '内容',
   c_score INT DEFAULT 0 COMMENT '评分',
+  c_praise INT DEFAULT 0 COMMENT '点赞数',
   c_time DATETIME NOT NULL COMMENT '时间',
   c_audit INT DEFAULT 0 COMMENT '审核：0-待审核；1-审核通过；2-审核不通过',
 
