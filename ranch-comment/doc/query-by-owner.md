@@ -1,5 +1,7 @@
 # 检索所有者评论
 
+URI /comment/query-by-owner
+
 参数
 - owner 所有者ID值。
 - pageSize 每页显示记录数。

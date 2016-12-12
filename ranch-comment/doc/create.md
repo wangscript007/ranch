@@ -1,5 +1,7 @@
 # 创建新评论
 
+URI /comment/create
+
 参数
 - key 服务key，用于标记服务类型。
 - owner 所有者ID，如文章、商品ID等。

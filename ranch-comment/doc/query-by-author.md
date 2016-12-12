@@ -1,5 +1,7 @@
 # 检索作者评论
 
+URI /comment/query-by-author
+
 参数
 - author 作者ID值。
 - pageSize 每页显示记录数。
