@@ -6,6 +6,7 @@ import org.lpw.tephra.cache.Cache;
 import org.lpw.tephra.crypto.Sign;
 import org.lpw.tephra.dao.orm.lite.LiteOrm;
 import org.lpw.tephra.test.TephraTestSupport;
+import org.lpw.tephra.test.mock.MockCarousel;
 import org.lpw.tephra.test.mock.MockHelper;
 import org.lpw.tephra.test.mock.MockScheduler;
 import org.lpw.tephra.util.Converter;
@@ -38,6 +39,8 @@ public class TestSupport extends TephraTestSupport implements AuditTesterDao<Doc
     protected MockHelper mockHelper;
     @Autowired
     protected MockScheduler mockScheduler;
+    @Autowired
+    protected MockCarousel mockCarousel;
     @Autowired
     protected DocService docService;
 

@@ -45,7 +45,7 @@ public class QueryTest extends TestSupport {
                 "  \"code\":0,\n" +
                 "  \"data\":{\n" +
                 "    \"" + parameter.get("id") + "\":{\n" +
-                "      \"key\":\"owner key\"\n" +
+                "      \"key\":\"author key\"\n" +
                 "    }\n" +
                 "  }\n" +
                 "}");
@@ -118,7 +118,7 @@ public class QueryTest extends TestSupport {
         Assert.assertEquals("owner key " + i, owner.getString("key"));
         JSONObject author = obj.getJSONObject("author");
         Assert.assertEquals(comment.getAuthor(), author.getString("id"));
-        Assert.assertEquals("owner key", author.getString("key"));
+        Assert.assertEquals("author key", author.getString("key"));
         Assert.assertEquals(comment.getSubject(), obj.getString("subject"));
         Assert.assertEquals(comment.getLabel(), obj.getString("label"));
         Assert.assertEquals(comment.getContent(), obj.getString("content"));

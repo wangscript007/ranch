@@ -4,6 +4,7 @@ import net.sf.json.JSONObject;
 import org.lpw.tephra.carousel.CarouselHelper;
 import org.lpw.tephra.util.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
@@ -18,6 +19,8 @@ public class CarouselImpl implements Carousel {
     protected Validator validator;
     @Autowired
     protected CarouselHelper carouselHelper;
+    @Value("${ranch.util.carousel.key.user:ranch.user}")
+    protected String userKey;
 
     @Override
     public JSONObject get(String key, String id) {
@@ -38,5 +41,10 @@ public class CarouselImpl implements Carousel {
             object.putAll(obj.getJSONObject(id));
 
         return object;
+    }
+
+    @Override
+    public JSONObject getUser(String id) {
+        return get(userKey + ".get", id);
     }
 }

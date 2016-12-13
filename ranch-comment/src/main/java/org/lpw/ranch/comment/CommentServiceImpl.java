@@ -90,7 +90,7 @@ public class CommentServiceImpl implements CommentService {
             if (owner)
                 object.put("owner", carousel.get(comment.getKey() + ".get", comment.getOwner()));
             if (author)
-                object.put("author", carousel.get("ranch.user.get", comment.getAuthor()));
+                object.put("author", carousel.getUser(comment.getAuthor()));
             if (!validator.isEmpty(comment.getSubject()))
                 object.put("subject", comment.getSubject());
             if (!validator.isEmpty(comment.getLabel()))

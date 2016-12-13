@@ -2,6 +2,7 @@ package org.lpw.ranch.doc;
 
 import net.sf.json.JSONObject;
 import org.lpw.ranch.audit.Audit;
+import org.lpw.ranch.util.Carousel;
 import org.lpw.tephra.cache.Cache;
 import org.lpw.tephra.dao.model.ModelHelper;
 import org.lpw.tephra.scheduler.DateJob;
@@ -41,6 +42,8 @@ public class DocServiceImpl implements DocService, MinuteJob, DateJob {
     protected DateTime dateTime;
     @Autowired
     protected ModelHelper modelHelper;
+    @Autowired
+    protected Carousel carousel;
     @Autowired
     protected DocDao docDao;
     @Value("${" + DocModel.NAME + ".audit.default:0}")
@@ -103,7 +106,7 @@ public class DocServiceImpl implements DocService, MinuteJob, DateJob {
                     object = modelHelper.toJson(doc);
                 else if (doc.getAudit() == Audit.Passed.getValue()) {
                     object.put("id", doc.getId());
-                    object.put("author", doc.getAuthor());
+                    object.put("author", carousel.getUser(doc.getAuthor()));
                     object.put("subject", doc.getSubject());
                     if (!validator.isEmpty(doc.getImage()))
                         object.put("image", doc.getImage());
