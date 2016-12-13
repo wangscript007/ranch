@@ -16,5 +16,5 @@ interface DocDao {
 
     void comment(String id, int n);
 
-    void audit(String[] ids, Audit audit);
+    void audit(String[] ids, Audit audit, String auditRemark);
 }

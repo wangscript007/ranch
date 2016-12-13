@@ -73,6 +73,7 @@ public class TestSupport extends TephraTestSupport implements AuditTesterDao<Doc
         doc.setScore(700 + i);
         doc.setTime(new Timestamp(System.currentTimeMillis() - i * TimeUnit.Day.getTime()));
         doc.setAudit(audit.getValue());
+        doc.setAuditRemark("remark " + i);
         liteOrm.save(doc);
 
         return doc;

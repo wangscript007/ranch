@@ -21,4 +21,18 @@ public interface AuditModel extends Model {
      * @param audit 审核状态。
      */
     void setAudit(int audit);
+
+    /**
+     * 获取审核备注。
+     *
+     * @return 审核备注。
+     */
+    String getAuditRemark();
+
+    /**
+     * 设置审核备注。
+     *
+     * @param auditRemark 审核备注。
+     */
+    void setAuditRemark(String auditRemark);
 }

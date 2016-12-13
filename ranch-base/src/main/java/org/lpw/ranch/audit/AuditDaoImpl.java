@@ -20,19 +20,25 @@ public class AuditDaoImpl implements AuditDao {
     protected LiteOrm liteOrm;
 
     @Override
-    public <T extends AuditModel> void audit(Class<T> modelClass, String[] ids, Audit audit) {
+    public <T extends AuditModel> void audit(Class<T> modelClass, String[] ids, Audit audit, String auditRemark) {
         if (modelClass == null || validator.isEmpty(ids) || audit == null)
             return;
 
-        StringBuilder where = new StringBuilder("c_id in(");
         List<Object> args = new ArrayList<>();
-        for (String id : ids) {
-            if (args.size() > 0)
-                where.append(',');
-            where.append('?');
-            args.add(id);
+        StringBuilder set = new StringBuilder(audit.getSql());
+        if (!validator.isEmpty(auditRemark)) {
+            set.append(",c_audit_remark=?");
+            args.add(auditRemark);
         }
 
-        liteOrm.update(new LiteQuery(modelClass).set(audit.getSql()).where(where.append(')').toString()), args.toArray());
+        StringBuilder where = new StringBuilder("c_id in(");
+        for (int i = 0; i < ids.length; i++) {
+            if (i > 0)
+                where.append(',');
+            where.append('?');
+            args.add(ids[i]);
+        }
+
+        liteOrm.update(new LiteQuery(modelClass).set(set.toString()).where(where.append(')').toString()), args.toArray());
     }
 }

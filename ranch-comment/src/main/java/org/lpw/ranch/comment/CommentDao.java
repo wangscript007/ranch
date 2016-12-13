@@ -15,5 +15,5 @@ interface CommentDao {
 
     void save(CommentModel comment);
 
-    void audit(String[] ids, Audit audit);
+    void audit(String[] ids, Audit audit, String auditRemark);
 }

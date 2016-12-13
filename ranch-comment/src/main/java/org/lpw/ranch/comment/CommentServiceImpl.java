@@ -118,17 +118,12 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public void pass(String[] ids) {
-        audit(ids, Audit.Passed);
+    public void pass(String[] ids, String auditRemark) {
+        commentDao.audit(ids, Audit.Passed, auditRemark);
     }
 
     @Override
-    public void refuse(String[] ids) {
-        audit(ids, Audit.Refused);
-    }
-
-    protected void audit(String[] ids, Audit audit) {
-        if (!validator.isEmpty(ids))
-            commentDao.audit(ids, audit);
+    public void refuse(String[] ids, String auditRemark) {
+        commentDao.audit(ids, Audit.Refused, auditRemark);
     }
 }

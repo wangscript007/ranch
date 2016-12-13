@@ -16,11 +16,11 @@ public class AuditTest extends TestSupport {
 
     @Test
     public void pass() {
-        passTester.pass(this, "doc", 14);
+        passTester.pass(this, DocModel.NAME, "doc", 14);
     }
 
     @Test
     public void refuse() {
-        refuseTester.refuse(this, "doc", 14);
+        refuseTester.refuse(this, DocModel.NAME, "doc", 14);
     }
 }

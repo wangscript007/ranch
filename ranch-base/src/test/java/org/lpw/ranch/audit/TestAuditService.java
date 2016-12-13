@@ -7,4 +7,6 @@ public interface TestAuditService extends AuditService {
     String[] getPassIds();
 
     String[] getRefuseIds();
+
+    String getAuditRemark();
 }

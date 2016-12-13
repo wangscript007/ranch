@@ -41,7 +41,7 @@ class CommentDaoImpl implements CommentDao {
     }
 
     @Override
-    public void audit(String[] ids, Audit audit) {
-        auditDao.audit(CommentModel.class, ids, audit);
+    public void audit(String[] ids, Audit audit, String auditRemark) {
+        auditDao.audit(CommentModel.class, ids, audit, auditRemark);
     }
 }

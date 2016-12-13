@@ -18,12 +18,17 @@ public abstract class AuditCtrlSupport {
     /**
      * 审核通过。
      * ids ID集，多个ID间以逗号分隔。
+     * auditRemark 审核备注，可空。
      *
      * @return ""。
      */
-    @Execute(name = "pass", validates = {@Validate(validator = Validators.SIGN)})
+    @Execute(name = "pass", validates = {
+            @Validate(validator = Validators.NOT_EMPTY, parameter = "ids", failureCode = 81),
+            @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "auditRemark", failureCode = 83),
+            @Validate(validator = Validators.SIGN)
+    })
     public Object pass() {
-        getAuditService().pass(request.getAsArray("ids"));
+        getAuditService().pass(request.getAsArray("ids"), request.get("auditRemark"));
 
         return "";
     }
@@ -31,12 +36,18 @@ public abstract class AuditCtrlSupport {
     /**
      * 审核不通过。
      * ids ID集，多个ID间以逗号分隔。
+     * auditRemark 审核备注，必须。
      *
      * @return ""。
      */
-    @Execute(name = "refuse", validates = {@Validate(validator = Validators.SIGN)})
+    @Execute(name = "refuse", validates = {
+            @Validate(validator = Validators.NOT_EMPTY, parameter = "ids", failureCode = 81),
+            @Validate(validator = Validators.NOT_EMPTY, parameter = "auditRemark", failureCode = 82),
+            @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "auditRemark", failureCode = 83),
+            @Validate(validator = Validators.SIGN)
+    })
     public Object refuse() {
-        getAuditService().refuse(request.getAsArray("ids"));
+        getAuditService().refuse(request.getAsArray("ids"), request.get("auditRemark"));
 
         return "";
     }

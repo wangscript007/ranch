@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 public class TestAuditServiceImpl implements TestAuditService {
     private String[] passIds;
     private String[] refuseIds;
+    private String auditRemark;
 
     @Override
     public String[] getPassIds() {
@@ -21,12 +22,19 @@ public class TestAuditServiceImpl implements TestAuditService {
     }
 
     @Override
-    public void pass(String[] ids) {
-        passIds = ids;
+    public String getAuditRemark() {
+        return auditRemark;
     }
 
     @Override
-    public void refuse(String[] ids) {
+    public void pass(String[] ids, String auditRemark) {
+        passIds = ids;
+        this.auditRemark = auditRemark;
+    }
+
+    @Override
+    public void refuse(String[] ids, String auditRemark) {
         refuseIds = ids;
+        this.auditRemark = auditRemark;
     }
 }

@@ -54,7 +54,7 @@ class DocDaoImpl implements DocDao {
     }
 
     @Override
-    public void audit(String[] ids, Audit audit) {
-        auditDao.audit(DocModel.class, ids, audit);
+    public void audit(String[] ids, Audit audit, String auditRemark) {
+        auditDao.audit(DocModel.class, ids, audit, auditRemark);
     }
 }

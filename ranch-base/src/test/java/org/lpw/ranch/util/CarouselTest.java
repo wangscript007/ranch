@@ -19,8 +19,12 @@ public class CarouselTest extends TephraTestSupport {
     @Test
     public void get() {
         mockCarousel.reset();
-        mockCarousel.register("key", "{\"code\":1}");
         JSONObject object = carousel.get("key", "id 1");
+        Assert.assertEquals(1, object.size());
+        Assert.assertEquals("id 1", object.getString("id"));
+
+        mockCarousel.register("key", "{\"code\":1}");
+        object = carousel.get("key", "id 1");
         Assert.assertEquals(1, object.size());
         Assert.assertEquals("id 1", object.getString("id"));
 

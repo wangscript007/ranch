@@ -158,13 +158,13 @@ public class DocServiceImpl implements DocService, MinuteJob, DateJob {
     }
 
     @Override
-    public void pass(String[] ids) {
-        docDao.audit(ids, Audit.Passed);
+    public void pass(String[] ids, String auditRemark) {
+        docDao.audit(ids, Audit.Passed, auditRemark);
     }
 
     @Override
-    public void refuse(String[] ids) {
-        docDao.audit(ids, Audit.Refused);
+    public void refuse(String[] ids, String auditRemark) {
+        docDao.audit(ids, Audit.Refused, auditRemark);
     }
 
     /**
