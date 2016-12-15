@@ -2,6 +2,7 @@ package org.lpw.ranch.doc;
 
 import org.lpw.ranch.audit.Audit;
 import org.lpw.ranch.audit.AuditTesterDao;
+import org.lpw.ranch.user.MockUser;
 import org.lpw.tephra.cache.Cache;
 import org.lpw.tephra.crypto.Sign;
 import org.lpw.tephra.dao.orm.lite.LiteOrm;
@@ -43,6 +44,8 @@ public class TestSupport extends TephraTestSupport implements AuditTesterDao<Doc
     protected MockCarousel mockCarousel;
     @Autowired
     protected DocService docService;
+    @Autowired
+    protected MockUser mockUser;
 
     protected List<DocModel> create(int size) {
         List<DocModel> list = new ArrayList<>();

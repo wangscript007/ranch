@@ -2,21 +2,22 @@ package org.lpw.ranch.doc;
 
 import net.sf.json.JSONObject;
 import org.lpw.ranch.audit.Audit;
+import org.lpw.ranch.audit.AuditHelper;
 import org.lpw.ranch.util.Carousel;
 import org.lpw.tephra.cache.Cache;
 import org.lpw.tephra.dao.model.ModelHelper;
 import org.lpw.tephra.scheduler.DateJob;
 import org.lpw.tephra.scheduler.MinuteJob;
-import org.lpw.tephra.util.Converter;
 import org.lpw.tephra.util.DateTime;
 import org.lpw.tephra.util.Generator;
-import org.lpw.tephra.util.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -35,15 +36,13 @@ public class DocServiceImpl implements DocService, MinuteJob, DateJob {
     @Autowired
     protected Generator generator;
     @Autowired
-    protected Validator validator;
-    @Autowired
-    protected Converter converter;
-    @Autowired
     protected DateTime dateTime;
     @Autowired
     protected ModelHelper modelHelper;
     @Autowired
     protected Carousel carousel;
+    @Autowired
+    protected AuditHelper auditHelper;
     @Autowired
     protected DocDao docDao;
     @Value("${" + DocModel.NAME + ".audit.default:0}")
@@ -98,33 +97,36 @@ public class DocServiceImpl implements DocService, MinuteJob, DateJob {
         String key = getCacheKey(CACHE_JSON, id + full);
         JSONObject object = cache.get(key);
         if (object == null) {
-            object = new JSONObject();
             if (doc == null)
                 doc = findById(id);
             if (doc != null) {
+                Set<String> ignores = new HashSet<>();
+                ignores.add("owner");
+                ignores.add("author");
                 if (full)
-                    object = modelHelper.toJson(doc);
+                    object = toJson(doc, ignores, true);
                 else if (doc.getAudit() == Audit.Passed.getValue()) {
-                    object.put("id", doc.getId());
-                    object.put("author", carousel.getUser(doc.getAuthor()));
-                    object.put("subject", doc.getSubject());
-                    if (!validator.isEmpty(doc.getImage()))
-                        object.put("image", doc.getImage());
-                    if (!validator.isEmpty(doc.getThumbnail()))
-                        object.put("thumbnail", doc.getThumbnail());
-                    if (!validator.isEmpty(doc.getSummary()))
-                        object.put("summary", doc.getSummary());
-                    if (!validator.isEmpty(doc.getLabel()))
-                        object.put("label", doc.getLabel());
-                    object.put("read", doc.getRead());
-                    object.put("favorite", doc.getFavorite());
-                    object.put("comment", doc.getComment());
-                    object.put("score", doc.getScore());
-                    object.put("time", converter.toString(doc.getTime()));
+                    ignores.add("key");
+                    ignores.add("scoreMin");
+                    ignores.add("scoreMax");
+                    ignores.add("sort");
+                    auditHelper.addProperty(ignores);
+                    object = toJson(doc, ignores, false);
                 }
             }
+            if (object == null)
+                object = new JSONObject();
             cache.put(key, object, false);
         }
+
+        return object;
+    }
+
+    protected JSONObject toJson(DocModel doc, Set<String> ignores, boolean owner) {
+        JSONObject object = modelHelper.toJson(doc, ignores);
+        if (owner)
+            object.put("owner", carousel.get(doc.getKey() + ".get", doc.getOwner()));
+        object.put("author", carousel.getUser(doc.getAuthor()));
 
         return object;
     }

@@ -9,3 +9,5 @@
 [审核通过](../ranch-base/doc/audit-pass.md)
 
 [审核不通过](../ranch-base/doc/audit-refuse.md)
+
+[配置参数](src/main/resources/comment.ranch.config)

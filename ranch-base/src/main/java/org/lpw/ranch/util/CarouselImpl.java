@@ -27,7 +27,7 @@ public class CarouselImpl implements Carousel {
         JSONObject object = new JSONObject();
         object.put("id", id);
         Map<String, String> parameter = new HashMap<>();
-        parameter.put("id", id);
+        parameter.put("ids", id);
         String service = carouselHelper.service(key, null, parameter, true);
         if (validator.isEmpty(service))
             return object;

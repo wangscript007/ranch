@@ -2,6 +2,7 @@ package org.lpw.ranch.comment;
 
 import org.lpw.ranch.audit.Audit;
 import org.lpw.ranch.audit.AuditTesterDao;
+import org.lpw.ranch.user.MockUser;
 import org.lpw.tephra.crypto.Sign;
 import org.lpw.tephra.dao.orm.lite.LiteOrm;
 import org.lpw.tephra.test.TephraTestSupport;
@@ -33,6 +34,8 @@ public class TestSupport extends TephraTestSupport implements AuditTesterDao<Com
     protected MockHelper mockHelper;
     @Autowired
     protected MockCarousel mockCarousel;
+    @Autowired
+    protected MockUser mockUser;
 
     public CommentModel create(int i, Audit audit) {
         return create(i, "owner " + i, "author " + i, audit);

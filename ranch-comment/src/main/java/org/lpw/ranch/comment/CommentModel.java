@@ -1,7 +1,7 @@
 package org.lpw.ranch.comment;
 
-import org.lpw.tephra.dao.model.Jsonable;
 import org.lpw.ranch.audit.AuditModelSupport;
+import org.lpw.tephra.dao.model.Jsonable;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -9,7 +9,6 @@ import org.springframework.stereotype.Component;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
-
 import java.sql.Timestamp;
 
 /**

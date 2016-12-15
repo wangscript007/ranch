@@ -112,6 +112,16 @@ public class CreateTest extends TestSupport {
         Assert.assertEquals(1409, object.getInt("code"));
         Assert.assertEquals(message.get(Validators.PREFIX + "empty", message.get(DocModel.NAME + ".content")), object.getString("message"));
 
+        mockCarousel.reset();
+        mockUser.register();
+        mockCarousel.register("key.get", "{\n" +
+                "  \"code\":0,\n" +
+                "  \"data\":{\n" +
+                "    \"" + ownerId + "\":{\n" +
+                "      \"key\":\"owner key\"\n" +
+                "    }\n" +
+                "  }\n" +
+                "}");
         mockHelper.reset();
         mockHelper.getRequest().addParameter("key", "key");
         mockHelper.getRequest().addParameter("owner", ownerId);
@@ -137,8 +147,10 @@ public class CreateTest extends TestSupport {
         JSONObject data = object.getJSONObject("data");
         Assert.assertEquals(36, data.getString("id").length());
         Assert.assertEquals("key", data.getString("key"));
-        Assert.assertEquals(ownerId, data.getString("owner"));
-        Assert.assertEquals(authorId, data.getString("author"));
+        JSONObject owner = data.getJSONObject("owner");
+        Assert.assertEquals(ownerId, owner.getString("id"));
+        Assert.assertEquals("owner key", owner.getString("key"));
+        mockUser.verify(data.getJSONObject("author"), authorId);
         Assert.assertEquals(1, data.getInt("scoreMin"));
         Assert.assertEquals(2, data.getInt("scoreMax"));
         Assert.assertEquals(3, data.getInt("sort"));

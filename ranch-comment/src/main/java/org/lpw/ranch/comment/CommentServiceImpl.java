@@ -3,16 +3,19 @@ package org.lpw.ranch.comment;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.lpw.ranch.audit.Audit;
+import org.lpw.ranch.audit.AuditHelper;
 import org.lpw.ranch.util.Carousel;
 import org.lpw.ranch.util.Pagination;
 import org.lpw.tephra.cache.Cache;
+import org.lpw.tephra.dao.model.ModelHelper;
 import org.lpw.tephra.dao.orm.PageList;
-import org.lpw.tephra.util.Converter;
 import org.lpw.tephra.util.DateTime;
-import org.lpw.tephra.util.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * @author lpw
@@ -24,15 +27,15 @@ public class CommentServiceImpl implements CommentService {
     @Autowired
     protected Cache cache;
     @Autowired
-    protected Validator validator;
-    @Autowired
-    protected Converter converter;
-    @Autowired
     protected DateTime dateTime;
+    @Autowired
+    protected ModelHelper modelHelper;
     @Autowired
     protected Carousel carousel;
     @Autowired
     protected Pagination pagination;
+    @Autowired
+    protected AuditHelper auditHelper;
     @Autowired
     protected CommentDao commentDao;
     @Value("${" + CommentModel.NAME + ".audit.default:0}")
@@ -83,22 +86,17 @@ public class CommentServiceImpl implements CommentService {
         String cacheKey = CACHE_JSON + comment.getId() + key + owner + author + child;
         JSONObject object = cache.get(cacheKey);
         if (object == null) {
-            object = new JSONObject();
-            object.put("id", comment.getId());
-            if (key)
-                object.put("key", comment.getKey());
+            Set<String> ignores = new HashSet<>();
+            if (!key)
+                ignores.add("key");
+            ignores.add("owner");
+            ignores.add("author");
+            auditHelper.addProperty(ignores);
+            object = modelHelper.toJson(comment, ignores);
             if (owner)
                 object.put("owner", carousel.get(comment.getKey() + ".get", comment.getOwner()));
             if (author)
                 object.put("author", carousel.getUser(comment.getAuthor()));
-            if (!validator.isEmpty(comment.getSubject()))
-                object.put("subject", comment.getSubject());
-            if (!validator.isEmpty(comment.getLabel()))
-                object.put("label", comment.getLabel());
-            object.put("content", comment.getContent());
-            object.put("score", comment.getScore());
-            object.put("praise", comment.getPraise());
-            object.put("time", converter.toString(comment.getTime()));
             if (child)
                 getChildren(object, comment);
             cache.put(cacheKey, object, false);

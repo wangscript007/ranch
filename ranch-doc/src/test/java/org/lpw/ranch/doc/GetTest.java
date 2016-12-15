@@ -32,14 +32,7 @@ public class GetTest extends TestSupport {
         Assert.assertTrue(data.isEmpty());
 
         mockCarousel.reset();
-        mockCarousel.register("ranch.user.get", (key, header, parameter, cacheable) -> "{\n" +
-                "  \"code\":0,\n" +
-                "  \"data\":{\n" +
-                "    \"" + parameter.get("id") + "\":{\n" +
-                "      \"key\":\"author key\"\n" +
-                "    }\n" +
-                "  }\n" +
-                "}");
+        mockUser.register();
         for (int i = 0; i < 2; i++) {
             mockHelper.reset();
             mockHelper.getRequest().addParameter("ids", "id," + doc1.getId() + "," + doc2.getId() + "," + doc3.getId() + "," + doc4.getId());
@@ -51,9 +44,7 @@ public class GetTest extends TestSupport {
             JSONObject doc = data.getJSONObject(doc1.getId());
             Assert.assertEquals(doc1.getId(), doc.getString("id"));
             Assert.assertFalse(doc.has("key"));
-            JSONObject author = doc.getJSONObject("author");
-            Assert.assertEquals("author 1", author.getString("id"));
-            Assert.assertEquals("author key", author.getString("key"));
+            mockUser.verify(doc.getJSONObject("author"), doc1.getAuthor());
             Assert.assertFalse(doc.has("scoreMin"));
             Assert.assertFalse(doc.has("scoreMax"));
             Assert.assertFalse(doc.has("sort"));
@@ -72,9 +63,7 @@ public class GetTest extends TestSupport {
             doc = data.getJSONObject(doc2.getId());
             Assert.assertEquals(doc2.getId(), doc.getString("id"));
             Assert.assertFalse(doc.has("key"));
-            author = doc.getJSONObject("author");
-            Assert.assertEquals("author 2", author.getString("id"));
-            Assert.assertEquals("author key", author.getString("key"));
+            mockUser.verify(doc.getJSONObject("author"), doc2.getAuthor());
             Assert.assertFalse(doc.has("scoreMin"));
             Assert.assertFalse(doc.has("scoreMax"));
             Assert.assertFalse(doc.has("sort"));

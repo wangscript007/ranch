@@ -41,14 +41,7 @@ public class QueryTest extends TestSupport {
         Assert.assertEquals(message.get(Validators.PREFIX + "illegal-sign"), object.getString("message"));
 
         mockCarousel.reset();
-        mockCarousel.register("ranch.user.get", (key, header, parameter, cacheable) -> "{\n" +
-                "  \"code\":0,\n" +
-                "  \"data\":{\n" +
-                "    \"" + parameter.get("id") + "\":{\n" +
-                "      \"key\":\"author key\"\n" +
-                "    }\n" +
-                "  }\n" +
-                "}");
+        mockUser.register();
         for (int i = 0; i < list.size(); i++) {
             mockCarousel.register("key " + i + ".get", "{\n" +
                     "  \"code\":0,\n" +
@@ -116,9 +109,7 @@ public class QueryTest extends TestSupport {
         JSONObject owner = obj.getJSONObject("owner");
         Assert.assertEquals("owner " + i, owner.getString("id"));
         Assert.assertEquals("owner key " + i, owner.getString("key"));
-        JSONObject author = obj.getJSONObject("author");
-        Assert.assertEquals(comment.getAuthor(), author.getString("id"));
-        Assert.assertEquals("author key", author.getString("key"));
+        mockUser.verify(obj.getJSONObject("author"), comment.getAuthor());
         Assert.assertEquals(comment.getSubject(), obj.getString("subject"));
         Assert.assertEquals(comment.getLabel(), obj.getString("label"));
         Assert.assertEquals(comment.getContent(), obj.getString("content"));
