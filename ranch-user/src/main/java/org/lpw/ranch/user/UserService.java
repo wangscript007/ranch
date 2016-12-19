@@ -27,4 +27,12 @@ public interface UserService {
      * @return 当前用户登入信息；如果未登入则返回空JSON数据。
      */
     JSONObject sign();
+
+    /**
+     * 获取用户数据集。
+     *
+     * @param ids ID集。
+     * @return 用户数据集。
+     */
+    JSONObject get(String[] ids);
 }

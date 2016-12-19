@@ -34,4 +34,12 @@ public class UserCtrl {
     public Object sign() {
         return templates.get().success(userService.sign(), null);
     }
+
+    @Execute(name = "get", validates = {
+            @Validate(validator = Validators.NOT_EMPTY, parameter = "ids", failureCode = 11),
+            @Validate(validator = Validators.SIGN)
+    })
+    public Object get() {
+        return userService.get(request.getAsArray("ids"));
+    }
 }

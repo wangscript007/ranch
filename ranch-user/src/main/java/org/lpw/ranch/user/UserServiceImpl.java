@@ -66,6 +66,20 @@ public class UserServiceImpl implements UserService {
         return user == null ? new JSONObject() : getJson(user.getId(), user);
     }
 
+    @Override
+    public JSONObject get(String[] ids) {
+        JSONObject object = new JSONObject();
+        for (String id : ids) {
+            JSONObject user = getJson(id, null);
+            if (user.isEmpty())
+                continue;
+
+            object.put(id, user);
+        }
+
+        return object;
+    }
+
     protected JSONObject getJson(String id, UserModel user) {
         String cacheKey = CACHE_JSON + id;
         JSONObject object = cache.get(cacheKey);
