@@ -11,4 +11,12 @@ public interface AuthService {
      * @return 认证信息，如果不存在则返回null。
      */
     AuthModel findByUid(String uid);
+
+    /**
+     * 绑定MAC ID。
+     *
+     * @param userId 用户ID。
+     * @param macId  MAC ID。
+     */
+    void bindMacId(String userId, String macId);
 }

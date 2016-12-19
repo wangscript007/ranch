@@ -8,6 +8,7 @@ import org.lpw.tephra.crypto.Digest;
 import org.lpw.tephra.ctrl.context.Session;
 import org.lpw.tephra.dao.model.ModelHelper;
 import org.lpw.tephra.util.Converter;
+import org.lpw.tephra.util.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,7 +17,7 @@ import org.springframework.stereotype.Service;
  */
 @Service(UserModel.NAME + ".service")
 public class UserServiceImpl implements UserService {
-    private static final String CACHE_ID = UserModel.NAME + ".service.id:";
+    private static final String CACHE_JSON = UserModel.NAME + ".service.json:";
     private static final String SESSION = UserModel.NAME + ".service.session";
 
     @Autowired
@@ -25,6 +26,8 @@ public class UserServiceImpl implements UserService {
     protected Digest digest;
     @Autowired
     protected Converter converter;
+    @Autowired
+    protected Validator validator;
     @Autowired
     protected ModelHelper modelHelper;
     @Autowired
@@ -35,14 +38,21 @@ public class UserServiceImpl implements UserService {
     protected UserDao userDao;
 
     @Override
-    public boolean signIn(String uid, String password) {
+    public boolean signIn(String uid, String password, String macId) {
         AuthModel auth = authService.findByUid(uid);
         if (auth == null)
             return false;
 
         UserModel user = findById(auth.getUser());
-        if (user == null || (auth.getType() == 1 && !user.getPassword().equals(password(password))))
+        if (user == null)
             return false;
+
+        if (auth.getType() == 1) {
+            if (validator.isEmpty(password) || !user.getPassword().equals(password(password)))
+                return false;
+
+            authService.bindMacId(user.getId(), macId);
+        }
 
         session.set(SESSION, user);
 
@@ -53,11 +63,11 @@ public class UserServiceImpl implements UserService {
     public JSONObject sign() {
         UserModel user = session.get(SESSION);
 
-        return getJson(user.getId(), user);
+        return user == null ? new JSONObject() : getJson(user.getId(), user);
     }
 
     protected JSONObject getJson(String id, UserModel user) {
-        String cacheKey = CACHE_ID + id;
+        String cacheKey = CACHE_JSON + id;
         JSONObject object = cache.get(cacheKey);
         if (object == null) {
             if (user == null)

@@ -63,14 +63,14 @@ public class AddressTest extends TestSupport {
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(0, object.getInt("code"));
         JSONObject data = object.getJSONObject("data");
-        Assert.assertEquals("北京市东城区东华门大街", data.getString("address"));
+        Assert.assertEquals("北京市东城区景山前街4号东华门大街", data.getString("address"));
         JSONObject component = data.getJSONObject("component");
         Assert.assertEquals("中国", component.getString("nation"));
         Assert.assertEquals("北京市", component.getString("province"));
         Assert.assertEquals("北京市", component.getString("city"));
         Assert.assertEquals("东城区", component.getString("district"));
         Assert.assertEquals("东华门大街", component.getString("street"));
-        Assert.assertEquals("", component.getString("street_number"));
+        Assert.assertEquals("景山前街4号", component.getString("street_number"));
         Assert.assertEquals("110101", data.getString("adcode"));
 
         Field field = GpsServiceImpl.class.getDeclaredField("qqlbsKey");

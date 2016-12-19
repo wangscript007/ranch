@@ -1,6 +1,7 @@
 package org.lpw.ranch.user.auth;
 
 import org.lpw.tephra.cache.Cache;
+import org.lpw.tephra.util.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +15,8 @@ public class AuthServiceImpl implements AuthService {
     @Autowired
     protected Cache cache;
     @Autowired
+    protected Validator validator;
+    @Autowired
     protected AuthDao authDao;
 
     @Override
@@ -24,5 +27,21 @@ public class AuthServiceImpl implements AuthService {
             cache.put(cacheKey, auth = authDao.findByUid(uid), false);
 
         return auth;
+    }
+
+    @Override
+    public void bindMacId(String userId, String macId) {
+        if (validator.isEmpty(macId))
+            return;
+
+        AuthModel auth = findByUid(macId);
+        if (auth == null) {
+            auth = new AuthModel();
+            auth.setUid(macId);
+        } else if (auth.getUser().equals(userId))
+            return;
+
+        auth.setUser(userId);
+        authDao.save(auth);
     }
 }

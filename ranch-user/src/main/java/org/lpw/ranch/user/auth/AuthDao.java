@@ -5,4 +5,6 @@ package org.lpw.ranch.user.auth;
  */
 interface AuthDao {
     AuthModel findByUid(String uid);
+
+    void save(AuthModel auth);
 }

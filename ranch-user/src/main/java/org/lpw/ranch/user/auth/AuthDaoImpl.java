@@ -17,4 +17,9 @@ class AuthDaoImpl implements AuthDao {
     public AuthModel findByUid(String uid) {
         return liteOrm.findOne(new LiteQuery(AuthModel.class).where("c_uid=?"), new Object[]{uid});
     }
+
+    @Override
+    public void save(AuthModel auth) {
+        liteOrm.save(auth);
+    }
 }
