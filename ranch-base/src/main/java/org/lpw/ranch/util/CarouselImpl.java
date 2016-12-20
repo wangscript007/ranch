@@ -19,6 +19,8 @@ public class CarouselImpl implements Carousel {
     protected Validator validator;
     @Autowired
     protected CarouselHelper carouselHelper;
+    @Value("${ranch.util.carousel.get.cache-time:5}")
+    protected int cacheTime;
     @Value("${ranch.util.carousel.key.user:ranch.user}")
     protected String userKey;
 
@@ -28,7 +30,7 @@ public class CarouselImpl implements Carousel {
         object.put("id", id);
         Map<String, String> parameter = new HashMap<>();
         parameter.put("ids", id);
-        String service = carouselHelper.service(key, null, parameter, true);
+        String service = carouselHelper.service(key, null, parameter, cacheTime);
         if (validator.isEmpty(service))
             return object;
 

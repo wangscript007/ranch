@@ -5,19 +5,25 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.lpw.tephra.test.TephraTestSupport;
 import org.lpw.tephra.test.mock.MockCarousel;
+import org.lpw.tephra.util.Thread;
+import org.lpw.tephra.util.TimeUnit;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * @author lpw
  */
 public class CarouselTest extends TephraTestSupport {
+    @Autowired private Thread thread;
     @Autowired
-    protected MockCarousel mockCarousel;
+    private MockCarousel mockCarousel;
     @Autowired
-    protected Carousel carousel;
+    private Carousel carousel;
 
     @Test
     public void get() {
+        while ((System.currentTimeMillis()/1000)%60>55)
+            thread.sleep(5, TimeUnit.Second);
+
         mockCarousel.reset();
         JSONObject object = carousel.get("key", "id 1");
         Assert.assertEquals(1, object.size());

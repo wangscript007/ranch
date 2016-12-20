@@ -31,7 +31,7 @@ public class SignTest extends TestSupport {
 
         list.forEach(user -> {
             mockHelper.reset();
-            session.set(UserModel.NAME + ".service.session", user);
+            session.set(mockHelper.getSession().getId(), UserModel.NAME + ".service.session", user);
             mockHelper.mock("/user/sign");
             JSONObject obj = mockHelper.getResponse().asJson();
             Assert.assertEquals(0, obj.getInt("code"));
