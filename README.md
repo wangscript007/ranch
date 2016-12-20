@@ -1,4 +1,4 @@
-Ranch旨在构建一系列基于[Tephra](../tephra)的微服务模块，各模块间相对独立，通过[Carousel](../carousel)服务中间件进行交互。
+Ranch旨在构建一系列基于[Tephra](https://github.com/heisedebaise/tephra)的微服务模块，各模块间相对独立，通过[Carousel](https://github.com/heisedebaise/carousel)服务中间件进行交互。
 
 Ranch将实现并开源一系列通用的业务模块，并建议各项目在此基础上开发业务模块。并且Ranch基于[Apache](LICENSE)开源协议，因此各项目可直接使用并且不需要开源项目相关的模块，也不需要为此支付任何成本。
 
