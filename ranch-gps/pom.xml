@@ -24,9 +24,9 @@
             <version>1.0.0-RELEASE</version>
         </dependency>
         <dependency>
-            <groupId>org.lpw.tephra</groupId>
-            <artifactId>tephra-test</artifactId>
-            <version>LATEST</version>
+            <groupId>org.lpw.ranch</groupId>
+            <artifactId>ranch-test</artifactId>
+            <version>1.0.0-RELEASE</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
