@@ -13,7 +13,7 @@ import java.util.List;
 public class GetTest extends TestSupport {
     @Test
     public void get() {
-        mockScheduler.pause();
+        schedulerAspect.pause();
         List<ClassifyModel> list = new ArrayList<>();
         for (int i = 0; i < 5; i++)
             list.add(create(i, null, i % 2 == 0));
@@ -129,6 +129,6 @@ public class GetTest extends TestSupport {
         equalsCodeName(classify, "code 44", "name 44");
         Assert.assertEquals("new label 4", classify.getString("label"));
 
-        mockScheduler.press();
+        schedulerAspect.press();
     }
 }

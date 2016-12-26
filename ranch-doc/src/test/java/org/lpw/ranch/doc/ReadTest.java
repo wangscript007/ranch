@@ -15,7 +15,7 @@ public class ReadTest extends TestSupport {
     @Test
     @SuppressWarnings({"unchecked"})
     public void read() {
-        mockScheduler.pause();
+        schedulerAspect.pause();
         List<DocModel> list = create(2);
 
         mockHelper.reset();
@@ -73,6 +73,6 @@ public class ReadTest extends TestSupport {
                 Assert.assertEquals(402 + j, findById(list.get(j).getId()).getRead());
         }
 
-        mockScheduler.press();
+        schedulerAspect.press();
     }
 }

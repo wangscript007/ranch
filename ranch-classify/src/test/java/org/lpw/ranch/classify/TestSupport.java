@@ -6,47 +6,48 @@ import org.lpw.ranch.recycle.Recycle;
 import org.lpw.tephra.cache.Cache;
 import org.lpw.tephra.crypto.Sign;
 import org.lpw.tephra.dao.orm.lite.LiteOrm;
+import org.lpw.tephra.test.SchedulerAspect;
 import org.lpw.tephra.test.TephraTestSupport;
 import org.lpw.tephra.test.mock.MockHelper;
-import org.lpw.tephra.test.mock.MockScheduler;
 import org.lpw.tephra.util.Converter;
 import org.lpw.tephra.util.Generator;
 import org.lpw.tephra.util.Message;
-import org.springframework.beans.factory.annotation.Autowired;
+
+import javax.inject.Inject;
 
 /**
  * @author lpw
  */
 public class TestSupport extends TephraTestSupport {
-    @Autowired
-    protected Message message;
-    @Autowired
-    protected Generator generator;
-    @Autowired
-    protected Converter converter;
-    @Autowired
-    protected Cache cache;
-    @Autowired
-    protected LiteOrm liteOrm;
-    @Autowired
-    protected Sign sign;
-    @Autowired
-    protected MockHelper mockHelper;
-    @Autowired
-    protected MockScheduler mockScheduler;
-    @Autowired
-    protected ClassifyService classifyService;
+    @Inject
+    Message message;
+    @Inject
+    Generator generator;
+    @Inject
+    Converter converter;
+    @Inject
+    Cache cache;
+    @Inject
+    LiteOrm liteOrm;
+    @Inject
+    Sign sign;
+    @Inject
+    MockHelper mockHelper;
+    @Inject
+    SchedulerAspect schedulerAspect;
+    @Inject
+    ClassifyService classifyService;
 
-    protected void equalsCodeName(JSONObject object, String code, String name) {
+    void equalsCodeName(JSONObject object, String code, String name) {
         Assert.assertEquals(code, object.getString("code"));
         Assert.assertEquals(name, object.getString("name"));
     }
 
-    protected ClassifyModel create(int code, boolean recycle) {
+    ClassifyModel create(int code, boolean recycle) {
         return create(code, "label " + code, recycle);
     }
 
-    protected ClassifyModel create(int code, String label, boolean recycle) {
+    ClassifyModel create(int code, String label, boolean recycle) {
         ClassifyModel classify = new ClassifyModel();
         classify.setCode("code " + code);
         classify.setName("name " + code);

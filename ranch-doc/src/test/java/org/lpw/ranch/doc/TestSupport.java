@@ -6,16 +6,16 @@ import org.lpw.ranch.user.MockUser;
 import org.lpw.tephra.cache.Cache;
 import org.lpw.tephra.crypto.Sign;
 import org.lpw.tephra.dao.orm.lite.LiteOrm;
+import org.lpw.tephra.test.SchedulerAspect;
 import org.lpw.tephra.test.TephraTestSupport;
 import org.lpw.tephra.test.mock.MockCarousel;
 import org.lpw.tephra.test.mock.MockHelper;
-import org.lpw.tephra.test.mock.MockScheduler;
 import org.lpw.tephra.util.Converter;
 import org.lpw.tephra.util.Generator;
 import org.lpw.tephra.util.Message;
 import org.lpw.tephra.util.TimeUnit;
-import org.springframework.beans.factory.annotation.Autowired;
 
+import javax.inject.Inject;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,30 +24,30 @@ import java.util.List;
  * @author lpw
  */
 public class TestSupport extends TephraTestSupport implements AuditTesterDao<DocModel> {
-    @Autowired
-    protected Message message;
-    @Autowired
-    protected Generator generator;
-    @Autowired
-    protected Converter converter;
-    @Autowired
-    protected Cache cache;
-    @Autowired
-    protected LiteOrm liteOrm;
-    @Autowired
-    protected Sign sign;
-    @Autowired
-    protected MockHelper mockHelper;
-    @Autowired
-    protected MockScheduler mockScheduler;
-    @Autowired
-    protected MockCarousel mockCarousel;
-    @Autowired
-    protected DocService docService;
-    @Autowired
-    protected MockUser mockUser;
+    @Inject
+    Message message;
+    @Inject
+    Generator generator;
+    @Inject
+    Converter converter;
+    @Inject
+    Cache cache;
+    @Inject
+    LiteOrm liteOrm;
+    @Inject
+    Sign sign;
+    @Inject
+    SchedulerAspect schedulerAspect;
+    @Inject
+    MockHelper mockHelper;
+    @Inject
+    MockCarousel mockCarousel;
+    @Inject
+    DocService docService;
+    @Inject
+    MockUser mockUser;
 
-    protected List<DocModel> create(int size) {
+    List<DocModel> create(int size) {
         List<DocModel> list = new ArrayList<>();
         for (int i = 0; i < size; i++)
             list.add(create(i, Audit.Passed));
@@ -59,7 +59,7 @@ public class TestSupport extends TephraTestSupport implements AuditTesterDao<Doc
         return create(i, "image " + i, "thumbnail " + i, "summary " + i, "label " + i, audit);
     }
 
-    protected DocModel create(int i, String image, String thumbnail, String summary, String label, Audit audit) {
+    DocModel create(int i, String image, String thumbnail, String summary, String label, Audit audit) {
         DocModel doc = new DocModel();
         doc.setKey("key " + i);
         doc.setOwner("owner " + i);

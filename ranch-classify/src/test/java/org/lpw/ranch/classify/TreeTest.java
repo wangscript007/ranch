@@ -13,7 +13,7 @@ import org.lpw.tephra.ctrl.validate.Validators;
 public class TreeTest extends TestSupport {
     @Test
     public void tree() {
-        mockScheduler.pause();
+        schedulerAspect.pause();
         cache.remove(ClassifyModel.NAME + ".service.tree:");
         ClassifyModel classify1a = create(1, false);
         ClassifyModel classify1b = create(1, false);
@@ -106,6 +106,6 @@ public class TreeTest extends TestSupport {
         Assert.assertEquals(0, object.getInt("code"));
         data = object.getJSONArray("data");
         Assert.assertTrue(data.isEmpty());
-        mockScheduler.press();
+        schedulerAspect.press();
     }
 }
