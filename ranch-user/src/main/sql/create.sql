@@ -30,4 +30,4 @@ CREATE TABLE t_user_auth
 
   PRIMARY KEY pk_user_auth(c_id),
   UNIQUE KEY uk_user_auth_uid(c_uid)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
