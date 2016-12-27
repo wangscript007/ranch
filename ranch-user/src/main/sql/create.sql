@@ -18,7 +18,7 @@ CREATE TABLE t_user
   KEY k_user_mobile(c_mobile),
   KEY k_user_email(c_email),
   UNIQUE KEY uk_user_code(c_code)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 DROP TABLE IF EXISTS t_user_auth;
 CREATE TABLE t_user_auth
@@ -30,4 +30,4 @@ CREATE TABLE t_user_auth
 
   PRIMARY KEY pk_user_auth(c_id),
   UNIQUE KEY uk_user_auth_uid(c_uid)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

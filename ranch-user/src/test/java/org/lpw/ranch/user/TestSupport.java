@@ -65,6 +65,7 @@ public class TestSupport extends TephraTestSupport {
     }
 
     protected void equals(UserModel user, JSONObject object) {
+        Assert.assertEquals(user.getId(), object.getString("id"));
         Assert.assertFalse(object.has("password"));
         Assert.assertEquals(user.getName(), object.getString("name"));
         Assert.assertEquals(user.getNick(), object.getString("nick"));

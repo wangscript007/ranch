@@ -18,4 +18,4 @@ CREATE TABLE t_comment
   KEY k_comment_audit(c_audit,c_time),
   KEY k_comment_audit_owner(c_audit,c_owner,c_time),
   KEY k_comment_author(c_author,c_time)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

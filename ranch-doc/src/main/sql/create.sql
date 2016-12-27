@@ -26,4 +26,4 @@ CREATE TABLE t_doc
   KEY k_doc_key(c_audit,c_key),
   KEY k_doc_owner(c_audit,c_owner),
   KEY k_doc_author(c_author,c_time)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

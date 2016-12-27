@@ -9,4 +9,4 @@ CREATE TABLE t_classify
 
   PRIMARY KEY pk_classify(c_id),
   KEY k_classify_code(c_recycle,c_code)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
