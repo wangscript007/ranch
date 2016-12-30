@@ -1,6 +1,8 @@
 # 删除评论
 
-URI /comment/delete
+请求：
+- Service Key - ranch.comment.delete
+- URI - /comment/delete
 
 参数
 - id 评论ID值。

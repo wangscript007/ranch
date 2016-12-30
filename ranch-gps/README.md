@@ -2,7 +2,7 @@
 
 ## 获取GPS坐标对应的地址信息
 
-地址：
+请求：
 - Service Key - ranch.gps.address
 - URI - /gps/address
 

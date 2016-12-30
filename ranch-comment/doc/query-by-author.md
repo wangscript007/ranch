@@ -1,6 +1,8 @@
 # 检索作者评论
 
-URI /comment/query-by-author
+请求：
+- Service Key - ranch.comment.query-by-author
+- URI - /comment/query-by-author
 
 参数
 - author 作者ID值。
@@ -16,7 +18,6 @@ URI /comment/query-by-author
   "list":[{
     "id": "ID值。",
     "owner": {},
-    "owner-comment": "所有者信息，未找到则仅包含id属性。",
     "subject": "标题",
     "label": "标签",
     "content": "内容",
@@ -24,3 +25,4 @@ URI /comment/query-by-author
   }]
 }
 ```
+- owner 所有者信息，未找到则仅包含id属性。

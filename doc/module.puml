@@ -1,0 +1,10 @@
+@startuml
+
+[base] <-- [gps]
+[base] <-- [classify]
+[base] <-- [comment]
+[base] <-- [doc]
+[base] <-- [user]
+[test]
+
+@enduml

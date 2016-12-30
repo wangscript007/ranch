@@ -1,14 +1,13 @@
-# 审核通过
+# 从回收站还原
 
 请求：
-- Service Key - ${module-name}.pass
-- URI - /${module-path}/pass
+- Service Key - ${module-name}.restore
+- URI - /${module-path}/restore
 > ${module-name}为模块名称。
 
 > ${module-path}为模块路径。
 
 参数
-- ids ID集，即要审核的ID数组，以逗号分隔。
-- auditRemark 审核备注。
+- id ID值。
 
 > 后台管理接口，需验证[请求参数签名](https://github.com/heisedebaise/tephra/blob/master/tephra-ctrl/doc/sign.md)。

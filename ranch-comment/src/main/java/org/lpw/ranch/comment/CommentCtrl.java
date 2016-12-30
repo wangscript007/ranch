@@ -24,7 +24,7 @@ public class CommentCtrl extends AuditCtrlSupport {
 
     /**
      * 检索评论集。
-     * audit 审核状态。
+     * audit 审核状态：0-待审核；1-审核通过；2-审核不通过。
      * pageSize 每页显示记录数。
      * pageNum 当前显示页数。
      *
