@@ -1,8 +1,9 @@
 package org.lpw.ranch.audit;
 
 import org.lpw.tephra.ctrl.execute.Execute;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+
+import javax.inject.Inject;
 
 /**
  * @author lpw
@@ -10,7 +11,7 @@ import org.springframework.stereotype.Controller;
 @Controller(TestAuditModel.NAME + ".ctrl")
 @Execute(name = "/audit/", key = TestAuditModel.NAME, code = "99")
 public class TestAuditCtrl extends AuditCtrlSupport {
-    @Autowired
+    @Inject
     private TestAuditService auditService;
 
     @Override

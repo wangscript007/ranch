@@ -4,7 +4,8 @@ import org.lpw.tephra.ctrl.context.Request;
 import org.lpw.tephra.ctrl.execute.Execute;
 import org.lpw.tephra.ctrl.validate.Validate;
 import org.lpw.tephra.ctrl.validate.Validators;
-import org.springframework.beans.factory.annotation.Autowired;
+
+import javax.inject.Inject;
 
 /**
  * 回收站操作服务。
@@ -12,7 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @author lpw
  */
 public abstract class RecycleCtrlSupport {
-    @Autowired
+    @Inject
     protected Request request;
 
     /**

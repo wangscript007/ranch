@@ -3,16 +3,17 @@ package org.lpw.ranch.util;
 import org.junit.Assert;
 import org.junit.Test;
 import org.lpw.tephra.test.TephraTestSupport;
-import org.lpw.tephra.test.mock.MockHelper;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.lpw.tephra.test.MockHelper;
+
+import javax.inject.Inject;
 
 /**
  * @author lpw
  */
 public class PaginationTest extends TephraTestSupport {
-    @Autowired
+    @Inject
     private MockHelper mockHelper;
-    @Autowired
+    @Inject
     private Pagination pagination;
 
     @Test

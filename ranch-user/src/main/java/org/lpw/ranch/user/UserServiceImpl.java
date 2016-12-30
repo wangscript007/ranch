@@ -9,8 +9,9 @@ import org.lpw.tephra.ctrl.context.Session;
 import org.lpw.tephra.dao.model.ModelHelper;
 import org.lpw.tephra.util.Converter;
 import org.lpw.tephra.util.Validator;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import javax.inject.Inject;
 
 /**
  * @author lpw
@@ -20,22 +21,22 @@ public class UserServiceImpl implements UserService {
     private static final String CACHE_JSON = UserModel.NAME + ".service.json:";
     private static final String SESSION = UserModel.NAME + ".service.session";
 
-    @Autowired
-    protected Cache cache;
-    @Autowired
-    protected Digest digest;
-    @Autowired
-    protected Converter converter;
-    @Autowired
-    protected Validator validator;
-    @Autowired
-    protected ModelHelper modelHelper;
-    @Autowired
-    protected Session session;
-    @Autowired
-    protected AuthService authService;
-    @Autowired
-    protected UserDao userDao;
+    @Inject
+    private Cache cache;
+    @Inject
+    private Digest digest;
+    @Inject
+    private Converter converter;
+    @Inject
+    private Validator validator;
+    @Inject
+    private ModelHelper modelHelper;
+    @Inject
+    private Session session;
+    @Inject
+    private AuthService authService;
+    @Inject
+    private UserDao userDao;
 
     @Override
     public boolean signIn(String uid, String password, String macId) {
@@ -80,7 +81,7 @@ public class UserServiceImpl implements UserService {
         return object;
     }
 
-    protected JSONObject getJson(String id, UserModel user) {
+    private JSONObject getJson(String id, UserModel user) {
         String cacheKey = CACHE_JSON + id;
         JSONObject object = cache.get(cacheKey);
         if (object == null) {
@@ -97,11 +98,11 @@ public class UserServiceImpl implements UserService {
     }
 
 
-    protected UserModel findById(String id) {
+    private UserModel findById(String id) {
         return userDao.findById(id);
     }
 
-    protected String password(String password) {
+    private String password(String password) {
         return digest.md5(UserModel.NAME + digest.sha1(password + UserModel.NAME));
     }
 }

@@ -2,20 +2,21 @@ package org.lpw.ranch.user;
 
 import net.sf.json.JSONObject;
 import org.junit.Assert;
-import org.lpw.tephra.test.mock.MockCarousel;
+import org.lpw.tephra.test.MockCarousel;
 import org.lpw.tephra.util.Converter;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import javax.inject.Inject;
 
 /**
  * @author lpw
  */
 @Component("ranch.user.mock")
 public class MockUserImpl implements MockUser {
-    @Autowired
-    protected Converter converter;
-    @Autowired
-    protected MockCarousel mockCarousel;
+    @Inject
+    private Converter converter;
+    @Inject
+    private MockCarousel mockCarousel;
 
     @Override
     public void register() {
@@ -40,5 +41,18 @@ public class MockUserImpl implements MockUser {
         Assert.assertEquals(2, user.size());
         Assert.assertEquals(id, user.getString("id"));
         Assert.assertEquals("ranch.user.get", user.getString("key"));
+    }
+
+    @Override
+    public void sign(String id) {
+        mockCarousel.register("ranch.user.sign", (key, header, parameter, cacheable) -> {
+            JSONObject object = new JSONObject();
+            object.put("code", 0);
+            JSONObject data = new JSONObject();
+            data.put("id", id);
+            object.put("data", data);
+
+            return object.toString();
+        });
     }
 }

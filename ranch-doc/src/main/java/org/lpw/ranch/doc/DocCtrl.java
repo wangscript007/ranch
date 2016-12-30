@@ -7,9 +7,9 @@ import org.lpw.tephra.ctrl.execute.Execute;
 import org.lpw.tephra.ctrl.template.Templates;
 import org.lpw.tephra.ctrl.validate.Validate;
 import org.lpw.tephra.ctrl.validate.Validators;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
+import javax.inject.Inject;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -19,10 +19,10 @@ import java.util.Map;
 @Controller(DocModel.NAME + ".ctrl")
 @Execute(name = "/doc/", key = DocModel.NAME, code = "14")
 public class DocCtrl extends AuditCtrlSupport {
-    @Autowired
-    protected Request request;
-    @Autowired
-    protected DocService docService;
+    @Inject
+    private Request request;
+    @Inject
+    private DocService docService;
 
     /**
      * 获取指定ID的文档信息集。

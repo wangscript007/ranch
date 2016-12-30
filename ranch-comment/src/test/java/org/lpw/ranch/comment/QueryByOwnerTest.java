@@ -75,7 +75,7 @@ public class QueryByOwnerTest extends TestSupport {
         }
     }
 
-    protected void equals(CommentModel comment, JSONObject obj, int i, CommentModel child) {
+    private void equals(CommentModel comment, JSONObject obj, int i, CommentModel child) {
         Assert.assertEquals(comment.getId(), obj.getString("id"));
         Assert.assertFalse(obj.has("key"));
         Assert.assertFalse(obj.has("owner"));

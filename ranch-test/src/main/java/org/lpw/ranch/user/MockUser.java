@@ -18,4 +18,11 @@ public interface MockUser {
      * @param id   目标ID值。
      */
     void verify(JSONObject user, String id);
+
+    /**
+     * 设置用户登入信息。
+     *
+     * @param id 用户ID。
+     */
+    void sign(String id);
 }

@@ -10,4 +10,6 @@
 
 [审核不通过](../ranch-base/doc/audit-refuse.md)
 
+[删除评论](doc/delete.md)
+
 [配置参数](src/main/resources/comment.ranch.config)

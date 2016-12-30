@@ -3,18 +3,19 @@ package org.lpw.ranch.recycle;
 import org.lpw.tephra.dao.orm.lite.LiteOrm;
 import org.lpw.tephra.dao.orm.lite.LiteQuery;
 import org.lpw.tephra.util.Validator;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+
+import javax.inject.Inject;
 
 /**
  * @author lpw
  */
 @Repository("ranch.recycle.dao")
 public class RecycleDaoImpl implements RecycleDao {
-    @Autowired
-    protected Validator validator;
-    @Autowired
-    protected LiteOrm liteOrm;
+    @Inject
+    private Validator validator;
+    @Inject
+    private LiteOrm liteOrm;
 
     @Override
     public <T extends RecycleModel> void recycle(Class<T> modelClass, String id, Recycle recycle) {

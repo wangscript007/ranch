@@ -3,8 +3,8 @@ package org.lpw.ranch.audit;
 import org.junit.Assert;
 import org.junit.Test;
 import org.lpw.tephra.test.TephraTestSupport;
-import org.springframework.beans.factory.annotation.Autowired;
 
+import javax.inject.Inject;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -12,8 +12,8 @@ import java.util.Set;
  * @author lpw
  */
 public class AuditHelperTest extends TephraTestSupport {
-    @Autowired
-    protected AuditHelper auditHelper;
+    @Inject
+    private AuditHelper auditHelper;
 
     @Test
     public void addProperty() {

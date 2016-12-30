@@ -9,18 +9,23 @@ import javax.inject.Inject;
 /**
  * @author lpw
  */
-@Controller(UserService.VALIDATOR_SIGN_IN)
+@Controller(User.VALIDATOR_SIGN_IN)
 public class SignInValidatorImpl extends ValidatorSupport {
     @Inject
-    private UserService userService;
+    private User user;
 
     @Override
-    public boolean validate(ValidateWrapper validate, String[] parameters) {
-        return userService.signIn(parameters[0], parameters[1], parameters[2]);
+    public boolean validate(ValidateWrapper validate, String parameter) {
+        return !user.sign().isEmpty();
+    }
+
+    @Override
+    public int getFailureCode(ValidateWrapper validate) {
+        return 9901;
     }
 
     @Override
     protected String getDefaultFailureMessageKey() {
-        return UserModel.NAME + ".sign-in.failure";
+        return "ranch.base.user.need-sign-in";
     }
 }

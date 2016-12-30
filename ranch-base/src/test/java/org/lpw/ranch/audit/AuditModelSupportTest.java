@@ -6,15 +6,16 @@ import org.junit.Test;
 import org.lpw.tephra.dao.model.ModelHelper;
 import org.lpw.tephra.dao.orm.lite.LiteOrm;
 import org.lpw.tephra.test.TephraTestSupport;
-import org.springframework.beans.factory.annotation.Autowired;
+
+import javax.inject.Inject;
 
 /**
  * @author lpw
  */
 public class AuditModelSupportTest extends TephraTestSupport {
-    @Autowired
+    @Inject
     private ModelHelper modelHelper;
-    @Autowired
+    @Inject
     private LiteOrm liteOrm;
 
     @Test

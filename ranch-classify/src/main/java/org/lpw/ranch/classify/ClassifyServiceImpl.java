@@ -10,9 +10,9 @@ import org.lpw.tephra.scheduler.DateJob;
 import org.lpw.tephra.util.Generator;
 import org.lpw.tephra.util.Json;
 import org.lpw.tephra.util.Validator;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.inject.Inject;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -25,18 +25,18 @@ public class ClassifyServiceImpl implements ClassifyService, DateJob {
     private static final String CACHE_TREE = ClassifyModel.NAME + ".service.tree:";
     private static final String CACHE_JSON = ClassifyModel.NAME + ".service.json:";
 
-    @Autowired
-    protected Cache cache;
-    @Autowired
-    protected Validator validator;
-    @Autowired
-    protected Generator generator;
-    @Autowired
-    protected Json json;
-    @Autowired
-    protected Pagination pagination;
-    @Autowired
-    protected ClassifyDao classifyDao;
+    @Inject
+    private Cache cache;
+    @Inject
+    private Validator validator;
+    @Inject
+    private Generator generator;
+    @Inject
+    private Json json;
+    @Inject
+    private Pagination pagination;
+    @Inject
+    private ClassifyDao classifyDao;
 
     @Override
     public JSONObject query(String code) {
@@ -64,7 +64,7 @@ public class ClassifyServiceImpl implements ClassifyService, DateJob {
         return array;
     }
 
-    protected JSONObject findParent(JSONArray array, String code) {
+    private JSONObject findParent(JSONArray array, String code) {
         for (int i = 0, size = array.size(); i < size; i++) {
             JSONObject object = array.getJSONObject(i);
             String string = object.getString("code");
@@ -146,7 +146,7 @@ public class ClassifyServiceImpl implements ClassifyService, DateJob {
         return getJson(id, classify, Recycle.No);
     }
 
-    protected JSONObject getJson(String id, ClassifyModel classify, Recycle recycle) {
+    private JSONObject getJson(String id, ClassifyModel classify, Recycle recycle) {
         String cacheKey = CACHE_JSON + getRandom() + id;
         JSONObject object = classify == null ? cache.get(cacheKey) : null;
         if (object == null) {
@@ -185,7 +185,7 @@ public class ClassifyServiceImpl implements ClassifyService, DateJob {
         return toJson(classifyDao.recycle(pagination.getPageSize(), pagination.getPageNum()), Recycle.Yes);
     }
 
-    protected JSONObject toJson(PageList<ClassifyModel> pl, Recycle recycle) {
+    private JSONObject toJson(PageList<ClassifyModel> pl, Recycle recycle) {
         JSONObject object = pl.toJson(false);
         JSONArray array = new JSONArray();
         pl.getList().forEach(classify -> array.add(getJson(classify.getId(), classify, recycle)));
@@ -213,17 +213,17 @@ public class ClassifyServiceImpl implements ClassifyService, DateJob {
         resetRandom();
     }
 
-    protected ClassifyModel findById(String id) {
+    private ClassifyModel findById(String id) {
         return classifyDao.findById(id);
     }
 
-    protected String getRandom() {
+    private String getRandom() {
         String random = cache.get(CACHE_RANDOM);
 
         return validator.isEmpty(random) ? resetRandom() : random;
     }
 
-    protected String resetRandom() {
+    private String resetRandom() {
         String random = generator.random(32);
         cache.put(CACHE_RANDOM, random, true);
 

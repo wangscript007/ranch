@@ -6,24 +6,25 @@ import org.junit.Test;
 import org.lpw.tephra.crypto.Sign;
 import org.lpw.tephra.ctrl.validate.Validators;
 import org.lpw.tephra.test.TephraTestSupport;
-import org.lpw.tephra.test.mock.MockHelper;
+import org.lpw.tephra.test.MockHelper;
 import org.lpw.tephra.util.Generator;
 import org.lpw.tephra.util.Message;
-import org.springframework.beans.factory.annotation.Autowired;
+
+import javax.inject.Inject;
 
 /**
  * @author lpw
  */
 public class AuditCtrlSupportTest extends TephraTestSupport {
-    @Autowired
+    @Inject
     private Message message;
-    @Autowired
+    @Inject
     private Generator generator;
-    @Autowired
+    @Inject
     private Sign sign;
-    @Autowired
+    @Inject
     private MockHelper mockHelper;
-    @Autowired
+    @Inject
     private TestAuditService auditService;
 
     @Test

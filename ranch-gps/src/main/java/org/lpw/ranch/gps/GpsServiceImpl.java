@@ -3,9 +3,10 @@ package org.lpw.ranch.gps;
 import net.sf.json.JSONObject;
 import org.lpw.tephra.util.Http;
 import org.lpw.tephra.util.Validator;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+
+import javax.inject.Inject;
 
 /**
  * @author lpw
@@ -14,12 +15,12 @@ import org.springframework.stereotype.Service;
 public class GpsServiceImpl implements GpsService {
     private static final String[] ADDRESS = {"http://apis.map.qq.com/ws/geocoder/v1/?location=", "&get_poi=0&key="};
 
-    @Autowired
-    protected Validator validator;
-    @Autowired
-    protected Http http;
+    @Inject
+    private Validator validator;
+    @Inject
+    private Http http;
     @Value("${ranch.gps.qqlbs.key:}")
-    protected String qqlbsKey;
+    private String qqlbsKey;
 
     @Override
     public JSONObject address(String lat, String lng) {

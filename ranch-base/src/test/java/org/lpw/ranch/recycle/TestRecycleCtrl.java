@@ -1,8 +1,9 @@
 package org.lpw.ranch.recycle;
 
 import org.lpw.tephra.ctrl.execute.Execute;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+
+import javax.inject.Inject;
 
 /**
  * @author lpw
@@ -10,7 +11,7 @@ import org.springframework.stereotype.Controller;
 @Controller(TestRecycleModel.NAME + ".ctrl")
 @Execute(name = "/recycle/", key = TestRecycleModel.NAME, code = "99")
 public class TestRecycleCtrl extends RecycleCtrlSupport {
-    @Autowired
+    @Inject
     private TestRecycleService recycleService;
 
     @Override

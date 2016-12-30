@@ -6,8 +6,9 @@ import org.lpw.tephra.ctrl.execute.Execute;
 import org.lpw.tephra.ctrl.template.Templates;
 import org.lpw.tephra.ctrl.validate.Validate;
 import org.lpw.tephra.ctrl.validate.Validators;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+
+import javax.inject.Inject;
 
 /**
  * @author lpw
@@ -15,10 +16,10 @@ import org.springframework.stereotype.Controller;
 @Controller(ClassifyModel.NAME + ".ctrl")
 @Execute(name = "/classify/", key = ClassifyModel.NAME, code = "12")
 public class ClassifyCtrl extends RecycleCtrlSupport {
-    @Autowired
-    protected Templates templates;
-    @Autowired
-    protected ClassifyService classifyService;
+    @Inject
+    private Templates templates;
+    @Inject
+    private ClassifyService classifyService;
 
     /**
      * 检索分类信息集。

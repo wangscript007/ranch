@@ -4,8 +4,9 @@ import org.lpw.tephra.ctrl.context.Request;
 import org.lpw.tephra.ctrl.execute.Execute;
 import org.lpw.tephra.ctrl.validate.Validate;
 import org.lpw.tephra.ctrl.validate.Validators;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+
+import javax.inject.Inject;
 
 /**
  * @author lpw
@@ -13,10 +14,10 @@ import org.springframework.stereotype.Controller;
 @Controller(GpsModel.NAME + ".ctrl")
 @Execute(name = "/gps/", key = GpsModel.NAME, code = "11")
 public class GpsCtrl {
-    @Autowired
-    protected Request request;
-    @Autowired
-    protected GpsService gpsService;
+    @Inject
+    private Request request;
+    @Inject
+    private GpsService gpsService;
 
     /**
      * 获取GPS坐标对应的地址信息。

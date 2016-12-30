@@ -13,7 +13,11 @@ interface CommentDao {
 
     PageList<CommentModel> query(String author, int pageSize, int pageNum);
 
+    CommentModel findById(String id);
+
     void save(CommentModel comment);
 
     void audit(String[] ids, Audit audit, String auditRemark);
+
+    void delete(String id);
 }

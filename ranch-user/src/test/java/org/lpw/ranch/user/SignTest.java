@@ -4,8 +4,8 @@ import net.sf.json.JSONObject;
 import org.junit.Assert;
 import org.junit.Test;
 import org.lpw.tephra.ctrl.context.Session;
-import org.springframework.beans.factory.annotation.Autowired;
 
+import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,7 +13,7 @@ import java.util.List;
  * @author lpw
  */
 public class SignTest extends TestSupport {
-    @Autowired
+    @Inject
     private Session session;
 
     @Test

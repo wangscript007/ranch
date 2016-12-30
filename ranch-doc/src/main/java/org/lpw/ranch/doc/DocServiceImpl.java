@@ -3,6 +3,7 @@ package org.lpw.ranch.doc;
 import net.sf.json.JSONObject;
 import org.lpw.ranch.audit.Audit;
 import org.lpw.ranch.audit.AuditHelper;
+import org.lpw.ranch.user.User;
 import org.lpw.ranch.util.Carousel;
 import org.lpw.tephra.cache.Cache;
 import org.lpw.tephra.dao.model.ModelHelper;
@@ -10,10 +11,10 @@ import org.lpw.tephra.scheduler.DateJob;
 import org.lpw.tephra.scheduler.MinuteJob;
 import org.lpw.tephra.util.DateTime;
 import org.lpw.tephra.util.Generator;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import javax.inject.Inject;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -31,23 +32,25 @@ public class DocServiceImpl implements DocService, MinuteJob, DateJob {
     private static final String CACHE_JSON = DocModel.NAME + ".service.json:";
     private static final String CACHE_CONTENT = DocModel.NAME + ".service.content:";
 
-    @Autowired
-    protected Cache cache;
-    @Autowired
-    protected Generator generator;
-    @Autowired
-    protected DateTime dateTime;
-    @Autowired
-    protected ModelHelper modelHelper;
-    @Autowired
-    protected Carousel carousel;
-    @Autowired
-    protected AuditHelper auditHelper;
-    @Autowired
-    protected DocDao docDao;
+    @Inject
+    private Cache cache;
+    @Inject
+    private Generator generator;
+    @Inject
+    private DateTime dateTime;
+    @Inject
+    private ModelHelper modelHelper;
+    @Inject
+    private Carousel carousel;
+    @Inject
+    private User user;
+    @Inject
+    private AuditHelper auditHelper;
+    @Inject
+    private DocDao docDao;
     @Value("${" + DocModel.NAME + ".audit.default:0}")
-    protected int defaultAudit;
-    protected Map<String, AtomicInteger> read = new ConcurrentHashMap<>();
+    private int defaultAudit;
+    private Map<String, AtomicInteger> read = new ConcurrentHashMap<>();
 
     @Override
     public DocModel findById(String id) {
@@ -93,7 +96,7 @@ public class DocServiceImpl implements DocService, MinuteJob, DateJob {
         return getJson(model.getId(), model, true);
     }
 
-    protected JSONObject getJson(String id, DocModel doc, boolean full) {
+    private JSONObject getJson(String id, DocModel doc, boolean full) {
         String key = getCacheKey(CACHE_JSON, id + full);
         JSONObject object = cache.get(key);
         if (object == null) {
@@ -122,11 +125,11 @@ public class DocServiceImpl implements DocService, MinuteJob, DateJob {
         return object;
     }
 
-    protected JSONObject toJson(DocModel doc, Set<String> ignores, boolean owner) {
+    private JSONObject toJson(DocModel doc, Set<String> ignores, boolean owner) {
         JSONObject object = modelHelper.toJson(doc, ignores);
         if (owner)
             object.put("owner", carousel.get(doc.getKey() + ".get", doc.getOwner()));
-        object.put("author", carousel.getUser(doc.getAuthor()));
+        object.put("author", user.get(doc.getAuthor()));
 
         return object;
     }
@@ -179,7 +182,7 @@ public class DocServiceImpl implements DocService, MinuteJob, DateJob {
         resetRandom();
     }
 
-    protected String getCacheKey(String prefix, String suffix) {
+    private String getCacheKey(String prefix, String suffix) {
         String random = cache.get(CACHE_RANDOM);
         if (random == null)
             random = resetRandom();
@@ -187,7 +190,7 @@ public class DocServiceImpl implements DocService, MinuteJob, DateJob {
         return prefix + random + suffix;
     }
 
-    protected String resetRandom() {
+    private String resetRandom() {
         String random = generator.random(32);
         cache.put(CACHE_RANDOM, random, true);
 

@@ -5,8 +5,9 @@ import org.lpw.tephra.ctrl.execute.Execute;
 import org.lpw.tephra.ctrl.template.Templates;
 import org.lpw.tephra.ctrl.validate.Validate;
 import org.lpw.tephra.ctrl.validate.Validators;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+
+import javax.inject.Inject;
 
 /**
  * @author lpw
@@ -14,12 +15,12 @@ import org.springframework.stereotype.Controller;
 @Controller(UserModel.NAME + ".ctrl")
 @Execute(name = "/user/", key = UserModel.NAME, code = "15")
 public class UserCtrl {
-    @Autowired
-    protected Request request;
-    @Autowired
-    protected Templates templates;
-    @Autowired
-    protected UserService userService;
+    @Inject
+    private Request request;
+    @Inject
+    private Templates templates;
+    @Inject
+    private UserService userService;
 
     @Execute(name = "sign-in", validates = {
             @Validate(validator = Validators.NOT_EMPTY, parameter = "uid", failureCode = 1),

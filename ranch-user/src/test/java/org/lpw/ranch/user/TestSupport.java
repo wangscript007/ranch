@@ -7,13 +7,13 @@ import org.lpw.tephra.crypto.Digest;
 import org.lpw.tephra.ctrl.context.Request;
 import org.lpw.tephra.dao.orm.lite.LiteOrm;
 import org.lpw.tephra.test.TephraTestSupport;
-import org.lpw.tephra.test.mock.MockHelper;
+import org.lpw.tephra.test.MockHelper;
 import org.lpw.tephra.util.Converter;
 import org.lpw.tephra.util.Generator;
 import org.lpw.tephra.util.Message;
 import org.lpw.tephra.util.TimeUnit;
-import org.springframework.beans.factory.annotation.Autowired;
 
+import javax.inject.Inject;
 import java.sql.Date;
 import java.sql.Timestamp;
 
@@ -21,19 +21,19 @@ import java.sql.Timestamp;
  * @author lpw
  */
 public class TestSupport extends TephraTestSupport {
-    @Autowired
+    @Inject
     protected Generator generator;
-    @Autowired
+    @Inject
     protected Message message;
-    @Autowired
+    @Inject
     protected Converter converter;
-    @Autowired
+    @Inject
     protected Digest digest;
-    @Autowired
+    @Inject
     protected LiteOrm liteOrm;
-    @Autowired
+    @Inject
     protected Request request;
-    @Autowired
+    @Inject
     protected MockHelper mockHelper;
 
     protected UserModel create(int i) {

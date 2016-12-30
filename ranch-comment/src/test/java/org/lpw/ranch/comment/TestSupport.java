@@ -6,35 +6,35 @@ import org.lpw.ranch.user.MockUser;
 import org.lpw.tephra.crypto.Sign;
 import org.lpw.tephra.dao.orm.lite.LiteOrm;
 import org.lpw.tephra.test.TephraTestSupport;
-import org.lpw.tephra.test.mock.MockCarousel;
-import org.lpw.tephra.test.mock.MockHelper;
+import org.lpw.tephra.test.MockCarousel;
+import org.lpw.tephra.test.MockHelper;
 import org.lpw.tephra.util.Converter;
 import org.lpw.tephra.util.Generator;
 import org.lpw.tephra.util.Message;
 import org.lpw.tephra.util.TimeUnit;
-import org.springframework.beans.factory.annotation.Autowired;
 
+import javax.inject.Inject;
 import java.sql.Timestamp;
 
 /**
  * @author lpw
  */
 public class TestSupport extends TephraTestSupport implements AuditTesterDao<CommentModel> {
-    @Autowired
+    @Inject
     protected Message message;
-    @Autowired
+    @Inject
     protected Generator generator;
-    @Autowired
+    @Inject
     protected Converter converter;
-    @Autowired
+    @Inject
     protected LiteOrm liteOrm;
-    @Autowired
+    @Inject
     protected Sign sign;
-    @Autowired
+    @Inject
     protected MockHelper mockHelper;
-    @Autowired
+    @Inject
     protected MockCarousel mockCarousel;
-    @Autowired
+    @Inject
     protected MockUser mockUser;
 
     public CommentModel create(int i, Audit audit) {

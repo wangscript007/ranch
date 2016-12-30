@@ -3,15 +3,16 @@ package org.lpw.ranch.doc;
 import org.junit.Test;
 import org.lpw.ranch.audit.PassTester;
 import org.lpw.ranch.audit.RefuseTester;
-import org.springframework.beans.factory.annotation.Autowired;
+
+import javax.inject.Inject;
 
 /**
  * @author lpw
  */
 public class AuditTest extends TestSupport {
-    @Autowired
+    @Inject
     private PassTester passTester;
-    @Autowired
+    @Inject
     private RefuseTester refuseTester;
 
     @Test

@@ -2,11 +2,12 @@ package org.lpw.ranch.util;
 
 import net.sf.json.JSONObject;
 import org.lpw.tephra.carousel.CarouselHelper;
+import org.lpw.tephra.ctrl.context.Header;
 import org.lpw.tephra.util.Validator;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import javax.inject.Inject;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -15,14 +16,14 @@ import java.util.Map;
  */
 @Component("ranch.util.carousel")
 public class CarouselImpl implements Carousel {
-    @Autowired
-    protected Validator validator;
-    @Autowired
-    protected CarouselHelper carouselHelper;
+    @Inject
+    private Validator validator;
+    @Inject
+    private Header header;
+    @Inject
+    private CarouselHelper carouselHelper;
     @Value("${ranch.util.carousel.get.cache-time:5}")
-    protected int cacheTime;
-    @Value("${ranch.util.carousel.key.user:ranch.user}")
-    protected String userKey;
+    private int cacheTime;
 
     @Override
     public JSONObject get(String key, String id) {
@@ -30,15 +31,7 @@ public class CarouselImpl implements Carousel {
         object.put("id", id);
         Map<String, String> parameter = new HashMap<>();
         parameter.put("ids", id);
-        String service = carouselHelper.service(key, null, parameter, cacheTime);
-        if (validator.isEmpty(service))
-            return object;
-
-        JSONObject json = JSONObject.fromObject(service);
-        if (json.getInt("code") != 0)
-            return object;
-
-        JSONObject obj = json.getJSONObject("data");
+        JSONObject obj = service(key, null, parameter, cacheTime);
         if (obj.has(id))
             object.putAll(obj.getJSONObject(id));
 
@@ -46,7 +39,20 @@ public class CarouselImpl implements Carousel {
     }
 
     @Override
-    public JSONObject getUser(String id) {
-        return get(userKey + ".get", id);
+    public JSONObject service(String key, Map<String, String> parameter) {
+        return service(key, null, parameter, 0);
+    }
+
+    @Override
+    public JSONObject service(String key, Map<String, String> header, Map<String, String> parameter, int cacheTime) {
+        String service = carouselHelper.service(key, header == null ? this.header.getMap() : header, parameter, cacheTime);
+        if (validator.isEmpty(service))
+            return new JSONObject();
+
+        JSONObject object = JSONObject.fromObject(service);
+        if (object.getInt("code") != 0)
+            return new JSONObject();
+
+        return object.getJSONObject("data");
     }
 }

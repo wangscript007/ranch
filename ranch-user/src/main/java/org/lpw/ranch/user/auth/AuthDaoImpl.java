@@ -2,16 +2,17 @@ package org.lpw.ranch.user.auth;
 
 import org.lpw.tephra.dao.orm.lite.LiteOrm;
 import org.lpw.tephra.dao.orm.lite.LiteQuery;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+
+import javax.inject.Inject;
 
 /**
  * @author lpw
  */
 @Repository(AuthModel.NAME + ".dao")
 class AuthDaoImpl implements AuthDao {
-    @Autowired
-    protected LiteOrm liteOrm;
+    @Inject
+    private LiteOrm liteOrm;
 
     @Override
     public AuthModel findByUid(String uid) {

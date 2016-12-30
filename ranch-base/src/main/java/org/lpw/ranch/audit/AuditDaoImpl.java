@@ -3,9 +3,9 @@ package org.lpw.ranch.audit;
 import org.lpw.tephra.dao.orm.lite.LiteOrm;
 import org.lpw.tephra.dao.orm.lite.LiteQuery;
 import org.lpw.tephra.util.Validator;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,10 +14,10 @@ import java.util.List;
  */
 @Repository("ranch.audit.dao")
 public class AuditDaoImpl implements AuditDao {
-    @Autowired
-    protected Validator validator;
-    @Autowired
-    protected LiteOrm liteOrm;
+    @Inject
+    private Validator validator;
+    @Inject
+    private LiteOrm liteOrm;
 
     @Override
     public <T extends AuditModel> void audit(Class<T> modelClass, String[] ids, Audit audit, String auditRemark) {

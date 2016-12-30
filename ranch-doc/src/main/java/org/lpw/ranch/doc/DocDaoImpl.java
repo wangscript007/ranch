@@ -4,9 +4,9 @@ import org.lpw.ranch.audit.Audit;
 import org.lpw.ranch.audit.AuditDao;
 import org.lpw.tephra.dao.orm.lite.LiteOrm;
 import org.lpw.tephra.dao.orm.lite.LiteQuery;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import javax.inject.Inject;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -15,11 +15,11 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 @Repository(DocModel.NAME + ".dao")
 class DocDaoImpl implements DocDao {
-    @Autowired
-    protected LiteOrm liteOrm;
-    @Autowired
-    protected AuditDao auditDao;
-    protected Map<String, String> map = new ConcurrentHashMap<>();
+    @Inject
+    private LiteOrm liteOrm;
+    @Inject
+    private AuditDao auditDao;
+    private Map<String, String> map = new ConcurrentHashMap<>();
 
     @Override
     public DocModel findById(String id) {
@@ -46,7 +46,7 @@ class DocDaoImpl implements DocDao {
         counter(id, "c_comment", n);
     }
 
-    protected void counter(String id, String column, int n) {
+    private void counter(String id, String column, int n) {
         String set = map.get(column);
         if (set == null)
             map.put(column, set = column + "=" + column + "+?");

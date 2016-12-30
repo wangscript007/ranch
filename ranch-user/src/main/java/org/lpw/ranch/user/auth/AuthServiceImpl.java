@@ -2,8 +2,9 @@ package org.lpw.ranch.user.auth;
 
 import org.lpw.tephra.cache.Cache;
 import org.lpw.tephra.util.Validator;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import javax.inject.Inject;
 
 /**
  * @author lpw
@@ -12,12 +13,12 @@ import org.springframework.stereotype.Service;
 public class AuthServiceImpl implements AuthService {
     private static final String CACHE_UID = AuthModel.NAME + ".service.uid:";
 
-    @Autowired
-    protected Cache cache;
-    @Autowired
-    protected Validator validator;
-    @Autowired
-    protected AuthDao authDao;
+    @Inject
+    private Cache cache;
+    @Inject
+    private Validator validator;
+    @Inject
+    private AuthDao authDao;
 
     @Override
     public AuthModel findByUid(String uid) {

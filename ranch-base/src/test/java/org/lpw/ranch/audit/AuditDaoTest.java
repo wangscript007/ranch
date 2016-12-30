@@ -4,8 +4,8 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.lpw.tephra.dao.orm.lite.LiteOrm;
 import org.lpw.tephra.test.TephraTestSupport;
-import org.springframework.beans.factory.annotation.Autowired;
 
+import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,9 +13,9 @@ import java.util.List;
  * @author lpw
  */
 public class AuditDaoTest extends TephraTestSupport {
-    @Autowired
+    @Inject
     private LiteOrm liteOrm;
-    @Autowired
+    @Inject
     private AuditDao auditDao;
 
     @Test

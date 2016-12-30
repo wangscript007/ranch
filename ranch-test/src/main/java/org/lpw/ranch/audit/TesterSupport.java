@@ -2,24 +2,24 @@ package org.lpw.ranch.audit;
 
 import org.junit.Assert;
 import org.lpw.tephra.crypto.Sign;
-import org.lpw.tephra.test.mock.MockHelper;
+import org.lpw.tephra.test.MockHelper;
 import org.lpw.tephra.util.Generator;
 import org.lpw.tephra.util.Message;
-import org.springframework.beans.factory.annotation.Autowired;
 
+import javax.inject.Inject;
 import java.util.List;
 
 /**
  * @author lpw
  */
 public class TesterSupport {
-    @Autowired
+    @Inject
     protected Message message;
-    @Autowired
+    @Inject
     protected Generator generator;
-    @Autowired
+    @Inject
     protected Sign sign;
-    @Autowired
+    @Inject
     protected MockHelper mockHelper;
 
     protected <T extends AuditModel> void equals(AuditTesterDao<T> testerDao, List<T> list, int i) {

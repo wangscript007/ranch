@@ -1,18 +1,19 @@
 package org.lpw.ranch.gps;
 
 import org.lpw.tephra.test.TephraTestSupport;
-import org.lpw.tephra.test.mock.MockHelper;
+import org.lpw.tephra.test.MockHelper;
 import org.lpw.tephra.util.Message;
-import org.springframework.beans.factory.annotation.Autowired;
+
+import javax.inject.Inject;
 
 /**
  * @author lpw
  */
 public class TestSupport extends TephraTestSupport {
-    @Autowired
+    @Inject
     protected Message message;
-    @Autowired
+    @Inject
     protected MockHelper mockHelper;
-    @Autowired
+    @Inject
     protected GpsService gpsService;
 }

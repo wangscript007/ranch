@@ -103,7 +103,7 @@ public class QueryTest extends TestSupport {
             equals(list.get(3 * i + 2), array.getJSONObject(i), 3 * i + 2);
     }
 
-    protected void equals(CommentModel comment, JSONObject obj, int i) {
+    private void equals(CommentModel comment, JSONObject obj, int i) {
         Assert.assertEquals(comment.getId(), obj.getString("id"));
         Assert.assertEquals("key " + i, obj.getString("key"));
         JSONObject owner = obj.getJSONObject("owner");

@@ -1,16 +1,17 @@
 package org.lpw.ranch.util;
 
 import org.lpw.tephra.ctrl.context.Request;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+
+import javax.inject.Inject;
 
 /**
  * @author lpw
  */
 @Controller("ranch.util.pagination")
 public class PaginationImpl implements Pagination {
-    @Autowired
-    protected Request request;
+    @Inject
+    private Request request;
 
     @Override
     public int getPageSize() {

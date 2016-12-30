@@ -5,9 +5,9 @@ import org.lpw.tephra.dao.jdbc.DataSource;
 import org.lpw.tephra.dao.orm.PageList;
 import org.lpw.tephra.dao.orm.lite.LiteOrm;
 import org.lpw.tephra.dao.orm.lite.LiteQuery;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -17,10 +17,10 @@ import java.util.Set;
  */
 @Repository(ClassifyModel.NAME + ".dao")
 class ClassifyDaoImpl implements ClassifyDao {
-    @Autowired
-    protected DataSource dataSource;
-    @Autowired
-    protected LiteOrm liteOrm;
+    @Inject
+    private DataSource dataSource;
+    @Inject
+    private LiteOrm liteOrm;
 
     @Override
     public PageList<ClassifyModel> query(int pageSize, int pageNum) {
@@ -54,7 +54,7 @@ class ClassifyDaoImpl implements ClassifyDao {
         return query(Recycle.Yes, pageSize, pageNum);
     }
 
-    protected PageList<ClassifyModel> query(Recycle recycle, int pageSize, int pageNum) {
+    private PageList<ClassifyModel> query(Recycle recycle, int pageSize, int pageNum) {
         return liteOrm.query(new LiteQuery(ClassifyModel.class).where(recycle.getSql()).order("c_code").size(pageSize).page(pageNum), null);
     }
 

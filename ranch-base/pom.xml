@@ -29,5 +29,11 @@
             <version>LATEST</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.lpw.tephra</groupId>
+            <artifactId>tephra-carousel-test</artifactId>
+            <version>LATEST</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 </project>

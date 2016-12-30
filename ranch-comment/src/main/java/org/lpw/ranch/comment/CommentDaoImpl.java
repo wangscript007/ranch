@@ -5,18 +5,19 @@ import org.lpw.ranch.audit.AuditDao;
 import org.lpw.tephra.dao.orm.PageList;
 import org.lpw.tephra.dao.orm.lite.LiteOrm;
 import org.lpw.tephra.dao.orm.lite.LiteQuery;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+
+import javax.inject.Inject;
 
 /**
  * @author lpw
  */
 @Repository(CommentModel.NAME + ".dao")
 class CommentDaoImpl implements CommentDao {
-    @Autowired
-    protected LiteOrm liteOrm;
-    @Autowired
-    protected AuditDao auditDao;
+    @Inject
+    private LiteOrm liteOrm;
+    @Inject
+    private AuditDao auditDao;
 
     @Override
     public PageList<CommentModel> query(Audit audit, int pageSize, int pageNum) {
@@ -36,6 +37,11 @@ class CommentDaoImpl implements CommentDao {
     }
 
     @Override
+    public CommentModel findById(String id) {
+        return liteOrm.findById(CommentModel.class, id);
+    }
+
+    @Override
     public void save(CommentModel comment) {
         liteOrm.save(comment);
     }
@@ -43,5 +49,10 @@ class CommentDaoImpl implements CommentDao {
     @Override
     public void audit(String[] ids, Audit audit, String auditRemark) {
         auditDao.audit(CommentModel.class, ids, audit, auditRemark);
+    }
+
+    @Override
+    public void delete(String id) {
+        liteOrm.deleteById(CommentModel.class, id);
     }
 }
