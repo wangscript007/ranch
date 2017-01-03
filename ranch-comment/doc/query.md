@@ -12,18 +12,20 @@
 返回值
 ```json
 {
-  "count":"总记录数",
-  "size":"每页显示记录数",
-  "number":"当前显示页数",
-  "list":[{
-    "id": "ID值。",
-    "owner": {},
-    "author": {},
-    "subject": "标题",
-    "label": "标签",
-    "content": "内容",
-    "children": []
-  }]
+    "count": "总记录数",
+    "size": "每页显示记录数",
+    "number": "当前显示页数",
+    "list": [
+        {
+            "id": "ID值。",
+            "owner": {},
+            "author": {},
+            "subject": "标题",
+            "label": "标签",
+            "content": "内容",
+            "children": []
+        }
+    ]
 }
 ```
 - owner 所有者信息，未找到则仅包含id属性。

@@ -1,8 +1,8 @@
-# 从回收站还原
+# 删除到回收站
 
 请求：
-- Service Key - ${module-name}.restore
-- URI - /${module-path}/restore
+- Service Key - ${module-name}.delete
+- URI - /${module-path}/delete
 > ${module-name}为模块名称。
 
 > ${module-path}为模块路径。

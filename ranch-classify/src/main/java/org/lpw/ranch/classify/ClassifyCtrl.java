@@ -29,7 +29,9 @@ public class ClassifyCtrl extends RecycleCtrlSupport {
      *
      * @return {PageList}。
      */
-    @Execute(name = "query")
+    @Execute(name = "query", validates = {
+            @Validate(validator = Validators.SIGN)
+    })
     public Object query() {
         return classifyService.query(request.get("code"));
     }
