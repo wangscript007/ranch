@@ -17,7 +17,8 @@ CREATE TABLE t_user
   PRIMARY KEY pk_user(c_id) USING HASH,
   KEY k_user_mobile(c_mobile) USING HASH,
   KEY k_user_email(c_email) USING HASH,
-  UNIQUE KEY uk_user_code(c_code) USING HASH
+  UNIQUE KEY uk_user_code(c_code) USING HASH,
+  KEY k_user_register(c_register) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS t_user_auth;
