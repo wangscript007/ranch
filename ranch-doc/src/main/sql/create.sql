@@ -11,9 +11,9 @@ CREATE TABLE t_doc
   c_subject VARCHAR(255) NOT NULL COMMENT '标题',
   c_image VARCHAR(255) DEFAULT NULL COMMENT '主图URI地址',
   c_thumbnail VARCHAR(255) DEFAULT NULL COMMENT '缩略图URI地址',
-  c_summary TEXT DEFAULT NULL COMMENT '摘要',
+  c_summary TEXT CHARACTER SET utf8mb4 DEFAULT NULL COMMENT '摘要',
   c_label TEXT DEFAULT NULL COMMENT '标签',
-  c_content TEXT NOT NULL COMMENT '内容',
+  c_content TEXT CHARACTER SET utf8mb4 NOT NULL COMMENT '内容',
   c_read INT DEFAULT 0 COMMENT '阅读次数',
   c_favorite INT DEFAULT 0 COMMENT '收藏次数',
   c_comment INT DEFAULT 0 COMMENT '评论次数',
@@ -22,8 +22,8 @@ CREATE TABLE t_doc
   c_audit INT DEFAULT 0 COMMENT '审核：0-待审核；1-审核通过；2-审核不通过',
   c_audit_remark VARCHAR(255) DEFAULT NULL COMMENT '审核备注',
 
-  PRIMARY KEY pk_doc(c_id),
-  KEY k_doc_key(c_audit,c_key),
-  KEY k_doc_owner(c_audit,c_owner),
-  KEY k_doc_author(c_author,c_time)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  PRIMARY KEY pk_doc(c_id) USING HASH,
+  KEY k_doc_key(c_audit,c_key) USING HASH,
+  KEY k_doc_owner(c_audit,c_owner,c_time) USING BTREE,
+  KEY k_doc_author(c_author,c_time) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;

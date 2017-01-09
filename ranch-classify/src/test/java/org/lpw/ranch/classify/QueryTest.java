@@ -5,6 +5,7 @@ import net.sf.json.JSONObject;
 import org.junit.Assert;
 import org.junit.Test;
 import org.lpw.ranch.recycle.Recycle;
+import org.lpw.tephra.ctrl.validate.Validators;
 
 /**
  * @author lpw
@@ -25,6 +26,15 @@ public class QueryTest extends TestSupport {
         mockHelper.getRequest().addParameter("pageNum", "1");
         mockHelper.mock("/classify/query");
         JSONObject object = mockHelper.getResponse().asJson();
+        Assert.assertEquals(1291, object.getInt("code"));
+        Assert.assertEquals(message.get(Validators.PREFIX + "illegal-sign"), object.getString("message"));
+
+        mockHelper.reset();
+        mockHelper.getRequest().addParameter("pageSize", "20");
+        mockHelper.getRequest().addParameter("pageNum", "1");
+        sign.put(mockHelper.getRequest().getMap(), null);
+        mockHelper.mock("/classify/query");
+        object = mockHelper.getResponse().asJson();
         Assert.assertEquals(0, object.getInt("code"));
         JSONObject data = object.getJSONObject("data");
         Assert.assertEquals(10, data.getInt("count"));
@@ -38,6 +48,7 @@ public class QueryTest extends TestSupport {
         mockHelper.getRequest().addParameter("code", "code 1");
         mockHelper.getRequest().addParameter("pageSize", "20");
         mockHelper.getRequest().addParameter("pageNum", "1");
+        sign.put(mockHelper.getRequest().getMap(), null);
         mockHelper.mock("/classify/query");
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(0, object.getInt("code"));

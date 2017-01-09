@@ -7,6 +7,6 @@ CREATE TABLE t_classify
   c_label TEXT DEFAULT NULL COMMENT '标签',
   c_recycle INT DEFAULT 0 COMMENT '回收站；0-否，1-是',
 
-  PRIMARY KEY pk_classify(c_id),
-  KEY k_classify_code(c_recycle,c_code)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  PRIMARY KEY pk_classify(c_id) USING HASH,
+  KEY k_classify_code(c_recycle,c_code) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
