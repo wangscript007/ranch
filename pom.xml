@@ -17,6 +17,7 @@
         <module>ranch-user</module>
         <module>ranch-web</module>
         <module>ranch-test</module>
+        <module>ranch-archives</module>
     </modules>
 
     <build>
