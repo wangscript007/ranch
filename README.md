@@ -13,6 +13,7 @@ Ranch目前包含以下模块：
 - [comment](ranch-comment/) —— 评论。
 - [doc](ranch-doc/) —— 文档。
 - [user](ranch-user/) —— 用户 & 认证。
+- [archives](ranch-archives/) —— 档案。
 - [test](ranch-test/) —— 单元测试支持。
 
 ![Ranch模块图](doc/module.png)
