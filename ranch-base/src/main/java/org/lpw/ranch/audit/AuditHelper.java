@@ -14,4 +14,24 @@ public interface AuditHelper {
      * @param set 目标集合。
      */
     void addProperty(Set<String> set);
+
+    /**
+     * 设置审核通过。
+     *
+     * @param modelClass  Model类。
+     * @param ids         ID集。
+     * @param auditRemark 审核备注。
+     * @param <T>         Model类。
+     */
+    <T extends AuditModel> void pass(Class<T> modelClass, String[] ids, String auditRemark);
+
+    /**
+     * 设置审核不通过。
+     *
+     * @param modelClass  Model类。
+     * @param ids         ID集。
+     * @param auditRemark 审核备注。
+     * @param <T>         Model类。
+     */
+    <T extends AuditModel> void refuse(Class<T> modelClass, String[] ids, String auditRemark);
 }

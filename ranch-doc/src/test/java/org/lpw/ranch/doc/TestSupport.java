@@ -2,14 +2,16 @@ package org.lpw.ranch.doc;
 
 import org.lpw.ranch.audit.Audit;
 import org.lpw.ranch.audit.AuditTesterDao;
+import org.lpw.ranch.recycle.Recycle;
 import org.lpw.ranch.user.MockUser;
 import org.lpw.tephra.cache.Cache;
 import org.lpw.tephra.crypto.Sign;
 import org.lpw.tephra.dao.orm.lite.LiteOrm;
-import org.lpw.tephra.test.SchedulerAspect;
-import org.lpw.tephra.test.TephraTestSupport;
+import org.lpw.tephra.dao.orm.lite.LiteQuery;
 import org.lpw.tephra.test.MockCarousel;
 import org.lpw.tephra.test.MockHelper;
+import org.lpw.tephra.test.SchedulerAspect;
+import org.lpw.tephra.test.TephraTestSupport;
 import org.lpw.tephra.util.Converter;
 import org.lpw.tephra.util.Generator;
 import org.lpw.tephra.util.Message;
@@ -55,11 +57,17 @@ public class TestSupport extends TephraTestSupport implements AuditTesterDao<Doc
         return list;
     }
 
-    public DocModel create(int i, Audit audit) {
-        return create(i, "image " + i, "thumbnail " + i, "summary " + i, "label " + i, audit);
+    @Override
+    public DocModel create(int i, Recycle recycle) {
+        return create(i, "image " + i, "thumbnail " + i, "summary " + i, "label " + i, Audit.Normal, recycle);
     }
 
-    DocModel create(int i, String image, String thumbnail, String summary, String label, Audit audit) {
+    @Override
+    public DocModel create(int i, Audit audit) {
+        return create(i, "image " + i, "thumbnail " + i, "summary " + i, "label " + i, audit, Recycle.No);
+    }
+
+    DocModel create(int i, String image, String thumbnail, String summary, String label, Audit audit, Recycle recycle) {
         DocModel doc = new DocModel();
         doc.setKey("key " + i);
         doc.setOwner("owner " + i);
@@ -80,6 +88,7 @@ public class TestSupport extends TephraTestSupport implements AuditTesterDao<Doc
         doc.setTime(new Timestamp(System.currentTimeMillis() - i * TimeUnit.Day.getTime()));
         doc.setAudit(audit.getValue());
         doc.setAuditRemark("remark " + i);
+        doc.setRecycle(recycle.getValue());
         liteOrm.save(doc);
 
         return doc;
@@ -87,5 +96,10 @@ public class TestSupport extends TephraTestSupport implements AuditTesterDao<Doc
 
     public DocModel findById(String id) {
         return liteOrm.findById(DocModel.class, id);
+    }
+
+    @Override
+    public void clean() {
+        liteOrm.delete(new LiteQuery(DocModel.class), null);
     }
 }

@@ -17,7 +17,7 @@
     "number": "当前显示页数",
     "list": [
         {
-            "id": "ID值。",
+            "id": "ID值",
             "owner": {},
             "author": {},
             "subject": "标题",

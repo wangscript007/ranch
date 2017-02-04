@@ -1,5 +1,7 @@
 package org.lpw.ranch.audit;
 
+import org.lpw.ranch.recycle.RecycleCtrlSupport;
+import org.lpw.ranch.recycle.RecycleService;
 import org.lpw.tephra.ctrl.context.Request;
 import org.lpw.tephra.ctrl.execute.Execute;
 import org.lpw.tephra.ctrl.validate.Validate;
@@ -12,7 +14,7 @@ import javax.inject.Inject;
  *
  * @author lpw
  */
-public abstract class AuditCtrlSupport {
+public abstract class AuditCtrlSupport extends RecycleCtrlSupport {
     @Inject
     protected Request request;
 
@@ -51,6 +53,11 @@ public abstract class AuditCtrlSupport {
         getAuditService().refuse(request.getAsArray("ids"), request.get("auditRemark"));
 
         return "";
+    }
+
+    @Override
+    protected RecycleService getRecycleService() {
+        return getAuditService();
     }
 
     /**

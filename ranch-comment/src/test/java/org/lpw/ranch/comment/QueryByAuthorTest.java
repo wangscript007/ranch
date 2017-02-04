@@ -5,6 +5,7 @@ import net.sf.json.JSONObject;
 import org.junit.Assert;
 import org.junit.Test;
 import org.lpw.ranch.audit.Audit;
+import org.lpw.ranch.recycle.Recycle;
 import org.lpw.tephra.ctrl.validate.Validators;
 
 import java.util.ArrayList;
@@ -19,7 +20,7 @@ public class QueryByAuthorTest extends TestSupport {
         String[] authors = new String[]{generator.uuid(), generator.uuid()};
         List<CommentModel> list = new ArrayList<>();
         for (int i = 0; i < 20; i++)
-            list.add(create(i, "owner " + i, authors[i % authors.length], Audit.values()[i % 3]));
+            list.add(create(i, "owner " + i, authors[i % authors.length], Audit.values()[i % 3], Recycle.No));
 
         mockHelper.reset();
         mockHelper.mock("/comment/query-by-author");

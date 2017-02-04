@@ -16,15 +16,15 @@
 返回值
 ```json
 {
-  "id": "ID值。",
+  "id": "ID值",
   "owner": {},
-  "owner-comment": "所有者信息，未找到则仅包含id属性。",
+  "owner-comment": "所有者信息，未找到则仅包含id属性",
   "author": {},
-  "author-comment": "作者信息，未找到则仅包含id属性。",
+  "author-comment": "作者信息，未找到则仅包含id属性",
   "subject": "标题",
   "label": "标签",
   "content": "内容",
   "children": [],
-  "children-comment": "如果不包含子评论则不返回children属性。"
+  "children-comment": "如果不包含子评论则不返回children属性"
 }
 ```

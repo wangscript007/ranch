@@ -44,7 +44,7 @@ public class CreateTest extends TestSupport {
         mockHelper.getRequest().addParameter("name", "name");
         mockHelper.mock("/classify/create");
         object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(1291, object.getInt("code"));
+        Assert.assertEquals(9995, object.getInt("code"));
         Assert.assertEquals(message.get(Validators.PREFIX + "illegal-sign"), object.getString("message"));
 
         mockHelper.reset();

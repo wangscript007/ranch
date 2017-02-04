@@ -3,21 +3,13 @@ package org.lpw.ranch.audit;
 import net.sf.json.JSONObject;
 import org.junit.Assert;
 import org.junit.Test;
-import org.lpw.tephra.dao.model.ModelHelper;
-import org.lpw.tephra.dao.orm.lite.LiteOrm;
-import org.lpw.tephra.test.TephraTestSupport;
-
-import javax.inject.Inject;
+import org.lpw.ranch.recycle.RecycleModel;
+import org.lpw.ranch.recycle.RecycleModelSupportTest;
 
 /**
  * @author lpw
  */
-public class AuditModelSupportTest extends TephraTestSupport {
-    @Inject
-    private ModelHelper modelHelper;
-    @Inject
-    private LiteOrm liteOrm;
-
+public class AuditModelSupportTest extends RecycleModelSupportTest {
     @Test
     public void audit() {
         TestAuditModel model1 = new TestAuditModel();
@@ -39,5 +31,15 @@ public class AuditModelSupportTest extends TephraTestSupport {
         Assert.assertEquals(model1.getId(), object.getString("id"));
         Assert.assertEquals(Audit.Passed.getValue(), object.getInt("audit"));
         Assert.assertEquals("remark", object.getString("auditRemark"));
+    }
+
+    @Override
+    protected RecycleModel newModel() {
+        return new TestAuditModel();
+    }
+
+    @Override
+    protected Class<? extends RecycleModel> modelClass() {
+        return TestAuditModel.class;
     }
 }

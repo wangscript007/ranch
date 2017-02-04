@@ -1,12 +1,13 @@
 package org.lpw.ranch.audit;
 
+import org.lpw.ranch.recycle.TestRecycleServiceSupport;
 import org.springframework.stereotype.Service;
 
 /**
  * @author lpw
  */
 @Service(TestAuditModel.NAME + ".service")
-public class TestAuditServiceImpl implements TestAuditService {
+public class TestAuditServiceImpl extends TestRecycleServiceSupport implements TestAuditService {
     private String[] passIds;
     private String[] refuseIds;
     private String auditRemark;

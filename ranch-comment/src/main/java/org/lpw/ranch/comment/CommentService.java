@@ -8,11 +8,6 @@ import org.lpw.ranch.audit.AuditService;
  */
 public interface CommentService extends AuditService {
     /**
-     * 是否可删除验证器Bean名称。
-     */
-    String VALIDATOR_DELETE_ENABLE = CommentModel.NAME + ".validator.delete-enable";
-
-    /**
      * 检索评论信息集。
      *
      * @param audit 审核状态。
@@ -37,25 +32,10 @@ public interface CommentService extends AuditService {
     JSONObject queryByAuthor(String author);
 
     /**
-     * 检索指定ID的评论信息。
-     *
-     * @param id ID值。
-     * @return 评论信息，如果不存在则返回null。
-     */
-    CommentModel findById(String id);
-
-    /**
      * 创建新评论。
      *
      * @param comment 评论信息。
      * @return 评论实例。
      */
     JSONObject create(CommentModel comment);
-
-    /**
-     * 删除评论。
-     *
-     * @param id 评论ID。
-     */
-    void delete(String id);
 }

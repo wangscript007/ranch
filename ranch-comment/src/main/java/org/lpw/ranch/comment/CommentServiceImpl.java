@@ -4,6 +4,7 @@ import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.lpw.ranch.audit.Audit;
 import org.lpw.ranch.audit.AuditHelper;
+import org.lpw.ranch.recycle.RecycleHelper;
 import org.lpw.ranch.user.User;
 import org.lpw.ranch.util.Carousel;
 import org.lpw.ranch.util.Pagination;
@@ -40,6 +41,8 @@ public class CommentServiceImpl implements CommentService {
     @Inject
     private AuditHelper auditHelper;
     @Inject
+    private RecycleHelper recycleHelper;
+    @Inject
     private CommentDao commentDao;
     @Value("${" + CommentModel.NAME + ".audit.default:0}")
     private int defaultAudit;
@@ -66,11 +69,6 @@ public class CommentServiceImpl implements CommentService {
         object.put("list", array);
 
         return object;
-    }
-
-    @Override
-    public CommentModel findById(String id) {
-        return commentDao.findById(id);
     }
 
     @Override
@@ -125,16 +123,26 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public void pass(String[] ids, String auditRemark) {
-        commentDao.audit(ids, Audit.Passed, auditRemark);
+        auditHelper.pass(CommentModel.class, ids, auditRemark);
     }
 
     @Override
     public void refuse(String[] ids, String auditRemark) {
-        commentDao.audit(ids, Audit.Refused, auditRemark);
+        auditHelper.refuse(CommentModel.class, ids, auditRemark);
     }
 
     @Override
     public void delete(String id) {
-        commentDao.delete(id);
+        recycleHelper.delete(CommentModel.class, id);
+    }
+
+    @Override
+    public JSONObject recycle() {
+        return recycleHelper.recycle(CommentModel.class);
+    }
+
+    @Override
+    public void restore(String id) {
+        recycleHelper.restore(CommentModel.class, id);
     }
 }

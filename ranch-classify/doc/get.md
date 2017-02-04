@@ -12,7 +12,7 @@
 ```json
 {
     "id-value": {
-        "id": "ID值。",
+        "id": "ID值",
         "code": "编码",
         "name": "名称",
         "label": "标签"

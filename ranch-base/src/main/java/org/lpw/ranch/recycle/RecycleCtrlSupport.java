@@ -23,7 +23,7 @@ public abstract class RecycleCtrlSupport {
      * @return ""。
      */
     @Execute(name = "delete", validates = {
-            @Validate(validator = Validators.ID, parameter = "id", failureCode = 1),
+            @Validate(validator = Validators.ID, parameter = "id", failureCode = 86),
             @Validate(validator = Validators.SIGN)
     })
     public Object delete() {
@@ -53,7 +53,7 @@ public abstract class RecycleCtrlSupport {
      * @return ""。
      */
     @Execute(name = "restore", validates = {
-            @Validate(validator = Validators.ID, parameter = "id", failureCode = 1),
+            @Validate(validator = Validators.ID, parameter = "id", failureCode = 86),
             @Validate(validator = Validators.SIGN)
     })
     public Object restore() {

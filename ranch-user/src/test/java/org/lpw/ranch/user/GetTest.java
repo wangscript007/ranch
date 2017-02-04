@@ -28,7 +28,7 @@ public class GetTest extends TestSupport {
         mockHelper.getRequest().addParameter("ids", "id1,id2");
         mockHelper.mock("/user/get");
         object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(1591, object.getInt("code"));
+        Assert.assertEquals(9995, object.getInt("code"));
         Assert.assertEquals(message.get(Validators.PREFIX + "illegal-sign"), object.getString("message"));
 
         mockHelper.reset();

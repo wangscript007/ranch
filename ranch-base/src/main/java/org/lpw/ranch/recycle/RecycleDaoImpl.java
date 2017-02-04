@@ -1,5 +1,6 @@
 package org.lpw.ranch.recycle;
 
+import org.lpw.tephra.dao.orm.PageList;
 import org.lpw.tephra.dao.orm.lite.LiteOrm;
 import org.lpw.tephra.dao.orm.lite.LiteQuery;
 import org.lpw.tephra.util.Validator;
@@ -19,9 +20,11 @@ public class RecycleDaoImpl implements RecycleDao {
 
     @Override
     public <T extends RecycleModel> void recycle(Class<T> modelClass, String id, Recycle recycle) {
-        if (modelClass == null || validator.isEmpty(id) || recycle == null)
-            return;
-
         liteOrm.update(new LiteQuery(modelClass).set(recycle.getSql()).where("c_id=?"), new Object[]{id});
+    }
+
+    @Override
+    public <T extends RecycleModel> PageList<T> recycle(Class<T> modelClass, int pageSize, int pageNum) {
+        return liteOrm.query(new LiteQuery(modelClass).where(Recycle.Yes.getSql()).size(pageSize).page(pageNum), null);
     }
 }

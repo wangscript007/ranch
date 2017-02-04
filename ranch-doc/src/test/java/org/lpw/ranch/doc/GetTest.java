@@ -4,6 +4,7 @@ import net.sf.json.JSONObject;
 import org.junit.Assert;
 import org.junit.Test;
 import org.lpw.ranch.audit.Audit;
+import org.lpw.ranch.recycle.Recycle;
 import org.lpw.tephra.ctrl.validate.Validators;
 
 /**
@@ -13,7 +14,7 @@ public class GetTest extends TestSupport {
     @Test
     public void get() {
         DocModel doc1 = create(1, Audit.Passed);
-        DocModel doc2 = create(2, null, null, null, null, Audit.Passed);
+        DocModel doc2 = create(2, null, null, null, null, Audit.Passed, Recycle.No);
         DocModel doc3 = create(3, Audit.Normal);
         DocModel doc4 = create(4, Audit.Refused);
 

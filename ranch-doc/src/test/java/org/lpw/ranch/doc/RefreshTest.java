@@ -16,7 +16,7 @@ public class RefreshTest extends TestSupport {
         mockHelper.reset();
         mockHelper.mock("/doc/refresh");
         JSONObject object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(1491, object.getInt("code"));
+        Assert.assertEquals(9995, object.getInt("code"));
         Assert.assertEquals(message.get(Validators.PREFIX + "illegal-sign"), object.getString("message"));
         Assert.assertNull(cache.get(cacheKey));
 

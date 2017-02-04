@@ -3,7 +3,7 @@ package org.lpw.ranch.audit;
 /**
  * @author lpw
  */
-public interface AuditDao {
+interface AuditDao {
     /**
      * 设置审核状态。
      *

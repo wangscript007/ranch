@@ -15,6 +15,4 @@ interface DocDao {
     void favorite(String id, int n);
 
     void comment(String id, int n);
-
-    void audit(String[] ids, Audit audit, String auditRemark);
 }

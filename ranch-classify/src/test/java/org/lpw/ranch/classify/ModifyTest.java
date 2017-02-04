@@ -55,7 +55,7 @@ public class ModifyTest extends TestSupport {
         mockHelper.getRequest().addParameter("label", "new label");
         mockHelper.mock("/classify/modify");
         object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(1291, object.getInt("code"));
+        Assert.assertEquals(9995, object.getInt("code"));
         Assert.assertEquals(message.get(Validators.PREFIX + "illegal-sign"), object.getString("message"));
 
         mockHelper.reset();

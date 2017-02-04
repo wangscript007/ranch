@@ -1,14 +1,14 @@
 package org.lpw.ranch.audit;
 
+import org.lpw.ranch.recycle.RecycleModelSupport;
 import org.lpw.tephra.dao.model.Jsonable;
-import org.lpw.tephra.dao.model.ModelSupport;
 
 import javax.persistence.Column;
 
 /**
  * @author lpw
  */
-public class AuditModelSupport extends ModelSupport implements AuditModel {
+public class AuditModelSupport extends RecycleModelSupport implements AuditModel {
     private int audit; // 审核状态：0-待审核；1-审核通过；2-审核不通过
     private String auditRemark; // 审核备注
 

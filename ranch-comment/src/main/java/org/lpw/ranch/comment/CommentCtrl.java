@@ -94,16 +94,6 @@ public class CommentCtrl extends AuditCtrlSupport {
         return commentService.create(request.setToModel(new CommentModel()));
     }
 
-    @Execute(name = "delete", validates = {
-            @Validate(validator = Validators.ID, parameter = "id", failureCode = 11),
-            @Validate(validator = User.VALIDATOR_SIGN_IN),
-            @Validate(validator = CommentService.VALIDATOR_DELETE_ENABLE, parameter = "id", failureCode = 12)})
-    public Object delete() {
-        commentService.delete(request.get("id"));
-
-        return "";
-    }
-
     @Override
     protected AuditService getAuditService() {
         return commentService;

@@ -3,6 +3,7 @@ package org.lpw.ranch.classify;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.lpw.ranch.recycle.Recycle;
+import org.lpw.ranch.recycle.RecycleHelper;
 import org.lpw.ranch.util.Pagination;
 import org.lpw.tephra.cache.Cache;
 import org.lpw.tephra.dao.orm.PageList;
@@ -35,6 +36,8 @@ public class ClassifyServiceImpl implements ClassifyService, DateJob {
     private Json json;
     @Inject
     private Pagination pagination;
+    @Inject
+    private RecycleHelper recycleHelper;
     @Inject
     private ClassifyDao classifyDao;
 
@@ -182,7 +185,7 @@ public class ClassifyServiceImpl implements ClassifyService, DateJob {
 
     @Override
     public JSONObject recycle() {
-        return toJson(classifyDao.recycle(pagination.getPageSize(), pagination.getPageNum()), Recycle.Yes);
+        return recycleHelper.recycle(ClassifyModel.class);
     }
 
     private JSONObject toJson(PageList<ClassifyModel> pl, Recycle recycle) {

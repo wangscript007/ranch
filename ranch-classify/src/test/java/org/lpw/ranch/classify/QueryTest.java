@@ -26,7 +26,7 @@ public class QueryTest extends TestSupport {
         mockHelper.getRequest().addParameter("pageNum", "1");
         mockHelper.mock("/classify/query");
         JSONObject object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(1291, object.getInt("code"));
+        Assert.assertEquals(9995, object.getInt("code"));
         Assert.assertEquals(message.get(Validators.PREFIX + "illegal-sign"), object.getString("message"));
 
         mockHelper.reset();

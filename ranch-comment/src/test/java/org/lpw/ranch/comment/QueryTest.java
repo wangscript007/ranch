@@ -37,7 +37,7 @@ public class QueryTest extends TestSupport {
         mockHelper.reset();
         mockHelper.mock("/comment/query");
         object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(1391, object.getInt("code"));
+        Assert.assertEquals(9995, object.getInt("code"));
         Assert.assertEquals(message.get(Validators.PREFIX + "illegal-sign"), object.getString("message"));
 
         mockCarousel.reset();

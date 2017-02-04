@@ -16,7 +16,7 @@
   "size":"每页显示记录数",
   "number":"当前显示页数",
   "list":[{
-    "id": "ID值。",
+    "id": "ID值",
     "author": {},
     "subject": "标题",
     "label": "标签",

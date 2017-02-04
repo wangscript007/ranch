@@ -22,21 +22,21 @@ public class DeleteTest extends TestSupport {
         mockHelper.reset();
         mockHelper.mock("/classify/delete");
         JSONObject object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(1201, object.getInt("code"));
+        Assert.assertEquals(1286, object.getInt("code"));
         Assert.assertEquals(message.get(Validators.PREFIX + "illegal-id", message.get(ClassifyModel.NAME + ".id")), object.getString("message"));
 
         mockHelper.reset();
         mockHelper.getRequest().addParameter("id", "id");
         mockHelper.mock("/classify/delete");
         object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(1201, object.getInt("code"));
+        Assert.assertEquals(1286, object.getInt("code"));
         Assert.assertEquals(message.get(Validators.PREFIX + "illegal-id", message.get(ClassifyModel.NAME + ".id")), object.getString("message"));
 
         mockHelper.reset();
         mockHelper.getRequest().addParameter("id", list.get(0).getId());
         mockHelper.mock("/classify/delete");
         object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(1291, object.getInt("code"));
+        Assert.assertEquals(9995, object.getInt("code"));
         Assert.assertEquals(message.get(Validators.PREFIX + "illegal-sign"), object.getString("message"));
 
         mockHelper.reset();

@@ -14,26 +14,33 @@ import javax.inject.Inject;
  */
 public class RecycleModelSupportTest extends TephraTestSupport {
     @Inject
-    private ModelHelper modelHelper;
+    protected ModelHelper modelHelper;
     @Inject
-    private LiteOrm liteOrm;
+    protected LiteOrm liteOrm;
 
     @Test
     public void recycle() {
-        TestRecycleModel model1 = new TestRecycleModel();
-        model1.setRecycle(Recycle.No.getValue());
-        liteOrm.save(model1);
-        TestRecycleModel model2 = liteOrm.findById(TestRecycleModel.class, model1.getId());
-        Assert.assertEquals(Recycle.No.getValue(), model2.getRecycle());
+        RecycleModel model = newModel();
+        model.setRecycle(Recycle.No.getValue());
+        liteOrm.save(model);
+        RecycleModel model1 = liteOrm.findById(modelClass(), model.getId());
+        Assert.assertEquals(Recycle.No.getValue(), model1.getRecycle());
 
-        model1.setRecycle(Recycle.Yes.getValue());
-        liteOrm.save(model1);
-        model2 = liteOrm.findById(TestRecycleModel.class, model1.getId());
-        Assert.assertEquals(Recycle.Yes.getValue(), model2.getRecycle());
+        model.setRecycle(Recycle.Yes.getValue());
+        liteOrm.save(model);
+        model1 = liteOrm.findById(modelClass(), model.getId());
+        Assert.assertEquals(Recycle.Yes.getValue(), model1.getRecycle());
 
-        JSONObject object = modelHelper.toJson(model1);
-        Assert.assertEquals(1, object.size());
-        Assert.assertEquals(model1.getId(), object.getString("id"));
+        JSONObject object = modelHelper.toJson(model);
+        Assert.assertEquals(model.getId(), object.getString("id"));
         Assert.assertFalse(object.has("recycle"));
+    }
+
+    protected RecycleModel newModel() {
+        return new TestRecycleModel();
+    }
+
+    protected Class<? extends RecycleModel> modelClass() {
+        return TestRecycleModel.class;
     }
 }

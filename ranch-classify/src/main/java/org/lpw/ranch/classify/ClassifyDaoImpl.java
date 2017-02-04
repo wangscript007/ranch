@@ -24,7 +24,7 @@ class ClassifyDaoImpl implements ClassifyDao {
 
     @Override
     public PageList<ClassifyModel> query(int pageSize, int pageNum) {
-        return query(Recycle.No, pageSize, pageNum);
+        return liteOrm.query(new LiteQuery(ClassifyModel.class).where(Recycle.No.getSql()).order("c_code").size(pageSize).page(pageNum), null);
     }
 
     @Override
@@ -47,15 +47,6 @@ class ClassifyDaoImpl implements ClassifyDao {
     public void delete(String code) {
         liteOrm.update(new LiteQuery(ClassifyModel.class).set(Recycle.Yes.getSql()).where("c_code like ?"),
                 new Object[]{dataSource.getDialect(null).getLike(code, false, true)});
-    }
-
-    @Override
-    public PageList<ClassifyModel> recycle(int pageSize, int pageNum) {
-        return query(Recycle.Yes, pageSize, pageNum);
-    }
-
-    private PageList<ClassifyModel> query(Recycle recycle, int pageSize, int pageNum) {
-        return liteOrm.query(new LiteQuery(ClassifyModel.class).where(recycle.getSql()).order("c_code").size(pageSize).page(pageNum), null);
     }
 
     @Override

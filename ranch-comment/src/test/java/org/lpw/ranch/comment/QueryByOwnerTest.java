@@ -5,6 +5,7 @@ import net.sf.json.JSONObject;
 import org.junit.Assert;
 import org.junit.Test;
 import org.lpw.ranch.audit.Audit;
+import org.lpw.ranch.recycle.Recycle;
 import org.lpw.tephra.ctrl.validate.Validators;
 
 import java.util.ArrayList;
@@ -19,8 +20,8 @@ public class QueryByOwnerTest extends TestSupport {
         String[] owners = new String[]{generator.uuid(), generator.uuid()};
         List<CommentModel> list = new ArrayList<>();
         for (int i = 0; i < 20; i++)
-            list.add(create(i, owners[i % owners.length], "author " + i, Audit.values()[i % 3]));
-        CommentModel child = create(101, list.get(1).getId(), "author 1", Audit.Passed);
+            list.add(create(i, owners[i % owners.length], "author " + i, Audit.values()[i % 3], Recycle.No));
+        CommentModel child = create(101, list.get(1).getId(), "author 1", Audit.Passed, Recycle.No);
 
         mockHelper.reset();
         mockHelper.mock("/comment/query-by-owner");

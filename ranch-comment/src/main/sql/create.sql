@@ -13,9 +13,10 @@ CREATE TABLE t_comment
   c_time DATETIME NOT NULL COMMENT '时间',
   c_audit INT DEFAULT 0 COMMENT '审核：0-待审核；1-审核通过；2-审核不通过',
   c_audit_remark VARCHAR(255) DEFAULT NULL COMMENT '审核备注',
+  c_recycle INT DEFAULT 0 COMMENT '回收站：0-否，1-是',
 
   PRIMARY KEY pk_comment(c_id) USING HASH,
-  KEY k_comment_audit(c_audit,c_time) USING BTREE,
-  KEY k_comment_audit_owner(c_audit,c_owner,c_time) USING BTREE,
-  KEY k_comment_author(c_author,c_time) USING BTREE
+  KEY k_comment_audit(c_recycle,c_audit,c_time) USING BTREE,
+  KEY k_comment_audit_owner(c_recycle,c_audit,c_owner,c_time) USING BTREE,
+  KEY k_comment_author(c_recycle,c_author,c_time) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

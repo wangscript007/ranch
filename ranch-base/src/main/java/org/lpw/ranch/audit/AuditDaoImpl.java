@@ -21,9 +21,6 @@ public class AuditDaoImpl implements AuditDao {
 
     @Override
     public <T extends AuditModel> void audit(Class<T> modelClass, String[] ids, Audit audit, String auditRemark) {
-        if (modelClass == null || validator.isEmpty(ids) || audit == null)
-            return;
-
         List<Object> args = new ArrayList<>();
         StringBuilder set = new StringBuilder(audit.getSql());
         if (!validator.isEmpty(auditRemark)) {

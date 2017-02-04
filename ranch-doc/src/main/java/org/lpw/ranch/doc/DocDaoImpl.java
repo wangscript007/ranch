@@ -1,7 +1,5 @@
 package org.lpw.ranch.doc;
 
-import org.lpw.ranch.audit.Audit;
-import org.lpw.ranch.audit.AuditDao;
 import org.lpw.tephra.dao.orm.lite.LiteOrm;
 import org.lpw.tephra.dao.orm.lite.LiteQuery;
 import org.springframework.stereotype.Repository;
@@ -17,8 +15,6 @@ import java.util.concurrent.ConcurrentHashMap;
 class DocDaoImpl implements DocDao {
     @Inject
     private LiteOrm liteOrm;
-    @Inject
-    private AuditDao auditDao;
     private Map<String, String> map = new ConcurrentHashMap<>();
 
     @Override
@@ -51,10 +47,5 @@ class DocDaoImpl implements DocDao {
         if (set == null)
             map.put(column, set = column + "=" + column + "+?");
         liteOrm.update(new LiteQuery(DocModel.class).set(set).where("c_id=?"), new Object[]{n, id});
-    }
-
-    @Override
-    public void audit(String[] ids, Audit audit, String auditRemark) {
-        auditDao.audit(DocModel.class, ids, audit, auditRemark);
     }
 }

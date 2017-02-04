@@ -1,11 +1,13 @@
 package org.lpw.ranch.audit;
 
+import org.lpw.ranch.recycle.RecycleService;
+
 /**
  * 回收站服务。
  *
  * @author lpw
  */
-public interface AuditService {
+public interface AuditService extends RecycleService {
     /**
      * 审核通过。
      *

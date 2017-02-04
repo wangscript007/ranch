@@ -32,7 +32,7 @@ public class FavoriteTest extends TestSupport {
         mockHelper.getRequest().addParameter("id", generator.uuid());
         mockHelper.mock("/doc/favorite");
         object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(1491, object.getInt("code"));
+        Assert.assertEquals(9995, object.getInt("code"));
         Assert.assertEquals(message.get(Validators.PREFIX + "illegal-sign"), object.getString("message"));
 
         mockHelper.reset();

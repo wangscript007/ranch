@@ -18,7 +18,5 @@ interface ClassifyDao {
 
     void delete(String code);
 
-    PageList<ClassifyModel> recycle(int pageSize, int pageNum);
-
     void restore(Set<String> codes);
 }

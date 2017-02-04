@@ -1,5 +1,6 @@
 package org.lpw.ranch.audit;
 
+import org.lpw.ranch.recycle.RecycleModel;
 import org.lpw.tephra.dao.model.Model;
 
 /**
@@ -7,7 +8,7 @@ import org.lpw.tephra.dao.model.Model;
  *
  * @author lpw
  */
-public interface AuditModel extends Model {
+public interface AuditModel extends Model, RecycleModel {
     /**
      * 获取审核状态。
      *

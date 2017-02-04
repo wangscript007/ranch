@@ -3,6 +3,7 @@ package org.lpw.ranch.doc;
 import net.sf.json.JSONObject;
 import org.lpw.ranch.audit.Audit;
 import org.lpw.ranch.audit.AuditHelper;
+import org.lpw.ranch.recycle.RecycleHelper;
 import org.lpw.ranch.user.User;
 import org.lpw.ranch.util.Carousel;
 import org.lpw.tephra.cache.Cache;
@@ -46,6 +47,8 @@ public class DocServiceImpl implements DocService, MinuteJob, DateJob {
     private User user;
     @Inject
     private AuditHelper auditHelper;
+    @Inject
+    private RecycleHelper recycleHelper;
     @Inject
     private DocDao docDao;
     @Value("${" + DocModel.NAME + ".audit.default:0}")
@@ -167,12 +170,27 @@ public class DocServiceImpl implements DocService, MinuteJob, DateJob {
 
     @Override
     public void pass(String[] ids, String auditRemark) {
-        docDao.audit(ids, Audit.Passed, auditRemark);
+        auditHelper.pass(DocModel.class, ids, auditRemark);
     }
 
     @Override
     public void refuse(String[] ids, String auditRemark) {
-        docDao.audit(ids, Audit.Refused, auditRemark);
+        auditHelper.refuse(DocModel.class, ids, auditRemark);
+    }
+
+    @Override
+    public void delete(String id) {
+        recycleHelper.delete(DocModel.class, id);
+    }
+
+    @Override
+    public JSONObject recycle() {
+        return recycleHelper.recycle(DocModel.class);
+    }
+
+    @Override
+    public void restore(String id) {
+        recycleHelper.restore(DocModel.class, id);
     }
 
     /**
