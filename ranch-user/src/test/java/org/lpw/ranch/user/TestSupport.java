@@ -6,8 +6,8 @@ import org.lpw.ranch.user.auth.AuthModel;
 import org.lpw.tephra.crypto.Digest;
 import org.lpw.tephra.ctrl.context.Request;
 import org.lpw.tephra.dao.orm.lite.LiteOrm;
-import org.lpw.tephra.test.TephraTestSupport;
 import org.lpw.tephra.test.MockHelper;
+import org.lpw.tephra.test.TephraTestSupport;
 import org.lpw.tephra.util.Converter;
 import org.lpw.tephra.util.Generator;
 import org.lpw.tephra.util.Message;
@@ -37,6 +37,10 @@ public class TestSupport extends TephraTestSupport {
     protected MockHelper mockHelper;
 
     protected UserModel create(int i) {
+        return create(i, 10 + i);
+    }
+
+    protected UserModel create(int i, int state) {
         UserModel user = new UserModel();
         user.setPassword(digest.md5(UserModel.NAME + digest.sha1("password " + i + UserModel.NAME)));
         user.setName("name " + i);
@@ -49,6 +53,8 @@ public class TestSupport extends TephraTestSupport {
         user.setBirthday(new Date(System.currentTimeMillis() - i * TimeUnit.Day.getTime()));
         user.setCode("code " + i);
         user.setRegister(new Timestamp(System.currentTimeMillis() - i * TimeUnit.Hour.getTime()));
+        user.setGrade(i);
+        user.setState(state);
         liteOrm.save(user);
 
         return user;
@@ -77,5 +83,7 @@ public class TestSupport extends TephraTestSupport {
         Assert.assertEquals(converter.toString(user.getBirthday()), object.getString("birthday"));
         Assert.assertEquals(user.getCode(), object.getString("code"));
         Assert.assertEquals(converter.toString(user.getRegister()), object.getString("register"));
+        Assert.assertEquals(user.getGrade(), object.getInt("grade"));
+        Assert.assertEquals(user.getState(), object.getInt("state"));
     }
 }

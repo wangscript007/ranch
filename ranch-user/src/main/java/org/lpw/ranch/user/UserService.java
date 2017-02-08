@@ -7,9 +7,23 @@ import net.sf.json.JSONObject;
  */
 public interface UserService {
     /**
+     * 注册验证器Bean名称。
+     */
+    String VALIDATOR_SIGN_UP = UserModel.NAME + ".validator.sign-up";
+    /**
      * 登入验证器Bean名称。
      */
     String VALIDATOR_SIGN_IN = UserModel.NAME + ".validator.sign-in";
+
+    /**
+     * 注册。
+     *
+     * @param uid      UID值。
+     * @param password 密码。
+     * @param type     认证类型。
+     * @return 注册成功则返回true；否则返回false。
+     */
+    boolean signUp(String uid, String password, int type);
 
     /**
      * 登入验证。
@@ -17,9 +31,10 @@ public interface UserService {
      * @param uid      UID值。
      * @param password 密码。
      * @param macId    客户端机器码。
+     * @param type     认证类型。
      * @return 认证成功则返回true；否则返回false。
      */
-    boolean signIn(String uid, String password, String macId);
+    boolean signIn(String uid, String password, String macId, int type);
 
     /**
      * 获取当前用户登入信息。

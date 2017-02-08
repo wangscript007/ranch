@@ -1,0 +1,23 @@
+@startuml
+
+package user{
+[Auth] <-- [User]
+}
+
+package menu{
+[Menu]
+}
+
+package dept{
+[Dept]
+}
+
+package croiser{
+[Crosier]
+}
+
+user <-- dept
+dept <-- croiser
+menu <-- croiser
+
+@enduml

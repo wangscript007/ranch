@@ -21,6 +21,17 @@ public class AuthServiceImpl implements AuthService {
     private AuthDao authDao;
 
     @Override
+    public AuthModel create(String userId, String uid, int type) {
+        AuthModel auth = new AuthModel();
+        auth.setUser(userId);
+        auth.setUid(uid);
+        auth.setType(type);
+        authDao.save(auth);
+
+        return auth;
+    }
+
+    @Override
     public AuthModel findByUid(String uid) {
         String cacheKey = CACHE_UID + uid;
         AuthModel auth = cache.get(cacheKey);

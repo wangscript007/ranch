@@ -9,8 +9,9 @@ import org.springframework.stereotype.Component;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
-import java.sql.Date;
+
 import java.sql.Timestamp;
+import java.sql.Date;
 
 /**
  * @author lpw
@@ -33,8 +34,9 @@ public class UserModel extends ModelSupport {
     private Date birthday; // 出生日期
     private String code; // 唯一编码
     private Timestamp register; // 注册时间
+    private int grade; // 等级：<50为用户；>=50为管理员；99为超级管理员
+    private int state; // 状态：0-正常；1-禁用
 
-    @Jsonable
     @Column(name = "c_password")
     public String getPassword() {
         return password;
@@ -142,5 +144,25 @@ public class UserModel extends ModelSupport {
 
     public void setRegister(Timestamp register) {
         this.register = register;
+    }
+
+    @Jsonable
+    @Column(name = "c_grade")
+    public int getGrade() {
+        return grade;
+    }
+
+    public void setGrade(int grade) {
+        this.grade = grade;
+    }
+
+    @Jsonable
+    @Column(name = "c_state")
+    public int getState() {
+        return state;
+    }
+
+    public void setState(int state) {
+        this.state = state;
     }
 }

@@ -22,10 +22,18 @@ public class UserCtrl {
     @Inject
     private UserService userService;
 
+    @Execute(name = "sign-up", validates = {
+            @Validate(validator = Validators.NOT_EMPTY, parameter = "uid", failureCode = 1),
+            @Validate(validator = UserService.VALIDATOR_SIGN_UP, parameters = {"uid", "password", "type"}, failureCode = 4)
+    })
+    public Object signUp() {
+        return sign();
+    }
+
     @Execute(name = "sign-in", validates = {
             @Validate(validator = Validators.NOT_EMPTY, parameter = "uid", failureCode = 1),
             @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "macId", failureCode = 2),
-            @Validate(validator = UserService.VALIDATOR_SIGN_IN, parameters = {"uid", "password", "macId"}, failureCode = 3)
+            @Validate(validator = UserService.VALIDATOR_SIGN_IN, parameters = {"uid", "password", "macId", "type"}, failureCode = 3)
     })
     public Object signIn() {
         return sign();

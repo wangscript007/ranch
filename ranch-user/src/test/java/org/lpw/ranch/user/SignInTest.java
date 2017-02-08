@@ -13,8 +13,8 @@ import org.lpw.tephra.dao.orm.lite.LiteQuery;
 public class SignInTest extends TestSupport {
     @Test
     public void signIn() {
-        UserModel user1 = create(1);
-        UserModel user2 = create(2);
+        UserModel user1 = create(1, 0);
+        UserModel user2 = create(2, 0);
         AuthModel auth0 = createAuth(user1.getId(), "mac id 1", 0);
         createAuth(user1.getId(), "uid 1", 1);
         createAuth("user 2", "uid 2", 2);

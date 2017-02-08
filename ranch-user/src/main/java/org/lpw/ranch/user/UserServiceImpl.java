@@ -8,6 +8,8 @@ import org.lpw.tephra.crypto.Digest;
 import org.lpw.tephra.ctrl.context.Session;
 import org.lpw.tephra.dao.model.ModelHelper;
 import org.lpw.tephra.util.Converter;
+import org.lpw.tephra.util.DateTime;
+import org.lpw.tephra.util.Generator;
 import org.lpw.tephra.util.Validator;
 import org.springframework.stereotype.Service;
 
@@ -30,6 +32,10 @@ public class UserServiceImpl implements UserService {
     @Inject
     private Validator validator;
     @Inject
+    private Generator generator;
+    @Inject
+    private DateTime dateTime;
+    @Inject
     private ModelHelper modelHelper;
     @Inject
     private Session session;
@@ -39,13 +45,44 @@ public class UserServiceImpl implements UserService {
     private UserDao userDao;
 
     @Override
-    public boolean signIn(String uid, String password, String macId) {
-        AuthModel auth = authService.findByUid(uid);
-        if (auth == null)
+    public boolean signUp(String uid, String password, int type) {
+        if (authService.findByUid(uid) != null)
             return false;
 
+        signUpDirect(uid, password, type);
+
+        return true;
+    }
+
+    private void signUpDirect(String uid, String password, int type) {
+        UserModel user = new UserModel();
+        if (type == 1)
+            user.setPassword(password(password));
+        user.setRegister(dateTime.now());
+        while (user.getCode() == null) {
+            String code = generator.random(8);
+            if (userDao.count(code) == 0)
+                user.setCode(code);
+        }
+        userDao.save(user);
+        authService.create(user.getId(), uid, type);
+        session.set(SESSION, user);
+    }
+
+    @Override
+    public boolean signIn(String uid, String password, String macId, int type) {
+        AuthModel auth = authService.findByUid(uid);
+        if (auth == null) {
+            if (type < 2)
+                return false;
+
+            signUpDirect(uid, password, type);
+
+            return true;
+        }
+
         UserModel user = findById(auth.getUser());
-        if (user == null)
+        if (user == null || user.getState() != 0)
             return false;
 
         if (auth.getType() == 1) {
@@ -87,10 +124,7 @@ public class UserServiceImpl implements UserService {
         if (object == null) {
             if (user == null)
                 user = findById(id);
-            if (user == null)
-                object = new JSONObject();
-            else
-                object = modelHelper.toJson(user, converter.toSet(new String[]{"password"}));
+            object = user == null ? new JSONObject() : modelHelper.toJson(user);
             cache.put(cacheKey, object, false);
         }
 

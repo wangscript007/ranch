@@ -5,4 +5,8 @@ package org.lpw.ranch.user;
  */
 interface UserDao {
     UserModel findById(String id);
+
+    int count(String code);
+
+    void save(UserModel user);
 }
