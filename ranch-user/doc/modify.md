@@ -9,7 +9,6 @@
 - nick 昵称。
 - mobile 手机号。
 - email Email地址。
-- portrait 头像。
 - gender 性别：0-未知；1-男；2-女。
 - address 详细地址。
 - birthday 出生日期。

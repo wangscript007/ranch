@@ -6,11 +6,11 @@
 
 [获取当前登入用户信息](doc/sign.md)
 
-[获取用户信息](doc/get.md)
-
 [修改当前用户信息](doc/modify.md)
 
 [修改当前用户认证密码](doc/password.md)
+
+[获取用户信息](doc/get.md)
 
 [检索用户](doc/query.md)
 

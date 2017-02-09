@@ -6,6 +6,7 @@ import org.lpw.ranch.user.auth.AuthModel;
 import org.lpw.tephra.crypto.Digest;
 import org.lpw.tephra.ctrl.context.Request;
 import org.lpw.tephra.dao.orm.lite.LiteOrm;
+import org.lpw.tephra.dao.orm.lite.LiteQuery;
 import org.lpw.tephra.test.MockHelper;
 import org.lpw.tephra.test.TephraTestSupport;
 import org.lpw.tephra.util.Converter;
@@ -85,5 +86,41 @@ public class TestSupport extends TephraTestSupport {
         Assert.assertEquals(converter.toString(user.getRegister()), object.getString("register"));
         Assert.assertEquals(user.getGrade(), object.getInt("grade"));
         Assert.assertEquals(user.getState(), object.getInt("state"));
+    }
+
+    protected void equalsSignUp(JSONObject data, String uid, int type, String password, String code) {
+        AuthModel auth = liteOrm.findOne(new LiteQuery(AuthModel.class).where("c_uid=?"), new Object[]{uid});
+        Assert.assertEquals(type, auth.getType());
+        Assert.assertEquals(auth.getUser(), data.getString("id"));
+        for (String name : new String[]{"password", "name", "nick", "mobile", "email", "portrait", "address", "birthday"})
+            Assert.assertFalse(data.has(name));
+        for (String name : new String[]{"gender", "grade", "state"})
+            Assert.assertEquals(0, data.getInt(name));
+        Assert.assertTrue(System.currentTimeMillis() - converter.toDate(data.getString("register")).getTime() < 2000L);
+        if (code == null)
+            Assert.assertEquals(8, data.getString("code").length());
+        else
+            Assert.assertEquals(code, data.getString("code"));
+
+        UserModel user = liteOrm.findById(UserModel.class, auth.getUser());
+        if (password == null)
+            Assert.assertNull(user.getPassword());
+        else
+            Assert.assertEquals(digest.md5(UserModel.NAME + digest.sha1(password + UserModel.NAME)), user.getPassword());
+        Assert.assertNull(user.getName());
+        Assert.assertNull(user.getNick());
+        Assert.assertNull(user.getMobile());
+        Assert.assertNull(user.getEmail());
+        Assert.assertNull(user.getPortrait());
+        Assert.assertNull(user.getAddress());
+        Assert.assertNull(user.getBirthday());
+        Assert.assertEquals(0, user.getGender());
+        Assert.assertEquals(0, user.getGrade());
+        Assert.assertEquals(0, user.getState());
+        Assert.assertTrue(System.currentTimeMillis() - user.getRegister().getTime() < 2000L);
+        if (code == null)
+            Assert.assertEquals(8, user.getCode().length());
+        else
+            Assert.assertEquals(code, user.getCode());
     }
 }

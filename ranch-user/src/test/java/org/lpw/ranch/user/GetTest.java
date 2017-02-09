@@ -21,7 +21,7 @@ public class GetTest extends TestSupport {
         mockHelper.reset();
         mockHelper.mock("/user/get");
         JSONObject object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(1511, object.getInt("code"));
+        Assert.assertEquals(1521, object.getInt("code"));
         Assert.assertEquals(message.get(Validators.PREFIX + "empty", message.get(UserModel.NAME + ".ids")), object.getString("message"));
 
         mockHelper.reset();

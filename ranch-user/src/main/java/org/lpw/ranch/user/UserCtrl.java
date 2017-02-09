@@ -24,6 +24,8 @@ public class UserCtrl {
 
     @Execute(name = "sign-up", validates = {
             @Validate(validator = Validators.NOT_EMPTY, parameter = "uid", failureCode = 1),
+            @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "uid", failureCode = 2),
+            @Validate(validator = UserService.VALIDATOR_PASSWORD, parameter = "password", failureCode = 3),
             @Validate(validator = UserService.VALIDATOR_SIGN_UP, parameters = {"uid", "password", "type"}, failureCode = 4)
     })
     public Object signUp() {
@@ -32,8 +34,9 @@ public class UserCtrl {
 
     @Execute(name = "sign-in", validates = {
             @Validate(validator = Validators.NOT_EMPTY, parameter = "uid", failureCode = 1),
-            @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "macId", failureCode = 2),
-            @Validate(validator = UserService.VALIDATOR_SIGN_IN, parameters = {"uid", "password", "macId", "type"}, failureCode = 3)
+            @Validate(validator = UserService.VALIDATOR_PASSWORD, parameter = "password", failureCode = 3),
+            @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "macId", failureCode = 5),
+            @Validate(validator = UserService.VALIDATOR_SIGN_IN, parameters = {"uid", "password", "macId", "type"}, failureCode = 6)
     })
     public Object signIn() {
         return sign();
@@ -44,8 +47,24 @@ public class UserCtrl {
         return templates.get().success(userService.sign(), null);
     }
 
+    @Execute(name = "modify", validates = {
+            @Validate(validator = Validators.MAX_LENGTH, number = {100}, emptyable = true, parameter = "name", failureCode = 7),
+            @Validate(validator = Validators.MAX_LENGTH, number = {100}, emptyable = true, parameter = "nick", failureCode = 8),
+            @Validate(validator = Validators.MOBILE, emptyable = true, parameter = "mobile", failureCode = 9),
+            @Validate(validator = Validators.EMAIL, emptyable = true, parameter = "email", failureCode = 10),
+            @Validate(validator = Validators.MAX_LENGTH, number = {100}, emptyable = true, parameter = "email", failureCode = 11),
+            @Validate(validator = Validators.BETWEEN, number = {0, 2}, emptyable = true, parameter = "gender", failureCode = 12),
+            @Validate(validator = Validators.MAX_LENGTH, number = {100}, emptyable = true, parameter = "address", failureCode = 13),
+            @Validate(validator = UserService.VALIDATOR_SIGN)
+    })
+    public Object modify() {
+        userService.modify(request.setToModel(new UserModel()));
+
+        return sign();
+    }
+
     @Execute(name = "get", validates = {
-            @Validate(validator = Validators.NOT_EMPTY, parameter = "ids", failureCode = 11),
+            @Validate(validator = Validators.NOT_EMPTY, parameter = "ids", failureCode = 21),
             @Validate(validator = Validators.SIGN)
     })
     public Object get() {

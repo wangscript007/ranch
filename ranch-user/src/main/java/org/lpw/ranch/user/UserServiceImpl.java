@@ -105,6 +105,28 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public void modify(UserModel user) {
+        UserModel model = session.get(SESSION);
+        if (user.getName() != null)
+            model.setName(user.getName());
+        if (user.getNick() != null)
+            model.setNick(user.getNick());
+        if (user.getMobile() != null)
+            model.setMobile(user.getMobile());
+        if (user.getEmail() != null)
+            model.setEmail(user.getEmail());
+        if (user.getGender() > 0)
+            model.setGender(user.getGender());
+        if (user.getAddress() != null)
+            model.setAddress(user.getAddress());
+        if (user.getBirthday() != null)
+            model.setBirthday(user.getBirthday());
+        userDao.save(model);
+        session.set(SESSION, model);
+        cache.remove(CACHE_JSON + model.getId());
+    }
+
+    @Override
     public JSONObject get(String[] ids) {
         JSONObject object = new JSONObject();
         for (String id : ids) {

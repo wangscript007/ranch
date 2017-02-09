@@ -14,6 +14,14 @@ public interface UserService {
      * 登入验证器Bean名称。
      */
     String VALIDATOR_SIGN_IN = UserModel.NAME + ".validator.sign-in";
+    /**
+     * 已登入验证器Bean名称。
+     */
+    String VALIDATOR_SIGN = UserModel.NAME + ".validator.sign";
+    /**
+     * 密码验证器Bean名称。
+     */
+    String VALIDATOR_PASSWORD = UserModel.NAME + ".validator.password";
 
     /**
      * 注册。
@@ -42,6 +50,13 @@ public interface UserService {
      * @return 当前用户登入信息；如果未登入则返回空JSON数据。
      */
     JSONObject sign();
+
+    /**
+     * 修改当前用户信息。
+     *
+     * @param user 用户信息。
+     */
+    void modify(UserModel user);
 
     /**
      * 获取用户数据集。
