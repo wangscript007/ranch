@@ -5,6 +5,7 @@ import org.lpw.tephra.ctrl.execute.Execute;
 import org.lpw.tephra.ctrl.template.Templates;
 import org.lpw.tephra.ctrl.validate.Validate;
 import org.lpw.tephra.ctrl.validate.Validators;
+import org.lpw.tephra.util.Message;
 import org.springframework.stereotype.Controller;
 
 import javax.inject.Inject;
@@ -15,6 +16,8 @@ import javax.inject.Inject;
 @Controller(UserModel.NAME + ".ctrl")
 @Execute(name = "/user/", key = UserModel.NAME, code = "15")
 public class UserCtrl {
+    @Inject
+    private Message message;
     @Inject
     private Request request;
     @Inject
@@ -61,6 +64,17 @@ public class UserCtrl {
         userService.modify(request.setToModel(new UserModel()));
 
         return sign();
+    }
+
+    @Execute(name = "password", validates = {
+            @Validate(validator = Validators.NOT_EMPTY, parameter = "new", failureCode = 14, failureArgKeys = {UserModel.NAME + ".password.new"}),
+            @Validate(validator = Validators.NOT_EQUALS, parameters = {"old", "new"}, failureCode = 15, failureArgKeys = {UserModel.NAME + ".password.new", UserModel.NAME + ".password.old"}),
+            @Validate(validator = Validators.EQUALS, parameters = {"new", "repeat"}, failureCode = 16, failureArgKeys = {UserModel.NAME + ".password.repeat", UserModel.NAME + ".password.new"}),
+            @Validate(validator = UserService.VALIDATOR_SIGN)
+    })
+    public Object password() {
+        return userService.password(request.get("old"), request.get("new")) ? "" :
+                templates.get().failure(17, message.get(UserModel.NAME + ".password.illegal"), null, null);
     }
 
     @Execute(name = "get", validates = {

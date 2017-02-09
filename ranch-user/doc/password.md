@@ -5,7 +5,7 @@
 - URI - /user/password
 
 参数
-- pwd 旧密码，如果尚未设置旧密码则为空。
+- old 旧密码，如果尚未设置旧密码则为空。
 - new 新密码。
 - repeat 重复新密码。
 

@@ -59,6 +59,15 @@ public interface UserService {
     void modify(UserModel user);
 
     /**
+     * 修改密码。
+     *
+     * @param oldPassword 旧密码。
+     * @param newPassword 新密码。
+     * @return 如果修改成功则返回true；否则返回false。
+     */
+    boolean password(String oldPassword, String newPassword);
+
+    /**
      * 获取用户数据集。
      *
      * @param ids ID集。

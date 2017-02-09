@@ -127,6 +127,20 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public boolean password(String oldPassword, String newPassword) {
+        UserModel user = session.get(SESSION);
+        if (!validator.isEmpty(user.getPassword())&&!user.getPassword().equals(password(oldPassword)))
+            return false;
+
+        user.setPassword(password(newPassword));
+        userDao.save(user);
+        session.set(SESSION, user);
+        cache.remove(CACHE_JSON + user.getId());
+
+        return true;
+    }
+
+    @Override
     public JSONObject get(String[] ids) {
         JSONObject object = new JSONObject();
         for (String id : ids) {
