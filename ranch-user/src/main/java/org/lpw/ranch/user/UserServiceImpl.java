@@ -3,6 +3,7 @@ package org.lpw.ranch.user;
 import net.sf.json.JSONObject;
 import org.lpw.ranch.user.auth.AuthModel;
 import org.lpw.ranch.user.auth.AuthService;
+import org.lpw.ranch.util.Pagination;
 import org.lpw.tephra.cache.Cache;
 import org.lpw.tephra.crypto.Digest;
 import org.lpw.tephra.ctrl.context.Session;
@@ -20,6 +21,7 @@ import javax.inject.Inject;
  */
 @Service(UserModel.NAME + ".service")
 public class UserServiceImpl implements UserService {
+    private static final String CACHE_MODEL = UserModel.NAME + ".service.model:";
     private static final String CACHE_JSON = UserModel.NAME + ".service.json:";
     private static final String SESSION = UserModel.NAME + ".service.session";
 
@@ -39,6 +41,8 @@ public class UserServiceImpl implements UserService {
     private ModelHelper modelHelper;
     @Inject
     private Session session;
+    @Inject
+    private Pagination pagination;
     @Inject
     private AuthService authService;
     @Inject
@@ -123,19 +127,19 @@ public class UserServiceImpl implements UserService {
             model.setBirthday(user.getBirthday());
         userDao.save(model);
         session.set(SESSION, model);
-        cache.remove(CACHE_JSON + model.getId());
+        cleanCache(model.getId());
     }
 
     @Override
     public boolean password(String oldPassword, String newPassword) {
         UserModel user = session.get(SESSION);
-        if (!validator.isEmpty(user.getPassword())&&!user.getPassword().equals(password(oldPassword)))
+        if (!validator.isEmpty(user.getPassword()) && !user.getPassword().equals(password(oldPassword)))
             return false;
 
         user.setPassword(password(newPassword));
         userDao.save(user);
         session.set(SESSION, user);
-        cache.remove(CACHE_JSON + user.getId());
+        cleanCache(user.getId());
 
         return true;
     }
@@ -167,12 +171,46 @@ public class UserServiceImpl implements UserService {
         return object;
     }
 
+    @Override
+    public UserModel findById(String id) {
+        String cacheKey = CACHE_MODEL + id;
+        UserModel user = cache.get(cacheKey);
+        if (user == null)
+            cache.put(cacheKey, user = userDao.findById(id), false);
 
-    private UserModel findById(String id) {
-        return userDao.findById(id);
+        return user;
     }
 
     private String password(String password) {
         return digest.md5(UserModel.NAME + digest.sha1(password + UserModel.NAME));
+    }
+
+    @Override
+    public JSONObject query(String mobile) {
+        if (validator.isEmpty(mobile))
+            return userDao.query(pagination.getPageSize(), pagination.getPageNum()).toJson();
+
+        return userDao.query(mobile).toJson();
+    }
+
+    @Override
+    public void grade(String id, int grade) {
+        UserModel user = findById(id);
+        user.setGrade(grade);
+        userDao.save(user);
+        cleanCache(id);
+    }
+
+    @Override
+    public void state(String id, int state) {
+        UserModel user = findById(id);
+        user.setState(state);
+        userDao.save(user);
+        cleanCache(id);
+    }
+
+    private void cleanCache(String id) {
+        cache.remove(CACHE_MODEL + id);
+        cache.remove(CACHE_JSON + id);
     }
 }

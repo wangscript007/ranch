@@ -22,6 +22,10 @@ public interface UserService {
      * 密码验证器Bean名称。
      */
     String VALIDATOR_PASSWORD = UserModel.NAME + ".validator.password";
+    /**
+     * 用户信息是否存在验证器Bean名称。
+     */
+    String VALIDATOR_EXISTS = UserModel.NAME + ".validator.exists";
 
     /**
      * 注册。
@@ -74,4 +78,36 @@ public interface UserService {
      * @return 用户数据集。
      */
     JSONObject get(String[] ids);
+
+    /**
+     * 获取用户数据。
+     *
+     * @param id ID值。
+     * @return 用户数据；不存在则返回null。
+     */
+    UserModel findById(String id);
+
+    /**
+     * 检索用户信息集。
+     *
+     * @param mobile 用户手机号；为空则表示所有。
+     * @return 用户信息集。
+     */
+    JSONObject query(String mobile);
+
+    /**
+     * 设置用户等级。
+     *
+     * @param id    用户ID值。
+     * @param grade 等级值。
+     */
+    void grade(String id, int grade);
+
+    /**
+     * 设置用户状态。
+     *
+     * @param id    用户ID值。
+     * @param state 状态值。
+     */
+    void state(String id, int state);
 }

@@ -74,7 +74,7 @@ public class UserCtrl {
     })
     public Object password() {
         return userService.password(request.get("old"), request.get("new")) ? "" :
-                templates.get().failure(17, message.get(UserModel.NAME + ".password.illegal"), null, null);
+                templates.get().failure(1517, message.get(UserModel.NAME + ".password.illegal"), null, null);
     }
 
     @Execute(name = "get", validates = {
@@ -83,5 +83,37 @@ public class UserCtrl {
     })
     public Object get() {
         return userService.get(request.getAsArray("ids"));
+    }
+
+    @Execute(name = "query", validates = {
+            @Validate(validator = Validators.MOBILE, emptyable = true, parameter = "mobile", failureCode = 9),
+            @Validate(validator = Validators.SIGN)
+    })
+    public Object query() {
+        return userService.query(request.get("mobile"));
+    }
+
+    @Execute(name = "grade", validates = {
+            @Validate(validator = Validators.ID, parameter = "id", failureCode = 22),
+            @Validate(validator = Validators.BETWEEN, number = {0, 99}, parameter = "grade", failureCode = 23),
+            @Validate(validator = Validators.SIGN),
+            @Validate(validator = UserService.VALIDATOR_EXISTS, parameter = "id", failureCode = 25)
+    })
+    public Object grade() {
+        userService.grade(request.get("id"), request.getAsInt("grade"));
+
+        return "";
+    }
+
+    @Execute(name = "state", validates = {
+            @Validate(validator = Validators.ID, parameter = "id", failureCode = 22),
+            @Validate(validator = Validators.BETWEEN, number = {0, 1}, parameter = "state", failureCode = 24),
+            @Validate(validator = Validators.SIGN),
+            @Validate(validator = UserService.VALIDATOR_EXISTS, parameter = "id", failureCode = 25)
+    })
+    public Object state() {
+        userService.state(request.get("id"), request.getAsInt("state"));
+
+        return "";
     }
 }

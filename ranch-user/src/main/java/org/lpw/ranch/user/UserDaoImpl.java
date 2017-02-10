@@ -1,5 +1,6 @@
 package org.lpw.ranch.user;
 
+import org.lpw.tephra.dao.orm.PageList;
 import org.lpw.tephra.dao.orm.lite.LiteOrm;
 import org.lpw.tephra.dao.orm.lite.LiteQuery;
 import org.springframework.stereotype.Repository;
@@ -22,6 +23,16 @@ class UserDaoImpl implements UserDao {
     @Override
     public int count(String code) {
         return liteOrm.count(new LiteQuery(UserModel.class).where("c_code=?"), new Object[]{code});
+    }
+
+    @Override
+    public PageList<UserModel> query(String mobile) {
+        return liteOrm.query(new LiteQuery(UserModel.class).where("c_mobile=?").order("c_register desc"), new Object[]{mobile});
+    }
+
+    @Override
+    public PageList<UserModel> query(int pageSize, int pageNum) {
+        return liteOrm.query(new LiteQuery(UserModel.class).order("c_register desc").size(pageSize).page(pageNum), null);
     }
 
     @Override

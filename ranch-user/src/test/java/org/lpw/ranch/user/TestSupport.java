@@ -46,7 +46,7 @@ public class TestSupport extends TephraTestSupport {
         user.setPassword(digest.md5(UserModel.NAME + digest.sha1("password " + i + UserModel.NAME)));
         user.setName("name " + i);
         user.setNick("nick " + i);
-        user.setMobile("mobile " + i);
+        user.setMobile("123123456" + (10 + i));
         user.setEmail("email " + i);
         user.setPortrait("portrait " + i);
         user.setGender(i);
