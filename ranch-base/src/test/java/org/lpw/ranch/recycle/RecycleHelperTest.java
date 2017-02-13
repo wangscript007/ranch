@@ -1,7 +1,7 @@
 package org.lpw.ranch.recycle;
 
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import org.junit.Assert;
 import org.junit.Test;
 import org.lpw.tephra.dao.orm.lite.LiteOrm;
@@ -96,9 +96,9 @@ public class RecycleHelperTest extends TephraTestSupport {
         mockHelper.getRequest().addParameter("pageNum", "1");
         mockHelper.mock("/recycle/recycle");
         JSONObject object = recycleHelper.recycle(TestRecycleModel.class);
-        Assert.assertEquals(5, object.getInt("count"));
-        Assert.assertEquals(20, object.getInt("size"));
-        Assert.assertEquals(1, object.getInt("number"));
+        Assert.assertEquals(5, object.getIntValue("count"));
+        Assert.assertEquals(20, object.getIntValue("size"));
+        Assert.assertEquals(1, object.getIntValue("number"));
         JSONArray list = object.getJSONArray("list");
         Assert.assertEquals(5, list.size());
         for (int i = 0; i < 5; i++)
@@ -109,9 +109,9 @@ public class RecycleHelperTest extends TephraTestSupport {
         mockHelper.getRequest().addParameter("pageNum", "1");
         mockHelper.mock("/recycle/recycle");
         object = recycleHelper.recycle(TestRecycleModel.class);
-        Assert.assertEquals(5, object.getInt("count"));
-        Assert.assertEquals(2, object.getInt("size"));
-        Assert.assertEquals(1, object.getInt("number"));
+        Assert.assertEquals(5, object.getIntValue("count"));
+        Assert.assertEquals(2, object.getIntValue("size"));
+        Assert.assertEquals(1, object.getIntValue("number"));
         list = object.getJSONArray("list");
         Assert.assertEquals(2, list.size());
         for (int i = 0; i < 2; i++)

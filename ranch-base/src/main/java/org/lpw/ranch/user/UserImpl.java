@@ -1,6 +1,6 @@
 package org.lpw.ranch.user;
 
-import net.sf.json.JSONObject;
+import com.alibaba.fastjson.JSONObject;
 import org.lpw.ranch.util.Carousel;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;

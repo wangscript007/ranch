@@ -1,6 +1,7 @@
 package org.lpw.ranch.gps;
 
-import net.sf.json.JSONObject;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import org.lpw.tephra.util.Http;
 import org.lpw.tephra.util.Validator;
 import org.springframework.beans.factory.annotation.Value;
@@ -33,8 +34,8 @@ public class GpsServiceImpl implements GpsService {
         if (validator.isEmpty(string))
             return object;
 
-        JSONObject json = JSONObject.fromObject(string);
-        if (json.getInt("status") != 0)
+        JSONObject json = JSON.parseObject(string);
+        if (json.getIntValue("status") != 0)
             return object;
 
         JSONObject result = json.getJSONObject("result");

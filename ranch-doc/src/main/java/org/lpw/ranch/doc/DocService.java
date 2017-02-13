@@ -1,6 +1,6 @@
 package org.lpw.ranch.doc;
 
-import net.sf.json.JSONObject;
+import com.alibaba.fastjson.JSONObject;
 import org.lpw.ranch.audit.AuditService;
 
 /**

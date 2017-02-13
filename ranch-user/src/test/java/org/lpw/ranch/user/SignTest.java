@@ -1,6 +1,6 @@
 package org.lpw.ranch.user;
 
-import net.sf.json.JSONObject;
+import com.alibaba.fastjson.JSONObject;
 import org.junit.Assert;
 import org.junit.Test;
 import org.lpw.tephra.ctrl.context.Session;
@@ -26,7 +26,7 @@ public class SignTest extends TestSupport {
         mockHelper.reset();
         mockHelper.mock("/user/sign");
         JSONObject object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(0, object.getInt("code"));
+        Assert.assertEquals(0, object.getIntValue("code"));
         Assert.assertTrue(object.getJSONObject("data").isEmpty());
 
         list.forEach(user -> {
@@ -34,7 +34,7 @@ public class SignTest extends TestSupport {
             session.set(mockHelper.getSession().getId(), UserModel.NAME + ".service.session", user);
             mockHelper.mock("/user/sign");
             JSONObject obj = mockHelper.getResponse().asJson();
-            Assert.assertEquals(0, obj.getInt("code"));
+            Assert.assertEquals(0, obj.getIntValue("code"));
             equals(user, obj.getJSONObject("data"));
         });
     }

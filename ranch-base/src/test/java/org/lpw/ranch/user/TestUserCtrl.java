@@ -1,6 +1,6 @@
 package org.lpw.ranch.user;
 
-import net.sf.json.JSONObject;
+import com.alibaba.fastjson.JSONObject;
 import org.lpw.tephra.ctrl.execute.Execute;
 import org.lpw.tephra.ctrl.validate.Validate;
 import org.springframework.stereotype.Controller;

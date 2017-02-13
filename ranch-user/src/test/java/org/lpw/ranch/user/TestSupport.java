@@ -1,6 +1,6 @@
 package org.lpw.ranch.user;
 
-import net.sf.json.JSONObject;
+import com.alibaba.fastjson.JSONObject;
 import org.junit.Assert;
 import org.lpw.ranch.user.auth.AuthModel;
 import org.lpw.tephra.crypto.Digest;
@@ -73,19 +73,19 @@ public class TestSupport extends TephraTestSupport {
 
     protected void equals(UserModel user, JSONObject object) {
         Assert.assertEquals(user.getId(), object.getString("id"));
-        Assert.assertFalse(object.has("password"));
+        Assert.assertFalse(object.containsKey("password"));
         Assert.assertEquals(user.getName(), object.getString("name"));
         Assert.assertEquals(user.getNick(), object.getString("nick"));
         Assert.assertEquals(user.getMobile(), object.getString("mobile"));
         Assert.assertEquals(user.getEmail(), object.getString("email"));
         Assert.assertEquals(user.getPortrait(), object.getString("portrait"));
-        Assert.assertEquals(user.getGender(), object.getInt("gender"));
+        Assert.assertEquals(user.getGender(), object.getIntValue("gender"));
         Assert.assertEquals(user.getAddress(), object.getString("address"));
         Assert.assertEquals(converter.toString(user.getBirthday()), object.getString("birthday"));
         Assert.assertEquals(user.getCode(), object.getString("code"));
         Assert.assertEquals(converter.toString(user.getRegister()), object.getString("register"));
-        Assert.assertEquals(user.getGrade(), object.getInt("grade"));
-        Assert.assertEquals(user.getState(), object.getInt("state"));
+        Assert.assertEquals(user.getGrade(), object.getIntValue("grade"));
+        Assert.assertEquals(user.getState(), object.getIntValue("state"));
     }
 
     protected void equalsSignUp(JSONObject data, String uid, int type, String password, String code) {
@@ -93,9 +93,9 @@ public class TestSupport extends TephraTestSupport {
         Assert.assertEquals(type, auth.getType());
         Assert.assertEquals(auth.getUser(), data.getString("id"));
         for (String name : new String[]{"password", "name", "nick", "mobile", "email", "portrait", "address", "birthday"})
-            Assert.assertFalse(data.has(name));
+            Assert.assertFalse(data.containsKey(name));
         for (String name : new String[]{"gender", "grade", "state"})
-            Assert.assertEquals(0, data.getInt(name));
+            Assert.assertEquals(0, data.getIntValue(name));
         Assert.assertTrue(System.currentTimeMillis() - converter.toDate(data.getString("register")).getTime() < 2000L);
         if (code == null)
             Assert.assertEquals(8, data.getString("code").length());

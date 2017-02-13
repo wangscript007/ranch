@@ -1,7 +1,7 @@
 package org.lpw.ranch.classify;
 
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import org.junit.Assert;
 import org.junit.Test;
 import org.lpw.ranch.recycle.Recycle;
@@ -27,7 +27,7 @@ public class TreeTest extends TestSupport {
         mockHelper.reset();
         mockHelper.mock("/classify/tree");
         JSONObject object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(1202, object.getInt("code"));
+        Assert.assertEquals(1202, object.getIntValue("code"));
         Assert.assertEquals(message.get(Validators.PREFIX + "empty", message.get(ClassifyModel.NAME + ".code")), object.getString("message"));
 
         for (int i = 0; i < 5; i++) {
@@ -35,7 +35,7 @@ public class TreeTest extends TestSupport {
             mockHelper.getRequest().addParameter("code", "code");
             mockHelper.mock("/classify/tree");
             object = mockHelper.getResponse().asJson();
-            Assert.assertEquals(0, object.getInt("code"));
+            Assert.assertEquals(0, object.getIntValue("code"));
             JSONArray data = object.getJSONArray("data");
             Assert.assertEquals(3, data.size());
             if (classify1a.getId().compareTo(classify1b.getId()) < 0) {
@@ -50,7 +50,7 @@ public class TreeTest extends TestSupport {
             Assert.assertEquals(2, array.size());
             Assert.assertEquals(classify11.getId(), array.getJSONObject(0).getString("id"));
             Assert.assertEquals(classify12.getId(), array.getJSONObject(1).getString("id"));
-            Assert.assertFalse(data.getJSONObject(1).has("children"));
+            Assert.assertFalse(data.getJSONObject(1).containsKey("children"));
             JSONArray children = array.getJSONObject(0).getJSONArray("children");
             Assert.assertEquals(1, children.size());
             Assert.assertEquals(classify111.getId(), children.getJSONObject(0).getString("id"));
@@ -69,7 +69,7 @@ public class TreeTest extends TestSupport {
         mockHelper.getRequest().addParameter("code", "code");
         mockHelper.mock("/classify/tree");
         object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(0, object.getInt("code"));
+        Assert.assertEquals(0, object.getIntValue("code"));
         JSONArray data = object.getJSONArray("data");
         Assert.assertEquals(2, data.size());
         Assert.assertEquals(classify1b.getId(), data.getJSONObject(0).getString("id"));
@@ -81,13 +81,13 @@ public class TreeTest extends TestSupport {
         JSONArray children = array.getJSONObject(0).getJSONArray("children");
         Assert.assertEquals(1, children.size());
         Assert.assertEquals(classify111.getId(), children.getJSONObject(0).getString("id"));
-        Assert.assertFalse(array.getJSONObject(1).has("children"));
+        Assert.assertFalse(array.getJSONObject(1).containsKey("children"));
 
         mockHelper.reset();
         mockHelper.getRequest().addParameter("code", "code 1");
         mockHelper.mock("/classify/tree");
         object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(0, object.getInt("code"));
+        Assert.assertEquals(0, object.getIntValue("code"));
         data = object.getJSONArray("data");
         Assert.assertEquals(1, data.size());
         Assert.assertEquals(classify1b.getId(), data.getJSONObject(0).getString("id"));
@@ -103,7 +103,7 @@ public class TreeTest extends TestSupport {
         mockHelper.getRequest().addParameter("code", "code 3");
         mockHelper.mock("/classify/tree");
         object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(0, object.getInt("code"));
+        Assert.assertEquals(0, object.getIntValue("code"));
         data = object.getJSONArray("data");
         Assert.assertTrue(data.isEmpty());
         schedulerAspect.press();

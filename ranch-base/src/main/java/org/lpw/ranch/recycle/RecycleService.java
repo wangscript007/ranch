@@ -1,6 +1,6 @@
 package org.lpw.ranch.recycle;
 
-import net.sf.json.JSONObject;
+import com.alibaba.fastjson.JSONObject;
 
 /**
  * 回收站服务。

@@ -1,6 +1,6 @@
 package org.lpw.ranch.classify;
 
-import net.sf.json.JSONObject;
+import com.alibaba.fastjson.JSONObject;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -30,7 +30,7 @@ public class GetTest extends TestSupport {
         mockHelper.reset();
         mockHelper.mock("/classify/get");
         JSONObject object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(0, object.getInt("code"));
+        Assert.assertEquals(0, object.getIntValue("code"));
         JSONObject data = object.getJSONObject("data");
         Assert.assertTrue(data.isEmpty());
 
@@ -38,10 +38,10 @@ public class GetTest extends TestSupport {
         mockHelper.getRequest().addParameter("ids", "id," + list.get(0).getId() + "," + list.get(1).getId() + "," + list.get(1).getId());
         mockHelper.mock("/classify/get");
         object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(0, object.getInt("code"));
+        Assert.assertEquals(0, object.getIntValue("code"));
         data = object.getJSONObject("data");
-        Assert.assertFalse(data.has("id"));
-        Assert.assertFalse(data.has(list.get(0).getId()));
+        Assert.assertFalse(data.containsKey("id"));
+        Assert.assertFalse(data.containsKey(list.get(0).getId()));
         JSONObject classify = data.getJSONObject(list.get(1).getId());
         Assert.assertEquals(list.get(1).getId(), classify.getString("id"));
         equalsCodeName(classify, "code 1", "name 1");
@@ -51,10 +51,10 @@ public class GetTest extends TestSupport {
         mockHelper.getRequest().addParameter("links", "true");
         mockHelper.mock("/classify/get");
         object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(0, object.getInt("code"));
+        Assert.assertEquals(0, object.getIntValue("code"));
         data = object.getJSONObject("data");
-        Assert.assertFalse(data.has("id"));
-        Assert.assertFalse(data.has(list.get(0).getId()));
+        Assert.assertFalse(data.containsKey("id"));
+        Assert.assertFalse(data.containsKey(list.get(0).getId()));
         classify = data.getJSONObject(list.get(1).getId());
         Assert.assertEquals(list.get(1).getId(), classify.getString("id"));
         equalsCodeName(classify, "code 1", "name 1");
@@ -64,7 +64,7 @@ public class GetTest extends TestSupport {
         mockHelper.getRequest().addParameter("links", "true");
         mockHelper.mock("/classify/get");
         object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(0, object.getInt("code"));
+        Assert.assertEquals(0, object.getIntValue("code"));
         data = object.getJSONObject("data");
         Assert.assertEquals(1, data.size());
         classify = data.getJSONObject(classify1.getId());
@@ -76,7 +76,7 @@ public class GetTest extends TestSupport {
         mockHelper.getRequest().addParameter("links", "true");
         mockHelper.mock("/classify/get");
         object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(0, object.getInt("code"));
+        Assert.assertEquals(0, object.getIntValue("code"));
         data = object.getJSONObject("data");
         Assert.assertEquals(1, data.size());
         classify = data.getJSONObject(classify2.getId());
@@ -88,7 +88,7 @@ public class GetTest extends TestSupport {
         mockHelper.getRequest().addParameter("links", "true");
         mockHelper.mock("/classify/get");
         object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(0, object.getInt("code"));
+        Assert.assertEquals(0, object.getIntValue("code"));
         data = object.getJSONObject("data");
         Assert.assertEquals(1, data.size());
         classify = data.getJSONObject(classify3.getId());
@@ -101,7 +101,7 @@ public class GetTest extends TestSupport {
             mockHelper.getRequest().addParameter("links", "true");
             mockHelper.mock("/classify/get");
             object = mockHelper.getResponse().asJson();
-            Assert.assertEquals(0, object.getInt("code"));
+            Assert.assertEquals(0, object.getIntValue("code"));
             data = object.getJSONObject("data");
             Assert.assertEquals(2, data.size());
             classify = data.getJSONObject(classify4.getId());
@@ -121,7 +121,7 @@ public class GetTest extends TestSupport {
         mockHelper.getRequest().addParameter("links", "true");
         mockHelper.mock("/classify/get");
         object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(0, object.getInt("code"));
+        Assert.assertEquals(0, object.getIntValue("code"));
         data = object.getJSONObject("data");
         Assert.assertEquals(1, data.size());
         classify = data.getJSONObject(classify4.getId());

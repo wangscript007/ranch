@@ -1,6 +1,6 @@
 package org.lpw.ranch.user;
 
-import net.sf.json.JSONObject;
+import com.alibaba.fastjson.JSONObject;
 import org.lpw.ranch.user.auth.AuthModel;
 import org.lpw.ranch.user.auth.AuthService;
 import org.lpw.ranch.util.Pagination;

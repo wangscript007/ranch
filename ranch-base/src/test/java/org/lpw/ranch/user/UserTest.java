@@ -1,11 +1,11 @@
 package org.lpw.ranch.user;
 
-import net.sf.json.JSONObject;
+import com.alibaba.fastjson.JSONObject;
 import org.junit.Assert;
 import org.junit.Test;
-import org.lpw.tephra.test.TephraTestSupport;
 import org.lpw.tephra.test.MockCarousel;
 import org.lpw.tephra.test.MockHelper;
+import org.lpw.tephra.test.TephraTestSupport;
 import org.lpw.tephra.util.Thread;
 import org.lpw.tephra.util.TimeUnit;
 

@@ -1,6 +1,6 @@
 package org.lpw.ranch.doc;
 
-import net.sf.json.JSONObject;
+import com.alibaba.fastjson.JSONObject;
 import org.junit.Assert;
 import org.junit.Test;
 import org.lpw.tephra.ctrl.validate.Validators;
@@ -16,7 +16,7 @@ public class RefreshTest extends TestSupport {
         mockHelper.reset();
         mockHelper.mock("/doc/refresh");
         JSONObject object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(9995, object.getInt("code"));
+        Assert.assertEquals(9995, object.getIntValue("code"));
         Assert.assertEquals(message.get(Validators.PREFIX + "illegal-sign"), object.getString("message"));
         Assert.assertNull(cache.get(cacheKey));
 
@@ -24,7 +24,7 @@ public class RefreshTest extends TestSupport {
         sign.put(mockHelper.getRequest().getMap(), null);
         mockHelper.mock("/doc/refresh");
         object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(0, object.getInt("code"));
+        Assert.assertEquals(0, object.getIntValue("code"));
         Assert.assertEquals("", object.getString("data"));
         String random = cache.get(cacheKey);
         Assert.assertEquals(32, random.length());

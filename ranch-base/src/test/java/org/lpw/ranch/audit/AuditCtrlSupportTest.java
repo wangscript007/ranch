@@ -1,6 +1,6 @@
 package org.lpw.ranch.audit;
 
-import net.sf.json.JSONObject;
+import com.alibaba.fastjson.JSONObject;
 import org.junit.Assert;
 import org.junit.Test;
 import org.lpw.ranch.recycle.MockRecycleService;
@@ -21,7 +21,7 @@ public class AuditCtrlSupportTest extends RecycleCtrlSupportTest {
         mockHelper.reset();
         mockHelper.mock("/audit/pass");
         JSONObject object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(9981, object.getInt("code"));
+        Assert.assertEquals(9981, object.getIntValue("code"));
         Assert.assertEquals(message.get(Validators.PREFIX + "empty", message.get(TestAuditModel.NAME + ".ids")), object.getString("message"));
         Assert.assertNull(auditService.getPassIds());
 
@@ -30,7 +30,7 @@ public class AuditCtrlSupportTest extends RecycleCtrlSupportTest {
         mockHelper.getRequest().addParameter("auditRemark", generator.random(101));
         mockHelper.mock("/audit/pass");
         object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(9983, object.getInt("code"));
+        Assert.assertEquals(9983, object.getIntValue("code"));
         Assert.assertEquals(message.get(Validators.PREFIX + "over-max-length", message.get(TestAuditModel.NAME + ".auditRemark"), 100), object.getString("message"));
         Assert.assertNull(auditService.getPassIds());
 
@@ -39,7 +39,7 @@ public class AuditCtrlSupportTest extends RecycleCtrlSupportTest {
         mockHelper.getRequest().addParameter("auditRemark", "audit-remark");
         mockHelper.mock("/audit/pass");
         object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(9995, object.getInt("code"));
+        Assert.assertEquals(9995, object.getIntValue("code"));
         Assert.assertEquals(message.get(Validators.PREFIX + "illegal-sign"), object.getString("message"));
         Assert.assertNull(auditService.getPassIds());
 
@@ -49,7 +49,7 @@ public class AuditCtrlSupportTest extends RecycleCtrlSupportTest {
         sign.put(mockHelper.getRequest().getMap(), null);
         mockHelper.mock("/audit/pass");
         object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(0, object.getInt("code"));
+        Assert.assertEquals(0, object.getIntValue("code"));
         Assert.assertEquals("", object.getString("data"));
         Assert.assertArrayEquals(new String[]{"id1", "id2"}, auditService.getPassIds());
         Assert.assertEquals("audit-remark", auditService.getAuditRemark());
@@ -60,7 +60,7 @@ public class AuditCtrlSupportTest extends RecycleCtrlSupportTest {
         mockHelper.reset();
         mockHelper.mock("/audit/refuse");
         JSONObject object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(9981, object.getInt("code"));
+        Assert.assertEquals(9981, object.getIntValue("code"));
         Assert.assertEquals(message.get(Validators.PREFIX + "empty", message.get(TestAuditModel.NAME + ".ids")), object.getString("message"));
         Assert.assertNull(auditService.getPassIds());
 
@@ -68,7 +68,7 @@ public class AuditCtrlSupportTest extends RecycleCtrlSupportTest {
         mockHelper.getRequest().addParameter("ids", "id1,id2");
         mockHelper.mock("/audit/refuse");
         object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(9982, object.getInt("code"));
+        Assert.assertEquals(9982, object.getIntValue("code"));
         Assert.assertEquals(message.get(Validators.PREFIX + "empty", message.get(TestAuditModel.NAME + ".auditRemark")), object.getString("message"));
         Assert.assertNull(auditService.getPassIds());
 
@@ -77,7 +77,7 @@ public class AuditCtrlSupportTest extends RecycleCtrlSupportTest {
         mockHelper.getRequest().addParameter("auditRemark", generator.random(101));
         mockHelper.mock("/audit/refuse");
         object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(9983, object.getInt("code"));
+        Assert.assertEquals(9983, object.getIntValue("code"));
         Assert.assertEquals(message.get(Validators.PREFIX + "over-max-length", message.get(TestAuditModel.NAME + ".auditRemark"), 100), object.getString("message"));
         Assert.assertNull(auditService.getPassIds());
 
@@ -86,7 +86,7 @@ public class AuditCtrlSupportTest extends RecycleCtrlSupportTest {
         mockHelper.getRequest().addParameter("auditRemark", "audit-remark");
         mockHelper.mock("/audit/refuse");
         object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(9995, object.getInt("code"));
+        Assert.assertEquals(9995, object.getIntValue("code"));
         Assert.assertEquals(message.get(Validators.PREFIX + "illegal-sign"), object.getString("message"));
         Assert.assertNull(auditService.getRefuseIds());
 
@@ -96,7 +96,7 @@ public class AuditCtrlSupportTest extends RecycleCtrlSupportTest {
         sign.put(mockHelper.getRequest().getMap(), null);
         mockHelper.mock("/audit/refuse");
         object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(0, object.getInt("code"));
+        Assert.assertEquals(0, object.getIntValue("code"));
         Assert.assertEquals("", object.getString("data"));
         Assert.assertArrayEquals(new String[]{"id1", "id2"}, auditService.getRefuseIds());
         Assert.assertEquals("audit-remark", auditService.getAuditRemark());

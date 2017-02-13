@@ -1,6 +1,6 @@
 package org.lpw.ranch.user;
 
-import net.sf.json.JSONObject;
+import com.alibaba.fastjson.JSONObject;
 import org.junit.Assert;
 import org.junit.Test;
 import org.lpw.tephra.ctrl.validate.Validators;
@@ -22,14 +22,14 @@ public class SignUpTest extends TestSupport {
         mockHelper.reset();
         mockHelper.mock("/user/sign-up");
         JSONObject object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(1501, object.getInt("code"));
+        Assert.assertEquals(1501, object.getIntValue("code"));
         Assert.assertEquals(message.get(Validators.PREFIX + "empty", message.get(UserModel.NAME + ".uid")), object.getString("message"));
 
         mockHelper.reset();
         mockHelper.getRequest().addParameter("uid", generator.random(101));
         mockHelper.mock("/user/sign-up");
         object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(1502, object.getInt("code"));
+        Assert.assertEquals(1502, object.getIntValue("code"));
         Assert.assertEquals(message.get(Validators.PREFIX + "over-max-length", message.get(UserModel.NAME + ".uid"), 100), object.getString("message"));
 
         mockHelper.reset();
@@ -37,7 +37,7 @@ public class SignUpTest extends TestSupport {
         mockHelper.getRequest().addParameter("type", "1");
         mockHelper.mock("/user/sign-up");
         object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(1503, object.getInt("code"));
+        Assert.assertEquals(1503, object.getIntValue("code"));
         Assert.assertEquals(message.get(UserModel.NAME + ".password.empty"), object.getString("message"));
 
         List<String> list = new ArrayList<>();
@@ -54,7 +54,7 @@ public class SignUpTest extends TestSupport {
         mockHelper.getRequest().addParameter("password", "password 1");
         mockHelper.mock("/user/sign-up");
         object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(0, object.getInt("code"));
+        Assert.assertEquals(0, object.getIntValue("code"));
         equalsSignUp(object.getJSONObject("data"), "sign up uid 1", 0, null, "code 0");
 
         mockHelper.reset();
@@ -62,7 +62,7 @@ public class SignUpTest extends TestSupport {
         mockHelper.getRequest().addParameter("password", "password 1");
         mockHelper.mock("/user/sign-up");
         object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(1504, object.getInt("code"));
+        Assert.assertEquals(1504, object.getIntValue("code"));
         Assert.assertEquals(message.get(UserModel.NAME + ".sign-up.failure"), object.getString("message"));
 
         mockHelper.reset();
@@ -71,7 +71,7 @@ public class SignUpTest extends TestSupport {
         mockHelper.getRequest().addParameter("type", "1");
         mockHelper.mock("/user/sign-up");
         object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(0, object.getInt("code"));
+        Assert.assertEquals(0, object.getIntValue("code"));
         equalsSignUp(object.getJSONObject("data"), "sign up uid 2", 1, "password 2", "code 1");
 
         generatorAspect.randomString(null);

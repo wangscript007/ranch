@@ -1,6 +1,6 @@
 package org.lpw.ranch.doc;
 
-import net.sf.json.JSONObject;
+import com.alibaba.fastjson.JSONObject;
 import org.junit.Assert;
 import org.junit.Test;
 import org.lpw.tephra.ctrl.validate.Validators;
@@ -18,21 +18,21 @@ public class FavoriteTest extends TestSupport {
         mockHelper.reset();
         mockHelper.mock("/doc/favorite");
         JSONObject object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(1411, object.getInt("code"));
+        Assert.assertEquals(1411, object.getIntValue("code"));
         Assert.assertEquals(message.get(Validators.PREFIX + "illegal-id", message.get(DocModel.NAME + ".id")), object.getString("message"));
 
         mockHelper.reset();
         mockHelper.getRequest().addParameter("id", "id");
         mockHelper.mock("/doc/favorite");
         object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(1411, object.getInt("code"));
+        Assert.assertEquals(1411, object.getIntValue("code"));
         Assert.assertEquals(message.get(Validators.PREFIX + "illegal-id", message.get(DocModel.NAME + ".id")), object.getString("message"));
 
         mockHelper.reset();
         mockHelper.getRequest().addParameter("id", generator.uuid());
         mockHelper.mock("/doc/favorite");
         object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(9995, object.getInt("code"));
+        Assert.assertEquals(9995, object.getIntValue("code"));
         Assert.assertEquals(message.get(Validators.PREFIX + "illegal-sign"), object.getString("message"));
 
         mockHelper.reset();
@@ -40,7 +40,7 @@ public class FavoriteTest extends TestSupport {
         sign.put(mockHelper.getRequest().getMap(), null);
         mockHelper.mock("/doc/favorite");
         object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(1412, object.getInt("code"));
+        Assert.assertEquals(1412, object.getIntValue("code"));
         Assert.assertEquals(message.get(DocModel.NAME + ".id.not-exists"), object.getString("message"));
 
         mockHelper.reset();
@@ -48,7 +48,7 @@ public class FavoriteTest extends TestSupport {
         sign.put(mockHelper.getRequest().getMap(), null);
         mockHelper.mock("/doc/favorite");
         object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(0, object.getInt("code"));
+        Assert.assertEquals(0, object.getIntValue("code"));
         Assert.assertEquals("", object.getString("data"));
         for (int i = 0; i < list.size(); i++)
             Assert.assertEquals(500 + i, findById(list.get(i).getId()).getFavorite());
@@ -59,7 +59,7 @@ public class FavoriteTest extends TestSupport {
         sign.put(mockHelper.getRequest().getMap(), null);
         mockHelper.mock("/doc/favorite");
         object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(0, object.getInt("code"));
+        Assert.assertEquals(0, object.getIntValue("code"));
         Assert.assertEquals("", object.getString("data"));
         Assert.assertEquals(505, findById(list.get(0).getId()).getFavorite());
         Assert.assertEquals(501, findById(list.get(1).getId()).getFavorite());
@@ -70,7 +70,7 @@ public class FavoriteTest extends TestSupport {
         sign.put(mockHelper.getRequest().getMap(), null);
         mockHelper.mock("/doc/favorite");
         object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(0, object.getInt("code"));
+        Assert.assertEquals(0, object.getIntValue("code"));
         Assert.assertEquals("", object.getString("data"));
         Assert.assertEquals(505, findById(list.get(0).getId()).getFavorite());
         Assert.assertEquals(496, findById(list.get(1).getId()).getFavorite());

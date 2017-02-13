@@ -1,6 +1,6 @@
 package org.lpw.ranch.gps;
 
-import net.sf.json.JSONObject;
+import com.alibaba.fastjson.JSONObject;
 import org.junit.Assert;
 import org.junit.Test;
 import org.lpw.tephra.ctrl.validate.Validators;
@@ -18,7 +18,7 @@ public class AddressTest extends TestSupport {
         mockHelper.reset();
         mockHelper.mock("/gps/address");
         JSONObject object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(1101, object.getInt("code"));
+        Assert.assertEquals(1101, object.getIntValue("code"));
         Assert.assertEquals(message.get(Validators.PREFIX + "not-match-regex", message.get(GpsModel.NAME + ".lat"), "^-?\\d{1,3}\\.\\d+$"),
                 object.getString("message"));
 
@@ -26,7 +26,7 @@ public class AddressTest extends TestSupport {
         mockHelper.getRequest().addParameter("lat", "123");
         mockHelper.mock("/gps/address");
         object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(1101, object.getInt("code"));
+        Assert.assertEquals(1101, object.getIntValue("code"));
         Assert.assertEquals(message.get(Validators.PREFIX + "not-match-regex", message.get(GpsModel.NAME + ".lat"), "^-?\\d{1,3}\\.\\d+$"),
                 object.getString("message"));
 
@@ -34,7 +34,7 @@ public class AddressTest extends TestSupport {
         mockHelper.getRequest().addParameter("lat", "39.917266");
         mockHelper.mock("/gps/address");
         object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(1102, object.getInt("code"));
+        Assert.assertEquals(1102, object.getIntValue("code"));
         Assert.assertEquals(message.get(Validators.PREFIX + "not-match-regex", message.get(GpsModel.NAME + ".lng"), "^\\d{1,3}\\.\\d+$"),
                 object.getString("message"));
 
@@ -43,7 +43,7 @@ public class AddressTest extends TestSupport {
         mockHelper.getRequest().addParameter("lng", "123");
         mockHelper.mock("/gps/address");
         object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(1102, object.getInt("code"));
+        Assert.assertEquals(1102, object.getIntValue("code"));
         Assert.assertEquals(message.get(Validators.PREFIX + "not-match-regex", message.get(GpsModel.NAME + ".lng"), "^\\d{1,3}\\.\\d+$"),
                 object.getString("message"));
 
@@ -52,7 +52,7 @@ public class AddressTest extends TestSupport {
         mockHelper.getRequest().addParameter("lng", "-116.397140");
         mockHelper.mock("/gps/address");
         object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(1102, object.getInt("code"));
+        Assert.assertEquals(1102, object.getIntValue("code"));
         Assert.assertEquals(message.get(Validators.PREFIX + "not-match-regex", message.get(GpsModel.NAME + ".lng"), "^\\d{1,3}\\.\\d+$"),
                 object.getString("message"));
 
@@ -61,7 +61,7 @@ public class AddressTest extends TestSupport {
         mockHelper.getRequest().addParameter("lng", "116.397140");
         mockHelper.mock("/gps/address");
         object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(0, object.getInt("code"));
+        Assert.assertEquals(0, object.getIntValue("code"));
         JSONObject data = object.getJSONObject("data");
         Assert.assertEquals("北京市东城区景山前街4号东华门大街", data.getString("address"));
         JSONObject component = data.getJSONObject("component");
@@ -81,7 +81,7 @@ public class AddressTest extends TestSupport {
         mockHelper.getRequest().addParameter("lng", "116.397140");
         mockHelper.mock("/gps/address");
         object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(0, object.getInt("code"));
+        Assert.assertEquals(0, object.getIntValue("code"));
         Assert.assertTrue(object.getJSONObject("data").isEmpty());
 
         field.set(gpsService, "qqlbs-key");
@@ -90,7 +90,7 @@ public class AddressTest extends TestSupport {
         mockHelper.getRequest().addParameter("lng", "116.397140");
         mockHelper.mock("/gps/address");
         object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(0, object.getInt("code"));
+        Assert.assertEquals(0, object.getIntValue("code"));
         Assert.assertTrue(object.getJSONObject("data").isEmpty());
 
         field = GpsServiceImpl.class.getDeclaredField("http");
@@ -106,7 +106,7 @@ public class AddressTest extends TestSupport {
         mockHelper.getRequest().addParameter("lng", "116.397140");
         mockHelper.mock("/gps/address");
         object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(0, object.getInt("code"));
+        Assert.assertEquals(0, object.getIntValue("code"));
         Assert.assertTrue(object.getJSONObject("data").isEmpty());
     }
 }

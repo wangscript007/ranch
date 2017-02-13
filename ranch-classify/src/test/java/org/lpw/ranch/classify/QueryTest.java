@@ -1,7 +1,7 @@
 package org.lpw.ranch.classify;
 
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import org.junit.Assert;
 import org.junit.Test;
 import org.lpw.ranch.recycle.Recycle;
@@ -26,7 +26,7 @@ public class QueryTest extends TestSupport {
         mockHelper.getRequest().addParameter("pageNum", "1");
         mockHelper.mock("/classify/query");
         JSONObject object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(9995, object.getInt("code"));
+        Assert.assertEquals(9995, object.getIntValue("code"));
         Assert.assertEquals(message.get(Validators.PREFIX + "illegal-sign"), object.getString("message"));
 
         mockHelper.reset();
@@ -35,11 +35,11 @@ public class QueryTest extends TestSupport {
         sign.put(mockHelper.getRequest().getMap(), null);
         mockHelper.mock("/classify/query");
         object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(0, object.getInt("code"));
+        Assert.assertEquals(0, object.getIntValue("code"));
         JSONObject data = object.getJSONObject("data");
-        Assert.assertEquals(10, data.getInt("count"));
-        Assert.assertEquals(20, data.getInt("size"));
-        Assert.assertEquals(1, data.getInt("number"));
+        Assert.assertEquals(10, data.getIntValue("count"));
+        Assert.assertEquals(20, data.getIntValue("size"));
+        Assert.assertEquals(1, data.getIntValue("number"));
         JSONArray array = data.getJSONArray("list");
         for (int i = 0, size = array.size(); i < size; i++)
             equalsCodeName(array.getJSONObject(i), "code " + converter.toString(2 * i, "00"), "name " + converter.toString(2 * i, "00"));
@@ -51,11 +51,11 @@ public class QueryTest extends TestSupport {
         sign.put(mockHelper.getRequest().getMap(), null);
         mockHelper.mock("/classify/query");
         object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(0, object.getInt("code"));
+        Assert.assertEquals(0, object.getIntValue("code"));
         data = object.getJSONObject("data");
-        Assert.assertEquals(5, data.getInt("count"));
-        Assert.assertEquals(20, data.getInt("size"));
-        Assert.assertEquals(1, data.getInt("number"));
+        Assert.assertEquals(5, data.getIntValue("count"));
+        Assert.assertEquals(20, data.getIntValue("size"));
+        Assert.assertEquals(1, data.getIntValue("number"));
         array = data.getJSONArray("list");
         for (int i = 0; i < 5; i++)
             equalsCodeName(array.getJSONObject(i), "code " + (10 + 2 * i), "name " + (10 + 2 * i));

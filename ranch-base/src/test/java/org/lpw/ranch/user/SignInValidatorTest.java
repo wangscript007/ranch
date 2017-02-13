@@ -1,11 +1,11 @@
 package org.lpw.ranch.user;
 
-import net.sf.json.JSONObject;
+import com.alibaba.fastjson.JSONObject;
 import org.junit.Assert;
 import org.junit.Test;
-import org.lpw.tephra.test.TephraTestSupport;
 import org.lpw.tephra.test.MockCarousel;
 import org.lpw.tephra.test.MockHelper;
+import org.lpw.tephra.test.TephraTestSupport;
 import org.lpw.tephra.util.Message;
 import org.lpw.tephra.util.Thread;
 import org.lpw.tephra.util.TimeUnit;
@@ -36,7 +36,7 @@ public class SignInValidatorTest extends TephraTestSupport {
         mockHelper.reset();
         mockHelper.mock("/base/user/sign");
         JSONObject object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(9901, object.getInt("code"));
+        Assert.assertEquals(9901, object.getIntValue("code"));
         Assert.assertEquals(message.get("ranch.base.user.need-sign-in"), object.getString("message"));
 
         mockCarousel.reset();
@@ -44,7 +44,7 @@ public class SignInValidatorTest extends TephraTestSupport {
         mockHelper.reset();
         mockHelper.mock("/base/user/sign");
         object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(0, object.getInt("code"));
+        Assert.assertEquals(0, object.getIntValue("code"));
         JSONObject data = object.getJSONObject("data");
         Assert.assertEquals(1, data.size());
         Assert.assertEquals("sign in", data.getString("state"));

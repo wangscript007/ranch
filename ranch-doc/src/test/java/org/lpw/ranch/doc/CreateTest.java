@@ -1,6 +1,6 @@
 package org.lpw.ranch.doc;
 
-import net.sf.json.JSONObject;
+import com.alibaba.fastjson.JSONObject;
 import org.junit.Assert;
 import org.junit.Test;
 import org.lpw.tephra.ctrl.validate.Validators;
@@ -14,21 +14,21 @@ public class CreateTest extends TestSupport {
         mockHelper.reset();
         mockHelper.mock("/doc/create");
         JSONObject object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(1401, object.getInt("code"));
+        Assert.assertEquals(1401, object.getIntValue("code"));
         Assert.assertEquals(message.get(Validators.PREFIX + "empty", message.get(DocModel.NAME + ".key")), object.getString("message"));
 
         mockHelper.reset();
         mockHelper.getRequest().addParameter("key", generator.random(101));
         mockHelper.mock("/doc/create");
         object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(1402, object.getInt("code"));
+        Assert.assertEquals(1402, object.getIntValue("code"));
         Assert.assertEquals(message.get(Validators.PREFIX + "over-max-length", message.get(DocModel.NAME + ".key"), 100), object.getString("message"));
 
         mockHelper.reset();
         mockHelper.getRequest().addParameter("key", "key");
         mockHelper.mock("/doc/create");
         object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(1403, object.getInt("code"));
+        Assert.assertEquals(1403, object.getIntValue("code"));
         Assert.assertEquals(message.get(Validators.PREFIX + "illegal-id", message.get(DocModel.NAME + ".owner")), object.getString("message"));
 
         mockHelper.reset();
@@ -36,7 +36,7 @@ public class CreateTest extends TestSupport {
         mockHelper.getRequest().addParameter("owner", "owner id");
         mockHelper.mock("/doc/create");
         object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(1403, object.getInt("code"));
+        Assert.assertEquals(1403, object.getIntValue("code"));
         Assert.assertEquals(message.get(Validators.PREFIX + "illegal-id", message.get(DocModel.NAME + ".owner")), object.getString("message"));
 
         mockHelper.reset();
@@ -45,7 +45,7 @@ public class CreateTest extends TestSupport {
         mockHelper.getRequest().addParameter("owner", ownerId);
         mockHelper.mock("/doc/create");
         object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(1404, object.getInt("code"));
+        Assert.assertEquals(1404, object.getIntValue("code"));
         Assert.assertEquals(message.get(Validators.PREFIX + "illegal-id", message.get(DocModel.NAME + ".author")), object.getString("message"));
 
         mockHelper.reset();
@@ -54,7 +54,7 @@ public class CreateTest extends TestSupport {
         mockHelper.getRequest().addParameter("author", "author id");
         mockHelper.mock("/doc/create");
         object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(1404, object.getInt("code"));
+        Assert.assertEquals(1404, object.getIntValue("code"));
         Assert.assertEquals(message.get(Validators.PREFIX + "illegal-id", message.get(DocModel.NAME + ".author")), object.getString("message"));
 
         mockHelper.reset();
@@ -64,7 +64,7 @@ public class CreateTest extends TestSupport {
         mockHelper.getRequest().addParameter("author", authorId);
         mockHelper.mock("/doc/create");
         object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(1405, object.getInt("code"));
+        Assert.assertEquals(1405, object.getIntValue("code"));
         Assert.assertEquals(message.get(Validators.PREFIX + "empty", message.get(DocModel.NAME + ".subject")), object.getString("message"));
 
         mockHelper.reset();
@@ -74,7 +74,7 @@ public class CreateTest extends TestSupport {
         mockHelper.getRequest().addParameter("subject", generator.random(101));
         mockHelper.mock("/doc/create");
         object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(1406, object.getInt("code"));
+        Assert.assertEquals(1406, object.getIntValue("code"));
         Assert.assertEquals(message.get(Validators.PREFIX + "over-max-length", message.get(DocModel.NAME + ".subject"), 100), object.getString("message"));
 
         mockHelper.reset();
@@ -85,7 +85,7 @@ public class CreateTest extends TestSupport {
         mockHelper.getRequest().addParameter("image", generator.random(101));
         mockHelper.mock("/doc/create");
         object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(1407, object.getInt("code"));
+        Assert.assertEquals(1407, object.getIntValue("code"));
         Assert.assertEquals(message.get(Validators.PREFIX + "over-max-length", message.get(DocModel.NAME + ".image"), 100), object.getString("message"));
 
         mockHelper.reset();
@@ -97,7 +97,7 @@ public class CreateTest extends TestSupport {
         mockHelper.getRequest().addParameter("thumbnail", generator.random(101));
         mockHelper.mock("/doc/create");
         object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(1408, object.getInt("code"));
+        Assert.assertEquals(1408, object.getIntValue("code"));
         Assert.assertEquals(message.get(Validators.PREFIX + "over-max-length", message.get(DocModel.NAME + ".thumbnail"), 100), object.getString("message"));
 
         mockHelper.reset();
@@ -109,7 +109,7 @@ public class CreateTest extends TestSupport {
         mockHelper.getRequest().addParameter("thumbnail", "thumbnail");
         mockHelper.mock("/doc/create");
         object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(1409, object.getInt("code"));
+        Assert.assertEquals(1409, object.getIntValue("code"));
         Assert.assertEquals(message.get(Validators.PREFIX + "empty", message.get(DocModel.NAME + ".content")), object.getString("message"));
 
         mockCarousel.reset();
@@ -143,7 +143,7 @@ public class CreateTest extends TestSupport {
         mockHelper.getRequest().addParameter("time", "2016-01-02 03:04:05");
         mockHelper.mock("/doc/create");
         object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(0, object.getInt("code"));
+        Assert.assertEquals(0, object.getIntValue("code"));
         JSONObject data = object.getJSONObject("data");
         Assert.assertEquals(36, data.getString("id").length());
         Assert.assertEquals("key", data.getString("key"));
@@ -151,19 +151,19 @@ public class CreateTest extends TestSupport {
         Assert.assertEquals(ownerId, owner.getString("id"));
         Assert.assertEquals("owner key", owner.getString("key"));
         mockUser.verify(data.getJSONObject("author"), authorId);
-        Assert.assertEquals(1, data.getInt("scoreMin"));
-        Assert.assertEquals(2, data.getInt("scoreMax"));
-        Assert.assertEquals(3, data.getInt("sort"));
+        Assert.assertEquals(1, data.getIntValue("scoreMin"));
+        Assert.assertEquals(2, data.getIntValue("scoreMax"));
+        Assert.assertEquals(3, data.getIntValue("sort"));
         Assert.assertEquals("subject", data.getString("subject"));
         Assert.assertEquals("image", data.getString("image"));
         Assert.assertEquals("thumbnail", data.getString("thumbnail"));
         Assert.assertEquals("label", data.getString("label"));
-        Assert.assertFalse(data.has("content"));
-        Assert.assertEquals(0, data.getInt("read"));
-        Assert.assertEquals(0, data.getInt("favorite"));
-        Assert.assertEquals(0, data.getInt("comment"));
-        Assert.assertEquals(0, data.getInt("score"));
-        Assert.assertEquals(2, data.getInt("audit"));
+        Assert.assertFalse(data.containsKey("content"));
+        Assert.assertEquals(0, data.getIntValue("read"));
+        Assert.assertEquals(0, data.getIntValue("favorite"));
+        Assert.assertEquals(0, data.getIntValue("comment"));
+        Assert.assertEquals(0, data.getIntValue("score"));
+        Assert.assertEquals(2, data.getIntValue("audit"));
         Assert.assertTrue(System.currentTimeMillis() - converter.toDate(data.getString("time"), "yyyy-MM-dd HH:mm:ss").getTime() < 2000L);
     }
 }

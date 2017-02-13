@@ -1,6 +1,6 @@
 package org.lpw.ranch.audit;
 
-import net.sf.json.JSONObject;
+import com.alibaba.fastjson.JSONObject;
 import org.junit.Assert;
 import org.junit.Test;
 import org.lpw.ranch.recycle.RecycleModel;
@@ -29,7 +29,7 @@ public class AuditModelSupportTest extends RecycleModelSupportTest {
         JSONObject object = modelHelper.toJson(model1);
         Assert.assertEquals(3, object.size());
         Assert.assertEquals(model1.getId(), object.getString("id"));
-        Assert.assertEquals(Audit.Passed.getValue(), object.getInt("audit"));
+        Assert.assertEquals(Audit.Passed.getValue(), object.getIntValue("audit"));
         Assert.assertEquals("remark", object.getString("auditRemark"));
     }
 

@@ -1,6 +1,6 @@
 package org.lpw.ranch.classify;
 
-import net.sf.json.JSONObject;
+import com.alibaba.fastjson.JSONObject;
 import org.junit.Assert;
 import org.junit.Test;
 import org.lpw.tephra.ctrl.validate.Validators;
@@ -14,21 +14,21 @@ public class CreateTest extends TestSupport {
         mockHelper.reset();
         mockHelper.mock("/classify/create");
         JSONObject object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(1202, object.getInt("code"));
+        Assert.assertEquals(1202, object.getIntValue("code"));
         Assert.assertEquals(message.get(Validators.PREFIX + "empty", message.get(ClassifyModel.NAME + ".code")), object.getString("message"));
 
         mockHelper.reset();
         mockHelper.getRequest().addParameter("code", generator.random(101));
         mockHelper.mock("/classify/create");
         object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(1203, object.getInt("code"));
+        Assert.assertEquals(1203, object.getIntValue("code"));
         Assert.assertEquals(message.get(Validators.PREFIX + "over-max-length", message.get(ClassifyModel.NAME + ".code"), 100), object.getString("message"));
 
         mockHelper.reset();
         mockHelper.getRequest().addParameter("code", "code");
         mockHelper.mock("/classify/create");
         object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(1204, object.getInt("code"));
+        Assert.assertEquals(1204, object.getIntValue("code"));
         Assert.assertEquals(message.get(Validators.PREFIX + "empty", message.get(ClassifyModel.NAME + ".name")), object.getString("message"));
 
         mockHelper.reset();
@@ -36,7 +36,7 @@ public class CreateTest extends TestSupport {
         mockHelper.getRequest().addParameter("name", generator.random(101));
         mockHelper.mock("/classify/create");
         object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(1205, object.getInt("code"));
+        Assert.assertEquals(1205, object.getIntValue("code"));
         Assert.assertEquals(message.get(Validators.PREFIX + "over-max-length", message.get(ClassifyModel.NAME + ".name"), 100), object.getString("message"));
 
         mockHelper.reset();
@@ -44,7 +44,7 @@ public class CreateTest extends TestSupport {
         mockHelper.getRequest().addParameter("name", "name");
         mockHelper.mock("/classify/create");
         object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(9995, object.getInt("code"));
+        Assert.assertEquals(9995, object.getIntValue("code"));
         Assert.assertEquals(message.get(Validators.PREFIX + "illegal-sign"), object.getString("message"));
 
         mockHelper.reset();
@@ -53,11 +53,11 @@ public class CreateTest extends TestSupport {
         sign.put(mockHelper.getRequest().getMap(), null);
         mockHelper.mock("/classify/create");
         object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(0, object.getInt("code"));
+        Assert.assertEquals(0, object.getIntValue("code"));
         JSONObject data = object.getJSONObject("data");
         Assert.assertEquals(36, data.getString("id").length());
         equalsCodeName(data, "code 1", "name 1");
-        Assert.assertFalse(data.has("label"));
+        Assert.assertFalse(data.containsKey("label"));
 
         mockHelper.reset();
         mockHelper.getRequest().addParameter("code", "code 2");
@@ -66,7 +66,7 @@ public class CreateTest extends TestSupport {
         sign.put(mockHelper.getRequest().getMap(), null);
         mockHelper.mock("/classify/create");
         object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(0, object.getInt("code"));
+        Assert.assertEquals(0, object.getIntValue("code"));
         data = object.getJSONObject("data");
         Assert.assertEquals(36, data.getString("id").length());
         equalsCodeName(data, "code 2", "name 2");
@@ -79,7 +79,7 @@ public class CreateTest extends TestSupport {
         sign.put(mockHelper.getRequest().getMap(), null);
         mockHelper.mock("/classify/create");
         object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(0, object.getInt("code"));
+        Assert.assertEquals(0, object.getIntValue("code"));
         data = object.getJSONObject("data");
         Assert.assertEquals(36, data.getString("id").length());
         equalsCodeName(data, "code 3", "name 3");

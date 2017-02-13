@@ -1,7 +1,7 @@
 package org.lpw.ranch.recycle;
 
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import org.junit.Assert;
 import org.lpw.tephra.crypto.Sign;
 import org.lpw.tephra.ctrl.validate.Validators;
@@ -41,14 +41,14 @@ public class RecycleTesterImpl implements RecycleTester {
         mockHelper.reset();
         mockHelper.mock("/" + uriPrefix + "/delete");
         JSONObject object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(codePrefix * 100 + 86, object.getInt("code"));
+        Assert.assertEquals(codePrefix * 100 + 86, object.getIntValue("code"));
         Assert.assertEquals(message.get(Validators.PREFIX + "illegal-id", message.get(name + ".id")), object.getString("message"));
 
         mockHelper.reset();
         mockHelper.getRequest().addParameter("id", "id");
         mockHelper.mock("/" + uriPrefix + "/delete");
         object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(codePrefix * 100 + 86, object.getInt("code"));
+        Assert.assertEquals(codePrefix * 100 + 86, object.getIntValue("code"));
         Assert.assertEquals(message.get(Validators.PREFIX + "illegal-id", message.get(name + ".id")), object.getString("message"));
 
         RecycleModel model = testerDao.create(0, Recycle.No);
@@ -56,7 +56,7 @@ public class RecycleTesterImpl implements RecycleTester {
         mockHelper.getRequest().addParameter("id", model.getId());
         mockHelper.mock("/" + uriPrefix + "/delete");
         object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(9995, object.getInt("code"));
+        Assert.assertEquals(9995, object.getIntValue("code"));
         Assert.assertEquals(message.get(Validators.PREFIX + "illegal-sign"), object.getString("message"));
 
         mockHelper.reset();
@@ -64,7 +64,7 @@ public class RecycleTesterImpl implements RecycleTester {
         sign.put(mockHelper.getRequest().getMap(), null);
         mockHelper.mock("/" + uriPrefix + "/delete");
         object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(0, object.getInt("code"));
+        Assert.assertEquals(0, object.getIntValue("code"));
         model = testerDao.findById(model.getId());
         Assert.assertEquals(Recycle.Yes.getValue(), model.getRecycle());
     }
@@ -75,14 +75,14 @@ public class RecycleTesterImpl implements RecycleTester {
         mockHelper.reset();
         mockHelper.mock("/" + uriPrefix + "/restore");
         JSONObject object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(codePrefix * 100 + 86, object.getInt("code"));
+        Assert.assertEquals(codePrefix * 100 + 86, object.getIntValue("code"));
         Assert.assertEquals(message.get(Validators.PREFIX + "illegal-id", message.get(name + ".id")), object.getString("message"));
 
         mockHelper.reset();
         mockHelper.getRequest().addParameter("id", "id");
         mockHelper.mock("/" + uriPrefix + "/restore");
         object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(codePrefix * 100 + 86, object.getInt("code"));
+        Assert.assertEquals(codePrefix * 100 + 86, object.getIntValue("code"));
         Assert.assertEquals(message.get(Validators.PREFIX + "illegal-id", message.get(name + ".id")), object.getString("message"));
 
         RecycleModel model = testerDao.create(0, Recycle.Yes);
@@ -90,7 +90,7 @@ public class RecycleTesterImpl implements RecycleTester {
         mockHelper.getRequest().addParameter("id", model.getId());
         mockHelper.mock("/" + uriPrefix + "/restore");
         object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(9995, object.getInt("code"));
+        Assert.assertEquals(9995, object.getIntValue("code"));
         Assert.assertEquals(message.get(Validators.PREFIX + "illegal-sign"), object.getString("message"));
 
         mockHelper.reset();
@@ -98,7 +98,7 @@ public class RecycleTesterImpl implements RecycleTester {
         sign.put(mockHelper.getRequest().getMap(), null);
         mockHelper.mock("/" + uriPrefix + "/restore");
         object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(0, object.getInt("code"));
+        Assert.assertEquals(0, object.getIntValue("code"));
         model = testerDao.findById(model.getId());
         Assert.assertEquals(Recycle.No.getValue(), model.getRecycle());
     }
@@ -118,7 +118,7 @@ public class RecycleTesterImpl implements RecycleTester {
         mockHelper.getRequest().addParameter("pageNum", "1");
         mockHelper.mock("/" + uriPrefix + "/recycle");
         JSONObject object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(9995, object.getInt("code"));
+        Assert.assertEquals(9995, object.getIntValue("code"));
         Assert.assertEquals(message.get(Validators.PREFIX + "illegal-sign"), object.getString("message"));
 
         mockHelper.reset();
@@ -127,11 +127,11 @@ public class RecycleTesterImpl implements RecycleTester {
         sign.put(mockHelper.getRequest().getMap(), null);
         mockHelper.mock("/" + uriPrefix + "/recycle");
         object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(0, object.getInt("code"));
+        Assert.assertEquals(0, object.getIntValue("code"));
         JSONObject data = object.getJSONObject("data");
-        Assert.assertEquals(5, data.getInt("count"));
-        Assert.assertEquals(2, data.getInt("size"));
-        Assert.assertEquals(1, data.getInt("number"));
+        Assert.assertEquals(5, data.getIntValue("count"));
+        Assert.assertEquals(2, data.getIntValue("size"));
+        Assert.assertEquals(1, data.getIntValue("number"));
         JSONArray list = data.getJSONArray("list");
         Assert.assertEquals(2, list.size());
         for (int i = 0; i < 2; i++)

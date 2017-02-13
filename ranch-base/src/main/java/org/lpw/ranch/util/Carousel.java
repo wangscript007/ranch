@@ -1,6 +1,6 @@
 package org.lpw.ranch.util;
 
-import net.sf.json.JSONObject;
+import com.alibaba.fastjson.JSONObject;
 
 import java.util.Map;
 

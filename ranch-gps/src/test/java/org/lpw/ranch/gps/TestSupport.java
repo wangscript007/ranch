@@ -1,7 +1,7 @@
 package org.lpw.ranch.gps;
 
-import org.lpw.tephra.test.TephraTestSupport;
 import org.lpw.tephra.test.MockHelper;
+import org.lpw.tephra.test.TephraTestSupport;
 import org.lpw.tephra.util.Message;
 
 import javax.inject.Inject;

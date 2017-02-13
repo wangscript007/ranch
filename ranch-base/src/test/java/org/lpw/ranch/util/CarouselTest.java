@@ -1,12 +1,11 @@
 package org.lpw.ranch.util;
 
-import net.sf.json.JSONObject;
+import com.alibaba.fastjson.JSONObject;
 import org.junit.Assert;
 import org.junit.Test;
-import org.lpw.tephra.test.TephraTestSupport;
 import org.lpw.tephra.test.MockCarousel;
-import org.lpw.tephra.test.MockCarouselService;
 import org.lpw.tephra.test.MockHelper;
+import org.lpw.tephra.test.TephraTestSupport;
 import org.lpw.tephra.util.Thread;
 import org.lpw.tephra.util.TimeUnit;
 
@@ -75,49 +74,46 @@ public class CarouselTest extends TephraTestSupport {
         JSONObject object = carousel.service("key", null);
         Assert.assertTrue(object.isEmpty());
 
-        mockCarousel.register("key", new MockCarouselService() {
-            @Override
-            public String service(String key, Map<String, String> header, Map<String, String> parameter, int cacheTime) {
-                JSONObject obj = new JSONObject();
-                if (cacheTime < 5) {
-                    JSONObject data = new JSONObject();
-                    if (header != null)
-                        data.putAll(header);
-                    if (parameter != null)
-                        data.putAll(parameter);
-                    data.put("cacheTime", cacheTime);
-                    obj.put("code", 0);
-                    obj.put("data", data);
-                } else
-                    obj.put("code", cacheTime);
+        mockCarousel.register("key", (key, header, parameter, cacheTime) -> {
+            JSONObject obj = new JSONObject();
+            if (cacheTime < 5) {
+                JSONObject data = new JSONObject();
+                if (header != null)
+                    data.putAll(header);
+                if (parameter != null)
+                    data.putAll(parameter);
+                data.put("cacheTime", cacheTime);
+                obj.put("code", 0);
+                obj.put("data", data);
+            } else
+                obj.put("code", cacheTime);
 
-                return obj.toString();
-            }
+            return obj.toString();
         });
         object = carousel.service("key", null);
         Assert.assertEquals(3, object.size());
         equals(object, "header");
-        Assert.assertEquals(0, object.getInt("cacheTime"));
+        Assert.assertEquals(0, object.getIntValue("cacheTime"));
 
         Map<String, String> parameter = newMap("parameter");
         object = carousel.service("key", parameter);
         Assert.assertEquals(5, object.size());
         equals(object, "header");
         equals(object, "parameter");
-        Assert.assertEquals(0, object.getInt("cacheTime"));
+        Assert.assertEquals(0, object.getIntValue("cacheTime"));
 
         object = carousel.service("key", null, parameter, 1);
         Assert.assertEquals(5, object.size());
         equals(object, "header");
         equals(object, "parameter");
-        Assert.assertEquals(1, object.getInt("cacheTime"));
+        Assert.assertEquals(1, object.getIntValue("cacheTime"));
 
         Map<String, String> header = newMap("new header");
         object = carousel.service("key", header, parameter, 2);
         Assert.assertEquals(5, object.size());
         equals(object, "new header");
         equals(object, "parameter");
-        Assert.assertEquals(2, object.getInt("cacheTime"));
+        Assert.assertEquals(2, object.getIntValue("cacheTime"));
 
         object = carousel.service("key", header, parameter, 5);
         Assert.assertTrue(object.isEmpty());

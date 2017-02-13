@@ -1,6 +1,6 @@
 package org.lpw.ranch.user;
 
-import net.sf.json.JSONObject;
+import com.alibaba.fastjson.JSONObject;
 import org.junit.Assert;
 import org.junit.Test;
 import org.lpw.tephra.ctrl.context.Session;
@@ -22,7 +22,7 @@ public class PasswordTest extends TestSupport {
         mockHelper.reset();
         mockHelper.mock("/user/password");
         JSONObject object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(1514, object.getInt("code"));
+        Assert.assertEquals(1514, object.getIntValue("code"));
         Assert.assertEquals(message.get(Validators.PREFIX + "empty", message.get(UserModel.NAME + ".password.new")), object.getString("message"));
 
         mockHelper.reset();
@@ -30,7 +30,7 @@ public class PasswordTest extends TestSupport {
         mockHelper.getRequest().addParameter("new", "password");
         mockHelper.mock("/user/password");
         object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(1515, object.getInt("code"));
+        Assert.assertEquals(1515, object.getIntValue("code"));
         Assert.assertEquals(message.get(Validators.PREFIX + "equals", message.get(UserModel.NAME + ".password.new"), message.get(UserModel.NAME + ".password.old")), object.getString("message"));
 
         mockHelper.reset();
@@ -38,7 +38,7 @@ public class PasswordTest extends TestSupport {
         mockHelper.getRequest().addParameter("repeat", "repeat");
         mockHelper.mock("/user/password");
         object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(1516, object.getInt("code"));
+        Assert.assertEquals(1516, object.getIntValue("code"));
         Assert.assertEquals(message.get(Validators.PREFIX + "not-equals", message.get(UserModel.NAME + ".password.repeat"), message.get(UserModel.NAME + ".password.new")), object.getString("message"));
 
         mockHelper.reset();
@@ -46,7 +46,7 @@ public class PasswordTest extends TestSupport {
         mockHelper.getRequest().addParameter("repeat", "new password");
         mockHelper.mock("/user/password");
         object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(9901, object.getInt("code"));
+        Assert.assertEquals(9901, object.getIntValue("code"));
         Assert.assertEquals(message.get(UserModel.NAME + ".need-sign-in"), object.getString("message"));
 
         mockHelper.reset();
@@ -55,7 +55,7 @@ public class PasswordTest extends TestSupport {
         mockHelper.getRequest().addParameter("repeat", "new password");
         mockHelper.mock("/user/password");
         object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(1517, object.getInt("code"));
+        Assert.assertEquals(1517, object.getIntValue("code"));
         Assert.assertEquals(message.get(UserModel.NAME + ".password.illegal"), object.getString("message"));
 
         mockHelper.reset();
@@ -65,7 +65,7 @@ public class PasswordTest extends TestSupport {
         mockHelper.getRequest().addParameter("repeat", "new password");
         mockHelper.mock("/user/password");
         object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(1517, object.getInt("code"));
+        Assert.assertEquals(1517, object.getIntValue("code"));
         Assert.assertEquals(message.get(UserModel.NAME + ".password.illegal"), object.getString("message"));
 
         mockHelper.reset();
@@ -75,7 +75,7 @@ public class PasswordTest extends TestSupport {
         mockHelper.getRequest().addParameter("repeat", "new password");
         mockHelper.mock("/user/password");
         object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(0, object.getInt("code"));
+        Assert.assertEquals(0, object.getIntValue("code"));
         Assert.assertEquals("", object.getString("data"));
         UserModel user11 = liteOrm.findById(UserModel.class, user1.getId());
         Assert.assertEquals(digest.md5(UserModel.NAME + digest.sha1("new password" + UserModel.NAME)), user11.getPassword());
@@ -88,7 +88,7 @@ public class PasswordTest extends TestSupport {
         mockHelper.getRequest().addParameter("repeat", "new password 11");
         mockHelper.mock("/user/password");
         object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(0, object.getInt("code"));
+        Assert.assertEquals(0, object.getIntValue("code"));
         Assert.assertEquals("", object.getString("data"));
         UserModel user111 = liteOrm.findById(UserModel.class, user1.getId());
         Assert.assertEquals(digest.md5(UserModel.NAME + digest.sha1("new password 11" + UserModel.NAME)), user111.getPassword());

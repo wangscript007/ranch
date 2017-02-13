@@ -1,6 +1,6 @@
 package org.lpw.ranch.user;
 
-import net.sf.json.JSONObject;
+import com.alibaba.fastjson.JSONObject;
 import org.junit.Assert;
 import org.junit.Test;
 import org.lpw.tephra.cache.Cache;
@@ -23,14 +23,14 @@ public class GradeTest extends TestSupport {
         mockHelper.reset();
         mockHelper.mock("/user/grade");
         JSONObject object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(1522, object.getInt("code"));
+        Assert.assertEquals(1522, object.getIntValue("code"));
         Assert.assertEquals(message.get(Validators.PREFIX + "illegal-id", message.get(UserModel.NAME + ".id")), object.getString("message"));
 
         mockHelper.reset();
         mockHelper.getRequest().addParameter("id", "id");
         mockHelper.mock("/user/grade");
         object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(1522, object.getInt("code"));
+        Assert.assertEquals(1522, object.getIntValue("code"));
         Assert.assertEquals(message.get(Validators.PREFIX + "illegal-id", message.get(UserModel.NAME + ".id")), object.getString("message"));
 
         mockHelper.reset();
@@ -38,7 +38,7 @@ public class GradeTest extends TestSupport {
         mockHelper.getRequest().addParameter("grade", "100");
         mockHelper.mock("/user/grade");
         object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(1523, object.getInt("code"));
+        Assert.assertEquals(1523, object.getIntValue("code"));
         Assert.assertEquals(message.get(Validators.PREFIX + "not-between", message.get(UserModel.NAME + ".grade"), 0, 99), object.getString("message"));
 
         mockHelper.reset();
@@ -46,7 +46,7 @@ public class GradeTest extends TestSupport {
         mockHelper.getRequest().addParameter("grade", "11");
         mockHelper.mock("/user/grade");
         object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(9995, object.getInt("code"));
+        Assert.assertEquals(9995, object.getIntValue("code"));
         Assert.assertEquals(message.get(Validators.PREFIX + "illegal-sign"), object.getString("message"));
 
         mockHelper.reset();
@@ -55,7 +55,7 @@ public class GradeTest extends TestSupport {
         request.putSign(mockHelper.getRequest().getMap());
         mockHelper.mock("/user/grade");
         object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(1525, object.getInt("code"));
+        Assert.assertEquals(1525, object.getIntValue("code"));
         Assert.assertEquals(message.get(UserModel.NAME + ".not-exists"), object.getString("message"));
 
         cache.put(UserModel.NAME + ".service.model:" + user1.getId(), user1, false);
@@ -69,7 +69,7 @@ public class GradeTest extends TestSupport {
         request.putSign(mockHelper.getRequest().getMap());
         mockHelper.mock("/user/grade");
         object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(0, object.getInt("code"));
+        Assert.assertEquals(0, object.getIntValue("code"));
         Assert.assertEquals("", object.getString("data"));
         UserModel user11 = liteOrm.findById(UserModel.class, user1.getId());
         Assert.assertEquals(11, user11.getGrade());

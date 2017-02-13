@@ -2,8 +2,8 @@ package org.lpw.ranch.util;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.lpw.tephra.test.TephraTestSupport;
 import org.lpw.tephra.test.MockHelper;
+import org.lpw.tephra.test.TephraTestSupport;
 
 import javax.inject.Inject;
 

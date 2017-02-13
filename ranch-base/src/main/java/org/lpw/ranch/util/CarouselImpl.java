@@ -1,6 +1,7 @@
 package org.lpw.ranch.util;
 
-import net.sf.json.JSONObject;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import org.lpw.tephra.carousel.CarouselHelper;
 import org.lpw.tephra.ctrl.context.Header;
 import org.lpw.tephra.util.Validator;
@@ -32,7 +33,7 @@ public class CarouselImpl implements Carousel {
         Map<String, String> parameter = new HashMap<>();
         parameter.put("ids", id);
         JSONObject obj = service(key, null, parameter, cacheTime);
-        if (obj.has(id))
+        if (obj.containsKey(id))
             object.putAll(obj.getJSONObject(id));
 
         return object;
@@ -49,8 +50,8 @@ public class CarouselImpl implements Carousel {
         if (validator.isEmpty(service))
             return new JSONObject();
 
-        JSONObject object = JSONObject.fromObject(service);
-        if (object.getInt("code") != 0)
+        JSONObject object = JSON.parseObject(service);
+        if (object.getIntValue("code") != 0)
             return new JSONObject();
 
         return object.getJSONObject("data");

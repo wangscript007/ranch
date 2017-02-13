@@ -1,7 +1,7 @@
 package org.lpw.ranch.classify;
 
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import org.lpw.ranch.recycle.RecycleService;
 
 /**

@@ -1,7 +1,7 @@
 package org.lpw.ranch.user;
 
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import org.junit.Assert;
 import org.junit.Test;
 import org.lpw.tephra.ctrl.validate.Validators;
@@ -23,7 +23,7 @@ public class QueryTest extends TestSupport {
         mockHelper.getRequest().addParameter("mobile", "mobile");
         mockHelper.mock("/user/query");
         JSONObject object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(1509, object.getInt("code"));
+        Assert.assertEquals(1509, object.getIntValue("code"));
         Assert.assertEquals(message.get(Validators.PREFIX + "illegal-mobile", message.get(UserModel.NAME + ".mobile")), object.getString("message"));
 
         mockHelper.reset();
@@ -31,7 +31,7 @@ public class QueryTest extends TestSupport {
         mockHelper.getRequest().addParameter("pageNum", "1");
         mockHelper.mock("/user/query");
         object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(9995, object.getInt("code"));
+        Assert.assertEquals(9995, object.getIntValue("code"));
         Assert.assertEquals(message.get(Validators.PREFIX + "illegal-sign"), object.getString("message"));
 
         mockHelper.reset();
@@ -40,11 +40,11 @@ public class QueryTest extends TestSupport {
         request.putSign(mockHelper.getRequest().getMap());
         mockHelper.mock("/user/query");
         object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(0, object.getInt("code"));
+        Assert.assertEquals(0, object.getIntValue("code"));
         JSONObject data = object.getJSONObject("data");
-        Assert.assertEquals(20, data.getInt("count"));
-        Assert.assertEquals(10, data.getInt("size"));
-        Assert.assertEquals(1, data.getInt("number"));
+        Assert.assertEquals(20, data.getIntValue("count"));
+        Assert.assertEquals(10, data.getIntValue("size"));
+        Assert.assertEquals(1, data.getIntValue("number"));
         JSONArray array = data.getJSONArray("list");
         Assert.assertEquals(10, array.size());
         for (int i = 0; i < 10; i++)
@@ -57,11 +57,11 @@ public class QueryTest extends TestSupport {
         request.putSign(mockHelper.getRequest().getMap());
         mockHelper.mock("/user/query");
         object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(0, object.getInt("code"));
+        Assert.assertEquals(0, object.getIntValue("code"));
         data = object.getJSONObject("data");
-        Assert.assertEquals(0, data.getInt("count"));
-        Assert.assertEquals(0, data.getInt("size"));
-        Assert.assertEquals(0, data.getInt("number"));
+        Assert.assertEquals(0, data.getIntValue("count"));
+        Assert.assertEquals(0, data.getIntValue("size"));
+        Assert.assertEquals(0, data.getIntValue("number"));
         array = data.getJSONArray("list");
         Assert.assertEquals(1, array.size());
         equals(list.get(0), array.getJSONObject(0));

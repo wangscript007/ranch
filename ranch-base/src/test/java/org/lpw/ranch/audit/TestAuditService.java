@@ -1,6 +1,6 @@
 package org.lpw.ranch.audit;
 
-import net.sf.json.JSONObject;
+import com.alibaba.fastjson.JSONObject;
 import org.lpw.ranch.recycle.MockRecycleService;
 
 /**

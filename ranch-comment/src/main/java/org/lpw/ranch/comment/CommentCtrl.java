@@ -2,7 +2,6 @@ package org.lpw.ranch.comment;
 
 import org.lpw.ranch.audit.AuditCtrlSupport;
 import org.lpw.ranch.audit.AuditService;
-import org.lpw.ranch.user.User;
 import org.lpw.tephra.ctrl.context.Request;
 import org.lpw.tephra.ctrl.execute.Execute;
 import org.lpw.tephra.ctrl.validate.Validate;

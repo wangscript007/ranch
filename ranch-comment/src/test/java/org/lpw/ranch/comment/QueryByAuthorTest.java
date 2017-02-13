@@ -1,7 +1,7 @@
 package org.lpw.ranch.comment;
 
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import org.junit.Assert;
 import org.junit.Test;
 import org.lpw.ranch.audit.Audit;
@@ -25,14 +25,14 @@ public class QueryByAuthorTest extends TestSupport {
         mockHelper.reset();
         mockHelper.mock("/comment/query-by-author");
         JSONObject object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(1304, object.getInt("code"));
+        Assert.assertEquals(1304, object.getIntValue("code"));
         Assert.assertEquals(message.get(Validators.PREFIX + "illegal-id", message.get(CommentModel.NAME + ".author")), object.getString("message"));
 
         mockHelper.reset();
         mockHelper.getRequest().addParameter("author", "author id");
         mockHelper.mock("/comment/query-by-author");
         object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(1304, object.getInt("code"));
+        Assert.assertEquals(1304, object.getIntValue("code"));
         Assert.assertEquals(message.get(Validators.PREFIX + "illegal-id", message.get(CommentModel.NAME + ".author")), object.getString("message"));
 
         mockCarousel.reset();
@@ -52,29 +52,29 @@ public class QueryByAuthorTest extends TestSupport {
         mockHelper.getRequest().addParameter("pageNum", "0");
         mockHelper.mock("/comment/query-by-author");
         object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(0, object.getInt("code"));
+        Assert.assertEquals(0, object.getIntValue("code"));
         JSONObject data = object.getJSONObject("data");
-        Assert.assertEquals(10, data.getInt("count"));
-        Assert.assertEquals(20, data.getInt("size"));
-        Assert.assertEquals(1, data.getInt("number"));
+        Assert.assertEquals(10, data.getIntValue("count"));
+        Assert.assertEquals(20, data.getIntValue("size"));
+        Assert.assertEquals(1, data.getIntValue("number"));
         JSONArray array = data.getJSONArray("list");
         Assert.assertEquals(10, array.size());
         for (int i = 0; i < array.size(); i++) {
             JSONObject obj = array.getJSONObject(i);
             CommentModel comment = list.get(2 * i);
             Assert.assertEquals(comment.getId(), obj.getString("id"));
-            Assert.assertFalse(obj.has("key"));
+            Assert.assertFalse(obj.containsKey("key"));
             JSONObject owner = obj.getJSONObject("owner");
             Assert.assertEquals("owner " + (i * 2), owner.getString("id"));
             Assert.assertEquals("owner key " + (i * 2), owner.getString("key"));
-            Assert.assertFalse(obj.has("author"));
+            Assert.assertFalse(obj.containsKey("author"));
             Assert.assertEquals(comment.getSubject(), obj.getString("subject"));
             Assert.assertEquals(comment.getLabel(), obj.getString("label"));
             Assert.assertEquals(comment.getContent(), obj.getString("content"));
-            Assert.assertEquals(comment.getScore(), obj.getInt("score"));
-            Assert.assertFalse(obj.has("audit"));
+            Assert.assertEquals(comment.getScore(), obj.getIntValue("score"));
+            Assert.assertFalse(obj.containsKey("audit"));
             Assert.assertEquals(converter.toString(comment.getTime()), obj.getString("time"));
-            Assert.assertFalse(obj.has("children"));
+            Assert.assertFalse(obj.containsKey("children"));
         }
     }
 }

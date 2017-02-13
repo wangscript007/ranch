@@ -1,6 +1,6 @@
 package org.lpw.ranch.recycle;
 
-import net.sf.json.JSONObject;
+import com.alibaba.fastjson.JSONObject;
 import org.junit.Assert;
 import org.junit.Test;
 import org.lpw.tephra.dao.model.ModelHelper;
@@ -33,7 +33,7 @@ public class RecycleModelSupportTest extends TephraTestSupport {
 
         JSONObject object = modelHelper.toJson(model);
         Assert.assertEquals(model.getId(), object.getString("id"));
-        Assert.assertFalse(object.has("recycle"));
+        Assert.assertFalse(object.containsKey("recycle"));
     }
 
     protected RecycleModel newModel() {

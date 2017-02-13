@@ -1,6 +1,6 @@
 package org.lpw.ranch.user;
 
-import net.sf.json.JSONObject;
+import com.alibaba.fastjson.JSONObject;
 import org.junit.Assert;
 import org.junit.Test;
 import org.lpw.ranch.user.auth.AuthModel;
@@ -25,7 +25,7 @@ public class SignInTest extends TestSupport {
         mockHelper.reset();
         mockHelper.mock("/user/sign-in");
         JSONObject object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(1501, object.getInt("code"));
+        Assert.assertEquals(1501, object.getIntValue("code"));
         Assert.assertEquals(message.get(Validators.PREFIX + "empty", message.get(UserModel.NAME + ".uid")), object.getString("message"));
 
         mockHelper.reset();
@@ -33,7 +33,7 @@ public class SignInTest extends TestSupport {
         mockHelper.getRequest().addParameter("type", "1");
         mockHelper.mock("/user/sign-in");
         object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(1503, object.getInt("code"));
+        Assert.assertEquals(1503, object.getIntValue("code"));
         Assert.assertEquals(message.get(UserModel.NAME + ".password.empty"), object.getString("message"));
 
         mockHelper.reset();
@@ -41,7 +41,7 @@ public class SignInTest extends TestSupport {
         mockHelper.getRequest().addParameter("macId", generator.random(101));
         mockHelper.mock("/user/sign-in");
         object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(1505, object.getInt("code"));
+        Assert.assertEquals(1505, object.getIntValue("code"));
         Assert.assertEquals(message.get(Validators.PREFIX + "over-max-length", message.get(UserModel.NAME + ".macId"), 100), object.getString("message"));
 
         mockHelper.reset();
@@ -49,7 +49,7 @@ public class SignInTest extends TestSupport {
         mockHelper.getRequest().addParameter("macId", "mac id");
         mockHelper.mock("/user/sign-in");
         object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(1506, object.getInt("code"));
+        Assert.assertEquals(1506, object.getIntValue("code"));
         Assert.assertEquals(message.get(UserModel.NAME + ".sign-in.failure"), object.getString("message"));
 
         mockHelper.reset();
@@ -57,7 +57,7 @@ public class SignInTest extends TestSupport {
         mockHelper.getRequest().addParameter("macId", "mac id");
         mockHelper.mock("/user/sign-in");
         object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(1506, object.getInt("code"));
+        Assert.assertEquals(1506, object.getIntValue("code"));
         Assert.assertEquals(message.get(UserModel.NAME + ".sign-in.failure"), object.getString("message"));
 
         mockHelper.reset();
@@ -65,7 +65,7 @@ public class SignInTest extends TestSupport {
         mockHelper.getRequest().addParameter("macId", "mac id");
         mockHelper.mock("/user/sign-in");
         object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(1506, object.getInt("code"));
+        Assert.assertEquals(1506, object.getIntValue("code"));
         Assert.assertEquals(message.get(UserModel.NAME + ".sign-in.failure"), object.getString("message"));
 
         mockHelper.reset();
@@ -74,7 +74,7 @@ public class SignInTest extends TestSupport {
         mockHelper.getRequest().addParameter("macId", "mac id");
         mockHelper.mock("/user/sign-in");
         object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(1506, object.getInt("code"));
+        Assert.assertEquals(1506, object.getIntValue("code"));
         Assert.assertEquals(message.get(UserModel.NAME + ".sign-in.failure"), object.getString("message"));
 
         mockHelper.reset();
@@ -82,7 +82,7 @@ public class SignInTest extends TestSupport {
         mockHelper.getRequest().addParameter("macId", "mac id");
         mockHelper.mock("/user/sign-in");
         object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(1506, object.getInt("code"));
+        Assert.assertEquals(1506, object.getIntValue("code"));
         Assert.assertEquals(message.get(UserModel.NAME + ".sign-in.failure"), object.getString("message"));
 
         mockHelper.reset();
@@ -90,7 +90,7 @@ public class SignInTest extends TestSupport {
         mockHelper.getRequest().addParameter("macId", "mac id");
         mockHelper.mock("/user/sign-in");
         object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(0, object.getInt("code"));
+        Assert.assertEquals(0, object.getIntValue("code"));
         equals(user1, object.getJSONObject("data"));
 
         for (int i = 0; i < 2; i++) {
@@ -101,7 +101,7 @@ public class SignInTest extends TestSupport {
             mockHelper.getRequest().addParameter("type", "1");
             mockHelper.mock("/user/sign-in");
             object = mockHelper.getResponse().asJson();
-            Assert.assertEquals(0, object.getInt("code"));
+            Assert.assertEquals(0, object.getIntValue("code"));
             equals(user1, object.getJSONObject("data"));
             AuthModel auth = liteOrm.findById(AuthModel.class, auth0.getId());
             Assert.assertEquals(user1.getId(), auth.getUser());
@@ -117,7 +117,7 @@ public class SignInTest extends TestSupport {
                 mockHelper.getRequest().addParameter("type", "1");
                 mockHelper.mock("/user/sign-in");
                 object = mockHelper.getResponse().asJson();
-                Assert.assertEquals(0, object.getInt("code"));
+                Assert.assertEquals(0, object.getIntValue("code"));
                 equals(user2, object.getJSONObject("data"));
                 auth = liteOrm.findOne(new LiteQuery(AuthModel.class).where("c_uid=?"), new Object[]{"mac id"});
                 Assert.assertEquals(user2.getId(), auth.getUser());
@@ -131,7 +131,7 @@ public class SignInTest extends TestSupport {
         mockHelper.getRequest().addParameter("type", "1");
         mockHelper.mock("/user/sign-in");
         object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(0, object.getInt("code"));
+        Assert.assertEquals(0, object.getIntValue("code"));
         equals(user1, object.getJSONObject("data"));
         Assert.assertEquals(count, liteOrm.count(new LiteQuery(AuthModel.class), null));
 
@@ -141,7 +141,7 @@ public class SignInTest extends TestSupport {
         mockHelper.getRequest().addParameter("type", "2");
         mockHelper.mock("/user/sign-in");
         object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(0, object.getInt("code"));
+        Assert.assertEquals(0, object.getIntValue("code"));
         equalsSignUp(object.getJSONObject("data"), "uid 5", 2, null, null);
     }
 }

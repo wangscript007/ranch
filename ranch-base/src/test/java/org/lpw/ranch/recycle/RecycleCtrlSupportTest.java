@@ -1,6 +1,6 @@
 package org.lpw.ranch.recycle;
 
-import net.sf.json.JSONObject;
+import com.alibaba.fastjson.JSONObject;
 import org.junit.Assert;
 import org.junit.Test;
 import org.lpw.tephra.crypto.Sign;
@@ -32,7 +32,7 @@ public class RecycleCtrlSupportTest extends TephraTestSupport {
         mockHelper.reset();
         mockHelper.mock("/" + uriPrefix() + "/delete");
         JSONObject object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(9986, object.getInt("code"));
+        Assert.assertEquals(9986, object.getIntValue("code"));
         Assert.assertEquals(message.get(Validators.PREFIX + "illegal-id", message.get(name() + ".id")), object.getString("message"));
         Assert.assertNull(recycleService().getDeleteId());
 
@@ -40,7 +40,7 @@ public class RecycleCtrlSupportTest extends TephraTestSupport {
         mockHelper.getRequest().addParameter("id", "id");
         mockHelper.mock("/" + uriPrefix() + "/delete");
         object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(9986, object.getInt("code"));
+        Assert.assertEquals(9986, object.getIntValue("code"));
         Assert.assertEquals(message.get(Validators.PREFIX + "illegal-id", message.get(name() + ".id")), object.getString("message"));
         Assert.assertNull(recycleService().getDeleteId());
 
@@ -49,7 +49,7 @@ public class RecycleCtrlSupportTest extends TephraTestSupport {
         mockHelper.getRequest().addParameter("id", id);
         mockHelper.mock("/" + uriPrefix() + "/delete");
         object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(9995, object.getInt("code"));
+        Assert.assertEquals(9995, object.getIntValue("code"));
         Assert.assertEquals(message.get(Validators.PREFIX + "illegal-sign"), object.getString("message"));
         Assert.assertNull(recycleService().getDeleteId());
 
@@ -58,7 +58,7 @@ public class RecycleCtrlSupportTest extends TephraTestSupport {
         sign.put(mockHelper.getRequest().getMap(), null);
         mockHelper.mock("/" + uriPrefix() + "/delete");
         object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(0, object.getInt("code"));
+        Assert.assertEquals(0, object.getIntValue("code"));
         Assert.assertEquals("", object.getString("data"));
         Assert.assertEquals(id, recycleService().getDeleteId());
     }
@@ -72,14 +72,14 @@ public class RecycleCtrlSupportTest extends TephraTestSupport {
         mockHelper.reset();
         mockHelper.mock("/" + uriPrefix() + "/recycle");
         JSONObject object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(9995, object.getInt("code"));
+        Assert.assertEquals(9995, object.getIntValue("code"));
         Assert.assertEquals(message.get(Validators.PREFIX + "illegal-sign"), object.getString("message"));
 
         mockHelper.reset();
         sign.put(mockHelper.getRequest().getMap(), null);
         mockHelper.mock("/" + uriPrefix() + "/recycle");
         object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(0, object.getInt("code"));
+        Assert.assertEquals(0, object.getIntValue("code"));
         JSONObject data = object.getJSONObject("data");
         Assert.assertEquals("recycle", data.getString("name"));
     }
@@ -89,7 +89,7 @@ public class RecycleCtrlSupportTest extends TephraTestSupport {
         mockHelper.reset();
         mockHelper.mock("/" + uriPrefix() + "/restore");
         JSONObject object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(9986, object.getInt("code"));
+        Assert.assertEquals(9986, object.getIntValue("code"));
         Assert.assertEquals(message.get(Validators.PREFIX + "illegal-id", message.get(name() + ".id")), object.getString("message"));
         Assert.assertNull(recycleService().getRestoreId());
 
@@ -97,7 +97,7 @@ public class RecycleCtrlSupportTest extends TephraTestSupport {
         mockHelper.getRequest().addParameter("id", "id");
         mockHelper.mock("/" + uriPrefix() + "/restore");
         object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(9986, object.getInt("code"));
+        Assert.assertEquals(9986, object.getIntValue("code"));
         Assert.assertEquals(message.get(Validators.PREFIX + "illegal-id", message.get(name() + ".id")), object.getString("message"));
         Assert.assertNull(recycleService().getRestoreId());
 
@@ -106,7 +106,7 @@ public class RecycleCtrlSupportTest extends TephraTestSupport {
         mockHelper.getRequest().addParameter("id", id);
         mockHelper.mock("/" + uriPrefix() + "/restore");
         object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(9995, object.getInt("code"));
+        Assert.assertEquals(9995, object.getIntValue("code"));
         Assert.assertEquals(message.get(Validators.PREFIX + "illegal-sign"), object.getString("message"));
         Assert.assertNull(recycleService().getRestoreId());
 
@@ -115,7 +115,7 @@ public class RecycleCtrlSupportTest extends TephraTestSupport {
         sign.put(mockHelper.getRequest().getMap(), null);
         mockHelper.mock("/" + uriPrefix() + "/restore");
         object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(0, object.getInt("code"));
+        Assert.assertEquals(0, object.getIntValue("code"));
         Assert.assertEquals("", object.getString("data"));
         Assert.assertEquals(id, recycleService().getRestoreId());
     }
@@ -128,7 +128,7 @@ public class RecycleCtrlSupportTest extends TephraTestSupport {
         return TestRecycleModel.NAME;
     }
 
-    protected MockRecycleService recycleService(){
+    protected MockRecycleService recycleService() {
         return recycleService;
     }
 }

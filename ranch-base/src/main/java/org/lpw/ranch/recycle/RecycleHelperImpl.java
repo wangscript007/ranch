@@ -1,6 +1,6 @@
 package org.lpw.ranch.recycle;
 
-import net.sf.json.JSONObject;
+import com.alibaba.fastjson.JSONObject;
 import org.lpw.ranch.util.Pagination;
 import org.lpw.tephra.util.Validator;
 import org.springframework.stereotype.Component;

@@ -1,7 +1,7 @@
 package org.lpw.ranch.comment;
 
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import org.junit.Assert;
 import org.junit.Test;
 import org.lpw.ranch.audit.Audit;
@@ -26,14 +26,14 @@ public class QueryByOwnerTest extends TestSupport {
         mockHelper.reset();
         mockHelper.mock("/comment/query-by-owner");
         JSONObject object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(1303, object.getInt("code"));
+        Assert.assertEquals(1303, object.getIntValue("code"));
         Assert.assertEquals(message.get(Validators.PREFIX + "illegal-id", message.get(CommentModel.NAME + ".owner")), object.getString("message"));
 
         mockHelper.reset();
         mockHelper.getRequest().addParameter("owner", "owner id");
         mockHelper.mock("/comment/query-by-owner");
         object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(1303, object.getInt("code"));
+        Assert.assertEquals(1303, object.getIntValue("code"));
         Assert.assertEquals(message.get(Validators.PREFIX + "illegal-id", message.get(CommentModel.NAME + ".owner")), object.getString("message"));
 
         mockCarousel.reset();
@@ -45,11 +45,11 @@ public class QueryByOwnerTest extends TestSupport {
         sign.put(mockHelper.getRequest().getMap(), null);
         mockHelper.mock("/comment/query-by-owner");
         object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(0, object.getInt("code"));
+        Assert.assertEquals(0, object.getIntValue("code"));
         JSONObject data = object.getJSONObject("data");
-        Assert.assertEquals(3, data.getInt("count"));
-        Assert.assertEquals(20, data.getInt("size"));
-        Assert.assertEquals(1, data.getInt("number"));
+        Assert.assertEquals(3, data.getIntValue("count"));
+        Assert.assertEquals(20, data.getIntValue("size"));
+        Assert.assertEquals(1, data.getIntValue("number"));
         JSONArray array = data.getJSONArray("list");
         Assert.assertEquals(3, array.size());
         for (int i = 0; i < array.size(); i++)
@@ -64,11 +64,11 @@ public class QueryByOwnerTest extends TestSupport {
             sign.put(mockHelper.getRequest().getMap(), null);
             mockHelper.mock("/comment/query-by-owner");
             object = mockHelper.getResponse().asJson();
-            Assert.assertEquals(0, object.getInt("code"));
+            Assert.assertEquals(0, object.getIntValue("code"));
             data = object.getJSONObject("data");
-            Assert.assertEquals(4, data.getInt("count"));
-            Assert.assertEquals(20, data.getInt("size"));
-            Assert.assertEquals(1, data.getInt("number"));
+            Assert.assertEquals(4, data.getIntValue("count"));
+            Assert.assertEquals(20, data.getIntValue("size"));
+            Assert.assertEquals(1, data.getIntValue("number"));
             array = data.getJSONArray("list");
             Assert.assertEquals(4, array.size());
             for (int i = 0; i < array.size(); i++)
@@ -78,20 +78,20 @@ public class QueryByOwnerTest extends TestSupport {
 
     private void equals(CommentModel comment, JSONObject obj, int i, CommentModel child) {
         Assert.assertEquals(comment.getId(), obj.getString("id"));
-        Assert.assertFalse(obj.has("key"));
-        Assert.assertFalse(obj.has("owner"));
+        Assert.assertFalse(obj.containsKey("key"));
+        Assert.assertFalse(obj.containsKey("owner"));
         mockUser.verify(obj.getJSONObject("author"), comment.getAuthor());
         Assert.assertEquals(comment.getSubject(), obj.getString("subject"));
         Assert.assertEquals(comment.getLabel(), obj.getString("label"));
         Assert.assertEquals(comment.getContent(), obj.getString("content"));
-        Assert.assertEquals(comment.getScore(), obj.getInt("score"));
-        Assert.assertFalse(obj.has("audit"));
+        Assert.assertEquals(comment.getScore(), obj.getIntValue("score"));
+        Assert.assertFalse(obj.containsKey("audit"));
         Assert.assertEquals(converter.toString(comment.getTime()), obj.getString("time"));
         if (i == 1) {
             JSONArray children = obj.getJSONArray("children");
             Assert.assertEquals(1, children.size());
             equals(child, children.getJSONObject(0), 101, null);
         } else
-            Assert.assertFalse(obj.has("children"));
+            Assert.assertFalse(obj.containsKey("children"));
     }
 }

@@ -1,7 +1,8 @@
 package org.lpw.ranch.classify;
 
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import org.lpw.ranch.recycle.Recycle;
 import org.lpw.ranch.recycle.RecycleHelper;
 import org.lpw.ranch.util.Pagination;
@@ -72,7 +73,7 @@ public class ClassifyServiceImpl implements ClassifyService, DateJob {
             JSONObject object = array.getJSONObject(i);
             String string = object.getString("code");
             if (code.startsWith(string) && !code.equals(string)) {
-                if (object.has("children")) {
+                if (object.containsKey("children")) {
                     JSONObject child = findParent(object.getJSONArray("children"), code);
                     if (child != null)
                         return child;
@@ -98,15 +99,15 @@ public class ClassifyServiceImpl implements ClassifyService, DateJob {
                 continue;
 
             object.put(id, json);
-            if (links && json.has("label")) {
+            if (links && json.containsKey("label")) {
                 Object obj = json.get("label");
                 if (!(obj instanceof JSONObject))
                     continue;
 
                 JSONObject label = (JSONObject) obj;
-                if (label.has("links") && label.getBoolean("links")) {
+                if (label.containsKey("links") && label.getBoolean("links")) {
                     label.keySet().forEach(key -> {
-                        String name = (String) key;
+                        String name = key;
                         if (name.equals("links"))
                             return;
 
@@ -166,7 +167,7 @@ public class ClassifyServiceImpl implements ClassifyService, DateJob {
             object.put("code", classify.getCode());
             object.put("name", classify.getName());
             if (!validator.isEmpty(classify.getLabel()))
-                object.put("label", classify.getLabel().charAt(0) == '{' ? JSONObject.fromObject(classify.getLabel()) : classify.getLabel());
+                object.put("label", classify.getLabel().charAt(0) == '{' ? JSON.parseObject(classify.getLabel()) : classify.getLabel());
             cache.put(cacheKey, object, false);
         }
 

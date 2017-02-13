@@ -1,6 +1,6 @@
 package org.lpw.ranch.user;
 
-import net.sf.json.JSONObject;
+import com.alibaba.fastjson.JSONObject;
 import org.junit.Assert;
 import org.junit.Test;
 import org.lpw.tephra.ctrl.validate.Validators;
@@ -21,14 +21,14 @@ public class GetTest extends TestSupport {
         mockHelper.reset();
         mockHelper.mock("/user/get");
         JSONObject object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(1521, object.getInt("code"));
+        Assert.assertEquals(1521, object.getIntValue("code"));
         Assert.assertEquals(message.get(Validators.PREFIX + "empty", message.get(UserModel.NAME + ".ids")), object.getString("message"));
 
         mockHelper.reset();
         mockHelper.getRequest().addParameter("ids", "id1,id2");
         mockHelper.mock("/user/get");
         object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(9995, object.getInt("code"));
+        Assert.assertEquals(9995, object.getIntValue("code"));
         Assert.assertEquals(message.get(Validators.PREFIX + "illegal-sign"), object.getString("message"));
 
         mockHelper.reset();
@@ -36,7 +36,7 @@ public class GetTest extends TestSupport {
         request.putSign(mockHelper.getRequest().getMap());
         mockHelper.mock("/user/get");
         object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(0, object.getInt("code"));
+        Assert.assertEquals(0, object.getIntValue("code"));
         JSONObject data = object.getJSONObject("data");
         Assert.assertTrue(data.isEmpty());
 
@@ -45,7 +45,7 @@ public class GetTest extends TestSupport {
         request.putSign(mockHelper.getRequest().getMap());
         mockHelper.mock("/user/get");
         object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(0, object.getInt("code"));
+        Assert.assertEquals(0, object.getIntValue("code"));
         data = object.getJSONObject("data");
         Assert.assertEquals(2, data.size());
         for (int i = 0; i < data.size(); i++) {

@@ -9,9 +9,8 @@ import org.springframework.stereotype.Component;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
-
-import java.sql.Timestamp;
 import java.sql.Date;
+import java.sql.Timestamp;
 
 /**
  * @author lpw

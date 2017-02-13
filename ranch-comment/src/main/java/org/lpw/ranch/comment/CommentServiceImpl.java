@@ -1,7 +1,7 @@
 package org.lpw.ranch.comment;
 
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import org.lpw.ranch.audit.Audit;
 import org.lpw.ranch.audit.AuditHelper;
 import org.lpw.ranch.recycle.RecycleHelper;
