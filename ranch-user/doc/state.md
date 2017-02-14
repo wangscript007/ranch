@@ -1,6 +1,6 @@
 # 修改用户状态
 
-请求：
+请求
 - Service Key - ranch.user.state
 - URI - /user/state
 

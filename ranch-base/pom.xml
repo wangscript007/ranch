@@ -20,6 +20,11 @@
     <dependencies>
         <dependency>
             <groupId>org.lpw.tephra</groupId>
+            <artifactId>tephra-ctrl-http</artifactId>
+            <version>LATEST</version>
+        </dependency>
+        <dependency>
+            <groupId>org.lpw.tephra</groupId>
             <artifactId>tephra-carousel</artifactId>
             <version>LATEST</version>
         </dependency>

@@ -1,6 +1,6 @@
 # 检索分类信息集
 
-请求：
+请求
 - Service Key - ranch.classify.query
 - URI - /classify/query
 

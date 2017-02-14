@@ -1,6 +1,6 @@
 # 检索回收站数据
 
-请求：
+请求
 - Service Key - ${module-name}.recycle
 - URI - /${module-path}/recycle
 > ${module-name}为模块名称。

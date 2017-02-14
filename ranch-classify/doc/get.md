@@ -1,6 +1,6 @@
 # 获取分类信息
 
-请求：
+请求
 - Service Key - ranch.classify.get
 - URI - /classify/get
 

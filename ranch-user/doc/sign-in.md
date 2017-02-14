@@ -1,6 +1,6 @@
 # 登入
 
-请求：
+请求
 - Service Key - ranch.user.sign-in
 - URI - /user/sign-in
 

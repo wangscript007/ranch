@@ -72,6 +72,13 @@ public interface UserService {
     boolean password(String oldPassword, String newPassword);
 
     /**
+     * 设置当前用户头像。
+     *
+     * @param uri 头像URI地址。
+     */
+    void portrait(String uri);
+
+    /**
      * 获取用户数据集。
      *
      * @param ids ID集。

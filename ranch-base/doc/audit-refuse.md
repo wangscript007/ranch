@@ -1,6 +1,6 @@
 # 审核不通过
 
-请求：
+请求
 - Service Key - ${module-name}.refuse
 - URI - /${module-path}/refuse
 > ${module-name}为模块名称。

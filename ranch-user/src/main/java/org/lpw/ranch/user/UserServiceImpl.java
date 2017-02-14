@@ -145,6 +145,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public void portrait(String uri) {
+        UserModel user = session.get(SESSION);
+        user.setPortrait(uri);
+        userDao.save(user);
+        cleanCache(user.getId());
+    }
+
+    @Override
     public JSONObject get(String[] ids) {
         JSONObject object = new JSONObject();
         for (String id : ids) {

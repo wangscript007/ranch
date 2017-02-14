@@ -1,6 +1,6 @@
 # 检索用户
 
-请求：
+请求
 - Service Key - ranch.user.query
 - URI - /user/query
 

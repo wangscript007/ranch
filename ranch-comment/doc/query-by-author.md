@@ -1,6 +1,6 @@
 # 检索作者评论
 
-请求：
+请求
 - Service Key - ranch.comment.query-by-author
 - URI - /comment/query-by-author
 

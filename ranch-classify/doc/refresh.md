@@ -1,6 +1,6 @@
 # 刷新缓存
 
-请求：
+请求
 - Service Key - ranch.classify.refresh
 - URI - /classify/refresh
 

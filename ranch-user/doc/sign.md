@@ -1,6 +1,6 @@
 # 获取当前登入用户信息
 
-请求：
+请求
 - Service Key - ranch.user.sign
 - URI - /user/sign
 

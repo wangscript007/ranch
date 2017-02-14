@@ -1,6 +1,6 @@
 # 检索所有评论
 
-请求：
+请求
 - Service Key - ranch.comment.query
 - URI - /comment/query
 

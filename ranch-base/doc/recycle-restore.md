@@ -1,6 +1,6 @@
 # 从回收站还原
 
-请求：
+请求
 - Service Key - ${module-name}.restore
 - URI - /${module-path}/restore
 > ${module-name}为模块名称。

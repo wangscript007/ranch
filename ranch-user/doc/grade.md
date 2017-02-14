@@ -1,6 +1,6 @@
 # 修改用户等级
 
-请求：
+请求
 - Service Key - ranch.user.grade
 - URI - /user/grade
 

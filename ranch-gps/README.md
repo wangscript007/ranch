@@ -2,15 +2,15 @@
 
 ## 获取GPS坐标对应的地址信息
 
-请求：
+请求
 - Service Key - ranch.gps.address
 - URI - /gps/address
 
-参数：
+参数
 - lat - 纬度坐标值。
 - lng - 经度坐标值。
 
-返回：
+返回
 ```json
 {
   "code" : 0,

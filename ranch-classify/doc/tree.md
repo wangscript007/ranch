@@ -1,6 +1,6 @@
 # 检索分类信息树
 
-请求：
+请求
 - Service Key - ranch.classify.tree
 - URI - /classify/tree
 

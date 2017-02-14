@@ -1,6 +1,6 @@
 # 创建新评论
 
-请求：
+请求
 - Service Key - ranch.comment.create
 - URI - /comment/create
 

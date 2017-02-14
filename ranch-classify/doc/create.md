@@ -1,6 +1,6 @@
 # 创建新分类
 
-请求：
+请求
 - Service Key - ranch.classify.create
 - URI - /classify/create
 

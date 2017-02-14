@@ -1,6 +1,6 @@
 # 修改当前用户认证密码
 
-请求：
+请求
 - Service Key - ranch.user.password
 - URI - /user/password
 

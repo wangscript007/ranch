@@ -1,6 +1,6 @@
 # 审核通过
 
-请求：
+请求
 - Service Key - ${module-name}.pass
 - URI - /${module-path}/pass
 > ${module-name}为模块名称。

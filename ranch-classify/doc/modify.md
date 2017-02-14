@@ -1,6 +1,6 @@
 # 修改分类信息
 
-请求：
+请求
 - Service Key - ranch.classify.modify
 - URI - /classify/modify
 

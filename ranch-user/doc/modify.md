@@ -1,6 +1,6 @@
 # 修改当前用户信息
 
-请求：
+请求
 - Service Key - ranch.user.modify
 - URI - /user/modify
 

@@ -1,6 +1,6 @@
 # 获取用户信息
 
-请求：
+请求
 - Service Key - ranch.user.get
 - URI - /user/get
 

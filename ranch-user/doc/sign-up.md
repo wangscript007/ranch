@@ -1,6 +1,6 @@
 # 注册
 
-请求：
+请求
 - Service Key - ranch.user.sign-up
 - URI - /user/sign-up
 
