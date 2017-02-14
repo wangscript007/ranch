@@ -63,7 +63,7 @@ public class SignUpTest extends TestSupport {
         mockHelper.mock("/user/sign-up");
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(1504, object.getIntValue("code"));
-        Assert.assertEquals(message.get(UserModel.NAME + ".sign-up.failure"), object.getString("message"));
+        Assert.assertEquals(message.get("ranch.user.auth.uid.exists", "UID"), object.getString("message"));
 
         mockHelper.reset();
         mockHelper.getRequest().addParameter("uid", "sign up uid 2");

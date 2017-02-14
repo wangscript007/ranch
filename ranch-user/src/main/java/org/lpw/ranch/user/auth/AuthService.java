@@ -5,6 +5,11 @@ package org.lpw.ranch.user.auth;
  */
 public interface AuthService {
     /**
+     * UID不存在验证器Bean名称。
+     */
+    String VALIDATOR_UID_NOT_EXISTS = AuthModel.NAME + ".validator.uid.not-exists";
+
+    /**
      * 创建新认证。
      *
      * @param userId 用户ID。

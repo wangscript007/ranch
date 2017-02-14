@@ -49,16 +49,7 @@ public class UserServiceImpl implements UserService {
     private UserDao userDao;
 
     @Override
-    public boolean signUp(String uid, String password, int type) {
-        if (authService.findByUid(uid) != null)
-            return false;
-
-        signUpDirect(uid, password, type);
-
-        return true;
-    }
-
-    private void signUpDirect(String uid, String password, int type) {
+    public void signUp(String uid, String password, int type) {
         UserModel user = new UserModel();
         if (type == 1)
             user.setPassword(password(password));
@@ -80,7 +71,7 @@ public class UserServiceImpl implements UserService {
             if (type < 2)
                 return false;
 
-            signUpDirect(uid, password, type);
+            signUp(uid, password, type);
 
             return true;
         }

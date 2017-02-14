@@ -7,10 +7,6 @@ import com.alibaba.fastjson.JSONObject;
  */
 public interface UserService {
     /**
-     * 注册验证器Bean名称。
-     */
-    String VALIDATOR_SIGN_UP = UserModel.NAME + ".validator.sign-up";
-    /**
      * 登入验证器Bean名称。
      */
     String VALIDATOR_SIGN_IN = UserModel.NAME + ".validator.sign-in";
@@ -33,9 +29,8 @@ public interface UserService {
      * @param uid      UID值。
      * @param password 密码。
      * @param type     认证类型。
-     * @return 注册成功则返回true；否则返回false。
      */
-    boolean signUp(String uid, String password, int type);
+    void signUp(String uid, String password, int type);
 
     /**
      * 登入验证。
