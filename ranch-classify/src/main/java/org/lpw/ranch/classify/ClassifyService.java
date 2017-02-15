@@ -11,6 +11,11 @@ import java.util.Map;
  */
 public interface ClassifyService extends RecycleService {
     /**
+     * 分类信息是否存在验证器Bean名称。
+     */
+    String VALIDATOR_EXISTS = ClassifyModel.NAME + ".validator.exists";
+
+    /**
      * 检索分类信息集。
      *
      * @param code 编码前缀。
@@ -45,17 +50,25 @@ public interface ClassifyService extends RecycleService {
     /**
      * 修改分类信息。
      *
-     * @param id     ID值。
-     * @param code   编码。
-     * @param pinyin 拼音码。
-     * @param name   名称。
-     * @param map    参数集。
+     * @param id   ID值。
+     * @param code 编码。
+     * @param key  关键词。
+     * @param name 名称。
+     * @param map  参数集。
      * @return 分类JSON格式数据。
      */
-    JSONObject modify(String id, String code, String pinyin, String name, Map<String, String> map);
+    JSONObject modify(String id, String code, String key, String name, Map<String, String> map);
 
     /**
      * 刷新缓存。
      */
     void refresh();
+
+    /**
+     * 检索分类信息。
+     *
+     * @param id ID值。
+     * @return 分类信息；如果不存在则返回null。
+     */
+    ClassifyModel findById(String id);
 }

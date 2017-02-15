@@ -13,6 +13,7 @@ import org.lpw.tephra.ctrl.validate.Validators;
 public class GetTest extends TestSupport {
     @Test
     public void get() {
+        cache.remove(DocModel.NAME + ".service.random");
         DocModel doc1 = create(1, Audit.Passed);
         DocModel doc2 = create(2, null, null, null, null, Audit.Passed, Recycle.No);
         DocModel doc3 = create(3, Audit.Normal);

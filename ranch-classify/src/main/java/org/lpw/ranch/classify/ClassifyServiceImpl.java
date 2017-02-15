@@ -104,9 +104,7 @@ public class ClassifyServiceImpl implements ClassifyService, DateJob {
                 continue;
 
             Object links = json.get("links");
-            if (links instanceof String[])
-                object.putAll(get((String[]) links));
-            else if (links instanceof JSONArray)
+            if (links instanceof JSONArray)
                 object.putAll(get(((JSONArray) links).toArray(new String[0])));
         }
 
@@ -117,22 +115,19 @@ public class ClassifyServiceImpl implements ClassifyService, DateJob {
     public JSONObject create(Map<String, String> map) {
         ClassifyModel classify = new ClassifyModel();
         classify.setCode(map.get("code"));
-        classify.setPinyin(map.get("pinyin"));
+        classify.setKey(map.get("key"));
         classify.setName(map.get("name"));
 
         return save(classify, new JSONObject(), map);
     }
 
     @Override
-    public JSONObject modify(String id, String code, String pinyin, String name, Map<String, String> map) {
+    public JSONObject modify(String id, String code, String key, String name, Map<String, String> map) {
         ClassifyModel classify = findById(id);
-        if (classify == null)
-            return new JSONObject();
-
         if (!validator.isEmpty(code))
             classify.setCode(code);
-        if (!validator.isEmpty(pinyin))
-            classify.setPinyin(pinyin);
+        if (!validator.isEmpty(key))
+            classify.setKey(key);
         if (!validator.isEmpty(name))
             classify.setName(name);
 
@@ -154,9 +149,12 @@ public class ClassifyServiceImpl implements ClassifyService, DateJob {
     private boolean ignore(String key) {
         if (ignores == null) {
             ignores = new HashSet<>();
+            ignores.add("id");
             ignores.add("code");
-            ignores.add("pinyin");
+            ignores.add("key");
             ignores.add("name");
+            ignores.add("sign-time");
+            ignores.add("sign");
         }
 
         return ignores.contains(key);
@@ -177,7 +175,7 @@ public class ClassifyServiceImpl implements ClassifyService, DateJob {
 
             object.put("id", classify.getId());
             object.put("code", classify.getCode());
-            object.put("pinyin", classify.getPinyin());
+            object.put("key", classify.getKey());
             object.put("name", classify.getName());
             if (!validator.isEmpty(classify.getJson()))
                 object.putAll(JSON.parseObject(classify.getJson()));
@@ -230,7 +228,8 @@ public class ClassifyServiceImpl implements ClassifyService, DateJob {
         resetRandom();
     }
 
-    private ClassifyModel findById(String id) {
+    @Override
+    public ClassifyModel findById(String id) {
         return classifyDao.findById(id);
     }
 

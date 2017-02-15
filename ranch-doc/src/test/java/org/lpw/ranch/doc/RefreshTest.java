@@ -13,6 +13,7 @@ public class RefreshTest extends TestSupport {
     public void refresh() {
         String cacheKey = DocModel.NAME + ".service.random";
         cache.remove(cacheKey);
+
         mockHelper.reset();
         mockHelper.mock("/doc/refresh");
         JSONObject object = mockHelper.getResponse().asJson();

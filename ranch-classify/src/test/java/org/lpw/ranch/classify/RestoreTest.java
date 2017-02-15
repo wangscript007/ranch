@@ -63,10 +63,10 @@ public class RestoreTest extends TestSupport {
             ClassifyModel classify = liteOrm.findById(ClassifyModel.class, list.get(i).getId());
             if (i == 1 || i == 10) {
                 Assert.assertEquals(Recycle.No.getValue(), classify.getRecycle());
-                Assert.assertTrue(classifyService.getJsons(new String[]{classify.getId()}, false).containsKey(classify.getId()));
+                Assert.assertTrue(classifyService.get(new String[]{classify.getId()}).containsKey(classify.getId()));
             } else {
                 Assert.assertEquals(Recycle.Yes.getValue(), classify.getRecycle());
-                Assert.assertFalse(classifyService.getJsons(new String[]{classify.getId()}, false).containsKey(classify.getId()));
+                Assert.assertFalse(classifyService.get(new String[]{classify.getId()}).containsKey(classify.getId()));
             }
         }
     }

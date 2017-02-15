@@ -193,9 +193,7 @@ public class DocServiceImpl implements DocService, MinuteJob, DateJob {
         recycleHelper.restore(DocModel.class, id);
     }
 
-    /**
-     * 刷新缓存。
-     */
+    @Override
     public void refresh() {
         resetRandom();
     }

@@ -16,6 +16,7 @@ public class QueryTest extends TestSupport {
         for (int i = 0; i < 20; i++) {
             ClassifyModel classify = new ClassifyModel();
             classify.setCode("code " + converter.toString(i, "00"));
+            classify.setKey("key " + converter.toString(i, "00"));
             classify.setName("name " + converter.toString(i, "00"));
             classify.setRecycle((i % 2 == 0 ? Recycle.No : Recycle.Yes).getValue());
             liteOrm.save(classify);
@@ -42,7 +43,8 @@ public class QueryTest extends TestSupport {
         Assert.assertEquals(1, data.getIntValue("number"));
         JSONArray array = data.getJSONArray("list");
         for (int i = 0, size = array.size(); i < size; i++)
-            equalsCodeName(array.getJSONObject(i), "code " + converter.toString(2 * i, "00"), "name " + converter.toString(2 * i, "00"));
+            equalsCodeKeyName(array.getJSONObject(i), "code " + converter.toString(2 * i, "00"),
+                    "key " + converter.toString(2 * i, "00"), "name " + converter.toString(2 * i, "00"));
 
         mockHelper.reset();
         mockHelper.getRequest().addParameter("code", "code 1");
@@ -58,6 +60,6 @@ public class QueryTest extends TestSupport {
         Assert.assertEquals(1, data.getIntValue("number"));
         array = data.getJSONArray("list");
         for (int i = 0; i < 5; i++)
-            equalsCodeName(array.getJSONObject(i), "code " + (10 + 2 * i), "name " + (10 + 2 * i));
+            equalsCodeKeyName(array.getJSONObject(i), "code " + (10 + 2 * i), "key " + (10 + 2 * i), "name " + (10 + 2 * i));
     }
 }

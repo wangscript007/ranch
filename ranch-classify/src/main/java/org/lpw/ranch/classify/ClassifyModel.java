@@ -21,7 +21,7 @@ public class ClassifyModel extends RecycleModelSupport {
     static final String NAME = "ranch.classify";
 
     private String code; // 编码
-    private String pinyin; // 拼音码
+    private String key; // 关键词
     private String name; // 名称
     private String json; // JSON扩展
 
@@ -36,13 +36,13 @@ public class ClassifyModel extends RecycleModelSupport {
     }
 
     @Jsonable
-    @Column(name = "c_pinyin")
-    public String getPinyin() {
-        return pinyin;
+    @Column(name = "c_key")
+    public String getKey() {
+        return key;
     }
 
-    public void setPinyin(String pinyin) {
-        this.pinyin = pinyin;
+    public void setKey(String key) {
+        this.key = key;
     }
 
     @Jsonable
