@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -41,6 +42,7 @@ public class ClassifyServiceImpl implements ClassifyService, DateJob {
     private RecycleHelper recycleHelper;
     @Inject
     private ClassifyDao classifyDao;
+    private Set<String> ignores;
 
     @Override
     public JSONObject query(String code) {
@@ -86,9 +88,8 @@ public class ClassifyServiceImpl implements ClassifyService, DateJob {
         return null;
     }
 
-    @SuppressWarnings({"unchecked"})
     @Override
-    public JSONObject getJsons(String[] ids, boolean links) {
+    public JSONObject get(String[] ids) {
         JSONObject object = new JSONObject();
         if (validator.isEmpty(ids))
             return object;
@@ -99,55 +100,66 @@ public class ClassifyServiceImpl implements ClassifyService, DateJob {
                 continue;
 
             object.put(id, json);
-            if (links && json.containsKey("label")) {
-                Object obj = json.get("label");
-                if (!(obj instanceof JSONObject))
-                    continue;
+            if (!json.containsKey("links"))
+                continue;
 
-                JSONObject label = (JSONObject) obj;
-                if (label.containsKey("links") && label.getBoolean("links")) {
-                    label.keySet().forEach(key -> {
-                        String name = key;
-                        if (name.equals("links"))
-                            return;
-
-                        JSONObject link = getJson(name, null, Recycle.No);
-                        if (!link.isEmpty())
-                            object.put(name, link);
-                    });
-                }
-            }
+            Object links = json.get("links");
+            if (links instanceof String[])
+                object.putAll(get((String[]) links));
+            else if (links instanceof JSONArray)
+                object.putAll(get(((JSONArray) links).toArray(new String[0])));
         }
 
         return object;
     }
 
     @Override
-    public JSONObject create(String code, String name, String label) {
+    public JSONObject create(Map<String, String> map) {
         ClassifyModel classify = new ClassifyModel();
-        classify.setCode(code);
-        classify.setName(name);
-        classify.setLabel(label);
-        classifyDao.save(classify);
+        classify.setCode(map.get("code"));
+        classify.setPinyin(map.get("pinyin"));
+        classify.setName(map.get("name"));
 
-        return getJson(classify.getId(), classify, Recycle.No);
+        return save(classify, new JSONObject(), map);
     }
 
     @Override
-    public JSONObject modify(String id, String code, String name, String label) {
+    public JSONObject modify(String id, String code, String pinyin, String name, Map<String, String> map) {
         ClassifyModel classify = findById(id);
         if (classify == null)
             return new JSONObject();
 
         if (!validator.isEmpty(code))
             classify.setCode(code);
+        if (!validator.isEmpty(pinyin))
+            classify.setPinyin(pinyin);
         if (!validator.isEmpty(name))
             classify.setName(name);
-        if (!validator.isEmpty(label))
-            classify.setLabel(label);
+
+        return save(classify, validator.isEmpty(classify.getJson()) ? new JSONObject() : JSON.parseObject(classify.getJson()), map);
+    }
+
+    private JSONObject save(ClassifyModel classify, JSONObject json, Map<String, String> map) {
+        map.forEach((key, value) -> {
+            if (!ignore(key))
+                json.put(key, value);
+        });
+        if (!json.isEmpty())
+            classify.setJson(json.toJSONString());
         classifyDao.save(classify);
 
-        return getJson(id, classify, Recycle.No);
+        return getJson(classify.getId(), classify, Recycle.No);
+    }
+
+    private boolean ignore(String key) {
+        if (ignores == null) {
+            ignores = new HashSet<>();
+            ignores.add("code");
+            ignores.add("pinyin");
+            ignores.add("name");
+        }
+
+        return ignores.contains(key);
     }
 
     private JSONObject getJson(String id, ClassifyModel classify, Recycle recycle) {
@@ -165,9 +177,10 @@ public class ClassifyServiceImpl implements ClassifyService, DateJob {
 
             object.put("id", classify.getId());
             object.put("code", classify.getCode());
+            object.put("pinyin", classify.getPinyin());
             object.put("name", classify.getName());
-            if (!validator.isEmpty(classify.getLabel()))
-                object.put("label", classify.getLabel().charAt(0) == '{' ? JSON.parseObject(classify.getLabel()) : classify.getLabel());
+            if (!validator.isEmpty(classify.getJson()))
+                object.putAll(JSON.parseObject(classify.getJson()));
             cache.put(cacheKey, object, false);
         }
 

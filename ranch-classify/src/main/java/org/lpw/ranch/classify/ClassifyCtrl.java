@@ -64,6 +64,7 @@ public class ClassifyCtrl extends RecycleCtrlSupport {
     /**
      * 创建新分类。
      * code 编码。
+     * pinyin 拼音码。
      * name 名称。
      * label 标签。
      *
@@ -72,18 +73,20 @@ public class ClassifyCtrl extends RecycleCtrlSupport {
     @Execute(name = "create", validates = {
             @Validate(validator = Validators.NOT_EMPTY, parameter = "code", failureCode = 2),
             @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "code", failureCode = 3),
-            @Validate(validator = Validators.NOT_EMPTY, parameter = "name", failureCode = 4),
-            @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "name", failureCode = 5),
+            @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "pinyin", failureCode = 4),
+            @Validate(validator = Validators.NOT_EMPTY, parameter = "name", failureCode = 5),
+            @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "name", failureCode = 6),
             @Validate(validator = Validators.SIGN)
     })
     public Object create() {
-        return templates.get().success(classifyService.create(request.get("code"), request.get("name"), request.get("label")), null);
+        return templates.get().success(classifyService.create(request.getMap()), null);
     }
 
     /**
      * 修改分类信息。
      * id ID值。
      * code 编码；为空表示不修改。
+     * pinyin 拼音码；为空表示不修改。
      * name 名称；为空表示不修改。
      * label 标签；为空表示不修改。
      *
@@ -92,7 +95,8 @@ public class ClassifyCtrl extends RecycleCtrlSupport {
     @Execute(name = "modify", validates = {
             @Validate(validator = Validators.ID, parameter = "id", failureCode = 1),
             @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "code", failureCode = 3),
-            @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "name", failureCode = 5),
+            @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "pinyin", failureCode = 4),
+            @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "name", failureCode = 6),
             @Validate(validator = Validators.SIGN)
     })
     public Object modify() {

@@ -1,7 +1,7 @@
 package org.lpw.ranch.classify;
 
-import org.lpw.ranch.recycle.RecycleModelSupport;
 import org.lpw.tephra.dao.model.Jsonable;
+import org.lpw.ranch.recycle.RecycleModelSupport;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -21,8 +21,9 @@ public class ClassifyModel extends RecycleModelSupport {
     static final String NAME = "ranch.classify";
 
     private String code; // 编码
+    private String pinyin; // 拼音码
     private String name; // 名称
-    private String label; // 标签
+    private String json; // JSON扩展
 
     @Jsonable
     @Column(name = "c_code")
@@ -32,6 +33,16 @@ public class ClassifyModel extends RecycleModelSupport {
 
     public void setCode(String code) {
         this.code = code;
+    }
+
+    @Jsonable
+    @Column(name = "c_pinyin")
+    public String getPinyin() {
+        return pinyin;
+    }
+
+    public void setPinyin(String pinyin) {
+        this.pinyin = pinyin;
     }
 
     @Jsonable
@@ -45,12 +56,12 @@ public class ClassifyModel extends RecycleModelSupport {
     }
 
     @Jsonable
-    @Column(name = "c_label")
-    public String getLabel() {
-        return label;
+    @Column(name = "c_json")
+    public String getJson() {
+        return json;
     }
 
-    public void setLabel(String label) {
-        this.label = label;
+    public void setJson(String json) {
+        this.json = json;
     }
 }
