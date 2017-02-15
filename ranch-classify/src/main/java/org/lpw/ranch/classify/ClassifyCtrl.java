@@ -52,13 +52,12 @@ public class ClassifyCtrl extends RecycleCtrlSupport {
     /**
      * 获取分类信息。
      * ids 分类信息ID集。
-     * links 是否解析链接映射。
      *
      * @return {id:ClassifyModel}。
      */
     @Execute(name = "get")
     public Object get() {
-        return classifyService.getJsons(request.getAsArray("ids"), request.getAsBoolean("links"));
+        return classifyService.get(request.getAsArray("ids"));
     }
 
     /**
@@ -100,7 +99,7 @@ public class ClassifyCtrl extends RecycleCtrlSupport {
             @Validate(validator = Validators.SIGN)
     })
     public Object modify() {
-        return templates.get().success(classifyService.modify(request.get("id"), request.get("code"), request.get("name"), request.get("label")), null);
+        return templates.get().success(classifyService.modify(request.get("id"), request.get("code"), request.get("pinyin"), request.get("name"), request.getMap()), null);
     }
 
     /**
