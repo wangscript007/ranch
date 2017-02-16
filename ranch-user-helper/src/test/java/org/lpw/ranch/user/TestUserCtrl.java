@@ -8,11 +8,11 @@ import org.springframework.stereotype.Controller;
 /**
  * @author lpw
  */
-@Controller("ranch.base.user.ctrl")
-@Execute(name = "/base/user/", code = "10")
+@Controller("ranch.user-helper.ctrl")
+@Execute(name = "/user/", code = "10")
 public class TestUserCtrl {
     @Execute(name = "sign", validates = {
-            @Validate(validator = User.VALIDATOR_SIGN_IN)
+            @Validate(validator = UserHelper.VALIDATOR_SIGN_IN)
     })
     public Object sign() {
         JSONObject object = new JSONObject();

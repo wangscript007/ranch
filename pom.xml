@@ -15,6 +15,7 @@
         <module>ranch-comment</module>
         <module>ranch-doc</module>
         <module>ranch-user</module>
+        <module>ranch-user-helper</module>
         <module>ranch-archives</module>
         <module>ranch-web</module>
         <module>ranch-test</module>

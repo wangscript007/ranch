@@ -9,14 +9,14 @@ import javax.inject.Inject;
 /**
  * @author lpw
  */
-@Controller(User.VALIDATOR_SIGN_IN)
+@Controller(UserHelper.VALIDATOR_SIGN_IN)
 public class SignInValidatorImpl extends ValidatorSupport {
     @Inject
-    private User user;
+    private UserHelper userHelper;
 
     @Override
     public boolean validate(ValidateWrapper validate, String parameter) {
-        return !user.sign().isEmpty();
+        return !userHelper.sign().isEmpty();
     }
 
     @Override
@@ -26,6 +26,6 @@ public class SignInValidatorImpl extends ValidatorSupport {
 
     @Override
     protected String getDefaultFailureMessageKey() {
-        return "ranch.base.user.need-sign-in";
+        return "ranch.user-helper.need-sign-in";
     }
 }

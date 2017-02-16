@@ -20,7 +20,7 @@
     <dependencies>
         <dependency>
             <groupId>org.lpw.ranch</groupId>
-            <artifactId>ranch-base</artifactId>
+            <artifactId>ranch-user-helper</artifactId>
             <version>0.5.0-RELEASE</version>
         </dependency>
         <dependency>

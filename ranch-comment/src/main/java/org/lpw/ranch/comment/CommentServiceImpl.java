@@ -5,7 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import org.lpw.ranch.audit.Audit;
 import org.lpw.ranch.audit.AuditHelper;
 import org.lpw.ranch.recycle.RecycleHelper;
-import org.lpw.ranch.user.User;
+import org.lpw.ranch.user.UserHelper;
 import org.lpw.ranch.util.Carousel;
 import org.lpw.ranch.util.Pagination;
 import org.lpw.tephra.cache.Cache;
@@ -35,7 +35,7 @@ public class CommentServiceImpl implements CommentService {
     @Inject
     private Carousel carousel;
     @Inject
-    private User user;
+    private UserHelper userHelper;
     @Inject
     private Pagination pagination;
     @Inject
@@ -102,7 +102,7 @@ public class CommentServiceImpl implements CommentService {
             if (owner)
                 object.put("owner", carousel.get(comment.getKey() + ".get", comment.getOwner()));
             if (author)
-                object.put("author", user.get(comment.getAuthor()));
+                object.put("author", userHelper.get(comment.getAuthor()));
             if (child)
                 getChildren(object, comment);
             cache.put(cacheKey, object, false);

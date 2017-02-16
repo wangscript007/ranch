@@ -7,10 +7,10 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>ranch-comment</artifactId>
+    <artifactId>ranch-user-helper</artifactId>
     <packaging>jar</packaging>
 
-    <name>ranch-comment</name>
+    <name>ranch-user-helper</name>
     <url>http://maven.apache.org</url>
 
     <properties>
@@ -20,7 +20,7 @@
     <dependencies>
         <dependency>
             <groupId>org.lpw.ranch</groupId>
-            <artifactId>ranch-user-helper</artifactId>
+            <artifactId>ranch-base</artifactId>
             <version>0.5.0-RELEASE</version>
         </dependency>
         <dependency>

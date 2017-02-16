@@ -4,7 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import org.lpw.ranch.audit.Audit;
 import org.lpw.ranch.audit.AuditHelper;
 import org.lpw.ranch.recycle.RecycleHelper;
-import org.lpw.ranch.user.User;
+import org.lpw.ranch.user.UserHelper;
 import org.lpw.ranch.util.Carousel;
 import org.lpw.tephra.cache.Cache;
 import org.lpw.tephra.dao.model.ModelHelper;
@@ -44,7 +44,7 @@ public class DocServiceImpl implements DocService, MinuteJob, DateJob {
     @Inject
     private Carousel carousel;
     @Inject
-    private User user;
+    private UserHelper userHelper;
     @Inject
     private AuditHelper auditHelper;
     @Inject
@@ -132,7 +132,7 @@ public class DocServiceImpl implements DocService, MinuteJob, DateJob {
         JSONObject object = modelHelper.toJson(doc, ignores);
         if (owner)
             object.put("owner", carousel.get(doc.getKey() + ".get", doc.getOwner()));
-        object.put("author", user.get(doc.getAuthor()));
+        object.put("author", userHelper.get(doc.getAuthor()));
 
         return object;
     }
