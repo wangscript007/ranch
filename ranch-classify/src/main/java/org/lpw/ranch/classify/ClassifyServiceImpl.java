@@ -136,11 +136,15 @@ public class ClassifyServiceImpl implements ClassifyService, DateJob {
 
     private JSONObject save(ClassifyModel classify, JSONObject json, Map<String, String> map) {
         map.forEach((key, value) -> {
-            if (!ignore(key))
+            if (ignore(key))
+                return;
+
+            if (key.charAt(0) == '-')
+                json.remove(key.substring(1));
+            else
                 json.put(key, value);
         });
-        if (!json.isEmpty())
-            classify.setJson(json.toJSONString());
+        classify.setJson(json.toJSONString());
         classifyDao.save(classify);
 
         return getJson(classify.getId(), classify, Recycle.No);

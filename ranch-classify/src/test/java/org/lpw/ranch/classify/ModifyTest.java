@@ -116,6 +116,8 @@ public class ModifyTest extends TestSupport {
 
         mockHelper.reset();
         mockHelper.getRequest().addParameter("id", list.get(0).getId());
+        mockHelper.getRequest().addParameter("json", "json 111");
+        mockHelper.getRequest().addParameter("-label", "label 11");
         sign.put(mockHelper.getRequest().getMap(), null);
         mockHelper.mock("/classify/modify");
         object = mockHelper.getResponse().asJson();
@@ -123,15 +125,13 @@ public class ModifyTest extends TestSupport {
         data = object.getJSONObject("data");
         Assert.assertEquals(list.get(0).getId(), data.getString("id"));
         equalsCodeKeyName(data, 11);
-        Assert.assertEquals("json 11", data.getString("json"));
-        Assert.assertEquals("label 11", data.getString("label"));
+        Assert.assertEquals("json 111", data.getString("json"));
+        Assert.assertFalse(data.containsKey("label"));
         classify = liteOrm.findById(ClassifyModel.class, list.get(0).getId());
         Assert.assertEquals("code 11", classify.getCode());
         Assert.assertEquals("key 11", classify.getKey());
         Assert.assertEquals("name 11", classify.getName());
-        json = JSON.parseObject(classify.getJson());
-        Assert.assertEquals("json 11", json.getString("json"));
-        Assert.assertEquals("label 11", json.getString("label"));
+        Assert.assertEquals("{\"json\":\"json 111\"}", classify.getJson());
         classify = liteOrm.findById(ClassifyModel.class, list.get(1).getId());
         Assert.assertEquals("code 1", classify.getCode());
         Assert.assertEquals("key 1", classify.getKey());
@@ -166,9 +166,7 @@ public class ModifyTest extends TestSupport {
         Assert.assertEquals("code 11", classify.getCode());
         Assert.assertEquals("key 11", classify.getKey());
         Assert.assertEquals("name 11", classify.getName());
-        json = JSON.parseObject(classify.getJson());
-        Assert.assertEquals("json 11", json.getString("json"));
-        Assert.assertEquals("label 11", json.getString("label"));
+        Assert.assertEquals("{\"json\":\"json 111\"}", classify.getJson());
         classify = liteOrm.findById(ClassifyModel.class, list.get(1).getId());
         Assert.assertEquals("code 1", classify.getCode());
         Assert.assertEquals("key 1", classify.getKey());

@@ -69,3 +69,20 @@ curl -d "pageSize=20&pageNum=1" http://127.0.0.1:8080/classify/query
     }
 }
 ```
+
+移除扩展属性时，只需在更新接口参数中添加“-要删除扩展属性名”，如：
+```text
+curl -d "code=123&key=abc&name=classify&custom=hello2&-u&id=82991f26-2213-4531-8996-7fb24d62304c" http://127.0.0.1:8080/classify/modify
+{
+    "code": 0,
+    "data": {
+        "code": "123",
+        "custom": "hello2",
+        "name": "classify",
+        "say": "hi",
+        "id": "82991f26-2213-4531-8996-7fb24d62304c",
+        "key": "abc"
+    }
+}
+```
+> “-u”表示删除扩展属性“u”。
