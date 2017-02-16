@@ -13,11 +13,13 @@
     {
         "id": "ID值",
         "code": "编码",
+        "key": "关键词",
         "name": "名称",
-        "label": "标签",
         "children": []
     }
 ]
 ```
 
 - children 子分类集，如果不包含子分类则不返回children属性。
+
+> [扩展属性](json.md)

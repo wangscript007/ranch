@@ -23,7 +23,7 @@ public class PortraitUploadListenerImpl implements UploadListener {
 
     @Override
     public boolean isUploadEnable(String key, String contentType, String name) {
-        return validator.isImage(contentType, name)&&!userService.sign().isEmpty();
+        return validator.isImage(contentType, name) && !userService.sign().isEmpty();
     }
 
     @Override
