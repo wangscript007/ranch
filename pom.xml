@@ -12,6 +12,7 @@
         <module>ranch-base</module>
         <module>ranch-gps</module>
         <module>ranch-classify</module>
+        <module>ranch-classify-helper</module>
         <module>ranch-comment</module>
         <module>ranch-doc</module>
         <module>ranch-user</module>

@@ -10,9 +10,11 @@ Ranch目前包含以下模块：
 - [base](ranch-base/) —— 基础支持。
 - [gps](ranch-gps/) —— GPS操作。
 - [classify](ranch-classify/) —— 分类 & 数据字典，支持多级。
+- [classify-helper](ranch-classify-helper/) —— 分类 & 数据字典支持。
 - [comment](ranch-comment/) —— 评论。
 - [doc](ranch-doc/) —— 文档。
 - [user](ranch-user/) —— 用户 & 认证。
+- [user-helper](ranch-user-helper/) —— 用户支持。
 - [archives](ranch-archives/) —— 档案。
 - [test](ranch-test/) —— 单元测试支持。
 

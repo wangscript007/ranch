@@ -1,10 +1,12 @@
+# 用户支持
+```java
 package org.lpw.ranch.user;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
 /**
- * 用户服务支持。
+ * 用户服务支持类。
  *
  * @author lpw
  */
@@ -38,3 +40,4 @@ public interface UserHelper {
      */
     JSONObject sign();
 }
+```
