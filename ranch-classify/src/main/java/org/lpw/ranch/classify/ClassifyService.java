@@ -40,6 +40,14 @@ public interface ClassifyService extends RecycleService {
     JSONObject get(String[] ids);
 
     /**
+     * 检索指定关键词的分类信息集。
+     *
+     * @param key 关键词前缀。
+     * @return 分类信息集。
+     */
+    JSONArray list(String key);
+
+    /**
      * 创建新分类。
      *
      * @param map 参数集。

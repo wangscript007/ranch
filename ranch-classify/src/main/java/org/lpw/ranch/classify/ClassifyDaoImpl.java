@@ -2,6 +2,9 @@ package org.lpw.ranch.classify;
 
 import org.lpw.ranch.recycle.Recycle;
 import org.lpw.tephra.dao.jdbc.DataSource;
+import org.lpw.tephra.dao.jdbc.Sql;
+import org.lpw.tephra.dao.jdbc.SqlTable;
+import org.lpw.tephra.dao.model.ModelTables;
 import org.lpw.tephra.dao.orm.PageList;
 import org.lpw.tephra.dao.orm.lite.LiteOrm;
 import org.lpw.tephra.dao.orm.lite.LiteQuery;
@@ -21,6 +24,11 @@ class ClassifyDaoImpl implements ClassifyDao {
     private DataSource dataSource;
     @Inject
     private LiteOrm liteOrm;
+    @Inject
+    private Sql sql;
+    @Inject
+    private ModelTables modelTables;
+    private String querySql;
 
     @Override
     public PageList<ClassifyModel> query(int pageSize, int pageNum) {
@@ -31,6 +39,22 @@ class ClassifyDaoImpl implements ClassifyDao {
     public PageList<ClassifyModel> query(String code, int pageSize, int pageNum) {
         return liteOrm.query(new LiteQuery(ClassifyModel.class).where(Recycle.No.getSql() + " and c_code like ?").order("c_code").size(pageSize).page(pageNum),
                 new Object[]{dataSource.getDialect(null).getLike(code, false, true)});
+    }
+
+    @Override
+    public List<String> query(String key, int size) {
+        if (querySql == null) {
+            StringBuilder sql = new StringBuilder("select c_id from ").append(modelTables.get(ClassifyModel.class).getTableName()).append(" where c_key like ?");
+            dataSource.getDialect(null).appendPagination(sql, size, 1);
+            querySql = sql.toString();
+        }
+
+        SqlTable sqlTable = sql.query(querySql, new Object[]{dataSource.getDialect(null).getLike(key, false, true)});
+        List<String> list = new ArrayList<>();
+        for (int i = 0; i < sqlTable.getRowCount(); i++)
+            list.add(sqlTable.get(i, "c_id"));
+
+        return list;
     }
 
     @Override

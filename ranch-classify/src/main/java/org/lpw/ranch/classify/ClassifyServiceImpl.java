@@ -12,6 +12,7 @@ import org.lpw.tephra.scheduler.DateJob;
 import org.lpw.tephra.util.Generator;
 import org.lpw.tephra.util.Json;
 import org.lpw.tephra.util.Validator;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
@@ -42,6 +43,8 @@ public class ClassifyServiceImpl implements ClassifyService, DateJob {
     private RecycleHelper recycleHelper;
     @Inject
     private ClassifyDao classifyDao;
+    @Value("${ranch.classify.query-by-key.size:20}")
+    private int size;
     private Set<String> ignores;
 
     @Override
@@ -109,6 +112,17 @@ public class ClassifyServiceImpl implements ClassifyService, DateJob {
         }
 
         return object;
+    }
+
+    @Override
+    public JSONArray list(String key) {
+        int size = pagination.getPageSize();
+        if (size <= 0)
+            size = this.size;
+        JSONArray array = new JSONArray();
+        classifyDao.query(key, size).forEach(id -> array.add(getJson(id, null, Recycle.No)));
+
+        return array;
     }
 
     @Override
