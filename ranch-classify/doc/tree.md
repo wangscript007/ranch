@@ -23,3 +23,5 @@
 - children 子分类集，如果不包含子分类则不返回children属性。
 
 > [扩展属性](json.md)
+
+> [刷新缓存](refresh.md)

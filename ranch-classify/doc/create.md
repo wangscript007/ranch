@@ -21,4 +21,6 @@
 
 > [扩展属性](json.md)
 
+> [刷新缓存](refresh.md)
+
 > 后台管理接口，需验证[请求参数签名](https://github.com/heisedebaise/tephra/blob/master/tephra-ctrl/doc/sign.md)。

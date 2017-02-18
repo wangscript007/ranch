@@ -1,6 +1,7 @@
 package org.lpw.ranch.util;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import org.lpw.tephra.carousel.CarouselHelper;
 import org.lpw.tephra.ctrl.context.Header;
@@ -32,7 +33,7 @@ public class CarouselImpl implements Carousel {
         object.put("id", id);
         Map<String, String> parameter = new HashMap<>();
         parameter.put("ids", id);
-        JSONObject obj = service(key, null, parameter, cacheTime);
+        JSONObject obj = service(key, null, parameter, cacheTime, JSONObject.class);
         if (obj.containsKey(id))
             object.putAll(obj.getJSONObject(id));
 
@@ -40,20 +41,20 @@ public class CarouselImpl implements Carousel {
     }
 
     @Override
-    public JSONObject service(String key, Map<String, String> parameter) {
-        return service(key, null, parameter, 0);
+    public <T> T service(String key, Map<String, String> header, Map<String, String> parameter, boolean cacheable, Class<T> jsonClass) {
+        return service(key, header, parameter, cacheable ? cacheTime : 0, jsonClass);
     }
 
     @Override
-    public JSONObject service(String key, Map<String, String> header, Map<String, String> parameter, int cacheTime) {
+    public <T> T service(String key, Map<String, String> header, Map<String, String> parameter, int cacheTime, Class<T> jsonClass) {
         String service = carouselHelper.service(key, header == null ? this.header.getMap() : header, parameter, cacheTime);
         if (validator.isEmpty(service))
-            return new JSONObject();
+            return (T) (jsonClass == JSONArray.class ? new JSONArray() : new JSONObject());
 
         JSONObject object = JSON.parseObject(service);
         if (object.getIntValue("code") != 0)
-            return new JSONObject();
+            return (T) (jsonClass == JSONArray.class ? new JSONArray() : new JSONObject());
 
-        return object.getJSONObject("data");
+        return (T) (jsonClass == JSONArray.class ? object.getJSONArray("data") : object.getJSONObject("data"));
     }
 }

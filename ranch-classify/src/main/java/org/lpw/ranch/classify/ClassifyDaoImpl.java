@@ -28,7 +28,6 @@ class ClassifyDaoImpl implements ClassifyDao {
     private Sql sql;
     @Inject
     private ModelTables modelTables;
-    private String querySql;
 
     @Override
     public PageList<ClassifyModel> query(int pageSize, int pageNum) {
@@ -43,13 +42,10 @@ class ClassifyDaoImpl implements ClassifyDao {
 
     @Override
     public List<String> query(String key, int size) {
-        if (querySql == null) {
-            StringBuilder sql = new StringBuilder("select c_id from ").append(modelTables.get(ClassifyModel.class).getTableName()).append(" where c_key like ?");
-            dataSource.getDialect(null).appendPagination(sql, size, 1);
-            querySql = sql.toString();
-        }
-
-        SqlTable sqlTable = sql.query(querySql, new Object[]{dataSource.getDialect(null).getLike(key, false, true)});
+        StringBuilder sql = new StringBuilder("select c_id from ").append(modelTables.get(ClassifyModel.class).getTableName())
+                .append(" where ").append(Recycle.No.getSql()).append(" and c_key like ?");
+        dataSource.getDialect(null).appendPagination(sql, size, 1);
+        SqlTable sqlTable = this.sql.query(sql.toString(), new Object[]{dataSource.getDialect(null).getLike(key, false, true)});
         List<String> list = new ArrayList<>();
         for (int i = 0; i < sqlTable.getRowCount(); i++)
             list.add(sqlTable.get(i, "c_id"));

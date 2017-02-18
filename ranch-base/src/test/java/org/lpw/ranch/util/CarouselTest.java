@@ -1,5 +1,6 @@
 package org.lpw.ranch.util;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import org.junit.Assert;
 import org.junit.Test;
@@ -70,11 +71,13 @@ public class CarouselTest extends TephraTestSupport {
         mockHelper.reset();
         mockHelper.getHeader().setMap(newMap("header"));
         mockHelper.mock("/carousel");
-        mockCarousel.reset();
-        JSONObject object = carousel.service("key", null);
-        Assert.assertTrue(object.isEmpty());
+        object();
+        array();
+    }
 
-        mockCarousel.register("key", (key, header, parameter, cacheTime) -> {
+    private void object() {
+        mockCarousel.reset();
+        mockCarousel.register("key.object", (key, header, parameter, cacheTime) -> {
             JSONObject obj = new JSONObject();
             if (cacheTime < 5) {
                 JSONObject data = new JSONObject();
@@ -90,33 +93,90 @@ public class CarouselTest extends TephraTestSupport {
 
             return obj.toString();
         });
-        object = carousel.service("key", null);
-        Assert.assertEquals(3, object.size());
-        equals(object, "header");
-        Assert.assertEquals(0, object.getIntValue("cacheTime"));
 
         Map<String, String> parameter = newMap("parameter");
-        object = carousel.service("key", parameter);
+        JSONObject object = carousel.service("key", null, parameter, false, JSONObject.class);
+        Assert.assertTrue(object.isEmpty());
+
+        object = carousel.service("key.object", null, parameter, false, JSONObject.class);
         Assert.assertEquals(5, object.size());
         equals(object, "header");
         equals(object, "parameter");
         Assert.assertEquals(0, object.getIntValue("cacheTime"));
 
-        object = carousel.service("key", null, parameter, 1);
+        object = carousel.service("key.object", null, parameter, 1, JSONObject.class);
         Assert.assertEquals(5, object.size());
         equals(object, "header");
         equals(object, "parameter");
         Assert.assertEquals(1, object.getIntValue("cacheTime"));
 
         Map<String, String> header = newMap("new header");
-        object = carousel.service("key", header, parameter, 2);
+        object = carousel.service("key.object", header, parameter, 2, JSONObject.class);
         Assert.assertEquals(5, object.size());
         equals(object, "new header");
         equals(object, "parameter");
         Assert.assertEquals(2, object.getIntValue("cacheTime"));
 
-        object = carousel.service("key", header, parameter, 5);
+        object = carousel.service("key.object", header, parameter, 5, JSONObject.class);
         Assert.assertTrue(object.isEmpty());
+        object = carousel.service("key.object", header, parameter, true, JSONObject.class);
+        Assert.assertTrue(object.isEmpty());
+    }
+
+    private void array() {
+        mockCarousel.reset();
+        mockCarousel.register("key.array", (key, header, parameter, cacheTime) -> {
+            JSONObject obj = new JSONObject();
+            if (cacheTime < 5) {
+                JSONObject data = new JSONObject();
+                if (header != null)
+                    data.putAll(header);
+                if (parameter != null)
+                    data.putAll(parameter);
+                data.put("cacheTime", cacheTime);
+                obj.put("code", 0);
+                JSONArray array = new JSONArray();
+                array.add(data);
+                obj.put("data", array);
+            } else
+                obj.put("code", cacheTime);
+
+            return obj.toString();
+        });
+
+        Map<String, String> parameter = newMap("parameter");
+        JSONArray array = carousel.service("key", null, parameter, false, JSONArray.class);
+        Assert.assertTrue(array.isEmpty());
+
+        array = carousel.service("key.array", null, parameter, false, JSONArray.class);
+        Assert.assertEquals(1, array.size());
+        JSONObject object = array.getJSONObject(0);
+        Assert.assertEquals(5, object.size());
+        equals(object, "header");
+        equals(object, "parameter");
+        Assert.assertEquals(0, object.getIntValue("cacheTime"));
+
+        array = carousel.service("key.array", null, parameter, 1, JSONArray.class);
+        Assert.assertEquals(1, array.size());
+        object = array.getJSONObject(0);
+        Assert.assertEquals(5, object.size());
+        equals(object, "header");
+        equals(object, "parameter");
+        Assert.assertEquals(1, object.getIntValue("cacheTime"));
+
+        Map<String, String> header = newMap("new header");
+        array = carousel.service("key.array", header, parameter, 2, JSONArray.class);
+        Assert.assertEquals(1, array.size());
+        object = array.getJSONObject(0);
+        Assert.assertEquals(5, object.size());
+        equals(object, "new header");
+        equals(object, "parameter");
+        Assert.assertEquals(2, object.getIntValue("cacheTime"));
+
+        array = carousel.service("key.array", header, parameter, 5, JSONArray.class);
+        Assert.assertTrue(array.isEmpty());
+        array = carousel.service("key.array", header, parameter, true, JSONArray.class);
+        Assert.assertTrue(array.isEmpty());
     }
 
     private Map<String, String> newMap(String name) {

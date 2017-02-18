@@ -6,6 +6,8 @@
 
 [获取分类信息](doc/get.md)
 
+[检索分类信息集](doc/list.md)
+
 [创建新分类](doc/create.md)
 
 [修改分类信息](doc/modify.md)
@@ -17,3 +19,5 @@
 [删除到回收站](../ranch-base/doc/recycle-delete.md)
 
 [从回收站还原](../ranch-base/doc/recycle-restore.md)
+
+[配置参数](src/main/resources/classify.ranch.config)

@@ -22,3 +22,5 @@
 - id-value 为分类信息的ID值。
 
 > [扩展属性](json.md)
+
+> [刷新缓存](refresh.md)

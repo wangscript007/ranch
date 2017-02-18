@@ -19,7 +19,7 @@ public class UserHelperImpl extends ServiceHelperSupport implements UserHelper {
         if (signKey == null)
             signKey = key + ".sign";
 
-        return carousel.service(signKey, null, null, 2);
+        return carousel.service(signKey, null, null, 2, JSONObject.class);
     }
 
     @Override

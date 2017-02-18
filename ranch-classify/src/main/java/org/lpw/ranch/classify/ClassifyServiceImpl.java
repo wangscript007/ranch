@@ -9,6 +9,7 @@ import org.lpw.ranch.util.Pagination;
 import org.lpw.tephra.cache.Cache;
 import org.lpw.tephra.dao.orm.PageList;
 import org.lpw.tephra.scheduler.DateJob;
+import org.lpw.tephra.util.Converter;
 import org.lpw.tephra.util.Generator;
 import org.lpw.tephra.util.Json;
 import org.lpw.tephra.util.Validator;
@@ -28,11 +29,15 @@ public class ClassifyServiceImpl implements ClassifyService, DateJob {
     private static final String CACHE_RANDOM = ClassifyModel.NAME + ".service.random";
     private static final String CACHE_TREE = ClassifyModel.NAME + ".service.tree:";
     private static final String CACHE_JSON = ClassifyModel.NAME + ".service.json:";
+    private static final String CACHE_GET = ClassifyModel.NAME + ".service.get:";
+    private static final String CACHE_LIST = ClassifyModel.NAME + ".service.list:";
 
     @Inject
     private Cache cache;
     @Inject
     private Validator validator;
+    @Inject
+    private Converter converter;
     @Inject
     private Generator generator;
     @Inject
@@ -43,7 +48,7 @@ public class ClassifyServiceImpl implements ClassifyService, DateJob {
     private RecycleHelper recycleHelper;
     @Inject
     private ClassifyDao classifyDao;
-    @Value("${ranch.classify.query-by-key.size:20}")
+    @Value("${ranch.classify.list.size:20}")
     private int size;
     private Set<String> ignores;
 
@@ -93,22 +98,27 @@ public class ClassifyServiceImpl implements ClassifyService, DateJob {
 
     @Override
     public JSONObject get(String[] ids) {
-        JSONObject object = new JSONObject();
         if (validator.isEmpty(ids))
-            return object;
+            return new JSONObject();
 
-        for (String id : ids) {
-            JSONObject json = getJson(id, null, Recycle.No);
-            if (json.isEmpty())
-                continue;
+        String cacheKey = CACHE_GET + converter.toString(ids);
+        JSONObject object = cache.get(cacheKey);
+        if (object == null) {
+            object = new JSONObject();
+            for (String id : ids) {
+                JSONObject json = getJson(id, null, Recycle.No);
+                if (json.isEmpty())
+                    continue;
 
-            object.put(id, json);
-            if (!json.containsKey("links"))
-                continue;
+                object.put(id, json);
+                if (!json.containsKey("links"))
+                    continue;
 
-            Object links = json.get("links");
-            if (links instanceof JSONArray)
-                object.putAll(get(((JSONArray) links).toArray(new String[0])));
+                Object links = json.get("links");
+                if (links instanceof JSONArray)
+                    object.putAll(get(((JSONArray) links).toArray(new String[0])));
+            }
+            cache.put(cacheKey, object, false);
         }
 
         return object;
@@ -119,8 +129,14 @@ public class ClassifyServiceImpl implements ClassifyService, DateJob {
         int size = pagination.getPageSize();
         if (size <= 0)
             size = this.size;
-        JSONArray array = new JSONArray();
-        classifyDao.query(key, size).forEach(id -> array.add(getJson(id, null, Recycle.No)));
+        String cacheKey = CACHE_LIST + getRandom() + key + size;
+        JSONArray array = cache.get(cacheKey);
+        if (array == null) {
+            array = new JSONArray();
+            for (String id : classifyDao.query(key, size))
+                array.add(getJson(id, null, Recycle.No));
+            cache.put(cacheKey, array, false);
+        }
 
         return array;
     }

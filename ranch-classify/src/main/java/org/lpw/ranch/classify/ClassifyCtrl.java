@@ -9,7 +9,6 @@ import org.lpw.tephra.ctrl.validate.Validators;
 import org.springframework.stereotype.Controller;
 
 import javax.inject.Inject;
-import java.util.Map;
 
 /**
  * @author lpw
@@ -39,6 +38,11 @@ public class ClassifyCtrl extends RecycleCtrlSupport {
     @Execute(name = "get")
     public Object get() {
         return classifyService.get(request.getAsArray("ids"));
+    }
+
+    @Execute(name = "list")
+    public Object list() {
+        return classifyService.list(request.get("key"));
     }
 
     @Execute(name = "create", validates = {

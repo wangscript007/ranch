@@ -18,22 +18,28 @@ public interface Carousel {
     JSONObject get(String key, String id);
 
     /**
-     * 获取Carousel服务JSON数据。
+     * 获取Carousel服务JSON数据/集。
      *
      * @param key       服务key。
+     * @param header    头信息集。
      * @param parameter 参数集。
-     * @return 服务JSON数据，获取失败则返回空JSON数据。
+     * @param cacheable 是否缓存，如果为true则使用默认缓存时长。
+     * @param jsonClass JSON类，JSONObject或JSONArray。
+     * @param <T>       JSON类。
+     * @return 服务JSON数据/集，获取失败则返回空JSON数据/集。
      */
-    JSONObject service(String key, Map<String, String> parameter);
+    <T> T service(String key, Map<String, String> header, Map<String, String> parameter, boolean cacheable, Class<T> jsonClass);
 
     /**
-     * 获取Carousel服务JSON数据。
+     * 获取Carousel服务JSON数据/集。
      *
      * @param key       服务key。
      * @param header    头信息集。
      * @param parameter 参数集。
      * @param cacheTime 缓存时长，单位：分钟。
-     * @return 服务JSON数据，获取失败则返回空JSON数据。
+     * @param jsonClass JSON类，JSONObject或JSONArray。
+     * @param <T>       JSON类。
+     * @return 服务JSON数据/集，获取失败则返回空JSON数据/集。
      */
-    JSONObject service(String key, Map<String, String> header, Map<String, String> parameter, int cacheTime);
+    <T> T service(String key, Map<String, String> header, Map<String, String> parameter, int cacheTime, Class<T> jsonClass);
 }
