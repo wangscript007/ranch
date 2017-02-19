@@ -7,7 +7,7 @@
     <groupId>org.lpw.ranch</groupId>
     <artifactId>ranch</artifactId>
     <packaging>pom</packaging>
-    <version>0.5.0-RELEASE</version>
+    <version>0.6.0-RELEASE</version>
     <modules>
         <module>ranch-base</module>
         <module>ranch-gps</module>
@@ -17,6 +17,7 @@
         <module>ranch-doc</module>
         <module>ranch-user</module>
         <module>ranch-user-helper</module>
+        <module>ranch-chat</module>
         <module>ranch-archives</module>
         <module>ranch-web</module>
         <module>ranch-test</module>
