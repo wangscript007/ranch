@@ -1,4 +1,4 @@
-package org.lpw.ranch.user;
+package org.lpw.ranch.user.helper;
 
 import com.alibaba.fastjson.JSONObject;
 import org.junit.Assert;
@@ -37,7 +37,7 @@ public class SignInValidatorTest extends TephraTestSupport {
         mockHelper.mock("/user/sign");
         JSONObject object = mockHelper.getResponse().asJson();
         Assert.assertEquals(9901, object.getIntValue("code"));
-        Assert.assertEquals(message.get("ranch.user-helper.need-sign-in"), object.getString("message"));
+        Assert.assertEquals(message.get("ranch.user.helper.need-sign-in"), object.getString("message"));
 
         mockCarousel.reset();
         mockCarousel.register("ranch.user.sign", "{\"code\":0,\"data\":{\"id\":\"id\"}}");

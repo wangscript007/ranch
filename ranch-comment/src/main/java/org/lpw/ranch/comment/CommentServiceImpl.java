@@ -5,7 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import org.lpw.ranch.audit.Audit;
 import org.lpw.ranch.audit.AuditHelper;
 import org.lpw.ranch.recycle.RecycleHelper;
-import org.lpw.ranch.user.UserHelper;
+import org.lpw.ranch.user.helper.UserHelper;
 import org.lpw.ranch.util.Carousel;
 import org.lpw.ranch.util.Pagination;
 import org.lpw.tephra.cache.Cache;

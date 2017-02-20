@@ -1,4 +1,4 @@
-package org.lpw.ranch.user;
+package org.lpw.ranch.user.helper;
 
 import com.alibaba.fastjson.JSONObject;
 import org.junit.Assert;

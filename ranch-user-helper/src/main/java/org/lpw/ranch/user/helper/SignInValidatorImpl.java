@@ -1,4 +1,4 @@
-package org.lpw.ranch.user;
+package org.lpw.ranch.user.helper;
 
 import org.lpw.tephra.ctrl.validate.ValidateWrapper;
 import org.lpw.tephra.ctrl.validate.ValidatorSupport;
@@ -26,6 +26,6 @@ public class SignInValidatorImpl extends ValidatorSupport {
 
     @Override
     protected String getDefaultFailureMessageKey() {
-        return "ranch.user-helper.need-sign-in";
+        return "ranch.user.helper.need-sign-in";
     }
 }

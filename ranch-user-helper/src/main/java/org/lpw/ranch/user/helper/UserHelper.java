@@ -1,4 +1,4 @@
-package org.lpw.ranch.user;
+package org.lpw.ranch.user.helper;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -12,7 +12,7 @@ public interface UserHelper {
     /**
      * 用户是否已登入验证器Bean名称。
      */
-    String VALIDATOR_SIGN_IN = "ranch.user-helper.validator.sign-in";
+    String VALIDATOR_SIGN_IN = "ranch.user.helper.validator.sign-in";
 
     /**
      * 获取用户信息。
