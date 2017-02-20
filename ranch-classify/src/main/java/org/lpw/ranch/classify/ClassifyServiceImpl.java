@@ -48,8 +48,6 @@ public class ClassifyServiceImpl implements ClassifyService, DateJob {
     private RecycleHelper recycleHelper;
     @Inject
     private ClassifyDao classifyDao;
-    @Value("${ranch.classify.list.size:20}")
-    private int size;
     private Set<String> ignores;
 
     @Override
@@ -125,20 +123,35 @@ public class ClassifyServiceImpl implements ClassifyService, DateJob {
     }
 
     @Override
-    public JSONArray list(String key) {
-        int size = pagination.getPageSize();
-        if (size <= 0)
-            size = this.size;
-        String cacheKey = CACHE_LIST + getRandom() + key + size;
+    public JSONArray list(String code, String key, String name) {
+        String cacheKey = CACHE_LIST + getRandom() + code + key + name;
         JSONArray array = cache.get(cacheKey);
         if (array == null) {
             array = new JSONArray();
-            for (String id : classifyDao.query(key, size))
-                array.add(getJson(id, null, Recycle.No));
+            for (ClassifyModel classify : classifyDao.query(code, 0, 0).getList())
+                if (contains(classify, key, name))
+                    array.add(getJson(classify.getId(), classify, Recycle.No));
             cache.put(cacheKey, array, false);
         }
 
         return array;
+    }
+
+    private boolean contains(ClassifyModel classify, String key, String name) {
+        boolean[] empty = new boolean[]{validator.isEmpty(key), validator.isEmpty(name), validator.isEmpty(classify.getKey())};
+        if (empty[0] && empty[1])
+            return true;
+
+        if (empty[0])
+            return classify.getName().contains(name);
+
+        if (empty[2])
+            return false;
+
+        if (empty[1])
+            return classify.getKey().contains(key);
+
+        return classify.getKey().contains(key) && classify.getName().contains(name);
     }
 
     @Override

@@ -1,4 +1,4 @@
-package org.lpw.ranch.classify;
+package org.lpw.ranch.classify.helper;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -63,13 +63,14 @@ public class ClassifyHelperTest extends TephraTestSupport {
             return json.toJSONString();
         });
 
-        JSONArray array = classifyHelper.list("key prefix", 2);
+        JSONArray array = classifyHelper.list("code", "key", "name");
         Assert.assertEquals(1, array.size());
         JSONObject object = array.getJSONObject(0);
-        Assert.assertEquals(4, object.size());
+        Assert.assertEquals(5, object.size());
         Assert.assertEquals("header value", object.getString("header name"));
-        Assert.assertEquals("key prefix", object.getString("key"));
-        Assert.assertEquals("2", object.getString("pageSize"));
+        Assert.assertEquals("code", object.getString("code"));
+        Assert.assertEquals("key", object.getString("key"));
+        Assert.assertEquals("name", object.getString("name"));
         Assert.assertEquals("5", object.getString("cacheTime"));
     }
 

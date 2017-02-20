@@ -42,10 +42,12 @@ public interface ClassifyService extends RecycleService {
     /**
      * 检索指定关键词的分类信息集。
      *
-     * @param key 关键词前缀。
+     * @param code 编码前缀。
+     * @param key  包含的关键词。
+     * @param name 包含的名称。
      * @return 分类信息集。
      */
-    JSONArray list(String key);
+    JSONArray list(String code, String key, String name);
 
     /**
      * 创建新分类。

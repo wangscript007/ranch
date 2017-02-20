@@ -1,4 +1,4 @@
-package org.lpw.ranch.classify;
+package org.lpw.ranch.classify.helper;
 
 import com.alibaba.fastjson.JSONArray;
 import org.lpw.ranch.util.ServiceHelperSupport;
@@ -17,10 +17,11 @@ public class ClassifyHelperImpl extends ServiceHelperSupport implements Classify
     private String key;
 
     @Override
-    public JSONArray list(String key, int size) {
+    public JSONArray list(String code, String key, String name) {
         Map<String, String> parameter = new HashMap<>();
+        parameter.put("code", code);
         parameter.put("key", key);
-        parameter.put("pageSize", "" + size);
+        parameter.put("name", name);
 
         return carousel.service(this.key + ".list", null, parameter, true, JSONArray.class);
     }

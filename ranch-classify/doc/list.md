@@ -5,8 +5,9 @@
 - URI - /classify/list
 
 参数
-- key 关键词前缀，会自动匹配【key+%】。
-- pageSize 显示数据数，如果未设置则使用${ranch.classify.list.size}设置值。
+- code 编码前缀，会自动匹配【code+%】。
+- key 包含的关键词。
+- name 包含的名称。
 
 返回值
 ```json

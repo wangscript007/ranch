@@ -13,8 +13,6 @@ interface ClassifyDao {
 
     PageList<ClassifyModel> query(String code, int pageSize, int pageNum);
 
-    List<String> query(String key, int size);
-
     ClassifyModel findById(String id);
 
     void save(ClassifyModel classify);

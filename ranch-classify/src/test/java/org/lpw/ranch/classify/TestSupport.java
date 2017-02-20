@@ -45,7 +45,10 @@ public class TestSupport extends TephraTestSupport {
 
     void equalsCodeKeyName(JSONObject object, String code, String key, String name) {
         Assert.assertEquals(code, object.getString("code"));
-        Assert.assertEquals(key, object.getString("key"));
+        if (key == null)
+            Assert.assertFalse(object.containsKey("key"));
+        else
+            Assert.assertEquals(key, object.getString("key"));
         Assert.assertEquals(name, object.getString("name"));
     }
 
