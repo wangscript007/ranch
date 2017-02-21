@@ -38,17 +38,18 @@ public class TestSupport extends TephraTestSupport {
     @Inject
     ClassifyService classifyService;
 
-    void equalsCodeKeyName(JSONObject object, int i) {
-        for (String name : new String[]{"code", "key", "name"})
+    void equals(JSONObject object, int i) {
+        for (String name : new String[]{"code", "key", "value", "name"})
             Assert.assertEquals(name + " " + i, object.get(name));
     }
 
-    void equalsCodeKeyName(JSONObject object, String code, String key, String name) {
+    void equals(JSONObject object, String code, String key, String value, String name) {
         Assert.assertEquals(code, object.getString("code"));
         if (key == null)
             Assert.assertFalse(object.containsKey("key"));
         else
             Assert.assertEquals(key, object.getString("key"));
+        Assert.assertEquals(value, object.getString("value"));
         Assert.assertEquals(name, object.getString("name"));
     }
 
@@ -57,10 +58,15 @@ public class TestSupport extends TephraTestSupport {
     }
 
     ClassifyModel create(int code, String json, boolean recycle) {
+        return create("code " + code, code, json, recycle);
+    }
+
+    ClassifyModel create(String code, int i, String json, boolean recycle) {
         ClassifyModel classify = new ClassifyModel();
-        classify.setCode("code " + code);
-        classify.setKey("key " + code);
-        classify.setName("name " + code);
+        classify.setCode(code);
+        classify.setKey("key " + i);
+        classify.setValue("value " + i);
+        classify.setName("name " + i);
         classify.setJson(json);
         classify.setRecycle((recycle ? Recycle.Yes : Recycle.No).getValue());
         liteOrm.save(classify);

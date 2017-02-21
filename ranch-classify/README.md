@@ -4,7 +4,9 @@
 
 [检索分类信息树](doc/tree.md)
 
-[获取分类信息](doc/get.md)
+[通过ID获取分类信息](doc/get.md)
+
+[通过编码与值获取分类信息](doc/find.md)
 
 [检索分类信息集](doc/list.md)
 

@@ -13,7 +13,8 @@
     {
         "id": "ID值",
         "code": "编码",
-        "key": "关键词",
+        "key": "键",
+        "value": "值",
         "name": "名称",
         "children": []
     }

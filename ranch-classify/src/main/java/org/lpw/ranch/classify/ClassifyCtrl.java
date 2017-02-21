@@ -25,7 +25,7 @@ public class ClassifyCtrl extends RecycleCtrlSupport {
             @Validate(validator = Validators.SIGN)
     })
     public Object query() {
-        return classifyService.query(request.get("code"));
+        return classifyService.query(request.get("code"), request.get("key"), request.get("name"));
     }
 
     @Execute(name = "tree", validates = {
@@ -40,6 +40,14 @@ public class ClassifyCtrl extends RecycleCtrlSupport {
         return classifyService.get(request.getAsArray("ids"));
     }
 
+    @Execute(name = "find", validates = {
+            @Validate(validator = Validators.NOT_EMPTY, parameter = "code", failureCode = 2),
+            @Validate(validator = Validators.NOT_EMPTY, parameter = "value", failureCode = 5)
+    })
+    public Object find() {
+        return templates.get().success(classifyService.find(request.get("code"), request.get("value")), null);
+    }
+
     @Execute(name = "list", validates = {
             @Validate(validator = Validators.NOT_EMPTY, parameter = "code", failureCode = 2)
     })
@@ -51,8 +59,10 @@ public class ClassifyCtrl extends RecycleCtrlSupport {
             @Validate(validator = Validators.NOT_EMPTY, parameter = "code", failureCode = 2),
             @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "code", failureCode = 3),
             @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "key", failureCode = 4),
-            @Validate(validator = Validators.NOT_EMPTY, parameter = "name", failureCode = 5),
-            @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "name", failureCode = 6),
+            @Validate(validator = Validators.NOT_EMPTY, parameter = "value", failureCode = 5),
+            @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "value", failureCode = 6),
+            @Validate(validator = Validators.NOT_EMPTY, parameter = "name", failureCode = 7),
+            @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "name", failureCode = 8),
             @Validate(validator = Validators.SIGN)
     })
     public Object create() {
@@ -63,12 +73,13 @@ public class ClassifyCtrl extends RecycleCtrlSupport {
             @Validate(validator = Validators.ID, parameter = "id", failureCode = 1),
             @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "code", failureCode = 3),
             @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "key", failureCode = 4),
-            @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "name", failureCode = 6),
+            @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "value", failureCode = 6),
+            @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "name", failureCode = 8),
             @Validate(validator = Validators.SIGN),
-            @Validate(validator = ClassifyService.VALIDATOR_EXISTS, parameter = "id", failureCode = 7)
+            @Validate(validator = ClassifyService.VALIDATOR_EXISTS, parameter = "id", failureCode = 9)
     })
     public Object modify() {
-        return templates.get().success(classifyService.modify(request.get("id"), request.get("code"), request.get("key"), request.get("name"), request.getMap()), null);
+        return templates.get().success(classifyService.modify(request.setToModel(new ClassifyModel()), request.getMap()), null);
     }
 
     @Execute(name = "refresh", validates = {

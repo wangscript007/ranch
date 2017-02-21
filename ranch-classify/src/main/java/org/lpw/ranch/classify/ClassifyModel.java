@@ -21,7 +21,8 @@ public class ClassifyModel extends RecycleModelSupport {
     static final String NAME = "ranch.classify";
 
     private String code; // 编码
-    private String key; // 关键词
+    private String key; // 键
+    private String value; // 值
     private String name; // 名称
     private String json; // JSON扩展
 
@@ -43,6 +44,16 @@ public class ClassifyModel extends RecycleModelSupport {
 
     public void setKey(String key) {
         this.key = key;
+    }
+
+    @Jsonable
+    @Column(name = "c_value")
+    public String getValue() {
+        return value;
+    }
+
+    public void setValue(String value) {
+        this.value = value;
     }
 
     @Jsonable

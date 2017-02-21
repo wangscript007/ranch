@@ -18,6 +18,15 @@ public interface ClassifyHelper {
     JSONObject get(String id);
 
     /**
+     * 查找分类信息。
+     *
+     * @param code  编码。
+     * @param value 值。
+     * @return 分类JSON数据，如果不存在则返回空JSON数据。
+     */
+    JSONObject find(String code, String value);
+
+    /**
      * 获取分类信息集。
      *
      * @param code 编码前缀，会自动匹配【code+%】。
@@ -28,11 +37,21 @@ public interface ClassifyHelper {
     JSONArray list(String code, String key, String name);
 
     /**
-     * 填充分类信息。
+     * 填充ID对应的分类信息。
      *
      * @param array 要填充的数据集。
      * @param names 要填充的属性名称集。
      * @return 填充后的数据集。
      */
     JSONArray fill(JSONArray array, String[] names);
+
+    /**
+     * 填充value对应分类信息。
+     *
+     * @param array 要填充的数据集。
+     * @param code  编码。
+     * @param names 要填充的属性名称集。
+     * @return 填充后的数据集。
+     */
+    JSONArray fill(JSONArray array, String code, String[] names);
 }

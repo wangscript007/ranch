@@ -5,16 +5,18 @@
 - URI - /classify/create
 
 参数
-- code 编码。
-- key 关键词。
-- name 名称。
+- code 编码，必须。
+- key 键。
+- value 值，必须。
+- name 名称，必须。
 
 返回值
 ```json
 {
     "id": "ID值",
     "code": "编码",
-    "key": "关键词",
+    "key": "键",
+    "value": "值",
     "name": "名称"
 }
 ```

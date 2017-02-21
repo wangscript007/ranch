@@ -35,11 +35,11 @@ public class ListTest extends TestSupport {
         Assert.assertEquals(0, object.getIntValue("code"));
         JSONArray data = object.getJSONArray("data");
         Assert.assertEquals(5, data.size());
-        equalsCodeKeyName(data.getJSONObject(0), 1111);
-        equalsCodeKeyName(data.getJSONObject(1), 1211);
-        equalsCodeKeyName(data.getJSONObject(2), 1212);
-        equalsCodeKeyName(data.getJSONObject(3), 1311);
-        equalsCodeKeyName(data.getJSONObject(4), "code 1312", null, "name 1312");
+        equals(data.getJSONObject(0), 1111);
+        equals(data.getJSONObject(1), 1211);
+        equals(data.getJSONObject(2), 1212);
+        equals(data.getJSONObject(3), 1311);
+        equals(data.getJSONObject(4), "code 1312", null, "value 1312", "name 1312");
 
         mockHelper.reset();
         mockHelper.getRequest().addParameter("code", "code");
@@ -49,10 +49,10 @@ public class ListTest extends TestSupport {
         Assert.assertEquals(0, object.getIntValue("code"));
         data = object.getJSONArray("data");
         Assert.assertEquals(4, data.size());
-        equalsCodeKeyName(data.getJSONObject(0), 1111);
-        equalsCodeKeyName(data.getJSONObject(1), 1211);
-        equalsCodeKeyName(data.getJSONObject(2), 1212);
-        equalsCodeKeyName(data.getJSONObject(3), 1311);
+        equals(data.getJSONObject(0), 1111);
+        equals(data.getJSONObject(1), 1211);
+        equals(data.getJSONObject(2), 1212);
+        equals(data.getJSONObject(3), 1311);
 
         mockHelper.reset();
         mockHelper.getRequest().addParameter("code", "code");
@@ -62,11 +62,11 @@ public class ListTest extends TestSupport {
         Assert.assertEquals(0, object.getIntValue("code"));
         data = object.getJSONArray("data");
         Assert.assertEquals(5, data.size());
-        equalsCodeKeyName(data.getJSONObject(0), 1111);
-        equalsCodeKeyName(data.getJSONObject(1), 1211);
-        equalsCodeKeyName(data.getJSONObject(2), 1212);
-        equalsCodeKeyName(data.getJSONObject(3), 1311);
-        equalsCodeKeyName(data.getJSONObject(4), "code 1312", null, "name 1312");
+        equals(data.getJSONObject(0), 1111);
+        equals(data.getJSONObject(1), 1211);
+        equals(data.getJSONObject(2), 1212);
+        equals(data.getJSONObject(3), 1311);
+        equals(data.getJSONObject(4), "code 1312", null, "value 1312", "name 1312");
 
         mockHelper.reset();
         mockHelper.getRequest().addParameter("code", "code");
@@ -77,10 +77,10 @@ public class ListTest extends TestSupport {
         Assert.assertEquals(0, object.getIntValue("code"));
         data = object.getJSONArray("data");
         Assert.assertEquals(4, data.size());
-        equalsCodeKeyName(data.getJSONObject(0), 1111);
-        equalsCodeKeyName(data.getJSONObject(1), 1211);
-        equalsCodeKeyName(data.getJSONObject(2), 1212);
-        equalsCodeKeyName(data.getJSONObject(3), 1311);
+        equals(data.getJSONObject(0), 1111);
+        equals(data.getJSONObject(1), 1211);
+        equals(data.getJSONObject(2), 1212);
+        equals(data.getJSONObject(3), 1311);
 
         mockHelper.reset();
         mockHelper.getRequest().addParameter("code", "code");
@@ -121,11 +121,11 @@ public class ListTest extends TestSupport {
         Assert.assertEquals(0, object.getIntValue("code"));
         data = object.getJSONArray("data");
         Assert.assertEquals(5, data.size());
-        equalsCodeKeyName(data.getJSONObject(0), 1111);
-        equalsCodeKeyName(data.getJSONObject(1), 1211);
-        equalsCodeKeyName(data.getJSONObject(2), 1212);
-        equalsCodeKeyName(data.getJSONObject(3), 1311);
-        equalsCodeKeyName(data.getJSONObject(4), "code 1312", null, "name 1312");
+        equals(data.getJSONObject(0), 1111);
+        equals(data.getJSONObject(1), 1211);
+        equals(data.getJSONObject(2), 1212);
+        equals(data.getJSONObject(3), 1311);
+        equals(data.getJSONObject(4), "code 1312", null, "value 1312", "name 1312");
 
         classifyService.refresh();
         mockHelper.reset();
@@ -135,11 +135,11 @@ public class ListTest extends TestSupport {
         Assert.assertEquals(0, object.getIntValue("code"));
         data = object.getJSONArray("data");
         Assert.assertEquals(5, data.size());
-        equalsCodeKeyName(data.getJSONObject(0), 1111);
-        equalsCodeKeyName(data.getJSONObject(1), 1211);
-        equalsCodeKeyName(data.getJSONObject(2), 1212);
-        equalsCodeKeyName(data.getJSONObject(3), 1311);
-        equalsCodeKeyName(data.getJSONObject(4), 1312);
+        equals(data.getJSONObject(0), 1111);
+        equals(data.getJSONObject(1), 1211);
+        equals(data.getJSONObject(2), 1212);
+        equals(data.getJSONObject(3), 1311);
+        equals(data.getJSONObject(4), 1312);
 
         schedulerAspect.press();
     }

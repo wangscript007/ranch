@@ -17,6 +17,7 @@ public class QueryTest extends TestSupport {
             ClassifyModel classify = new ClassifyModel();
             classify.setCode("code " + converter.toString(i, "00"));
             classify.setKey("key " + converter.toString(i, "00"));
+            classify.setValue("value " + converter.toString(i, "00"));
             classify.setName("name " + converter.toString(i, "00"));
             classify.setRecycle((i % 2 == 0 ? Recycle.No : Recycle.Yes).getValue());
             liteOrm.save(classify);
@@ -43,8 +44,26 @@ public class QueryTest extends TestSupport {
         Assert.assertEquals(1, data.getIntValue("number"));
         JSONArray array = data.getJSONArray("list");
         for (int i = 0, size = array.size(); i < size; i++)
-            equalsCodeKeyName(array.getJSONObject(i), "code " + converter.toString(2 * i, "00"),
-                    "key " + converter.toString(2 * i, "00"), "name " + converter.toString(2 * i, "00"));
+            equals(array.getJSONObject(i), "code " + converter.toString(2 * i, "00"),
+                    "key " + converter.toString(2 * i, "00"), "value " + converter.toString(2 * i, "00"), "name " + converter.toString(2 * i, "00"));
+
+        mockHelper.reset();
+        mockHelper.getRequest().addParameter("key", "key 1");
+        mockHelper.getRequest().addParameter("name", "name 1");
+        mockHelper.getRequest().addParameter("pageSize", "20");
+        mockHelper.getRequest().addParameter("pageNum", "1");
+        sign.put(mockHelper.getRequest().getMap(), null);
+        mockHelper.mock("/classify/query");
+        object = mockHelper.getResponse().asJson();
+        Assert.assertEquals(0, object.getIntValue("code"));
+        data = object.getJSONObject("data");
+        Assert.assertEquals(10, data.getIntValue("count"));
+        Assert.assertEquals(20, data.getIntValue("size"));
+        Assert.assertEquals(1, data.getIntValue("number"));
+        array = data.getJSONArray("list");
+        for (int i = 0, size = array.size(); i < size; i++)
+            equals(array.getJSONObject(i), "code " + converter.toString(2 * i, "00"),
+                    "key " + converter.toString(2 * i, "00"), "value " + converter.toString(2 * i, "00"), "name " + converter.toString(2 * i, "00"));
 
         mockHelper.reset();
         mockHelper.getRequest().addParameter("code", "code 1");
@@ -60,6 +79,40 @@ public class QueryTest extends TestSupport {
         Assert.assertEquals(1, data.getIntValue("number"));
         array = data.getJSONArray("list");
         for (int i = 0; i < 5; i++)
-            equalsCodeKeyName(array.getJSONObject(i), "code " + (10 + 2 * i), "key " + (10 + 2 * i), "name " + (10 + 2 * i));
+            equals(array.getJSONObject(i), "code " + (10 + 2 * i), "key " + (10 + 2 * i), "value " + (10 + 2 * i), "name " + (10 + 2 * i));
+
+        mockHelper.reset();
+        mockHelper.getRequest().addParameter("code", "code 1");
+        mockHelper.getRequest().addParameter("key", "key 1");
+        mockHelper.getRequest().addParameter("name", "name 1");
+        mockHelper.getRequest().addParameter("pageSize", "20");
+        mockHelper.getRequest().addParameter("pageNum", "1");
+        sign.put(mockHelper.getRequest().getMap(), null);
+        mockHelper.mock("/classify/query");
+        object = mockHelper.getResponse().asJson();
+        Assert.assertEquals(0, object.getIntValue("code"));
+        data = object.getJSONObject("data");
+        Assert.assertEquals(5, data.getIntValue("count"));
+        Assert.assertEquals(20, data.getIntValue("size"));
+        Assert.assertEquals(1, data.getIntValue("number"));
+        array = data.getJSONArray("list");
+        for (int i = 0; i < 5; i++)
+            equals(array.getJSONObject(i), "code " + (10 + 2 * i), "key " + (10 + 2 * i), "value " + (10 + 2 * i), "name " + (10 + 2 * i));
+
+        mockHelper.reset();
+        mockHelper.getRequest().addParameter("code", "code 1");
+        mockHelper.getRequest().addParameter("value", "value 2");
+        mockHelper.getRequest().addParameter("name", "name 3");
+        mockHelper.getRequest().addParameter("pageSize", "20");
+        mockHelper.getRequest().addParameter("pageNum", "1");
+        sign.put(mockHelper.getRequest().getMap(), null);
+        mockHelper.mock("/classify/query");
+        object = mockHelper.getResponse().asJson();
+        Assert.assertEquals(0, object.getIntValue("code"));
+        data = object.getJSONObject("data");
+        Assert.assertEquals(0, data.getIntValue("count"));
+        Assert.assertEquals(20, data.getIntValue("size"));
+        Assert.assertEquals(1, data.getIntValue("number"));
+        Assert.assertTrue(data.getJSONArray("list").isEmpty());
     }
 }

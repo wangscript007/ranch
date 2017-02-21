@@ -19,9 +19,11 @@ public interface ClassifyService extends RecycleService {
      * 检索分类信息集。
      *
      * @param code 编码前缀。
+     * @param key  包含的键。
+     * @param name 包含的名称。
      * @return 分类信息集。
      */
-    JSONObject query(String code);
+    JSONObject query(String code, String key, String name);
 
     /**
      * 检索分类信息树。
@@ -38,6 +40,15 @@ public interface ClassifyService extends RecycleService {
      * @return 分类信息，如果不存在则返回空JSON。
      */
     JSONObject get(String[] ids);
+
+    /**
+     * 查找分类信息。
+     *
+     * @param code  编码。
+     * @param value 值。
+     * @return 分类信息，如果不存在则返回空JSON。
+     */
+    JSONObject find(String code, String value);
 
     /**
      * 检索指定关键词的分类信息集。
@@ -60,14 +71,11 @@ public interface ClassifyService extends RecycleService {
     /**
      * 修改分类信息。
      *
-     * @param id   ID值。
-     * @param code 编码。
-     * @param key  关键词。
-     * @param name 名称。
-     * @param map  参数集。
+     * @param classify 分类参数。
+     * @param map      参数集。
      * @return 分类JSON格式数据。
      */
-    JSONObject modify(String id, String code, String key, String name, Map<String, String> map);
+    JSONObject modify(ClassifyModel classify, Map<String, String> map);
 
     /**
      * 刷新缓存。

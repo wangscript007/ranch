@@ -1,4 +1,4 @@
-# 获取分类信息
+# 通过ID获取分类信息
 
 请求
 - Service Key - ranch.classify.get
@@ -13,7 +13,8 @@
     "id-value": {
         "id": "ID值",
         "code": "编码",
-        "key": "关键词",
+        "key": "键",
+        "value": "值",
         "name": "名称"
     }
 }

@@ -13,7 +13,6 @@ import org.lpw.tephra.util.Converter;
 import org.lpw.tephra.util.Generator;
 import org.lpw.tephra.util.Json;
 import org.lpw.tephra.util.Validator;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
@@ -51,9 +50,9 @@ public class ClassifyServiceImpl implements ClassifyService, DateJob {
     private Set<String> ignores;
 
     @Override
-    public JSONObject query(String code) {
+    public JSONObject query(String code, String key, String name) {
         return toJson(validator.isEmpty(code) ? classifyDao.query(pagination.getPageSize(), pagination.getPageNum())
-                : classifyDao.query(code, pagination.getPageSize(), pagination.getPageNum()), Recycle.No);
+                : classifyDao.query(code, key, name, pagination.getPageSize(), pagination.getPageNum()), Recycle.No);
     }
 
     @Override
@@ -62,7 +61,7 @@ public class ClassifyServiceImpl implements ClassifyService, DateJob {
         JSONArray array = cache.get(cacheKey);
         if (array == null) {
             array = new JSONArray();
-            for (ClassifyModel classify : classifyDao.query(code, 0, 0).getList()) {
+            for (ClassifyModel classify : classifyDao.query(code, null, null, 0, 0).getList()) {
                 JSONObject object = getJson(classify.getId(), classify, Recycle.No);
                 JSONObject parent = findParent(array, classify.getCode());
                 if (parent == null)
@@ -123,12 +122,24 @@ public class ClassifyServiceImpl implements ClassifyService, DateJob {
     }
 
     @Override
+    public JSONObject find(String code, String value) {
+        String cacheKey = CACHE_GET + getRandom() + code + value;
+        JSONObject object = cache.get(cacheKey);
+        if (object == null) {
+            ClassifyModel classify = classifyDao.findByCodeValue(code, value);
+            cache.put(cacheKey, object = classify == null ? new JSONObject() : getJson(classify.getId(), classify, Recycle.No), false);
+        }
+
+        return object;
+    }
+
+    @Override
     public JSONArray list(String code, String key, String name) {
         String cacheKey = CACHE_LIST + getRandom() + code + key + name;
         JSONArray array = cache.get(cacheKey);
         if (array == null) {
             array = new JSONArray();
-            for (ClassifyModel classify : classifyDao.query(code, 0, 0).getList())
+            for (ClassifyModel classify : classifyDao.query(code, null, null, 0, 0).getList())
                 if (contains(classify, key, name))
                     array.add(getJson(classify.getId(), classify, Recycle.No));
             cache.put(cacheKey, array, false);
@@ -159,20 +170,23 @@ public class ClassifyServiceImpl implements ClassifyService, DateJob {
         ClassifyModel classify = new ClassifyModel();
         classify.setCode(map.get("code"));
         classify.setKey(map.get("key"));
+        classify.setValue(map.get("value"));
         classify.setName(map.get("name"));
 
         return save(classify, new JSONObject(), map);
     }
 
     @Override
-    public JSONObject modify(String id, String code, String key, String name, Map<String, String> map) {
-        ClassifyModel classify = findById(id);
-        if (!validator.isEmpty(code))
-            classify.setCode(code);
-        if (!validator.isEmpty(key))
-            classify.setKey(key);
-        if (!validator.isEmpty(name))
-            classify.setName(name);
+    public JSONObject modify(ClassifyModel model, Map<String, String> map) {
+        ClassifyModel classify = findById(model.getId());
+        if (!validator.isEmpty(model.getCode()))
+            classify.setCode(model.getCode());
+        if (!validator.isEmpty(model.getKey()))
+            classify.setKey(model.getKey());
+        if (!validator.isEmpty(model.getValue()))
+            classify.setValue(model.getValue());
+        if (!validator.isEmpty(model.getName()))
+            classify.setName(model.getName());
 
         return save(classify, validator.isEmpty(classify.getJson()) ? new JSONObject() : JSON.parseObject(classify.getJson()), map);
     }
@@ -199,6 +213,7 @@ public class ClassifyServiceImpl implements ClassifyService, DateJob {
             ignores.add("id");
             ignores.add("code");
             ignores.add("key");
+            ignores.add("value");
             ignores.add("name");
             ignores.add("sign-time");
             ignores.add("sign");
@@ -223,6 +238,7 @@ public class ClassifyServiceImpl implements ClassifyService, DateJob {
             object.put("id", classify.getId());
             object.put("code", classify.getCode());
             object.put("key", classify.getKey());
+            object.put("value", classify.getValue());
             object.put("name", classify.getName());
             if (!validator.isEmpty(classify.getJson()))
                 object.putAll(JSON.parseObject(classify.getJson()));

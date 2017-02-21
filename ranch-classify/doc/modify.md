@@ -5,17 +5,19 @@
 - URI - /classify/modify
 
 参数
-- id ID值。
-- code 编码。
-- key 关键词。
-- name 名称。
+- id ID值，必须。
+- code 编码，为空表示不修改。
+- key 键，为空表示不修改。
+- value 值，为空表示不修改。
+- name 名称，为空表示不修改。
 
 返回值
 ```json
 {
     "id": "ID值",
     "code": "编码",
-    "key": "关键词",
+    "key": "键",
+    "value": "值",
     "name": "名称"
 }
 ```

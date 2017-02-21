@@ -49,7 +49,7 @@ public class GetTest extends TestSupport {
         Assert.assertFalse(data.containsKey(list.get(0).getId()));
         JSONObject classify = data.getJSONObject(list.get(1).getId());
         Assert.assertEquals(list.get(1).getId(), classify.getString("id"));
-        equalsCodeKeyName(classify, 1);
+        equals(classify, 1);
 
         mockHelper.reset();
         mockHelper.getRequest().addParameter("ids", "id," + list.get(0).getId() + "," + list.get(1).getId() + "," + list.get(1).getId());
@@ -62,7 +62,7 @@ public class GetTest extends TestSupport {
         Assert.assertFalse(data.containsKey(list.get(0).getId()));
         classify = data.getJSONObject(list.get(1).getId());
         Assert.assertEquals(list.get(1).getId(), classify.getString("id"));
-        equalsCodeKeyName(classify, 1);
+        equals(classify, 1);
 
         mockHelper.reset();
         mockHelper.getRequest().addParameter("ids", classify1.getId());
@@ -73,7 +73,7 @@ public class GetTest extends TestSupport {
         Assert.assertEquals(1, data.size());
         classify = data.getJSONObject(classify1.getId());
         Assert.assertEquals(classify1.getId(), classify.getString("id"));
-        equalsCodeKeyName(classify, 11);
+        equals(classify, 11);
 
         mockHelper.reset();
         mockHelper.getRequest().addParameter("ids", classify2.getId());
@@ -84,10 +84,10 @@ public class GetTest extends TestSupport {
         Assert.assertEquals(2, data.size());
         classify = data.getJSONObject(classify2.getId());
         Assert.assertEquals(classify2.getId(), classify.getString("id"));
-        equalsCodeKeyName(classify, 22);
+        equals(classify, 22);
         classify = data.getJSONObject(list.get(1).getId());
         Assert.assertEquals(list.get(1).getId(), classify.getString("id"));
-        equalsCodeKeyName(classify, 1);
+        equals(classify, 1);
 
         schedulerAspect.press();
     }
