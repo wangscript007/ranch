@@ -21,8 +21,8 @@ class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public int count(String code) {
-        return liteOrm.count(new LiteQuery(UserModel.class).where("c_code=?"), new Object[]{code});
+    public UserModel findByCode(String code) {
+        return liteOrm.findOne(new LiteQuery(UserModel.class).where("c_code=?"), new Object[]{code});
     }
 
     @Override

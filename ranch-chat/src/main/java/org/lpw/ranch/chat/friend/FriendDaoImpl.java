@@ -21,8 +21,8 @@ class FriendDaoImpl implements FriendDao {
     }
 
     @Override
-    public FriendModel findById(String id) {
-        return liteOrm.findById(FriendModel.class, id);
+    public FriendModel find(String owner, String friend) {
+        return liteOrm.findOne(new LiteQuery(FriendModel.class).where("c_owner=? and c_friend=?"), new Object[]{owner, friend});
     }
 
     @Override

@@ -42,7 +42,10 @@ public class TestSupport extends TephraTestSupport {
     }
 
     protected UserModel create(int i, int state) {
-        UserModel user = new UserModel();
+        return set(new UserModel(), i, state);
+    }
+
+    protected UserModel set(UserModel user, int i, int state) {
         user.setPassword(digest.md5(UserModel.NAME + digest.sha1("password " + i + UserModel.NAME)));
         user.setName("name " + i);
         user.setNick("nick " + i);

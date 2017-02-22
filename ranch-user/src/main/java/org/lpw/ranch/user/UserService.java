@@ -82,6 +82,14 @@ public interface UserService {
     JSONObject get(String[] ids);
 
     /**
+     * 根据编码获得用户信息。
+     *
+     * @param code 唯一编码。
+     * @return 用户信息；如果不存在则返回空JSON。
+     */
+    JSONObject find(String code);
+
+    /**
      * 获取用户数据。
      *
      * @param id ID值。

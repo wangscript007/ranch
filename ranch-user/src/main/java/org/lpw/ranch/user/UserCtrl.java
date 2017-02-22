@@ -33,7 +33,7 @@ public class UserCtrl {
             @Validate(validator = AuthService.VALIDATOR_UID_NOT_EXISTS, parameter = "uid", failureCode = 4)
     })
     public Object signUp() {
-        userService.signUp(request.get("uid"),request.get("password"),request.getAsInt("type"));
+        userService.signUp(request.get("uid"), request.get("password"), request.getAsInt("type"));
 
         return sign();
     }
@@ -86,6 +86,14 @@ public class UserCtrl {
     })
     public Object get() {
         return userService.get(request.getAsArray("ids"));
+    }
+
+    @Execute(name = "find", validates = {
+            @Validate(validator = Validators.NOT_EMPTY, parameter = "code", failureCode = 26),
+            @Validate(validator = Validators.SIGN)
+    })
+    public Object find() {
+        return templates.get().success(userService.find(request.get("code")), null);
     }
 
     @Execute(name = "query", validates = {

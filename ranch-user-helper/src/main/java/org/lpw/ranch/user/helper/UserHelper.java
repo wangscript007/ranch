@@ -23,6 +23,14 @@ public interface UserHelper {
     JSONObject get(String id);
 
     /**
+     * 根据编码获得用户信息。
+     *
+     * @param code 唯一编码。
+     * @return 用户信息；如果不存在则返回空JSON。
+     */
+    JSONObject find(String code);
+
+    /**
      * 填充用户信息。
      *
      * @param array 要填充的数据集。

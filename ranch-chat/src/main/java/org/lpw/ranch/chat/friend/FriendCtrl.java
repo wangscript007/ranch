@@ -10,10 +10,15 @@ import javax.inject.Inject;
  * @author lpw
  */
 @Controller(FriendModel.NAME + ".ctrl")
-@Execute(name = "/chat/friend/", key = FriendModel.NAME, code = "0")
+@Execute(name = "/chat/friend/", key = FriendModel.NAME, code = "16")
 public class FriendCtrl {
     @Inject
     private Request request;
     @Inject
     private FriendService friendService;
+
+    @Execute(name = "query")
+    public Object query() {
+        return friendService.query();
+    }
 }

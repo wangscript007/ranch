@@ -8,7 +8,7 @@ import org.lpw.tephra.dao.orm.PageList;
 interface UserDao {
     UserModel findById(String id);
 
-    int count(String code);
+    UserModel findByCode(String code);
 
     PageList<UserModel> query(String mobile);
 

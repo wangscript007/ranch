@@ -8,7 +8,7 @@ import org.lpw.tephra.dao.orm.PageList;
 interface FriendDao {
     PageList<FriendModel> query(String owner);
 
-    FriendModel findById(String id);
+    FriendModel find(String owner,String friend);
 
     void save(FriendModel friend);
 }

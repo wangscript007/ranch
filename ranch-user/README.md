@@ -14,6 +14,8 @@
 
 [获取用户信息](doc/get.md)
 
+[使用唯一编码获取用户信息](doc/find.md)
+
 [检索用户](doc/query.md)
 
 [修改用户等级](doc/grade.md)

@@ -56,7 +56,7 @@ public class UserServiceImpl implements UserService {
         user.setRegister(dateTime.now());
         while (user.getCode() == null) {
             String code = generator.random(8);
-            if (userDao.count(code) == 0)
+            if (userDao.findByCode(code) == null)
                 user.setCode(code);
         }
         userDao.save(user);
@@ -118,7 +118,7 @@ public class UserServiceImpl implements UserService {
             model.setBirthday(user.getBirthday());
         userDao.save(model);
         session.set(SESSION, model);
-        cleanCache(model.getId());
+        cleanCache(model);
     }
 
     @Override
@@ -130,7 +130,7 @@ public class UserServiceImpl implements UserService {
         user.setPassword(password(newPassword));
         userDao.save(user);
         session.set(SESSION, user);
-        cleanCache(user.getId());
+        cleanCache(user);
 
         return true;
     }
@@ -140,7 +140,7 @@ public class UserServiceImpl implements UserService {
         UserModel user = session.get(SESSION);
         user.setPortrait(uri);
         userDao.save(user);
-        cleanCache(user.getId());
+        cleanCache(user);
     }
 
     @Override
@@ -152,6 +152,18 @@ public class UserServiceImpl implements UserService {
                 continue;
 
             object.put(id, user);
+        }
+
+        return object;
+    }
+
+    @Override
+    public JSONObject find(String code) {
+        String cacheKey = CACHE_JSON + code;
+        JSONObject object = cache.get(cacheKey);
+        if (object == null) {
+            UserModel user = userDao.findByCode(code);
+            cache.put(cacheKey, object = user == null ? new JSONObject() : getJson(user.getId(), user), false);
         }
 
         return object;
@@ -197,7 +209,7 @@ public class UserServiceImpl implements UserService {
         UserModel user = findById(id);
         user.setGrade(grade);
         userDao.save(user);
-        cleanCache(id);
+        cleanCache(user);
     }
 
     @Override
@@ -205,11 +217,12 @@ public class UserServiceImpl implements UserService {
         UserModel user = findById(id);
         user.setState(state);
         userDao.save(user);
-        cleanCache(id);
+        cleanCache(user);
     }
 
-    private void cleanCache(String id) {
-        cache.remove(CACHE_MODEL + id);
-        cache.remove(CACHE_JSON + id);
+    private void cleanCache(UserModel user) {
+        cache.remove(CACHE_MODEL + user.getId());
+        cache.remove(CACHE_JSON + user.getId());
+        cache.remove(CACHE_JSON + user.getCode());
     }
 }
