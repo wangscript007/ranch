@@ -17,8 +17,4 @@ interface ClassifyDao {
     ClassifyModel findByCodeValue(String code, String value);
 
     void save(ClassifyModel classify);
-
-    void delete(String code);
-
-    void restore(Set<String> codes);
 }

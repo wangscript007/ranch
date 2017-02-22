@@ -55,4 +55,19 @@ public class UserHelperTest extends TephraTestSupport {
         Assert.assertEquals(1, object.size());
         Assert.assertEquals("sign", object.getString("name"));
     }
+
+    @Test
+    public void id() {
+        while (Calendar.getInstance().get(Calendar.SECOND) > 55)
+            thread.sleep(5, TimeUnit.Second);
+
+        mockHelper.reset();
+        mockHelper.mock("/carousel");
+        mockCarousel.reset();
+        mockCarousel.register("key", "{\"code\":0,\"data\":{\"id 1\":{\"id\":\"new id\",\"name\":\"carousel\"}}}");
+        Assert.assertNull(userHelper.id());
+
+        mockCarousel.register("ranch.user.sign", "{\"code\":0,\"data\":{\"id\":\"id value\"}}");
+        Assert.assertEquals("id value", userHelper.id());
+    }
 }

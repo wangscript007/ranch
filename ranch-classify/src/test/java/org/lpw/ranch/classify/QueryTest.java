@@ -114,5 +114,25 @@ public class QueryTest extends TestSupport {
         Assert.assertEquals(20, data.getIntValue("size"));
         Assert.assertEquals(1, data.getIntValue("number"));
         Assert.assertTrue(data.getJSONArray("list").isEmpty());
+
+        String code = generator.random(32);
+        for (int i = 0; i < 10; i++)
+            create(code, i, null, false);
+        mockHelper.reset();
+        mockHelper.getRequest().addParameter("code", code);
+        mockHelper.getRequest().addParameter("pageSize", "20");
+        mockHelper.getRequest().addParameter("pageNum", "1");
+        sign.put(mockHelper.getRequest().getMap(), null);
+        mockHelper.mock("/classify/query");
+        object = mockHelper.getResponse().asJson();
+        Assert.assertEquals(0, object.getIntValue("code"));
+        data = object.getJSONObject("data");
+        Assert.assertEquals(10, data.getIntValue("count"));
+        Assert.assertEquals(20, data.getIntValue("size"));
+        Assert.assertEquals(1, data.getIntValue("number"));
+        JSONArray list = data.getJSONArray("list");
+        Assert.assertEquals(10, list.size());
+        for (int i = 0; i < 10; i++)
+            equals(list.getJSONObject(i), code, "key " + i, "value " + i, "name " + i);
     }
 }

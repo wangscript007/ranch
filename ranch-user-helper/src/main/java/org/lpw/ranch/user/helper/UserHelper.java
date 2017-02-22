@@ -37,4 +37,11 @@ public interface UserHelper {
      * @return 用户登入信息，如果未登入则返回空JSON对象。
      */
     JSONObject sign();
+
+    /**
+     * 获取当前登入用户ID值。
+     *
+     * @return 当前登入用户ID值；如果未登入则返回null。
+     */
+    String id();
 }

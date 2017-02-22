@@ -61,23 +61,4 @@ class ClassifyDaoImpl implements ClassifyDao {
     public void save(ClassifyModel classify) {
         liteOrm.save(classify);
     }
-
-    @Override
-    public void delete(String code) {
-        liteOrm.update(new LiteQuery(ClassifyModel.class).set(Recycle.Yes.getSql()).where("c_code like ?"),
-                new Object[]{dataSource.getDialect(null).getLike(code, false, true)});
-    }
-
-    @Override
-    public void restore(Set<String> codes) {
-        StringBuilder where = new StringBuilder(Recycle.Yes.getSql()).append(" and c_code in(");
-        List<Object> args = new ArrayList<>();
-        codes.forEach(code -> {
-            if (args.size() > 0)
-                where.append(',');
-            where.append('?');
-            args.add(code);
-        });
-        liteOrm.update(new LiteQuery(ClassifyModel.class).set(Recycle.No.getSql()).where(where.append(')').toString()), args.toArray());
-    }
 }

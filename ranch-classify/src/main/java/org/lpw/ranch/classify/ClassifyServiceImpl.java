@@ -123,11 +123,17 @@ public class ClassifyServiceImpl implements ClassifyService, DateJob {
 
     @Override
     public JSONObject find(String code, String value) {
+        if (validator.isEmpty(code) || validator.isEmpty(value))
+            return new JSONObject();
+
         String cacheKey = CACHE_GET + getRandom() + code + value;
         JSONObject object = cache.get(cacheKey);
         if (object == null) {
             ClassifyModel classify = classifyDao.findByCodeValue(code, value);
-            cache.put(cacheKey, object = classify == null ? new JSONObject() : getJson(classify.getId(), classify, Recycle.No), false);
+            if (classify == null)
+                return new JSONObject();
+
+            cache.put(cacheKey, object = getJson(classify.getId(), classify, Recycle.No), false);
         }
 
         return object;
@@ -250,12 +256,7 @@ public class ClassifyServiceImpl implements ClassifyService, DateJob {
 
     @Override
     public void delete(String id) {
-        ClassifyModel classify = findById(id);
-        if (classify == null)
-            return;
-
-        classifyDao.delete(classify.getCode());
-        resetRandom();
+        recycleHelper.delete(ClassifyModel.class, id);
     }
 
     @Override
@@ -274,16 +275,7 @@ public class ClassifyServiceImpl implements ClassifyService, DateJob {
 
     @Override
     public void restore(String id) {
-        ClassifyModel classify = findById(id);
-        if (classify == null)
-            return;
-
-        Set<String> codes = new HashSet<>();
-        StringBuilder code = new StringBuilder();
-        for (char ch : classify.getCode().toCharArray())
-            codes.add(code.append(ch).toString());
-        classifyDao.restore(codes);
-        resetRandom();
+        recycleHelper.restore(ClassifyModel.class, id);
     }
 
     @Override

@@ -1,5 +1,7 @@
 package org.lpw.ranch.classify;
 
+import com.alibaba.fastjson.JSONObject;
+import org.junit.Assert;
 import org.junit.Test;
 import org.lpw.ranch.recycle.Recycle;
 import org.lpw.ranch.recycle.RecycleModel;
@@ -17,8 +19,40 @@ public class RecycleTest extends TestSupport implements RecycleTesterDao<Recycle
     private RecycleTester recycleTester;
 
     @Test
-    public void recycle() {
-        recycleTester.recycle(this, ClassifyModel.NAME, "classify");
+    public void all() {
+        recycleTester.all(this, ClassifyModel.NAME, "classify", 12);
+    }
+
+    @Test
+    public void restore() {
+        ClassifyModel classify1 = create(1, false);
+        ClassifyModel classify2 = create(1, true);
+
+        mockHelper.reset();
+        mockHelper.getRequest().addParameter("id", generator.uuid());
+        sign.put(mockHelper.getRequest().getMap(), null);
+        mockHelper.mock("/classify/restore");
+        JSONObject object = mockHelper.getResponse().asJson();
+        Assert.assertEquals(1209, object.getIntValue("code"));
+        Assert.assertEquals(message.get(ClassifyModel.NAME + ".not-exists"), object.getString("message"));
+
+        mockHelper.reset();
+        mockHelper.getRequest().addParameter("id", classify2.getId());
+        sign.put(mockHelper.getRequest().getMap(), null);
+        mockHelper.mock("/classify/restore");
+        object = mockHelper.getResponse().asJson();
+        Assert.assertEquals(1210, object.getIntValue("code"));
+        Assert.assertEquals(message.get(ClassifyModel.NAME + ".code-value.exists"), object.getString("message"));
+
+        liteOrm.delete(classify1);
+        classifyService.refresh();
+        mockHelper.reset();
+        mockHelper.getRequest().addParameter("id", classify2.getId());
+        sign.put(mockHelper.getRequest().getMap(), null);
+        mockHelper.mock("/classify/restore");
+        object = mockHelper.getResponse().asJson();
+        Assert.assertEquals(0, object.getIntValue("code"));
+        Assert.assertEquals(Recycle.No.getValue(), liteOrm.findById(ClassifyModel.class, classify2.getId()).getRecycle());
     }
 
     @Override

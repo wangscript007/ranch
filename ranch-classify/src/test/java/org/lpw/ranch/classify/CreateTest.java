@@ -89,6 +89,17 @@ public class CreateTest extends TestSupport {
         Assert.assertFalse(data.containsKey("json"));
 
         mockHelper.reset();
+        mockHelper.getRequest().addParameter("code", "code 1");
+        mockHelper.getRequest().addParameter("key", "key 1");
+        mockHelper.getRequest().addParameter("value", "value 1");
+        mockHelper.getRequest().addParameter("name", "name 1");
+        sign.put(mockHelper.getRequest().getMap(), null);
+        mockHelper.mock("/classify/create");
+        object = mockHelper.getResponse().asJson();
+        Assert.assertEquals(1210, object.getIntValue("code"));
+        Assert.assertEquals(message.get(ClassifyModel.NAME + ".code-value.exists"), object.getString("message"));
+
+        mockHelper.reset();
         mockHelper.getRequest().addParameter("code", "code 2");
         mockHelper.getRequest().addParameter("key", "key 2");
         mockHelper.getRequest().addParameter("value", "value 2");

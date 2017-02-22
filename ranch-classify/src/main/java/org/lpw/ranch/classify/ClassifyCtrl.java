@@ -63,7 +63,8 @@ public class ClassifyCtrl extends RecycleCtrlSupport {
             @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "value", failureCode = 6),
             @Validate(validator = Validators.NOT_EMPTY, parameter = "name", failureCode = 7),
             @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "name", failureCode = 8),
-            @Validate(validator = Validators.SIGN)
+            @Validate(validator = Validators.SIGN),
+            @Validate(validator = ClassifyService.VALIDATOR_CODE_VALUE_NOT_EXISTS, parameters = {"code", "value"}, failureCode = 10)
     })
     public Object create() {
         return templates.get().success(classifyService.create(request.getMap()), null);
@@ -76,7 +77,8 @@ public class ClassifyCtrl extends RecycleCtrlSupport {
             @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "value", failureCode = 6),
             @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "name", failureCode = 8),
             @Validate(validator = Validators.SIGN),
-            @Validate(validator = ClassifyService.VALIDATOR_EXISTS, parameter = "id", failureCode = 9)
+            @Validate(validator = ClassifyService.VALIDATOR_EXISTS, parameter = "id", failureCode = 9),
+            @Validate(validator = ClassifyService.VALIDATOR_CODE_VALUE_NOT_EXISTS, parameters = {"code", "value", "id"}, failureCode = 10)
     })
     public Object modify() {
         return templates.get().success(classifyService.modify(request.setToModel(new ClassifyModel()), request.getMap()), null);
@@ -89,6 +91,16 @@ public class ClassifyCtrl extends RecycleCtrlSupport {
         classifyService.refresh();
 
         return "";
+    }
+
+    @Execute(name = "restore", validates = {
+            @Validate(validator = Validators.ID, parameter = "id", failureCode = 86),
+            @Validate(validator = Validators.SIGN),
+            @Validate(validator = ClassifyService.VALIDATOR_EXISTS, parameter = "id", failureCode = 9),
+            @Validate(validator = ClassifyService.VALIDATOR_CODE_VALUE_NOT_EXISTS, parameter = "id", failureCode = 10)
+    })
+    public Object restore() {
+        return super.restore();
     }
 
     @Override

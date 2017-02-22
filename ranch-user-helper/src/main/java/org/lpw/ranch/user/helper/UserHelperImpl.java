@@ -23,6 +23,11 @@ public class UserHelperImpl extends ServiceHelperSupport implements UserHelper {
     }
 
     @Override
+    public String id() {
+        return sign().getString("id");
+    }
+
+    @Override
     protected String getKey() {
         return key;
     }

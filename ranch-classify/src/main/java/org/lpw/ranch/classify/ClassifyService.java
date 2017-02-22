@@ -14,6 +14,10 @@ public interface ClassifyService extends RecycleService {
      * 分类信息是否存在验证器Bean名称。
      */
     String VALIDATOR_EXISTS = ClassifyModel.NAME + ".validator.exists";
+    /**
+     * 分类code+value是否不存在验证器Bean名称。
+     */
+    String VALIDATOR_CODE_VALUE_NOT_EXISTS = ClassifyModel.NAME + ".validator.code-value.not-exists";
 
     /**
      * 检索分类信息集。
