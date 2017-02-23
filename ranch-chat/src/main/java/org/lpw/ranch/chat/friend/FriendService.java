@@ -17,15 +17,15 @@ public interface FriendService {
      * 添加好友。
      *
      * @param friend 好友ID或唯一编码。
-     * @param note   请求备注。
+     * @param memo   请求备注。
      */
-    void create(String friend, String note);
+    void create(String friend, String memo);
 
     /**
      * 通过好友审核。
      *
      * @param friend 好友ID。
-     * @param note   备注。
+     * @param memo   备注。
      */
-    void pass(String friend, String note);
+    void pass(String friend, String memo);
 }

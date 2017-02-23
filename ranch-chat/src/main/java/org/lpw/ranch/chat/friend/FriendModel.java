@@ -24,7 +24,7 @@ public class FriendModel extends ModelSupport {
 
     private String owner; // 所有者ID
     private String friend; // 好友ID
-    private String note; // 备注
+    private String memo; // 备注
     private int state; // 状态：0-待对方确认；1-待己方确认；2-已通过；3-已拒绝/拉黑
     private Timestamp create; // 创建时间
 
@@ -49,13 +49,13 @@ public class FriendModel extends ModelSupport {
     }
 
     @Jsonable
-    @Column(name = "c_note")
-    public String getNote() {
-        return note;
+    @Column(name = "c_memo")
+    public String getMemo() {
+        return memo;
     }
 
-    public void setNote(String note) {
-        this.note = note;
+    public void setMemo(String memo) {
+        this.memo = memo;
     }
 
     @Jsonable

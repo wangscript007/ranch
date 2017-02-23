@@ -45,7 +45,7 @@ public class FriendServiceImpl implements FriendService {
     }
 
     @Override
-    public void create(String friend, String note) {
+    public void create(String friend, String memo) {
         JSONObject user = userHelper.get(friend);
         if (user.isEmpty())
             user = userHelper.find(friend);
@@ -66,14 +66,14 @@ public class FriendServiceImpl implements FriendService {
         }
 
         create(owner, friendId, null, 0);
-        create(friendId, owner, note, 1);
+        create(friendId, owner, memo, 1);
     }
 
-    private void create(String owner, String friend, String note, int state) {
+    private void create(String owner, String friend, String memo, int state) {
         FriendModel model = new FriendModel();
         model.setOwner(owner);
         model.setFriend(friend);
-        model.setNote(note);
+        model.setMemo(memo);
         model.setState(state);
         model.setCreate(dateTime.now());
         friendDao.save(model);
@@ -81,19 +81,19 @@ public class FriendServiceImpl implements FriendService {
     }
 
     @Override
-    public void pass(String friend, String note) {
+    public void pass(String friend, String memo) {
         String owner = userHelper.id();
-        pass(owner, friend, note);
+        pass(owner, friend, memo);
         pass(friend, owner, null);
     }
 
-    private void pass(String owner, String friend, String note) {
+    private void pass(String owner, String friend, String memo) {
         FriendModel model = friendDao.find(owner, friend);
         if (model == null)
             return;
 
-        if (!validator.isEmpty(note))
-            model.setNote(note);
+        if (!validator.isEmpty(memo))
+            model.setMemo(memo);
         model.setState(2);
         friendDao.save(model);
         cache.remove(CACHE_OWNER + owner);
