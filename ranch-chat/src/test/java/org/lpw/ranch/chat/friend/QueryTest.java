@@ -20,5 +20,6 @@ public class QueryTest extends TestSupport {
         JSONObject object = mockHelper.getResponse().asJson();
         Assert.assertEquals(9901, object.getIntValue("code"));
         Assert.assertEquals(message.get("ranch.user.helper.need-sign-in"), object.getString("message"));
+
     }
 }
