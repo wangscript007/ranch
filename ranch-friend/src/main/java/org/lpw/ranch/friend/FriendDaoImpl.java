@@ -1,4 +1,4 @@
-package org.lpw.ranch.chat.friend;
+package org.lpw.ranch.friend;
 
 import org.lpw.tephra.dao.orm.PageList;
 import org.lpw.tephra.dao.orm.lite.LiteOrm;

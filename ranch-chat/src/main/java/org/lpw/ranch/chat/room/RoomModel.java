@@ -20,7 +20,7 @@ import java.sql.Timestamp;
 @Entity(name = RoomModel.NAME)
 @Table(name = "t_chat_room")
 public class RoomModel extends ModelSupport {
-    static final String NAME = "chat.room";
+    static final String NAME = "ranch.chat.room";
 
     private String owner; // 所有者ID
     private String title; // 房间名称

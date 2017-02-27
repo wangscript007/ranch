@@ -13,6 +13,10 @@ public interface UserHelper {
      * 用户是否已登入验证器Bean名称。
      */
     String VALIDATOR_SIGN_IN = "ranch.user.helper.validator.sign-in";
+    /**
+     * 用户是否存在验证器Bean名称。
+     */
+    String VALIDATOR_EXISTS = "ranch.user.helper.validator.exists";
 
     /**
      * 获取用户信息。

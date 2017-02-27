@@ -1,4 +1,4 @@
-package org.lpw.ranch.chat.friend;
+package org.lpw.ranch.friend;
 
 import org.lpw.tephra.dao.model.Jsonable;
 import org.lpw.tephra.dao.model.ModelSupport;
@@ -9,7 +9,6 @@ import org.springframework.stereotype.Component;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
-
 import java.sql.Timestamp;
 
 /**
@@ -18,7 +17,7 @@ import java.sql.Timestamp;
 @Component(FriendModel.NAME + ".model")
 @Scope(BeanDefinition.SCOPE_PROTOTYPE)
 @Entity(name = FriendModel.NAME)
-@Table(name = "t_chat_friend")
+@Table(name = "t_friend")
 public class FriendModel extends ModelSupport {
     static final String NAME = "chat.friend";
 

@@ -20,7 +20,7 @@ import java.sql.Timestamp;
 @Entity(name = MessageModel.NAME)
 @Table(name = "t_chat_message")
 public class MessageModel extends ModelSupport {
-    static final String NAME = "chat.message";
+    static final String NAME = "ranch.chat.message";
 
     private String sender; // 发送者ID
     private String receiver; // 接收者ID

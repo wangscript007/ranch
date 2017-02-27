@@ -17,6 +17,7 @@
         <module>ranch-doc</module>
         <module>ranch-user</module>
         <module>ranch-user-helper</module>
+        <module>ranch-friend</module>
         <module>ranch-chat</module>
         <module>ranch-archives</module>
         <module>ranch-web</module>

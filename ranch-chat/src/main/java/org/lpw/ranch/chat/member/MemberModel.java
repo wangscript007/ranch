@@ -18,7 +18,7 @@ import javax.persistence.Table;
 @Entity(name = MemberModel.NAME)
 @Table(name = "t_chat_member")
 public class MemberModel extends ModelSupport {
-    static final String NAME = "chat.member";
+    static final String NAME = "ranch.chat.member";
 
     private String room; // 房间ID
     private String user; // 用户ID

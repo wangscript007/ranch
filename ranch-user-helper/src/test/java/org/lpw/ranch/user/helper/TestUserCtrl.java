@@ -20,4 +20,14 @@ public class TestUserCtrl {
 
         return object;
     }
+
+    @Execute(name = "get", validates = {
+            @Validate(validator = UserHelper.VALIDATOR_EXISTS, parameter = "id")
+    })
+    public Object get() {
+        JSONObject object = new JSONObject();
+        object.put("state", "exists");
+
+        return object;
+    }
 }
