@@ -41,15 +41,19 @@ public class TestSupport extends TephraTestSupport {
     }
 
     FriendModel create(String owner, String friend, int i) {
-        return create(owner, friend, "memo " + i, i);
+        return create(owner, friend, "memo " + i, i, i);
     }
 
-    FriendModel create(String owner, String friend, String memo, int i) {
+    FriendModel create(String owner, int state, int i) {
+        return create(owner, "friend " + i, "memo " + i, state, i);
+    }
+
+    FriendModel create(String owner, String friend, String memo, int state, int i) {
         FriendModel model = new FriendModel();
         model.setOwner(owner);
         model.setFriend(friend);
         model.setMemo(memo);
-        model.setState(i);
+        model.setState(state);
         model.setCreate(new Timestamp(System.currentTimeMillis() - i * TimeUnit.Day.getTime()));
         liteOrm.save(model);
 

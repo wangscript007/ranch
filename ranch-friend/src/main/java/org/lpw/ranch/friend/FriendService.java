@@ -22,7 +22,7 @@ public interface FriendService {
     /**
      * 添加好友。
      *
-     * @param friend 好友ID或唯一编码。
+     * @param friend 好友ID。
      * @param memo   请求备注。
      */
     void create(String friend, String memo);

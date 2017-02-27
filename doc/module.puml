@@ -5,6 +5,7 @@
 [base] <-- [comment]
 [base] <-- [doc]
 [base] <-- [user]
+[base] <-- [friend]
 [base] <-- [chat]
 [base] <-- [archives]
 [test]

@@ -36,12 +36,13 @@ public class FriendServiceImpl implements FriendService {
     @Override
     public JSONArray query(int state) {
         String owner = userHelper.id();
-        String cacheKey = CACHE_OWNER + owner;
+        String cacheKey = CACHE_OWNER + owner + state;
         JSONArray array = cache.get(cacheKey);
         if (array == null) {
-            array = modelHelper.toJson(friendDao.query(owner).getList());
+            array = modelHelper.toJson(friendDao.query(owner, state, state != 2).getList());
             array = userHelper.fill(array, new String[]{"friend"});
-            array.sort(Comparator.comparing(this::getCompareName));
+            if (state == 2)
+                array.sort(Comparator.comparing(this::getCompareName));
             cache.put(cacheKey, array, false);
         }
 
