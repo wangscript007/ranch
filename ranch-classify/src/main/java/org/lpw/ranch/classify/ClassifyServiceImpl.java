@@ -50,9 +50,9 @@ public class ClassifyServiceImpl implements ClassifyService, DateJob {
     private Set<String> ignores;
 
     @Override
-    public JSONObject query(String code, String key, String name) {
+    public JSONObject query(String code, String key, String value, String name) {
         return toJson(validator.isEmpty(code) ? classifyDao.query(pagination.getPageSize(), pagination.getPageNum())
-                : classifyDao.query(code, key, name, pagination.getPageSize(), pagination.getPageNum()), Recycle.No);
+                : classifyDao.query(code, key, value, name, pagination.getPageSize(), pagination.getPageNum()), Recycle.No);
     }
 
     @Override
@@ -61,7 +61,7 @@ public class ClassifyServiceImpl implements ClassifyService, DateJob {
         JSONArray array = cache.get(cacheKey);
         if (array == null) {
             array = new JSONArray();
-            for (ClassifyModel classify : classifyDao.query(code, null, null, 0, 0).getList()) {
+            for (ClassifyModel classify : classifyDao.query(code, null, null, null, 0, 0).getList()) {
                 JSONObject object = getJson(classify.getId(), classify, Recycle.No);
                 JSONObject parent = findParent(array, classify.getCode());
                 if (parent == null)
@@ -145,7 +145,7 @@ public class ClassifyServiceImpl implements ClassifyService, DateJob {
         JSONArray array = cache.get(cacheKey);
         if (array == null) {
             array = new JSONArray();
-            for (ClassifyModel classify : classifyDao.query(code, null, null, 0, 0).getList())
+            for (ClassifyModel classify : classifyDao.query(code, null, null, null, 0, 0).getList())
                 if (contains(classify, key, name))
                     array.add(getJson(classify.getId(), classify, Recycle.No));
             cache.put(cacheKey, array, false);

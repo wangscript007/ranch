@@ -17,8 +17,8 @@ class FriendDaoImpl implements FriendDao {
 
     @Override
     public PageList<FriendModel> query(String owner, int state, boolean sortable) {
-        LiteQuery query=new LiteQuery(FriendModel.class).where("c_owner=? and c_state=?");
-        if(sortable)
+        LiteQuery query = new LiteQuery(FriendModel.class).where("c_owner=? and c_state=?");
+        if (sortable)
             query.order("c_create desc");
 
         return liteOrm.query(query, new Object[]{owner, state});

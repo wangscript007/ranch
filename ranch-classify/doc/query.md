@@ -7,6 +7,7 @@
 参数
 - code 编码前缀，会自动匹配【code+%】。
 - key 包含的键值，仅当code不为空时有效。
+- value 包含的值，仅当code不为空时有效。
 - name 包含的名称，仅当code不为空时有效。
 - pageSize 每页显示记录数。
 - pageNum 当前显示页数。

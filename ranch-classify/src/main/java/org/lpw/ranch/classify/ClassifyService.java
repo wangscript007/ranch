@@ -22,12 +22,13 @@ public interface ClassifyService extends RecycleService {
     /**
      * 检索分类信息集。
      *
-     * @param code 编码前缀。
-     * @param key  包含的键。
-     * @param name 包含的名称。
+     * @param code  编码前缀。
+     * @param key   包含的键。
+     * @param value 包含的值。
+     * @param name  包含的名称。
      * @return 分类信息集。
      */
-    JSONObject query(String code, String key, String name);
+    JSONObject query(String code, String key, String value, String name);
 
     /**
      * 检索分类信息树。

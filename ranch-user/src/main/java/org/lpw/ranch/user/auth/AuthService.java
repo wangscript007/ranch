@@ -1,5 +1,7 @@
 package org.lpw.ranch.user.auth;
 
+import com.alibaba.fastjson.JSONArray;
+
 /**
  * @author lpw
  */
@@ -8,6 +10,14 @@ public interface AuthService {
      * UID不存在验证器Bean名称。
      */
     String VALIDATOR_UID_NOT_EXISTS = AuthModel.NAME + ".validator.uid.not-exists";
+
+    /**
+     * 检索用户的认证信息集。
+     *
+     * @param user 用户ID。
+     * @return 认证信息集，如果不存在则返回空JSON数组。
+     */
+    JSONArray query(String user);
 
     /**
      * 创建新认证。

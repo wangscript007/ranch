@@ -1,7 +1,7 @@
 package org.lpw.ranch.classify;
 
-import org.lpw.tephra.dao.model.Jsonable;
 import org.lpw.ranch.recycle.RecycleModelSupport;
+import org.lpw.tephra.dao.model.Jsonable;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;

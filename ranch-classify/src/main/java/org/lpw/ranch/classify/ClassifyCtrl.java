@@ -25,7 +25,7 @@ public class ClassifyCtrl extends RecycleCtrlSupport {
             @Validate(validator = Validators.SIGN)
     })
     public Object query() {
-        return classifyService.query(request.get("code"), request.get("key"), request.get("name"));
+        return classifyService.query(request.get("code"), request.get("key"), request.get("value"), request.get("name"));
     }
 
     @Execute(name = "tree", validates = {

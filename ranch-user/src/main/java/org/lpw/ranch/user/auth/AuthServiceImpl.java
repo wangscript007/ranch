@@ -1,6 +1,8 @@
 package org.lpw.ranch.user.auth;
 
+import com.alibaba.fastjson.JSONArray;
 import org.lpw.tephra.cache.Cache;
+import org.lpw.tephra.dao.model.ModelHelper;
 import org.lpw.tephra.util.Validator;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +20,14 @@ public class AuthServiceImpl implements AuthService {
     @Inject
     private Validator validator;
     @Inject
+    private ModelHelper modelHelper;
+    @Inject
     private AuthDao authDao;
+
+    @Override
+    public JSONArray query(String user) {
+        return modelHelper.toJson(authDao.query(user).getList());
+    }
 
     @Override
     public AuthModel create(String userId, String uid, int type) {

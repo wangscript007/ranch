@@ -21,3 +21,5 @@
 [修改用户等级](doc/grade.md)
 
 [修改用户状态](doc/state.md)
+
+[获取用户认证信息集](doc/auth-query.md)
