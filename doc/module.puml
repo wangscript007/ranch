@@ -6,6 +6,7 @@
 [base] <-- [doc]
 [base] <-- [user]
 [base] <-- [friend]
+[base] <-- [group]
 [base] <-- [chat]
 [base] <-- [archives]
 [test]

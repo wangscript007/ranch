@@ -15,8 +15,9 @@ Ranch目前包含以下模块：
 - [doc](ranch-doc/) —— 文档。
 - [user](ranch-user/) —— 用户 & 认证。
 - [user-helper](ranch-user-helper/) —— 用户支持。
-- [chat](ranch-chat/) —— 即时通讯。
 - [friend](ranch-friend/) —— 好友。
+- [group](ranch-group/) —— 群组。
+- [chat](ranch-chat/) —— 即时通讯。
 - [archives](ranch-archives/) —— 档案。
 - [test](ranch-test/) —— 单元测试支持。
 

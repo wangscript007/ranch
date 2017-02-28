@@ -7,8 +7,10 @@ import org.lpw.tephra.test.TephraTestSupport;
 import org.lpw.tephra.util.Converter;
 import org.lpw.tephra.util.Generator;
 import org.lpw.tephra.util.Message;
+import org.lpw.tephra.util.TimeUnit;
 
 import javax.inject.Inject;
+import java.sql.Timestamp;
 
 /**
  * @author lpw
@@ -26,4 +28,18 @@ public class TestSupport extends TephraTestSupport {
     MockCarousel mockCarousel;
     @Inject
     MockHelper mockHelper;
+    long now = System.currentTimeMillis();
+
+    GroupModel create(int i) {
+        GroupModel group = new GroupModel();
+        group.setOwner("owner " + i);
+        group.setName("name " + i);
+        group.setNote("note " + i);
+        group.setMember(100 + i);
+        group.setAudit(i);
+        group.setCreate(new Timestamp(now - i * TimeUnit.Day.getTime()));
+        liteOrm.save(group);
+
+        return group;
+    }
 }

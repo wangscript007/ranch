@@ -30,4 +30,29 @@ public class GroupCtrl {
     public Object create() {
         return groupService.create(request.get("name"), request.get("note"), request.getAsInt("audit"));
     }
+
+    @Execute(name = "name", validates = {
+            @Validate(validator = Validators.NOT_EMPTY, parameter = "name", failureCode = 1),
+            @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "name", failureCode = 2),
+            @Validate(validator = GroupService.VALIDATOR_MODIFY_ENABLE, parameter = "id", failureCode = 5)
+    })
+    public Object name() {
+        return groupService.name(request.get("id"), request.get("name"));
+    }
+
+    @Execute(name = "note", validates = {
+            @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "note", failureCode = 3),
+            @Validate(validator = GroupService.VALIDATOR_MODIFY_ENABLE, parameter = "id", failureCode = 5)
+    })
+    public Object note() {
+        return groupService.note(request.get("id"), request.get("note"));
+    }
+
+    @Execute(name = "audit", validates = {
+            @Validate(validator = Validators.BETWEEN, number = {0, 1}, parameter = "audit", failureCode = 4),
+            @Validate(validator = GroupService.VALIDATOR_MODIFY_ENABLE, parameter = "id", failureCode = 5)
+    })
+    public Object audit() {
+        return groupService.audit(request.get("id"), request.getAsInt("audit"));
+    }
 }
