@@ -21,6 +21,7 @@ CREATE TABLE t_group_member
   c_user CHAR(36) NOT NULL COMMENT '用户ID',
   c_nick VARCHAR(255) DEFAULT NULL COMMENT '群组昵称',
   c_type INT DEFAULT 0 COMMENT '类型：0-待审核；1-普通成员；2-管理员；3-所有者',
+  c_join DATETIME DEFAULT NULL COMMENT '加入时间',
 
   PRIMARY KEY pk_group_member(c_id) USING HASH,
   KEY k_group_member_group(c_group) USING HASH,
