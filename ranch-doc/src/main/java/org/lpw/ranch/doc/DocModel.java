@@ -1,7 +1,7 @@
 package org.lpw.ranch.doc;
 
-import org.lpw.ranch.audit.AuditModelSupport;
 import org.lpw.tephra.dao.model.Jsonable;
+import org.lpw.ranch.audit.AuditModelSupport;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+
 import java.sql.Timestamp;
 
 /**
@@ -33,11 +34,12 @@ public class DocModel extends AuditModelSupport {
     private String summary; // 摘要
     private String label; // 标签
     private String content; // 内容
+    private String source; // 内容源
     private int read; // 阅读次数
     private int favorite; // 收藏次数
     private int comment; // 评论次数
     private int score; // 得分
-    private Timestamp time; // 时间
+    private Timestamp time; // 更新时间
 
     @Jsonable
     @Column(name = "c_key")
@@ -149,6 +151,7 @@ public class DocModel extends AuditModelSupport {
         this.label = label;
     }
 
+    @Jsonable
     @Column(name = "c_content")
     public String getContent() {
         return content;
@@ -156,6 +159,16 @@ public class DocModel extends AuditModelSupport {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    @Jsonable
+    @Column(name = "c_source")
+    public String getSource() {
+        return source;
+    }
+
+    public void setSource(String source) {
+        this.source = source;
     }
 
     @Jsonable
