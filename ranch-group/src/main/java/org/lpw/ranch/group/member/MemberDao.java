@@ -5,4 +5,6 @@ package org.lpw.ranch.group.member;
  */
 interface MemberDao {
     MemberModel find(String group, String user);
+
+    void save(MemberModel member);
 }

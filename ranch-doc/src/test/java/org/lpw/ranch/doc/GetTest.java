@@ -55,6 +55,7 @@ public class GetTest extends TestSupport {
             Assert.assertEquals("thumbnail 1", doc.getString("thumbnail"));
             Assert.assertEquals("summary 1", doc.getString("summary"));
             Assert.assertEquals("label 1", doc.getString("label"));
+            Assert.assertFalse(doc.containsKey("source"));
             Assert.assertFalse(doc.containsKey("content"));
             Assert.assertEquals(401, doc.getIntValue("read"));
             Assert.assertEquals(501, doc.getIntValue("favorite"));

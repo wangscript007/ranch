@@ -10,6 +10,10 @@ public interface GroupService {
      * 是否可修改验证器Bean名称。
      */
     String VALIDATOR_MODIFY_ENABLE = GroupModel.NAME + ".validator.modify-enable";
+    /**
+     * 是否存在验证器Bean名称。
+     */
+    String VALIDATOR_EXISTS = GroupModel.NAME + ".validator.exists";
 
     /**
      * 创建新群组。

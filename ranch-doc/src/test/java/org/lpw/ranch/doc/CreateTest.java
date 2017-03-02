@@ -110,6 +110,19 @@ public class CreateTest extends TestSupport {
         mockHelper.mock("/doc/create");
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(1409, object.getIntValue("code"));
+        Assert.assertEquals(message.get(Validators.PREFIX + "empty", message.get(DocModel.NAME + ".source")), object.getString("message"));
+
+        mockHelper.reset();
+        mockHelper.getRequest().addParameter("key", "key");
+        mockHelper.getRequest().addParameter("owner", ownerId);
+        mockHelper.getRequest().addParameter("author", authorId);
+        mockHelper.getRequest().addParameter("subject", "subject");
+        mockHelper.getRequest().addParameter("image", "image");
+        mockHelper.getRequest().addParameter("thumbnail", "thumbnail");
+        mockHelper.getRequest().addParameter("source", "source");
+        mockHelper.mock("/doc/create");
+        object = mockHelper.getResponse().asJson();
+        Assert.assertEquals(1410, object.getIntValue("code"));
         Assert.assertEquals(message.get(Validators.PREFIX + "empty", message.get(DocModel.NAME + ".content")), object.getString("message"));
 
         mockCarousel.reset();
@@ -134,6 +147,7 @@ public class CreateTest extends TestSupport {
         mockHelper.getRequest().addParameter("thumbnail", "thumbnail");
         mockHelper.getRequest().addParameter("summary", "summary");
         mockHelper.getRequest().addParameter("label", "label");
+        mockHelper.getRequest().addParameter("source", "source");
         mockHelper.getRequest().addParameter("content", "content");
         mockHelper.getRequest().addParameter("read", "4");
         mockHelper.getRequest().addParameter("favorite", "5");
@@ -158,7 +172,8 @@ public class CreateTest extends TestSupport {
         Assert.assertEquals("image", data.getString("image"));
         Assert.assertEquals("thumbnail", data.getString("thumbnail"));
         Assert.assertEquals("label", data.getString("label"));
-        Assert.assertFalse(data.containsKey("content"));
+        Assert.assertEquals("source", data.getString("source"));
+        Assert.assertEquals("content", data.getString("content"));
         Assert.assertEquals(0, data.getIntValue("read"));
         Assert.assertEquals(0, data.getIntValue("favorite"));
         Assert.assertEquals(0, data.getIntValue("comment"));

@@ -1,6 +1,7 @@
 package org.lpw.ranch.group;
 
 import com.alibaba.fastjson.JSONObject;
+import org.lpw.ranch.group.member.MemberService;
 import org.lpw.ranch.user.helper.UserHelper;
 import org.lpw.tephra.cache.Cache;
 import org.lpw.tephra.dao.model.ModelHelper;
@@ -28,6 +29,8 @@ public class GroupServiceImpl implements GroupService {
     @Inject
     private UserHelper userHelper;
     @Inject
+    private MemberService memberService;
+    @Inject
     private GroupDao groupDao;
 
     @Override
@@ -40,6 +43,7 @@ public class GroupServiceImpl implements GroupService {
         group.setAudit(audit);
         group.setCreate(dateTime.now());
         groupDao.save(group);
+        memberService.create(group.getId(), group.getOwner());
 
         return getJson(group.getId(), group);
     }

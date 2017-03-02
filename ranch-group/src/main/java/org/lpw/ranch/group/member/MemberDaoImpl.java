@@ -18,4 +18,9 @@ class MemberDaoImpl implements MemberDao {
     public MemberModel find(String group, String user) {
         return liteOrm.findOne(new LiteQuery(MemberModel.class).where("c_group=? and c_user=?"), new Object[]{group, user});
     }
+
+    @Override
+    public void save(MemberModel member) {
+        liteOrm.save(member);
+    }
 }

@@ -63,7 +63,8 @@ public class DocCtrl extends AuditCtrlSupport {
             @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "subject", failureCode = 6),
             @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "image", failureCode = 7),
             @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "thumbnail", failureCode = 8),
-            @Validate(validator = Validators.NOT_EMPTY, parameter = "content", failureCode = 9)
+            @Validate(validator = Validators.NOT_EMPTY, parameter = "source", failureCode = 9),
+            @Validate(validator = Validators.NOT_EMPTY, parameter = "content", failureCode = 10)
     })
     public Object create() {
         return docService.create(request.setToModel(new DocModel()));

@@ -80,6 +80,7 @@ public class TestSupport extends TephraTestSupport implements AuditTesterDao<Doc
         doc.setThumbnail(thumbnail);
         doc.setSummary(summary);
         doc.setLabel(label);
+        doc.setSource("source " + i);
         doc.setContent("content " + i);
         doc.setRead(400 + i);
         doc.setFavorite(500 + i);

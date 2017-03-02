@@ -91,6 +91,7 @@ public class DocServiceImpl implements DocService, MinuteJob, DateJob {
         model.setThumbnail(doc.getThumbnail());
         model.setSummary(doc.getSummary());
         model.setLabel(doc.getLabel());
+        model.setSource(doc.getSource());
         model.setContent(doc.getContent());
         model.setTime(dateTime.now());
         model.setAudit(defaultAudit);
@@ -116,6 +117,8 @@ public class DocServiceImpl implements DocService, MinuteJob, DateJob {
                     ignores.add("scoreMin");
                     ignores.add("scoreMax");
                     ignores.add("sort");
+                    ignores.add("source");
+                    ignores.add("content");
                     auditHelper.addProperty(ignores);
                     object = toJson(doc, ignores, false);
                 }

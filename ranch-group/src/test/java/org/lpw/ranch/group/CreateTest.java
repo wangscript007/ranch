@@ -3,7 +3,11 @@ package org.lpw.ranch.group;
 import com.alibaba.fastjson.JSONObject;
 import org.junit.Assert;
 import org.junit.Test;
+import org.lpw.ranch.group.member.MemberModel;
+import org.lpw.ranch.group.member.MemberService;
 import org.lpw.tephra.ctrl.validate.Validators;
+import org.lpw.tephra.dao.orm.PageList;
+import org.lpw.tephra.dao.orm.lite.LiteQuery;
 
 /**
  * @author lpw
@@ -83,5 +87,14 @@ public class CreateTest extends TestSupport {
         Assert.assertEquals(1, group.getMember());
         Assert.assertEquals(1, group.getAudit());
         Assert.assertTrue(System.currentTimeMillis() - group.getCreate().getTime() < 2000L);
+
+        PageList<MemberModel> pl = liteOrm.query(new LiteQuery(MemberModel.class), null);
+        Assert.assertEquals(1, pl.getList().size());
+        MemberModel member = pl.getList().get(0);
+        Assert.assertEquals(group.getId(), member.getGroup());
+        Assert.assertEquals("sign in id", member.getUser());
+        Assert.assertNull(member.getNick());
+        Assert.assertEquals(MemberService.Type.Owner.ordinal(), member.getType());
+        Assert.assertTrue(System.currentTimeMillis() - member.getJoin().getTime() < 2000L);
     }
 }

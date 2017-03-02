@@ -33,8 +33,8 @@ public class DocModel extends AuditModelSupport {
     private String thumbnail; // 缩略图URI地址
     private String summary; // 摘要
     private String label; // 标签
-    private String content; // 内容
     private String source; // 内容源
+    private String content; // 内容
     private int read; // 阅读次数
     private int favorite; // 收藏次数
     private int comment; // 评论次数
@@ -152,16 +152,6 @@ public class DocModel extends AuditModelSupport {
     }
 
     @Jsonable
-    @Column(name = "c_content")
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
-    }
-
-    @Jsonable
     @Column(name = "c_source")
     public String getSource() {
         return source;
@@ -169,6 +159,16 @@ public class DocModel extends AuditModelSupport {
 
     public void setSource(String source) {
         this.source = source;
+    }
+
+    @Jsonable
+    @Column(name = "c_content")
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
     }
 
     @Jsonable

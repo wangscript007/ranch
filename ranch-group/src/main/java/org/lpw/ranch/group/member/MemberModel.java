@@ -25,6 +25,7 @@ public class MemberModel extends ModelSupport {
     private String group; // 群组ID
     private String user; // 用户ID
     private String nick; // 群组昵称
+    private String reason; // 申请加入理由
     private int type; // 类型：0-待审核；1-普通成员；2-管理员；3-所有者
     private Timestamp join; // 加入时间
 
@@ -56,6 +57,16 @@ public class MemberModel extends ModelSupport {
 
     public void setNick(String nick) {
         this.nick = nick;
+    }
+
+    @Jsonable
+    @Column(name = "c_reason")
+    public String getReason() {
+        return reason;
+    }
+
+    public void setReason(String reason) {
+        this.reason = reason;
     }
 
     @Jsonable
