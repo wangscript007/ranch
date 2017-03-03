@@ -15,6 +15,11 @@ class MemberDaoImpl implements MemberDao {
     private LiteOrm liteOrm;
 
     @Override
+    public MemberModel findById(String id) {
+        return liteOrm.findById(MemberModel.class, id);
+    }
+
+    @Override
     public MemberModel find(String group, String user) {
         return liteOrm.findOne(new LiteQuery(MemberModel.class).where("c_group=? and c_user=?"), new Object[]{group, user});
     }
@@ -22,5 +27,10 @@ class MemberDaoImpl implements MemberDao {
     @Override
     public void save(MemberModel member) {
         liteOrm.save(member);
+    }
+
+    @Override
+    public void delete(String id) {
+        liteOrm.deleteById(MemberModel.class, id);
     }
 }

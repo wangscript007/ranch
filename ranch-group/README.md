@@ -7,3 +7,5 @@
 [修改群组公告](doc/note.md)
 
 [修改群组新成员审核设置](doc/audit.md)
+
+[加入群组](doc/member/join.md)

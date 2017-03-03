@@ -22,6 +22,16 @@ public class MemberServiceImpl implements MemberService {
     private MemberDao memberDao;
 
     @Override
+    public MemberModel findById(String id) {
+        return memberDao.findById(id);
+    }
+
+    @Override
+    public MemberModel find(String group, String user) {
+        return memberDao.find(group, user);
+    }
+
+    @Override
     public void create(String group, String owner) {
         create(group, owner, null, Type.Owner);
     }
@@ -29,7 +39,7 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public void join(String group, String reason) {
         String user = userHelper.id();
-        MemberModel member = memberDao.find(group, user);
+        MemberModel member = find(group, user);
         if (member == null) {
             create(group, user, reason, groupService.get(group).getIntValue("audit") == 0 ? Type.Normal : Type.New);
 
@@ -48,5 +58,40 @@ public class MemberServiceImpl implements MemberService {
         member.setType(type.ordinal());
         member.setJoin(dateTime.now());
         memberDao.save(member);
+    }
+
+    @Override
+    public void pass(String id) {
+        MemberModel member = findById(id);
+        member.setType(Type.Normal.ordinal());
+        member.setJoin(dateTime.now());
+        memberDao.save(member);
+    }
+
+    @Override
+    public void refuse(String id) {
+        memberDao.delete(id);
+    }
+
+    @Override
+    public void manager(String id) {
+        MemberModel member = findById(id);
+        if (member.getType() >= Type.Manager.ordinal())
+            return;
+
+        member.setType(Type.Manager.ordinal());
+        memberDao.save(member);
+    }
+
+    @Override
+    public void nick(String id, String nick) {
+        MemberModel member = findById(id);
+        member.setNick(nick);
+        memberDao.save(member);
+    }
+
+    @Override
+    public void leave(String id) {
+        memberDao.delete(id);
     }
 }

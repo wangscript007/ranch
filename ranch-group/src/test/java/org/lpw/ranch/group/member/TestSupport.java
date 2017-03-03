@@ -4,10 +4,10 @@ import org.lpw.tephra.dao.orm.lite.LiteOrm;
 import org.lpw.tephra.test.MockCarousel;
 import org.lpw.tephra.test.MockHelper;
 import org.lpw.tephra.test.TephraTestSupport;
-import org.lpw.tephra.util.Converter;
 import org.lpw.tephra.util.DateTime;
 import org.lpw.tephra.util.Generator;
 import org.lpw.tephra.util.Message;
+import org.lpw.tephra.util.Thread;
 
 import javax.inject.Inject;
 
@@ -20,7 +20,7 @@ public class TestSupport extends TephraTestSupport {
     @Inject
     Generator generator;
     @Inject
-    Converter converter;
+    Thread thread;
     @Inject
     DateTime dateTime;
     @Inject

@@ -7,6 +7,7 @@ import org.lpw.ranch.group.GroupModel;
 import org.lpw.tephra.ctrl.validate.Validators;
 import org.lpw.tephra.dao.orm.PageList;
 import org.lpw.tephra.dao.orm.lite.LiteQuery;
+import org.lpw.tephra.util.TimeUnit;
 
 /**
  * @author lpw
@@ -74,7 +75,6 @@ public class JoinTest extends TestSupport {
         Assert.assertEquals(MemberService.Type.Normal.ordinal(), member1.getType());
         Assert.assertTrue(System.currentTimeMillis() - member1.getJoin().getTime() < 2000L);
 
-        mockCarousel.register("ranch.user.sign", "{\"code\":0,\"data\":{\"id\":\"sign in id\"}}");
         mockHelper.reset();
         mockHelper.getRequest().addParameter("group", group2.getId());
         mockHelper.getRequest().addParameter("reason", "join reason 2");
@@ -91,5 +91,23 @@ public class JoinTest extends TestSupport {
         Assert.assertEquals("join reason 2", member2.getReason());
         Assert.assertEquals(MemberService.Type.New.ordinal(), member2.getType());
         Assert.assertTrue(System.currentTimeMillis() - member2.getJoin().getTime() < 2000L);
+
+        thread.sleep(3, TimeUnit.Second);
+        mockHelper.reset();
+        mockHelper.getRequest().addParameter("group", group2.getId());
+        mockHelper.getRequest().addParameter("reason", "join reason 3");
+        mockHelper.mock("/group/member/join");
+        object = mockHelper.getResponse().asJson();
+        Assert.assertEquals(0, object.getIntValue("code"));
+        Assert.assertEquals("", object.getString("data"));
+        pl = liteOrm.query(new LiteQuery(MemberModel.class).where("c_group=?"), new Object[]{group2.getId()});
+        Assert.assertEquals(1, pl.getList().size());
+        MemberModel member3 = pl.getList().get(0);
+        Assert.assertEquals(group2.getId(), member3.getGroup());
+        Assert.assertEquals("sign in id", member3.getUser());
+        Assert.assertNull(member3.getNick());
+        Assert.assertEquals("join reason 3", member3.getReason());
+        Assert.assertEquals(MemberService.Type.New.ordinal(), member3.getType());
+        Assert.assertTrue(System.currentTimeMillis() - member3.getJoin().getTime() > 2000L);
     }
 }
