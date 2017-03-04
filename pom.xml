@@ -19,7 +19,7 @@
         <module>ranch-user-helper</module>
         <module>ranch-friend</module>
         <module>ranch-group</module>
-        <module>ranch-chat</module>
+        <module>ranch-message</module>
         <module>ranch-archives</module>
         <module>ranch-web</module>
         <module>ranch-test</module>

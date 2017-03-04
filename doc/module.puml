@@ -7,7 +7,7 @@
 [base] <-- [user]
 [base] <-- [friend]
 [base] <-- [group]
-[base] <-- [chat]
+[base] <-- [message]
 [base] <-- [archives]
 [test]
 
