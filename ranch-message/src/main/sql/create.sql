@@ -10,6 +10,5 @@ CREATE TABLE t_message
   c_time DATETIME NOT NULL COMMENT '发送时间',
 
   PRIMARY KEY pk_message(c_id) USING HASH,
-  KEY k_message_sender(c_time,c_sender) USING BTREE,
-  KEY k_message_receiver(c_time,c_receiver) USING BTREE
+  KEY k_message_time(c_time) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

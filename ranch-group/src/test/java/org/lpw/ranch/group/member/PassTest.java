@@ -84,5 +84,6 @@ public class PassTest extends TestSupport {
         MemberModel member11 = liteOrm.findById(MemberModel.class, member1.getId());
         Assert.assertEquals(MemberService.Type.Normal.ordinal(), member11.getType());
         Assert.assertTrue(System.currentTimeMillis() - member11.getJoin().getTime() < 2000L);
+        Assert.assertEquals(1, liteOrm.findById(GroupModel.class, group.getId()).getMember());
     }
 }

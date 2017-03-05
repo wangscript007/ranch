@@ -1,5 +1,6 @@
 package org.lpw.ranch.group;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import org.lpw.ranch.group.member.MemberService;
 import org.lpw.ranch.user.helper.UserHelper;
@@ -34,12 +35,19 @@ public class GroupServiceImpl implements GroupService {
     private GroupDao groupDao;
 
     @Override
+    public JSONArray queryByUser(String user) {
+        JSONArray array = new JSONArray();
+        memberService.queryByUser(user).forEach(member -> array.add(getJson(member.getGroup(), null)));
+
+        return array;
+    }
+
+    @Override
     public JSONObject create(String name, String note, int audit) {
         GroupModel group = new GroupModel();
         group.setOwner(userHelper.id());
         group.setName(name);
         group.setNote(note);
-        group.setMember(1);
         group.setAudit(audit);
         group.setCreate(dateTime.now());
         groupDao.save(group);
@@ -70,6 +78,13 @@ public class GroupServiceImpl implements GroupService {
         group.setAudit(audit);
 
         return modify(group);
+    }
+
+    @Override
+    public void member(String id, int count) {
+        GroupModel group = groupDao.findById(id);
+        group.setMember(group.getMember() + count);
+        modify(group);
     }
 
     private JSONObject modify(GroupModel group) {

@@ -1,5 +1,6 @@
 package org.lpw.ranch.group;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
 /**
@@ -14,6 +15,14 @@ public interface GroupService {
      * 是否存在验证器Bean名称。
      */
     String VALIDATOR_EXISTS = GroupModel.NAME + ".validator.exists";
+
+    /**
+     * 检索用户所在群组集。
+     *
+     * @param user 用户ID。
+     * @return 群组集；如果未找到则返回空JSON数据。
+     */
+    JSONArray queryByUser(String user);
 
     /**
      * 创建新群组。
@@ -51,6 +60,14 @@ public interface GroupService {
      * @return 群组信息。
      */
     JSONObject audit(String id, int audit);
+
+    /**
+     * 增减成员数。
+     *
+     * @param id    群组ID值。
+     * @param count 成员数：正数为增加，负数为减少。
+     */
+    void member(String id, int count);
 
     /**
      * 获取群组信息。

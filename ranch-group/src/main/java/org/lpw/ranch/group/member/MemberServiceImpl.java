@@ -1,11 +1,14 @@
 package org.lpw.ranch.group.member;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import org.lpw.ranch.group.GroupService;
 import org.lpw.ranch.user.helper.UserHelper;
 import org.lpw.tephra.util.DateTime;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
+import java.util.List;
 
 /**
  * @author lpw
@@ -29,6 +32,26 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public MemberModel find(String group, String user) {
         return memberDao.find(group, user);
+    }
+
+    @Override
+    public JSONArray queryByGroup(String group) {
+        JSONArray array = new JSONArray();
+        memberDao.queryByGroup(group).getList().forEach(member -> {
+            JSONObject object = new JSONObject();
+            object.put("id", member.getId());
+            object.put("group", group);
+            object.put("user", userHelper.get(member.getUser()));
+            object.put("nick", member.getNick());
+            array.add(object);
+        });
+
+        return array;
+    }
+
+    @Override
+    public List<MemberModel> queryByUser(String user) {
+        return memberDao.queryByUser(user).getList();
     }
 
     @Override
@@ -58,6 +81,8 @@ public class MemberServiceImpl implements MemberService {
         member.setType(type.ordinal());
         member.setJoin(dateTime.now());
         memberDao.save(member);
+        if (type.ordinal() >= Type.Normal.ordinal())
+            groupService.member(group, 1);
     }
 
     @Override
@@ -66,6 +91,7 @@ public class MemberServiceImpl implements MemberService {
         member.setType(Type.Normal.ordinal());
         member.setJoin(dateTime.now());
         memberDao.save(member);
+        groupService.member(member.getGroup(), 1);
     }
 
     @Override
@@ -79,6 +105,8 @@ public class MemberServiceImpl implements MemberService {
         if (member.getType() >= Type.Manager.ordinal())
             return;
 
+        if (member.getType() == Type.New.ordinal())
+            groupService.member(member.getGroup(), 1);
         member.setType(Type.Manager.ordinal());
         memberDao.save(member);
     }
@@ -92,6 +120,9 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public void leave(String id) {
-        memberDao.delete(id);
+        MemberModel member = findById(id);
+        if (member.getType() >= Type.Normal.ordinal())
+            groupService.member(member.getGroup(), -1);
+        memberDao.delete(member.getId());
     }
 }

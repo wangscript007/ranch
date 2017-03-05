@@ -20,6 +20,13 @@ public class GroupCtrl {
     @Inject
     private GroupService groupService;
 
+    @Execute(name = "query-by-user", validates = {
+            @Validate(validator = Validators.ID, parameter = "user", failureCode = 6)
+    })
+    public Object queryByUser() {
+        return groupService.queryByUser(request.get("user"));
+    }
+
     @Execute(name = "create", validates = {
             @Validate(validator = Validators.NOT_EMPTY, parameter = "name", failureCode = 1),
             @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "name", failureCode = 2),

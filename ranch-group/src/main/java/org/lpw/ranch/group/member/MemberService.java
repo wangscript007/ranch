@@ -1,5 +1,9 @@
 package org.lpw.ranch.group.member;
 
+import com.alibaba.fastjson.JSONArray;
+
+import java.util.List;
+
 /**
  * @author lpw
  */
@@ -55,6 +59,22 @@ public interface MemberService {
      * @return 成员信息；如果不存在则返回null。
      */
     MemberModel find(String group, String user);
+
+    /**
+     * 检索群组的成员集。
+     *
+     * @param group 群组ID。
+     * @return 成员集。
+     */
+    JSONArray queryByGroup(String group);
+
+    /**
+     * 检索用户所属的群组成员集。
+     *
+     * @param user 用户ID。
+     * @return 成员集。
+     */
+    List<MemberModel> queryByUser(String user);
 
     /**
      * 创建所有者成员。

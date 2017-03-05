@@ -64,7 +64,7 @@ public class LeaveTest extends TestSupport {
         Assert.assertEquals(1727, object.getIntValue("code"));
         Assert.assertEquals(message.get(MemberModel.NAME + ".not-self-manager"), object.getString("message"));
 
-        mockCarousel.register("ranch.user.sign", "{\"code\":0,\"data\":{\"id\":\"user 0\"}}");
+        mockCarousel.register("ranch.user.sign", "{\"code\":0,\"data\":{\"id\":\"user 2\"}}");
         mockHelper.reset();
         mockHelper.getRequest().addParameter("id", member1.getId());
         mockHelper.mock("/group/member/leave");
@@ -80,6 +80,7 @@ public class LeaveTest extends TestSupport {
         Assert.assertEquals(0, object.getIntValue("code"));
         Assert.assertEquals("", object.getString("data"));
         Assert.assertNull(liteOrm.findById(MemberModel.class, member1.getId()));
+        Assert.assertEquals(0, liteOrm.findById(GroupModel.class, group.getId()).getMember());
 
         mockCarousel.register("ranch.user.sign", "{\"code\":0,\"data\":{\"id\":\"user 3\"}}");
         mockHelper.reset();
@@ -89,5 +90,6 @@ public class LeaveTest extends TestSupport {
         Assert.assertEquals(0, object.getIntValue("code"));
         Assert.assertEquals("", object.getString("data"));
         Assert.assertNull(liteOrm.findById(MemberModel.class, member2.getId()));
+        Assert.assertEquals(-1, liteOrm.findById(GroupModel.class, group.getId()).getMember());
     }
 }

@@ -1,5 +1,7 @@
 package org.lpw.ranch.message;
 
+import com.alibaba.fastjson.JSONArray;
+
 /**
  * @author lpw
  */
@@ -13,4 +15,12 @@ public interface MessageService {
      * @param content  内容。
      */
     void send(int type, String receiver, int format, String content);
+
+    /**
+     * 检索当前用户最新信息集。
+     *
+     * @param time 最近一次获取时间戳。
+     * @return 最新信息集。
+     */
+    JSONArray newest(long time);
 }

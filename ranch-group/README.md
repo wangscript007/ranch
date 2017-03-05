@@ -1,5 +1,7 @@
 # 群组
 
+[检索用户所属群组](doc/query-by-user.md)
+
 [创建群组](doc/create.md)
 
 [修改群组名称](doc/name.md)
