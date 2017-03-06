@@ -1,6 +1,6 @@
 # 群组
 
-[检索用户所属群组](doc/query-by-user.md)
+[检索当前用户所属群组](doc/query-by-user.md)
 
 [创建群组](doc/create.md)
 
@@ -9,6 +9,8 @@
 [修改群组公告](doc/note.md)
 
 [修改群组新成员审核设置](doc/audit.md)
+
+[检索群组成员集](doc/member/query-by-group.md)
 
 [加入群组](doc/member/join.md)
 

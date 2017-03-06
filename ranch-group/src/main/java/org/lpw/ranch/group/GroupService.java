@@ -17,12 +17,11 @@ public interface GroupService {
     String VALIDATOR_EXISTS = GroupModel.NAME + ".validator.exists";
 
     /**
-     * 检索用户所在群组集。
+     * 检索当前用户所在群组集。
      *
-     * @param user 用户ID。
      * @return 群组集；如果未找到则返回空JSON数据。
      */
-    JSONArray queryByUser(String user);
+    JSONArray queryByUser();
 
     /**
      * 创建新群组。

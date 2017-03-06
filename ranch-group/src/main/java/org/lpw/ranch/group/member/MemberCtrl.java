@@ -21,6 +21,13 @@ public class MemberCtrl {
     @Inject
     private MemberService memberService;
 
+    @Execute(name = "query-by-group", validates = {
+            @Validate(validator = Validators.ID, parameter = "group", failureCode = 28)
+    })
+    public Object queryByGroup() {
+        return memberService.queryByGroup(request.get("group"));
+    }
+
     @Execute(name = "join", validates = {
             @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "reason", failureCode = 21),
             @Validate(validator = GroupService.VALIDATOR_EXISTS, parameter = "group", failureCode = 22),

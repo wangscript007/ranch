@@ -1,11 +1,8 @@
-# 检索用户所属群组
+# 检索当前用户所属群组
 
 请求
 - Service Key - ranch.group.query-by-user
 - URI - /group/query-by-user
-
-参数
-- user 用户ID。
 
 返回值
 ```json

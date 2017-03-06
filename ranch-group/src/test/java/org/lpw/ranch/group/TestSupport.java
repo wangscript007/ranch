@@ -1,5 +1,6 @@
 package org.lpw.ranch.group;
 
+import org.lpw.tephra.cache.Cache;
 import org.lpw.tephra.dao.orm.lite.LiteOrm;
 import org.lpw.tephra.test.MockCarousel;
 import org.lpw.tephra.test.MockHelper;
@@ -16,6 +17,8 @@ import java.sql.Timestamp;
  * @author lpw
  */
 public class TestSupport extends TephraTestSupport {
+    @Inject
+    Cache cache;
     @Inject
     Message message;
     @Inject

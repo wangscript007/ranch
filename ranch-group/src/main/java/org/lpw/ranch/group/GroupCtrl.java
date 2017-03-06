@@ -21,10 +21,10 @@ public class GroupCtrl {
     private GroupService groupService;
 
     @Execute(name = "query-by-user", validates = {
-            @Validate(validator = Validators.ID, parameter = "user", failureCode = 6)
+            @Validate(validator = UserHelper.VALIDATOR_SIGN_IN)
     })
     public Object queryByUser() {
-        return groupService.queryByUser(request.get("user"));
+        return groupService.queryByUser();
     }
 
     @Execute(name = "create", validates = {

@@ -35,9 +35,9 @@ public class GroupServiceImpl implements GroupService {
     private GroupDao groupDao;
 
     @Override
-    public JSONArray queryByUser(String user) {
+    public JSONArray queryByUser() {
         JSONArray array = new JSONArray();
-        memberService.queryByUser(user).forEach(member -> array.add(getJson(member.getGroup(), null)));
+        memberService.queryByUser(userHelper.id()).forEach(member -> array.add(getJson(member.getGroup(), null)));
 
         return array;
     }
