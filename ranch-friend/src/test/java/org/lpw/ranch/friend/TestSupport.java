@@ -37,21 +37,21 @@ public class TestSupport extends TephraTestSupport {
     MockHelper mockHelper;
 
     FriendModel create(String owner, int i) {
-        return create(owner, "friend " + i, i);
+        return create(owner, "user " + i, i);
     }
 
-    FriendModel create(String owner, String friend, int i) {
-        return create(owner, friend, "memo " + i, i, i);
+    FriendModel create(String owner, String user, int i) {
+        return create(owner, user, "memo " + i, i, i);
     }
 
     FriendModel create(String owner, int state, int i) {
-        return create(owner, "friend " + i, "memo " + i, state, i);
+        return create(owner, "user " + i, "memo " + i, state, i);
     }
 
-    FriendModel create(String owner, String friend, String memo, int state, int i) {
+    FriendModel create(String owner, String user, String memo, int state, int i) {
         FriendModel model = new FriendModel();
         model.setOwner(owner);
-        model.setFriend(friend);
+        model.setUser(user);
         model.setMemo(memo);
         model.setState(state);
         model.setCreate(new Timestamp(System.currentTimeMillis() - i * TimeUnit.Day.getTime()));
@@ -67,7 +67,7 @@ public class TestSupport extends TephraTestSupport {
             JSONObject object = array.getJSONObject(i);
             Assert.assertEquals(friend.getId(), object.getString("id"));
             Assert.assertEquals(friend.getOwner(), object.getString("owner"));
-            Assert.assertEquals(friend.getFriend(), object.getJSONObject("friend").getString("id"));
+            Assert.assertEquals(friend.getUser(), object.getJSONObject("user").getString("id"));
             if (friend.getMemo() == null)
                 Assert.assertFalse(object.containsKey("memo"));
             else

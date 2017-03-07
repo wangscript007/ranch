@@ -1,6 +1,7 @@
 package org.lpw.ranch.message;
 
 import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 
 /**
  * @author lpw
@@ -22,5 +23,5 @@ public interface MessageService {
      * @param time 最近一次获取时间戳。
      * @return 最新信息集。
      */
-    JSONArray newest(long time);
+    JSONObject newest(long time);
 }

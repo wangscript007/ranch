@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+
 import java.sql.Timestamp;
 
 /**
@@ -19,10 +20,10 @@ import java.sql.Timestamp;
 @Entity(name = FriendModel.NAME)
 @Table(name = "t_friend")
 public class FriendModel extends ModelSupport {
-    static final String NAME = "chat.friend";
+    static final String NAME = "ranch.friend";
 
     private String owner; // 所有者ID
-    private String friend; // 好友ID
+    private String user; // 好友ID
     private String memo; // 备注
     private int state; // 状态：0-待对方确认；1-待己方确认；2-已通过；3-已拒绝/拉黑
     private Timestamp create; // 创建时间
@@ -38,13 +39,13 @@ public class FriendModel extends ModelSupport {
     }
 
     @Jsonable
-    @Column(name = "c_friend")
-    public String getFriend() {
-        return friend;
+    @Column(name = "c_user")
+    public String getUser() {
+        return user;
     }
 
-    public void setFriend(String friend) {
-        this.friend = friend;
+    public void setUser(String user) {
+        this.user = user;
     }
 
     @Jsonable

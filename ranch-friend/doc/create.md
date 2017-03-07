@@ -5,7 +5,7 @@
 - URI - /friend/create
 
 参数
-- friend 好友ID。
+- user 好友ID。
 - memo 请求备注。
 
 返回值

@@ -1,6 +1,7 @@
 package org.lpw.ranch.friend;
 
 import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 
 /**
  * @author lpw
@@ -20,34 +21,42 @@ public interface FriendService {
     JSONArray query(int state);
 
     /**
+     * 获取好友信息。
+     *
+     * @param user 好友ID值。
+     * @return 好友信息；如果不存在或未审核通过则返回空JSON。
+     */
+    JSONObject findAsJson(String user);
+
+    /**
      * 添加好友。
      *
-     * @param friend 好友ID。
-     * @param memo   请求备注。
+     * @param user 好友ID。
+     * @param memo 请求备注。
      */
-    void create(String friend, String memo);
+    void create(String user, String memo);
 
     /**
      * 通过好友审核。
      *
-     * @param friend 好友ID。
-     * @param memo   备注。
+     * @param user 好友ID。
+     * @param memo 备注。
      */
-    void pass(String friend, String memo);
+    void pass(String user, String memo);
 
     /**
      * 设置好友备注。
      *
-     * @param friend 好友ID。
-     * @param memo   备注。
+     * @param user 好友ID。
+     * @param memo 备注。
      */
-    void memo(String friend, String memo);
+    void memo(String user, String memo);
 
     /**
      * 查找好友信息。
      *
-     * @param friend 好友ID。
+     * @param user 好友ID。
      * @return 好友信息；如果不存在则返回null。
      */
-    FriendModel find(String friend);
+    FriendModel find(String user);
 }
