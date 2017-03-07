@@ -19,7 +19,6 @@ import java.util.Comparator;
 public class FriendServiceImpl implements FriendService {
     private static final String CACHE_OWNER = FriendModel.NAME + ".service.owner:";
     private static final String CACHE_OWNER_USER = FriendModel.NAME + ".service.owner-user:";
-    private static final String CACHE_OWNER_USER_JSON = FriendModel.NAME + ".service.owner-user.json:";
 
     @Inject
     private Cache cache;
@@ -48,27 +47,6 @@ public class FriendServiceImpl implements FriendService {
         }
 
         return array;
-    }
-
-    @Override
-    public JSONObject findAsJson(String user) {
-        String owner = userHelper.id();
-        String cacheKey = CACHE_OWNER_USER_JSON + owner + user;
-        JSONObject object = cache.get(cacheKey);
-        if (object == null) {
-            FriendModel friend = find(owner, user);
-            if (friend.getState() != 2) {
-                cache.put(cacheKey, object = new JSONObject(), false);
-
-                return object;
-            }
-
-            object = modelHelper.toJson(friend);
-            object.put("user", userHelper.get(friend.getUser()));
-            cache.put(cacheKey, object, false);
-        }
-
-        return object;
     }
 
     private String getCompareName(Object object) {
@@ -151,6 +129,5 @@ public class FriendServiceImpl implements FriendService {
     private void cleanCache(String owner, String user) {
         cache.remove(CACHE_OWNER + owner);
         cache.remove(CACHE_OWNER_USER + owner + user);
-        cache.remove(CACHE_OWNER_USER_JSON + owner + user);
     }
 }

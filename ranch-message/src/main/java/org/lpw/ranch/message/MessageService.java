@@ -20,7 +20,7 @@ public interface MessageService {
     /**
      * 检索当前用户最新信息集。
      *
-     * @param time 最近一次获取时间戳。
+     * @param time 最近一次获取时间戳，单位：毫秒。
      * @return 最新信息集。
      */
     JSONObject newest(long time);

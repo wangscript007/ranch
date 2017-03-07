@@ -21,14 +21,6 @@ public interface FriendService {
     JSONArray query(int state);
 
     /**
-     * 获取好友信息。
-     *
-     * @param user 好友ID值。
-     * @return 好友信息；如果不存在或未审核通过则返回空JSON。
-     */
-    JSONObject findAsJson(String user);
-
-    /**
      * 添加好友。
      *
      * @param user 好友ID。

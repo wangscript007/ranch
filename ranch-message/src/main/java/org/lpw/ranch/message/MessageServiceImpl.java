@@ -13,8 +13,10 @@ import javax.inject.Inject;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * @author lpw
@@ -50,30 +52,27 @@ public class MessageServiceImpl implements MessageService {
 
     @Override
     public JSONObject newest(long time) {
-        Map<String, JSONObject> groups = getGroups();
         JSONObject object = new JSONObject();
         object.put("time", System.currentTimeMillis());
-        object.put("messages", query(groups, time));
+        object.put("messages", query(getGroups(), time));
 
         return object;
     }
 
-    private Map<String, JSONObject> getGroups() {
+    private Set<String> getGroups() {
+        Set<String> set = new HashSet<>();
         JSONArray array = carousel.service(groupKey + ".query-by-user", null, null, false, JSONArray.class);
-        Map<String, JSONObject> groups = new HashMap<>();
-        for (int i = 0, size = array.size(); i < size; i++) {
-            JSONObject object = array.getJSONObject(i);
-            groups.put(object.getString("id"), object);
-        }
+        for (int i = 0, size = array.size(); i < size; i++)
+            set.add(array.getJSONObject(i).getString("id"));
 
-        return groups;
+        return set;
     }
 
-    private JSONArray query(Map<String, JSONObject> groups, long time) {
+    private JSONArray query(Set<String> groups, long time) {
         Map<String, List<MessageModel>> map = new HashMap<>();
         List<String> list = new ArrayList<>();
         String sender = userHelper.id();
-        messageDao.query(new Timestamp(time), sender, groups.keySet(), size).getList().forEach(message -> {
+        messageDao.query(new Timestamp(time), sender, groups, size).getList().forEach(message -> {
             String key = message.getReceiver().equals(sender) ? message.getSender() : message.getReceiver();
             List<MessageModel> messages = map.get(key);
             if (messages == null) {
@@ -86,13 +85,11 @@ public class MessageServiceImpl implements MessageService {
 
         JSONArray array = new JSONArray();
         list.forEach(id -> {
-            if (groups.containsKey(id)) {
-                JSONObject group = groups.get(id);
-                group.put("messages", modelHelper.toJson(map.get(id)));
-                array.add(group);
-
-                return;
-            }
+            JSONObject object = new JSONObject();
+            object.put("id", id);
+            object.put("group", groups.contains(id));
+            object.put("list", modelHelper.toJson(map.get(id)));
+            array.add(object);
         });
 
         return array;

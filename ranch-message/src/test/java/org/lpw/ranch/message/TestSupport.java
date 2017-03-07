@@ -19,6 +19,8 @@ public class TestSupport extends TephraTestSupport {
     @Inject
     Generator generator;
     @Inject
+    Converter converter;
+    @Inject
     LiteOrm liteOrm;
     @Inject
     MockCarousel mockCarousel;

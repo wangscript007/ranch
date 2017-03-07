@@ -28,15 +28,6 @@ public class FriendCtrl {
         return friendService.query(request.getAsInt("state"));
     }
 
-    @Execute(name = "find", validates = {
-            @Validate(validator = Validators.NOT_EMPTY, parameter = "user", failureCode = 1),
-            @Validate(validator = UserHelper.VALIDATOR_SIGN_IN),
-            @Validate(validator = UserHelper.VALIDATOR_EXISTS, parameter = "user")
-    })
-    public Object find() {
-        return friendService.findAsJson(request.get("user"));
-    }
-
     @Execute(name = "create", validates = {
             @Validate(validator = Validators.NOT_EMPTY, parameter = "user", failureCode = 1),
             @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "memo", failureCode = 3),

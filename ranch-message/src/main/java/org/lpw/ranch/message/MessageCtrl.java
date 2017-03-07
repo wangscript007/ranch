@@ -32,4 +32,11 @@ public class MessageCtrl {
 
         return "";
     }
+
+    @Execute(name = "newest", validates = {
+            @Validate(validator = UserHelper.VALIDATOR_SIGN_IN)
+    })
+    public Object newest() {
+        return messageService.newest(request.getAsLong("time"));
+    }
 }
