@@ -47,6 +47,7 @@ public class QueryTest extends TestSupport {
                     "  \"code\":0,\n" +
                     "  \"data\":{\n" +
                     "    \"owner " + i + "\":{\n" +
+                    "      \"id\":\"owner " + i + "\",\n" +
                     "      \"key\":\"owner key " + i + "\"\n" +
                     "    }\n" +
                     "  }\n" +

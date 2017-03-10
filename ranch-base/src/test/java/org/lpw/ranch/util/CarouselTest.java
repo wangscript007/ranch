@@ -52,8 +52,7 @@ public class CarouselTest extends TephraTestSupport {
 
         mockCarousel.register("key", "{\"code\":0,\"data\":{\"id 3\":{\"name\":\"carousel\"}}}");
         object = carousel.get("key", "id 3");
-        Assert.assertEquals(2, object.size());
-        Assert.assertEquals("id 3", object.getString("id"));
+        Assert.assertEquals(1, object.size());
         Assert.assertEquals("carousel", object.getString("name"));
 
         mockCarousel.register("key", "{\"code\":0,\"data\":{\"id 4\":{\"id\":\"new id\",\"name\":\"carousel\"}}}");

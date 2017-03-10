@@ -121,6 +121,7 @@ public class CreateTest extends TestSupport {
                 "  \"code\":0,\n" +
                 "  \"data\":{\n" +
                 "    \"" + ownerId + "\":{\n" +
+                "      \"id\":\"" + ownerId + "\",\n" +
                 "      \"key\":\"owner key\"\n" +
                 "    }\n" +
                 "  }\n" +

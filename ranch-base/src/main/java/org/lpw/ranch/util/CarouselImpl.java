@@ -33,11 +33,9 @@ public class CarouselImpl implements Carousel {
         object.put("id", id);
         Map<String, String> parameter = new HashMap<>();
         parameter.put("ids", id);
-        JSONObject obj = service(key, null, parameter, cacheTime, JSONObject.class);
-        if (obj.containsKey(id))
-            object.putAll(obj.getJSONObject(id));
+        JSONObject data = service(key, null, parameter, true, JSONObject.class);
 
-        return object;
+        return data.containsKey(id) ? data.getJSONObject(id) : object;
     }
 
     @Override
