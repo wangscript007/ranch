@@ -58,6 +58,7 @@ public class GetTest extends TestSupport {
         snapshot.setData("data " + i);
         snapshot.setContent("content " + i);
         snapshot.setTime(new Timestamp(time - i * TimeUnit.Day.getTime()));
+        snapshot.setMd5("md5 "+i);
         liteOrm.save(snapshot);
 
         return snapshot;
@@ -67,5 +68,6 @@ public class GetTest extends TestSupport {
         Assert.assertEquals("data " + i, object.getString("data"));
         Assert.assertEquals("content " + i, object.getString("content"));
         Assert.assertEquals(dateTime.toString(new Timestamp(time - i * TimeUnit.Day.getTime())), object.getString("time"));
+        Assert.assertEquals("md5 " + i, object.getString("md5"));
     }
 }

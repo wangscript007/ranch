@@ -25,6 +25,7 @@ public class SnapshotModel extends ModelSupport {
     private String data; // 数据
     private String content; // 内容
     private Timestamp time; // 时间
+    private String md5; // MD5值
 
     @Jsonable
     @Column(name = "c_data")
@@ -54,5 +55,15 @@ public class SnapshotModel extends ModelSupport {
 
     public void setTime(Timestamp time) {
         this.time = time;
+    }
+
+    @Jsonable
+    @Column(name = "c_md5")
+    public String getMd5() {
+        return md5;
+    }
+
+    public void setMd5(String md5) {
+        this.md5 = md5;
     }
 }

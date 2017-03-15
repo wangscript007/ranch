@@ -12,15 +12,17 @@
 {
   "id-1": {
     "id": "ID值",
-    "data":"数据",
-    "content":"内容",
-    "time":"时间"
+    "data": "数据",
+    "content": "内容",
+    "time": "时间",
+    "md5": "MD5值"
   },
   "id-n": {
     "id": "ID值",
-    "data":"数据",
-    "content":"内容",
-    "time":"时间"
+    "data": "数据",
+    "content": "内容",
+    "time": "时间",
+    "md5": "MD5值"
   }
 }
 ```

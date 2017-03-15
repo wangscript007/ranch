@@ -5,6 +5,8 @@ CREATE TABLE t_snapshot
   c_data TEXT NOT NULL COMMENT '数据',
   c_content TEXT NOT NULL COMMENT '内容',
   c_time DATETIME DEFAULT NULL COMMENT '时间',
+  c_md5 CHAR(32) NOT NULL COMMENT 'MD5值',
 
-  PRIMARY KEY pk_snapshot(c_id) USING HASH
+  PRIMARY KEY pk_snapshot(c_id) USING HASH,
+  UNIQUE KEY uk_snapshot_md5(c_md5) USING HASH
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

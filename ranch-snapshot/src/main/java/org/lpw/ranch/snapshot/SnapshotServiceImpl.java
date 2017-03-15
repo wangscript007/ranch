@@ -1,6 +1,7 @@
 package org.lpw.ranch.snapshot;
 
 import com.alibaba.fastjson.JSONObject;
+import org.lpw.tephra.crypto.Digest;
 import org.lpw.tephra.dao.model.ModelHelper;
 import org.lpw.tephra.util.DateTime;
 import org.springframework.stereotype.Service;
@@ -12,6 +13,8 @@ import javax.inject.Inject;
  */
 @Service(SnapshotModel.NAME + ".service")
 public class SnapshotServiceImpl implements SnapshotService {
+    @Inject
+    private Digest digest;
     @Inject
     private DateTime dateTime;
     @Inject
@@ -33,10 +36,16 @@ public class SnapshotServiceImpl implements SnapshotService {
 
     @Override
     public String create(String data, String content) {
-        SnapshotModel snapshot = new SnapshotModel();
+        String md5 = digest.md5(data + content);
+        SnapshotModel snapshot = snapshotDao.findByMd5(md5);
+        if (snapshot != null)
+            return snapshot.getId();
+
+        snapshot = new SnapshotModel();
         snapshot.setData(data);
         snapshot.setContent(content);
         snapshot.setTime(dateTime.now());
+        snapshot.setMd5(md5);
         snapshotDao.save(snapshot);
 
         return snapshot.getId();
