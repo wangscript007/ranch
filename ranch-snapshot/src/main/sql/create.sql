@@ -1,0 +1,10 @@
+DROP TABLE IF EXISTS t_snapshot;
+CREATE TABLE t_snapshot
+(
+  c_id CHAR(36) NOT NULL COMMENT '主键',
+  c_data TEXT NOT NULL COMMENT '数据',
+  c_content TEXT NOT NULL COMMENT '内容',
+  c_time DATETIME DEFAULT NULL COMMENT '时间',
+
+  PRIMARY KEY pk_snapshot(c_id) USING HASH
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;

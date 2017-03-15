@@ -18,6 +18,7 @@ Ranch目前包含以下模块：
 - [friend](ranch-friend/) —— 好友。
 - [group](ranch-group/) —— 群组。
 - [message](ranch-message/) —— 消息 & 即时通讯。
+- [snapshot](ranch-snapshot/) —— 快照。
 - [archives](ranch-archives/) —— 档案。
 - [test](ranch-test/) —— 单元测试支持。
 

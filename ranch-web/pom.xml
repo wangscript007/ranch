@@ -3,7 +3,7 @@
     <parent>
         <artifactId>ranch</artifactId>
         <groupId>org.lpw.ranch</groupId>
-        <version>0.6.0-RELEASE</version>
+        <version>0.7.0-RELEASE</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>ranch-web</artifactId>
@@ -14,32 +14,32 @@
         <dependency>
             <groupId>org.lpw.ranch</groupId>
             <artifactId>ranch-gps</artifactId>
-            <version>0.6.0-RELEASE</version>
+            <version>0.7.0-RELEASE</version>
         </dependency>
         <dependency>
             <groupId>org.lpw.ranch</groupId>
             <artifactId>ranch-classify</artifactId>
-            <version>0.6.0-RELEASE</version>
+            <version>0.7.0-RELEASE</version>
         </dependency>
         <dependency>
             <groupId>org.lpw.ranch</groupId>
             <artifactId>ranch-comment</artifactId>
-            <version>0.6.0-RELEASE</version>
+            <version>0.7.0-RELEASE</version>
         </dependency>
         <dependency>
             <groupId>org.lpw.ranch</groupId>
             <artifactId>ranch-doc</artifactId>
-            <version>0.6.0-RELEASE</version>
+            <version>0.7.0-RELEASE</version>
         </dependency>
         <dependency>
             <groupId>org.lpw.ranch</groupId>
             <artifactId>ranch-user</artifactId>
-            <version>0.6.0-RELEASE</version>
+            <version>0.7.0-RELEASE</version>
         </dependency>
         <dependency>
             <groupId>org.lpw.ranch</groupId>
             <artifactId>ranch-archives</artifactId>
-            <version>0.6.0-RELEASE</version>
+            <version>0.7.0-RELEASE</version>
         </dependency>
         <dependency>
             <groupId>org.lpw.tephra</groupId>

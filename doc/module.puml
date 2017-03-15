@@ -1,13 +1,14 @@
 @startuml
 
-[base] <-- [gps]
-[base] <-- [classify]
-[base] <-- [comment]
-[base] <-- [doc]
+[base] <-u- [gps]
+[base] <-u- [classify]
+[base] <-u- [comment]
+[base] <-u- [doc]
 [base] <-- [user]
 [base] <-- [friend]
 [base] <-- [group]
 [base] <-- [message]
+[base] <-- [snapshot]
 [base] <-- [archives]
 [test]
 
