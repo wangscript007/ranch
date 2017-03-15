@@ -25,6 +25,16 @@ public class DocCtrl extends AuditCtrlSupport {
     private DocService docService;
 
     /**
+     * 检索文档。
+     *
+     * @return {PageList[DocModel]}。
+     */
+    @Execute(name = "query")
+    public Object query() {
+        return docService.query();
+    }
+
+    /**
      * 获取指定ID的文档信息集。
      * ids ID集。
      *

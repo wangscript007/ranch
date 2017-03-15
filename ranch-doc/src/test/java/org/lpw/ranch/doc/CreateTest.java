@@ -180,6 +180,6 @@ public class CreateTest extends TestSupport {
         Assert.assertEquals(0, data.getIntValue("comment"));
         Assert.assertEquals(0, data.getIntValue("score"));
         Assert.assertEquals(2, data.getIntValue("audit"));
-        Assert.assertTrue(System.currentTimeMillis() - converter.toDate(data.getString("time"), "yyyy-MM-dd HH:mm:ss").getTime() < 2000L);
+        Assert.assertTrue(System.currentTimeMillis() - dateTime.toDate(data.getString("time"), "yyyy-MM-dd HH:mm:ss").getTime() < 2000L);
     }
 }

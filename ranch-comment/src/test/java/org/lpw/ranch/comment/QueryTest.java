@@ -6,7 +6,9 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.lpw.ranch.audit.Audit;
 import org.lpw.tephra.ctrl.validate.Validators;
+import org.lpw.tephra.util.TimeUnit;
 
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -102,6 +104,171 @@ public class QueryTest extends TestSupport {
         Assert.assertEquals(3, array.size());
         for (int i = 0; i < array.size(); i++)
             equals(list.get(3 * i + 2), array.getJSONObject(i), 3 * i + 2);
+
+        mockHelper.reset();
+        mockHelper.getRequest().addParameter("audit", "2");
+        mockHelper.getRequest().addParameter("start", dateTime.toString(new Date(time - 7 * TimeUnit.Day.getTime())));
+        mockHelper.getRequest().addParameter("pageSize", "20");
+        mockHelper.getRequest().addParameter("pageNum", "0");
+        sign.put(mockHelper.getRequest().getMap(), null);
+        mockHelper.mock("/comment/query");
+        object = mockHelper.getResponse().asJson();
+        Assert.assertEquals(0, object.getIntValue("code"));
+        data = object.getJSONObject("data");
+        Assert.assertEquals(2, data.getIntValue("count"));
+        Assert.assertEquals(20, data.getIntValue("size"));
+        Assert.assertEquals(1, data.getIntValue("number"));
+        array = data.getJSONArray("list");
+        Assert.assertEquals(2, array.size());
+        for (int i = 0; i < array.size(); i++)
+            equals(list.get(3 * i + 2), array.getJSONObject(i), 3 * i + 2);
+
+        mockHelper.reset();
+        mockHelper.getRequest().addParameter("audit", "2");
+        mockHelper.getRequest().addParameter("end", dateTime.toString(new Date(time - 3 * TimeUnit.Day.getTime())));
+        mockHelper.getRequest().addParameter("pageSize", "20");
+        mockHelper.getRequest().addParameter("pageNum", "0");
+        sign.put(mockHelper.getRequest().getMap(), null);
+        mockHelper.mock("/comment/query");
+        object = mockHelper.getResponse().asJson();
+        Assert.assertEquals(0, object.getIntValue("code"));
+        data = object.getJSONObject("data");
+        Assert.assertEquals(2, data.getIntValue("count"));
+        Assert.assertEquals(20, data.getIntValue("size"));
+        Assert.assertEquals(1, data.getIntValue("number"));
+        array = data.getJSONArray("list");
+        Assert.assertEquals(2, array.size());
+        for (int i = 0; i < array.size(); i++)
+            equals(list.get(3 * i + 5), array.getJSONObject(i), 3 * i + 5);
+
+        mockHelper.reset();
+        mockHelper.getRequest().addParameter("audit", "2");
+        mockHelper.getRequest().addParameter("start", dateTime.toString(new Date(time - 7 * TimeUnit.Day.getTime())));
+        mockHelper.getRequest().addParameter("end", dateTime.toString(new Date(time - 3 * TimeUnit.Day.getTime())));
+        mockHelper.getRequest().addParameter("pageSize", "20");
+        mockHelper.getRequest().addParameter("pageNum", "0");
+        sign.put(mockHelper.getRequest().getMap(), null);
+        mockHelper.mock("/comment/query");
+        object = mockHelper.getResponse().asJson();
+        Assert.assertEquals(0, object.getIntValue("code"));
+        data = object.getJSONObject("data");
+        Assert.assertEquals(1, data.getIntValue("count"));
+        Assert.assertEquals(20, data.getIntValue("size"));
+        Assert.assertEquals(1, data.getIntValue("number"));
+        array = data.getJSONArray("list");
+        Assert.assertEquals(1, array.size());
+        equals(list.get(5), array.getJSONObject(0), 5);
+
+        mockHelper.reset();
+        mockHelper.getRequest().addParameter("audit", "2");
+        mockHelper.getRequest().addParameter("owner", "owner 5");
+        mockHelper.getRequest().addParameter("pageSize", "20");
+        mockHelper.getRequest().addParameter("pageNum", "0");
+        sign.put(mockHelper.getRequest().getMap(), null);
+        mockHelper.mock("/comment/query");
+        object = mockHelper.getResponse().asJson();
+        Assert.assertEquals(0, object.getIntValue("code"));
+        data = object.getJSONObject("data");
+        Assert.assertEquals(1, data.getIntValue("count"));
+        Assert.assertEquals(20, data.getIntValue("size"));
+        Assert.assertEquals(1, data.getIntValue("number"));
+        array = data.getJSONArray("list");
+        Assert.assertEquals(1, array.size());
+        equals(list.get(5), array.getJSONObject(0), 5);
+
+        mockHelper.reset();
+        mockHelper.getRequest().addParameter("audit", "2");
+        mockHelper.getRequest().addParameter("author", "author 5");
+        mockHelper.getRequest().addParameter("pageSize", "20");
+        mockHelper.getRequest().addParameter("pageNum", "0");
+        sign.put(mockHelper.getRequest().getMap(), null);
+        mockHelper.mock("/comment/query");
+        object = mockHelper.getResponse().asJson();
+        Assert.assertEquals(0, object.getIntValue("code"));
+        data = object.getJSONObject("data");
+        Assert.assertEquals(1, data.getIntValue("count"));
+        Assert.assertEquals(20, data.getIntValue("size"));
+        Assert.assertEquals(1, data.getIntValue("number"));
+        array = data.getJSONArray("list");
+        Assert.assertEquals(1, array.size());
+        equals(list.get(5), array.getJSONObject(0), 5);
+
+        mockHelper.reset();
+        mockHelper.getRequest().addParameter("audit", "2");
+        mockHelper.getRequest().addParameter("owner", "owner 5");
+        mockHelper.getRequest().addParameter("author", "author 5");
+        mockHelper.getRequest().addParameter("start", dateTime.toString(new Date(time - 20 * TimeUnit.Day.getTime())));
+        mockHelper.getRequest().addParameter("end", dateTime.toString(new Date(time - 3 * TimeUnit.Day.getTime())));
+        mockHelper.getRequest().addParameter("pageSize", "20");
+        mockHelper.getRequest().addParameter("pageNum", "0");
+        sign.put(mockHelper.getRequest().getMap(), null);
+        mockHelper.mock("/comment/query");
+        object = mockHelper.getResponse().asJson();
+        Assert.assertEquals(0, object.getIntValue("code"));
+        data = object.getJSONObject("data");
+        Assert.assertEquals(1, data.getIntValue("count"));
+        Assert.assertEquals(20, data.getIntValue("size"));
+        Assert.assertEquals(1, data.getIntValue("number"));
+        array = data.getJSONArray("list");
+        Assert.assertEquals(1, array.size());
+        equals(list.get(5), array.getJSONObject(0), 5);
+
+        mockHelper.reset();
+        mockHelper.getRequest().addParameter("audit", "2");
+        mockHelper.getRequest().addParameter("owner", "owner 5");
+        mockHelper.getRequest().addParameter("author", "author 5");
+        mockHelper.getRequest().addParameter("start", dateTime.toString(new Date(time - 2 * TimeUnit.Day.getTime())));
+        mockHelper.getRequest().addParameter("end", dateTime.toString(new Date(time - 3 * TimeUnit.Day.getTime())));
+        mockHelper.getRequest().addParameter("pageSize", "20");
+        mockHelper.getRequest().addParameter("pageNum", "0");
+        sign.put(mockHelper.getRequest().getMap(), null);
+        mockHelper.mock("/comment/query");
+        object = mockHelper.getResponse().asJson();
+        Assert.assertEquals(0, object.getIntValue("code"));
+        data = object.getJSONObject("data");
+        Assert.assertEquals(0, data.getIntValue("count"));
+        Assert.assertEquals(20, data.getIntValue("size"));
+        Assert.assertEquals(1, data.getIntValue("number"));
+        array = data.getJSONArray("list");
+        Assert.assertEquals(0, array.size());
+
+        mockHelper.reset();
+        mockHelper.getRequest().addParameter("audit", "2");
+        mockHelper.getRequest().addParameter("owner", "owner 5");
+        mockHelper.getRequest().addParameter("author", "author 4");
+        mockHelper.getRequest().addParameter("start", dateTime.toString(new Date(time - 20 * TimeUnit.Day.getTime())));
+        mockHelper.getRequest().addParameter("end", dateTime.toString(new Date(time - 3 * TimeUnit.Day.getTime())));
+        mockHelper.getRequest().addParameter("pageSize", "20");
+        mockHelper.getRequest().addParameter("pageNum", "0");
+        sign.put(mockHelper.getRequest().getMap(), null);
+        mockHelper.mock("/comment/query");
+        object = mockHelper.getResponse().asJson();
+        Assert.assertEquals(0, object.getIntValue("code"));
+        data = object.getJSONObject("data");
+        Assert.assertEquals(0, data.getIntValue("count"));
+        Assert.assertEquals(20, data.getIntValue("size"));
+        Assert.assertEquals(1, data.getIntValue("number"));
+        array = data.getJSONArray("list");
+        Assert.assertEquals(0, array.size());
+
+        mockHelper.reset();
+        mockHelper.getRequest().addParameter("audit", "2");
+        mockHelper.getRequest().addParameter("owner", "owner 6");
+        mockHelper.getRequest().addParameter("author", "author 5");
+        mockHelper.getRequest().addParameter("start", dateTime.toString(new Date(time - 20 * TimeUnit.Day.getTime())));
+        mockHelper.getRequest().addParameter("end", dateTime.toString(new Date(time - 3 * TimeUnit.Day.getTime())));
+        mockHelper.getRequest().addParameter("pageSize", "20");
+        mockHelper.getRequest().addParameter("pageNum", "0");
+        sign.put(mockHelper.getRequest().getMap(), null);
+        mockHelper.mock("/comment/query");
+        object = mockHelper.getResponse().asJson();
+        Assert.assertEquals(0, object.getIntValue("code"));
+        data = object.getJSONObject("data");
+        Assert.assertEquals(0, data.getIntValue("count"));
+        Assert.assertEquals(20, data.getIntValue("size"));
+        Assert.assertEquals(1, data.getIntValue("number"));
+        array = data.getJSONArray("list");
+        Assert.assertEquals(0, array.size());
     }
 
     private void equals(CommentModel comment, JSONObject obj, int i) {

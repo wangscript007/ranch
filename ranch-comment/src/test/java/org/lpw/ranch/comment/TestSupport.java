@@ -11,6 +11,7 @@ import org.lpw.tephra.test.MockCarousel;
 import org.lpw.tephra.test.MockHelper;
 import org.lpw.tephra.test.TephraTestSupport;
 import org.lpw.tephra.util.Converter;
+import org.lpw.tephra.util.DateTime;
 import org.lpw.tephra.util.Generator;
 import org.lpw.tephra.util.Message;
 import org.lpw.tephra.util.TimeUnit;
@@ -23,21 +24,24 @@ import java.sql.Timestamp;
  */
 public class TestSupport extends TephraTestSupport implements AuditTesterDao<CommentModel> {
     @Inject
-    protected Message message;
+    Message message;
     @Inject
-    protected Generator generator;
+    Generator generator;
     @Inject
-    protected Converter converter;
+    Converter converter;
     @Inject
-    protected LiteOrm liteOrm;
+    DateTime dateTime;
     @Inject
-    protected Sign sign;
+    LiteOrm liteOrm;
     @Inject
-    protected MockHelper mockHelper;
+    Sign sign;
     @Inject
-    protected MockCarousel mockCarousel;
+    MockHelper mockHelper;
     @Inject
-    protected MockUser mockUser;
+    MockCarousel mockCarousel;
+    @Inject
+    MockUser mockUser;
+    long time = System.currentTimeMillis();
 
     @Override
     public CommentModel create(int i, Recycle recycle) {
@@ -59,7 +63,7 @@ public class TestSupport extends TephraTestSupport implements AuditTesterDao<Com
         comment.setContent("content " + i);
         comment.setScore(i);
         comment.setPraise(10 + i);
-        comment.setTime(new Timestamp(System.currentTimeMillis() - i * TimeUnit.Hour.getTime()));
+        comment.setTime(new Timestamp(time - i * TimeUnit.Day.getTime()));
         comment.setAudit(audit.getValue());
         comment.setAuditRemark("remark " + i);
         comment.setRecycle(recycle.getValue());

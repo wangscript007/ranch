@@ -79,7 +79,7 @@ public class CreateTest extends TestSupport {
         Assert.assertEquals("note value", data.getString("note"));
         Assert.assertEquals(1, data.getIntValue("member"));
         Assert.assertEquals(1, data.getIntValue("audit"));
-        Assert.assertTrue(System.currentTimeMillis() - converter.toDate(data.getString("create")).getTime() < 2000L);
+        Assert.assertTrue(System.currentTimeMillis() - dateTime.toDate(data.getString("create")).getTime() < 2000L);
         GroupModel group = liteOrm.findById(GroupModel.class, data.getString("id"));
         Assert.assertEquals("sign in id", group.getOwner());
         Assert.assertEquals("name value", group.getName());

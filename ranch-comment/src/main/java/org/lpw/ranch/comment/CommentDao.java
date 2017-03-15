@@ -3,11 +3,14 @@ package org.lpw.ranch.comment;
 import org.lpw.ranch.audit.Audit;
 import org.lpw.tephra.dao.orm.PageList;
 
+import java.sql.Date;
+import java.sql.Timestamp;
+
 /**
  * @author lpw
  */
 interface CommentDao {
-    PageList<CommentModel> query(Audit audit, int pageSize, int pageNum);
+    PageList<CommentModel> query(Audit audit, String owner, String author, Timestamp start, Timestamp end, int pageSize, int pageNum);
 
     PageList<CommentModel> query(Audit audit, String owner, int pageSize, int pageNum);
 

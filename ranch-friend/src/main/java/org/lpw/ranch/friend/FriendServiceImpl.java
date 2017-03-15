@@ -127,7 +127,8 @@ public class FriendServiceImpl implements FriendService {
     }
 
     private void cleanCache(String owner, String user) {
-        cache.remove(CACHE_OWNER + owner);
+        for (int i = 0; i < 4; i++)
+            cache.remove(CACHE_OWNER + owner + i);
         cache.remove(CACHE_OWNER_USER + owner + user);
     }
 }

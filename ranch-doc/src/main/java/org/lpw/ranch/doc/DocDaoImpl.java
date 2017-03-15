@@ -1,5 +1,7 @@
 package org.lpw.ranch.doc;
 
+import org.lpw.ranch.recycle.Recycle;
+import org.lpw.tephra.dao.orm.PageList;
 import org.lpw.tephra.dao.orm.lite.LiteOrm;
 import org.lpw.tephra.dao.orm.lite.LiteQuery;
 import org.springframework.stereotype.Repository;
@@ -20,6 +22,11 @@ class DocDaoImpl implements DocDao {
     @Override
     public DocModel findById(String id) {
         return liteOrm.findById(DocModel.class, id);
+    }
+
+    @Override
+    public PageList<DocModel> query(int pageSize, int pageNum) {
+        return liteOrm.query(new LiteQuery(DocModel.class).where(Recycle.No.getSql()).size(pageSize).page(pageNum), new Object[]{});
     }
 
     @Override

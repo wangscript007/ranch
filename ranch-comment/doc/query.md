@@ -6,6 +6,10 @@
 
 参数
 - audit 审核状态：0-待审核；1-审核通过；2-审核不通过。
+- owner 所有者ID值。
+- author 作者ID值。
+- start 开始时间，格式yyyy-MM-dd。
+- end 结束时间，格式yyyy-MM-dd。
 - pageSize 每页显示记录数。
 - pageNum 当前显示页数。
 

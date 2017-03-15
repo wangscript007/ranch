@@ -10,6 +10,7 @@ import org.lpw.tephra.dao.orm.lite.LiteQuery;
 import org.lpw.tephra.test.MockHelper;
 import org.lpw.tephra.test.TephraTestSupport;
 import org.lpw.tephra.util.Converter;
+import org.lpw.tephra.util.DateTime;
 import org.lpw.tephra.util.Generator;
 import org.lpw.tephra.util.Message;
 import org.lpw.tephra.util.TimeUnit;
@@ -23,29 +24,31 @@ import java.sql.Timestamp;
  */
 public class TestSupport extends TephraTestSupport {
     @Inject
-    protected Generator generator;
+    Generator generator;
     @Inject
-    protected Message message;
+    Message message;
     @Inject
-    protected Converter converter;
+    Converter converter;
     @Inject
-    protected Digest digest;
+    DateTime dateTime;
     @Inject
-    protected LiteOrm liteOrm;
+    Digest digest;
     @Inject
-    protected Request request;
+    LiteOrm liteOrm;
     @Inject
-    protected MockHelper mockHelper;
+    Request request;
+    @Inject
+    MockHelper mockHelper;
 
-    protected UserModel create(int i) {
+    UserModel create(int i) {
         return create(i, 10 + i);
     }
 
-    protected UserModel create(int i, int state) {
+    UserModel create(int i, int state) {
         return set(new UserModel(), i, state);
     }
 
-    protected UserModel set(UserModel user, int i, int state) {
+    UserModel set(UserModel user, int i, int state) {
         user.setPassword(digest.md5(UserModel.NAME + digest.sha1("password " + i + UserModel.NAME)));
         user.setName("name " + i);
         user.setNick("nick " + i);
@@ -64,7 +67,7 @@ public class TestSupport extends TephraTestSupport {
         return user;
     }
 
-    protected AuthModel createAuth(String user, String uid, int type) {
+    AuthModel createAuth(String user, String uid, int type) {
         AuthModel auth = new AuthModel();
         auth.setUser(user);
         auth.setUid(uid);
@@ -74,7 +77,7 @@ public class TestSupport extends TephraTestSupport {
         return auth;
     }
 
-    protected void equals(UserModel user, JSONObject object) {
+    void equals(UserModel user, JSONObject object) {
         Assert.assertEquals(user.getId(), object.getString("id"));
         Assert.assertFalse(object.containsKey("password"));
         Assert.assertEquals(user.getName(), object.getString("name"));
@@ -91,7 +94,7 @@ public class TestSupport extends TephraTestSupport {
         Assert.assertEquals(user.getState(), object.getIntValue("state"));
     }
 
-    protected void equalsSignUp(JSONObject data, String uid, int type, String password, String code) {
+    void equalsSignUp(JSONObject data, String uid, int type, String password, String code) {
         AuthModel auth = liteOrm.findOne(new LiteQuery(AuthModel.class).where("c_uid=?"), new Object[]{uid});
         Assert.assertEquals(type, auth.getType());
         Assert.assertEquals(auth.getUser(), data.getString("id"));
@@ -99,7 +102,7 @@ public class TestSupport extends TephraTestSupport {
             Assert.assertFalse(data.containsKey(name));
         for (String name : new String[]{"gender", "grade", "state"})
             Assert.assertEquals(0, data.getIntValue(name));
-        Assert.assertTrue(System.currentTimeMillis() - converter.toDate(data.getString("register")).getTime() < 2000L);
+        Assert.assertTrue(System.currentTimeMillis() - dateTime.toDate(data.getString("register")).getTime() < 2000L);
         if (code == null)
             Assert.assertEquals(8, data.getString("code").length());
         else

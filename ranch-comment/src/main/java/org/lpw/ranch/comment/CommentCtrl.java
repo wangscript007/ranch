@@ -6,6 +6,7 @@ import org.lpw.tephra.ctrl.context.Request;
 import org.lpw.tephra.ctrl.execute.Execute;
 import org.lpw.tephra.ctrl.validate.Validate;
 import org.lpw.tephra.ctrl.validate.Validators;
+import org.lpw.tephra.util.DateTime;
 import org.springframework.stereotype.Controller;
 
 import javax.inject.Inject;
@@ -16,6 +17,8 @@ import javax.inject.Inject;
 @Controller(CommentModel.NAME + ".ctrl")
 @Execute(name = "/comment/", key = CommentModel.NAME, code = "13")
 public class CommentCtrl extends AuditCtrlSupport {
+    @Inject
+    private DateTime dateTime;
     @Inject
     private Request request;
     @Inject
@@ -34,7 +37,7 @@ public class CommentCtrl extends AuditCtrlSupport {
             @Validate(validator = Validators.SIGN)
     })
     public Object query() {
-        return commentService.query(request.getAsInt("audit"));
+        return commentService.query(request.getAsInt("audit"), request.get("owner"), request.get("author"), dateTime.getStart(request.get("start")), dateTime.getEnd(request.get("end")));
     }
 
     /**

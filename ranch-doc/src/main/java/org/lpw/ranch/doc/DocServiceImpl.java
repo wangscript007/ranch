@@ -6,6 +6,7 @@ import org.lpw.ranch.audit.AuditHelper;
 import org.lpw.ranch.recycle.RecycleHelper;
 import org.lpw.ranch.user.helper.UserHelper;
 import org.lpw.ranch.util.Carousel;
+import org.lpw.ranch.util.Pagination;
 import org.lpw.tephra.cache.Cache;
 import org.lpw.tephra.dao.model.ModelHelper;
 import org.lpw.tephra.scheduler.DateJob;
@@ -50,6 +51,8 @@ public class DocServiceImpl implements DocService, MinuteJob, DateJob {
     @Inject
     private RecycleHelper recycleHelper;
     @Inject
+    private Pagination pagination;
+    @Inject
     private DocDao docDao;
     @Value("${" + DocModel.NAME + ".audit.default:0}")
     private int defaultAudit;
@@ -63,6 +66,11 @@ public class DocServiceImpl implements DocService, MinuteJob, DateJob {
             cache.put(key, doc = docDao.findById(id), false);
 
         return doc;
+    }
+
+    @Override
+    public JSONObject query() {
+        return docDao.query(pagination.getPageSize(), pagination.getPageNum()).toJson();
     }
 
     @Override

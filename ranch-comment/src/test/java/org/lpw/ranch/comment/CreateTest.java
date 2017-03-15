@@ -153,7 +153,7 @@ public class CreateTest extends TestSupport {
         Assert.assertEquals(3, data.getIntValue("score"));
         Assert.assertEquals(0, data.getIntValue("praise"));
         Assert.assertFalse(data.containsKey("audit"));
-        Assert.assertTrue(System.currentTimeMillis() - converter.toDate(data.getString("time"), "yyyy-MM-dd HH:mm:ss").getTime() < 2000L);
+        Assert.assertTrue(System.currentTimeMillis() - dateTime.toDate(data.getString("time"), "yyyy-MM-dd HH:mm:ss").getTime() < 2000L);
         Assert.assertFalse(data.containsKey("children"));
 
         mockHelper.reset();
@@ -181,7 +181,7 @@ public class CreateTest extends TestSupport {
         Assert.assertEquals(3, data.getIntValue("score"));
         Assert.assertEquals(0, data.getIntValue("praise"));
         Assert.assertFalse(data.containsKey("audit"));
-        Assert.assertTrue(System.currentTimeMillis() - converter.toDate(data.getString("time"), "yyyy-MM-dd HH:mm:ss").getTime() < 2000L);
+        Assert.assertTrue(System.currentTimeMillis() - dateTime.toDate(data.getString("time"), "yyyy-MM-dd HH:mm:ss").getTime() < 2000L);
         Assert.assertFalse(data.containsKey("children"));
     }
 }

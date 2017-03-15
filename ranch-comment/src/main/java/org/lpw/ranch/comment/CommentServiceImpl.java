@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
+import java.sql.Timestamp;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -48,8 +49,8 @@ public class CommentServiceImpl implements CommentService {
     private int defaultAudit;
 
     @Override
-    public JSONObject query(int audit) {
-        return toJson(commentDao.query(Audit.values()[audit], pagination.getPageSize(), pagination.getPageNum()), true, true, true, false);
+    public JSONObject query(int audit, String owner, String author, Timestamp start, Timestamp end) {
+        return toJson(commentDao.query(Audit.values()[audit], owner, author, start, end, pagination.getPageSize(), pagination.getPageNum()), true, true, true, false);
     }
 
     @Override

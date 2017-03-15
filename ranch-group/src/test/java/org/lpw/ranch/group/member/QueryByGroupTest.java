@@ -106,6 +106,6 @@ public class QueryByGroupTest extends TestSupport {
         Assert.assertEquals("name user " + i + j, user.getString("name"));
         Assert.assertEquals("nick " + i + j, object.getString("nick"));
         Assert.assertEquals(j, object.getIntValue("type"));
-        Assert.assertTrue(System.currentTimeMillis() - converter.toDate(object.getString("join")).getTime() < 2000L);
+        Assert.assertTrue(System.currentTimeMillis() - dateTime.toDate(object.getString("join")).getTime() < 2000L);
     }
 }
