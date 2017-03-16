@@ -1,6 +1,7 @@
 package org.lpw.ranch.group.member;
 
 import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 
 import java.util.List;
 
@@ -35,6 +36,10 @@ public interface MemberService {
      */
     String VALIDATOR_EXISTS = MemberModel.NAME + ".validator.exists";
     /**
+     * 用户是否存在验证器Bean名称。
+     */
+    String VALIDATOR_USER_EXISTS = MemberModel.NAME + ".validator.user.exists";
+    /**
      * 当前用户是否为群组管理员验证器Bean名称。
      */
     String VALIDATOR_MANAGER = MemberModel.NAME + ".validator.manager";
@@ -56,9 +61,9 @@ public interface MemberService {
      *
      * @param group 群组ID值。
      * @param user  用户ID值。
-     * @return 成员信息；如果不存在则返回null。
+     * @return 成员信息；如果不存在则返回空JSON。
      */
-    MemberModel find(String group, String user);
+    JSONObject find(String group, String user);
 
     /**
      * 检索群组的成员集。

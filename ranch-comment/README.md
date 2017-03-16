@@ -8,6 +8,8 @@
 
 [检索作者者评论](doc/query-by-author.md)
 
+[获取评论信息集](doc/get.md)
+
 [审核通过](../ranch-base/doc/audit-pass.md)
 
 [审核不通过](../ranch-base/doc/audit-refuse.md)

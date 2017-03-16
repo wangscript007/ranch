@@ -28,6 +28,13 @@ public class MemberCtrl {
         return memberService.queryByGroup(request.get("group"));
     }
 
+    @Execute(name = "find", validates = {
+            @Validate(validator = MemberService.VALIDATOR_USER_EXISTS, parameters = {"group", "user"}, failureCode = 29)
+    })
+    public Object find() {
+        return memberService.find(request.get("group"), request.get("user"));
+    }
+
     @Execute(name = "join", validates = {
             @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "reason", failureCode = 21),
             @Validate(validator = GroupService.VALIDATOR_EXISTS, parameter = "group", failureCode = 22),

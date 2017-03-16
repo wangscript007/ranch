@@ -24,14 +24,6 @@ public class CommentCtrl extends AuditCtrlSupport {
     @Inject
     private CommentService commentService;
 
-    /**
-     * 检索评论集。
-     * audit 审核状态：0-待审核；1-审核通过；2-审核不通过。
-     * pageSize 每页显示记录数。
-     * pageNum 当前显示页数。
-     *
-     * @return {PageList}。
-     */
     @Execute(name = "query", validates = {
             @Validate(validator = Validators.BETWEEN, number = {0, 2}, parameter = "audit", failureCode = 9),
             @Validate(validator = Validators.SIGN)
@@ -40,14 +32,6 @@ public class CommentCtrl extends AuditCtrlSupport {
         return commentService.query(request.getAsInt("audit"), request.get("owner"), request.get("author"), dateTime.getStart(request.get("start")), dateTime.getEnd(request.get("end")));
     }
 
-    /**
-     * 检索评论集。
-     * owner 所有者ID。
-     * pageSize 每页显示记录数。
-     * pageNum 当前显示页数。
-     *
-     * @return {PageList}。
-     */
     @Execute(name = "query-by-owner", validates = {
             @Validate(validator = Validators.ID, parameter = "owner", failureCode = 3)
     })
@@ -55,14 +39,6 @@ public class CommentCtrl extends AuditCtrlSupport {
         return commentService.queryByOwner(request.get("owner"));
     }
 
-    /**
-     * 检索评论集。
-     * owner 作者ID。
-     * pageSize 每页显示记录数。
-     * pageNum 当前显示页数。
-     *
-     * @return {PageList}。
-     */
     @Execute(name = "query-by-author", validates = {
             @Validate(validator = Validators.ID, parameter = "author", failureCode = 4)
     })
@@ -70,18 +46,13 @@ public class CommentCtrl extends AuditCtrlSupport {
         return commentService.queryByAuthor(request.get("author"));
     }
 
-    /**
-     * 创建新回复。
-     * key 服务key。
-     * owner 所有者ID。
-     * author 作者ID。
-     * subject 标题。
-     * label 标签。
-     * content 内容。
-     * score 评分。
-     *
-     * @return {CommentModel}。
-     */
+    @Execute(name = "get", validates = {
+            @Validate(validator = Validators.NOT_EMPTY, parameter = "ids", failureCode = 9)
+    })
+    public Object get() {
+        return commentService.get(request.getAsArray("ids"));
+    }
+
     @Execute(name = "create", validates = {
             @Validate(validator = Validators.NOT_EMPTY, parameter = "key", failureCode = 1),
             @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "key", failureCode = 2),

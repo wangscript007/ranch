@@ -60,6 +60,11 @@ class CommentDaoImpl implements CommentDao {
     }
 
     @Override
+    public CommentModel findById(String id) {
+        return liteOrm.findById(CommentModel.class, id);
+    }
+
+    @Override
     public void save(CommentModel comment) {
         liteOrm.save(comment);
     }

@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import org.lpw.ranch.group.GroupService;
 import org.lpw.ranch.user.helper.UserHelper;
 import org.lpw.tephra.cache.Cache;
+import org.lpw.tephra.dao.model.ModelHelper;
 import org.lpw.tephra.util.Converter;
 import org.lpw.tephra.util.DateTime;
 import org.springframework.stereotype.Service;
@@ -19,6 +20,7 @@ import java.util.List;
 public class MemberServiceImpl implements MemberService {
     private static final String CACHE_GROUP = MemberModel.NAME + ".service.group:";
     private static final String CACHE_USER = MemberModel.NAME + ".service.user:";
+    private static final String CACHE_GROUP_USER = MemberModel.NAME + ".service.group-user:";
 
     @Inject
     private Cache cache;
@@ -26,6 +28,8 @@ public class MemberServiceImpl implements MemberService {
     private Converter converter;
     @Inject
     private DateTime dateTime;
+    @Inject
+    private ModelHelper modelHelper;
     @Inject
     private UserHelper userHelper;
     @Inject
@@ -39,8 +43,15 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public MemberModel find(String group, String user) {
-        return memberDao.find(group, user);
+    public JSONObject find(String group, String user) {
+        String cacheKey = CACHE_GROUP_USER + group + user;
+        JSONObject object = cache.get(cacheKey);
+        if (object == null) {
+            MemberModel member = memberDao.find(group, user);
+            cache.put(cacheKey, object = member == null ? new JSONObject() : modelHelper.toJson(member), false);
+        }
+
+        return object;
     }
 
     @Override
@@ -82,13 +93,14 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public void join(String group, String reason) {
         String user = userHelper.id();
-        MemberModel member = find(group, user);
-        if (member == null) {
+        JSONObject object = find(group, user);
+        if (object.isEmpty()) {
             create(group, user, reason, groupService.get(group).getIntValue("audit") == 0 ? Type.Normal : Type.New);
 
             return;
         }
 
+        MemberModel member = memberDao.findById(object.getString("id"));
         member.setReason(reason);
         memberDao.save(member);
     }
@@ -103,8 +115,7 @@ public class MemberServiceImpl implements MemberService {
         memberDao.save(member);
         if (type.ordinal() >= Type.Normal.ordinal()) {
             groupService.member(group, 1);
-            cache.remove(CACHE_GROUP + group);
-            cache.remove(CACHE_USER + user);
+            clearCache(member);
         }
     }
 
@@ -115,8 +126,7 @@ public class MemberServiceImpl implements MemberService {
         member.setJoin(dateTime.now());
         memberDao.save(member);
         groupService.member(member.getGroup(), 1);
-        cache.remove(CACHE_GROUP + member.getGroup());
-        cache.remove(CACHE_USER + member.getUser());
+        clearCache(member);
     }
 
     @Override
@@ -132,8 +142,7 @@ public class MemberServiceImpl implements MemberService {
 
         if (member.getType() == Type.New.ordinal()) {
             groupService.member(member.getGroup(), 1);
-            cache.remove(CACHE_GROUP + member.getGroup());
-            cache.remove(CACHE_USER + member.getUser());
+            clearCache(member);
         }
         member.setType(Type.Manager.ordinal());
         memberDao.save(member);
@@ -144,7 +153,7 @@ public class MemberServiceImpl implements MemberService {
         MemberModel member = findById(id);
         member.setNick(nick);
         memberDao.save(member);
-        cache.remove(CACHE_GROUP + member.getGroup());
+        clearCache(member);
     }
 
     @Override
@@ -152,9 +161,14 @@ public class MemberServiceImpl implements MemberService {
         MemberModel member = findById(id);
         if (member.getType() >= Type.Normal.ordinal()) {
             groupService.member(member.getGroup(), -1);
-            cache.remove(CACHE_GROUP + member.getGroup());
-            cache.remove(CACHE_USER + member.getUser());
+            clearCache(member);
         }
         memberDao.delete(member.getId());
+    }
+
+    private void clearCache(MemberModel member) {
+        cache.remove(CACHE_GROUP + member.getGroup());
+        cache.remove(CACHE_USER + member.getUser());
+        cache.remove(CACHE_GROUP_USER + member.getGroup() + member.getUser());
     }
 }

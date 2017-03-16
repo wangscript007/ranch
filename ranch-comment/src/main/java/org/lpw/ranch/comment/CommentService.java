@@ -38,6 +38,14 @@ public interface CommentService extends AuditService {
     JSONObject queryByAuthor(String author);
 
     /**
+     * 获取评论信息集。
+     *
+     * @param ids ID集。
+     * @return 评论信息集。
+     */
+    JSONObject get(String[] ids);
+
+    /**
      * 创建新评论。
      *
      * @param comment 评论信息。

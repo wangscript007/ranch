@@ -12,6 +12,8 @@
 
 [检索群组成员集](doc/member/query-by-group.md)
 
+[查找群成员信息](doc/member/find.md)
+
 [加入群组](doc/member/join.md)
 
 [通过加入申请](doc/member/pass.md)

@@ -270,20 +270,4 @@ public class QueryTest extends TestSupport {
         array = data.getJSONArray("list");
         Assert.assertEquals(0, array.size());
     }
-
-    private void equals(CommentModel comment, JSONObject obj, int i) {
-        Assert.assertEquals(comment.getId(), obj.getString("id"));
-        Assert.assertEquals("key " + i, obj.getString("key"));
-        JSONObject owner = obj.getJSONObject("owner");
-        Assert.assertEquals("owner " + i, owner.getString("id"));
-        Assert.assertEquals("owner key " + i, owner.getString("key"));
-        mockUser.verify(obj.getJSONObject("author"), comment.getAuthor());
-        Assert.assertEquals(comment.getSubject(), obj.getString("subject"));
-        Assert.assertEquals(comment.getLabel(), obj.getString("label"));
-        Assert.assertEquals(comment.getContent(), obj.getString("content"));
-        Assert.assertEquals(comment.getScore(), obj.getIntValue("score"));
-        Assert.assertFalse(obj.containsKey("audit"));
-        Assert.assertEquals(converter.toString(comment.getTime()), obj.getString("time"));
-        Assert.assertFalse(obj.containsKey("children"));
-    }
 }

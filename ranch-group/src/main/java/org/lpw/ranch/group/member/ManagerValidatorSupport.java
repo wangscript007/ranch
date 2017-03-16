@@ -1,5 +1,6 @@
 package org.lpw.ranch.group.member;
 
+import com.alibaba.fastjson.JSONObject;
 import org.lpw.ranch.user.helper.UserHelper;
 import org.lpw.tephra.ctrl.validate.ValidatorSupport;
 
@@ -15,8 +16,8 @@ public abstract class ManagerValidatorSupport extends ValidatorSupport {
     MemberService memberService;
 
     protected boolean validate(String group, String user) {
-        MemberModel manager = memberService.find(group, user);
+        JSONObject manager = memberService.find(group, user);
 
-        return manager != null && manager.getType() >= MemberService.Type.Manager.ordinal();
+        return !manager.isEmpty() && manager.getIntValue("type") >= MemberService.Type.Manager.ordinal();
     }
 }

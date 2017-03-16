@@ -1,4 +1,4 @@
-# 通过ID获取分类信息
+# 获取分类信息集
 
 请求
 - Service Key - ranch.classify.get
