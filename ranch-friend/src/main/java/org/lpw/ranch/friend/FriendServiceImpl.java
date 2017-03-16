@@ -19,6 +19,7 @@ import java.util.Comparator;
 public class FriendServiceImpl implements FriendService {
     private static final String CACHE_OWNER = FriendModel.NAME + ".service.owner:";
     private static final String CACHE_OWNER_USER = FriendModel.NAME + ".service.owner-user:";
+    private static final String CACHE_GET = FriendModel.NAME + ".service.get:";
 
     @Inject
     private Cache cache;
@@ -58,6 +59,34 @@ public class FriendServiceImpl implements FriendService {
     }
 
     @Override
+    public JSONObject get(String[] ids) {
+        JSONObject json = new JSONObject();
+        for (String id : ids) {
+            String cacheKey = CACHE_GET + id;
+            JSONObject object = cache.get(cacheKey);
+            if (object != null) {
+                json.put(id, object);
+
+                continue;
+            }
+
+            FriendModel friend1 = friendDao.findById(id);
+            if (friend1 == null || friend1.getState() != 2)
+                continue;
+
+            FriendModel friend2 = friendDao.find(friend1.getUser(), friend1.getOwner());
+            if (friend2 == null || friend2.getState() != 2)
+                continue;
+
+            object = modelHelper.toJson(friend1);
+            cache.put(cacheKey, object, false);
+            json.put(id, object);
+        }
+
+        return json;
+    }
+
+    @Override
     public void create(String user, String memo) {
         String owner = userHelper.id();
         FriendModel model = find(owner, user);
@@ -78,7 +107,7 @@ public class FriendServiceImpl implements FriendService {
         model.setState(state);
         model.setCreate(dateTime.now());
         friendDao.save(model);
-        cleanCache(owner, user);
+        cleanCache(model);
     }
 
     @Override
@@ -97,7 +126,7 @@ public class FriendServiceImpl implements FriendService {
             model.setMemo(memo);
         model.setState(2);
         friendDao.save(model);
-        cleanCache(owner, user);
+        cleanCache(model);
     }
 
     @Override
@@ -109,7 +138,7 @@ public class FriendServiceImpl implements FriendService {
 
         model.setMemo(memo);
         friendDao.save(model);
-        cleanCache(owner, user);
+        cleanCache(model);
     }
 
     @Override
@@ -126,9 +155,10 @@ public class FriendServiceImpl implements FriendService {
         return model;
     }
 
-    private void cleanCache(String owner, String user) {
+    private void cleanCache(FriendModel friend) {
         for (int i = 0; i < 4; i++)
-            cache.remove(CACHE_OWNER + owner + i);
-        cache.remove(CACHE_OWNER_USER + owner + user);
+            cache.remove(CACHE_OWNER + friend.getOwner() + i);
+        cache.remove(CACHE_OWNER_USER + friend.getOwner() + friend.getUser());
+        cache.remove(CACHE_GET + friend.getId());
     }
 }

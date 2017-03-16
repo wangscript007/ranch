@@ -8,6 +8,8 @@ import org.lpw.tephra.dao.orm.PageList;
 interface FriendDao {
     PageList<FriendModel> query(String owner, int state, boolean sortable);
 
+    FriendModel findById(String id);
+
     FriendModel find(String owner, String user);
 
     void save(FriendModel user);

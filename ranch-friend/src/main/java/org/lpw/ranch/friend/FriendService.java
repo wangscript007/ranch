@@ -21,6 +21,14 @@ public interface FriendService {
     JSONArray query(int state);
 
     /**
+     * 获取已验证通过的好友信息集。
+     *
+     * @param ids 好友ID集。
+     * @return 好友信息集。
+     */
+    JSONObject get(String[] ids);
+
+    /**
      * 添加好友。
      *
      * @param user 好友ID。
@@ -47,7 +55,7 @@ public interface FriendService {
     /**
      * 查找好友信息。
      *
-     * @param user 好友ID。
+     * @param user 用户ID。
      * @return 好友信息；如果不存在则返回null。
      */
     FriendModel find(String user);

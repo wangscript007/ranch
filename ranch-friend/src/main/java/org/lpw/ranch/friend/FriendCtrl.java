@@ -5,6 +5,7 @@ import org.lpw.tephra.ctrl.context.Request;
 import org.lpw.tephra.ctrl.execute.Execute;
 import org.lpw.tephra.ctrl.validate.Validate;
 import org.lpw.tephra.ctrl.validate.Validators;
+import org.lpw.tephra.dao.model.ModelHelper;
 import org.springframework.stereotype.Controller;
 
 import javax.inject.Inject;
@@ -15,6 +16,8 @@ import javax.inject.Inject;
 @Controller(FriendModel.NAME + ".ctrl")
 @Execute(name = "/friend/", key = FriendModel.NAME, code = "16")
 public class FriendCtrl {
+    @Inject
+    private ModelHelper modelHelper;
     @Inject
     private Request request;
     @Inject
@@ -28,11 +31,26 @@ public class FriendCtrl {
         return friendService.query(request.getAsInt("state"));
     }
 
+    @Execute(name = "get", validates = {
+            @Validate(validator = Validators.NOT_EMPTY, parameter = "ids", failureCode = 6)
+    })
+    public Object get() {
+        return friendService.get(request.getAsArray("ids"));
+    }
+
+    @Execute(name = "find", validates = {
+            @Validate(validator = Validators.NOT_EMPTY, parameter = "user", failureCode = 1),
+            @Validate(validator = UserHelper.VALIDATOR_SIGN_IN),
+            @Validate(validator = UserHelper.VALIDATOR_EXISTS, parameter = "user")
+    })
+    public Object find() {
+        return modelHelper.toJson(friendService.find(request.get("user")));
+    }
+
     @Execute(name = "create", validates = {
             @Validate(validator = Validators.NOT_EMPTY, parameter = "user", failureCode = 1),
             @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "memo", failureCode = 3),
             @Validate(validator = UserHelper.VALIDATOR_SIGN_IN),
-            @Validate(validator = UserHelper.VALIDATOR_EXISTS, parameter = "user")
     })
     public Object create() {
         friendService.create(request.get("user"), request.get("memo"));

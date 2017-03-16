@@ -1,4 +1,4 @@
-# 发送信息
+# 发送消息
 
 请求
 - Service Key - ranch.message.send

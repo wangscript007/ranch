@@ -35,5 +35,4 @@ public class TestSupport extends TephraTestSupport {
     MockCarousel mockCarousel;
     @Inject
     MockHelper mockHelper;
-    long now = System.currentTimeMillis();
 }

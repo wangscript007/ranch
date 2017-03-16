@@ -113,10 +113,9 @@ public class MemberServiceImpl implements MemberService {
         member.setType(type.ordinal());
         member.setJoin(dateTime.now());
         memberDao.save(member);
-        if (type.ordinal() >= Type.Normal.ordinal()) {
+        if (type.ordinal() >= Type.Normal.ordinal())
             groupService.member(group, 1);
-            clearCache(member);
-        }
+        clearCache(member);
     }
 
     @Override

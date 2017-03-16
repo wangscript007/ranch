@@ -3,8 +3,10 @@ package org.lpw.ranch.message;
 import org.lpw.ranch.user.helper.UserHelper;
 import org.lpw.tephra.ctrl.context.Request;
 import org.lpw.tephra.ctrl.execute.Execute;
+import org.lpw.tephra.ctrl.template.Templates;
 import org.lpw.tephra.ctrl.validate.Validate;
 import org.lpw.tephra.ctrl.validate.Validators;
+import org.lpw.tephra.util.Message;
 import org.springframework.stereotype.Controller;
 
 import javax.inject.Inject;
@@ -16,7 +18,11 @@ import javax.inject.Inject;
 @Execute(name = "/message/", key = MessageModel.NAME, code = "18")
 public class MessageCtrl {
     @Inject
+    private Message message;
+    @Inject
     private Request request;
+    @Inject
+    private Templates templates;
     @Inject
     private MessageService messageService;
 
@@ -28,9 +34,10 @@ public class MessageCtrl {
             @Validate(validator = UserHelper.VALIDATOR_SIGN_IN)
     })
     public Object send() {
-        messageService.send(request.getAsInt("type"), request.get("receiver"), request.getAsInt("format"), request.get("content"));
+        boolean result = request.getAsInt("type") == 1 ? messageService.sendToGroup(request.get("receiver"), request.getAsInt("format"), request.get("content")) :
+                messageService.sendToFriend(request.get("receiver"), request.getAsInt("format"), request.get("content"));
 
-        return "";
+        return result ? "" : templates.get().failure(1805, message.get(MessageModel.NAME + ".send.failure"), null, null);
     }
 
     @Execute(name = "newest", validates = {
