@@ -4,7 +4,6 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import org.lpw.ranch.audit.Audit;
 import org.lpw.ranch.audit.AuditHelper;
-import org.lpw.ranch.recycle.Recycle;
 import org.lpw.ranch.recycle.RecycleHelper;
 import org.lpw.ranch.user.helper.UserHelper;
 import org.lpw.ranch.util.Carousel;
@@ -77,8 +76,8 @@ public class CommentServiceImpl implements CommentService {
     public JSONObject get(String[] ids) {
         JSONObject json = new JSONObject();
         for (String id : ids) {
-            JSONObject object = getJson(id, null, true, true, true, true);
-            if (!object.isEmpty() && object.getIntValue("audit") == Audit.Passed.getValue() && object.getIntValue("recycle") == Recycle.No.getValue())
+            JSONObject object = getJson(id, null, true, true, true, false);
+            if (!object.isEmpty())
                 json.put(id, object);
         }
 

@@ -35,7 +35,9 @@ public class ClassifyCtrl extends RecycleCtrlSupport {
         return classifyService.tree(request.get("code"));
     }
 
-    @Execute(name = "get")
+    @Execute(name = "get", validates = {
+            @Validate(validator = Validators.NOT_EMPTY, parameter = "ids", failureCode = 11)
+    })
     public Object get() {
         return classifyService.get(request.getAsArray("ids"));
     }

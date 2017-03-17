@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import org.junit.Assert;
 import org.junit.Test;
 import org.lpw.tephra.cache.Cache;
+import org.lpw.tephra.ctrl.validate.Validators;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
@@ -35,16 +36,15 @@ public class GetTest extends TestSupport {
         mockHelper.reset();
         mockHelper.mock("/classify/get");
         JSONObject object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(0, object.getIntValue("code"));
-        JSONObject data = object.getJSONObject("data");
-        Assert.assertTrue(data.isEmpty());
+        Assert.assertEquals(1211, object.getIntValue("code"));
+        Assert.assertEquals(message.get(Validators.PREFIX + "empty", message.get(ClassifyModel.NAME + ".ids")), object.getString("message"));
 
         mockHelper.reset();
         mockHelper.getRequest().addParameter("ids", "id," + list.get(0).getId() + "," + list.get(1).getId() + "," + list.get(1).getId());
         mockHelper.mock("/classify/get");
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(0, object.getIntValue("code"));
-        data = object.getJSONObject("data");
+        JSONObject data = object.getJSONObject("data");
         Assert.assertFalse(data.containsKey("id"));
         Assert.assertFalse(data.containsKey(list.get(0).getId()));
         JSONObject classify = data.getJSONObject(list.get(1).getId());
