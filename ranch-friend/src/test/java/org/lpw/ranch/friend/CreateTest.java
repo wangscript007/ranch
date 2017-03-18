@@ -39,16 +39,6 @@ public class CreateTest extends TestSupport {
 
         mockCarousel.reset();
         mockCarousel.register("ranch.user.sign", "{\"code\":0,\"data\":{\"id\":\"sign in id\"}}");
-        mockHelper.reset();
-        mockHelper.getRequest().addParameter("user", "user");
-        mockHelper.getRequest().addParameter("memo", "memo");
-        mockHelper.mock("/friend/create");
-        object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(1525, object.getIntValue("code"));
-        Assert.assertEquals(message.get("ranch.user.helper.not-exists"), object.getString("message"));
-
-        mockCarousel.reset();
-        mockCarousel.register("ranch.user.sign", "{\"code\":0,\"data\":{\"id\":\"sign in id\"}}");
         mockCarousel.register("ranch.user.get", "{\"code\":0,\"data\":{\"user id\":{\"id\":\"user id\",\"name\":\"user name\"}}}");
         for (int i = 0; i < 5; i++) {
             mockHelper.reset();

@@ -95,9 +95,6 @@ public class ClassifyServiceImpl implements ClassifyService, DateJob {
 
     @Override
     public JSONObject get(String[] ids) {
-        if (validator.isEmpty(ids))
-            return new JSONObject();
-
         String cacheKey = CACHE_GET + converter.toString(ids);
         JSONObject object = cache.get(cacheKey);
         if (object == null) {

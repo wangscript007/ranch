@@ -41,9 +41,13 @@ public class MessageServiceImpl implements MessageService {
     private int size;
 
     @Override
-    public boolean sendToFriend(String receiver, int format, String content) {
+    public boolean send(int type, String receiver, int format, String content) {
+        return type == 1 ? sendToGroup(receiver, format, content) : sendToFriend(receiver, format, content);
+    }
+
+    private boolean sendToFriend(String receiver, int format, String content) {
         JSONObject friend = carousel.get(friendKey + ".get", receiver);
-        if (friend.isEmpty())
+        if (friend.size() <= 1)
             return false;
 
         send(userHelper.id(), 0, friend.getString("user"), format, content);
@@ -51,17 +55,16 @@ public class MessageServiceImpl implements MessageService {
         return true;
     }
 
-    @Override
-    public boolean sendToGroup(String receiver, int format, String content) {
+    private boolean sendToGroup(String receiver, int format, String content) {
         String user = userHelper.id();
         Map<String, String> parameter = new HashMap<>();
         parameter.put("group", receiver);
         parameter.put("user", user);
-        JSONObject group = carousel.service(groupKey + ".find", null, parameter, false, JSONObject.class);
-        if (group.isEmpty())
+        JSONObject member = carousel.service(groupKey + ".member.find", null, parameter, false, JSONObject.class);
+        if (member.isEmpty())
             return false;
 
-        send(user, 1, receiver, format, content);
+        send(member.getString("id"), 1, receiver, format, content);
 
         return true;
     }

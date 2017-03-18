@@ -4,7 +4,6 @@ import com.alibaba.fastjson.JSONObject;
 import org.junit.Assert;
 import org.junit.Test;
 import org.lpw.tephra.ctrl.validate.Validators;
-import org.lpw.tephra.dao.orm.PageList;
 import org.lpw.tephra.dao.orm.lite.LiteQuery;
 
 /**
@@ -81,25 +80,56 @@ public class SendTest extends TestSupport {
         Assert.assertEquals(9901, object.getIntValue("code"));
         Assert.assertEquals(message.get("ranch.user.helper.need-sign-in"), object.getString("message"));
 
+        for (int i = 0; i < 2; i++) {
+            String receiver = generator.uuid();
+            mockCarousel.register("ranch.user.sign", "{\"code\":0,\"data\":{\"id\":\"sign in id\"}}");
+            mockHelper.reset();
+            mockHelper.getRequest().addParameter("type", "" + i);
+            mockHelper.getRequest().addParameter("receiver", receiver);
+            mockHelper.getRequest().addParameter("format", "1");
+            mockHelper.getRequest().addParameter("content", "content value");
+            mockHelper.mock("/message/send");
+            object = mockHelper.getResponse().asJson();
+            Assert.assertEquals(1805, object.getIntValue("code"));
+            Assert.assertEquals(message.get(MessageModel.NAME + ".send.failure"), object.getString("message"));
+        }
+
         String receiver = generator.uuid();
-        mockCarousel.register("ranch.user.sign", "{\"code\":0,\"data\":{\"id\":\"sign in id\"}}");
+        mockCarousel.register("ranch.friend.get", "{\"code\":0,\"data\":{\"" + receiver + "\":{\"id\":\"" + receiver + "\",\"user\":\"friend user id\"}}}");
         mockHelper.reset();
         mockHelper.getRequest().addParameter("type", "0");
         mockHelper.getRequest().addParameter("receiver", receiver);
         mockHelper.getRequest().addParameter("format", "1");
-        mockHelper.getRequest().addParameter("content", "content value");
+        mockHelper.getRequest().addParameter("content", "friend content");
         mockHelper.mock("/message/send");
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(0, object.getIntValue("code"));
         Assert.assertEquals("", object.getString("data"));
-        PageList<MessageModel> pl = liteOrm.query(new LiteQuery(MessageModel.class), null);
-        Assert.assertEquals(1, pl.getList().size());
-        MessageModel message = pl.getList().get(0);
+        MessageModel message = liteOrm.findOne(new LiteQuery(MessageModel.class).where("c_type=?"), new Object[]{0});
         Assert.assertEquals("sign in id", message.getSender());
         Assert.assertEquals(0, message.getType());
-        Assert.assertEquals(receiver, message.getReceiver());
+        Assert.assertEquals("friend user id", message.getReceiver());
         Assert.assertEquals(1, message.getFormat());
-        Assert.assertEquals("content value", message.getContent());
+        Assert.assertEquals("friend content", message.getContent());
+        Assert.assertTrue(System.currentTimeMillis() - message.getTime().getTime() < 2000L);
+
+        receiver = generator.uuid();
+        mockCarousel.register("ranch.group.member.find", "{\"code\":0,\"data\":{\"id\":\"member id\"}}");
+        mockHelper.reset();
+        mockHelper.getRequest().addParameter("type", "1");
+        mockHelper.getRequest().addParameter("receiver", receiver);
+        mockHelper.getRequest().addParameter("format", "2");
+        mockHelper.getRequest().addParameter("content", "group content");
+        mockHelper.mock("/message/send");
+        object = mockHelper.getResponse().asJson();
+        Assert.assertEquals(0, object.getIntValue("code"));
+        Assert.assertEquals("", object.getString("data"));
+        message = liteOrm.findOne(new LiteQuery(MessageModel.class).where("c_type=?"), new Object[]{1});
+        Assert.assertEquals("member id", message.getSender());
+        Assert.assertEquals(1, message.getType());
+        Assert.assertEquals(receiver, message.getReceiver());
+        Assert.assertEquals(2, message.getFormat());
+        Assert.assertEquals("group content", message.getContent());
         Assert.assertTrue(System.currentTimeMillis() - message.getTime().getTime() < 2000L);
     }
 }

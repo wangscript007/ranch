@@ -34,10 +34,8 @@ public class MessageCtrl {
             @Validate(validator = UserHelper.VALIDATOR_SIGN_IN)
     })
     public Object send() {
-        boolean result = request.getAsInt("type") == 1 ? messageService.sendToGroup(request.get("receiver"), request.getAsInt("format"), request.get("content")) :
-                messageService.sendToFriend(request.get("receiver"), request.getAsInt("format"), request.get("content"));
-
-        return result ? "" : templates.get().failure(1805, message.get(MessageModel.NAME + ".send.failure"), null, null);
+        return messageService.send(request.getAsInt("type"), request.get("receiver"), request.getAsInt("format"), request.get("content")) ? "" :
+                templates.get().failure(1805, message.get(MessageModel.NAME + ".send.failure"), null, null);
     }
 
     @Execute(name = "newest", validates = {
