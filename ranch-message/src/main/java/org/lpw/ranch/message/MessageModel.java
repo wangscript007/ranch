@@ -25,7 +25,7 @@ public class MessageModel extends ModelSupport {
     private String sender; // 发送者ID
     private int type; // 接收者类型：0-好友；1-群组
     private String receiver; // 接收者ID
-    private int format; // 消息格式：0-文本；1-图片；2-音频；3-视频；4-文件；5-红包
+    private int format; // 消息格式：0-文本；1-图片；2-音频；3-视频；4-文件；5-红包；6-公告；7-名片
     private String content; // 内容
     private Timestamp time; // 发送时间
 
