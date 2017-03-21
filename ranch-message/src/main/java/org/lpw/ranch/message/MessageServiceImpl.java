@@ -6,6 +6,7 @@ import org.lpw.ranch.user.helper.UserHelper;
 import org.lpw.ranch.util.Carousel;
 import org.lpw.tephra.dao.model.ModelHelper;
 import org.lpw.tephra.util.DateTime;
+import org.lpw.tephra.util.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +26,7 @@ import java.util.Set;
 public class MessageServiceImpl implements MessageService {
     @Inject
     private DateTime dateTime;
+    @Inject private Logger logger;
     @Inject
     private ModelHelper modelHelper;
     @Inject
@@ -47,8 +49,12 @@ public class MessageServiceImpl implements MessageService {
 
     private boolean sendToFriend(String receiver, int format, String content) {
         JSONObject friend = carousel.get(friendKey + ".get", receiver);
-        if (friend.size() <= 1)
+        if (friend.size() <= 1) {
+            if (logger.isDebugEnable())
+                logger.debug("好友[{}]信息[{}]不存在，消息发送失败！", receiver, friend.toJSONString());
+
             return false;
+        }
 
         send(userHelper.id(), 0, friend.getString("user"), format, content);
 
@@ -61,8 +67,12 @@ public class MessageServiceImpl implements MessageService {
         parameter.put("group", receiver);
         parameter.put("user", user);
         JSONObject member = carousel.service(groupKey + ".member.find", null, parameter, false, JSONObject.class);
-        if (member.isEmpty())
+        if (member.isEmpty()) {
+            if (logger.isDebugEnable())
+                logger.debug("群组[{}]成员信息不存在，消息发送失败！", receiver);
+
             return false;
+        }
 
         send(member.getString("id"), 1, receiver, format, content);
 
