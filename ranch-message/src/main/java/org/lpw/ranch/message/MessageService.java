@@ -7,14 +7,29 @@ import com.alibaba.fastjson.JSONObject;
  */
 public interface MessageService {
     /**
+     * 校验码是否不存在验证器Bean名称。
+     */
+    String VALIDATOR_NOT_EXISTS_CODE = MessageModel.NAME + ".validator.code.not-exists";
+
+    /**
+     * 验证校验码是否存在。
+     *
+     * @param code 验证校验码。
+     * @return 如果存在则返回true；否则返回false。
+     */
+    boolean exists(String code);
+
+    /**
      * 发送消息。
-     * @param type 接收者类型：0-好友；1-群组。
+     *
+     * @param type     接收者类型：0-好友；1-群组。
      * @param receiver 接收者ID。
      * @param format   消息格式：0-文本；1-图片；2-音频；3-视频；4-文件；5-红包。
      * @param content  消息内容。
+     * @param code     校验码。
      * @return 如果发送成功则返回true；否则返回false。
      */
-    boolean send(int type,String receiver, int format, String content);
+    boolean send(int type, String receiver, int format, String content, String code);
 
     /**
      * 检索当前用户最新信息集。

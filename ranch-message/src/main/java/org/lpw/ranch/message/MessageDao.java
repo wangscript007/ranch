@@ -12,4 +12,6 @@ interface MessageDao {
     void save(MessageModel message);
 
     PageList<MessageModel> query(Timestamp time, String sender, Set<String> receivers, int size);
+
+    MessageModel findByCode(String code);
 }

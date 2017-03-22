@@ -1,6 +1,7 @@
 package org.lpw.ranch.message;
 
 import org.lpw.tephra.dao.model.Jsonable;
+import org.lpw.tephra.dao.model.Memory;
 import org.lpw.tephra.dao.model.ModelSupport;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.Scope;
@@ -19,6 +20,7 @@ import java.sql.Timestamp;
 @Scope(BeanDefinition.SCOPE_PROTOTYPE)
 @Entity(name = MessageModel.NAME)
 @Table(name = "t_message")
+@Memory(name = "m_message")
 public class MessageModel extends ModelSupport {
     static final String NAME = "ranch.message";
 
@@ -28,6 +30,7 @@ public class MessageModel extends ModelSupport {
     private int format; // 消息格式：0-文本；1-图片；2-音频；3-视频；4-文件；5-红包；6-公告；7-名片
     private String content; // 内容
     private Timestamp time; // 发送时间
+    private String code; // 校验码
 
     @Jsonable
     @Column(name = "c_sender")
@@ -87,5 +90,14 @@ public class MessageModel extends ModelSupport {
 
     public void setTime(Timestamp time) {
         this.time = time;
+    }
+
+    @Column(name = "c_code")
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
     }
 }

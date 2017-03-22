@@ -31,12 +31,17 @@ class MessageDaoImpl implements MessageDao {
         args.add(time);
         args.add(sender);
         args.add(sender);
-        receivers.forEach(receiver->{
+        receivers.forEach(receiver -> {
             where.append(",?");
             args.add(receiver);
         });
         where.append("))");
 
         return liteOrm.query(new LiteQuery(MessageModel.class).where(where.toString()).order("c_time desc").size(size), args.toArray());
+    }
+
+    @Override
+    public MessageModel findByCode(String code) {
+        return liteOrm.findOne(new LiteQuery(MessageModel.class).where("c_code=?"), new Object[]{code});
     }
 }

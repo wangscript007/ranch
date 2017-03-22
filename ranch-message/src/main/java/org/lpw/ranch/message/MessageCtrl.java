@@ -31,11 +31,15 @@ public class MessageCtrl {
             @Validate(validator = Validators.ID, parameter = "receiver", failureCode = 2),
             @Validate(validator = Validators.BETWEEN, number = {0, 7}, parameter = "format", failureCode = 3),
             @Validate(validator = Validators.NOT_EMPTY, parameter = "content", failureCode = 4),
-            @Validate(validator = UserHelper.VALIDATOR_SIGN_IN)
+            @Validate(validator = Validators.NOT_EMPTY, parameter = "code", failureCode = 5),
+            @Validate(validator = UserHelper.VALIDATOR_SIGN_IN),
+            @Validate(validator = MessageService.VALIDATOR_NOT_EXISTS_CODE, parameter = "code", failureCode = 6)
     })
     public Object send() {
-        return messageService.send(request.getAsInt("type"), request.get("receiver"), request.getAsInt("format"), request.get("content")) ? "" :
-                templates.get().failure(1805, message.get(MessageModel.NAME + ".send.failure"), null, null);
+        String code = request.get("code");
+
+        return messageService.send(request.getAsInt("type"), request.get("receiver"), request.getAsInt("format"), request.get("content"), code) ? code :
+                templates.get().failure(1807, message.get(MessageModel.NAME + ".send.failure"), null, null);
     }
 
     @Execute(name = "newest", validates = {

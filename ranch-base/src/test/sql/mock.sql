@@ -4,7 +4,7 @@ CREATE TABLE t_recycle
   c_id CHAR(36) NOT NULL COMMENT '主键',
   c_recycle INT DEFAULT 0 COMMENT '回收站；0-否，1-是',
 
-  PRIMARY KEY pk_recycle(c_id)
+  PRIMARY KEY pk(c_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS t_audit;
@@ -15,5 +15,5 @@ CREATE TABLE t_audit
   c_audit_remark VARCHAR(255) DEFAULT NULL COMMENT '审核备注',
   c_recycle INT DEFAULT 0 COMMENT '回收站；0-否，1-是',
 
-  PRIMARY KEY pk_audit(c_id)
+  PRIMARY KEY pk(c_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
