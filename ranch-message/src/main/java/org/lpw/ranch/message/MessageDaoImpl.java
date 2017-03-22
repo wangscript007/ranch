@@ -25,7 +25,7 @@ class MessageDaoImpl implements MessageDao {
     }
 
     @Override
-    public PageList<MessageModel> query(Timestamp time, String sender, Set<String> receivers, int size) {
+    public PageList<MessageModel> query(Timestamp time, String sender, Set<String> receivers) {
         StringBuilder where = new StringBuilder("c_time>=? and (c_sender=? or c_receiver in(?");
         List<Object> args = new ArrayList<>();
         args.add(time);
@@ -37,7 +37,7 @@ class MessageDaoImpl implements MessageDao {
         });
         where.append("))");
 
-        return liteOrm.query(new LiteQuery(MessageModel.class).where(where.toString()).order("c_time desc").size(size), args.toArray());
+        return liteOrm.query(new LiteQuery(MessageModel.class).where(where.toString()).order("c_time desc"), args.toArray());
     }
 
     @Override

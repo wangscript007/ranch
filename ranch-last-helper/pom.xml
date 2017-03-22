@@ -7,10 +7,10 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>ranch-message</artifactId>
+    <artifactId>ranch-last-helper</artifactId>
     <packaging>jar</packaging>
 
-    <name>ranch-message</name>
+    <name>ranch-last-helper</name>
     <url>http://maven.apache.org</url>
 
     <properties>
@@ -20,12 +20,7 @@
     <dependencies>
         <dependency>
             <groupId>org.lpw.ranch</groupId>
-            <artifactId>ranch-user-helper</artifactId>
-            <version>0.7.0-RELEASE</version>
-        </dependency>
-        <dependency>
-            <groupId>org.lpw.ranch</groupId>
-            <artifactId>ranch-last-helper</artifactId>
+            <artifactId>ranch-base</artifactId>
             <version>0.7.0-RELEASE</version>
         </dependency>
         <dependency>

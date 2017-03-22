@@ -2,6 +2,7 @@ package org.lpw.ranch.message;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import org.lpw.ranch.last.helper.LastHelper;
 import org.lpw.ranch.user.helper.UserHelper;
 import org.lpw.ranch.util.Carousel;
 import org.lpw.tephra.dao.model.ModelHelper;
@@ -24,6 +25,8 @@ import java.util.Set;
  */
 @Service(MessageModel.NAME + ".service")
 public class MessageServiceImpl implements MessageService {
+    private static final String LAST_TYPE_NEWEST = MessageModel.NAME + ".newest";
+
     @Inject
     private DateTime dateTime;
     @Inject
@@ -35,13 +38,13 @@ public class MessageServiceImpl implements MessageService {
     @Inject
     private UserHelper userHelper;
     @Inject
+    private LastHelper lastHelper;
+    @Inject
     private MessageDao messageDao;
     @Value("${ranch.friend.key:ranch.friend}")
     private String friendKey;
     @Value("${ranch.group.key:ranch.group}")
     private String groupKey;
-    @Value("${" + MessageModel.NAME + ".size:200}")
-    private int size;
 
     @Override
     public String send(int type, String receiver, int format, String content, String code) {
@@ -116,7 +119,7 @@ public class MessageServiceImpl implements MessageService {
         Map<String, List<MessageModel>> map = new HashMap<>();
         List<String> list = new ArrayList<>();
         String sender = userHelper.id();
-        messageDao.query(new Timestamp(time), sender, groups, size).getList().forEach(message -> {
+        messageDao.query(lastTime(time), sender, groups).getList().forEach(message -> {
             String key = message.getReceiver().equals(sender) ? message.getSender() : message.getReceiver();
             List<MessageModel> messages = map.get(key);
             if (messages == null) {
@@ -138,6 +141,16 @@ public class MessageServiceImpl implements MessageService {
         });
 
         return array;
+    }
+
+    private Timestamp lastTime(long time) {
+        if (time <= 0) {
+            JSONObject last = lastHelper.find(LAST_TYPE_NEWEST);
+            time = last.isEmpty() ? 0L : last.getLongValue("millisecond");
+        }
+        lastHelper.save(LAST_TYPE_NEWEST);
+
+        return new Timestamp(time);
     }
 
     private String findFriend(String id) {
