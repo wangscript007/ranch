@@ -32,10 +32,9 @@ public class MessageCtrl {
             @Validate(validator = Validators.BETWEEN, number = {0, 7}, parameter = "format", failureCode = 3),
             @Validate(validator = Validators.NOT_EMPTY, parameter = "content", failureCode = 4),
             @Validate(validator = Validators.MAX_LENGTH, number = {1000}, parameter = "content", failureCode = 5),
-            @Validate(validator = Validators.NOT_EMPTY, parameter = "code", failureCode = 6),
-            @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "code", failureCode = 7),
+            @Validate(validator = Validators.MATCH_REGEX, string = {"^[a-zA-Z0-9]{1,64}$"}, parameter = "code", failureCode = 6),
             @Validate(validator = UserHelper.VALIDATOR_SIGN_IN),
-            @Validate(validator = MessageService.VALIDATOR_NOT_EXISTS_CODE, parameter = "code", failureCode = 8)
+            @Validate(validator = MessageService.VALIDATOR_NOT_EXISTS_CODE, parameter = "code", failureCode = 7)
     })
     public Object send() {
         int type = request.getAsInt("type");
@@ -43,7 +42,7 @@ public class MessageCtrl {
         if (messageService.send(type, request.get("receiver"), request.getAsInt("format"), request.get("content"), code))
             return code;
 
-        return templates.get().failure(type == 1 ? 1809 : 1810, message.get(MessageModel.NAME + (type == 1 ? ".group" : ".friend") + ".not-exists"), null, null);
+        return templates.get().failure(type == 1 ? 1809 : 1808, message.get(MessageModel.NAME + (type == 1 ? ".group" : ".friend") + ".not-exists"), null, null);
     }
 
     @Execute(name = "newest", validates = {
