@@ -44,30 +44,27 @@ public class MessageServiceImpl implements MessageService {
     private int size;
 
     @Override
-    public boolean exists(String code) {
-        return messageDao.findByCode(code) != null;
-    }
+    public String send(int type, String receiver, int format, String content, String code) {
+        MessageModel message = messageDao.findByCode(code);
+        if (message != null)
+            return message.getId();
 
-    @Override
-    public boolean send(int type, String receiver, int format, String content, String code) {
         return type == 1 ? sendToGroup(receiver, format, content, code) : sendToFriend(receiver, format, content, code);
     }
 
-    private boolean sendToFriend(String receiver, int format, String content, String code) {
+    private String sendToFriend(String receiver, int format, String content, String code) {
         JSONObject friend = carousel.get(friendKey + ".get", receiver);
         if (friend.size() <= 1) {
             if (logger.isDebugEnable())
                 logger.debug("好友[{}]信息[{}]不存在，消息发送失败！", receiver, friend.toJSONString());
 
-            return false;
+            return null;
         }
 
-        send(userHelper.id(), 0, friend.getString("user"), format, content, code);
-
-        return true;
+        return send(userHelper.id(), 0, friend.getString("user"), format, content, code);
     }
 
-    private boolean sendToGroup(String receiver, int format, String content, String code) {
+    private String sendToGroup(String receiver, int format, String content, String code) {
         String user = userHelper.id();
         Map<String, String> parameter = new HashMap<>();
         parameter.put("group", receiver);
@@ -77,15 +74,13 @@ public class MessageServiceImpl implements MessageService {
             if (logger.isDebugEnable())
                 logger.debug("群组[{}]成员信息不存在，消息发送失败！", receiver);
 
-            return false;
+            return null;
         }
 
-        send(member.getString("id"), 1, receiver, format, content, code);
-
-        return true;
+        return send(member.getString("id"), 1, receiver, format, content, code);
     }
 
-    private void send(String sender, int type, String receiver, int format, String content, String code) {
+    private String send(String sender, int type, String receiver, int format, String content, String code) {
         MessageModel message = new MessageModel();
         message.setSender(sender);
         message.setType(type);
@@ -95,6 +90,8 @@ public class MessageServiceImpl implements MessageService {
         message.setTime(dateTime.now());
         message.setCode(code);
         messageDao.save(message);
+
+        return message.getId();
     }
 
     @Override

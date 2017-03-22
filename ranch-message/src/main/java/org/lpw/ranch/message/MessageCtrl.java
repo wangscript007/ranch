@@ -33,16 +33,15 @@ public class MessageCtrl {
             @Validate(validator = Validators.NOT_EMPTY, parameter = "content", failureCode = 4),
             @Validate(validator = Validators.MAX_LENGTH, number = {1000}, parameter = "content", failureCode = 5),
             @Validate(validator = Validators.MATCH_REGEX, string = {"^[a-zA-Z0-9]{1,64}$"}, parameter = "code", failureCode = 6),
-            @Validate(validator = UserHelper.VALIDATOR_SIGN_IN),
-            @Validate(validator = MessageService.VALIDATOR_NOT_EXISTS_CODE, parameter = "code", failureCode = 7)
+            @Validate(validator = UserHelper.VALIDATOR_SIGN_IN)
     })
     public Object send() {
         int type = request.getAsInt("type");
-        String code = request.get("code");
-        if (messageService.send(type, request.get("receiver"), request.getAsInt("format"), request.get("content"), code))
-            return code;
+        String id = messageService.send(type, request.get("receiver"), request.getAsInt("format"), request.get("content"), request.get("code"));
+        if (id != null)
+            return id;
 
-        return templates.get().failure(type == 1 ? 1809 : 1808, message.get(MessageModel.NAME + (type == 1 ? ".group" : ".friend") + ".not-exists"), null, null);
+        return templates.get().failure(type == 1 ? 1808 : 1807, message.get(MessageModel.NAME + (type == 1 ? ".group" : ".friend") + ".not-exists"), null, null);
     }
 
     @Execute(name = "newest", validates = {
