@@ -29,7 +29,7 @@ public class MessageCtrl {
     @Execute(name = "send", validates = {
             @Validate(validator = Validators.BETWEEN, number = {0, 1}, parameter = "type", failureCode = 1),
             @Validate(validator = Validators.ID, parameter = "receiver", failureCode = 2),
-            @Validate(validator = Validators.BETWEEN, number = {0, 5}, parameter = "format", failureCode = 3),
+            @Validate(validator = Validators.BETWEEN, number = {0, 7}, parameter = "format", failureCode = 3),
             @Validate(validator = Validators.NOT_EMPTY, parameter = "content", failureCode = 4),
             @Validate(validator = UserHelper.VALIDATOR_SIGN_IN)
     })

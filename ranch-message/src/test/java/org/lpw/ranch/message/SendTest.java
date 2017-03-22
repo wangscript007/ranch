@@ -50,16 +50,16 @@ public class SendTest extends TestSupport {
         mockHelper.mock("/message/send");
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(1803, object.getIntValue("code"));
-        Assert.assertEquals(message.get(Validators.PREFIX + "not-between", message.get(MessageModel.NAME + ".format"), 0, 5), object.getString("message"));
+        Assert.assertEquals(message.get(Validators.PREFIX + "not-between", message.get(MessageModel.NAME + ".format"), 0, 7), object.getString("message"));
 
         mockHelper.reset();
         mockHelper.getRequest().addParameter("type", "0");
         mockHelper.getRequest().addParameter("receiver", generator.uuid());
-        mockHelper.getRequest().addParameter("format", "6");
+        mockHelper.getRequest().addParameter("format", "8");
         mockHelper.mock("/message/send");
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(1803, object.getIntValue("code"));
-        Assert.assertEquals(message.get(Validators.PREFIX + "not-between", message.get(MessageModel.NAME + ".format"), 0, 5), object.getString("message"));
+        Assert.assertEquals(message.get(Validators.PREFIX + "not-between", message.get(MessageModel.NAME + ".format"), 0, 7), object.getString("message"));
 
         mockHelper.reset();
         mockHelper.getRequest().addParameter("type", "0");
