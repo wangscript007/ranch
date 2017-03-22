@@ -22,9 +22,9 @@
         <module>ranch-message</module>
         <module>ranch-snapshot</module>
         <module>ranch-last</module>
+        <module>ranch-last-helper</module>
         <module>ranch-archives</module>
         <module>ranch-web</module>
-        <module>ranch-last-helper</module>
         <module>ranch-test</module>
     </modules>
 
