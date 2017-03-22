@@ -31,15 +31,19 @@ public class MessageCtrl {
             @Validate(validator = Validators.ID, parameter = "receiver", failureCode = 2),
             @Validate(validator = Validators.BETWEEN, number = {0, 7}, parameter = "format", failureCode = 3),
             @Validate(validator = Validators.NOT_EMPTY, parameter = "content", failureCode = 4),
-            @Validate(validator = Validators.NOT_EMPTY, parameter = "code", failureCode = 5),
+            @Validate(validator = Validators.MAX_LENGTH, number = {1000}, parameter = "content", failureCode = 5),
+            @Validate(validator = Validators.NOT_EMPTY, parameter = "code", failureCode = 6),
+            @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "code", failureCode = 7),
             @Validate(validator = UserHelper.VALIDATOR_SIGN_IN),
-            @Validate(validator = MessageService.VALIDATOR_NOT_EXISTS_CODE, parameter = "code", failureCode = 6)
+            @Validate(validator = MessageService.VALIDATOR_NOT_EXISTS_CODE, parameter = "code", failureCode = 8)
     })
     public Object send() {
+        int type = request.getAsInt("type");
         String code = request.get("code");
+        if (messageService.send(type, request.get("receiver"), request.getAsInt("format"), request.get("content"), code))
+            return code;
 
-        return messageService.send(request.getAsInt("type"), request.get("receiver"), request.getAsInt("format"), request.get("content"), code) ? code :
-                templates.get().failure(1807, message.get(MessageModel.NAME + ".send.failure"), null, null);
+        return templates.get().failure(type == 1 ? 1809 : 1810, message.get(MessageModel.NAME + (type == 1 ? ".group" : ".friend") + ".not-exists"), null, null);
     }
 
     @Execute(name = "newest", validates = {
