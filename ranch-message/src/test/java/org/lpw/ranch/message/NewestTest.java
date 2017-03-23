@@ -54,6 +54,7 @@ public class NewestTest extends TestSupport {
             message.setFormat(i);
             message.setContent("content " + i);
             message.setTime(new Timestamp(time + i * TimeUnit.Minute.getTime()));
+            message.setCode("code " + i);
             liteOrm.save(message);
         }
         for (int i = 10; i < 20; i++) {
@@ -64,6 +65,7 @@ public class NewestTest extends TestSupport {
             message.setFormat(i);
             message.setContent("content " + i);
             message.setTime(new Timestamp(time + i * TimeUnit.Minute.getTime()));
+            message.setCode("code " + i);
             liteOrm.save(message);
         }
         for (int i = 20; i < 30; i++) {
@@ -74,6 +76,7 @@ public class NewestTest extends TestSupport {
             message.setFormat(i);
             message.setContent("content " + i);
             message.setTime(new Timestamp(time + i * TimeUnit.Minute.getTime()));
+            message.setCode("code " + i);
             liteOrm.save(message);
         }
 
