@@ -74,7 +74,39 @@ public class SendTest extends TestSupport {
         mockHelper.getRequest().addParameter("type", "0");
         mockHelper.getRequest().addParameter("receiver", generator.uuid());
         mockHelper.getRequest().addParameter("format", "1");
+        mockHelper.getRequest().addParameter("content", generator.random(1001));
+        mockHelper.mock("/message/send");
+        object = mockHelper.getResponse().asJson();
+        Assert.assertEquals(1805, object.getIntValue("code"));
+        Assert.assertEquals(message.get(Validators.PREFIX + "over-max-length", message.get(MessageModel.NAME + ".content"), 1000), object.getString("message"));
+
+        mockHelper.reset();
+        mockHelper.getRequest().addParameter("type", "0");
+        mockHelper.getRequest().addParameter("receiver", generator.uuid());
+        mockHelper.getRequest().addParameter("format", "1");
         mockHelper.getRequest().addParameter("content", "content value");
+        mockHelper.mock("/message/send");
+        object = mockHelper.getResponse().asJson();
+        Assert.assertEquals(1806, object.getIntValue("code"));
+        Assert.assertEquals(message.get(Validators.PREFIX + "not-match-regex", message.get(MessageModel.NAME + ".code"), "^[a-zA-Z0-9]{1,64}$"), object.getString("message"));
+
+        mockHelper.reset();
+        mockHelper.getRequest().addParameter("type", "0");
+        mockHelper.getRequest().addParameter("receiver", generator.uuid());
+        mockHelper.getRequest().addParameter("format", "1");
+        mockHelper.getRequest().addParameter("content", "content value");
+        mockHelper.getRequest().addParameter("code", "code value");
+        mockHelper.mock("/message/send");
+        object = mockHelper.getResponse().asJson();
+        Assert.assertEquals(1806, object.getIntValue("code"));
+        Assert.assertEquals(message.get(Validators.PREFIX + "not-match-regex", message.get(MessageModel.NAME + ".code"), "^[a-zA-Z0-9]{1,64}$"), object.getString("message"));
+
+        mockHelper.reset();
+        mockHelper.getRequest().addParameter("type", "0");
+        mockHelper.getRequest().addParameter("receiver", generator.uuid());
+        mockHelper.getRequest().addParameter("format", "1");
+        mockHelper.getRequest().addParameter("content", "content value");
+        mockHelper.getRequest().addParameter("code", "codevalue");
         mockHelper.mock("/message/send");
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(9901, object.getIntValue("code"));
