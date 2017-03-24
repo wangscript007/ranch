@@ -39,29 +39,10 @@ public class CreateTest extends TestSupport {
         Assert.assertEquals(1403, object.getIntValue("code"));
         Assert.assertEquals(message.get(Validators.PREFIX + "illegal-id", message.get(DocModel.NAME + ".owner")), object.getString("message"));
 
-        mockHelper.reset();
-        String ownerId = generator.uuid();
-        mockHelper.getRequest().addParameter("key", "key");
-        mockHelper.getRequest().addParameter("owner", ownerId);
-        mockHelper.mock("/doc/create");
-        object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(1404, object.getIntValue("code"));
-        Assert.assertEquals(message.get(Validators.PREFIX + "illegal-id", message.get(DocModel.NAME + ".author")), object.getString("message"));
-
+        String ownerId=generator.uuid();
         mockHelper.reset();
         mockHelper.getRequest().addParameter("key", "key");
         mockHelper.getRequest().addParameter("owner", ownerId);
-        mockHelper.getRequest().addParameter("author", "author id");
-        mockHelper.mock("/doc/create");
-        object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(1404, object.getIntValue("code"));
-        Assert.assertEquals(message.get(Validators.PREFIX + "illegal-id", message.get(DocModel.NAME + ".author")), object.getString("message"));
-
-        mockHelper.reset();
-        String authorId = generator.uuid();
-        mockHelper.getRequest().addParameter("key", "key");
-        mockHelper.getRequest().addParameter("owner", ownerId);
-        mockHelper.getRequest().addParameter("author", authorId);
         mockHelper.mock("/doc/create");
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(1405, object.getIntValue("code"));
@@ -70,7 +51,6 @@ public class CreateTest extends TestSupport {
         mockHelper.reset();
         mockHelper.getRequest().addParameter("key", "key");
         mockHelper.getRequest().addParameter("owner", ownerId);
-        mockHelper.getRequest().addParameter("author", authorId);
         mockHelper.getRequest().addParameter("subject", generator.random(101));
         mockHelper.mock("/doc/create");
         object = mockHelper.getResponse().asJson();
@@ -80,7 +60,6 @@ public class CreateTest extends TestSupport {
         mockHelper.reset();
         mockHelper.getRequest().addParameter("key", "key");
         mockHelper.getRequest().addParameter("owner", ownerId);
-        mockHelper.getRequest().addParameter("author", authorId);
         mockHelper.getRequest().addParameter("subject", "subject");
         mockHelper.getRequest().addParameter("image", generator.random(101));
         mockHelper.mock("/doc/create");
@@ -91,7 +70,6 @@ public class CreateTest extends TestSupport {
         mockHelper.reset();
         mockHelper.getRequest().addParameter("key", "key");
         mockHelper.getRequest().addParameter("owner", ownerId);
-        mockHelper.getRequest().addParameter("author", authorId);
         mockHelper.getRequest().addParameter("subject", "subject");
         mockHelper.getRequest().addParameter("image", "image");
         mockHelper.getRequest().addParameter("thumbnail", generator.random(101));
@@ -103,7 +81,6 @@ public class CreateTest extends TestSupport {
         mockHelper.reset();
         mockHelper.getRequest().addParameter("key", "key");
         mockHelper.getRequest().addParameter("owner", ownerId);
-        mockHelper.getRequest().addParameter("author", authorId);
         mockHelper.getRequest().addParameter("subject", "subject");
         mockHelper.getRequest().addParameter("image", "image");
         mockHelper.getRequest().addParameter("thumbnail", "thumbnail");
@@ -115,7 +92,6 @@ public class CreateTest extends TestSupport {
         mockHelper.reset();
         mockHelper.getRequest().addParameter("key", "key");
         mockHelper.getRequest().addParameter("owner", ownerId);
-        mockHelper.getRequest().addParameter("author", authorId);
         mockHelper.getRequest().addParameter("subject", "subject");
         mockHelper.getRequest().addParameter("image", "image");
         mockHelper.getRequest().addParameter("thumbnail", "thumbnail");
@@ -124,6 +100,13 @@ public class CreateTest extends TestSupport {
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(1410, object.getIntValue("code"));
         Assert.assertEquals(message.get(Validators.PREFIX + "empty", message.get(DocModel.NAME + ".content")), object.getString("message"));
+
+        mockHelper.reset();
+        mockHelper.getRequest().addParameter("type", "type value");
+        mockHelper.mock("/doc/create");
+        object = mockHelper.getResponse().asJson();
+        Assert.assertEquals(9901, object.getIntValue("code"));
+        Assert.assertEquals(message.get("ranch.user.helper.need-sign-in"), object.getString("message"));
 
         mockCarousel.reset();
         mockUser.register();
@@ -139,7 +122,6 @@ public class CreateTest extends TestSupport {
         mockHelper.reset();
         mockHelper.getRequest().addParameter("key", "key");
         mockHelper.getRequest().addParameter("owner", ownerId);
-        mockHelper.getRequest().addParameter("author", authorId);
         mockHelper.getRequest().addParameter("scoreMin", "1");
         mockHelper.getRequest().addParameter("scoreMax", "2");
         mockHelper.getRequest().addParameter("sort", "3");
@@ -165,7 +147,6 @@ public class CreateTest extends TestSupport {
         JSONObject owner = data.getJSONObject("owner");
         Assert.assertEquals(ownerId, owner.getString("id"));
         Assert.assertEquals("owner key", owner.getString("key"));
-        mockUser.verify(data.getJSONObject("author"), authorId);
         Assert.assertEquals(1, data.getIntValue("scoreMin"));
         Assert.assertEquals(2, data.getIntValue("scoreMax"));
         Assert.assertEquals(3, data.getIntValue("sort"));

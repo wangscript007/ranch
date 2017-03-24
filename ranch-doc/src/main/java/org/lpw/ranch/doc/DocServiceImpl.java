@@ -69,8 +69,23 @@ public class DocServiceImpl implements DocService, MinuteJob, DateJob {
     }
 
     @Override
-    public JSONObject query() {
-        return docDao.query(pagination.getPageSize(), pagination.getPageNum()).toJson();
+    public JSONObject queryByKey(int audit, String key) {
+        return docDao.queryByKey(Audit.values()[audit], key, pagination.getPageSize(), pagination.getPageNum()).toJson();
+    }
+
+    @Override
+    public JSONObject queryByOwner(int audit, String owner) {
+        return docDao.queryByOwner(Audit.values()[audit], owner, pagination.getPageSize(), pagination.getPageNum()).toJson();
+    }
+
+    @Override
+    public JSONObject queryByAuthor(int audit, String author) {
+        return docDao.queryByAuthor(Audit.values()[audit], author, pagination.getPageSize(), pagination.getPageNum()).toJson();
+    }
+
+    @Override
+    public JSONObject queryByAuthor() {
+        return docDao.queryByAuthor(userHelper.id(), pagination.getPageSize(), pagination.getPageNum()).toJson();
     }
 
     @Override
@@ -90,7 +105,7 @@ public class DocServiceImpl implements DocService, MinuteJob, DateJob {
         DocModel model = new DocModel();
         model.setKey(doc.getKey());
         model.setOwner(doc.getOwner());
-        model.setAuthor(doc.getAuthor());
+        model.setAuthor(userHelper.id());
         model.setScoreMin(doc.getScoreMin());
         model.setScoreMax(doc.getScoreMax());
         model.setSort(doc.getSort());

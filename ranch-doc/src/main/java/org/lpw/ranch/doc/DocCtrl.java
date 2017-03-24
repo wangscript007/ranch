@@ -24,22 +24,43 @@ public class DocCtrl extends AuditCtrlSupport {
     @Inject
     private DocService docService;
 
-    /**
-     * 检索文档。
-     *
-     * @return {PageList[DocModel]}。
-     */
-    @Execute(name = "query")
-    public Object query() {
-        return docService.query();
+    @Execute(name = "query-by-key", validates = {
+            @Validate(validator = Validators.BETWEEN, number = {0, 2}, parameter = "audit", failureCode = 13),
+            @Validate(validator = Validators.NOT_EMPTY, parameter = "key", failureCode = 1),
+            @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "key", failureCode = 2),
+            @Validate(validator = Validators.SIGN)
+    })
+    public Object queryByKey() {
+        return docService.queryByKey(request.getAsInt("audit"), request.get("key"));
     }
 
-    /**
-     * 获取指定ID的文档信息集。
-     * ids ID集。
-     *
-     * @return {id:{DocModel}}。
-     */
+    @Execute(name = "query-by-owner", validates = {
+            @Validate(validator = Validators.BETWEEN, number = {0, 2}, parameter = "audit", failureCode = 13),
+            @Validate(validator = Validators.ID, parameter = "owner", failureCode = 3),
+            @Validate(validator = Validators.SIGN)
+    })
+    public Object queryByOwner() {
+        return docService.queryByOwner(request.getAsInt("audit"), request.get("owner"));
+    }
+
+    @Execute(name = "query-by-author", validates = {
+            @Validate(validator = Validators.BETWEEN, number = {0, 2}, parameter = "audit", failureCode = 13),
+            @Validate(validator = Validators.ID, parameter = "author", failureCode = 4),
+            @Validate(validator = Validators.SIGN)
+    })
+    public Object queryByAuthor() {
+        return docService.queryByAuthor(request.getAsInt("audit"), request.get("author"));
+    }
+
+    @Execute(name = "query-by-user", validates = {
+            @Validate(validator = Validators.BETWEEN, number = {0, 2}, parameter = "audit", failureCode = 13),
+            @Validate(validator = Validators.ID, parameter = "author", failureCode = 4),
+            @Validate(validator = Validators.SIGN)
+    })
+    public Object queryByUser() {
+        return docService.queryByAuthor();
+    }
+
     @Execute(name = "get", validates = {
             @Validate(validator = Validators.NOT_EMPTY, parameter = "ids", failureCode = 13)
     })
@@ -47,47 +68,22 @@ public class DocCtrl extends AuditCtrlSupport {
         return docService.get(request.getAsArray("ids"));
     }
 
-    /**
-     * 创建新回复。
-     * key 服务key。
-     * owner 所有者ID。
-     * author 作者ID。
-     * scoreMin 最小分数值。
-     * scoreMax 最大分数值。
-     * sort 顺序。
-     * subject 标题。
-     * image 主图URI地址。
-     * thumbnail 缩略图URI地址。
-     * summary 标签。
-     * label 标签。
-     * content 内容。
-     *
-     * @return ""。
-     */
     @Execute(name = "create", validates = {
             @Validate(validator = Validators.NOT_EMPTY, parameter = "key", failureCode = 1),
             @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "key", failureCode = 2),
             @Validate(validator = Validators.ID, parameter = "owner", failureCode = 3),
-            @Validate(validator = Validators.ID, parameter = "author", failureCode = 4),
             @Validate(validator = Validators.NOT_EMPTY, parameter = "subject", failureCode = 5),
             @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "subject", failureCode = 6),
             @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "image", failureCode = 7),
             @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "thumbnail", failureCode = 8),
             @Validate(validator = Validators.NOT_EMPTY, parameter = "source", failureCode = 9),
-            @Validate(validator = Validators.NOT_EMPTY, parameter = "content", failureCode = 10)
+            @Validate(validator = Validators.NOT_EMPTY, parameter = "content", failureCode = 10),
+            @Validate(validator = Validators.SIGN)
     })
     public Object create() {
         return docService.create(request.setToModel(new DocModel()));
     }
 
-    /**
-     * 阅读文档。
-     * id 文档ID。
-     * html 是否需要包装为HTML文档，true为需要，其他不需要。
-     * css 应用样式表名称集，多个间以逗号分割。仅html=true时有效。
-     *
-     * @return 文档内容。
-     */
     @Execute(name = "read", type = Templates.FREEMARKER, template = "read", validates = {
             @Validate(validator = Validators.ID, parameter = "id", failureCode = 11),
             @Validate(validator = DocService.VALIDATOR_EXISTS, parameter = "id", failureCode = 12)
@@ -105,13 +101,6 @@ public class DocCtrl extends AuditCtrlSupport {
         return map;
     }
 
-    /**
-     * 增减收藏数。
-     * id ID值。
-     * favorite 收藏数：正数表示增加，负数表示减少。
-     *
-     * @return ""。
-     */
     @Execute(name = "favorite", validates = {
             @Validate(validator = Validators.ID, parameter = "id", failureCode = 11),
             @Validate(validator = Validators.SIGN),
@@ -123,13 +112,6 @@ public class DocCtrl extends AuditCtrlSupport {
         return "";
     }
 
-    /**
-     * 增减收藏数。
-     * id ID值。
-     * comment 评论数：正数表示增加，负数表示减少。
-     *
-     * @return ""。
-     */
     @Execute(name = "comment", validates = {
             @Validate(validator = Validators.ID, parameter = "id", failureCode = 11),
             @Validate(validator = Validators.SIGN),
@@ -141,11 +123,6 @@ public class DocCtrl extends AuditCtrlSupport {
         return "";
     }
 
-    /**
-     * 刷新缓存信息。
-     *
-     * @return ""。
-     */
     @Execute(name = "refresh", validates = {
             @Validate(validator = Validators.SIGN)
     })

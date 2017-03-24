@@ -20,7 +20,39 @@ public interface DocService extends AuditService {
      */
     DocModel findById(String id);
 
-    JSONObject query();
+    /**
+     * 检索类型key的文档信息集。
+     *
+     * @param audit 审核状态。
+     * @param key   类型key。
+     * @return 文档信息集。
+     */
+    JSONObject queryByKey(int audit, String key);
+
+    /**
+     * 检索所有者的文档信息集。
+     *
+     * @param audit 审核状态。
+     * @param owner 所有者ID。
+     * @return 文档信息集。
+     */
+    JSONObject queryByOwner(int audit, String owner);
+
+    /**
+     * 检索作者的文档信息集。
+     *
+     * @param audit  审核状态。
+     * @param author 作者ID。
+     * @return 文档信息集。
+     */
+    JSONObject queryByAuthor(int audit, String author);
+
+    /**
+     * 检索当前用户的文档信息集。
+     *
+     * @return 文档信息集。
+     */
+    JSONObject queryByAuthor();
 
     /**
      * 获取指定ID的文档信息集。

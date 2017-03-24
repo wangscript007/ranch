@@ -1,6 +1,6 @@
 package org.lpw.ranch.doc;
 
-import org.lpw.ranch.recycle.Recycle;
+import org.lpw.ranch.audit.Audit;
 import org.lpw.tephra.dao.orm.PageList;
 import org.lpw.tephra.dao.orm.lite.LiteOrm;
 import org.lpw.tephra.dao.orm.lite.LiteQuery;
@@ -25,8 +25,23 @@ class DocDaoImpl implements DocDao {
     }
 
     @Override
-    public PageList<DocModel> query(int pageSize, int pageNum) {
-        return liteOrm.query(new LiteQuery(DocModel.class).where(Recycle.No.getSql()).size(pageSize).page(pageNum), new Object[]{});
+    public PageList<DocModel> queryByKey(Audit audit, String key, int pageSize, int pageNum) {
+        return liteOrm.query(new LiteQuery(DocModel.class).where(audit.getSql() + " and c_key=?").order("c_time desc").size(pageSize).page(pageNum), new Object[]{key});
+    }
+
+    @Override
+    public PageList<DocModel> queryByOwner(Audit audit, String owner, int pageSize, int pageNum) {
+        return liteOrm.query(new LiteQuery(DocModel.class).where(audit.getSql() + " and c_owner=?").order("c_time desc").size(pageSize).page(pageNum), new Object[]{owner});
+    }
+
+    @Override
+    public PageList<DocModel> queryByAuthor(Audit audit, String author, int pageSize, int pageNum) {
+        return liteOrm.query(new LiteQuery(DocModel.class).where(audit.getSql() + " and c_author=?").order("c_time desc").size(pageSize).page(pageNum), new Object[]{author});
+    }
+
+    @Override
+    public PageList<DocModel> queryByAuthor(String author, int pageSize, int pageNum) {
+        return liteOrm.query(new LiteQuery(DocModel.class).where("c_author=?").order("c_time desc").size(pageSize).page(pageNum), new Object[]{author});
     }
 
     @Override
