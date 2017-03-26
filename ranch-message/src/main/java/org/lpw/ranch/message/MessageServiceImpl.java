@@ -148,7 +148,7 @@ public class MessageServiceImpl implements MessageService {
             JSONObject last = lastHelper.find(LAST_TYPE_NEWEST);
             time = last.isEmpty() ? 0L : last.getLongValue("millisecond");
         }
-        lastHelper.save(LAST_TYPE_NEWEST);
+        lastHelper.save(LAST_TYPE_NEWEST, null);
 
         return new Timestamp(time);
     }

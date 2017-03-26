@@ -21,17 +21,19 @@ public class LastHelperImpl implements LastHelper {
 
     @Override
     public JSONObject find(String type) {
-        return service(".find", type);
+        return service(".find", type, null);
     }
 
     @Override
-    public JSONObject save(String type) {
-        return service(".save", type);
+    public JSONObject save(String type, Map<String, String> map) {
+        return service(".save", type, map);
     }
 
-    private JSONObject service(String key, String type) {
+    private JSONObject service(String key, String type, Map<String, String> map) {
         Map<String, String> parameter = new HashMap<>();
         parameter.put("type", type);
+        if (map != null)
+            parameter.putAll(map);
 
         return carousel.service(lastKey + key, null, parameter, false, JSONObject.class);
     }

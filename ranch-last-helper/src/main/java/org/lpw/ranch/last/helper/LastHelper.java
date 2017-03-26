@@ -2,6 +2,8 @@ package org.lpw.ranch.last.helper;
 
 import com.alibaba.fastjson.JSONObject;
 
+import java.util.Map;
+
 /**
  * @author lpw
  */
@@ -18,7 +20,8 @@ public interface LastHelper {
      * 保存最新日志信息。
      *
      * @param type 类型。
+     * @param map  扩展参数集。
      * @return 日志信息。
      */
-    JSONObject save(String type);
+    JSONObject save(String type, Map<String, String> map);
 }

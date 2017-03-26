@@ -2,6 +2,8 @@ package org.lpw.ranch.last;
 
 import com.alibaba.fastjson.JSONObject;
 
+import java.util.Map;
+
 /**
  * @author lpw
  */
@@ -18,7 +20,8 @@ public interface LastService {
      * 保存最新日志。
      *
      * @param type 类型。
+     * @param map  参数集。
      * @return 日志信息。
      */
-    JSONObject save(String type);
+    JSONObject save(String type, Map<String, String> map);
 }

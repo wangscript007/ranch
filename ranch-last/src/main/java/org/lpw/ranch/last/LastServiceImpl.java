@@ -8,6 +8,9 @@ import org.lpw.tephra.util.DateTime;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * @author lpw
@@ -26,6 +29,7 @@ public class LastServiceImpl implements LastService {
     private UserHelper userHelper;
     @Inject
     private LastDao lastDao;
+    private Set<String> ignores;
 
     @Override
     public JSONObject find(String type) {
@@ -52,7 +56,7 @@ public class LastServiceImpl implements LastService {
     }
 
     @Override
-    public JSONObject save(String type) {
+    public JSONObject save(String type, Map<String, String> map) {
         String user = userHelper.id();
         LastModel last = lastDao.find(user, type);
         if (last == null) {
@@ -60,10 +64,27 @@ public class LastServiceImpl implements LastService {
             last.setUser(user);
             last.setType(type);
         }
+        JSONObject json = new JSONObject();
+        map.forEach((key, value) -> {
+            if (ignore(key))
+                return;
+
+            json.put(key, value);
+        });
+        last.setJson(json.toJSONString());
         last.setTime(dateTime.now());
         lastDao.save(last);
         cache.remove(CACHE_USER_TYPE + user + type);
 
         return find(user, type, last);
+    }
+
+    private boolean ignore(String key) {
+        if (ignores == null) {
+            ignores = new HashSet<>();
+            ignores.add("type");
+        }
+
+        return ignores.contains(key);
     }
 }

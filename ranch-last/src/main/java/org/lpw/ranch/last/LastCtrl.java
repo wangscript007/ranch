@@ -35,6 +35,6 @@ public class LastCtrl {
             @Validate(validator = UserHelper.VALIDATOR_SIGN_IN)
     })
     public Object save() {
-        return lastService.save(request.get("type"));
+        return lastService.save(request.get("type"), request.getMap());
     }
 }

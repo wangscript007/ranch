@@ -24,6 +24,7 @@ public class LastModel extends ModelSupport {
 
     private String user; // 用户ID
     private String type; // 类型
+    private String json; // 扩展数据
     private Timestamp time; // 时间
 
     @Jsonable
@@ -44,6 +45,16 @@ public class LastModel extends ModelSupport {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    @Jsonable
+    @Column(name = "c_json")
+    public String getJson() {
+        return json;
+    }
+
+    public void setJson(String json) {
+        this.json = json;
     }
 
     @Jsonable
