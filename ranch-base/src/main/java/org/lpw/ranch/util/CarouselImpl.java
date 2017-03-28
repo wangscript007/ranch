@@ -45,9 +45,9 @@ public class CarouselImpl implements Carousel {
 
     @Override
     public <T> T service(String key, Map<String, String> header, Map<String, String> parameter, int cacheTime, Class<T> jsonClass) {
-        Map<String, String> map = new HashMap<>(this.header.getMap());
-        if (!validator.isEmpty(header))
-            map.putAll(header);
+        Map<String, String> map = new HashMap<>();
+        put(map, this.header.getMap());
+        put(map, header);
         String service = carouselHelper.service(key, map, parameter, cacheTime);
         if (validator.isEmpty(service))
             return (T) (jsonClass == JSONArray.class ? new JSONArray() : new JSONObject());
@@ -57,5 +57,10 @@ public class CarouselImpl implements Carousel {
             return (T) (jsonClass == JSONArray.class ? new JSONArray() : new JSONObject());
 
         return (T) (jsonClass == JSONArray.class ? object.getJSONArray("data") : object.getJSONObject("data"));
+    }
+
+    private void put(Map<String, String> map, Map<String, String> header) {
+        if (!validator.isEmpty(header))
+            map.putAll(header);
     }
 }
