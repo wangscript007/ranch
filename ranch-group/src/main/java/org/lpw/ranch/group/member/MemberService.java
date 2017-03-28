@@ -92,10 +92,11 @@ public interface MemberService {
     /**
      * 加入群组。
      *
-     * @param group  群组ID。
-     * @param reason 申请加入理由。
+     * @param group      群组ID。
+     * @param reason     申请加入理由。
+     * @param introducer 介绍人ID。
      */
-    void join(String group, String reason);
+    void join(String group, String reason, String introducer);
 
     /**
      * 通过审核。

@@ -87,15 +87,23 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public void create(String group, String owner) {
-        create(group, owner, null, Type.Owner);
+        create(group, owner, null, Type.Owner, null);
     }
 
     @Override
-    public void join(String group, String reason) {
+    public void join(String group, String reason, String introducer) {
         String user = userHelper.id();
         JSONObject object = find(group, user);
         if (object.isEmpty()) {
-            create(group, user, reason, groupService.get(group).getIntValue("audit") == 0 ? Type.Normal : Type.New);
+            Type type = groupService.get(group).getIntValue("audit") == 0 ? Type.Normal : Type.New;
+            if (type == Type.New && introducer != null) {
+                MemberModel member = findById(introducer);
+                if (member == null)
+                    introducer = null;
+                else if (member.getType() >= Type.Manager.ordinal())
+                    type = Type.Normal;
+            }
+            create(group, user, reason, type, introducer);
 
             return;
         }
@@ -105,12 +113,13 @@ public class MemberServiceImpl implements MemberService {
         memberDao.save(member);
     }
 
-    private void create(String group, String user, String reason, Type type) {
+    private void create(String group, String user, String reason, Type type, String introducer) {
         MemberModel member = new MemberModel();
         member.setGroup(group);
         member.setUser(user);
         member.setReason(reason);
         member.setType(type.ordinal());
+        member.setIntroducer(introducer);
         member.setJoin(dateTime.now());
         memberDao.save(member);
         if (type.ordinal() >= Type.Normal.ordinal())

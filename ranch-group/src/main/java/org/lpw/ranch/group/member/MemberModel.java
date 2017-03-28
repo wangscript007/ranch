@@ -27,6 +27,7 @@ public class MemberModel extends ModelSupport {
     private String nick; // 群组昵称
     private String reason; // 申请加入理由
     private int type; // 类型：0-待审核；1-普通成员；2-管理员；3-所有者
+    private String introducer; // 介绍人ID
     private Timestamp join; // 加入时间
 
     @Jsonable
@@ -77,6 +78,16 @@ public class MemberModel extends ModelSupport {
 
     public void setType(int type) {
         this.type = type;
+    }
+
+    @Jsonable
+    @Column(name = "c_introducer")
+    public String getIntroducer() {
+        return introducer;
+    }
+
+    public void setIntroducer(String introducer) {
+        this.introducer = introducer;
     }
 
     @Jsonable
