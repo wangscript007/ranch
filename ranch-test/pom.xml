@@ -15,6 +15,7 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <version.ranch>0.7.0-RELEASE</version.ranch>
     </properties>
 
     <dependencies>
@@ -31,7 +32,7 @@
         <dependency>
             <groupId>org.lpw.ranch</groupId>
             <artifactId>ranch-base</artifactId>
-            <version>0.7.0-RELEASE</version>
+            <version>${version.ranch}</version>
         </dependency>
     </dependencies>
 </project>

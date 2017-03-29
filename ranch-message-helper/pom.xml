@@ -7,10 +7,10 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>ranch-last-helper</artifactId>
+    <artifactId>ranch-message-helper</artifactId>
     <packaging>jar</packaging>
 
-    <name>ranch-last-helper</name>
+    <name>ranch-message-helper</name>
     <url>http://maven.apache.org</url>
 
     <properties>

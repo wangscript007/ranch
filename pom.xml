@@ -20,6 +20,7 @@
         <module>ranch-friend</module>
         <module>ranch-group</module>
         <module>ranch-message</module>
+        <module>ranch-message-helper</module>
         <module>ranch-snapshot</module>
         <module>ranch-last</module>
         <module>ranch-last-helper</module>
