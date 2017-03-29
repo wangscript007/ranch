@@ -1,10 +1,10 @@
 package org.lpw.ranch.util;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import org.lpw.tephra.carousel.CarouselHelper;
 import org.lpw.tephra.ctrl.context.Header;
+import org.lpw.tephra.util.Json;
 import org.lpw.tephra.util.Validator;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -20,6 +20,8 @@ import java.util.Map;
 public class CarouselImpl implements Carousel {
     @Inject
     private Validator validator;
+    @Inject
+    private Json json;
     @Inject
     private Header header;
     @Inject
@@ -45,18 +47,26 @@ public class CarouselImpl implements Carousel {
 
     @Override
     public <T> T service(String key, Map<String, String> header, Map<String, String> parameter, int cacheTime, Class<T> jsonClass) {
+        JSONObject object = service(key, header, parameter, cacheTime);
+        if (!object.containsKey("code") || object.getIntValue("code") != 0)
+            return (T) (jsonClass == JSONArray.class ? new JSONArray() : new JSONObject());
+
+        return (T) (jsonClass == JSONArray.class ? object.getJSONArray("data") : object.getJSONObject("data"));
+    }
+
+    @Override
+    public JSONObject service(String key, Map<String, String> header, Map<String, String> parameter, boolean cacheable) {
+        return service(key, header, parameter, cacheable ? cacheTime : 0);
+    }
+
+    @Override
+    public JSONObject service(String key, Map<String, String> header, Map<String, String> parameter, int cacheTime) {
         Map<String, String> map = new HashMap<>();
         put(map, this.header.getMap());
         put(map, header);
         String service = carouselHelper.service(key, map, parameter, cacheTime);
-        if (validator.isEmpty(service))
-            return (T) (jsonClass == JSONArray.class ? new JSONArray() : new JSONObject());
 
-        JSONObject object = JSON.parseObject(service);
-        if (object.getIntValue("code") != 0)
-            return (T) (jsonClass == JSONArray.class ? new JSONArray() : new JSONObject());
-
-        return (T) (jsonClass == JSONArray.class ? object.getJSONArray("data") : object.getJSONObject("data"));
+        return validator.isEmpty(service) ? new JSONObject() : json.toObject(service);
     }
 
     private void put(Map<String, String> map, Map<String, String> header) {

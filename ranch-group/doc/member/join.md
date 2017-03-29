@@ -6,6 +6,7 @@
 
 参数
 - group 群组ID值。
+- user 用户ID，为空则表示当前用户。
 - reason 申请加入理由。
 - introducer 推荐人成员ID。
 

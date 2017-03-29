@@ -8,6 +8,7 @@ import org.lpw.tephra.cache.Cache;
 import org.lpw.tephra.dao.model.ModelHelper;
 import org.lpw.tephra.util.Converter;
 import org.lpw.tephra.util.DateTime;
+import org.lpw.tephra.util.Validator;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
@@ -24,6 +25,8 @@ public class MemberServiceImpl implements MemberService {
 
     @Inject
     private Cache cache;
+    @Inject
+    private Validator validator;
     @Inject
     private Converter converter;
     @Inject
@@ -91,8 +94,9 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public void join(String group, String reason, String introducer) {
-        String user = userHelper.id();
+    public void join(String group, String user, String reason, String introducer) {
+        if (validator.isEmpty(user))
+            user = userHelper.id();
         JSONObject object = find(group, user);
         if (object.isEmpty()) {
             Type type = groupService.get(group).getIntValue("audit") == 0 ? Type.Normal : Type.New;

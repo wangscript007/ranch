@@ -93,10 +93,11 @@ public interface MemberService {
      * 加入群组。
      *
      * @param group      群组ID。
+     * @param user       用户ID，为空则表示当前用户。
      * @param reason     申请加入理由。
      * @param introducer 介绍人ID。
      */
-    void join(String group, String reason, String introducer);
+    void join(String group, String user, String reason, String introducer);
 
     /**
      * 通过审核。

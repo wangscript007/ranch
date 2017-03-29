@@ -36,13 +36,14 @@ public class MemberCtrl {
     }
 
     @Execute(name = "join", validates = {
+            @Validate(validator = Validators.ID, emptyable = true, parameter = "user", failureCode = 29),
             @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "reason", failureCode = 21),
-            @Validate(validator = GroupService.VALIDATOR_EXISTS, parameter = "group", failureCode = 22),
             @Validate(validator = Validators.ID, emptyable = true, parameter = "introducer", failureCode = 28),
+            @Validate(validator = GroupService.VALIDATOR_EXISTS, parameter = "group", failureCode = 22),
             @Validate(validator = UserHelper.VALIDATOR_SIGN_IN)
     })
     public Object join() {
-        memberService.join(request.get("group"), request.get("reason"), request.get("introducer"));
+        memberService.join(request.get("group"), request.get("user"), request.get("reason"), request.get("introducer"));
 
         return "";
     }
