@@ -24,6 +24,14 @@ public interface GroupService {
     JSONArray queryByUser();
 
     /**
+     * 查找群组信息集。
+     *
+     * @param ids ID集。
+     * @return 群组信息集。
+     */
+    JSONObject get(String[] ids);
+
+    /**
      * 创建新群组。
      *
      * @param name  名称。
@@ -41,6 +49,15 @@ public interface GroupService {
      * @return 群组信息。
      */
     JSONObject name(String id, String name);
+
+    /**
+     * 修改群组头像。
+     *
+     * @param id       ID值。
+     * @param portrait 头像。
+     * @return 群组信息。
+     */
+    JSONObject portrait(String id, String portrait);
 
     /**
      * 修改群组公告。

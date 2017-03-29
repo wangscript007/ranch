@@ -27,6 +27,14 @@ public class GroupCtrl {
         return groupService.queryByUser();
     }
 
+    @Execute(name = "get", validates = {
+            @Validate(validator = Validators.NOT_EMPTY, parameter = "ids", failureCode = 8),
+            @Validate(validator = Validators.SIGN)
+    })
+    public Object get() {
+        return groupService.get(request.getAsArray("ids"));
+    }
+
     @Execute(name = "create", validates = {
             @Validate(validator = Validators.NOT_EMPTY, parameter = "name", failureCode = 1),
             @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "name", failureCode = 2),
@@ -45,6 +53,15 @@ public class GroupCtrl {
     })
     public Object name() {
         return groupService.name(request.get("id"), request.get("name"));
+    }
+
+    @Execute(name = "portrait", validates = {
+            @Validate(validator = Validators.NOT_EMPTY, parameter = "portrait", failureCode = 6),
+            @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "portrait", failureCode = 7),
+            @Validate(validator = GroupService.VALIDATOR_MODIFY_ENABLE, parameter = "id", failureCode = 5)
+    })
+    public Object portrait() {
+        return groupService.portrait(request.get("id"), request.get("portrait"));
     }
 
     @Execute(name = "note", validates = {

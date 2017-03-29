@@ -8,6 +8,7 @@ import org.lpw.tephra.cache.Cache;
 import org.lpw.tephra.dao.model.ModelHelper;
 import org.lpw.tephra.util.DateTime;
 import org.lpw.tephra.util.Validator;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
@@ -33,6 +34,8 @@ public class GroupServiceImpl implements GroupService {
     private MemberService memberService;
     @Inject
     private GroupDao groupDao;
+    @Value("${ranch.message.key:ranch.message}")
+    private String messageKey;
 
     @Override
     public JSONArray queryByUser() {
@@ -40,6 +43,18 @@ public class GroupServiceImpl implements GroupService {
         memberService.queryByUser(userHelper.id()).forEach(member -> array.add(getJson(member.getGroup(), null)));
 
         return array;
+    }
+
+    @Override
+    public JSONObject get(String[] ids) {
+        JSONObject json = new JSONObject();
+        for (String id : ids) {
+            JSONObject object = getJson(id, null);
+            if (!object.isEmpty())
+                json.put(id, object);
+        }
+
+        return json;
     }
 
     @Override
@@ -60,6 +75,14 @@ public class GroupServiceImpl implements GroupService {
     public JSONObject name(String id, String name) {
         GroupModel group = groupDao.findById(id);
         group.setName(name);
+
+        return modify(group);
+    }
+
+    @Override
+    public JSONObject portrait(String id, String portrait) {
+        GroupModel group = groupDao.findById(id);
+        group.setPortrait(portrait);
 
         return modify(group);
     }

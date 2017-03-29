@@ -24,6 +24,7 @@ public class GroupModel extends ModelSupport {
 
     private String owner; // 所有者ID
     private String name; // 名称
+    private String portrait; // 头像
     private String note; // 公告
     private int member; // 成员数
     private int audit; // 新成员是否需要审核：0-否；1-是
@@ -47,6 +48,16 @@ public class GroupModel extends ModelSupport {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    @Jsonable
+    @Column(name = "c_portrait")
+    public String getPortrait() {
+        return portrait;
+    }
+
+    public void setPortrait(String portrait) {
+        this.portrait = portrait;
     }
 
     @Jsonable

@@ -2,9 +2,13 @@
 
 [检索当前用户所属群组](doc/query-by-user.md)
 
+[获取群组信息集](doc/get.md)
+
 [创建群组](doc/create.md)
 
 [修改群组名称](doc/name.md)
+
+[修改群组头像](doc/portrait.md)
 
 [修改群组公告](doc/note.md)
 
