@@ -29,7 +29,7 @@ public class MessageCtrl {
     @Execute(name = "send", validates = {
             @Validate(validator = Validators.BETWEEN, number = {0, 1}, parameter = "type", failureCode = 1),
             @Validate(validator = Validators.ID, parameter = "receiver", failureCode = 2),
-            @Validate(validator = Validators.BETWEEN, number = {0, 7}, parameter = "format", failureCode = 3),
+            @Validate(validator = Validators.BETWEEN, number = {0, 9}, parameter = "format", failureCode = 3),
             @Validate(validator = Validators.NOT_EMPTY, parameter = "content", failureCode = 4),
             @Validate(validator = Validators.MAX_LENGTH, number = {1000}, parameter = "content", failureCode = 5),
             @Validate(validator = Validators.MATCH_REGEX, string = {"^[a-zA-Z0-9]{1,64}$"}, parameter = "code", failureCode = 6),
@@ -42,6 +42,18 @@ public class MessageCtrl {
             return id;
 
         return templates.get().failure(type == 1 ? 1808 : 1807, message.get(MessageModel.NAME + (type == 1 ? ".group" : ".friend") + ".not-exists"), null, null);
+    }
+
+    @Execute(name = "notify", validates = {
+            @Validate(validator = Validators.BETWEEN, number = {0, 1}, parameter = "type", failureCode = 1),
+            @Validate(validator = Validators.ID, parameter = "receiver", failureCode = 2),
+            @Validate(validator = Validators.NOT_EMPTY, parameter = "content", failureCode = 4),
+            @Validate(validator = Validators.MAX_LENGTH, number = {1000}, parameter = "content", failureCode = 5),
+            @Validate(validator = Validators.MATCH_REGEX, string = {"^[a-zA-Z0-9]{1,64}$"}, parameter = "code", failureCode = 6),
+            @Validate(validator = Validators.SIGN)
+    })
+    public Object sendNotify() {
+        return messageService.notify(request.getAsInt("type"), request.get("receiver"), request.get("content"), request.get("code"));
     }
 
     @Execute(name = "newest", validates = {

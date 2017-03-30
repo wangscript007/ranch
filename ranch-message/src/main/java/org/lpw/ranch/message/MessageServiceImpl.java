@@ -83,6 +83,15 @@ public class MessageServiceImpl implements MessageService {
         return send(member.getString("id"), 1, receiver, format, content, code);
     }
 
+    @Override
+    public String notify(int type, String receiver, String content, String code) {
+        MessageModel message = messageDao.findByCode(code);
+        if (message != null)
+            return message.getId();
+
+        return send("", type, receiver, 9, content, code);
+    }
+
     private String send(String sender, int type, String receiver, int format, String content, String code) {
         MessageModel message = new MessageModel();
         message.setSender(sender);

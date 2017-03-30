@@ -3,11 +3,13 @@ package org.lpw.ranch.group.member;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import org.lpw.ranch.group.GroupService;
+import org.lpw.ranch.message.helper.MessageHelper;
 import org.lpw.ranch.user.helper.UserHelper;
 import org.lpw.tephra.cache.Cache;
 import org.lpw.tephra.dao.model.ModelHelper;
 import org.lpw.tephra.util.Converter;
 import org.lpw.tephra.util.DateTime;
+import org.lpw.tephra.util.Message;
 import org.lpw.tephra.util.Validator;
 import org.springframework.stereotype.Service;
 
@@ -32,9 +34,13 @@ public class MemberServiceImpl implements MemberService {
     @Inject
     private DateTime dateTime;
     @Inject
+    private Message message;
+    @Inject
     private ModelHelper modelHelper;
     @Inject
     private UserHelper userHelper;
+    @Inject
+    private MessageHelper messageHelper;
     @Inject
     private GroupService groupService;
     @Inject
@@ -98,23 +104,29 @@ public class MemberServiceImpl implements MemberService {
         if (validator.isEmpty(user))
             user = userHelper.id();
         JSONObject object = find(group, user);
+        Type type = groupService.get(group).getIntValue("audit") == 0 ? Type.Normal : Type.New;
+        if (type == Type.New && introducer != null) {
+            MemberModel member = findById(introducer);
+            if (member == null)
+                introducer = null;
+            else if (member.getType() >= Type.Manager.ordinal())
+                type = Type.Normal;
+        }
         if (object.isEmpty()) {
-            Type type = groupService.get(group).getIntValue("audit") == 0 ? Type.Normal : Type.New;
-            if (type == Type.New && introducer != null) {
-                MemberModel member = findById(introducer);
-                if (member == null)
-                    introducer = null;
-                else if (member.getType() >= Type.Manager.ordinal())
-                    type = Type.Normal;
-            }
             create(group, user, reason, type, introducer);
 
             return;
         }
 
+        if (object.getIntValue("type") > 0)
+            return;
+
         MemberModel member = memberDao.findById(object.getString("id"));
+        member.setType(type.ordinal());
         member.setReason(reason);
         memberDao.save(member);
+        pass(member);
+        clearCache(member);
     }
 
     private void create(String group, String user, String reason, Type type, String introducer) {
@@ -126,8 +138,7 @@ public class MemberServiceImpl implements MemberService {
         member.setIntroducer(introducer);
         member.setJoin(dateTime.now());
         memberDao.save(member);
-        if (type.ordinal() >= Type.Normal.ordinal())
-            groupService.member(group, 1);
+        pass(member);
         clearCache(member);
     }
 
@@ -137,8 +148,23 @@ public class MemberServiceImpl implements MemberService {
         member.setType(Type.Normal.ordinal());
         member.setJoin(dateTime.now());
         memberDao.save(member);
-        groupService.member(member.getGroup(), 1);
+        pass(member);
         clearCache(member);
+    }
+
+    private void pass(MemberModel member) {
+        if (member.getType() == Type.New.ordinal())
+            return;
+
+        groupService.member(member.getGroup(), 1);
+        MemberModel introducer = member.getIntroducer() == null ? null : findById(member.getIntroducer());
+        String content = introducer == null ? message.get(MemberModel.NAME + ".pass.message.join", getNick(member)) :
+                message.get(MemberModel.NAME + ".pass.message", getNick(introducer), getNick(member));
+        messageHelper.notify(MessageHelper.Type.Group, member.getGroup(), content);
+    }
+
+    private String getNick(MemberModel member) {
+        return validator.isEmpty(member.getNick()) ? userHelper.get(member.getUser()).getString("nick") : member.getNick();
     }
 
     @Override
