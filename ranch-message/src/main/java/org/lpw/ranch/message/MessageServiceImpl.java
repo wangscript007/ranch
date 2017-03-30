@@ -143,7 +143,7 @@ public class MessageServiceImpl implements MessageService {
         list.forEach(id -> {
             boolean group = groups.contains(id);
             JSONObject object = new JSONObject();
-            object.put("id", group ? id : findFriend(id));
+            object.put("id", group || id.equals("") ? id : findFriend(id));
             object.put("group", group);
             object.put("list", modelHelper.toJson(map.get(id)));
             array.add(object);

@@ -82,4 +82,26 @@ public class FriendCtrl {
 
         return "";
     }
+
+    @Execute(name = "refuse", validates = {
+            @Validate(validator = Validators.NOT_EMPTY, parameter = "user", failureCode = 1),
+            @Validate(validator = UserHelper.VALIDATOR_SIGN_IN),
+            @Validate(validator = FriendService.VALIDATOR_EXISTS, parameter = "user", failureCode = 4)
+    })
+    public Object refuse() {
+        friendService.refuse(request.get("user"));
+
+        return "";
+    }
+
+    @Execute(name = "blacklist", validates = {
+            @Validate(validator = Validators.NOT_EMPTY, parameter = "user", failureCode = 1),
+            @Validate(validator = UserHelper.VALIDATOR_SIGN_IN),
+            @Validate(validator = FriendService.VALIDATOR_EXISTS, parameter = "user", failureCode = 4)
+    })
+    public Object blacklist() {
+        friendService.blacklist(request.get("user"));
+
+        return "";
+    }
 }

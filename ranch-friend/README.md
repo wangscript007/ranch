@@ -10,4 +10,8 @@
 
 [通过好友](doc/pass.md)
 
+[拒绝好友](doc/refuse.md)
+
+[拉黑好友](doc/blacklist.md)
+
 [设置好友备注](doc/memo.md)

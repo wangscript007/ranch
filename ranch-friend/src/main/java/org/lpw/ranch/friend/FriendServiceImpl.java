@@ -2,10 +2,12 @@ package org.lpw.ranch.friend;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import org.lpw.ranch.message.helper.MessageHelper;
 import org.lpw.ranch.user.helper.UserHelper;
 import org.lpw.tephra.cache.Cache;
 import org.lpw.tephra.dao.model.ModelHelper;
 import org.lpw.tephra.util.DateTime;
+import org.lpw.tephra.util.Message;
 import org.lpw.tephra.util.Validator;
 import org.springframework.stereotype.Service;
 
@@ -28,9 +30,13 @@ public class FriendServiceImpl implements FriendService {
     @Inject
     private DateTime dateTime;
     @Inject
+    private Message message;
+    @Inject
     private ModelHelper modelHelper;
     @Inject
     private UserHelper userHelper;
+    @Inject
+    private MessageHelper messageHelper;
     @Inject
     private FriendDao friendDao;
 
@@ -89,25 +95,27 @@ public class FriendServiceImpl implements FriendService {
     @Override
     public void create(String user, String memo) {
         String owner = userHelper.id();
-        FriendModel model = find(owner, user);
-        if (model == null) {
+        FriendModel friend = find(owner, user);
+        if (friend == null) {
             create(owner, user, null, 0);
             create(user, owner, memo, 1);
-        } else if (model.getState() == 1) {
+        } else if (friend.getState() == 1) {
             pass(owner, user, null, 1);
             pass(user, owner, memo, 0);
         }
     }
 
     private void create(String owner, String user, String memo, int state) {
-        FriendModel model = new FriendModel();
-        model.setOwner(owner);
-        model.setUser(user);
-        model.setMemo(memo);
-        model.setState(state);
-        model.setCreate(dateTime.now());
-        friendDao.save(model);
-        cleanCache(model);
+        FriendModel friend = new FriendModel();
+        friend.setOwner(owner);
+        friend.setUser(user);
+        friend.setMemo(memo);
+        friend.setState(state);
+        friend.setCreate(dateTime.now());
+        friendDao.save(friend);
+        cleanCache(friend);
+        if (state == 1)
+            messageHelper.notify(MessageHelper.Type.Friend, user, "0" + modelHelper.toJson(friend));
     }
 
     @Override
@@ -118,27 +126,59 @@ public class FriendServiceImpl implements FriendService {
     }
 
     private void pass(String owner, String user, String memo, int state) {
-        FriendModel model = find(owner, user);
-        if (model == null || model.getState() != state)
+        FriendModel friend = find(owner, user);
+        if (friend == null || friend.getState() != state)
             return;
 
         if (!validator.isEmpty(memo))
-            model.setMemo(memo);
-        model.setState(2);
-        friendDao.save(model);
-        cleanCache(model);
+            friend.setMemo(memo);
+        friend.setState(2);
+        friendDao.save(friend);
+        cleanCache(friend);
+        messageHelper.notify(MessageHelper.Type.Friend, owner, message.get(FriendModel.NAME + ".pass"));
     }
 
     @Override
     public void memo(String user, String memo) {
         String owner = userHelper.id();
-        FriendModel model = find(owner, user);
-        if (model.getState() != 2)
+        FriendModel friend = find(owner, user);
+        if (friend.getState() != 2)
             return;
 
-        model.setMemo(memo);
-        friendDao.save(model);
-        cleanCache(model);
+        friend.setMemo(memo);
+        friendDao.save(friend);
+        cleanCache(friend);
+    }
+
+    @Override
+    public void refuse(String user) {
+        String owner = userHelper.id();
+        refuse(owner, user, 1);
+        refuse(user, owner, 0);
+    }
+
+    private void refuse(String owner, String user, int state) {
+        FriendModel friend = find(owner, user);
+        if (friend == null || friend.getState() != state)
+            return;
+
+        friend.setState(3);
+        friendDao.save(friend);
+        cleanCache(friend);
+        if (state == 0)
+            messageHelper.notify(MessageHelper.Type.Friend, owner,
+                    message.get(FriendModel.NAME + ".refuse", userHelper.get(user).getString("nick")));
+    }
+
+    @Override
+    public void blacklist(String user) {
+        FriendModel friend=find(user);
+        if(friend==null)
+            return;
+
+        friend.setState(4);
+        friendDao.save(friend);
+        cleanCache(friend);
     }
 
     @Override
@@ -148,15 +188,15 @@ public class FriendServiceImpl implements FriendService {
 
     private FriendModel find(String owner, String user) {
         String cacheKey = CACHE_OWNER_USER + owner + user;
-        FriendModel model = cache.get(cacheKey);
-        if (model == null)
-            cache.put(cacheKey, model = friendDao.find(owner, user), false);
+        FriendModel friend = cache.get(cacheKey);
+        if (friend == null)
+            cache.put(cacheKey, friend = friendDao.find(owner, user), false);
 
-        return model;
+        return friend;
     }
 
     private void cleanCache(FriendModel friend) {
-        for (int i = 0; i < 4; i++)
+        for (int i = 0; i < 5; i++)
             cache.remove(CACHE_OWNER + friend.getOwner() + i);
         cache.remove(CACHE_OWNER_USER + friend.getOwner() + friend.getUser());
         cache.remove(CACHE_GET + friend.getId());

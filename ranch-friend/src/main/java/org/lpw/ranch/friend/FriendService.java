@@ -53,6 +53,20 @@ public interface FriendService {
     void memo(String user, String memo);
 
     /**
+     * 拒绝好友申请。
+     *
+     * @param user 好友ID。
+     */
+    void refuse(String user);
+
+    /**
+     * 将好友加入黑名单（拉黑）。
+     *
+     * @param user 好友ID。
+     */
+    void blacklist(String user);
+
+    /**
      * 查找好友信息。
      *
      * @param user 用户ID。

@@ -25,7 +25,7 @@ public class FriendModel extends ModelSupport {
     private String owner; // 所有者ID
     private String user; // 好友ID
     private String memo; // 备注
-    private int state; // 状态：0-待对方确认；1-待己方确认；2-已通过；3-已拒绝/拉黑
+    private int state; // 状态：0-待对方确认；1-待己方确认；2-已通过；3-已拒绝；4-已拉黑
     private Timestamp create; // 创建时间
 
     @Jsonable

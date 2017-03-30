@@ -14,6 +14,8 @@ interface MemberDao {
 
     PageList<MemberModel> queryByUser(String user);
 
+    PageList<MemberModel> query(String group, int type);
+
     void save(MemberModel member);
 
     void delete(String id);
