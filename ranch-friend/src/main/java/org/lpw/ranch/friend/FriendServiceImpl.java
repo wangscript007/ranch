@@ -115,7 +115,7 @@ public class FriendServiceImpl implements FriendService {
         friendDao.save(friend);
         cleanCache(friend);
         if (state == 1)
-            messageHelper.notify(MessageHelper.Type.Friend, user, "0" + modelHelper.toJson(friend));
+            notify(friend, owner, "friend.newcomer", "");
     }
 
     @Override
@@ -134,8 +134,7 @@ public class FriendServiceImpl implements FriendService {
             friend.setMemo(memo);
         friend.setState(2);
         friendDao.save(friend);
-        cleanCache(friend);
-        messageHelper.notify(MessageHelper.Type.Friend, owner, message.get(FriendModel.NAME + ".pass"));
+        notify(friend, owner, "friend.pass", message.get(FriendModel.NAME + ".pass"));
     }
 
     @Override
@@ -166,14 +165,13 @@ public class FriendServiceImpl implements FriendService {
         friendDao.save(friend);
         cleanCache(friend);
         if (state == 0)
-            messageHelper.notify(MessageHelper.Type.Friend, owner,
-                    message.get(FriendModel.NAME + ".refuse", userHelper.get(user).getString("nick")));
+            notify(friend, owner, "friend.refuse", message.get(FriendModel.NAME + ".refuse"));
     }
 
     @Override
     public void blacklist(String user) {
-        FriendModel friend=find(user);
-        if(friend==null)
+        FriendModel friend = find(user);
+        if (friend == null)
             return;
 
         friend.setState(4);
@@ -200,5 +198,21 @@ public class FriendServiceImpl implements FriendService {
             cache.remove(CACHE_OWNER + friend.getOwner() + i);
         cache.remove(CACHE_OWNER_USER + friend.getOwner() + friend.getUser());
         cache.remove(CACHE_GET + friend.getId());
+    }
+
+    private void notify(FriendModel friend, String receiver, String operate, Object message) {
+        cleanCache(friend);
+        JSONObject object = new JSONObject();
+        object.put("operate", operate);
+        object.put("friend", getJson(friend));
+        object.put("message", message);
+        messageHelper.notify(MessageHelper.Type.Friend, receiver, object.toJSONString());
+    }
+
+    private JSONObject getJson(FriendModel friend) {
+        JSONObject object = modelHelper.toJson(friend);
+        object.put("user", userHelper.get(friend.getUser()));
+
+        return object;
     }
 }

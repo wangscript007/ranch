@@ -147,9 +147,8 @@ public class MemberServiceImpl implements MemberService {
     private void newcomer(MemberModel member) {
         JSONObject object = modelHelper.toJson(member, converter.toSet(new String[]{"user"}));
         object.put("user", userHelper.get(member.getUser()));
-        String string = object.toJSONString();
-        memberDao.query(member.getGroup(), Type.Normal.ordinal()).getList().forEach(manager ->
-                messageHelper.send(MessageHelper.Type.Group, manager.getId(), MessageHelper.Format.Notify, "0" + string));
+        memberDao.query(member.getGroup(), Type.Manager.ordinal()).getList().forEach(manager ->
+                notify(manager, manager.getUser(), "group.new", object));
     }
 
     @Override
@@ -170,7 +169,7 @@ public class MemberServiceImpl implements MemberService {
         MemberModel introducer = member.getIntroducer() == null ? null : findById(member.getIntroducer());
         String content = introducer == null ? message.get(MemberModel.NAME + ".pass.join", getNick(member)) :
                 message.get(MemberModel.NAME + ".pass", getNick(introducer), getNick(member));
-        notify(member, 1, content);
+        notify(member, member.getGroup(), "group.pass", content);
     }
 
     private String getNick(MemberModel member) {
@@ -184,7 +183,7 @@ public class MemberServiceImpl implements MemberService {
             return;
 
         memberDao.delete(id);
-        messageHelper.send(MessageHelper.Type.Group, member.getUser(), MessageHelper.Format.Notify, message.get(MemberModel.NAME + ".refuse"));
+        notify(member, member.getUser(), "group.refuse", message.get(MemberModel.NAME + ".refuse"));
     }
 
     @Override
@@ -216,9 +215,9 @@ public class MemberServiceImpl implements MemberService {
             groupService.member(member.getGroup(), -1);
             clearCache(member);
             boolean self = member.getUser().equals(userHelper.id());
-            notify(member, 3, message.get(MemberModel.NAME + (self ? ".leave.self" : ".leave"), getNick(member)));
+            notify(member, member.getGroup(), "group.leave", message.get(MemberModel.NAME + (self ? ".leave.self" : ".leave"), getNick(member)));
             if (!self)
-                messageHelper.send(MessageHelper.Type.Group, member.getUser(), MessageHelper.Format.Notify, message.get(MemberModel.NAME + ".leave.note"));
+                notify(member, member.getUser(), "group.leave.note", message.get(MemberModel.NAME + ".leave.note"));
         }
         memberDao.delete(member.getId());
     }
@@ -229,8 +228,19 @@ public class MemberServiceImpl implements MemberService {
         cache.remove(CACHE_GROUP_USER + member.getGroup() + member.getUser());
     }
 
-    private void notify(MemberModel member, int type, String content) {
+    private void notify(MemberModel member, String receiver, String operate, Object message) {
         clearCache(member);
-        messageHelper.notify(MessageHelper.Type.Group, member.getGroup(), type + content);
+        JSONObject object = new JSONObject();
+        object.put("operate", operate);
+        object.put("member", getJson(member));
+        object.put("message", message);
+        messageHelper.notify(MessageHelper.Type.Group, receiver, object.toJSONString());
+    }
+
+    private JSONObject getJson(MemberModel member) {
+        JSONObject object = modelHelper.toJson(member);
+        object.put("user", userHelper.get(member.getUser()));
+
+        return object;
     }
 }
