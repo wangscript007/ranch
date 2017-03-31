@@ -27,7 +27,7 @@ class MemberDaoImpl implements MemberDao {
 
     @Override
     public PageList<MemberModel> queryByGroup(String group, int type) {
-        return liteOrm.query(new LiteQuery(MemberModel.class).where("c_group=? and c_type=?"), new Object[]{group, type});
+        return query("group", group, type);
     }
 
     @Override

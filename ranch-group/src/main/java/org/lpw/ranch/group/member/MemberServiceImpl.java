@@ -64,8 +64,15 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public JSONArray queryByGroup(String group, int type) {
-        String cacheKey = CACHE_GROUP + group;
+    public JSONArray queryByGroup(String group) {
+        JSONObject obj = find(group, userHelper.id());
+        int type;
+        if (obj.isEmpty() || (type = obj.getIntValue("type")) == 0)
+            return new JSONArray();
+
+        if (type >= Type.Manager.ordinal())
+            type = 0;
+        String cacheKey = CACHE_GROUP + group + type;
         JSONArray array = cache.get(cacheKey);
         if (array == null) {
             array = new JSONArray();
@@ -164,6 +171,9 @@ public class MemberServiceImpl implements MemberService {
 
     private void pass(MemberModel member) {
         groupService.member(member.getGroup(), 1);
+        if (member.getType() == Type.Owner.ordinal())
+            return;
+
         MemberModel introducer = member.getIntroducer() == null ? null : findById(member.getIntroducer());
         String content = introducer == null ? message.get(MemberModel.NAME + ".pass.join", getNick(member)) :
                 message.get(MemberModel.NAME + ".pass", getNick(introducer), getNick(member));
@@ -221,7 +231,8 @@ public class MemberServiceImpl implements MemberService {
     }
 
     private void clearCache(MemberModel member) {
-        cache.remove(CACHE_GROUP + member.getGroup());
+        cache.remove(CACHE_GROUP + member.getGroup() + 0);
+        cache.remove(CACHE_GROUP + member.getGroup() + 1);
         cache.remove(CACHE_USER + member.getUser());
         cache.remove(CACHE_GROUP_USER + member.getGroup() + member.getUser());
     }

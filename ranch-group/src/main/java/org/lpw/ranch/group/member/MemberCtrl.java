@@ -25,7 +25,7 @@ public class MemberCtrl {
             @Validate(validator = Validators.ID, parameter = "group", failureCode = 28)
     })
     public Object queryByGroup() {
-        return memberService.queryByGroup(request.get("group"), request.getAsInt("type"));
+        return memberService.queryByGroup(request.get("group"));
     }
 
     @Execute(name = "find", validates = {
