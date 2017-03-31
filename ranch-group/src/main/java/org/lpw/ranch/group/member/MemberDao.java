@@ -10,11 +10,11 @@ interface MemberDao {
 
     MemberModel find(String group, String user);
 
-    PageList<MemberModel> queryByGroup(String group);
+    PageList<MemberModel> queryByGroup(String group, int type);
 
     PageList<MemberModel> queryByUser(String user);
 
-    PageList<MemberModel> query(String group, int type);
+    PageList<MemberModel> queryManager(String group);
 
     void save(MemberModel member);
 

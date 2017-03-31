@@ -26,22 +26,22 @@ class MemberDaoImpl implements MemberDao {
     }
 
     @Override
-    public PageList<MemberModel> queryByGroup(String group) {
-        return query("group", group);
+    public PageList<MemberModel> queryByGroup(String group, int type) {
+        return liteOrm.query(new LiteQuery(MemberModel.class).where("c_group=? and c_type=?"), new Object[]{group, type});
     }
 
     @Override
     public PageList<MemberModel> queryByUser(String user) {
-        return query("user", user);
-    }
-
-    private PageList<MemberModel> query(String column, String value) {
-        return liteOrm.query(new LiteQuery(MemberModel.class).where("c_" + column + "=? and c_type>0"), new Object[]{value});
+        return query("user", user, 1);
     }
 
     @Override
-    public PageList<MemberModel> query(String group, int type) {
-        return liteOrm.query(new LiteQuery(MemberModel.class).where("c_group=? and c_type>=?"), new Object[]{group, type});
+    public PageList<MemberModel> queryManager(String group) {
+        return query("group", group, 2);
+    }
+
+    private PageList<MemberModel> query(String column, String value, int type) {
+        return liteOrm.query(new LiteQuery(MemberModel.class).where("c_" + column + "=? and c_type>=?"), new Object[]{value, type});
     }
 
     @Override

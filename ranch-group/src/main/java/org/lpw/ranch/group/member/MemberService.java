@@ -69,9 +69,10 @@ public interface MemberService {
      * 检索群组的成员集。
      *
      * @param group 群组ID。
+     * @param type  类型：0-待审核；1-普通成员；2-管理员；3-所有者。
      * @return 成员集。
      */
-    JSONArray queryByGroup(String group);
+    JSONArray queryByGroup(String group, int type);
 
     /**
      * 检索用户所属的群组成员集。

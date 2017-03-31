@@ -64,12 +64,12 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public JSONArray queryByGroup(String group) {
+    public JSONArray queryByGroup(String group, int type) {
         String cacheKey = CACHE_GROUP + group;
         JSONArray array = cache.get(cacheKey);
         if (array == null) {
             array = new JSONArray();
-            for (MemberModel member : memberDao.queryByGroup(group).getList()) {
+            for (MemberModel member : memberDao.queryByGroup(group, type).getList()) {
                 JSONObject object = modelHelper.toJson(member, converter.toSet(new String[]{"user"}));
                 object.put("user", userHelper.get(member.getUser()));
                 array.add(object);
@@ -145,10 +145,8 @@ public class MemberServiceImpl implements MemberService {
     }
 
     private void newcomer(MemberModel member) {
-        JSONObject object = modelHelper.toJson(member, converter.toSet(new String[]{"user"}));
-        object.put("user", userHelper.get(member.getUser()));
-        memberDao.query(member.getGroup(), Type.Manager.ordinal()).getList().forEach(manager ->
-                notify(manager, manager.getUser(), "group.new", object));
+        memberDao.queryManager(member.getGroup()).getList().forEach(manager ->
+                notify(member, manager.getUser(), "group.new", ""));
     }
 
     @Override
