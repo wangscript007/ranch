@@ -13,7 +13,7 @@ import java.util.Comparator;
  * @author lpw
  */
 public class QueryByGroupTest extends TestSupport {
-    @Test
+//    @Test
     public void queryByGroup() {
         String[] groups = new String[2];
         for (int i = 0; i < groups.length; i++) {

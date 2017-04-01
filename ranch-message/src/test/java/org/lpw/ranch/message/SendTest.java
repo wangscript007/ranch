@@ -11,7 +11,7 @@ import org.lpw.tephra.dao.orm.lite.LiteQuery;
  * @author lpw
  */
 public class SendTest extends TestSupport {
-    @Test
+//    @Test
     public void send() {
         mockCarousel.reset();
         mockCarousel.register("ranch.user.sign", "{\"code\":0,\"data\":{}}");

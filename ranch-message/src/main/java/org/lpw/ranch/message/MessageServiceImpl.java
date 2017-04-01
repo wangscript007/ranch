@@ -129,7 +129,11 @@ public class MessageServiceImpl implements MessageService {
         List<String> list = new ArrayList<>();
         String sender = userHelper.id();
         messageDao.query(lastTime(time), sender, groups).getList().forEach(message -> {
-            String key = message.getReceiver().equals(sender) ? message.getSender() : message.getReceiver();
+            String key;
+            if (message.getFormat() == 9)
+                key = "notify";
+            else
+                key = message.getReceiver().equals(sender) ? message.getSender() : message.getReceiver();
             List<MessageModel> messages = map.get(key);
             if (messages == null) {
                 messages = new ArrayList<>();
@@ -143,7 +147,7 @@ public class MessageServiceImpl implements MessageService {
         list.forEach(id -> {
             boolean group = groups.contains(id);
             JSONObject object = new JSONObject();
-            object.put("id", group || id.equals("") ? id : findFriend(id));
+            object.put("id", group || id.equals("") || id.equals("notify") ? id : findFriend(id));
             object.put("group", group);
             object.put("list", modelHelper.toJson(map.get(id)));
             array.add(object);

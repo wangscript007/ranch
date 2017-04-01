@@ -3,7 +3,6 @@ package org.lpw.ranch.message;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import org.junit.Assert;
-import org.junit.Test;
 import org.lpw.tephra.util.TimeUnit;
 
 import java.sql.Timestamp;
@@ -12,7 +11,7 @@ import java.sql.Timestamp;
  * @author lpw
  */
 public class NewestTest extends TestSupport {
-    @Test
+    //    @Test
     public void newest() {
         mockCarousel.reset();
         mockCarousel.register("ranch.user.sign", "{\"code\":0,\"data\":{}}");

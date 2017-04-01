@@ -4,7 +4,6 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import org.lpw.ranch.message.helper.MessageHelper;
 import org.lpw.ranch.user.helper.UserHelper;
-import org.lpw.tephra.cache.Cache;
 import org.lpw.tephra.dao.model.ModelHelper;
 import org.lpw.tephra.util.DateTime;
 import org.lpw.tephra.util.Message;
@@ -19,12 +18,6 @@ import java.util.Comparator;
  */
 @Service(FriendModel.NAME + ".service")
 public class FriendServiceImpl implements FriendService {
-    private static final String CACHE_OWNER = FriendModel.NAME + ".service.owner:";
-    private static final String CACHE_OWNER_USER = FriendModel.NAME + ".service.owner-user:";
-    private static final String CACHE_GET = FriendModel.NAME + ".service.get:";
-
-    @Inject
-    private Cache cache;
     @Inject
     private Validator validator;
     @Inject
@@ -43,15 +36,10 @@ public class FriendServiceImpl implements FriendService {
     @Override
     public JSONArray query(int state) {
         String owner = userHelper.id();
-        String cacheKey = CACHE_OWNER + owner + state;
-        JSONArray array = cache.get(cacheKey);
-        if (array == null) {
-            array = modelHelper.toJson(friendDao.query(owner, state, state != 2).getList());
-            array = userHelper.fill(array, new String[]{"user"});
-            if (state == 2)
-                array.sort(Comparator.comparing(this::getCompareName));
-            cache.put(cacheKey, array, false);
-        }
+        JSONArray array = modelHelper.toJson(friendDao.query(owner, state, state != 2).getList());
+        array = userHelper.fill(array, new String[]{"user"});
+        if (state == 2)
+            array.sort(Comparator.comparing(this::getCompareName));
 
         return array;
     }
@@ -68,14 +56,6 @@ public class FriendServiceImpl implements FriendService {
     public JSONObject get(String[] ids) {
         JSONObject json = new JSONObject();
         for (String id : ids) {
-            String cacheKey = CACHE_GET + id;
-            JSONObject object = cache.get(cacheKey);
-            if (object != null) {
-                json.put(id, object);
-
-                continue;
-            }
-
             FriendModel friend1 = friendDao.findById(id);
             if (friend1 == null || friend1.getState() != 2)
                 continue;
@@ -84,9 +64,7 @@ public class FriendServiceImpl implements FriendService {
             if (friend2 == null || friend2.getState() != 2)
                 continue;
 
-            object = modelHelper.toJson(friend1);
-            cache.put(cacheKey, object, false);
-            json.put(id, object);
+            json.put(id, modelHelper.toJson(friend1));
         }
 
         return json;
@@ -113,7 +91,6 @@ public class FriendServiceImpl implements FriendService {
         friend.setState(state);
         friend.setCreate(dateTime.now());
         friendDao.save(friend);
-        cleanCache(friend);
         if (state == 1)
             notify(friend, owner, "friend.newcomer", "");
     }
@@ -146,7 +123,6 @@ public class FriendServiceImpl implements FriendService {
 
         friend.setMemo(memo);
         friendDao.save(friend);
-        cleanCache(friend);
     }
 
     @Override
@@ -163,7 +139,6 @@ public class FriendServiceImpl implements FriendService {
 
         friend.setState(3);
         friendDao.save(friend);
-        cleanCache(friend);
         if (state == 0)
             notify(friend, owner, "friend.refuse", message.get(FriendModel.NAME + ".refuse"));
     }
@@ -176,7 +151,6 @@ public class FriendServiceImpl implements FriendService {
 
         friend.setState(4);
         friendDao.save(friend);
-        cleanCache(friend);
     }
 
     @Override
@@ -185,23 +159,10 @@ public class FriendServiceImpl implements FriendService {
     }
 
     private FriendModel find(String owner, String user) {
-        String cacheKey = CACHE_OWNER_USER + owner + user;
-        FriendModel friend = cache.get(cacheKey);
-        if (friend == null)
-            cache.put(cacheKey, friend = friendDao.find(owner, user), false);
-
-        return friend;
-    }
-
-    private void cleanCache(FriendModel friend) {
-        for (int i = 0; i < 5; i++)
-            cache.remove(CACHE_OWNER + friend.getOwner() + i);
-        cache.remove(CACHE_OWNER_USER + friend.getOwner() + friend.getUser());
-        cache.remove(CACHE_GET + friend.getId());
+        return friendDao.find(owner, user);
     }
 
     private void notify(FriendModel friend, String receiver, String operate, Object message) {
-        cleanCache(friend);
         JSONObject object = new JSONObject();
         object.put("operate", operate);
         object.put("friend", getJson(friend));

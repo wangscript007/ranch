@@ -4,7 +4,6 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import org.lpw.ranch.group.member.MemberService;
 import org.lpw.ranch.user.helper.UserHelper;
-import org.lpw.tephra.cache.Cache;
 import org.lpw.tephra.dao.model.ModelHelper;
 import org.lpw.tephra.util.DateTime;
 import org.lpw.tephra.util.Validator;
@@ -18,10 +17,6 @@ import javax.inject.Inject;
  */
 @Service(GroupModel.NAME + ".service")
 public class GroupServiceImpl implements GroupService {
-    private static final String CACHE_ID = GroupModel.NAME + ".service.id:";
-
-    @Inject
-    private Cache cache;
     @Inject
     private DateTime dateTime;
     @Inject
@@ -68,7 +63,7 @@ public class GroupServiceImpl implements GroupService {
         groupDao.save(group);
         memberService.create(group.getId(), group.getOwner());
 
-        return getJson(group.getId(), group);
+        return getJson(group.getId(), null);
     }
 
     @Override
@@ -112,7 +107,6 @@ public class GroupServiceImpl implements GroupService {
 
     private JSONObject modify(GroupModel group) {
         groupDao.save(group);
-        cache.remove(CACHE_ID + group.getId());
 
         return getJson(group.getId(), group);
     }
@@ -123,14 +117,9 @@ public class GroupServiceImpl implements GroupService {
     }
 
     private JSONObject getJson(String id, GroupModel group) {
-        String cacheKey = CACHE_ID + id;
-        JSONObject object = cache.get(cacheKey);
-        if (object == null) {
-            if (group == null)
-                group = groupDao.findById(id);
-            cache.put(cacheKey, object = group == null ? new JSONObject() : modelHelper.toJson(group), false);
-        }
+        if (group == null)
+            group = groupDao.findById(id);
 
-        return object;
+        return group == null ? new JSONObject() : modelHelper.toJson(group);
     }
 }

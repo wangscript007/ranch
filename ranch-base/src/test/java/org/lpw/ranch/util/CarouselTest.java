@@ -111,7 +111,8 @@ public class CarouselTest extends TephraTestSupport {
 
         Map<String, String> header = newMap("new header");
         object = carousel.service("key.object", header, parameter, 2, JSONObject.class);
-        Assert.assertEquals(5, object.size());
+        Assert.assertEquals(7, object.size());
+        equals(object, "header");
         equals(object, "new header");
         equals(object, "parameter");
         Assert.assertEquals(2, object.getIntValue("cacheTime"));
@@ -167,7 +168,8 @@ public class CarouselTest extends TephraTestSupport {
         array = carousel.service("key.array", header, parameter, 2, JSONArray.class);
         Assert.assertEquals(1, array.size());
         object = array.getJSONObject(0);
-        Assert.assertEquals(5, object.size());
+        Assert.assertEquals(7, object.size());
+        equals(object, "header");
         equals(object, "new header");
         equals(object, "parameter");
         Assert.assertEquals(2, object.getIntValue("cacheTime"));

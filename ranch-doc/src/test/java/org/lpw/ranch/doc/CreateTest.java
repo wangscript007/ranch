@@ -2,14 +2,13 @@ package org.lpw.ranch.doc;
 
 import com.alibaba.fastjson.JSONObject;
 import org.junit.Assert;
-import org.junit.Test;
 import org.lpw.tephra.ctrl.validate.Validators;
 
 /**
  * @author lpw
  */
 public class CreateTest extends TestSupport {
-    @Test
+    //    @Test
     public void create() {
         mockHelper.reset();
         mockHelper.mock("/doc/create");
@@ -39,7 +38,7 @@ public class CreateTest extends TestSupport {
         Assert.assertEquals(1403, object.getIntValue("code"));
         Assert.assertEquals(message.get(Validators.PREFIX + "illegal-id", message.get(DocModel.NAME + ".owner")), object.getString("message"));
 
-        String ownerId=generator.uuid();
+        String ownerId = generator.uuid();
         mockHelper.reset();
         mockHelper.getRequest().addParameter("key", "key");
         mockHelper.getRequest().addParameter("owner", ownerId);
