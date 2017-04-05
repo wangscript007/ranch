@@ -24,6 +24,7 @@
         <module>ranch-snapshot</module>
         <module>ranch-last</module>
         <module>ranch-last-helper</module>
+        <module>ranch-address</module>
         <module>ranch-archives</module>
         <module>ranch-web</module>
         <module>ranch-test</module>

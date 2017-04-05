@@ -72,6 +72,7 @@ public class CarouselTest extends TephraTestSupport {
         mockHelper.mock("/carousel");
         object();
         array();
+        json();
     }
 
     private void object() {
@@ -178,6 +179,67 @@ public class CarouselTest extends TephraTestSupport {
         Assert.assertTrue(array.isEmpty());
         array = carousel.service("key.array", header, parameter, true, JSONArray.class);
         Assert.assertTrue(array.isEmpty());
+    }
+
+    private void json() {
+        mockCarousel.reset();
+        mockCarousel.register("key.object", (key, header, parameter, cacheTime) -> {
+            JSONObject obj = new JSONObject();
+            if (cacheTime < 5) {
+                JSONObject data = new JSONObject();
+                if (header != null)
+                    data.putAll(header);
+                if (parameter != null)
+                    data.putAll(parameter);
+                data.put("cacheTime", cacheTime);
+                obj.put("code", 0);
+                obj.put("data", data);
+            } else
+                obj.put("code", cacheTime);
+
+            return obj.toString();
+        });
+
+        Map<String, String> parameter = newMap("parameter");
+        JSONObject object = carousel.service("key", null, parameter, false, JSONObject.class);
+        Assert.assertTrue(object.isEmpty());
+
+        object = carousel.service("key.object", null, parameter, false);
+        Assert.assertEquals(2, object.size());
+        Assert.assertEquals(0, object.getIntValue("code"));
+        JSONObject data = object.getJSONObject("data");
+        Assert.assertEquals(5, data.size());
+        equals(data, "header");
+        equals(data, "parameter");
+        Assert.assertEquals(0, data.getIntValue("cacheTime"));
+
+        object = carousel.service("key.object", null, parameter, 1);
+        Assert.assertEquals(2, object.size());
+        Assert.assertEquals(0, object.getIntValue("code"));
+        data = object.getJSONObject("data");
+        Assert.assertEquals(5, data.size());
+        equals(data, "header");
+        equals(data, "parameter");
+        Assert.assertEquals(1, data.getIntValue("cacheTime"));
+
+        Map<String, String> header = newMap("new header");
+        object = carousel.service("key.object", header, parameter, 2);
+        Assert.assertEquals(2, object.size());
+        Assert.assertEquals(0, object.getIntValue("code"));
+        data = object.getJSONObject("data");
+        Assert.assertEquals(7, data.size());
+        equals(data, "header");
+        equals(data, "new header");
+        equals(data, "parameter");
+        Assert.assertEquals(2, data.getIntValue("cacheTime"));
+
+        object = carousel.service("key.object", header, parameter, 5);
+        Assert.assertEquals(1, object.size());
+        Assert.assertEquals(5, object.getIntValue("code"));
+
+        object = carousel.service("key.object", header, parameter, true);
+        Assert.assertEquals(1, object.size());
+        Assert.assertEquals(5, object.getIntValue("code"));
     }
 
     private Map<String, String> newMap(String name) {

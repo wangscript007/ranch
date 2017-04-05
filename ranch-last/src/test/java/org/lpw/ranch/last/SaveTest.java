@@ -76,10 +76,12 @@ public class SaveTest extends TestSupport {
         time = data.getLongValue("millisecond");
         Assert.assertTrue(System.currentTimeMillis() - time < 2000L);
         Assert.assertEquals(dateTime.toString(new Timestamp(time)), data.getString("time"));
+        Assert.assertFalse(data.containsKey("json"));
 
         mockCarousel.register("ranch.user.sign", "{\"code\":0,\"data\":{\"id\":\"new sign in id\"}}");
         mockHelper.reset();
         mockHelper.getRequest().addParameter("type", "type value");
+        mockHelper.getRequest().addParameter("name", "name value");
         mockHelper.mock("/last/save");
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(0, object.getIntValue("code"));
@@ -90,5 +92,7 @@ public class SaveTest extends TestSupport {
         time = data.getLongValue("millisecond");
         Assert.assertTrue(System.currentTimeMillis() - time < 2000L);
         Assert.assertEquals(dateTime.toString(new Timestamp(time)), data.getString("time"));
+        Assert.assertEquals("name value", data.getString("name"));
+        Assert.assertFalse(data.containsKey("json"));
     }
 }

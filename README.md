@@ -19,6 +19,8 @@ Ranch目前包含以下模块：
 - [group](ranch-group/) —— 群组。
 - [message](ranch-message/) —— 消息 & 即时通讯。
 - [snapshot](ranch-snapshot/) —— 快照。
+- [last](ranch-last/) —— 最近日志。
+- [last-helper](ranch-last-helper/) —— 最近日志支持。
 - [archives](ranch-archives/) —— 档案。
 - [test](ranch-test/) —— 单元测试支持。
 

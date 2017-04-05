@@ -5,6 +5,8 @@ import org.lpw.ranch.user.helper.UserHelper;
 import org.lpw.tephra.cache.Cache;
 import org.lpw.tephra.dao.model.ModelHelper;
 import org.lpw.tephra.util.DateTime;
+import org.lpw.tephra.util.Json;
+import org.lpw.tephra.util.Validator;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
@@ -23,6 +25,10 @@ public class LastServiceImpl implements LastService {
     private Cache cache;
     @Inject
     private DateTime dateTime;
+    @Inject
+    private Validator validator;
+    @Inject
+    private Json json;
     @Inject
     private ModelHelper modelHelper;
     @Inject
@@ -51,6 +57,10 @@ public class LastServiceImpl implements LastService {
 
         JSONObject object = modelHelper.toJson(last);
         object.put("millisecond", last.getTime().getTime());
+        JSONObject json = this.json.toObject(object.getString("json"));
+        if (json != null)
+            object.putAll(this.json.toObject(json));
+        object.remove("json");
 
         return object;
     }
