@@ -244,7 +244,7 @@ public class ClassifyServiceImpl implements ClassifyService, DateJob {
             object.put("value", classify.getValue());
             object.put("name", classify.getName());
             if (!validator.isEmpty(classify.getJson()))
-                object.putAll(JSON.parseObject(classify.getJson()));
+                object.putAll(json.toObject(classify.getJson()));
             cache.put(cacheKey, object, false);
         }
 
