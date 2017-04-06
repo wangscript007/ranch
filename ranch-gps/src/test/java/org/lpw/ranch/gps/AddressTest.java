@@ -19,15 +19,23 @@ public class AddressTest extends TestSupport {
         mockHelper.mock("/gps/address");
         JSONObject object = mockHelper.getResponse().asJson();
         Assert.assertEquals(1101, object.getIntValue("code"));
-        Assert.assertEquals(message.get(Validators.PREFIX + "not-match-regex", message.get(GpsModel.NAME + ".lat"), "^-?\\d{1,3}\\.\\d+$"),
+        Assert.assertEquals(message.get(Validators.PREFIX + "illegal-latitude", message.get(GpsModel.NAME + ".lat")),
                 object.getString("message"));
 
         mockHelper.reset();
-        mockHelper.getRequest().addParameter("lat", "123");
+        mockHelper.getRequest().addParameter("lat", "91");
         mockHelper.mock("/gps/address");
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(1101, object.getIntValue("code"));
-        Assert.assertEquals(message.get(Validators.PREFIX + "not-match-regex", message.get(GpsModel.NAME + ".lat"), "^-?\\d{1,3}\\.\\d+$"),
+        Assert.assertEquals(message.get(Validators.PREFIX + "illegal-latitude", message.get(GpsModel.NAME + ".lat")),
+                object.getString("message"));
+
+        mockHelper.reset();
+        mockHelper.getRequest().addParameter("lat", "-91");
+        mockHelper.mock("/gps/address");
+        object = mockHelper.getResponse().asJson();
+        Assert.assertEquals(1101, object.getIntValue("code"));
+        Assert.assertEquals(message.get(Validators.PREFIX + "illegal-latitude", message.get(GpsModel.NAME + ".lat")),
                 object.getString("message"));
 
         mockHelper.reset();
@@ -35,25 +43,25 @@ public class AddressTest extends TestSupport {
         mockHelper.mock("/gps/address");
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(1102, object.getIntValue("code"));
-        Assert.assertEquals(message.get(Validators.PREFIX + "not-match-regex", message.get(GpsModel.NAME + ".lng"), "^\\d{1,3}\\.\\d+$"),
+        Assert.assertEquals(message.get(Validators.PREFIX + "illegal-longitude", message.get(GpsModel.NAME + ".lng")),
                 object.getString("message"));
 
         mockHelper.reset();
         mockHelper.getRequest().addParameter("lat", "39.917266");
-        mockHelper.getRequest().addParameter("lng", "123");
+        mockHelper.getRequest().addParameter("lng", "181");
         mockHelper.mock("/gps/address");
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(1102, object.getIntValue("code"));
-        Assert.assertEquals(message.get(Validators.PREFIX + "not-match-regex", message.get(GpsModel.NAME + ".lng"), "^\\d{1,3}\\.\\d+$"),
+        Assert.assertEquals(message.get(Validators.PREFIX + "illegal-longitude", message.get(GpsModel.NAME + ".lng")),
                 object.getString("message"));
 
         mockHelper.reset();
         mockHelper.getRequest().addParameter("lat", "39.917266");
-        mockHelper.getRequest().addParameter("lng", "-116.397140");
+        mockHelper.getRequest().addParameter("lng", "-39.397140");
         mockHelper.mock("/gps/address");
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(1102, object.getIntValue("code"));
-        Assert.assertEquals(message.get(Validators.PREFIX + "not-match-regex", message.get(GpsModel.NAME + ".lng"), "^\\d{1,3}\\.\\d+$"),
+        Assert.assertEquals(message.get(Validators.PREFIX + "illegal-longitude", message.get(GpsModel.NAME + ".lng")),
                 object.getString("message"));
 
         mockHelper.reset();

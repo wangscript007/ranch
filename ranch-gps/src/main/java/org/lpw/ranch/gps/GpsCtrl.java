@@ -27,8 +27,8 @@ public class GpsCtrl {
      * @return {address:"",component:{}}。
      */
     @Execute(name = "address", validates = {
-            @Validate(validator = Validators.MATCH_REGEX, parameter = "lat", string = {"^-?\\d{1,3}\\.\\d+$"}, failureCode = 1),
-            @Validate(validator = Validators.MATCH_REGEX, parameter = "lng", string = {"^\\d{1,3}\\.\\d+$"}, failureCode = 2)
+            @Validate(validator = Validators.LATITUDE, parameter = "lat", failureCode = 1),
+            @Validate(validator = Validators.LONGITUDE, parameter = "lng", failureCode = 2)
     })
     public Object address() {
         return gpsService.address(request.get("lat"), request.get("lng"));
