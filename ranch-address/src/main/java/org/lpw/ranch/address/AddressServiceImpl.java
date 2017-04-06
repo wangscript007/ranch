@@ -39,11 +39,7 @@ public class AddressServiceImpl implements AddressService {
 
     @Override
     public JSONObject save(AddressModel model) {
-        AddressModel address = null;
-        if (!validator.isEmpty(model.getId()))
-            address = addressDao.findById(model.getId());
-        if (address == null)
-            address = new AddressModel();
+        AddressModel address = validator.isEmpty(model.getId()) ? new AddressModel() : addressDao.findById(model.getId());
         String user = userHelper.id();
         address.setUser(user);
         address.setRegion(model.getRegion());
