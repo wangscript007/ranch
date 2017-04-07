@@ -1,8 +1,8 @@
 # 设置为默认地址
 
 请求
-- Service Key - ranch.address.save
-- URI - /address/save
+- Service Key - ranch.address.major
+- URI - /address/major
 
 参数
 - id ID值。

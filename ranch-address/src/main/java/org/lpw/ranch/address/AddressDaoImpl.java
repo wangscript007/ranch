@@ -34,4 +34,9 @@ class AddressDaoImpl implements AddressDao {
     public void major(String user, int major) {
         liteOrm.update(new LiteQuery(AddressModel.class).set("c_major=?").where("c_user=?"), new Object[]{major, user});
     }
+
+    @Override
+    public void delete(String id) {
+        liteOrm.deleteById(AddressModel.class, id);
+    }
 }

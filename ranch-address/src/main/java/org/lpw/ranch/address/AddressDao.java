@@ -13,4 +13,6 @@ interface AddressDao {
     void save(AddressModel address);
 
     void major(String user, int major);
+
+    void delete(String id);
 }

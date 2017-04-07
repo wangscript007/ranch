@@ -45,6 +45,13 @@ public interface AddressService {
     JSONObject major(String id);
 
     /**
+     * 删除地址。
+     *
+     * @param id 地址ID值。
+     */
+    void delete(String id);
+
+    /**
      * 检索地址信息。
      *
      * @param id ID值。

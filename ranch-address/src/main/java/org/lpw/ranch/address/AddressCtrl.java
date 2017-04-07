@@ -60,4 +60,14 @@ public class AddressCtrl {
     public Object major() {
         return addressService.major(request.get("id"));
     }
+
+    @Execute(name = "delete", validates = {
+            @Validate(validator = UserHelper.VALIDATOR_SIGN_IN),
+            @Validate(validator = AddressService.VALIDATOR_UPDATABLE, parameter = "id", failureCode = 1)
+    })
+    public Object delete() {
+        addressService.delete(request.get("id"));
+
+        return "";
+    }
 }

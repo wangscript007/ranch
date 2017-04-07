@@ -7,3 +7,5 @@
 [设置为默认地址](doc/major.md)
 
 [使用地址](doc/use.md)
+
+[删除地址](doc/delete.md)
