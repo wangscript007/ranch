@@ -30,10 +30,11 @@ public class UserCtrl {
             @Validate(validator = Validators.NOT_EMPTY, parameter = "uid", failureCode = 1),
             @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "uid", failureCode = 2),
             @Validate(validator = UserService.VALIDATOR_PASSWORD, parameter = "password", failureCode = 3),
+            @Validate(validator = Validators.BETWEEN, number = {0, 1}, parameter = "type", failureCode = 27),
             @Validate(validator = AuthService.VALIDATOR_UID_NOT_EXISTS, parameter = "uid", failureCode = 4)
     })
     public Object signUp() {
-        userService.signUp(request.get("uid"), request.get("password"), request.getAsInt("type"));
+        userService.signUp(request.get("uid"), request.get("password"), UserService.Type.values()[request.getAsInt("type")]);
 
         return sign();
     }
@@ -42,6 +43,7 @@ public class UserCtrl {
             @Validate(validator = Validators.NOT_EMPTY, parameter = "uid", failureCode = 1),
             @Validate(validator = UserService.VALIDATOR_PASSWORD, parameter = "password", failureCode = 3),
             @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "macId", failureCode = 5),
+            @Validate(validator = Validators.BETWEEN, number = {0, 2}, parameter = "type", failureCode = 27),
             @Validate(validator = UserService.VALIDATOR_SIGN_IN, parameters = {"uid", "password", "macId", "type"}, failureCode = 6)
     })
     public Object signIn() {

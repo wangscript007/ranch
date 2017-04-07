@@ -12,6 +12,7 @@ import org.lpw.tephra.util.Converter;
 import org.lpw.tephra.util.DateTime;
 import org.lpw.tephra.util.Generator;
 import org.lpw.tephra.util.Validator;
+import org.lpw.tephra.weixin.WeixinService;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
@@ -42,6 +43,8 @@ public class UserServiceImpl implements UserService {
     @Inject
     private Session session;
     @Inject
+    private WeixinService weixinService;
+    @Inject
     private Pagination pagination;
     @Inject
     private AuthService authService;
@@ -49,9 +52,9 @@ public class UserServiceImpl implements UserService {
     private UserDao userDao;
 
     @Override
-    public void signUp(String uid, String password, int type) {
+    public void signUp(String uid, String password, Type type) {
         UserModel user = new UserModel();
-        if (type == 1)
+        if (type == Type.Self)
             user.setPassword(password(password));
         user.setRegister(dateTime.now());
         while (user.getCode() == null) {
@@ -60,21 +63,20 @@ public class UserServiceImpl implements UserService {
                 user.setCode(code);
         }
         userDao.save(user);
-        authService.create(user.getId(), uid, type);
+        authService.create(user.getId(), uid, type.ordinal());
         session.set(SESSION, user);
     }
 
     @Override
-    public boolean signIn(String uid, String password, String macId, int type) {
+    public boolean signIn(String uid, String password, String macId, Type type) {
+        if (type == Type.WeiXin)
+            uid = getWeixinOpenId(password, uid);
+        if (uid == null)
+            return false;
+
         AuthModel auth = authService.findByUid(uid);
-        if (auth == null) {
-            if (type < 2)
-                return false;
-
-            signUp(uid, password, type);
-
-            return true;
-        }
+        if (auth == null)
+            return false;
 
         UserModel user = findById(auth.getUser());
         if (user == null || user.getState() != 0)
@@ -90,6 +92,22 @@ public class UserServiceImpl implements UserService {
         session.set(SESSION, user);
 
         return true;
+    }
+
+    private String getWeixinOpenId(String appId, String code) {
+        String openId = weixinService.auth(appId, code);
+        if (openId == null)
+            return null;
+
+        if (authService.findByUid(openId) == null) {
+            signUp(openId, null, Type.WeiXin);
+            UserModel user = new UserModel();
+            user.setNick(weixinService.getNickname());
+            modify(user);
+            portrait(weixinService.getPortrait());
+        }
+
+        return openId;
     }
 
     @Override

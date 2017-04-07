@@ -17,7 +17,7 @@ public class PasswordValidatorImpl extends ValidatorSupport {
 
     @Override
     public boolean validate(ValidateWrapper validate, String parameter) {
-        return request.getAsInt("type") != 1 || !validator.isEmpty(parameter);
+        return request.getAsInt("type") != UserService.Type.Self.ordinal() || !validator.isEmpty(parameter);
     }
 
     @Override

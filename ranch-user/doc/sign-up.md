@@ -5,9 +5,9 @@
 - URI - /user/sign-up
 
 参数
-- uid UID值，type=0则uid为MacID，type=1则uid为用户名（手机号、Email、账号等），其他则为第三方OpenID。
+- uid UID值，type=0则uid为MacID，type=1则uid为用户名（手机号、Email、账号等）。
 - password 密码。
-- type 认证类型：0-机器码；1-自有账号；其他为第三方账号。
+- type 认证类型：0-机器码；1-自有账号。
 
 返回值
 ```text

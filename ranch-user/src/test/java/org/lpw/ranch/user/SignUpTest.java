@@ -40,6 +40,22 @@ public class SignUpTest extends TestSupport {
         Assert.assertEquals(1503, object.getIntValue("code"));
         Assert.assertEquals(message.get(UserModel.NAME + ".password.empty"), object.getString("message"));
 
+        mockHelper.reset();
+        mockHelper.getRequest().addParameter("uid", "sign up uid 1");
+        mockHelper.getRequest().addParameter("type", "-1");
+        mockHelper.mock("/user/sign-up");
+        object = mockHelper.getResponse().asJson();
+        Assert.assertEquals(1527, object.getIntValue("code"));
+        Assert.assertEquals(message.get(Validators.PREFIX + "not-between", message.get(UserModel.NAME + ".type"), 0, 1), object.getString("message"));
+
+        mockHelper.reset();
+        mockHelper.getRequest().addParameter("uid", "sign up uid 1");
+        mockHelper.getRequest().addParameter("type", "2");
+        mockHelper.mock("/user/sign-up");
+        object = mockHelper.getResponse().asJson();
+        Assert.assertEquals(1527, object.getIntValue("code"));
+        Assert.assertEquals(message.get(Validators.PREFIX + "not-between", message.get(UserModel.NAME + ".type"), 0, 1), object.getString("message"));
+
         List<String> list = new ArrayList<>();
         list.add("mock session id");
         list.add("code 0");

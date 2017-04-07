@@ -6,6 +6,21 @@ import com.alibaba.fastjson.JSONObject;
  * @author lpw
  */
 public interface UserService {
+    enum Type {
+        /**
+         * MAC ID。
+         */
+        MacId,
+        /**
+         * 自有账号。
+         */
+        Self,
+        /**
+         * 微信。
+         */
+        WeiXin
+    }
+
     /**
      * 登入验证器Bean名称。
      */
@@ -30,7 +45,7 @@ public interface UserService {
      * @param password 密码。
      * @param type     认证类型。
      */
-    void signUp(String uid, String password, int type);
+    void signUp(String uid, String password, Type type);
 
     /**
      * 登入验证。
@@ -41,7 +56,7 @@ public interface UserService {
      * @param type     认证类型。
      * @return 认证成功则返回true；否则返回false。
      */
-    boolean signIn(String uid, String password, String macId, int type);
+    boolean signIn(String uid, String password, String macId, Type type);
 
     /**
      * 获取当前用户登入信息。
