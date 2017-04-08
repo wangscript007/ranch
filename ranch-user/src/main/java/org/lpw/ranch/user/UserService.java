@@ -6,6 +6,9 @@ import com.alibaba.fastjson.JSONObject;
  * @author lpw
  */
 public interface UserService {
+    /**
+     * 认证类型。
+     */
     enum Type {
         /**
          * MAC ID。
