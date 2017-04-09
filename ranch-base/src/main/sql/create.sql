@@ -1,0 +1,11 @@
+DROP TABLE IF EXISTS m_lock;
+CREATE TABLE m_lock
+(
+  c_id CHAR(36) NOT NULL COMMENT '主键',
+  c_key CHAR(32) NOT NULL COMMENT '锁key',
+  c_index BIGINT AUTO_INCREMENT NOT NULL COMMENT '序号',
+
+  PRIMARY KEY pk(c_id) USING HASH,
+  KEY k_key(c_key) USING HASH,
+  UNIQUE KEY uk_index(c_index)
+) ENGINE=Memory AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
