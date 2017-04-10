@@ -1,6 +1,8 @@
 package org.lpw.ranch.doc;
 
 import com.alibaba.fastjson.JSONObject;
+import com.vladsch.flexmark.html.HtmlRenderer;
+import com.vladsch.flexmark.parser.Parser;
 import org.lpw.ranch.audit.Audit;
 import org.lpw.ranch.audit.AuditHelper;
 import org.lpw.ranch.recycle.RecycleHelper;
@@ -115,12 +117,16 @@ public class DocServiceImpl implements DocService, MinuteJob, DateJob {
         model.setSummary(doc.getSummary());
         model.setLabel(doc.getLabel());
         model.setSource(doc.getSource());
-        model.setContent(doc.getContent());
+        model.setContent(toHtml(doc.getSource()));
         model.setTime(dateTime.now());
         model.setAudit(defaultAudit);
         docDao.save(model);
 
         return getJson(model.getId(), model, true);
+    }
+
+    private String toHtml(String markdown) {
+        return HtmlRenderer.builder().build().render(Parser.builder().build().parse(markdown));
     }
 
     private JSONObject getJson(String id, DocModel doc, boolean full) {

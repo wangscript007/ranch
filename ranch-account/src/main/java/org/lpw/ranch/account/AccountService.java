@@ -15,4 +15,14 @@ public interface AccountService {
      * @return 账户信息。
      */
     JSONObject deposit(String owner, int type, int amount);
+
+    /**
+     * 取出。
+     *
+     * @param owner  所有者。
+     * @param type   类型。
+     * @param amount 金额。
+     * @return 账户信息。
+     */
+    JSONObject withdraw(String owner, int type, int amount);
 }

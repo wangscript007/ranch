@@ -20,6 +20,11 @@
 
     <dependencies>
         <dependency>
+            <groupId>com.vladsch.flexmark</groupId>
+            <artifactId>flexmark-all</artifactId>
+            <version>LATEST</version>
+        </dependency>
+        <dependency>
             <groupId>org.lpw.ranch</groupId>
             <artifactId>ranch-user-helper</artifactId>
             <version>${version.ranch}</version>
