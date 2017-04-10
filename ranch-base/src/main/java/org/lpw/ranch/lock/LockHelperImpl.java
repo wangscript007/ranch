@@ -1,23 +1,31 @@
 package org.lpw.ranch.lock;
 
+import org.lpw.tephra.atomic.Atomicable;
 import org.lpw.tephra.crypto.Digest;
 import org.lpw.tephra.util.Thread;
 import org.lpw.tephra.util.TimeUnit;
+import org.lpw.tephra.util.Validator;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * @author lpw
  */
-@Service(LockModel.NAME + ".service")
-public class LockHelperImpl implements LockHelper {
+@Service(LockModel.NAME + ".helper")
+public class LockHelperImpl implements LockHelper, Atomicable {
     @Inject
     private Digest digest;
     @Inject
     private Thread thread;
     @Inject
+    private Validator validator;
+    @Inject
     private LockDao lockDao;
+    private ThreadLocal<Set<String>> ids = new ThreadLocal<>();
 
     @Override
     public String lock(String key, long wait) {
@@ -28,6 +36,9 @@ public class LockHelperImpl implements LockHelper {
         LockModel lock = new LockModel();
         lock.setKey(md5);
         lockDao.save(lock);
+        if (ids.get() == null)
+            ids.set(new HashSet<>());
+        ids.get().add(lock.getId());
         lock = lockDao.findById(lock.getId());
         for (long i = 0L; i < wait; i++) {
             LockModel model = lockDao.findByKey(md5);
@@ -36,6 +47,7 @@ public class LockHelperImpl implements LockHelper {
 
             thread.sleep(1, TimeUnit.MilliSecond);
         }
+        unlock(lock.getId());
 
         return null;
     }
@@ -43,5 +55,20 @@ public class LockHelperImpl implements LockHelper {
     @Override
     public void unlock(String id) {
         lockDao.delete(id);
+        ids.get().remove(id);
+    }
+
+    @Override
+    public void fail(Throwable throwable) {
+        close();
+    }
+
+    @Override
+    public void close() {
+        if (validator.isEmpty(ids.get()))
+            return;
+
+        Set<String> set = new HashSet<>(ids.get());
+        set.forEach(this::unlock);
     }
 }

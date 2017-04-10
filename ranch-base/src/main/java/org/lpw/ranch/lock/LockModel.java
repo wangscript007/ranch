@@ -21,7 +21,6 @@ public class LockModel extends ModelSupport {
     static final String NAME = "ranch.lock";
 
     private String key; // 锁key
-    private long index; // 序号
 
     @Jsonable
     @Column(name = "c_key")
@@ -31,15 +30,5 @@ public class LockModel extends ModelSupport {
 
     public void setKey(String key) {
         this.key = key;
-    }
-
-    @Jsonable
-    @Column(name = "c_index", updatable = false)
-    public long getIndex() {
-        return index;
-    }
-
-    public void setIndex(long index) {
-        this.index = index;
     }
 }

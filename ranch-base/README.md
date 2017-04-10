@@ -2,6 +2,6 @@
 
 [调用Carousel服务](doc/carousel.md)
 
-[配置参数](src/main/resources/base.ranch.config)
+[全局锁](doc/lock.md)
 
-> 关于Carousel的相关说明与使用，可参考[这里](https://github.com/heisedebaise/tephra/tree/master/tephra-carousel)。
+[配置参数](src/main/resources/base.ranch.config)

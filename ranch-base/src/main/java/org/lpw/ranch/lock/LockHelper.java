@@ -1,6 +1,8 @@
 package org.lpw.ranch.lock;
 
 /**
+ * 全局锁主要应用于集群、分布式环境下，对同一关键数据进行悲观锁操作。
+ *
  * @author lpw
  */
 public interface LockHelper {
