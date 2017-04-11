@@ -15,3 +15,20 @@ CREATE TABLE t_account
   PRIMARY KEY pk(c_id) USING HASH,
   KEY k_user(c_user) USING HASH
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS t_account_log;
+CREATE TABLE t_account_log
+(
+  c_id CHAR(36) NOT NULL COMMENT '主键',
+  c_user CHAR(36) NOT NULL COMMENT '用户',
+  c_account CHAR(36) NOT NULL COMMENT '账户',
+  c_type VARCHAR(255) DEFAULT NULL COMMENT '类型',
+  c_amount INT DEFAULT 0 COMMENT '数量',
+  c_balance INT DEFAULT 0 COMMENT '余额',
+  c_state INT DEFAULT 0 COMMENT '状态：0-待处理；1-审核通过；2-审核不通过；3-已完成',
+  c_time DATETIME DEFAULT NULL COMMENT '时间',
+
+  PRIMARY KEY pk(c_id) USING HASH,
+  KEY k_user(c_user,c_time) USING HASH,
+  KEY k_account(c_account,c_time) USING HASH
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;

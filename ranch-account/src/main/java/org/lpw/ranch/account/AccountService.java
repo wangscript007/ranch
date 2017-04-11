@@ -9,12 +9,13 @@ public interface AccountService {
     /**
      * 存入。
      *
+     * @param user   用户。
      * @param owner  所有者。
      * @param type   类型。
      * @param amount 金额。
      * @return 账户信息。
      */
-    JSONObject deposit(String owner, int type, int amount);
+    JSONObject deposit(String user, String owner, int type, int amount);
 
     /**
      * 取出。

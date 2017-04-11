@@ -1,6 +1,7 @@
 package org.lpw.ranch.account;
 
 import com.alibaba.fastjson.JSONObject;
+import org.lpw.ranch.account.log.LogService;
 import org.lpw.ranch.lock.LockHelper;
 import org.lpw.ranch.user.helper.UserHelper;
 import org.lpw.tephra.dao.model.ModelHelper;
@@ -22,34 +23,33 @@ public class AccountServiceImpl implements AccountService {
     @Inject
     private UserHelper userHelper;
     @Inject
+    private LogService logService;
+    @Inject
     private AccountDao accountDao;
 
     @Override
-    public JSONObject deposit(String owner, int type, int amount) {
-        AccountModel account = find(owner, type);
+    public JSONObject deposit(String user, String owner, int type, int amount) {
+        AccountModel account = find(user, owner, type);
         if (account == null)
             return null;
 
-        account.setBalance(account.getBalance() + amount);
         account.setDeposit(account.getDeposit() + amount);
 
-        return save(account);
+        return save(account, amount, "deposit", LogService.State.Complete);
     }
 
     @Override
     public JSONObject withdraw(String owner, int type, int amount) {
-        AccountModel account = find(owner, type);
+        AccountModel account = find(userHelper.id(), owner, type);
         if (account == null)
             return null;
 
-        account.setBalance(account.getBalance() - amount);
         account.setWithdraw(account.getWithdraw() + amount);
 
-        return save(account);
+        return save(account, -1 * amount, "withdraw", LogService.State.New);
     }
 
-    private AccountModel find(String owner, int type) {
-        String user = userHelper.id();
+    private AccountModel find(String user, String owner, int type) {
         String lockId = lockHelper.lock(LOCK_USER + user, 1000L);
         if (lockId == null)
             return null;
@@ -66,8 +66,10 @@ public class AccountServiceImpl implements AccountService {
         return account;
     }
 
-    private JSONObject save(AccountModel account) {
+    private JSONObject save(AccountModel account, int amount, String type, LogService.State state) {
+        account.setBalance(account.getBalance() + amount);
         accountDao.save(account);
+        logService.create(account, type, amount, state);
         lockHelper.unlock(account.getLockId());
 
         return modelHelper.toJson(account);
