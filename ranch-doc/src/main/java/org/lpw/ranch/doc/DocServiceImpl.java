@@ -1,28 +1,28 @@
 package org.lpw.ranch.doc;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.vladsch.flexmark.html.HtmlRenderer;
 import com.vladsch.flexmark.parser.Parser;
 import org.lpw.ranch.audit.Audit;
 import org.lpw.ranch.audit.AuditHelper;
+import org.lpw.ranch.recycle.Recycle;
 import org.lpw.ranch.recycle.RecycleHelper;
 import org.lpw.ranch.user.helper.UserHelper;
 import org.lpw.ranch.util.Carousel;
 import org.lpw.ranch.util.Pagination;
 import org.lpw.tephra.cache.Cache;
 import org.lpw.tephra.dao.model.ModelHelper;
-import org.lpw.tephra.scheduler.DateJob;
 import org.lpw.tephra.scheduler.MinuteJob;
 import org.lpw.tephra.util.DateTime;
 import org.lpw.tephra.util.Generator;
+import org.lpw.tephra.util.Validator;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -30,14 +30,14 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @author lpw
  */
 @Service(DocModel.NAME + ".service")
-public class DocServiceImpl implements DocService, MinuteJob, DateJob {
-    private static final String CACHE_RANDOM = DocModel.NAME + ".service.random";
-    private static final String CACHE_MODEL = DocModel.NAME + ".service.model:";
+public class DocServiceImpl implements DocService, MinuteJob {
     private static final String CACHE_JSON = DocModel.NAME + ".service.json:";
     private static final String CACHE_CONTENT = DocModel.NAME + ".service.content:";
 
     @Inject
     private Cache cache;
+    @Inject
+    private Validator validator;
     @Inject
     private Generator generator;
     @Inject
@@ -62,27 +62,16 @@ public class DocServiceImpl implements DocService, MinuteJob, DateJob {
 
     @Override
     public DocModel findById(String id) {
-        String key = getCacheKey(CACHE_MODEL, id);
-        DocModel doc = cache.get(key);
-        if (doc == null)
-            cache.put(key, doc = docDao.findById(id), false);
-
-        return doc;
+        return docDao.findById(id);
     }
 
     @Override
-    public JSONObject queryByKey(int audit, String key) {
-        return docDao.queryByKey(Audit.values()[audit], key, pagination.getPageSize(), pagination.getPageNum()).toJson();
-    }
+    public JSONArray query(String key, String owner, String author, String subject, Audit audit) {
+        JSONArray array = new JSONArray();
+        docDao.query(key, owner, author, subject, audit, Recycle.No, pagination.getPageSize(), pagination.getPageNum())
+                .getList().forEach(doc -> array.add(getJson(doc.getId(), doc, false)));
 
-    @Override
-    public JSONObject queryByOwner(int audit, String owner) {
-        return docDao.queryByOwner(Audit.values()[audit], owner, pagination.getPageSize(), pagination.getPageNum()).toJson();
-    }
-
-    @Override
-    public JSONObject queryByAuthor(int audit, String author) {
-        return docDao.queryByAuthor(Audit.values()[audit], author, pagination.getPageSize(), pagination.getPageNum()).toJson();
+        return array;
     }
 
     @Override
@@ -94,7 +83,7 @@ public class DocServiceImpl implements DocService, MinuteJob, DateJob {
     public JSONObject get(String[] ids) {
         JSONObject object = new JSONObject();
         for (String id : ids) {
-            JSONObject doc = getJson(id, null, false);
+            JSONObject doc = getJson(id, null, true);
             if (!doc.isEmpty())
                 object.put(id, doc);
         }
@@ -103,8 +92,10 @@ public class DocServiceImpl implements DocService, MinuteJob, DateJob {
     }
 
     @Override
-    public JSONObject create(DocModel doc) {
-        DocModel model = new DocModel();
+    public JSONObject save(DocModel doc) {
+        DocModel model = validator.isEmpty(doc.getId()) ? new DocModel() : findById(doc.getId());
+        if (model == null)
+            model = new DocModel();
         model.setKey(doc.getKey());
         model.setOwner(doc.getOwner());
         model.setAuthor(userHelper.id());
@@ -117,42 +108,26 @@ public class DocServiceImpl implements DocService, MinuteJob, DateJob {
         model.setSummary(doc.getSummary());
         model.setLabel(doc.getLabel());
         model.setSource(doc.getSource());
-        model.setContent(toHtml(doc.getSource()));
+        model.setContent(HtmlRenderer.builder().build().render(Parser.builder().build().parse(doc.getSource())));
         model.setTime(dateTime.now());
         model.setAudit(defaultAudit);
         docDao.save(model);
+        clearCache(model.getId());
 
-        return getJson(model.getId(), model, true);
+        return getJson(model.getId(), model, false);
     }
 
-    private String toHtml(String markdown) {
-        return HtmlRenderer.builder().build().render(Parser.builder().build().parse(markdown));
-    }
-
-    private JSONObject getJson(String id, DocModel doc, boolean full) {
-        String key = getCacheKey(CACHE_JSON, id + full);
+    private JSONObject getJson(String id, DocModel doc, boolean passable) {
+        String key = CACHE_JSON + id + passable;
         JSONObject object = cache.get(key);
         if (object == null) {
             if (doc == null)
                 doc = findById(id);
-            if (doc != null) {
-                Set<String> ignores = new HashSet<>();
-                ignores.add("owner");
-                ignores.add("author");
-                if (full)
-                    object = toJson(doc, ignores, true);
-                else if (doc.getAudit() == Audit.Passed.getValue()) {
-                    ignores.add("key");
-                    ignores.add("scoreMin");
-                    ignores.add("scoreMax");
-                    ignores.add("sort");
-                    ignores.add("source");
-                    ignores.add("content");
-                    auditHelper.addProperty(ignores);
-                    object = toJson(doc, ignores, false);
-                }
-            }
-            if (object == null)
+            if (doc != null && (!passable || doc.getAudit() == Audit.Passed.getValue())) {
+                object = modelHelper.toJson(doc);
+                object.put("owner", carousel.get(doc.getKey() + ".get", doc.getOwner()));
+                object.put("author", userHelper.get(doc.getAuthor()));
+            } else
                 object = new JSONObject();
             cache.put(key, object, false);
         }
@@ -160,26 +135,18 @@ public class DocServiceImpl implements DocService, MinuteJob, DateJob {
         return object;
     }
 
-    private JSONObject toJson(DocModel doc, Set<String> ignores, boolean owner) {
-        JSONObject object = modelHelper.toJson(doc, ignores);
-        if (owner)
-            object.put("owner", carousel.get(doc.getKey() + ".get", doc.getOwner()));
-        object.put("author", userHelper.get(doc.getAuthor()));
-
-        return object;
+    @Override
+    public String source(String id) {
+        return findById(id).getSource();
     }
 
     @Override
     public String read(String id) {
-        String key = getCacheKey(CACHE_CONTENT, id);
+        String key = CACHE_CONTENT + id;
         String content = cache.get(key);
         if (content == null)
             cache.put(key, content = findById(id).getContent(), false);
-        AtomicInteger integer = read.get(id);
-        if (integer == null)
-            integer = new AtomicInteger();
-        integer.incrementAndGet();
-        read.put(id, integer);
+        read.computeIfAbsent(id, i -> new AtomicInteger()).incrementAndGet();
 
         return content;
     }
@@ -190,6 +157,7 @@ public class DocServiceImpl implements DocService, MinuteJob, DateJob {
             return;
 
         docDao.favorite(id, n);
+        clearCache(id);
     }
 
     @Override
@@ -198,21 +166,25 @@ public class DocServiceImpl implements DocService, MinuteJob, DateJob {
             return;
 
         docDao.comment(id, n);
+        clearCache(id);
     }
 
     @Override
     public void pass(String[] ids, String auditRemark) {
         auditHelper.pass(DocModel.class, ids, auditRemark);
+        clearCache(ids);
     }
 
     @Override
     public void refuse(String[] ids, String auditRemark) {
         auditHelper.refuse(DocModel.class, ids, auditRemark);
+        clearCache(ids);
     }
 
     @Override
     public void delete(String id) {
         recycleHelper.delete(DocModel.class, id);
+        clearCache(id);
     }
 
     @Override
@@ -223,26 +195,7 @@ public class DocServiceImpl implements DocService, MinuteJob, DateJob {
     @Override
     public void restore(String id) {
         recycleHelper.restore(DocModel.class, id);
-    }
-
-    @Override
-    public void refresh() {
-        resetRandom();
-    }
-
-    private String getCacheKey(String prefix, String suffix) {
-        String random = cache.get(CACHE_RANDOM);
-        if (random == null)
-            random = resetRandom();
-
-        return prefix + random + suffix;
-    }
-
-    private String resetRandom() {
-        String random = generator.random(32);
-        cache.put(CACHE_RANDOM, random, true);
-
-        return random;
+        clearCache(id);
     }
 
     @Override
@@ -252,11 +205,20 @@ public class DocServiceImpl implements DocService, MinuteJob, DateJob {
 
         Map<String, AtomicInteger> map = new HashMap<>(read);
         read.clear();
-        map.forEach((id, n) -> docDao.read(id, n.get()));
+        map.forEach((id, n) -> {
+            docDao.read(id, n.get());
+            clearCache(id);
+        });
     }
 
-    @Override
-    public void executeDateJob() {
-        resetRandom();
+    private void clearCache(String[] ids) {
+        for (String id : ids)
+            clearCache(id);
+    }
+
+    private void clearCache(String id) {
+        cache.remove(CACHE_JSON + id + true);
+        cache.remove(CACHE_JSON + id + false);
+        cache.remove(CACHE_CONTENT + id);
     }
 }

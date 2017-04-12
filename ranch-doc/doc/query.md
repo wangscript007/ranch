@@ -1,12 +1,15 @@
-# 检索类型KEY的文档信息集
+# 检索文档信息集
 
 请求
-- Service Key - ranch.doc.query-by-key
-- URI - /doc/query-by-key
+- Service Key - ranch.doc.query
+- URI - /doc/query
 
 参数
-- audit 审核状态：0-待审核；1-审核通过；2-审核不通过。
 - key 类型KEY。
+- owner 所有者ID。
+- author 作者ID。
+- subject 标题，模糊匹配。
+- audit 审核状态：0-待审核；1-审核通过；2-审核不通过。
 - pageSize 每页显示记录数。
 - pageNum 当前显示页数。
 
@@ -20,8 +23,8 @@
         {
             "id": "ID值",
             "key": "类型KEY",
-            "owner": "所有者ID",
-            "author": "作者ID",
+            "owner": {},
+            "author": {},
             "scoreMin": "最小分值",
             "scoreMax": "最大分值",
             "sort": "顺序",
@@ -30,8 +33,6 @@
             "thumbnail": "缩略图URI地址",
             "summary": "摘要",
             "label": "标签",
-            "source": "内容源",
-            "content": "内容",
             "read": "阅读次数",
             "favorite": "收藏次数",
             "comment": "评论次数",

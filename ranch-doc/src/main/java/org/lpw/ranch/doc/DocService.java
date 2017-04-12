@@ -1,6 +1,8 @@
 package org.lpw.ranch.doc;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import org.lpw.ranch.audit.Audit;
 import org.lpw.ranch.audit.AuditService;
 
 /**
@@ -21,31 +23,16 @@ public interface DocService extends AuditService {
     DocModel findById(String id);
 
     /**
-     * 检索类型key的文档信息集。
+     * 检索文档信息集。
      *
-     * @param audit 审核状态。
-     * @param key   类型key。
+     * @param key     类型key。
+     * @param owner   所有者ID。
+     * @param author  作者ID。
+     * @param subject 标题，模糊匹配。
+     * @param audit   审核状态。
      * @return 文档信息集。
      */
-    JSONObject queryByKey(int audit, String key);
-
-    /**
-     * 检索所有者的文档信息集。
-     *
-     * @param audit 审核状态。
-     * @param owner 所有者ID。
-     * @return 文档信息集。
-     */
-    JSONObject queryByOwner(int audit, String owner);
-
-    /**
-     * 检索作者的文档信息集。
-     *
-     * @param audit  审核状态。
-     * @param author 作者ID。
-     * @return 文档信息集。
-     */
-    JSONObject queryByAuthor(int audit, String author);
+    JSONArray query(String key, String owner, String author, String subject, Audit audit);
 
     /**
      * 检索当前用户的文档信息集。
@@ -67,7 +54,15 @@ public interface DocService extends AuditService {
      *
      * @param doc 文档信息。
      */
-    JSONObject create(DocModel doc);
+    JSONObject save(DocModel doc);
+
+    /**
+     * 获取文档源内容。
+     *
+     * @param id ID值。
+     * @return 源内容。
+     */
+    String source(String id);
 
     /**
      * 阅读。
@@ -92,9 +87,4 @@ public interface DocService extends AuditService {
      * @param n  评论数：正数表示增加，负数表示减少。
      */
     void comment(String id, int n);
-
-    /**
-     * 刷新缓存。
-     */
-    void refresh();
 }

@@ -1,7 +1,10 @@
 package org.lpw.ranch.doc;
 
+import org.lpw.ranch.audit.Audit;
 import org.lpw.ranch.audit.AuditCtrlSupport;
+import org.lpw.ranch.audit.AuditHelper;
 import org.lpw.ranch.audit.AuditService;
+import org.lpw.ranch.user.helper.UserHelper;
 import org.lpw.tephra.ctrl.context.Request;
 import org.lpw.tephra.ctrl.execute.Execute;
 import org.lpw.tephra.ctrl.template.Templates;
@@ -24,40 +27,18 @@ public class DocCtrl extends AuditCtrlSupport {
     @Inject
     private DocService docService;
 
-    @Execute(name = "query-by-key", validates = {
-            @Validate(validator = Validators.BETWEEN, number = {0, 2}, parameter = "audit", failureCode = 13),
-            @Validate(validator = Validators.NOT_EMPTY, parameter = "key", failureCode = 1),
-            @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "key", failureCode = 2),
+    @Execute(name = "query", validates = {
+            @Validate(validator = AuditHelper.VALIDATOR, parameter = "audit", failureCode = 13),
             @Validate(validator = Validators.SIGN)
     })
-    public Object queryByKey() {
-        return docService.queryByKey(request.getAsInt("audit"), request.get("key"));
-    }
-
-    @Execute(name = "query-by-owner", validates = {
-            @Validate(validator = Validators.BETWEEN, number = {0, 2}, parameter = "audit", failureCode = 13),
-            @Validate(validator = Validators.ID, parameter = "owner", failureCode = 3),
-            @Validate(validator = Validators.SIGN)
-    })
-    public Object queryByOwner() {
-        return docService.queryByOwner(request.getAsInt("audit"), request.get("owner"));
+    public Object query() {
+        return docService.query(request.get("key"), request.get("owner"), request.get("author"), request.get("subject"), Audit.values()[request.getAsInt("audit")]);
     }
 
     @Execute(name = "query-by-author", validates = {
-            @Validate(validator = Validators.BETWEEN, number = {0, 2}, parameter = "audit", failureCode = 13),
-            @Validate(validator = Validators.ID, parameter = "author", failureCode = 4),
-            @Validate(validator = Validators.SIGN)
+            @Validate(validator = UserHelper.VALIDATOR_SIGN_IN)
     })
     public Object queryByAuthor() {
-        return docService.queryByAuthor(request.getAsInt("audit"), request.get("author"));
-    }
-
-    @Execute(name = "query-by-user", validates = {
-            @Validate(validator = Validators.BETWEEN, number = {0, 2}, parameter = "audit", failureCode = 13),
-            @Validate(validator = Validators.ID, parameter = "author", failureCode = 4),
-            @Validate(validator = Validators.SIGN)
-    })
-    public Object queryByUser() {
         return docService.queryByAuthor();
     }
 
@@ -68,7 +49,7 @@ public class DocCtrl extends AuditCtrlSupport {
         return docService.get(request.getAsArray("ids"));
     }
 
-    @Execute(name = "create", validates = {
+    @Execute(name = "save", validates = {
             @Validate(validator = Validators.NOT_EMPTY, parameter = "key", failureCode = 1),
             @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "key", failureCode = 2),
             @Validate(validator = Validators.ID, parameter = "owner", failureCode = 3),
@@ -77,11 +58,19 @@ public class DocCtrl extends AuditCtrlSupport {
             @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "image", failureCode = 7),
             @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "thumbnail", failureCode = 8),
             @Validate(validator = Validators.NOT_EMPTY, parameter = "source", failureCode = 9),
-            @Validate(validator = Validators.NOT_EMPTY, parameter = "content", failureCode = 10),
-            @Validate(validator = Validators.SIGN)
+            @Validate(validator = UserHelper.VALIDATOR_SIGN_IN)
     })
-    public Object create() {
-        return docService.create(request.setToModel(new DocModel()));
+    public Object save() {
+        return docService.save(request.setToModel(new DocModel()));
+    }
+
+    @Execute(name = "source", type = Templates.STRING, validates = {
+            @Validate(validator = Validators.ID, parameter = "id", failureCode = 11),
+            @Validate(validator = Validators.SIGN),
+            @Validate(validator = DocService.VALIDATOR_EXISTS, parameter = "id", failureCode = 12)
+    })
+    public Object source() {
+        return docService.source(request.get("id"));
     }
 
     @Execute(name = "read", type = Templates.FREEMARKER, template = "read", validates = {
@@ -119,15 +108,6 @@ public class DocCtrl extends AuditCtrlSupport {
     })
     public Object comment() {
         docService.comment(request.get("id"), request.getAsInt("comment"));
-
-        return "";
-    }
-
-    @Execute(name = "refresh", validates = {
-            @Validate(validator = Validators.SIGN)
-    })
-    public Object refresh() {
-        docService.refresh();
 
         return "";
     }

@@ -1,10 +1,11 @@
 package org.lpw.ranch.doc;
 
+import com.alibaba.fastjson.JSONObject;
+import org.junit.Assert;
 import org.lpw.ranch.audit.Audit;
 import org.lpw.ranch.audit.AuditTesterDao;
 import org.lpw.ranch.recycle.Recycle;
 import org.lpw.ranch.user.MockUser;
-import org.lpw.tephra.cache.Cache;
 import org.lpw.tephra.crypto.Sign;
 import org.lpw.tephra.dao.orm.lite.LiteOrm;
 import org.lpw.tephra.dao.orm.lite.LiteQuery;
@@ -36,8 +37,6 @@ public class TestSupport extends TephraTestSupport implements AuditTesterDao<Doc
     @Inject
     DateTime dateTime;
     @Inject
-    Cache cache;
-    @Inject
     LiteOrm liteOrm;
     @Inject
     Sign sign;
@@ -51,6 +50,7 @@ public class TestSupport extends TephraTestSupport implements AuditTesterDao<Doc
     DocService docService;
     @Inject
     MockUser mockUser;
+    long time = System.currentTimeMillis() / 60 / 1000 * 60 * 1000;
 
     List<DocModel> create(int size) {
         List<DocModel> list = new ArrayList<>();
@@ -89,7 +89,7 @@ public class TestSupport extends TephraTestSupport implements AuditTesterDao<Doc
         doc.setFavorite(500 + i);
         doc.setComment(600 + i);
         doc.setScore(700 + i);
-        doc.setTime(new Timestamp(System.currentTimeMillis() - i * TimeUnit.Day.getTime()));
+        doc.setTime(new Timestamp(time - i * TimeUnit.Day.getTime()));
         doc.setAudit(audit.getValue());
         doc.setAuditRemark("remark " + i);
         doc.setRecycle(recycle.getValue());
@@ -98,6 +98,34 @@ public class TestSupport extends TephraTestSupport implements AuditTesterDao<Doc
         return doc;
     }
 
+    void equals(JSONObject object, int i, Audit audit) {
+        Assert.assertEquals(19, object.size());
+        Assert.assertEquals(36, object.getString("id").length());
+        Assert.assertEquals("key " + i, object.getString("key"));
+        JSONObject owner = object.getJSONObject("owner");
+        Assert.assertEquals(1, owner.size());
+        Assert.assertEquals("owner " + i, owner.getString("id"));
+        JSONObject author = object.getJSONObject("author");
+        Assert.assertEquals(1, author.size());
+        Assert.assertEquals("author " + i, author.getString("id"));
+        Assert.assertEquals(100 + i, object.getIntValue("scoreMin"));
+        Assert.assertEquals(200 + i, object.getIntValue("scoreMax"));
+        Assert.assertEquals(300 + i, object.getIntValue("sort"));
+        Assert.assertEquals("subject " + i, object.getString("subject"));
+        Assert.assertEquals("image " + i, object.getString("image"));
+        Assert.assertEquals("thumbnail " + i, object.getString("thumbnail"));
+        Assert.assertEquals("summary " + i, object.getString("summary"));
+        Assert.assertEquals("label " + i, object.getString("label"));
+        Assert.assertEquals(400 + i, object.getIntValue("read"));
+        Assert.assertEquals(500 + i, object.getIntValue("favorite"));
+        Assert.assertEquals(600 + i, object.getIntValue("comment"));
+        Assert.assertEquals(700 + i, object.getIntValue("score"));
+        Assert.assertEquals(dateTime.toString(new Timestamp(time - i * TimeUnit.Day.getTime())), object.getString("time"));
+        Assert.assertEquals(audit.getValue(), object.getIntValue("audit"));
+        Assert.assertEquals("remark " + i, object.getString("auditRemark"));
+    }
+
+    @Override
     public DocModel findById(String id) {
         return liteOrm.findById(DocModel.class, id);
     }

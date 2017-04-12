@@ -9,6 +9,12 @@ import java.util.Set;
  */
 public interface AuditHelper {
     /**
+     * 审核状态值验证器Bean名称。
+     * 默认错误信息key=ranch.audit.illegal。
+     */
+    String VALIDATOR = "ranch.audit.validator";
+
+    /**
      * 添加审核属性名称到集合。
      *
      * @param set 目标集合。

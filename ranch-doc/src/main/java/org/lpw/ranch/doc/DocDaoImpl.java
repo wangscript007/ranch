@@ -1,12 +1,17 @@
 package org.lpw.ranch.doc;
 
 import org.lpw.ranch.audit.Audit;
+import org.lpw.ranch.recycle.Recycle;
+import org.lpw.tephra.dao.jdbc.DataSource;
 import org.lpw.tephra.dao.orm.PageList;
 import org.lpw.tephra.dao.orm.lite.LiteOrm;
 import org.lpw.tephra.dao.orm.lite.LiteQuery;
+import org.lpw.tephra.util.Validator;
 import org.springframework.stereotype.Repository;
 
 import javax.inject.Inject;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -16,8 +21,12 @@ import java.util.concurrent.ConcurrentHashMap;
 @Repository(DocModel.NAME + ".dao")
 class DocDaoImpl implements DocDao {
     @Inject
+    private Validator validator;
+    @Inject
+    private DataSource dataSource;
+    @Inject
     private LiteOrm liteOrm;
-    private Map<String, String> map = new ConcurrentHashMap<>();
+    private Map<String, String> counter = new ConcurrentHashMap<>();
 
     @Override
     public DocModel findById(String id) {
@@ -25,23 +34,30 @@ class DocDaoImpl implements DocDao {
     }
 
     @Override
-    public PageList<DocModel> queryByKey(Audit audit, String key, int pageSize, int pageNum) {
-        return liteOrm.query(new LiteQuery(DocModel.class).where(audit.getSql() + " and c_key=?").order("c_time desc").size(pageSize).page(pageNum), new Object[]{key});
+    public PageList<DocModel> query(String key, String owner, String author, String subject, Audit audit, Recycle recycle, int pageSize, int pageNum) {
+        StringBuilder where = new StringBuilder().append(recycle.getSql()).append(" and ").append(audit.getSql());
+        List<Object> args = new ArrayList<>();
+        append(where, args, "key", key);
+        append(where, args, "owner", owner);
+        append(where, args, "author", author);
+        if (!validator.isEmpty(subject)) {
+            where.append(" and c_subject like ?");
+            args.add(dataSource.getDialect(null).getLike(subject, true, true));
+        }
+
+        return liteOrm.query(new LiteQuery(DocModel.class).where(where.toString()).order("c_time desc").size(pageSize).page(pageNum), args.toArray());
     }
 
-    @Override
-    public PageList<DocModel> queryByOwner(Audit audit, String owner, int pageSize, int pageNum) {
-        return liteOrm.query(new LiteQuery(DocModel.class).where(audit.getSql() + " and c_owner=?").order("c_time desc").size(pageSize).page(pageNum), new Object[]{owner});
-    }
-
-    @Override
-    public PageList<DocModel> queryByAuthor(Audit audit, String author, int pageSize, int pageNum) {
-        return liteOrm.query(new LiteQuery(DocModel.class).where(audit.getSql() + " and c_author=?").order("c_time desc").size(pageSize).page(pageNum), new Object[]{author});
+    private void append(StringBuilder where, List<Object> args, String name, String value) {
+        if (!validator.isEmpty(value)) {
+            where.append(" and c_").append(name).append("=?");
+            args.add(value);
+        }
     }
 
     @Override
     public PageList<DocModel> queryByAuthor(String author, int pageSize, int pageNum) {
-        return liteOrm.query(new LiteQuery(DocModel.class).where("c_author=?").order("c_time desc").size(pageSize).page(pageNum), new Object[]{author});
+        return liteOrm.query(new LiteQuery(DocModel.class).where(Recycle.No.getSql() + " and c_author=?").order("c_time desc").size(pageSize).page(pageNum), new Object[]{author});
     }
 
     @Override
@@ -51,23 +67,20 @@ class DocDaoImpl implements DocDao {
 
     @Override
     public void read(String id, int n) {
-        counter(id, "c_read", n);
+        counter(id, "read", n);
     }
 
     @Override
     public void favorite(String id, int n) {
-        counter(id, "c_favorite", n);
+        counter(id, "favorite", n);
     }
 
     @Override
     public void comment(String id, int n) {
-        counter(id, "c_comment", n);
+        counter(id, "comment", n);
     }
 
     private void counter(String id, String column, int n) {
-        String set = map.get(column);
-        if (set == null)
-            map.put(column, set = column + "=" + column + "+?");
-        liteOrm.update(new LiteQuery(DocModel.class).set(set).where("c_id=?"), new Object[]{n, id});
+        liteOrm.update(new LiteQuery(DocModel.class).set(counter.computeIfAbsent(column, col -> "c_" + col + "=c_" + col + "+?")).where("c_id=?"), new Object[]{n, id});
     }
 }

@@ -1,12 +1,18 @@
-# 分类 & 数据字典
+# 文档
 
-[检索类型KEY的文档信息集](doc/query-by-key.md)
+[检索文档信息集](doc/query.md)
 
-[检索所有者的文档信息集](doc/query-by-owner.md)
+[检索当前用户文档信息集](doc/query-by-author.md)
 
-[检索作者的文档信息集](doc/query-by-author.md)
+[获取文档信息集](doc/get.md)
 
-[检索当前用户的文档信息集](doc/query-by-user.md)
+[获取文档源内容](doc/source.md)
+
+[阅读文档](doc/read.md)
+
+[增减收藏数](doc/favorite.md)
+
+[增减评论数](doc/comment.md)
 
 [审核通过](../ranch-base/doc/audit-pass.md)
 
