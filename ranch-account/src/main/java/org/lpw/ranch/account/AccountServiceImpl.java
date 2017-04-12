@@ -5,6 +5,7 @@ import org.lpw.ranch.account.log.LogService;
 import org.lpw.ranch.lock.LockHelper;
 import org.lpw.ranch.user.helper.UserHelper;
 import org.lpw.tephra.dao.model.ModelHelper;
+import org.lpw.tephra.util.Validator;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
@@ -16,6 +17,8 @@ import javax.inject.Inject;
 public class AccountServiceImpl implements AccountService {
     private static final String LOCK_USER = AccountModel.NAME + ".service.lock:";
 
+    @Inject
+    private Validator validator;
     @Inject
     private ModelHelper modelHelper;
     @Inject
@@ -41,7 +44,7 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public JSONObject withdraw(String owner, int type, int amount) {
         AccountModel account = find(userHelper.id(), owner, type);
-        if (account == null)
+        if (account == null || account.getBalance() - amount < 0)
             return null;
 
         account.setWithdraw(account.getWithdraw() + amount);
@@ -49,11 +52,46 @@ public class AccountServiceImpl implements AccountService {
         return save(account, -1 * amount, "withdraw", LogService.State.New);
     }
 
+    @Override
+    public JSONObject reward(String user, String owner, int type, int amount) {
+        AccountModel account = find(user, owner, type);
+        if (account == null)
+            return null;
+
+        account.setReward(account.getReward() + amount);
+
+        return save(account, amount, "reward", LogService.State.Complete);
+    }
+
+    @Override
+    public JSONObject profit(String user, String owner, int type, int amount) {
+        AccountModel account = find(user, owner, type);
+        if (account == null)
+            return null;
+
+        account.setProfit(account.getProfit() + amount);
+
+        return save(account, amount, "profit", LogService.State.Complete);
+    }
+
+    @Override
+    public JSONObject consume(String user, String owner, int type, int amount) {
+        AccountModel account = find(user, owner, type);
+        if (account == null || account.getBalance() - amount < 0)
+            return null;
+
+        account.setConsume(account.getConsume() + amount);
+
+        return save(account, -1 * amount, "consume", LogService.State.Complete);
+    }
+
     private AccountModel find(String user, String owner, int type) {
         String lockId = lockHelper.lock(LOCK_USER + user, 1000L);
         if (lockId == null)
             return null;
 
+        if (validator.isEmpty(owner))
+            owner = "";
         AccountModel account = accountDao.find(user, owner, type);
         if (account == null) {
             account = new AccountModel();
