@@ -13,6 +13,7 @@ import org.lpw.ranch.util.Carousel;
 import org.lpw.ranch.util.Pagination;
 import org.lpw.tephra.cache.Cache;
 import org.lpw.tephra.dao.model.ModelHelper;
+import org.lpw.tephra.dao.orm.PageList;
 import org.lpw.tephra.scheduler.MinuteJob;
 import org.lpw.tephra.util.DateTime;
 import org.lpw.tephra.util.Generator;
@@ -31,8 +32,8 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 @Service(DocModel.NAME + ".service")
 public class DocServiceImpl implements DocService, MinuteJob {
+    private static final String CACHE_MODEL = DocModel.NAME + ".service.model:";
     private static final String CACHE_JSON = DocModel.NAME + ".service.json:";
-    private static final String CACHE_CONTENT = DocModel.NAME + ".service.content:";
 
     @Inject
     private Cache cache;
@@ -62,21 +63,31 @@ public class DocServiceImpl implements DocService, MinuteJob {
 
     @Override
     public DocModel findById(String id) {
-        return docDao.findById(id);
+        String cacheKey = CACHE_MODEL + id;
+        DocModel doc = cache.get(cacheKey);
+        if (doc == null)
+            cache.put(cacheKey, doc = docDao.findById(id), false);
+
+        return doc;
     }
 
     @Override
-    public JSONArray query(String key, String owner, String author, String subject, Audit audit) {
-        JSONArray array = new JSONArray();
-        docDao.query(key, owner, author, subject, audit, Recycle.No, pagination.getPageSize(), pagination.getPageNum())
-                .getList().forEach(doc -> array.add(getJson(doc.getId(), doc, false)));
-
-        return array;
+    public JSONObject query(String key, String owner, String author, String subject, Audit audit) {
+        return query(docDao.query(key, owner, author, subject, audit, Recycle.No, pagination.getPageSize(), pagination.getPageNum()));
     }
 
     @Override
     public JSONObject queryByAuthor() {
-        return docDao.queryByAuthor(userHelper.id(), pagination.getPageSize(), pagination.getPageNum()).toJson();
+        return query(docDao.queryByAuthor(userHelper.id(), pagination.getPageSize(), pagination.getPageNum()));
+    }
+
+    private JSONObject query(PageList<DocModel> pl) {
+        JSONObject object = pl.toJson(false);
+        JSONArray list = new JSONArray();
+        pl.getList().forEach(doc -> list.add(getJson(doc.getId(), doc, false)));
+        object.put("list", list);
+
+        return object;
     }
 
     @Override
@@ -94,8 +105,6 @@ public class DocServiceImpl implements DocService, MinuteJob {
     @Override
     public JSONObject save(DocModel doc, boolean markdown) {
         DocModel model = validator.isEmpty(doc.getId()) ? new DocModel() : findById(doc.getId());
-        if (model == null)
-            model = new DocModel();
         model.setKey(doc.getKey());
         model.setOwner(doc.getOwner());
         model.setAuthor(userHelper.id());
@@ -108,7 +117,7 @@ public class DocServiceImpl implements DocService, MinuteJob {
         model.setSummary(doc.getSummary());
         model.setLabel(doc.getLabel());
         model.setSource(doc.getSource());
-        model.setContent(markdown ? HtmlRenderer.builder().build().render(Parser.builder().build().parse(doc.getSource())) : doc.getSource());
+        model.setContent(markdown ? HtmlRenderer.builder().build().render(Parser.builder().build().parse(doc.getSource())).trim() : doc.getSource());
         model.setTime(dateTime.now());
         model.setAudit(defaultAudit);
         docDao.save(model);
@@ -142,13 +151,9 @@ public class DocServiceImpl implements DocService, MinuteJob {
 
     @Override
     public String read(String id) {
-        String key = CACHE_CONTENT + id;
-        String content = cache.get(key);
-        if (content == null)
-            cache.put(key, content = findById(id).getContent(), false);
         read.computeIfAbsent(id, i -> new AtomicInteger()).incrementAndGet();
 
-        return content;
+        return findById(id).getContent();
     }
 
     @Override
@@ -217,8 +222,8 @@ public class DocServiceImpl implements DocService, MinuteJob {
     }
 
     private void clearCache(String id) {
+        cache.remove(CACHE_MODEL + id);
         cache.remove(CACHE_JSON + id + true);
         cache.remove(CACHE_JSON + id + false);
-        cache.remove(CACHE_CONTENT + id);
     }
 }

@@ -33,7 +33,7 @@ public class GetTest extends TestSupport {
 
         mockCarousel.reset();
         mockHelper.reset();
-        mockHelper.getRequest().addParameter("ids", "id," + doc1.getId() + "," + doc2.getId() + "," + doc3.getId() + "," + doc4.getId());
+        mockHelper.getRequest().addParameter("ids", "id," + doc1.getId() + "," + doc2.getId() + "," + doc3.getId() + "," + doc4.getId() + "," + doc2.getId() + "," + doc4.getId());
         mockHelper.mock("/doc/get");
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(0, object.getIntValue("code"));

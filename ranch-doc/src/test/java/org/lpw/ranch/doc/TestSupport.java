@@ -5,7 +5,6 @@ import org.junit.Assert;
 import org.lpw.ranch.audit.Audit;
 import org.lpw.ranch.audit.AuditTesterDao;
 import org.lpw.ranch.recycle.Recycle;
-import org.lpw.ranch.user.MockUser;
 import org.lpw.tephra.crypto.Sign;
 import org.lpw.tephra.dao.orm.lite.LiteOrm;
 import org.lpw.tephra.dao.orm.lite.LiteQuery;
@@ -13,10 +12,10 @@ import org.lpw.tephra.test.MockCarousel;
 import org.lpw.tephra.test.MockHelper;
 import org.lpw.tephra.test.SchedulerAspect;
 import org.lpw.tephra.test.TephraTestSupport;
-import org.lpw.tephra.util.Converter;
 import org.lpw.tephra.util.DateTime;
 import org.lpw.tephra.util.Generator;
 import org.lpw.tephra.util.Message;
+import org.lpw.tephra.util.Thread;
 import org.lpw.tephra.util.TimeUnit;
 
 import javax.inject.Inject;
@@ -33,9 +32,9 @@ public class TestSupport extends TephraTestSupport implements AuditTesterDao<Doc
     @Inject
     Generator generator;
     @Inject
-    Converter converter;
-    @Inject
     DateTime dateTime;
+    @Inject
+    Thread thread;
     @Inject
     LiteOrm liteOrm;
     @Inject
@@ -48,8 +47,6 @@ public class TestSupport extends TephraTestSupport implements AuditTesterDao<Doc
     MockCarousel mockCarousel;
     @Inject
     DocService docService;
-    @Inject
-    MockUser mockUser;
     long time = System.currentTimeMillis() / 60 / 1000 * 60 * 1000;
 
     List<DocModel> create(int size) {
@@ -62,7 +59,7 @@ public class TestSupport extends TephraTestSupport implements AuditTesterDao<Doc
 
     @Override
     public DocModel create(int i, Recycle recycle) {
-        return create(i, "image " + i, "thumbnail " + i, "summary " + i, "label " + i, Audit.Normal, recycle);
+        return create(i, "author " + i, "image " + i, "thumbnail " + i, "summary " + i, "label " + i, Audit.Normal, recycle);
     }
 
     @Override
@@ -70,11 +67,19 @@ public class TestSupport extends TephraTestSupport implements AuditTesterDao<Doc
         return create(i, "image " + i, "thumbnail " + i, "summary " + i, "label " + i, audit, Recycle.No);
     }
 
-    DocModel create(int i, String image, String thumbnail, String summary, String label, Audit audit, Recycle recycle) {
+    DocModel create(int i, String author, Audit audit) {
+        return create(i, author, "image " + i, "thumbnail " + i, "summary " + i, "label " + i, audit, Recycle.No);
+    }
+
+    private DocModel create(int i, String image, String thumbnail, String summary, String label, Audit audit, Recycle recycle) {
+        return create(i, "author " + i, image, thumbnail, summary, label, audit, recycle);
+    }
+
+    private DocModel create(int i, String author, String image, String thumbnail, String summary, String label, Audit audit, Recycle recycle) {
         DocModel doc = new DocModel();
         doc.setKey("key " + i);
         doc.setOwner("owner " + i);
-        doc.setAuthor("author " + i);
+        doc.setAuthor(author);
         doc.setScoreMin(100 + i);
         doc.setScoreMax(200 + i);
         doc.setSort(300 + i);
@@ -99,15 +104,19 @@ public class TestSupport extends TephraTestSupport implements AuditTesterDao<Doc
     }
 
     void equals(JSONObject object, int i, Audit audit) {
+        equals(object, i, "author " + i, audit);
+    }
+
+    void equals(JSONObject object, int i, String author, Audit audit) {
         Assert.assertEquals(19, object.size());
         Assert.assertEquals(36, object.getString("id").length());
         Assert.assertEquals("key " + i, object.getString("key"));
         JSONObject owner = object.getJSONObject("owner");
         Assert.assertEquals(1, owner.size());
         Assert.assertEquals("owner " + i, owner.getString("id"));
-        JSONObject author = object.getJSONObject("author");
-        Assert.assertEquals(1, author.size());
-        Assert.assertEquals("author " + i, author.getString("id"));
+        JSONObject auth = object.getJSONObject("author");
+        Assert.assertEquals(1, auth.size());
+        Assert.assertEquals(author, auth.getString("id"));
         Assert.assertEquals(100 + i, object.getIntValue("scoreMin"));
         Assert.assertEquals(200 + i, object.getIntValue("scoreMax"));
         Assert.assertEquals(300 + i, object.getIntValue("sort"));

@@ -1,6 +1,5 @@
 package org.lpw.ranch.doc;
 
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import org.lpw.ranch.audit.Audit;
 import org.lpw.ranch.audit.AuditService;
@@ -32,7 +31,7 @@ public interface DocService extends AuditService {
      * @param audit   审核状态。
      * @return 文档信息集。
      */
-    JSONArray query(String key, String owner, String author, String subject, Audit audit);
+    JSONObject query(String key, String owner, String author, String subject, Audit audit);
 
     /**
      * 检索当前用户的文档信息集。

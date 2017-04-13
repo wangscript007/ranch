@@ -39,7 +39,7 @@ public class AddressTest extends TestSupport {
                 object.getString("message"));
 
         mockHelper.reset();
-        mockHelper.getRequest().addParameter("lat", "39.917266");
+        mockHelper.getRequest().addParameter("lat", "39.984154");
         mockHelper.mock("/gps/address");
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(1102, object.getIntValue("code"));
@@ -47,7 +47,7 @@ public class AddressTest extends TestSupport {
                 object.getString("message"));
 
         mockHelper.reset();
-        mockHelper.getRequest().addParameter("lat", "39.917266");
+        mockHelper.getRequest().addParameter("lat", "39.984154");
         mockHelper.getRequest().addParameter("lng", "181");
         mockHelper.mock("/gps/address");
         object = mockHelper.getResponse().asJson();
@@ -56,7 +56,7 @@ public class AddressTest extends TestSupport {
                 object.getString("message"));
 
         mockHelper.reset();
-        mockHelper.getRequest().addParameter("lat", "39.917266");
+        mockHelper.getRequest().addParameter("lat", "39.984154");
         mockHelper.getRequest().addParameter("lng", "-39.397140");
         mockHelper.mock("/gps/address");
         object = mockHelper.getResponse().asJson();
@@ -65,28 +65,28 @@ public class AddressTest extends TestSupport {
                 object.getString("message"));
 
         mockHelper.reset();
-        mockHelper.getRequest().addParameter("lat", "39.917266");
-        mockHelper.getRequest().addParameter("lng", "116.397140");
+        mockHelper.getRequest().addParameter("lat", "39.984154");
+        mockHelper.getRequest().addParameter("lng", "116.307490");
         mockHelper.mock("/gps/address");
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(0, object.getIntValue("code"));
         JSONObject data = object.getJSONObject("data");
-        Assert.assertEquals("北京市东城区景山前街4号东华门大街", data.getString("address"));
+        Assert.assertEquals("北京市海淀区北四环西路66号彩和坊路", data.getString("address"));
         JSONObject component = data.getJSONObject("component");
         Assert.assertEquals("中国", component.getString("nation"));
         Assert.assertEquals("北京市", component.getString("province"));
         Assert.assertEquals("北京市", component.getString("city"));
-        Assert.assertEquals("东城区", component.getString("district"));
-        Assert.assertEquals("东华门大街", component.getString("street"));
-        Assert.assertEquals("景山前街4号", component.getString("street_number"));
-        Assert.assertEquals("110101", data.getString("adcode"));
+        Assert.assertEquals("海淀区", component.getString("district"));
+        Assert.assertEquals("彩和坊路", component.getString("street"));
+        Assert.assertEquals("北四环西路66号", component.getString("street_number"));
+        Assert.assertEquals("110108", data.getString("adcode"));
 
         Field field = GpsServiceImpl.class.getDeclaredField("qqlbsKey");
         field.setAccessible(true);
         field.set(gpsService, "");
         mockHelper.reset();
-        mockHelper.getRequest().addParameter("lat", "39.917266");
-        mockHelper.getRequest().addParameter("lng", "116.397140");
+        mockHelper.getRequest().addParameter("lat", "39.984154");
+        mockHelper.getRequest().addParameter("lng", "116.307490");
         mockHelper.mock("/gps/address");
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(0, object.getIntValue("code"));
@@ -94,8 +94,8 @@ public class AddressTest extends TestSupport {
 
         field.set(gpsService, "qqlbs-key");
         mockHelper.reset();
-        mockHelper.getRequest().addParameter("lat", "39.917266");
-        mockHelper.getRequest().addParameter("lng", "116.397140");
+        mockHelper.getRequest().addParameter("lat", "39.984154");
+        mockHelper.getRequest().addParameter("lng", "116.307490");
         mockHelper.mock("/gps/address");
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(0, object.getIntValue("code"));
@@ -110,8 +110,8 @@ public class AddressTest extends TestSupport {
             }
         });
         mockHelper.reset();
-        mockHelper.getRequest().addParameter("lat", "39.917266");
-        mockHelper.getRequest().addParameter("lng", "116.397140");
+        mockHelper.getRequest().addParameter("lat", "39.984154");
+        mockHelper.getRequest().addParameter("lng", "116.307490");
         mockHelper.mock("/gps/address");
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(0, object.getIntValue("code"));
