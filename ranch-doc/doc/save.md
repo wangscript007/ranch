@@ -17,6 +17,7 @@
 - summary 摘要。
 - label 标签。
 - source 内容源。
+- markdown 是否为Markdown文档：true-是；其他-否。
 
 返回值
 ```json

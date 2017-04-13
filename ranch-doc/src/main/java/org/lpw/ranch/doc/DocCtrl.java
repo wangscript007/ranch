@@ -61,7 +61,7 @@ public class DocCtrl extends AuditCtrlSupport {
             @Validate(validator = UserHelper.VALIDATOR_SIGN_IN)
     })
     public Object save() {
-        return docService.save(request.setToModel(new DocModel()));
+        return docService.save(request.setToModel(new DocModel()), request.getAsBoolean("markdown"));
     }
 
     @Execute(name = "source", type = Templates.STRING, validates = {

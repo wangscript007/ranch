@@ -92,7 +92,7 @@ public class DocServiceImpl implements DocService, MinuteJob {
     }
 
     @Override
-    public JSONObject save(DocModel doc) {
+    public JSONObject save(DocModel doc, boolean markdown) {
         DocModel model = validator.isEmpty(doc.getId()) ? new DocModel() : findById(doc.getId());
         if (model == null)
             model = new DocModel();
@@ -108,7 +108,7 @@ public class DocServiceImpl implements DocService, MinuteJob {
         model.setSummary(doc.getSummary());
         model.setLabel(doc.getLabel());
         model.setSource(doc.getSource());
-        model.setContent(HtmlRenderer.builder().build().render(Parser.builder().build().parse(doc.getSource())));
+        model.setContent(markdown ? HtmlRenderer.builder().build().render(Parser.builder().build().parse(doc.getSource())) : doc.getSource());
         model.setTime(dateTime.now());
         model.setAudit(defaultAudit);
         docDao.save(model);

@@ -52,9 +52,10 @@ public interface DocService extends AuditService {
     /**
      * 保存文档信息。
      *
-     * @param doc 文档信息。
+     * @param doc      文档信息。
+     * @param markdown 是否为Markdown文档。
      */
-    JSONObject save(DocModel doc);
+    JSONObject save(DocModel doc, boolean markdown);
 
     /**
      * 获取文档源内容。
