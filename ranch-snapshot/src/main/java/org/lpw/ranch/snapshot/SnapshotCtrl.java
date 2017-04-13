@@ -29,7 +29,6 @@ public class SnapshotCtrl {
 
     @Execute(name = "create", validates = {
             @Validate(validator = Validators.NOT_EMPTY, parameter = "data", failureCode = 2),
-            @Validate(validator = Validators.NOT_EMPTY, parameter = "content", failureCode = 3),
             @Validate(validator = Validators.SIGN)
     })
     public Object create() {

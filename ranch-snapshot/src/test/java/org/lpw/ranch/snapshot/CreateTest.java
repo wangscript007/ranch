@@ -20,13 +20,6 @@ public class CreateTest extends TestSupport {
 
         mockHelper.reset();
         mockHelper.getRequest().addParameter("data", "data value");
-        mockHelper.mock("/snapshot/create");
-        object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(1903, object.getIntValue("code"));
-        Assert.assertEquals(message.get(Validators.PREFIX + "empty", message.get(SnapshotModel.NAME + ".content")), object.getString("message"));
-
-        mockHelper.reset();
-        mockHelper.getRequest().addParameter("data", "data value");
         mockHelper.getRequest().addParameter("content", "content value");
         mockHelper.mock("/snapshot/create");
         object = mockHelper.getResponse().asJson();

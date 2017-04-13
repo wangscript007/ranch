@@ -6,6 +6,8 @@
 
 [获取文档信息集](doc/get.md)
 
+[保存文档信息](doc/save.md)
+
 [获取文档源内容](doc/source.md)
 
 [阅读文档](doc/read.md)
