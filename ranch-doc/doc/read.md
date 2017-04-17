@@ -24,7 +24,7 @@
     </#if>
 </head>
 <body>
-${data.html!""}
+${data.content!""}
 </body>
 </html>
 <#else>
