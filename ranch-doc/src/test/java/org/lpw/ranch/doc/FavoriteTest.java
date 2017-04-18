@@ -74,5 +74,16 @@ public class FavoriteTest extends TestSupport {
         Assert.assertEquals("", object.getString("data"));
         Assert.assertEquals(505, findById(list.get(0).getId()).getFavorite());
         Assert.assertEquals(496, findById(list.get(1).getId()).getFavorite());
+
+        mockHelper.reset();
+        mockHelper.getRequest().addParameter("id", list.get(1).getId());
+        mockHelper.getRequest().addParameter("favorite", "-500");
+        sign.put(mockHelper.getRequest().getMap(), null);
+        mockHelper.mock("/doc/favorite");
+        object = mockHelper.getResponse().asJson();
+        Assert.assertEquals(0, object.getIntValue("code"));
+        Assert.assertEquals("", object.getString("data"));
+        Assert.assertEquals(505, findById(list.get(0).getId()).getFavorite());
+        Assert.assertEquals(0, findById(list.get(1).getId()).getFavorite());
     }
 }

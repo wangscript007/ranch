@@ -64,23 +64,4 @@ class DocDaoImpl implements DocDao {
     public void save(DocModel doc) {
         liteOrm.save(doc);
     }
-
-    @Override
-    public void read(String id, int n) {
-        counter(id, "read", n);
-    }
-
-    @Override
-    public void favorite(String id, int n) {
-        counter(id, "favorite", n);
-    }
-
-    @Override
-    public void comment(String id, int n) {
-        counter(id, "comment", n);
-    }
-
-    private void counter(String id, String column, int n) {
-        liteOrm.update(new LiteQuery(DocModel.class).set(counter.computeIfAbsent(column, col -> "c_" + col + "=c_" + col + "+?")).where("c_id=?"), new Object[]{n, id});
-    }
 }

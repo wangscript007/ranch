@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import org.junit.Assert;
 import org.junit.Test;
 import org.lpw.ranch.audit.Audit;
+import org.lpw.ranch.recycle.Recycle;
 import org.lpw.tephra.ctrl.validate.Validators;
 
 /**
@@ -16,6 +17,7 @@ public class GetTest extends TestSupport {
         DocModel doc2 = create(2, Audit.Passed);
         DocModel doc3 = create(3, Audit.Normal);
         DocModel doc4 = create(4, Audit.Refused);
+        DocModel doc5 = create(5, "image 5", "thumbnail 5", "summary 5", "label 5", Audit.Passed, Recycle.Yes);
 
         mockHelper.reset();
         mockHelper.mock("/doc/get");
@@ -33,7 +35,7 @@ public class GetTest extends TestSupport {
 
         mockCarousel.reset();
         mockHelper.reset();
-        mockHelper.getRequest().addParameter("ids", "id," + doc1.getId() + "," + doc2.getId() + "," + doc3.getId() + "," + doc4.getId() + "," + doc2.getId() + "," + doc4.getId());
+        mockHelper.getRequest().addParameter("ids", "id," + doc1.getId() + "," + doc2.getId() + "," + doc3.getId() + "," + doc4.getId() + "," + doc2.getId() + "," + doc4.getId() + "," + doc5.getId());
         mockHelper.mock("/doc/get");
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(0, object.getIntValue("code"));

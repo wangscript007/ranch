@@ -71,7 +71,7 @@ public class TestSupport extends TephraTestSupport implements AuditTesterDao<Doc
         return create(i, author, "image " + i, "thumbnail " + i, "summary " + i, "label " + i, audit, Recycle.No);
     }
 
-    private DocModel create(int i, String image, String thumbnail, String summary, String label, Audit audit, Recycle recycle) {
+    DocModel create(int i, String image, String thumbnail, String summary, String label, Audit audit, Recycle recycle) {
         return create(i, "author " + i, image, thumbnail, summary, label, audit, recycle);
     }
 

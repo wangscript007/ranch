@@ -84,7 +84,7 @@ public class DocServiceImpl implements DocService, MinuteJob {
     private JSONObject query(PageList<DocModel> pl) {
         JSONObject object = pl.toJson(false);
         JSONArray list = new JSONArray();
-        pl.getList().forEach(doc -> list.add(getJson(doc.getId(), doc, false)));
+        pl.getList().forEach(doc -> list.add(toJson(doc)));
         object.put("list", list);
 
         return object;
@@ -94,9 +94,14 @@ public class DocServiceImpl implements DocService, MinuteJob {
     public JSONObject get(String[] ids) {
         JSONObject object = new JSONObject();
         for (String id : ids) {
-            JSONObject doc = getJson(id, null, true);
-            if (!doc.isEmpty())
-                object.put(id, doc);
+            if (object.containsKey(id))
+                continue;
+
+            DocModel doc = findById(id);
+            if (doc == null || doc.getAudit() != Audit.Passed.getValue() || doc.getRecycle() != Recycle.No.getValue())
+                continue;
+
+            object.put(id, toJson(doc));
         }
 
         return object;
@@ -106,7 +111,7 @@ public class DocServiceImpl implements DocService, MinuteJob {
     public JSONObject save(DocModel doc, boolean markdown) {
         DocModel model = validator.isEmpty(doc.getId()) ? new DocModel() : findById(doc.getId());
         model.setKey(doc.getKey());
-        model.setOwner(doc.getOwner());
+        model.setOwner(validator.isEmpty(doc.getOwner()) ? "" : doc.getOwner());
         model.setAuthor(userHelper.id());
         model.setScoreMin(doc.getScoreMin());
         model.setScoreMax(doc.getScoreMax());
@@ -123,21 +128,21 @@ public class DocServiceImpl implements DocService, MinuteJob {
         docDao.save(model);
         clearCache(model.getId());
 
-        return getJson(model.getId(), model, false);
+        return toJson(model);
     }
 
-    private JSONObject getJson(String id, DocModel doc, boolean passable) {
-        String key = CACHE_JSON + id + passable;
+    private JSONObject toJson(DocModel doc) {
+        String key = CACHE_JSON + doc.getId();
         JSONObject object = cache.get(key);
         if (object == null) {
-            if (doc == null)
-                doc = findById(id);
-            if (doc != null && (!passable || doc.getAudit() == Audit.Passed.getValue())) {
-                object = modelHelper.toJson(doc);
-                object.put("owner", carousel.get(doc.getKey() + ".get", doc.getOwner()));
-                object.put("author", userHelper.get(doc.getAuthor()));
+            object = modelHelper.toJson(doc);
+            if (validator.isEmpty(doc.getOwner())) {
+                JSONObject owner = new JSONObject();
+                owner.put("id", "");
+                object.put("owner", owner);
             } else
-                object = new JSONObject();
+                object.put("owner", carousel.get(doc.getKey() + ".get", doc.getOwner()));
+            object.put("author", userHelper.get(doc.getAuthor()));
             cache.put(key, object, false);
         }
 
@@ -161,7 +166,9 @@ public class DocServiceImpl implements DocService, MinuteJob {
         if (n == 0)
             return;
 
-        docDao.favorite(id, n);
+        DocModel doc = findById(id);
+        doc.setFavorite(Math.max(0, doc.getFavorite() + n));
+        docDao.save(doc);
         clearCache(id);
     }
 
@@ -170,7 +177,9 @@ public class DocServiceImpl implements DocService, MinuteJob {
         if (n == 0)
             return;
 
-        docDao.comment(id, n);
+        DocModel doc = findById(id);
+        doc.setComment(Math.max(0, doc.getComment() + n));
+        docDao.save(doc);
         clearCache(id);
     }
 
@@ -211,7 +220,9 @@ public class DocServiceImpl implements DocService, MinuteJob {
         Map<String, AtomicInteger> map = new HashMap<>(read);
         read.clear();
         map.forEach((id, n) -> {
-            docDao.read(id, n.get());
+            DocModel doc = findById(id);
+            doc.setRead(doc.getRead() + n.get());
+            docDao.save(doc);
             clearCache(id);
         });
     }
@@ -223,7 +234,6 @@ public class DocServiceImpl implements DocService, MinuteJob {
 
     private void clearCache(String id) {
         cache.remove(CACHE_MODEL + id);
-        cache.remove(CACHE_JSON + id + true);
-        cache.remove(CACHE_JSON + id + false);
+        cache.remove(CACHE_JSON + id);
     }
 }

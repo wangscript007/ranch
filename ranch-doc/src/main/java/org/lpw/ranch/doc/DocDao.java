@@ -15,10 +15,4 @@ interface DocDao {
     PageList<DocModel> queryByAuthor(String author, int pageSize, int pageNum);
 
     void save(DocModel doc);
-
-    void read(String id, int n);
-
-    void favorite(String id, int n);
-
-    void comment(String id, int n);
 }

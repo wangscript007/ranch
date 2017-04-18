@@ -29,28 +29,20 @@ public class SaveTest extends TestSupport {
 
         mockHelper.reset();
         mockHelper.getRequest().addParameter("key", "key");
-        mockHelper.mock("/doc/save");
-        object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(1403, object.getIntValue("code"));
-        Assert.assertEquals(message.get(Validators.PREFIX + "illegal-id", message.get(DocModel.NAME + ".owner")), object.getString("message"));
-
-        mockHelper.reset();
-        mockHelper.getRequest().addParameter("key", "key");
         mockHelper.getRequest().addParameter("owner", "owner id");
         mockHelper.mock("/doc/save");
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(1403, object.getIntValue("code"));
         Assert.assertEquals(message.get(Validators.PREFIX + "illegal-id", message.get(DocModel.NAME + ".owner")), object.getString("message"));
 
-        String ownerId = generator.uuid();
         mockHelper.reset();
         mockHelper.getRequest().addParameter("key", "key");
-        mockHelper.getRequest().addParameter("owner", ownerId);
         mockHelper.mock("/doc/save");
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(1405, object.getIntValue("code"));
         Assert.assertEquals(message.get(Validators.PREFIX + "empty", message.get(DocModel.NAME + ".subject")), object.getString("message"));
 
+        String ownerId = generator.uuid();
         mockHelper.reset();
         mockHelper.getRequest().addParameter("key", "key");
         mockHelper.getRequest().addParameter("owner", ownerId);
@@ -183,7 +175,6 @@ public class SaveTest extends TestSupport {
         mockHelper.reset();
         mockHelper.getRequest().addParameter("id", doc1.getId());
         mockHelper.getRequest().addParameter("key", "key 2");
-        mockHelper.getRequest().addParameter("owner", ownerId);
         mockHelper.getRequest().addParameter("author", "author id 2");
         mockHelper.getRequest().addParameter("scoreMin", "11");
         mockHelper.getRequest().addParameter("scoreMax", "22");
@@ -210,7 +201,7 @@ public class SaveTest extends TestSupport {
         Assert.assertEquals("key 2", data.getString("key"));
         owner = data.getJSONObject("owner");
         Assert.assertEquals(1, owner.size());
-        Assert.assertEquals(ownerId, owner.getString("id"));
+        Assert.assertEquals("", owner.getString("id"));
         author = data.getJSONObject("author");
         Assert.assertEquals("sign in id", author.getString("id"));
         Assert.assertEquals(11, data.getIntValue("scoreMin"));
@@ -230,7 +221,7 @@ public class SaveTest extends TestSupport {
         Assert.assertTrue(time - dateTime.toTime(data.getString("time")).getTime() < 2000L);
         DocModel doc2 = findById(data.getString("id"));
         Assert.assertEquals("key 2", doc2.getKey());
-        Assert.assertEquals(ownerId, doc2.getOwner());
+        Assert.assertEquals("", doc2.getOwner());
         Assert.assertEquals("sign in id", doc2.getAuthor());
         Assert.assertEquals(11, doc2.getScoreMin());
         Assert.assertEquals(22, doc2.getScoreMax());

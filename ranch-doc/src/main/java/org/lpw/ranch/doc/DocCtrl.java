@@ -52,7 +52,7 @@ public class DocCtrl extends AuditCtrlSupport {
     @Execute(name = "save", validates = {
             @Validate(validator = Validators.NOT_EMPTY, parameter = "key", failureCode = 1),
             @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "key", failureCode = 2),
-            @Validate(validator = Validators.ID, parameter = "owner", failureCode = 3),
+            @Validate(validator = Validators.ID, emptyable = true, parameter = "owner", failureCode = 3),
             @Validate(validator = Validators.NOT_EMPTY, parameter = "subject", failureCode = 5),
             @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "subject", failureCode = 6),
             @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "image", failureCode = 7),
