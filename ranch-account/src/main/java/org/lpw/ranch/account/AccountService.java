@@ -52,11 +52,10 @@ public interface AccountService {
     /**
      * 消费。
      *
-     * @param user   用户。
      * @param owner  所有者。
      * @param type   类型。
      * @param amount 数量。
      * @return 账户信息；如果消费失败则返回null。
      */
-    JSONObject consume(String user, String owner, int type, int amount);
+    JSONObject consume(String owner, int type, int amount);
 }

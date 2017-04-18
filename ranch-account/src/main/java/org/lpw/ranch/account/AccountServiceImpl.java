@@ -75,8 +75,8 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public JSONObject consume(String user, String owner, int type, int amount) {
-        AccountModel account = find(user, owner, type);
+    public JSONObject consume(String owner, int type, int amount) {
+        AccountModel account = find(userHelper.id(), owner, type);
         if (account == null || account.getBalance() - amount < 0)
             return null;
 
