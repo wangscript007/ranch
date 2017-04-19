@@ -12,6 +12,7 @@ import org.lpw.tephra.cache.Cache;
 import org.lpw.tephra.dao.model.ModelHelper;
 import org.lpw.tephra.dao.orm.PageList;
 import org.lpw.tephra.util.DateTime;
+import org.lpw.tephra.util.Validator;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -31,6 +32,8 @@ public class CommentServiceImpl implements CommentService {
     private Cache cache;
     @Inject
     private DateTime dateTime;
+    @Inject
+    private Validator validator;
     @Inject
     private ModelHelper modelHelper;
     @Inject
@@ -89,7 +92,7 @@ public class CommentServiceImpl implements CommentService {
         CommentModel model = new CommentModel();
         model.setKey(comment.getKey());
         model.setOwner(comment.getOwner());
-        model.setAuthor(comment.getAuthor());
+        model.setAuthor(validator.isEmpty(comment.getAuthor()) ? userHelper.id() : comment.getAuthor());
         model.setSubject(comment.getSubject());
         model.setLabel(comment.getLabel());
         model.setContent(comment.getContent());

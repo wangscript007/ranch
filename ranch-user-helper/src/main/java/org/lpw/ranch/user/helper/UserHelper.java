@@ -11,10 +11,19 @@ import com.alibaba.fastjson.JSONObject;
 public interface UserHelper {
     /**
      * 用户是否已登入验证器Bean名称。
+     * 默认错误信息key=ranch.user.helper.need-sign-in。
      */
     String VALIDATOR_SIGN_IN = "ranch.user.helper.validator.sign-in";
+
+    /**
+     * 是否为ID值或用户是否已登入验证器Bean名称。
+     * 默认错误信息key=ranch.user.helper.not-id-and-sign-in。
+     */
+    String VALIDATOR_ID_OR_SIGN_IN="ranch.user.helper.validator.id-or-sign-in";
+
     /**
      * 用户是否存在验证器Bean名称。
+     * 默认错误信息key=ranch.user.helper.not-exists。
      */
     String VALIDATOR_EXISTS = "ranch.user.helper.validator.exists";
 

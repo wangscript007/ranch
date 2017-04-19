@@ -2,6 +2,7 @@ package org.lpw.ranch.comment;
 
 import org.lpw.ranch.audit.AuditCtrlSupport;
 import org.lpw.ranch.audit.AuditService;
+import org.lpw.ranch.user.helper.UserHelper;
 import org.lpw.tephra.ctrl.context.Request;
 import org.lpw.tephra.ctrl.execute.Execute;
 import org.lpw.tephra.ctrl.validate.Validate;
@@ -57,11 +58,11 @@ public class CommentCtrl extends AuditCtrlSupport {
             @Validate(validator = Validators.NOT_EMPTY, parameter = "key", failureCode = 1),
             @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "key", failureCode = 2),
             @Validate(validator = Validators.ID, parameter = "owner", failureCode = 3),
-            @Validate(validator = Validators.ID, parameter = "author", failureCode = 4),
             @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "subject", failureCode = 5),
             @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "label", failureCode = 6),
             @Validate(validator = Validators.NOT_EMPTY, parameter = "content", failureCode = 7),
-            @Validate(validator = Validators.BETWEEN, number = {0, 5}, parameter = "score", failureCode = 8)
+            @Validate(validator = Validators.BETWEEN, number = {0, 5}, parameter = "score", failureCode = 8),
+            @Validate(validator = UserHelper.VALIDATOR_ID_OR_SIGN_IN, parameter = "author", failureCode = 4)
     })
     public Object create() {
         return commentService.create(request.setToModel(new CommentModel()));
