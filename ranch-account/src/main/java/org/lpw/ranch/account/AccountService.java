@@ -7,6 +7,12 @@ import com.alibaba.fastjson.JSONObject;
  */
 public interface AccountService {
     /**
+     * 消费验证器Bean名称。
+     * 验证失败key=ranch.account.consume.failure。
+     */
+    String VALIDATOR_CONSUME = AccountModel.NAME + ".validator.consume";
+
+    /**
      * 存入。
      *
      * @param user   用户。
