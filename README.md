@@ -21,7 +21,8 @@ Ranch目前包含以下模块：
 - [snapshot](ranch-snapshot/) —— 快照。
 - [last](ranch-last/) —— 最近日志。
 - [last-helper](ranch-last-helper/) —— 最近日志支持。
-- [address](ranch-last-helper/) —— 地址。
+- [address](ranch-address/) —— 地址。
+- [account](ranch-account/) —— 账户。
 - [archives](ranch-archives/) —— 档案。
 - [test](ranch-test/) —— 单元测试支持。
 

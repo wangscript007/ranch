@@ -13,11 +13,6 @@
     <name>ranch-doc</name>
     <url>http://maven.apache.org</url>
 
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <version.ranch>0.7.0-RELEASE</version.ranch>
-    </properties>
-
     <dependencies>
         <dependency>
             <groupId>com.vladsch.flexmark</groupId>

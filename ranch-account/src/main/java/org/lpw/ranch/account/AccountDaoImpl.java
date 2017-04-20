@@ -1,5 +1,6 @@
 package org.lpw.ranch.account;
 
+import org.lpw.tephra.dao.orm.PageList;
 import org.lpw.tephra.dao.orm.lite.LiteOrm;
 import org.lpw.tephra.dao.orm.lite.LiteQuery;
 import org.springframework.stereotype.Repository;
@@ -13,6 +14,16 @@ import javax.inject.Inject;
 class AccountDaoImpl implements AccountDao {
     @Inject
     private LiteOrm liteOrm;
+
+    @Override
+    public PageList<AccountModel> query(String user) {
+        return liteOrm.query(new LiteQuery(AccountModel.class).where("c_user=?").order("c_type"), new Object[]{user});
+    }
+
+    @Override
+    public PageList<AccountModel> query(String user, String owner) {
+        return liteOrm.query(new LiteQuery(AccountModel.class).where("c_user=? and c_owner=?").order("c_type"), new Object[]{user, owner});
+    }
 
     @Override
     public AccountModel find(String user, String owner, int type) {

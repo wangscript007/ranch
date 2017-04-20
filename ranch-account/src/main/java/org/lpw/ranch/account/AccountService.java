@@ -1,5 +1,6 @@
 package org.lpw.ranch.account;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
 /**
@@ -11,6 +12,15 @@ public interface AccountService {
      * 验证失败key=ranch.account.consume.failure。
      */
     String VALIDATOR_CONSUME = AccountModel.NAME + ".validator.consume";
+
+    /**
+     * 检索账户信息集。
+     *
+     * @param user  用户ID，为空则为当前用户。
+     * @param owner 所有者ID，null则表示所有。
+     * @return 账户信息集。
+     */
+    JSONArray query(String user, String owner);
 
     /**
      * 存入。

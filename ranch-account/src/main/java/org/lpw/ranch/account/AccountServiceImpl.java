@@ -1,10 +1,12 @@
 package org.lpw.ranch.account;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import org.lpw.ranch.account.log.LogService;
 import org.lpw.ranch.lock.LockHelper;
 import org.lpw.ranch.user.helper.UserHelper;
 import org.lpw.tephra.dao.model.ModelHelper;
+import org.lpw.tephra.dao.orm.PageList;
 import org.lpw.tephra.util.Validator;
 import org.springframework.stereotype.Service;
 
@@ -29,6 +31,17 @@ public class AccountServiceImpl implements AccountService {
     private LogService logService;
     @Inject
     private AccountDao accountDao;
+
+    @Override
+    public JSONArray query(String user, String owner) {
+        if (validator.isEmpty(user))
+            user = userHelper.id();
+        if (owner != null && owner.trim().length() == 0)
+            owner = "";
+        PageList<AccountModel> pl = owner == null ? accountDao.query(user) : accountDao.query(user, owner);
+
+        return modelHelper.toJson(pl.getList());
+    }
 
     @Override
     public JSONObject deposit(String user, String owner, int type, int amount) {

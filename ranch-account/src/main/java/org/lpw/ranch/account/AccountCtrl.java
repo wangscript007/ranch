@@ -27,6 +27,13 @@ public class AccountCtrl {
     @Inject
     private AccountService accountService;
 
+    @Execute(name = "query", validates = {
+            @Validate(validator = UserHelper.VALIDATOR_ID_OR_SIGN_IN, parameter = "user", failureCode = 10)
+    })
+    public Object query() {
+        return accountService.query(request.get("user"), request.get("owner"));
+    }
+
     @Execute(name = "deposit", validates = {
             @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "owner", failureCode = 1),
             @Validate(validator = Validators.BETWEEN, number = {0, 0}, parameter = "type", failureCode = 2),
