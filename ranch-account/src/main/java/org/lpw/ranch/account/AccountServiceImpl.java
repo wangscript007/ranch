@@ -57,8 +57,14 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public JSONObject withdraw(String owner, int type, int amount) {
         AccountModel account = find(userHelper.id(), owner, type);
-        if (account == null || account.getBalance() - amount < 0)
+        if (account == null)
             return null;
+
+        if (account.getBalance() - amount < 0) {
+            lockHelper.unlock(account.getLockId());
+
+            return null;
+        }
 
         account.setWithdraw(account.getWithdraw() + amount);
 
@@ -90,8 +96,14 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public JSONObject consume(String owner, int type, int amount) {
         AccountModel account = find(userHelper.id(), owner, type);
-        if (account == null || account.getBalance() - amount < 0)
+        if (account == null)
             return null;
+
+        if (account.getBalance() - amount < 0) {
+            lockHelper.unlock(account.getLockId());
+
+            return null;
+        }
 
         account.setConsume(account.getConsume() + amount);
 
