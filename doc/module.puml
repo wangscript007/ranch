@@ -12,6 +12,7 @@
 [base] <-- [last]
 [base] <-- [address]
 [base] <-- [account]
+[base] <-- [dbtool]
 [base] <-- [archives]
 [test]
 

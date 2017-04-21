@@ -23,6 +23,7 @@ Ranch目前包含以下模块：
 - [last-helper](ranch-last-helper/) —— 最近日志支持。
 - [address](ranch-address/) —— 地址。
 - [account](ranch-account/) —— 账户。
+- [dbtool](ranch-dbtool/) —— 数据库助手。
 - [archives](ranch-archives/) —— 档案。
 - [test](ranch-test/) —— 单元测试支持。
 

@@ -26,6 +26,7 @@
         <module>ranch-last-helper</module>
         <module>ranch-address</module>
         <module>ranch-account</module>
+        <module>ranch-dbtool</module>
         <module>ranch-archives</module>
         <module>ranch-web</module>
         <module>ranch-test</module>
