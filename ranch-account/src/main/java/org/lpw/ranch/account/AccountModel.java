@@ -29,7 +29,8 @@ public class AccountModel extends ModelSupport {
     private int reward; // 奖励总额
     private int profit; // 盈利总额
     private int consume; // 消费总额
-    private String lockId;//全局锁ID
+    private int pending; // 待结算总额
+    private String lockId; // 全局锁ID
 
     @Jsonable
     @Column(name = "c_user")
@@ -119,6 +120,16 @@ public class AccountModel extends ModelSupport {
 
     public void setConsume(int consume) {
         this.consume = consume;
+    }
+
+    @Jsonable
+    @Column(name = "c_pending")
+    public int getPending() {
+        return pending;
+    }
+
+    public void setPending(int pending) {
+        this.pending = pending;
     }
 
     public String getLockId() {

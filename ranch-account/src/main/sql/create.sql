@@ -11,6 +11,7 @@ CREATE TABLE t_account
   c_reward INT DEFAULT 0 COMMENT '奖励总额',
   c_profit INT DEFAULT 0 COMMENT '盈利总额',
   c_consume INT DEFAULT 0 COMMENT '消费总额',
+  c_pending INT DEFAULT 0 COMMENT '待结算总额',
 
   PRIMARY KEY pk(c_id) USING HASH,
   KEY k_user(c_user) USING HASH

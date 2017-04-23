@@ -67,6 +67,7 @@ public class AccountServiceImpl implements AccountService {
         }
 
         account.setWithdraw(account.getWithdraw() + amount);
+        account.setPending(account.getPending() + amount);
 
         return save(account, -1 * amount, "withdraw", LogService.State.New);
     }
@@ -106,8 +107,9 @@ public class AccountServiceImpl implements AccountService {
         }
 
         account.setConsume(account.getConsume() + amount);
+        account.setPending(account.getPending() + amount);
 
-        return save(account, -1 * amount, "consume", LogService.State.Complete);
+        return save(account, -1 * amount, "consume", LogService.State.New);
     }
 
     private AccountModel find(String user, String owner, int type) {
@@ -132,9 +134,11 @@ public class AccountServiceImpl implements AccountService {
     private JSONObject save(AccountModel account, int amount, String type, LogService.State state) {
         account.setBalance(account.getBalance() + amount);
         accountDao.save(account);
-        logService.create(account, type, amount, state);
+        String logId = logService.create(account, type, amount, state);
         lockHelper.unlock(account.getLockId());
+        JSONObject object = modelHelper.toJson(account);
+        object.put("logId", logId);
 
-        return modelHelper.toJson(account);
+        return object;
     }
 }

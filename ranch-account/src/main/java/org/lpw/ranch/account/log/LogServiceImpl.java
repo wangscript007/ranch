@@ -17,7 +17,7 @@ public class LogServiceImpl implements LogService {
     private LogDao logDao;
 
     @Override
-    public void create(AccountModel account, String type, int amount, State state) {
+    public String create(AccountModel account, String type, int amount, State state) {
         LogModel log = new LogModel();
         log.setUser(account.getUser());
         log.setAccount(account.getId());
@@ -27,5 +27,7 @@ public class LogServiceImpl implements LogService {
         log.setState(state.ordinal());
         log.setTime(dateTime.now());
         logDao.save(log);
+
+        return log.getId();
     }
 }

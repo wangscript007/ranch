@@ -35,6 +35,7 @@ public interface LogService {
      * @param type    类型。
      * @param amount  数量。
      * @param state   状态。
+     * @return 日志ID值。
      */
-    void create(AccountModel account, String type, int amount, State state);
+    String create(AccountModel account, String type, int amount, State state);
 }

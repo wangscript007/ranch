@@ -21,6 +21,7 @@
     "withdraw": "取出总额",
     "reward": "奖励总额",
     "profit": "盈利总额",
-    "consume": "消费总额"
+    "consume": "消费总额",
+    "logId": "账户日志ID"
 }
 ```
