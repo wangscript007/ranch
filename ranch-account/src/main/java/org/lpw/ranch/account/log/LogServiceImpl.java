@@ -30,4 +30,14 @@ public class LogServiceImpl implements LogService {
 
         return log.getId();
     }
+
+    @Override
+    public void complete(String id) {
+        LogModel log = logDao.findById(id);
+        if (log == null)
+            return;
+
+        log.setState(State.Complete.ordinal());
+        logDao.save(log);
+    }
 }

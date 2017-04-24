@@ -38,4 +38,11 @@ public interface LogService {
      * @return 日志ID值。
      */
     String create(AccountModel account, String type, int amount, State state);
+
+    /**
+     * 设置为完成。
+     *
+     * @param id ID值。
+     */
+    void complete(String id);
 }
