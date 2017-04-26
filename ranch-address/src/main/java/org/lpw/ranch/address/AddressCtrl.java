@@ -32,6 +32,8 @@ public class AddressCtrl {
             @Validate(validator = Validators.NOT_EMPTY, parameter = "detail", failureCode = 3),
             @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "detail", failureCode = 4),
             @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "postcode", failureCode = 5),
+            @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "name", failureCode = 12),
+            @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "phone", failureCode = 13),
             @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "latitude", failureCode = 6),
             @Validate(validator = Validators.LATITUDE, emptyable = true, parameter = "latitude", failureCode = 7),
             @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "longitude", failureCode = 8),

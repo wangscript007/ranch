@@ -45,6 +45,8 @@ public class TestSupport extends TephraTestSupport {
         address.setRegion("region " + i);
         address.setDetail("detail " + i);
         address.setPostcode("postcode " + i);
+        address.setName("name " + i);
+        address.setPhone("phone " + i);
         address.setLatitude("latitude " + i);
         address.setLongitude("longitude " + i);
         address.setLabel("label " + i);
@@ -58,11 +60,8 @@ public class TestSupport extends TephraTestSupport {
     void equals(JSONObject object, String user, int i, int major, boolean time) {
         Assert.assertEquals(user, object.getString("user"));
         Assert.assertEquals("region " + i, object.getJSONObject("region").getString("id"));
-        Assert.assertEquals("detail " + i, object.getString("detail"));
-        Assert.assertEquals("postcode " + i, object.getString("postcode"));
-        Assert.assertEquals("latitude " + i, object.getString("latitude"));
-        Assert.assertEquals("longitude " + i, object.getString("longitude"));
-        Assert.assertEquals("label " + i, object.getString("label"));
+        for (String key : new String[]{"detail", "postcode", "name", "phone", "latitude", "longitude", "label"})
+            Assert.assertEquals(key + " " + i, object.getString(key));
         Assert.assertEquals(major, object.getIntValue("major"));
         if (time)
             Assert.assertEquals(dateTime.toString(new Timestamp(this.time - i * TimeUnit.Hour.getTime())), object.getString("time"));
@@ -73,6 +72,8 @@ public class TestSupport extends TephraTestSupport {
         Assert.assertEquals("region " + i, address.getRegion());
         Assert.assertEquals("detail " + i, address.getDetail());
         Assert.assertEquals("postcode " + i, address.getPostcode());
+        Assert.assertEquals("name " + i, address.getName());
+        Assert.assertEquals("phone " + i, address.getPhone());
         Assert.assertEquals("latitude " + i, address.getLatitude());
         Assert.assertEquals("longitude " + i, address.getLongitude());
         Assert.assertEquals("label " + i, address.getLabel());

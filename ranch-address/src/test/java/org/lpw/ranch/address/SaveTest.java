@@ -57,6 +57,24 @@ public class SaveTest extends TestSupport {
         mockHelper.reset();
         mockHelper.getRequest().addParameter("region", region);
         mockHelper.getRequest().addParameter("detail", "detail value");
+        mockHelper.getRequest().addParameter("name", generator.random(101));
+        mockHelper.mock("/address/save");
+        object = mockHelper.getResponse().asJson();
+        Assert.assertEquals(2112, object.getIntValue("code"));
+        Assert.assertEquals(message.get(Validators.PREFIX + "over-max-length", message.get(AddressModel.NAME + ".name"), 100), object.getString("message"));
+
+        mockHelper.reset();
+        mockHelper.getRequest().addParameter("region", region);
+        mockHelper.getRequest().addParameter("detail", "detail value");
+        mockHelper.getRequest().addParameter("phone", generator.random(101));
+        mockHelper.mock("/address/save");
+        object = mockHelper.getResponse().asJson();
+        Assert.assertEquals(2113, object.getIntValue("code"));
+        Assert.assertEquals(message.get(Validators.PREFIX + "over-max-length", message.get(AddressModel.NAME + ".phone"), 100), object.getString("message"));
+
+        mockHelper.reset();
+        mockHelper.getRequest().addParameter("region", region);
+        mockHelper.getRequest().addParameter("detail", "detail value");
         mockHelper.getRequest().addParameter("latitude", generator.random(101));
         mockHelper.mock("/address/save");
         object = mockHelper.getResponse().asJson();
@@ -141,6 +159,8 @@ public class SaveTest extends TestSupport {
         mockHelper.getRequest().addParameter("region", region);
         mockHelper.getRequest().addParameter("detail", "detail value");
         mockHelper.getRequest().addParameter("postcode", "postcode value");
+        mockHelper.getRequest().addParameter("name", "name value");
+        mockHelper.getRequest().addParameter("phone", "phone value");
         mockHelper.getRequest().addParameter("latitude", "-12.345678");
         mockHelper.getRequest().addParameter("longitude", "12.345678");
         mockHelper.getRequest().addParameter("label", "label value");
@@ -155,6 +175,8 @@ public class SaveTest extends TestSupport {
         Assert.assertEquals(region, data.getJSONObject("region").getString("id"));
         Assert.assertEquals("detail value", data.getString("detail"));
         Assert.assertEquals("postcode value", data.getString("postcode"));
+        Assert.assertEquals("name value", data.getString("name"));
+        Assert.assertEquals("phone value", data.getString("phone"));
         Assert.assertEquals("-12.345678", data.getString("latitude"));
         Assert.assertEquals("12.345678", data.getString("longitude"));
         Assert.assertEquals("label value", data.getString("label"));
@@ -165,6 +187,8 @@ public class SaveTest extends TestSupport {
         Assert.assertEquals(region, address11.getRegion());
         Assert.assertEquals("detail value", address11.getDetail());
         Assert.assertEquals("postcode value", address11.getPostcode());
+        Assert.assertEquals("name value", address11.getName());
+        Assert.assertEquals("phone value", address11.getPhone());
         Assert.assertEquals("-12.345678", address11.getLatitude());
         Assert.assertEquals("12.345678", address11.getLongitude());
         Assert.assertEquals("label value", address11.getLabel());
@@ -177,6 +201,8 @@ public class SaveTest extends TestSupport {
         mockHelper.getRequest().addParameter("region", region2);
         mockHelper.getRequest().addParameter("detail", "detail value 2");
         mockHelper.getRequest().addParameter("postcode", "postcode value 2");
+        mockHelper.getRequest().addParameter("name", "name value 2");
+        mockHelper.getRequest().addParameter("phone", "phone value 2");
         mockHelper.getRequest().addParameter("latitude", "-12.3456789");
         mockHelper.getRequest().addParameter("longitude", "12.3456789");
         mockHelper.getRequest().addParameter("label", "label value 2");
@@ -190,6 +216,8 @@ public class SaveTest extends TestSupport {
         Assert.assertEquals(region2, data.getJSONObject("region").getString("id"));
         Assert.assertEquals("detail value 2", data.getString("detail"));
         Assert.assertEquals("postcode value 2", data.getString("postcode"));
+        Assert.assertEquals("name value 2", data.getString("name"));
+        Assert.assertEquals("phone value 2", data.getString("phone"));
         Assert.assertEquals("-12.3456789", data.getString("latitude"));
         Assert.assertEquals("12.3456789", data.getString("longitude"));
         Assert.assertEquals("label value 2", data.getString("label"));
@@ -200,6 +228,8 @@ public class SaveTest extends TestSupport {
         Assert.assertEquals(region2, address2.getRegion());
         Assert.assertEquals("detail value 2", address2.getDetail());
         Assert.assertEquals("postcode value 2", address2.getPostcode());
+        Assert.assertEquals("name value 2", address2.getName());
+        Assert.assertEquals("phone value 2", address2.getPhone());
         Assert.assertEquals("-12.3456789", address2.getLatitude());
         Assert.assertEquals("12.3456789", address2.getLongitude());
         Assert.assertEquals("label value 2", address2.getLabel());
@@ -210,6 +240,8 @@ public class SaveTest extends TestSupport {
         Assert.assertEquals(region, address111.getRegion());
         Assert.assertEquals("detail value", address111.getDetail());
         Assert.assertEquals("postcode value", address111.getPostcode());
+        Assert.assertEquals("name value", address111.getName());
+        Assert.assertEquals("phone value", address111.getPhone());
         Assert.assertEquals("-12.345678", address111.getLatitude());
         Assert.assertEquals("12.345678", address111.getLongitude());
         Assert.assertEquals("label value", address111.getLabel());
@@ -221,6 +253,8 @@ public class SaveTest extends TestSupport {
         mockHelper.getRequest().addParameter("region", region2);
         mockHelper.getRequest().addParameter("detail", "detail value 3");
         mockHelper.getRequest().addParameter("postcode", "postcode value 3");
+        mockHelper.getRequest().addParameter("name", "name value 3");
+        mockHelper.getRequest().addParameter("phone", "phone value 3");
         mockHelper.getRequest().addParameter("latitude", "-12.34567890");
         mockHelper.getRequest().addParameter("longitude", "12.34567890");
         mockHelper.getRequest().addParameter("label", "label value 3");
@@ -234,6 +268,8 @@ public class SaveTest extends TestSupport {
         Assert.assertEquals(region2, data.getJSONObject("region").getString("id"));
         Assert.assertEquals("detail value 3", data.getString("detail"));
         Assert.assertEquals("postcode value 3", data.getString("postcode"));
+        Assert.assertEquals("name value 3", data.getString("name"));
+        Assert.assertEquals("phone value 3", data.getString("phone"));
         Assert.assertEquals("-12.34567890", data.getString("latitude"));
         Assert.assertEquals("12.34567890", data.getString("longitude"));
         Assert.assertEquals("label value 3", data.getString("label"));
@@ -244,6 +280,8 @@ public class SaveTest extends TestSupport {
         Assert.assertEquals(region2, address3.getRegion());
         Assert.assertEquals("detail value 3", address3.getDetail());
         Assert.assertEquals("postcode value 3", address3.getPostcode());
+        Assert.assertEquals("name value 3", address3.getName());
+        Assert.assertEquals("phone value 3", address3.getPhone());
         Assert.assertEquals("-12.34567890", address3.getLatitude());
         Assert.assertEquals("12.34567890", address3.getLongitude());
         Assert.assertEquals("label value 3", address3.getLabel());
@@ -254,6 +292,8 @@ public class SaveTest extends TestSupport {
         Assert.assertEquals(region2, address22.getRegion());
         Assert.assertEquals("detail value 2", address22.getDetail());
         Assert.assertEquals("postcode value 2", address22.getPostcode());
+        Assert.assertEquals("name value 2", address22.getName());
+        Assert.assertEquals("phone value 2", address22.getPhone());
         Assert.assertEquals("-12.3456789", address22.getLatitude());
         Assert.assertEquals("12.3456789", address22.getLongitude());
         Assert.assertEquals("label value 2", address22.getLabel());
@@ -264,6 +304,8 @@ public class SaveTest extends TestSupport {
         Assert.assertEquals(region, address1111.getRegion());
         Assert.assertEquals("detail value", address1111.getDetail());
         Assert.assertEquals("postcode value", address1111.getPostcode());
+        Assert.assertEquals("name value", address1111.getName());
+        Assert.assertEquals("phone value", address1111.getPhone());
         Assert.assertEquals("-12.345678", address1111.getLatitude());
         Assert.assertEquals("12.345678", address1111.getLongitude());
         Assert.assertEquals("label value", address1111.getLabel());
@@ -274,6 +316,8 @@ public class SaveTest extends TestSupport {
         mockHelper.getRequest().addParameter("region", region2);
         mockHelper.getRequest().addParameter("detail", "detail value 33");
         mockHelper.getRequest().addParameter("postcode", "postcode value 33");
+        mockHelper.getRequest().addParameter("name", "name value 33");
+        mockHelper.getRequest().addParameter("phone", "phone value 33");
         mockHelper.getRequest().addParameter("latitude", "-12.345678903");
         mockHelper.getRequest().addParameter("longitude", "12.345678903");
         mockHelper.getRequest().addParameter("label", "label value 33");
@@ -287,6 +331,8 @@ public class SaveTest extends TestSupport {
         Assert.assertEquals(region2, data.getJSONObject("region").getString("id"));
         Assert.assertEquals("detail value 33", data.getString("detail"));
         Assert.assertEquals("postcode value 33", data.getString("postcode"));
+        Assert.assertEquals("name value 33", data.getString("name"));
+        Assert.assertEquals("phone value 33", data.getString("phone"));
         Assert.assertEquals("-12.345678903", data.getString("latitude"));
         Assert.assertEquals("12.345678903", data.getString("longitude"));
         Assert.assertEquals("label value 33", data.getString("label"));
@@ -297,6 +343,8 @@ public class SaveTest extends TestSupport {
         Assert.assertEquals(region2, address33.getRegion());
         Assert.assertEquals("detail value 3", address33.getDetail());
         Assert.assertEquals("postcode value 3", address33.getPostcode());
+        Assert.assertEquals("name value 3", address33.getName());
+        Assert.assertEquals("phone value 3", address33.getPhone());
         Assert.assertEquals("-12.34567890", address33.getLatitude());
         Assert.assertEquals("12.34567890", address33.getLongitude());
         Assert.assertEquals("label value 3", address33.getLabel());
@@ -307,6 +355,8 @@ public class SaveTest extends TestSupport {
         Assert.assertEquals(region2, address333.getRegion());
         Assert.assertEquals("detail value 33", address333.getDetail());
         Assert.assertEquals("postcode value 33", address333.getPostcode());
+        Assert.assertEquals("name value 33", address333.getName());
+        Assert.assertEquals("phone value 33", address333.getPhone());
         Assert.assertEquals("-12.345678903", address333.getLatitude());
         Assert.assertEquals("12.345678903", address333.getLongitude());
         Assert.assertEquals("label value 33", address333.getLabel());

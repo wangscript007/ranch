@@ -26,6 +26,8 @@ public class AddressModel extends ModelSupport {
     private String region; // 行政区字典ID
     private String detail; // 详细地址
     private String postcode; // 邮政编码
+    private String name; // 联系人
+    private String phone; // 电话号码
     private String latitude; // GPS纬度
     private String longitude; // GPS经度
     private String label; // 标签
@@ -70,6 +72,26 @@ public class AddressModel extends ModelSupport {
 
     public void setPostcode(String postcode) {
         this.postcode = postcode;
+    }
+
+    @Jsonable
+    @Column(name = "c_name")
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    @Jsonable
+    @Column(name = "c_phone")
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 
     @Jsonable

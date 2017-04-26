@@ -45,6 +45,8 @@ public class AddressServiceImpl implements AddressService {
         address.setRegion(model.getRegion());
         address.setDetail(model.getDetail());
         address.setPostcode(model.getPostcode());
+        address.setName(model.getName());
+        address.setPhone(model.getPhone());
         address.setLatitude(model.getLatitude());
         address.setLongitude(model.getLongitude());
         address.setLabel(model.getLabel());
