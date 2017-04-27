@@ -26,6 +26,11 @@ class AccountDaoImpl implements AccountDao {
     }
 
     @Override
+    public AccountModel findById(String id) {
+        return liteOrm.findById(AccountModel.class, id);
+    }
+
+    @Override
     public AccountModel find(String user, String owner, int type) {
         return liteOrm.findOne(new LiteQuery(AccountModel.class).where("c_user=? and c_owner=? and c_type=?"), new Object[]{user, owner, type});
     }

@@ -10,6 +10,8 @@ interface AccountDao {
 
     PageList<AccountModel> query(String user, String owner);
 
+    AccountModel findById(String id);
+
     AccountModel find(String user, String owner, int type);
 
     void save(AccountModel account);

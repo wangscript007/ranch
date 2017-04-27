@@ -1,6 +1,7 @@
 package org.lpw.ranch.account.log;
 
 import org.lpw.ranch.account.AccountModel;
+import org.lpw.ranch.account.AccountService;
 import org.lpw.tephra.util.DateTime;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +14,8 @@ import javax.inject.Inject;
 public class LogServiceImpl implements LogService {
     @Inject
     private DateTime dateTime;
+    @Inject
+    private AccountService accountService;
     @Inject
     private LogDao logDao;
 
@@ -34,10 +37,11 @@ public class LogServiceImpl implements LogService {
     @Override
     public void complete(String id) {
         LogModel log = logDao.findById(id);
-        if (log == null)
+        if (log == null || log.getState() != State.New.ordinal())
             return;
 
         log.setState(State.Complete.ordinal());
         logDao.save(log);
+        accountService.complete(log.getAccount(), log.getAmount());
     }
 }

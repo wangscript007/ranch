@@ -112,6 +112,27 @@ public class AccountServiceImpl implements AccountService {
         return save(account, -1 * amount, "consume", LogService.State.New);
     }
 
+    @Override
+    public void complete(String id, int amount) {
+        AccountModel account=accountDao.findById(id);
+        if(account==null)
+            return;
+
+        String lockId = lockHelper.lock(LOCK_USER + account.getUser(), 1000L);
+        if (lockId == null)
+            return ;
+
+        if (account.getPending() < amount) {
+            lockHelper.unlock(lockId);
+
+            return;
+        }
+
+        account.setPending(account.getPending() - amount);
+        accountDao.save(account);
+        lockHelper.unlock(lockId);
+    }
+
     private AccountModel find(String user, String owner, int type) {
         String lockId = lockHelper.lock(LOCK_USER + user, 1000L);
         if (lockId == null)
@@ -134,10 +155,9 @@ public class AccountServiceImpl implements AccountService {
     private JSONObject save(AccountModel account, int amount, String type, LogService.State state) {
         account.setBalance(account.getBalance() + amount);
         accountDao.save(account);
-        String logId = logService.create(account, type, amount, state);
         lockHelper.unlock(account.getLockId());
         JSONObject object = modelHelper.toJson(account);
-        object.put("logId", logId);
+        object.put("logId", logService.create(account, type, amount, state));
 
         return object;
     }

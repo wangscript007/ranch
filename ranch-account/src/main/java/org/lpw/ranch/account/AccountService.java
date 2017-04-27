@@ -74,4 +74,12 @@ public interface AccountService {
      * @return 账户信息；如果消费失败则返回null。
      */
     JSONObject consume(String owner, int type, int amount);
+
+    /**
+     * 结算。
+     *
+     * @param id     账户ID。
+     * @param amount 数量。
+     */
+    void complete(String id, int amount);
 }
