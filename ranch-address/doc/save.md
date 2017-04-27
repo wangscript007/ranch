@@ -15,7 +15,6 @@
 - longitude GPS经度。
 - label 标签。
 - major 默认地址：0-否；1-是。
-- time 时间。
 
 返回值
 ```json
