@@ -25,7 +25,7 @@ CREATE TABLE t_doc
   c_recycle INT DEFAULT 0 COMMENT '回收站；0-否，1-是',
 
   PRIMARY KEY pk(c_id) USING HASH,
-  KEY k_recycle_audit_key(c_recycle,c_audit,c_key,c_time) USING BTREE,
-  KEY k_recycle_audit_owner(c_recycle,c_audit,c_owner,c_time) USING BTREE,
+  KEY k_recycle_audit_key(c_recycle,c_audit,c_key) USING BTREE,
+  KEY k_recycle_audit_owner(c_recycle,c_audit,c_owner) USING BTREE,
   KEY k_recycle_author(c_recycle,c_author,c_time) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

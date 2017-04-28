@@ -45,7 +45,7 @@ class DocDaoImpl implements DocDao {
             args.add(dataSource.getDialect(null).getLike(subject, true, true));
         }
 
-        return liteOrm.query(new LiteQuery(DocModel.class).where(where.toString()).order("c_time desc").size(pageSize).page(pageNum), args.toArray());
+        return liteOrm.query(new LiteQuery(DocModel.class).where(where.toString()).order("c_sort,c_time desc").size(pageSize).page(pageNum), args.toArray());
     }
 
     private void append(StringBuilder where, List<Object> args, String name, String value) {
