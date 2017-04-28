@@ -59,7 +59,7 @@ public class DocCtrl extends AuditCtrlSupport {
             @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "thumbnail", failureCode = 8),
             @Validate(validator = Validators.NOT_EMPTY, parameter = "source", failureCode = 9),
             @Validate(validator = UserHelper.VALIDATOR_SIGN_IN),
-            @Validate(validator = DocService.VALIDATOR_EXISTS, parameter = "id", emptyable = true, failureCode = 12)
+            @Validate(validator = DocService.VALIDATOR_EXISTS, emptyable = true, parameter = "id", failureCode = 12)
     })
     public Object save() {
         return docService.save(request.setToModel(new DocModel()), request.getAsBoolean("markdown"));
