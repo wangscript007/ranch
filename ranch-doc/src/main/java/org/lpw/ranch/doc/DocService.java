@@ -87,4 +87,11 @@ public interface DocService extends AuditService {
      * @param n  评论数：正数表示增加，负数表示减少。
      */
     void comment(String id, int n);
+
+    /**
+     * 点赞。
+     *
+     * @param id ID值。
+     */
+    void praise(String id);
 }

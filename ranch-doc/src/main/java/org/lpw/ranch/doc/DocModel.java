@@ -38,6 +38,7 @@ public class DocModel extends AuditModelSupport {
     private int read; // 阅读次数
     private int favorite; // 收藏次数
     private int comment; // 评论次数
+    private int praise; // 点赞数
     private int score; // 得分
     private Timestamp time; // 更新时间
 
@@ -197,6 +198,16 @@ public class DocModel extends AuditModelSupport {
 
     public void setComment(int comment) {
         this.comment = comment;
+    }
+
+    @Jsonable
+    @Column(name = "c_praise")
+    public int getPraise() {
+        return praise;
+    }
+
+    public void setPraise(int praise) {
+        this.praise = praise;
     }
 
     @Jsonable

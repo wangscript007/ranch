@@ -93,6 +93,7 @@ public class TestSupport extends TephraTestSupport implements AuditTesterDao<Doc
         doc.setRead(400 + i);
         doc.setFavorite(500 + i);
         doc.setComment(600 + i);
+        doc.setPraise(800 + i);
         doc.setScore(700 + i);
         doc.setTime(new Timestamp(time - i * TimeUnit.Day.getTime()));
         doc.setAudit(audit.getValue());
@@ -108,7 +109,7 @@ public class TestSupport extends TephraTestSupport implements AuditTesterDao<Doc
     }
 
     void equals(JSONObject object, int i, String author, Audit audit) {
-        Assert.assertEquals(19, object.size());
+        Assert.assertEquals(20, object.size());
         Assert.assertEquals(36, object.getString("id").length());
         Assert.assertEquals("key " + i, object.getString("key"));
         JSONObject owner = object.getJSONObject("owner");
@@ -128,6 +129,7 @@ public class TestSupport extends TephraTestSupport implements AuditTesterDao<Doc
         Assert.assertEquals(400 + i, object.getIntValue("read"));
         Assert.assertEquals(500 + i, object.getIntValue("favorite"));
         Assert.assertEquals(600 + i, object.getIntValue("comment"));
+        Assert.assertEquals(800 + i, object.getIntValue("praise"));
         Assert.assertEquals(700 + i, object.getIntValue("score"));
         Assert.assertEquals(dateTime.toString(new Timestamp(time - i * TimeUnit.Day.getTime())), object.getString("time"));
         Assert.assertEquals(audit.getValue(), object.getIntValue("audit"));

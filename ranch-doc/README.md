@@ -16,6 +16,8 @@
 
 [增减评论数](doc/comment.md)
 
+[点赞](doc/praise.md)
+
 [审核通过](../ranch-base/doc/audit-pass.md)
 
 [审核不通过](../ranch-base/doc/audit-refuse.md)

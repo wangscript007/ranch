@@ -60,6 +60,7 @@ public class DocServiceImpl implements DocService, MinuteJob {
     @Value("${" + DocModel.NAME + ".audit.default:0}")
     private int defaultAudit;
     private Map<String, AtomicInteger> read = new ConcurrentHashMap<>();
+    private Map<String, AtomicInteger> praise = new ConcurrentHashMap<>();
 
     @Override
     public DocModel findById(String id) {
@@ -184,6 +185,11 @@ public class DocServiceImpl implements DocService, MinuteJob {
     }
 
     @Override
+    public void praise(String id) {
+        praise.computeIfAbsent(id, i -> new AtomicInteger()).incrementAndGet();
+    }
+
+    @Override
     public void pass(String[] ids, String auditRemark) {
         auditHelper.pass(DocModel.class, ids, auditRemark);
         clearCache(ids);
@@ -214,6 +220,11 @@ public class DocServiceImpl implements DocService, MinuteJob {
 
     @Override
     public void executeMinuteJob() {
+        read();
+        praise();
+    }
+
+    private void read() {
         if (read.isEmpty())
             return;
 
@@ -222,6 +233,20 @@ public class DocServiceImpl implements DocService, MinuteJob {
         map.forEach((id, n) -> {
             DocModel doc = findById(id);
             doc.setRead(doc.getRead() + n.get());
+            docDao.save(doc);
+            clearCache(id);
+        });
+    }
+
+    private void praise() {
+        if (praise.isEmpty())
+            return;
+
+        Map<String, AtomicInteger> map = new HashMap<>(praise);
+        praise.clear();
+        map.forEach((id, n) -> {
+            DocModel doc = findById(id);
+            doc.setPraise(doc.getPraise() + n.get());
             docDao.save(doc);
             clearCache(id);
         });

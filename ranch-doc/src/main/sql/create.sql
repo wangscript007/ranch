@@ -18,6 +18,7 @@ CREATE TABLE t_doc
   c_read INT DEFAULT 0 COMMENT '阅读次数',
   c_favorite INT DEFAULT 0 COMMENT '收藏次数',
   c_comment INT DEFAULT 0 COMMENT '评论次数',
+  c_praise INT DEFAULT 0 COMMENT '点赞数',
   c_score INT DEFAULT 0 COMMENT '得分',
   c_time DATETIME NOT NULL COMMENT '更新时间',
   c_audit INT DEFAULT 0 COMMENT '审核：0-待审核；1-审核通过；2-审核不通过',

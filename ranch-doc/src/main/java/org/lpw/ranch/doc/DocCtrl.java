@@ -113,6 +113,16 @@ public class DocCtrl extends AuditCtrlSupport {
         return "";
     }
 
+    @Execute(name = "praise", validates = {
+            @Validate(validator = Validators.ID, parameter = "id", failureCode = 11),
+            @Validate(validator = DocService.VALIDATOR_EXISTS, parameter = "id", failureCode = 12)
+    })
+    public Object praise() {
+        docService.praise(request.get("id"));
+
+        return "";
+    }
+
     @Override
     protected AuditService getAuditService() {
         return docService;

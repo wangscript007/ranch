@@ -31,6 +31,7 @@
             "read": "阅读次数",
             "favorite": "收藏次数",
             "comment": "评论次数",
+            "praise": "点赞数",
             "score": "得分",
             "time": "更新时间"
         }
