@@ -28,6 +28,7 @@ public class SchemaModel extends ModelSupport {
     private String username; // 用户名
     private String password; // 密码
     private String memo; // 备注
+    private int tables; // 表数量
 
     @Jsonable
     @Column(name = "c_group")
@@ -107,5 +108,15 @@ public class SchemaModel extends ModelSupport {
 
     public void setMemo(String memo) {
         this.memo = memo;
+    }
+
+    @Jsonable
+    @Column(name = "c_tables")
+    public int getTables() {
+        return tables;
+    }
+
+    public void setTables(int tables) {
+        this.tables = tables;
     }
 }

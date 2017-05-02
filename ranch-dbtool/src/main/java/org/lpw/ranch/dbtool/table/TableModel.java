@@ -24,6 +24,7 @@ public class TableModel extends ModelSupport {
     private String group; // 分组ID
     private String name; // 名称
     private String memo; // 备注
+    private int columns; // 列数量
 
     @Jsonable
     @Column(name = "c_schema")
@@ -63,5 +64,15 @@ public class TableModel extends ModelSupport {
 
     public void setMemo(String memo) {
         this.memo = memo;
+    }
+
+    @Jsonable
+    @Column(name = "c_columns")
+    public int getColumns() {
+        return columns;
+    }
+
+    public void setColumns(int columns) {
+        this.columns = columns;
     }
 }

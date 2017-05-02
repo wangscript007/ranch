@@ -10,6 +10,7 @@ CREATE TABLE t_dbtool_schema
   c_username VARCHAR(255) DEFAULT NULL COMMENT '用户名',
   c_password VARCHAR(255) DEFAULT NULL COMMENT '密码',
   c_memo VARCHAR(255) DEFAULT NULL COMMENT '备注',
+  c_tables INT DEFAULT 0 COMMENT '表数量',
 
   PRIMARY KEY pk(c_id) USING HASH
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -22,6 +23,7 @@ CREATE TABLE t_dbtool_table
   c_group CHAR(36) DEFAULT NULL COMMENT '分组ID',
   c_name VARCHAR(255) DEFAULT NULL COMMENT '名称',
   c_memo VARCHAR(255) DEFAULT NULL COMMENT '备注',
+  c_columns INT DEFAULT 0 COMMENT '列数量',
 
   PRIMARY KEY pk(c_id) USING HASH,
   KEY k_schema(c_schema) USING HASH
