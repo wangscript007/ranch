@@ -28,7 +28,8 @@ public class LogModel extends ModelSupport {
     private int amount; // 数量
     private int balance; // 余额
     private int state; // 状态：0-待处理；1-审核通过；2-审核不通过；3-已完成
-    private Timestamp time; // 时间
+    private Timestamp start; // 开始时间
+    private Timestamp end; // 结束时间
 
     @Jsonable
     @Column(name = "c_user")
@@ -91,12 +92,22 @@ public class LogModel extends ModelSupport {
     }
 
     @Jsonable
-    @Column(name = "c_time")
-    public Timestamp getTime() {
-        return time;
+    @Column(name = "c_start")
+    public Timestamp getStart() {
+        return start;
     }
 
-    public void setTime(Timestamp time) {
-        this.time = time;
+    public void setStart(Timestamp start) {
+        this.start = start;
+    }
+
+    @Jsonable
+    @Column(name = "c_end")
+    public Timestamp getEnd() {
+        return end;
+    }
+
+    public void setEnd(Timestamp end) {
+        this.end = end;
     }
 }

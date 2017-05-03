@@ -28,7 +28,8 @@ public class LogServiceImpl implements LogService {
         log.setAmount(amount);
         log.setBalance(account.getBalance());
         log.setState(state.ordinal());
-        log.setTime(dateTime.now());
+        log.setStart(dateTime.now());
+        log.setEnd(dateTime.now());
         logDao.save(log);
 
         return log.getId();
@@ -41,6 +42,7 @@ public class LogServiceImpl implements LogService {
             return;
 
         log.setState(State.Complete.ordinal());
+        log.setEnd(dateTime.now());
         logDao.save(log);
         accountService.complete(log.getAccount(), log.getAmount());
     }

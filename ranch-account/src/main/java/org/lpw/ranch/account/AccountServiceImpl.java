@@ -114,14 +114,16 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public void complete(String id, int amount) {
-        AccountModel account=accountDao.findById(id);
-        if(account==null)
+        AccountModel account = accountDao.findById(id);
+        if (account == null)
             return;
 
         String lockId = lockHelper.lock(LOCK_USER + account.getUser(), 1000L);
         if (lockId == null)
-            return ;
+            return;
 
+        if (amount < 0)
+            amount = 0 - amount;
         if (account.getPending() < amount) {
             lockHelper.unlock(lockId);
 
