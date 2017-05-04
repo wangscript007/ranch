@@ -20,6 +20,12 @@ public interface SchemaService {
     String VALIDATOR_KEY_NOT_EXISTS = SchemaModel.NAME + ".validator.key.not-exists";
 
     /**
+     * 类型是否合法验证器Bean名称。
+     * 默认错误信息key=ranch.dbtool.schema.illegal-type。
+     */
+    String VALIDATOR_TYPE = SchemaModel.NAME + ".validator.illegal-type";
+
+    /**
      * 检索数据源配置集。
      *
      * @param group 分组ID。
