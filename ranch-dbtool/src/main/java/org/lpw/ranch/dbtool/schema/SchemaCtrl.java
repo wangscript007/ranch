@@ -30,7 +30,7 @@ public class SchemaCtrl {
 
     @Execute(name = "save", validates = {
             @Validate(validator = Validators.ID, emptyable = true, parameter = "id", failureCode = 1),
-            @Validate(validator = Validators.ID, parameter = "group", failureCode = 2),
+            @Validate(validator = Validators.ID, emptyable = true, parameter = "group", failureCode = 2),
             @Validate(validator = Validators.NOT_EMPTY, parameter = "key", failureCode = 3),
             @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "key", failureCode = 4),
             @Validate(validator = SchemaService.VALIDATOR_TYPE, parameter = "type", failureCode = 5),

@@ -26,6 +26,10 @@ public class TestSupport extends TephraTestSupport {
     @Inject
     MockHelper mockHelper;
 
+    SchemaModel create(int i) {
+        return create("group " + i, "type " + i, i);
+    }
+
     SchemaModel create(String group, String type, int i) {
         SchemaModel schema = new SchemaModel();
         schema.setGroup(group);
