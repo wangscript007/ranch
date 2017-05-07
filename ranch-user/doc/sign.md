@@ -5,7 +5,7 @@
 - URI - /user/sign
 
 返回值
-```text
+```json
 {
     "id": "ID值",
     "name": "姓名",

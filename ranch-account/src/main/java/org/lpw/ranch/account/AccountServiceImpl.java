@@ -39,8 +39,18 @@ public class AccountServiceImpl implements AccountService {
         if (owner != null && owner.trim().length() == 0)
             owner = "";
         PageList<AccountModel> pl = owner == null ? accountDao.query(user) : accountDao.query(user, owner);
+        if (pl.getList().isEmpty()) {
+            JSONArray array = new JSONArray();
+            array.add(deposit(user, "", 0, 500000));
 
-        return modelHelper.toJson(pl.getList());
+            return fill(array);
+        }
+
+        return fill(modelHelper.toJson(pl.getList()));
+    }
+
+    private JSONArray fill(JSONArray array) {
+        return userHelper.fill(array, new String[]{"user"});
     }
 
     @Override

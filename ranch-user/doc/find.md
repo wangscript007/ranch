@@ -8,7 +8,7 @@
 - code 唯一编码。
 
 返回值
-```text
+```json
 {
     "id": "ID值",
     "name": "姓名",

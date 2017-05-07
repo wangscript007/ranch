@@ -69,6 +69,11 @@ public interface UserService {
     JSONObject sign();
 
     /**
+     * 登出。
+     */
+    void signOut();
+
+    /**
      * 修改当前用户信息。
      *
      * @param user 用户信息。

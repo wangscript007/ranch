@@ -55,6 +55,13 @@ public class UserCtrl {
         return templates.get().success(userService.sign(), null);
     }
 
+    @Execute(name = "sign-out")
+    public Object signOut() {
+        userService.signOut();
+
+        return "";
+    }
+
     @Execute(name = "modify", validates = {
             @Validate(validator = Validators.MAX_LENGTH, number = {100}, emptyable = true, parameter = "name", failureCode = 7),
             @Validate(validator = Validators.MAX_LENGTH, number = {100}, emptyable = true, parameter = "nick", failureCode = 8),

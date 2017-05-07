@@ -118,6 +118,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public void signOut() {
+        session.remove(SESSION);
+    }
+
+    @Override
     public void modify(UserModel user) {
         UserModel model = session.get(SESSION);
         if (user.getName() != null)

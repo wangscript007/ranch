@@ -8,7 +8,7 @@
 - user 用户ID。
 
 返回值
-```text
+```json
 [
     {
         "id": "ID值",
