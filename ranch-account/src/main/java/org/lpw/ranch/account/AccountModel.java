@@ -30,6 +30,7 @@ public class AccountModel extends ModelSupport {
     private int profit; // 盈利总额
     private int consume; // 消费总额
     private int pending; // 待结算总额
+    private String checksum; // 校验值
     private String lockId; // 全局锁ID
 
     @Jsonable
@@ -130,6 +131,15 @@ public class AccountModel extends ModelSupport {
 
     public void setPending(int pending) {
         this.pending = pending;
+    }
+
+    @Column(name = "c_checksum")
+    public String getChecksum() {
+        return checksum;
+    }
+
+    public void setChecksum(String checksum) {
+        this.checksum = checksum;
     }
 
     public String getLockId() {

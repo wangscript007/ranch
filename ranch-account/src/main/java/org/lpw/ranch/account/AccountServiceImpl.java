@@ -5,9 +5,11 @@ import com.alibaba.fastjson.JSONObject;
 import org.lpw.ranch.account.log.LogService;
 import org.lpw.ranch.lock.LockHelper;
 import org.lpw.ranch.user.helper.UserHelper;
+import org.lpw.tephra.crypto.Digest;
 import org.lpw.tephra.dao.model.ModelHelper;
 import org.lpw.tephra.dao.orm.PageList;
 import org.lpw.tephra.util.Validator;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
@@ -18,9 +20,12 @@ import javax.inject.Inject;
 @Service(AccountModel.NAME + ".service")
 public class AccountServiceImpl implements AccountService {
     private static final String LOCK_USER = AccountModel.NAME + ".service.lock:";
+    private static final String CHECKSUM = AccountModel.NAME + ".service.checksum";
 
     @Inject
     private Validator validator;
+    @Inject
+    private Digest digest;
     @Inject
     private ModelHelper modelHelper;
     @Inject
@@ -31,6 +36,8 @@ public class AccountServiceImpl implements AccountService {
     private LogService logService;
     @Inject
     private AccountDao accountDao;
+    @Value("${ranch.account.balance:0}")
+    private int balance;
 
     @Override
     public JSONArray query(String user, String owner) {
@@ -39,24 +46,17 @@ public class AccountServiceImpl implements AccountService {
         if (owner != null && owner.trim().length() == 0)
             owner = "";
         PageList<AccountModel> pl = owner == null ? accountDao.query(user) : accountDao.query(user, owner);
-        if (pl.getList().isEmpty()) {
-            JSONArray array = new JSONArray();
-            array.add(deposit(user, "", 0, 500000));
+        JSONArray array = modelHelper.toJson(pl.getList());
+        if (array.isEmpty())
+            array.add(balance > 0 ? deposit(user, "", 0, balance) : save(find(user, owner, 0), 0, null, LogService.State.Complete));
 
-            return fill(array);
-        }
-
-        return fill(modelHelper.toJson(pl.getList()));
-    }
-
-    private JSONArray fill(JSONArray array) {
         return userHelper.fill(array, new String[]{"user"});
     }
 
     @Override
     public JSONObject deposit(String user, String owner, int type, int amount) {
         AccountModel account = find(user, owner, type);
-        if (account == null)
+        if (account == null || amount <= 0)
             return null;
 
         account.setDeposit(account.getDeposit() + amount);
@@ -166,11 +166,22 @@ public class AccountServiceImpl implements AccountService {
 
     private JSONObject save(AccountModel account, int amount, String type, LogService.State state) {
         account.setBalance(account.getBalance() + amount);
+        account.setChecksum(checksum(account.getUser(), account.getOwner(), account.getType(), account.getBalance(),
+                account.getDeposit(), account.getWithdraw(), account.getReward(), account.getProfit(), account.getConsume(), account.getPending()));
         accountDao.save(account);
         lockHelper.unlock(account.getLockId());
         JSONObject object = modelHelper.toJson(account);
-        object.put("logId", logService.create(account, type, amount, state));
+        if (type != null)
+            object.put("logId", logService.create(account, type, amount, state));
 
         return object;
+    }
+
+    private String checksum(Object... objects) {
+        StringBuilder sb = new StringBuilder(CHECKSUM);
+        for (Object object : objects)
+            sb.append('&').append(object);
+
+        return digest.md5(sb.toString());
     }
 }
