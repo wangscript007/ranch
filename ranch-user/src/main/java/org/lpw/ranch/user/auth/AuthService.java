@@ -38,10 +38,17 @@ public interface AuthService {
     AuthModel findByUid(String uid);
 
     /**
-     * 绑定MAC ID。
+     * 绑定ID。
      *
-     * @param userId 用户ID。
-     * @param macId  MAC ID。
+     * @param user 用户ID。
+     * @param id   绑定ID。
      */
-    void bindMacId(String userId, String macId);
+    void bind(String user, String id);
+
+    /**
+     * 解除绑定。
+     *
+     * @param id 绑定ID。
+     */
+    void unbind(String id);
 }

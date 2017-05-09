@@ -10,6 +10,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
+import java.sql.Timestamp;
+
 /**
  * @author lpw
  */
@@ -22,7 +24,8 @@ public class AuthModel extends ModelSupport {
 
     private String user; // 用户ID
     private String uid; // 认证ID
-    private int type; // 类型：0-机器码；1-自有账号；其他为第三方账号
+    private Timestamp time; // 绑定时间
+    private int type; // 类型：0-绑定ID；1-自有账号；其他为第三方账号
 
     @Jsonable
     @Column(name = "c_user")
@@ -42,6 +45,16 @@ public class AuthModel extends ModelSupport {
 
     public void setUid(String uid) {
         this.uid = uid;
+    }
+
+    @Jsonable
+    @Column(name = "c_time")
+    public Timestamp getTime() {
+        return time;
+    }
+
+    public void setTime(Timestamp time) {
+        this.time = time;
     }
 
     @Jsonable

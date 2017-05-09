@@ -30,4 +30,9 @@ class AuthDaoImpl implements AuthDao {
     public void save(AuthModel auth) {
         liteOrm.save(auth);
     }
+
+    @Override
+    public void delete(AuthModel auth) {
+        liteOrm.delete(auth);
+    }
 }

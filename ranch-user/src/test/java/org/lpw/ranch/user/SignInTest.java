@@ -128,15 +128,21 @@ public class SignInTest extends TestSupport {
         Assert.assertEquals("uid 4", args.get(0)[1]);
 
         mockHelper.reset();
+        mockHelper.getSession().setId("session id");
+        session.remove(UserModel.NAME + ".service.session");
         mockHelper.getRequest().addParameter("uid", "mac id 1");
         mockHelper.getRequest().addParameter("macId", "mac id");
         mockHelper.mock("/user/sign-in");
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(0, object.getIntValue("code"));
         equals(user1, object.getJSONObject("data"));
+        Assert.assertNull(find("mac id"));
+        Assert.assertNull(find("session id"));
 
         for (int i = 0; i < 2; i++) {
             mockHelper.reset();
+            mockHelper.getSession().setId("session id");
+            session.remove(UserModel.NAME + ".service.session");
             mockHelper.getRequest().addParameter("uid", "uid 1");
             mockHelper.getRequest().addParameter("password", "password 1");
             mockHelper.getRequest().addParameter("macId", "mac id");
@@ -150,9 +156,13 @@ public class SignInTest extends TestSupport {
             Assert.assertEquals("mac id 1", auth.getUid());
             auth = liteOrm.findOne(new LiteQuery(AuthModel.class).where("c_uid=?"), new Object[]{"mac id"});
             Assert.assertEquals(user1.getId(), auth.getUser());
+            auth(user1.getId(), "mac id", 0, new long[]{0, 2000});
+            auth(user1.getId(), "session id", 0, new long[]{0, 2000});
 
             for (int j = 0; j < 2; j++) {
                 mockHelper.reset();
+                mockHelper.getSession().setId("session id");
+                session.remove(UserModel.NAME + ".service.session");
                 mockHelper.getRequest().addParameter("uid", "uid 3");
                 mockHelper.getRequest().addParameter("password", "password 2");
                 mockHelper.getRequest().addParameter("macId", "mac id");
@@ -161,13 +171,16 @@ public class SignInTest extends TestSupport {
                 object = mockHelper.getResponse().asJson();
                 Assert.assertEquals(0, object.getIntValue("code"));
                 equals(user2, object.getJSONObject("data"));
-                auth = liteOrm.findOne(new LiteQuery(AuthModel.class).where("c_uid=?"), new Object[]{"mac id"});
-                Assert.assertEquals(user2.getId(), auth.getUser());
+                auth(user2.getId(), "mac id", 0, new long[]{0, 2000});
+                auth(user2.getId(), "session id", 0, new long[]{0, 2000});
             }
         }
 
+        thread.sleep(3, TimeUnit.Second);
         int count = liteOrm.count(new LiteQuery(AuthModel.class), null);
         mockHelper.reset();
+        mockHelper.getSession().setId("new session id");
+        session.remove(UserModel.NAME + ".service.session");
         mockHelper.getRequest().addParameter("uid", "uid 1");
         mockHelper.getRequest().addParameter("password", "password 1");
         mockHelper.getRequest().addParameter("type", "1");
@@ -175,7 +188,9 @@ public class SignInTest extends TestSupport {
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(0, object.getIntValue("code"));
         equals(user1, object.getJSONObject("data"));
-        Assert.assertEquals(count, liteOrm.count(new LiteQuery(AuthModel.class), null));
+        auth(user2.getId(), "mac id", 0, new long[]{2000, 5000});
+        auth(user1.getId(), "new session id", 0, new long[]{0, 2000});
+        Assert.assertEquals(count + 1, liteOrm.count(new LiteQuery(AuthModel.class), null));
 
         signInByWeixin();
     }

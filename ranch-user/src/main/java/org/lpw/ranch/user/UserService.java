@@ -11,9 +11,9 @@ public interface UserService {
      */
     enum Type {
         /**
-         * MAC ID。
+         * 绑定ID。
          */
-        MacId,
+        Bind,
         /**
          * 自有账号。
          */

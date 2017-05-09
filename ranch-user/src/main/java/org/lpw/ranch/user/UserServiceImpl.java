@@ -86,9 +86,9 @@ public class UserServiceImpl implements UserService {
             if (validator.isEmpty(password) || !user.getPassword().equals(password(password)))
                 return false;
 
-            authService.bindMacId(user.getId(), macId);
+            authService.bind(user.getId(), macId);
+            authService.bind(user.getId(), session.getId());
         }
-
         session.set(SESSION, user);
 
         return true;
@@ -113,12 +113,23 @@ public class UserServiceImpl implements UserService {
     @Override
     public JSONObject sign() {
         UserModel user = session.get(SESSION);
+        if (user == null) {
+            AuthModel auth = authService.findByUid(session.getId());
+            if (auth != null && auth.getType() == Type.Bind.ordinal()) {
+                user = findById(auth.getUser());
+                if (user != null) {
+                    authService.bind(user.getId(), session.getId());
+                    session.set(SESSION, user = findById(auth.getUser()));
+                }
+            }
+        }
 
         return user == null ? new JSONObject() : getJson(user.getId(), user);
     }
 
     @Override
     public void signOut() {
+        authService.unbind(session.getId());
         session.remove(SESSION);
     }
 

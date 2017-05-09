@@ -5,6 +5,7 @@ import org.junit.Assert;
 import org.lpw.ranch.user.auth.AuthModel;
 import org.lpw.tephra.crypto.Digest;
 import org.lpw.tephra.ctrl.context.Request;
+import org.lpw.tephra.ctrl.context.Session;
 import org.lpw.tephra.dao.orm.lite.LiteOrm;
 import org.lpw.tephra.dao.orm.lite.LiteQuery;
 import org.lpw.tephra.test.MockHelper;
@@ -13,6 +14,7 @@ import org.lpw.tephra.util.Converter;
 import org.lpw.tephra.util.DateTime;
 import org.lpw.tephra.util.Generator;
 import org.lpw.tephra.util.Message;
+import org.lpw.tephra.util.Thread;
 import org.lpw.tephra.util.TimeUnit;
 
 import javax.inject.Inject;
@@ -32,11 +34,15 @@ public class TestSupport extends TephraTestSupport {
     @Inject
     DateTime dateTime;
     @Inject
+    Thread thread;
+    @Inject
     Digest digest;
     @Inject
     LiteOrm liteOrm;
     @Inject
     Request request;
+    @Inject
+    Session session;
     @Inject
     MockHelper mockHelper;
 
@@ -92,6 +98,18 @@ public class TestSupport extends TephraTestSupport {
         Assert.assertEquals(converter.toString(user.getRegister()), object.getString("register"));
         Assert.assertEquals(user.getGrade(), object.getIntValue("grade"));
         Assert.assertEquals(user.getState(), object.getIntValue("state"));
+    }
+
+    void auth(String user, String uid, int type, long[] times) {
+        AuthModel auth = find(uid);
+        Assert.assertEquals(user, auth.getUser());
+        Assert.assertEquals(type, auth.getType());
+        Assert.assertTrue(System.currentTimeMillis() - auth.getTime().getTime() > times[0]);
+        Assert.assertTrue(System.currentTimeMillis() - auth.getTime().getTime() < times[1]);
+    }
+
+    AuthModel find(String uid) {
+        return liteOrm.findOne(new LiteQuery(AuthModel.class).where("c_uid=?"), new Object[]{uid});
     }
 
     void equalsSignUp(JSONObject data, String uid, int type, String password, String code) {
