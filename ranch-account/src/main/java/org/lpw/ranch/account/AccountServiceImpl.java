@@ -55,8 +55,13 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public JSONObject deposit(String user, String owner, int type, int amount) {
+        if (amount <= 0)
+            return null;
+
+        if (validator.isEmpty(user))
+            user = userHelper.id();
         AccountModel account = find(user, owner, type);
-        if (account == null || amount <= 0)
+        if (account == null)
             return null;
 
         account.setDeposit(account.getDeposit() + amount);
@@ -172,7 +177,7 @@ public class AccountServiceImpl implements AccountService {
         lockHelper.unlock(account.getLockId());
         JSONObject object = modelHelper.toJson(account);
         if (type != null)
-            object.put("logId", logService.create(account, type, amount, state));
+            object.put("logId", logService.create(account, type, amount, state, null));
 
         return object;
     }

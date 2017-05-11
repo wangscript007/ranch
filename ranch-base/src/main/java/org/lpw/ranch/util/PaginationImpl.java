@@ -19,6 +19,13 @@ public class PaginationImpl implements Pagination {
     }
 
     @Override
+    public int getPageSize(int defaultSize) {
+        int pageSize = getPageSize();
+
+        return pageSize <= 0 ? defaultSize : pageSize;
+    }
+
+    @Override
     public int getPageNum() {
         return request.getAsInt("pageNum");
     }

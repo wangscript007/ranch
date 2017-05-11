@@ -30,6 +30,7 @@ CREATE TABLE t_account_log
   c_state INT DEFAULT 0 COMMENT '状态：0-待处理；1-审核通过；2-审核不通过；3-已完成',
   c_start DATETIME DEFAULT NULL COMMENT '开始时间',
   c_end DATETIME DEFAULT NULL COMMENT '结束时间',
+  c_json TEXT DEFAULT NULL COMMENT '扩展属性集',
 
   PRIMARY KEY pk(c_id) USING HASH,
   KEY k_user(c_user,c_start) USING BTREE,

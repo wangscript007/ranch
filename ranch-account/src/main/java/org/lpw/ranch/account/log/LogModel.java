@@ -30,6 +30,7 @@ public class LogModel extends ModelSupport {
     private int state; // 状态：0-待处理；1-审核通过；2-审核不通过；3-已完成
     private Timestamp start; // 开始时间
     private Timestamp end; // 结束时间
+    private String json; // 扩展属性集
 
     @Jsonable
     @Column(name = "c_user")
@@ -109,5 +110,15 @@ public class LogModel extends ModelSupport {
 
     public void setEnd(Timestamp end) {
         this.end = end;
+    }
+
+    @Jsonable
+    @Column(name = "c_json")
+    public String getJson() {
+        return json;
+    }
+
+    public void setJson(String json) {
+        this.json = json;
     }
 }

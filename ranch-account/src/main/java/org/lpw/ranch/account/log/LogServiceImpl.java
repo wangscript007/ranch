@@ -1,17 +1,22 @@
 package org.lpw.ranch.account.log;
 
+import com.alibaba.fastjson.JSONObject;
 import org.lpw.ranch.account.AccountModel;
 import org.lpw.ranch.account.AccountService;
 import org.lpw.tephra.util.DateTime;
+import org.lpw.tephra.util.Validator;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
+import java.util.Map;
 
 /**
  * @author lpw
  */
 @Service(LogModel.NAME + ".service")
 public class LogServiceImpl implements LogService {
+    @Inject
+    private Validator validator;
     @Inject
     private DateTime dateTime;
     @Inject
@@ -20,7 +25,7 @@ public class LogServiceImpl implements LogService {
     private LogDao logDao;
 
     @Override
-    public String create(AccountModel account, String type, int amount, State state) {
+    public String create(AccountModel account, String type, int amount, State state, Map<String, String> map) {
         LogModel log = new LogModel();
         log.setUser(account.getUser());
         log.setAccount(account.getId());
@@ -30,6 +35,11 @@ public class LogServiceImpl implements LogService {
         log.setState(state.ordinal());
         log.setStart(dateTime.now());
         log.setEnd(dateTime.now());
+        if (!validator.isEmpty(map)) {
+            JSONObject json = new JSONObject();
+            map.forEach(json::put);
+            log.setJson(json.toJSONString());
+        }
         logDao.save(log);
 
         return log.getId();

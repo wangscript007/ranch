@@ -2,6 +2,8 @@ package org.lpw.ranch.account.log;
 
 import org.lpw.ranch.account.AccountModel;
 
+import java.util.Map;
+
 /**
  * @author lpw
  */
@@ -35,9 +37,10 @@ public interface LogService {
      * @param type    类型。
      * @param amount  数量。
      * @param state   状态。
+     * @param map     参数集。
      * @return 日志ID值。
      */
-    String create(AccountModel account, String type, int amount, State state);
+    String create(AccountModel account, String type, int amount, State state, Map<String, String> map);
 
     /**
      * 设置为完成。
