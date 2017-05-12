@@ -97,12 +97,21 @@ public class UserCtrl {
         return userService.get(request.getAsArray("ids"));
     }
 
-    @Execute(name = "find", validates = {
+    @Execute(name = "find-by-code", validates = {
             @Validate(validator = Validators.NOT_EMPTY, parameter = "code", failureCode = 26),
             @Validate(validator = Validators.SIGN)
     })
     public Object find() {
-        return templates.get().success(userService.find(request.get("code")), null);
+        return templates.get().success(userService.findByCode(request.get("code")), null);
+    }
+
+    @Execute(name = "find-by-uid", validates = {
+            @Validate(validator = Validators.NOT_EMPTY, parameter = "uid", failureCode = 27),
+            @Validate(validator = Validators.SIGN),
+            @Validate(validator = AuthService.VALIDATOR_UID_EXISTS, parameter = "uid", failureCode = 28)
+    })
+    public Object findByUid() {
+        return templates.get().success(userService.findByUid(request.get("uid")), null);
     }
 
     @Execute(name = "query", validates = {

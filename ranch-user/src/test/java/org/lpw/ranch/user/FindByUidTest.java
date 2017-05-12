@@ -13,42 +13,45 @@ import java.util.List;
 /**
  * @author lpw
  */
-public class FindTest extends TestSupport {
+public class FindByUidTest extends TestSupport {
     @Inject
     private Cache cache;
 
     @Test
-    public void find() {
+    public void findByUid() {
         List<UserModel> list = new ArrayList<>();
-        for (int i = 0; i < 5; i++)
-            list.add(create(i));
+        for (int i = 0; i < 5; i++) {
+            UserModel user = create(i);
+            createAuth(user.getId(), "uid " + i, 1);
+            list.add(user);
+        }
 
         mockHelper.reset();
-        mockHelper.mock("/user/find");
+        mockHelper.mock("/user/find-by-uid");
         JSONObject object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(1526, object.getIntValue("code"));
-        Assert.assertEquals(message.get(Validators.PREFIX + "empty", message.get(UserModel.NAME + ".code")), object.getString("message"));
+        Assert.assertEquals(1527, object.getIntValue("code"));
+        Assert.assertEquals(message.get(Validators.PREFIX + "empty", message.get(UserModel.NAME + ".uid")), object.getString("message"));
 
         mockHelper.reset();
-        mockHelper.getRequest().addParameter("code", "code");
-        mockHelper.mock("/user/find");
+        mockHelper.getRequest().addParameter("uid", "uid");
+        mockHelper.mock("/user/find-by-uid");
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(9995, object.getIntValue("code"));
         Assert.assertEquals(message.get(Validators.PREFIX + "illegal-sign"), object.getString("message"));
 
         mockHelper.reset();
-        mockHelper.getRequest().addParameter("code", "code");
+        mockHelper.getRequest().addParameter("uid", "uid");
         request.putSign(mockHelper.getRequest().getMap());
-        mockHelper.mock("/user/find");
+        mockHelper.mock("/user/find-by-uid");
         object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(0, object.getIntValue("code"));
-        Assert.assertTrue(object.getJSONObject("data").isEmpty());
+        Assert.assertEquals(1528, object.getIntValue("code"));
+        Assert.assertEquals(message.get("ranch.user.auth.uid.not-exists", message.get(UserModel.NAME + ".uid")), object.getString("message"));
 
         for (int i = 0; i < 2; i++) {
             mockHelper.reset();
-            mockHelper.getRequest().addParameter("code", "code 0");
+            mockHelper.getRequest().addParameter("uid", "uid 0");
             request.putSign(mockHelper.getRequest().getMap());
-            mockHelper.mock("/user/find");
+            mockHelper.mock("/user/find-by-uid");
             object = mockHelper.getResponse().asJson();
             Assert.assertEquals(0, object.getIntValue("code"));
             equals(list.get(0), object.getJSONObject("data"));
@@ -57,21 +60,22 @@ public class FindTest extends TestSupport {
         }
 
         cache.remove(UserModel.NAME + ".service.json:" + list.get(0).getId());
-        cache.remove(UserModel.NAME + ".service.json:code 0");
+        cache.remove(UserModel.NAME + ".service.json:uid 0");
         mockHelper.reset();
-        mockHelper.getRequest().addParameter("code", "code 0");
+        mockHelper.getRequest().addParameter("uid", "uid 0");
         request.putSign(mockHelper.getRequest().getMap());
-        mockHelper.mock("/user/find");
+        mockHelper.mock("/user/find-by-uid");
+        object = mockHelper.getResponse().asJson();
+        Assert.assertEquals(0, object.getIntValue("code"));
+        equals(list.get(0), object.getJSONObject("data"));
+
+        createAuth("user 11", "uid 11", 1);
+        mockHelper.reset();
+        mockHelper.getRequest().addParameter("uid", "uid 11");
+        request.putSign(mockHelper.getRequest().getMap());
+        mockHelper.mock("/user/find-by-uid");
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(0, object.getIntValue("code"));
         Assert.assertTrue(object.getJSONObject("data").isEmpty());
-
-        mockHelper.reset();
-        mockHelper.getRequest().addParameter("code", "code 5");
-        request.putSign(mockHelper.getRequest().getMap());
-        mockHelper.mock("/user/find");
-        object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(0, object.getIntValue("code"));
-        equals(liteOrm.findById(UserModel.class, list.get(0).getId()), object.getJSONObject("data"));
     }
 }

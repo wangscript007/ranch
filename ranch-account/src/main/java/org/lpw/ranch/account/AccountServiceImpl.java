@@ -13,6 +13,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author lpw
@@ -48,16 +50,13 @@ public class AccountServiceImpl implements AccountService {
         PageList<AccountModel> pl = owner == null ? accountDao.query(user) : accountDao.query(user, owner);
         JSONArray array = modelHelper.toJson(pl.getList());
         if (array.isEmpty())
-            array.add(balance > 0 ? deposit(user, "", 0, balance) : save(find(user, owner, 0), 0, null, LogService.State.Complete));
+            array.add(balance > 0 ? deposit(user, "", 0, balance, null) : save(find(user, owner, 0), 0, null, LogService.State.Complete, null));
 
         return userHelper.fill(array, new String[]{"user"});
     }
 
     @Override
-    public JSONObject deposit(String user, String owner, int type, int amount) {
-        if (amount <= 0)
-            return null;
-
+    public JSONObject deposit(String user, String owner, int type, int amount, Map<String, String> map) {
         if (validator.isEmpty(user))
             user = userHelper.id();
         AccountModel account = find(user, owner, type);
@@ -66,11 +65,11 @@ public class AccountServiceImpl implements AccountService {
 
         account.setDeposit(account.getDeposit() + amount);
 
-        return save(account, amount, "deposit", LogService.State.Complete);
+        return save(account, amount, "deposit", LogService.State.New, map);
     }
 
     @Override
-    public JSONObject withdraw(String owner, int type, int amount) {
+    public JSONObject withdraw(String owner, int type, int amount, Map<String, String> map) {
         AccountModel account = find(userHelper.id(), owner, type);
         if (account == null)
             return null;
@@ -84,7 +83,7 @@ public class AccountServiceImpl implements AccountService {
         account.setWithdraw(account.getWithdraw() + amount);
         account.setPending(account.getPending() + amount);
 
-        return save(account, -1 * amount, "withdraw", LogService.State.New);
+        return save(account, -1 * amount, "withdraw", LogService.State.New, map);
     }
 
     @Override
@@ -95,7 +94,7 @@ public class AccountServiceImpl implements AccountService {
 
         account.setReward(account.getReward() + amount);
 
-        return save(account, amount, "reward", LogService.State.Complete);
+        return save(account, amount, "reward", LogService.State.Complete, null);
     }
 
     @Override
@@ -106,7 +105,7 @@ public class AccountServiceImpl implements AccountService {
 
         account.setProfit(account.getProfit() + amount);
 
-        return save(account, amount, "profit", LogService.State.Complete);
+        return save(account, amount, "profit", LogService.State.Complete, null);
     }
 
     @Override
@@ -124,7 +123,7 @@ public class AccountServiceImpl implements AccountService {
         account.setConsume(account.getConsume() + amount);
         account.setPending(account.getPending() + amount);
 
-        return save(account, -1 * amount, "consume", LogService.State.New);
+        return save(account, -1 * amount, "consume", LogService.State.New, null);
     }
 
     @Override
@@ -169,15 +168,22 @@ public class AccountServiceImpl implements AccountService {
         return account;
     }
 
-    private JSONObject save(AccountModel account, int amount, String type, LogService.State state) {
+    private JSONObject save(AccountModel account, int amount, String type, LogService.State state, Map<String, String> map) {
         account.setBalance(account.getBalance() + amount);
         account.setChecksum(checksum(account.getUser(), account.getOwner(), account.getType(), account.getBalance(),
                 account.getDeposit(), account.getWithdraw(), account.getReward(), account.getProfit(), account.getConsume(), account.getPending()));
         accountDao.save(account);
         lockHelper.unlock(account.getLockId());
         JSONObject object = modelHelper.toJson(account);
-        if (type != null)
-            object.put("logId", logService.create(account, type, amount, state, null));
+        if (type != null) {
+            Map<String, String> parameter = new HashMap<>();
+            if (map != null) {
+                parameter.putAll(map);
+                for (String key : new String[]{"user", "owner", "type", "amount"})
+                    parameter.remove(key);
+            }
+            object.put("logId", logService.create(account, type, amount, state, parameter));
+        }
 
         return object;
     }

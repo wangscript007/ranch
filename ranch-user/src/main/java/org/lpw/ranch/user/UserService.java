@@ -110,7 +110,7 @@ public interface UserService {
      * @param code 唯一编码。
      * @return 用户信息；如果不存在则返回空JSON。
      */
-    JSONObject find(String code);
+    JSONObject findByCode(String code);
 
     /**
      * 获取用户数据。
@@ -119,6 +119,14 @@ public interface UserService {
      * @return 用户数据；不存在则返回null。
      */
     UserModel findById(String id);
+
+    /**
+     * 获取用户数据。
+     *
+     * @param uid UID值。
+     * @return 用户数据；不存在则返回空JSON。
+     */
+    JSONObject findByUid(String uid);
 
     /**
      * 检索用户信息集。

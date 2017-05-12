@@ -1,7 +1,9 @@
 package org.lpw.ranch.account.log;
 
+import com.alibaba.fastjson.JSONObject;
 import org.lpw.ranch.account.AccountModel;
 
+import java.sql.Date;
 import java.util.Map;
 
 /**
@@ -29,6 +31,16 @@ public interface LogService {
          */
         Complete
     }
+
+    /**
+     * 检索账户操作日志集。
+     *
+     * @param uid   用户UID。
+     * @param start 开始日期。
+     * @param end   结束日期。
+     * @return 操作日志集。
+     */
+    JSONObject query(String uid, Date start, Date end);
 
     /**
      * 新增日志。

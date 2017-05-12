@@ -1,11 +1,11 @@
-# 使用唯一编码获取用户信息
+# 使用UID获取用户信息
 
 请求
-- Service Key - ranch.user.find
-- URI - /user/find
+- Service Key - ranch.user.find-by-uid
+- URI - /user/find-by-uid
 
 参数
-- code 唯一编码。
+- uid UID值。
 
 返回值
 ```json

@@ -8,8 +8,14 @@ import com.alibaba.fastjson.JSONArray;
 public interface AuthService {
     /**
      * UID不存在验证器Bean名称。
+     * 默认错误信息key=ranch.user.auth.uid.exists。
      */
     String VALIDATOR_UID_NOT_EXISTS = AuthModel.NAME + ".validator.uid.not-exists";
+    /**
+     * UID存在验证器Bean名称。
+     * 默认错误信息key=ranch.user.auth.uid.not-exists。
+     */
+    String VALIDATOR_UID_EXISTS = AuthModel.NAME + ".validator.uid.exists";
 
     /**
      * 检索用户的认证信息集。

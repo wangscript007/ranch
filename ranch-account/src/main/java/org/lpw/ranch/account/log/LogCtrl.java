@@ -16,4 +16,9 @@ public class LogCtrl {
     private Request request;
     @Inject
     private LogService logService;
+
+    @Execute(name = "query")
+    public Object query() {
+        return logService.query(request.get("uid"), request.getAsSqlDate("start"), request.getAsSqlDate("end"));
+    }
 }

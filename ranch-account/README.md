@@ -11,3 +11,5 @@
 [盈利](doc/profit.md)
 
 [消费](doc/consume.md)
+
+[检索账户变更日志集](doc/log/query.md)

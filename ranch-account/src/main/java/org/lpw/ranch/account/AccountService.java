@@ -3,6 +3,8 @@ package org.lpw.ranch.account;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
+import java.util.Map;
+
 /**
  * @author lpw
  */
@@ -29,9 +31,10 @@ public interface AccountService {
      * @param owner  所有者。
      * @param type   类型。
      * @param amount 数量。
+     * @param map    参数集。
      * @return 账户信息；如果存入失败则返回null。
      */
-    JSONObject deposit(String user, String owner, int type, int amount);
+    JSONObject deposit(String user, String owner, int type, int amount, Map<String, String> map);
 
     /**
      * 取出。
@@ -39,9 +42,10 @@ public interface AccountService {
      * @param owner  所有者。
      * @param type   类型。
      * @param amount 数量。
+     * @param map    参数集。
      * @return 账户信息；如果取出失败则返回null。
      */
-    JSONObject withdraw(String owner, int type, int amount);
+    JSONObject withdraw(String owner, int type, int amount, Map<String, String> map);
 
     /**
      * 奖励。

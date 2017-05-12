@@ -19,7 +19,7 @@ public interface UserHelper {
      * 是否为ID值或用户是否已登入验证器Bean名称。
      * 默认错误信息key=ranch.user.helper.not-id-and-sign-in。
      */
-    String VALIDATOR_ID_OR_SIGN_IN="ranch.user.helper.validator.id-or-sign-in";
+    String VALIDATOR_ID_OR_SIGN_IN = "ranch.user.helper.validator.id-or-sign-in";
 
     /**
      * 用户是否存在验证器Bean名称。
@@ -41,7 +41,15 @@ public interface UserHelper {
      * @param code 唯一编码。
      * @return 用户信息；如果不存在则返回空JSON。
      */
-    JSONObject find(String code);
+    JSONObject findByCode(String code);
+
+    /**
+     * 根据UID获取用户信息。
+     *
+     * @param uid UID值。
+     * @return 用户信息；如果不存在则返回空JSON对象。
+     */
+    JSONObject findByUid(String uid);
 
     /**
      * 填充用户信息。

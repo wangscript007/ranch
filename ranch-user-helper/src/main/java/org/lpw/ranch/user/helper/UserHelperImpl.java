@@ -15,18 +15,30 @@ import java.util.Map;
 public class UserHelperImpl extends ServiceHelperSupport implements UserHelper {
     @Value("${ranch.user.key:ranch.user}")
     private String key;
-    private String findKey;
+    private String codeKey;
+    private String uidKey;
     private String signKey;
 
     @Override
-    public JSONObject find(String code) {
-        if (findKey == null)
-            findKey = key + ".find";
+    public JSONObject findByCode(String code) {
+        if (codeKey == null)
+            codeKey = key + ".find-by-code";
 
         Map<String, String> parameter = new HashMap<>();
         parameter.put("code", code);
 
-        return carousel.service(findKey, null, parameter, true, JSONObject.class);
+        return carousel.service(codeKey, null, parameter, true, JSONObject.class);
+    }
+
+    @Override
+    public JSONObject findByUid(String uid) {
+        if (uidKey == null)
+            uidKey = key + ".find-by-uid";
+
+        Map<String, String> parameter = new HashMap<>();
+        parameter.put("uid", uid);
+
+        return carousel.service(uidKey, null, parameter, true, JSONObject.class);
     }
 
     @Override

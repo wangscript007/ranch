@@ -41,7 +41,7 @@ public class AccountCtrl {
             @Validate(validator = UserHelper.VALIDATOR_ID_OR_SIGN_IN, parameter = "user", failureCode = 10)
     })
     public Object deposit() {
-        return execute(accountService.deposit(request.get("user"), request.get("owner"), request.getAsInt("type"), request.getAsInt("amount")), 5, "deposit");
+        return execute(accountService.deposit(request.get("user"), request.get("owner"), request.getAsInt("type"), request.getAsInt("amount"), request.getMap()), 5, "deposit");
     }
 
     @Execute(name = "withdraw", validates = {
@@ -51,7 +51,7 @@ public class AccountCtrl {
             @Validate(validator = UserHelper.VALIDATOR_SIGN_IN)
     })
     public Object withdraw() {
-        return execute(accountService.withdraw(request.get("owner"), request.getAsInt("type"), request.getAsInt("amount")), 6, "withdraw");
+        return execute(accountService.withdraw(request.get("owner"), request.getAsInt("type"), request.getAsInt("amount"), request.getMap()), 6, "withdraw");
     }
 
     @Execute(name = "reward", validates = {

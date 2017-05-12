@@ -192,7 +192,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public JSONObject find(String code) {
+    public JSONObject findByCode(String code) {
         String cacheKey = CACHE_JSON + code;
         JSONObject object = cache.get(cacheKey);
         if (object == null) {
@@ -224,6 +224,18 @@ public class UserServiceImpl implements UserService {
             cache.put(cacheKey, user = userDao.findById(id), false);
 
         return user;
+    }
+
+    @Override
+    public JSONObject findByUid(String uid) {
+        String cacheKey = CACHE_JSON + uid;
+        JSONObject object = cache.get(cacheKey);
+        if (object == null) {
+            UserModel user = findById(authService.findByUid(uid).getUser());
+            cache.put(cacheKey, object = user == null ? new JSONObject() : getJson(user.getId(), user), false);
+        }
+
+        return object;
     }
 
     private String password(String password) {

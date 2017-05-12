@@ -16,7 +16,9 @@
 
 [获取用户信息](doc/get.md)
 
-[使用唯一编码获取用户信息](doc/find.md)
+[使用唯一编码获取用户信息](doc/find-by-code.md)
+
+[使用UID获取用户信息](doc/find-by-uid.md)
 
 [检索用户](doc/query.md)
 
