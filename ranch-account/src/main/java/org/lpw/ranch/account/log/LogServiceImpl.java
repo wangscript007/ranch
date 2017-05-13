@@ -104,7 +104,7 @@ public class LogServiceImpl implements LogService {
 
         log.setState(State.Complete.ordinal());
         log.setEnd(dateTime.now());
+        accountService.complete(log);
         logDao.save(log);
-        accountService.complete(log.getAccount(), log.getAmount());
     }
 }

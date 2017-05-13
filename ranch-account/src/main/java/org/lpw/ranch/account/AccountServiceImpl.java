@@ -2,7 +2,9 @@ package org.lpw.ranch.account;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import org.lpw.ranch.account.log.LogModel;
 import org.lpw.ranch.account.log.LogService;
+import org.lpw.ranch.account.type.AccountTypes;
 import org.lpw.ranch.lock.LockHelper;
 import org.lpw.ranch.user.helper.UserHelper;
 import org.lpw.tephra.crypto.Digest;
@@ -13,7 +15,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -35,6 +36,8 @@ public class AccountServiceImpl implements AccountService {
     @Inject
     private UserHelper userHelper;
     @Inject
+    private AccountTypes accountTypes;
+    @Inject
     private LogService logService;
     @Inject
     private AccountDao accountDao;
@@ -48,9 +51,14 @@ public class AccountServiceImpl implements AccountService {
         if (owner != null && owner.trim().length() == 0)
             owner = "";
         PageList<AccountModel> pl = owner == null ? accountDao.query(user) : accountDao.query(user, owner);
+        if (pl.getList().isEmpty()) {
+            if (balance > 0)
+                logService.complete(deposit(user, owner, 0, balance, null).getString("logId"));
+            else
+                save(find(user, owner, 0));
+            pl = owner == null ? accountDao.query(user) : accountDao.query(user, owner);
+        }
         JSONArray array = modelHelper.toJson(pl.getList());
-        if (array.isEmpty())
-            array.add(balance > 0 ? deposit(user, "", 0, balance, null) : save(find(user, owner, 0), 0, null, LogService.State.Complete, null));
 
         return userHelper.fill(array, new String[]{"user"});
     }
@@ -60,97 +68,54 @@ public class AccountServiceImpl implements AccountService {
         if (validator.isEmpty(user))
             user = userHelper.id();
         AccountModel account = find(user, owner, type);
-        if (account == null)
-            return null;
 
-        account.setDeposit(account.getDeposit() + amount);
-
-        return save(account, amount, "deposit", LogService.State.New, map);
+        return account == null ? null : save(account, accountTypes.get(AccountTypes.DEPOSIT).change(account, amount, map));
     }
 
     @Override
     public JSONObject withdraw(String owner, int type, int amount, Map<String, String> map) {
         AccountModel account = find(userHelper.id(), owner, type);
-        if (account == null)
-            return null;
 
-        if (account.getBalance() - amount < 0) {
-            lockHelper.unlock(account.getLockId());
-
-            return null;
-        }
-
-        account.setWithdraw(account.getWithdraw() + amount);
-        account.setPending(account.getPending() + amount);
-
-        return save(account, -1 * amount, "withdraw", LogService.State.New, map);
+        return account == null ? null : save(account, accountTypes.get(AccountTypes.WITHDRAW).change(account, amount, map));
     }
 
     @Override
     public JSONObject reward(String user, String owner, int type, int amount) {
         AccountModel account = find(user, owner, type);
-        if (account == null)
-            return null;
 
-        account.setReward(account.getReward() + amount);
-
-        return save(account, amount, "reward", LogService.State.Complete, null);
+        return account == null ? null : save(account, accountTypes.get(AccountTypes.REWARD).change(account, amount, null));
     }
 
     @Override
     public JSONObject profit(String user, String owner, int type, int amount) {
         AccountModel account = find(user, owner, type);
-        if (account == null)
-            return null;
 
-        account.setProfit(account.getProfit() + amount);
-
-        return save(account, amount, "profit", LogService.State.Complete, null);
+        return account == null ? null : save(account, accountTypes.get(AccountTypes.PROFIT).change(account, amount, null));
     }
 
     @Override
     public JSONObject consume(String owner, int type, int amount) {
         AccountModel account = find(userHelper.id(), owner, type);
-        if (account == null)
-            return null;
 
-        if (account.getBalance() - amount < 0) {
-            lockHelper.unlock(account.getLockId());
-
-            return null;
-        }
-
-        account.setConsume(account.getConsume() + amount);
-        account.setPending(account.getPending() + amount);
-
-        return save(account, -1 * amount, "consume", LogService.State.New, null);
+        return account == null ? null : save(account, accountTypes.get(AccountTypes.CONSUME).change(account, amount, null));
     }
 
     @Override
-    public void complete(String id, int amount) {
-        AccountModel account = accountDao.findById(id);
+    public void complete(LogModel log) {
+        AccountModel account = accountDao.findById(log.getAccount());
         if (account == null)
             return;
 
-        String lockId = lockHelper.lock(LOCK_USER + account.getUser(), 1000L);
+        String lockId = lock(account.getUser());
         if (lockId == null)
             return;
 
-        if (amount < 0)
-            amount = 0 - amount;
-        if (account.getPending() < amount) {
-            lockHelper.unlock(lockId);
-
-            return;
-        }
-
-        account.setPending(account.getPending() - amount);
-        accountDao.save(account);
-        lockHelper.unlock(lockId);
+        accountTypes.get(log.getType()).complte(account, log);
+        save(account);
     }
 
     private AccountModel find(String user, String owner, int type) {
-        String lockId = lockHelper.lock(LOCK_USER + user, 1000L);
+        String lockId = lock(user);
         if (lockId == null)
             return null;
 
@@ -162,37 +127,38 @@ public class AccountServiceImpl implements AccountService {
             account.setUser(user);
             account.setOwner(owner);
             account.setType(type);
+            accountDao.save(account);
         }
         account.setLockId(lockId);
 
         return account;
     }
 
-    private JSONObject save(AccountModel account, int amount, String type, LogService.State state, Map<String, String> map) {
-        account.setBalance(account.getBalance() + amount);
-        account.setChecksum(checksum(account.getUser(), account.getOwner(), account.getType(), account.getBalance(),
-                account.getDeposit(), account.getWithdraw(), account.getReward(), account.getProfit(), account.getConsume(), account.getPending()));
-        accountDao.save(account);
-        lockHelper.unlock(account.getLockId());
-        JSONObject object = modelHelper.toJson(account);
-        if (type != null) {
-            Map<String, String> parameter = new HashMap<>();
-            if (map != null) {
-                parameter.putAll(map);
-                for (String key : new String[]{"user", "owner", "type", "amount"})
-                    parameter.remove(key);
-            }
-            object.put("logId", logService.create(account, type, amount, state, parameter));
-        }
-
-        return object;
+    private String lock(String user) {
+        return lockHelper.lock(LOCK_USER + user, 1000L);
     }
 
-    private String checksum(Object... objects) {
+    private void save(AccountModel account) {
         StringBuilder sb = new StringBuilder(CHECKSUM);
-        for (Object object : objects)
+        for (Object object : new Object[]{account.getUser(), account.getOwner(), account.getType(), account.getBalance(),
+                account.getDeposit(), account.getWithdraw(), account.getReward(), account.getProfit(), account.getConsume(), account.getPending()})
             sb.append('&').append(object);
+        account.setChecksum(digest.md5(sb.toString()));
+        accountDao.save(account);
+        lockHelper.unlock(account.getLockId());
+    }
 
-        return digest.md5(sb.toString());
+    private JSONObject save(AccountModel account, String logId) {
+        if (logId == null) {
+            lockHelper.unlock(account.getLockId());
+
+            return null;
+        }
+
+        save(account);
+        JSONObject object = modelHelper.toJson(account);
+        object.put("logId", logId);
+
+        return object;
     }
 }

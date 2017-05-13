@@ -2,6 +2,7 @@ package org.lpw.ranch.account;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import org.lpw.ranch.account.log.LogModel;
 
 import java.util.Map;
 
@@ -82,8 +83,7 @@ public interface AccountService {
     /**
      * 结算。
      *
-     * @param id     账户ID。
-     * @param amount 数量。
+     * @param log 操作日志。
      */
-    void complete(String id, int amount);
+    void complete(LogModel log);
 }
