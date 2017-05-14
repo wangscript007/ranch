@@ -34,7 +34,7 @@ public class WithdrawImpl extends AccountTypeSupport implements AccountType {
             return;
 
         account.setPending(account.getPending() - log.getAmount());
-        if (log.getState() == LogService.State.Refuse.ordinal())
+        if (log.getState() == LogService.State.Reject.ordinal())
             account.setBalance(account.getBalance() + log.getAmount());
         else
             account.setWithdraw(account.getWithdraw() + log.getAmount());

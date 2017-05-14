@@ -13,3 +13,7 @@
 [消费](doc/consume.md)
 
 [检索账户变更日志集](doc/log/query.md)
+
+[审核通过](doc/log/pass.md)
+
+[审核不通过](doc/log/reject.md)

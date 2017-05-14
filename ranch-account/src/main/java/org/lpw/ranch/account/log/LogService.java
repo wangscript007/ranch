@@ -25,7 +25,7 @@ public interface LogService {
         /**
          * 审核不通过。
          */
-        Refuse,
+        Reject,
         /**
          * 已完成。
          */
@@ -53,6 +53,20 @@ public interface LogService {
      * @return 日志ID值。
      */
     String create(AccountModel account, String type, int amount, State state, Map<String, String> map);
+
+    /**
+     * 设置审核通过。
+     *
+     * @param ids ID集。
+     */
+    void pass(String[] ids);
+
+    /**
+     * 设置审核不通过。
+     *
+     * @param ids ID集。
+     */
+    void reject(String[] ids);
 
     /**
      * 设置为完成。

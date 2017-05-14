@@ -97,12 +97,28 @@ public class LogServiceImpl implements LogService {
     }
 
     @Override
+    public void pass(String[] ids) {
+        for (String id : ids)
+            complete(id, State.Pass);
+    }
+
+    @Override
+    public void reject(String[] ids) {
+        for (String id : ids)
+            complete(id, State.Reject);
+    }
+
+    @Override
     public void complete(String id) {
+        complete(id, State.Complete);
+    }
+
+    private void complete(String id, State state) {
         LogModel log = logDao.findById(id);
         if (log == null || log.getState() != State.New.ordinal())
             return;
 
-        log.setState(State.Complete.ordinal());
+        log.setState(state.ordinal());
         log.setEnd(dateTime.now());
         accountService.complete(log);
         logDao.save(log);

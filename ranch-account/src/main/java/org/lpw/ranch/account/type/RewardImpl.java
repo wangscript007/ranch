@@ -42,7 +42,7 @@ public class RewardImpl extends AccountTypeSupport implements AccountType {
             return;
 
         account.setPending(account.getPending() - log.getAmount());
-        if (log.getState() == LogService.State.Refuse.ordinal())
+        if (log.getState() == LogService.State.Reject.ordinal())
             return;
 
         account.setBalance(account.getBalance() + log.getAmount());
