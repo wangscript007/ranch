@@ -78,7 +78,7 @@ public class AuditTesterImpl implements AuditTester {
         Assert.assertEquals("", object.getString("data"));
         for (int i = 0; i < 3; i++) {
             T model = testerDao.findById(list.get(i).getId());
-            Assert.assertEquals(Audit.Passed.getValue(), model.getAudit());
+            Assert.assertEquals(Audit.Pass.getValue(), model.getAudit());
             if (i == 1)
                 Assert.assertEquals("remark " + i, model.getAuditRemark());
             else
@@ -136,7 +136,7 @@ public class AuditTesterImpl implements AuditTester {
         Assert.assertEquals("", object.getString("data"));
         for (int i = 0; i < 3; i++) {
             T model = testerDao.findById(list.get(i).getId());
-            Assert.assertEquals(Audit.Refused.getValue(), model.getAudit());
+            Assert.assertEquals(Audit.Reject.getValue(), model.getAudit());
             if (i == 2)
                 Assert.assertEquals("remark " + i, model.getAuditRemark());
             else

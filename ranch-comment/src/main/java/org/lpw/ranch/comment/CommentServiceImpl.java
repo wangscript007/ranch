@@ -58,7 +58,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public JSONObject queryByOwner(String owner) {
-        return toJson(commentDao.query(Audit.Passed, owner, pagination.getPageSize(), pagination.getPageNum()), false, false, true, true);
+        return toJson(commentDao.query(Audit.Pass, owner, pagination.getPageSize(), pagination.getPageNum()), false, false, true, true);
     }
 
     @Override
@@ -134,7 +134,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     private void getChildren(JSONObject object, CommentModel comment) {
-        PageList<CommentModel> pl = commentDao.query(Audit.Passed, comment.getId(), 0, 0);
+        PageList<CommentModel> pl = commentDao.query(Audit.Pass, comment.getId(), 0, 0);
         if (pl.getList().isEmpty())
             return;
 

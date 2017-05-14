@@ -52,7 +52,7 @@ public class TestSupport extends TephraTestSupport implements AuditTesterDao<Doc
     List<DocModel> create(int size) {
         List<DocModel> list = new ArrayList<>();
         for (int i = 0; i < size; i++)
-            list.add(create(i, Audit.Passed));
+            list.add(create(i, Audit.Pass));
 
         return list;
     }

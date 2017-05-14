@@ -21,7 +21,7 @@ public class QueryByOwnerTest extends TestSupport {
         List<CommentModel> list = new ArrayList<>();
         for (int i = 0; i < 20; i++)
             list.add(create(i, owners[i % owners.length], "author " + i, Audit.values()[i % 3], Recycle.No));
-        CommentModel child = create(101, list.get(1).getId(), "author 1", Audit.Passed, Recycle.No);
+        CommentModel child = create(101, list.get(1).getId(), "author 1", Audit.Pass, Recycle.No);
 
         mockHelper.reset();
         mockHelper.mock("/comment/query-by-owner");

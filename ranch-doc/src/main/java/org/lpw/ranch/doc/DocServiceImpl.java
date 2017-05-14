@@ -99,7 +99,7 @@ public class DocServiceImpl implements DocService, MinuteJob {
                 continue;
 
             DocModel doc = findById(id);
-            if (doc == null || doc.getAudit() != Audit.Passed.getValue() || doc.getRecycle() != Recycle.No.getValue())
+            if (doc == null || doc.getAudit() != Audit.Pass.getValue() || doc.getRecycle() != Recycle.No.getValue())
                 continue;
 
             object.put(id, toJson(doc));

@@ -13,7 +13,7 @@ public class ValidatorImpl extends ValidatorSupport {
     public boolean validate(ValidateWrapper validate, String parameter) {
         int n = converter.toInt(parameter);
 
-        return n >= Audit.Normal.ordinal() && n <= Audit.Refused.ordinal();
+        return n >= Audit.Normal.ordinal() && n <= Audit.Reject.ordinal();
     }
 
     @Override

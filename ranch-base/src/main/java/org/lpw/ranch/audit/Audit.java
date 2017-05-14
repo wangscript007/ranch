@@ -13,11 +13,11 @@ public enum Audit {
     /**
      * 审核通过。
      */
-    Passed(1),
+    Pass(1),
     /**
      * 审核不通过。
      */
-    Refused(2);
+    Reject(2);
 
     private int value;
     private String sql;

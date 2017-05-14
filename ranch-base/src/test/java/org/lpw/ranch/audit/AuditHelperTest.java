@@ -55,7 +55,7 @@ public class AuditHelperTest extends TephraTestSupport {
         auditHelper.pass(TestAuditModel.class, new String[]{list.get(0).getId(), list.get(1).getId()}, null);
         for (int i = 0; i < 2; i++) {
             TestAuditModel model = liteOrm.findById(TestAuditModel.class, list.get(i).getId());
-            Assert.assertEquals(Audit.Passed.getValue(), model.getAudit());
+            Assert.assertEquals(Audit.Pass.getValue(), model.getAudit());
             Assert.assertEquals("remark " + i, model.getAuditRemark());
         }
         equals(list, 2);
@@ -84,7 +84,7 @@ public class AuditHelperTest extends TephraTestSupport {
         auditHelper.refuse(TestAuditModel.class, new String[]{list.get(0).getId(), list.get(1).getId()}, "remark");
         for (int i = 0; i < 2; i++) {
             TestAuditModel model = liteOrm.findById(TestAuditModel.class, list.get(i).getId());
-            Assert.assertEquals(Audit.Refused.getValue(), model.getAudit());
+            Assert.assertEquals(Audit.Reject.getValue(), model.getAudit());
             Assert.assertEquals("remark", model.getAuditRemark());
         }
         equals(list, 2);

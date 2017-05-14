@@ -27,12 +27,12 @@ public class AuditHelperImpl implements AuditHelper {
 
     @Override
     public <T extends AuditModel> void pass(Class<T> modelClass, String[] ids, String auditRemark) {
-        audit(modelClass, ids, Audit.Passed, auditRemark);
+        audit(modelClass, ids, Audit.Pass, auditRemark);
     }
 
     @Override
     public <T extends AuditModel> void refuse(Class<T> modelClass, String[] ids, String auditRemark) {
-        audit(modelClass, ids, Audit.Refused, auditRemark);
+        audit(modelClass, ids, Audit.Reject, auditRemark);
     }
 
     private <T extends AuditModel> void audit(Class<T> modelClass, String[] ids, Audit audit, String auditRemark) {

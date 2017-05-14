@@ -82,7 +82,7 @@ public class QueryTest extends TestSupport {
         Assert.assertEquals(3, list.size());
         for (int i = 0; i < 10; i++)
             if (i % 3 == 1)
-                equals(list.getJSONObject(i / 3), i, Audit.Passed);
+                equals(list.getJSONObject(i / 3), i, Audit.Pass);
 
         mockCarousel.reset();
         mockHelper.reset();
@@ -100,7 +100,7 @@ public class QueryTest extends TestSupport {
         Assert.assertEquals(1, data.getIntValue("number"));
         list = data.getJSONArray("list");
         Assert.assertEquals(1, list.size());
-        equals(list.getJSONObject(0), 4, Audit.Passed);
+        equals(list.getJSONObject(0), 4, Audit.Pass);
 
         mockCarousel.reset();
         mockHelper.reset();
@@ -118,7 +118,7 @@ public class QueryTest extends TestSupport {
         Assert.assertEquals(1, data.getIntValue("number"));
         list = data.getJSONArray("list");
         Assert.assertEquals(1, list.size());
-        equals(list.getJSONObject(0), 5, Audit.Refused);
+        equals(list.getJSONObject(0), 5, Audit.Reject);
 
         mockCarousel.reset();
         mockHelper.reset();

@@ -13,11 +13,11 @@ import org.lpw.tephra.ctrl.validate.Validators;
 public class GetTest extends TestSupport {
     @Test
     public void get() {
-        DocModel doc1 = create(1, Audit.Passed);
-        DocModel doc2 = create(2, Audit.Passed);
+        DocModel doc1 = create(1, Audit.Pass);
+        DocModel doc2 = create(2, Audit.Pass);
         DocModel doc3 = create(3, Audit.Normal);
-        DocModel doc4 = create(4, Audit.Refused);
-        DocModel doc5 = create(5, "image 5", "thumbnail 5", "summary 5", "label 5", Audit.Passed, Recycle.Yes);
+        DocModel doc4 = create(4, Audit.Reject);
+        DocModel doc5 = create(5, "image 5", "thumbnail 5", "summary 5", "label 5", Audit.Pass, Recycle.Yes);
 
         mockHelper.reset();
         mockHelper.mock("/doc/get");
@@ -41,7 +41,7 @@ public class GetTest extends TestSupport {
         Assert.assertEquals(0, object.getIntValue("code"));
         data = object.getJSONObject("data");
         Assert.assertEquals(2, data.size());
-        equals(data.getJSONObject(doc1.getId()), 1, Audit.Passed);
-        equals(data.getJSONObject(doc2.getId()), 2, Audit.Passed);
+        equals(data.getJSONObject(doc1.getId()), 1, Audit.Pass);
+        equals(data.getJSONObject(doc2.getId()), 2, Audit.Pass);
     }
 }
