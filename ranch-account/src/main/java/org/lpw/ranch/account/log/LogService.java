@@ -36,11 +36,13 @@ public interface LogService {
      * 检索账户操作日志集。
      *
      * @param uid   用户UID。
+     * @param type  类型。
+     * @param state 状态：0-待处理；1-审核通过；2-审核不通过；3-已完成。
      * @param start 开始日期。
      * @param end   结束日期。
      * @return 操作日志集。
      */
-    JSONObject query(String uid, Date start, Date end);
+    JSONObject query(String uid, String type, int state, Date start, Date end);
 
     /**
      * 新增日志。

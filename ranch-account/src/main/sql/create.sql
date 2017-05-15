@@ -31,7 +31,7 @@ CREATE TABLE t_account_log
   c_start DATETIME DEFAULT NULL COMMENT '开始时间',
   c_end DATETIME DEFAULT NULL COMMENT '结束时间',
   c_json TEXT DEFAULT NULL COMMENT '扩展属性集',
-  c_index BIGINT AUTO_INCREMENT NOT NULL COMMENT '顺序',
+  c_index BIGINT AUTO_INCREMENT NOT NULL COMMENT '序号',
 
   PRIMARY KEY pk(c_id) USING HASH,
   KEY k_user(c_user,c_start) USING BTREE,

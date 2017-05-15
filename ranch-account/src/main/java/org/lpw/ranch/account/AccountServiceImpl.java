@@ -88,8 +88,10 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public JSONObject withdraw(String owner, int type, int amount, Map<String, String> map) {
-        AccountModel account = find(userHelper.id(), owner, type);
+    public JSONObject withdraw(String user, String owner, int type, int amount, Map<String, String> map) {
+        if (validator.isEmpty(user))
+            user = userHelper.id();
+        AccountModel account = find(user, owner, type);
 
         return account == null ? null : save(account, accountTypes.get(AccountTypes.WITHDRAW).change(account, amount, map));
     }

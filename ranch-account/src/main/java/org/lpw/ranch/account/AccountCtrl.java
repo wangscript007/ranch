@@ -55,10 +55,10 @@ public class AccountCtrl {
             @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "owner", failureCode = 1),
             @Validate(validator = Validators.BETWEEN, number = {0, 0}, parameter = "type", failureCode = 2),
             @Validate(validator = Validators.GREATER_THAN, number = {0}, parameter = "amount", failureCode = 3),
-            @Validate(validator = UserHelper.VALIDATOR_SIGN_IN)
+            @Validate(validator = UserHelper.VALIDATOR_ID_OR_SIGN_IN, parameter = "user", failureCode = 10)
     })
     public Object withdraw() {
-        return execute(accountService.withdraw(request.get("owner"), request.getAsInt("type"), request.getAsInt("amount"), request.getMap()), 6, "withdraw");
+        return execute(accountService.withdraw(request.get("user"), request.get("owner"), request.getAsInt("type"), request.getAsInt("amount"), request.getMap()), 6, "withdraw");
     }
 
     @Execute(name = "reward", validates = {

@@ -30,7 +30,7 @@ public class LogModel extends ModelSupport {
     private Timestamp start; // 开始时间
     private Timestamp end; // 结束时间
     private String json; // 扩展属性集
-    private long index; // 顺序
+    private long index; // 序号
 
     @Jsonable
     @Column(name = "c_user")

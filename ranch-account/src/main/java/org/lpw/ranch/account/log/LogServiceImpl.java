@@ -50,14 +50,14 @@ public class LogServiceImpl implements LogService {
     }
 
     @Override
-    public JSONObject query(String uid, Date start, Date end) {
+    public JSONObject query(String uid, String type, int state, Date start, Date end) {
         String userId = null;
         if (!validator.isEmpty(uid)) {
             JSONObject user = userHelper.findByUid(uid);
             userId = user.isEmpty() ? uid : user.getString("id");
         }
 
-        PageList<LogModel> pl = logDao.query(userId, dateTime.getStart(start), dateTime.getEnd(end), pagination.getPageSize(20), pagination.getPageNum());
+        PageList<LogModel> pl = logDao.query(userId, type, state, dateTime.getStart(start), dateTime.getEnd(end), pagination.getPageSize(20), pagination.getPageNum());
         JSONObject object = pl.toJson(false);
         JSONArray list = new JSONArray();
         pl.getList().forEach(log -> list.add(toJson(log)));

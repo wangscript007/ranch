@@ -48,13 +48,14 @@ public interface AccountService {
     /**
      * 取出。
      *
+     * @param user   用户。
      * @param owner  所有者。
      * @param type   类型。
      * @param amount 数量。
      * @param map    参数集。
      * @return 账户信息；如果取出失败则返回null。
      */
-    JSONObject withdraw(String owner, int type, int amount, Map<String, String> map);
+    JSONObject withdraw(String user, String owner, int type, int amount, Map<String, String> map);
 
     /**
      * 奖励。
