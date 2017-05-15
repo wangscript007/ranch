@@ -42,6 +42,11 @@ public class UserHelperImpl extends ServiceHelperSupport implements UserHelper {
     }
 
     @Override
+    public String findIdByUid(String uid) {
+        return findByUid(uid).getString("id");
+    }
+
+    @Override
     public JSONObject sign() {
         if (signKey == null)
             signKey = key + ".sign";

@@ -42,7 +42,7 @@ class LogDaoImpl implements LogDao {
             args.add(end);
         }
 
-        return liteOrm.query(new LiteQuery(LogModel.class).where(where.toString()).order("c_start desc").size(pageSize).page(pageNum), args.toArray());
+        return liteOrm.query(new LiteQuery(LogModel.class).where(where.toString()).order("c_start desc,c_index desc").size(pageSize).page(pageNum), args.toArray());
     }
 
     @Override

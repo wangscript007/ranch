@@ -31,8 +31,10 @@ CREATE TABLE t_account_log
   c_start DATETIME DEFAULT NULL COMMENT '开始时间',
   c_end DATETIME DEFAULT NULL COMMENT '结束时间',
   c_json TEXT DEFAULT NULL COMMENT '扩展属性集',
+  c_index BIGINT AUTO_INCREMENT NOT NULL COMMENT '顺序',
 
   PRIMARY KEY pk(c_id) USING HASH,
   KEY k_user(c_user,c_start) USING BTREE,
-  KEY k_account(c_account,c_start) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  KEY k_account(c_account,c_start) USING BTREE,
+  UNIQUE KEY uk_index(c_index) USING HASH
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;

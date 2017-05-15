@@ -34,6 +34,13 @@ public class AccountCtrl {
         return accountService.query(request.get("user"), request.get("owner"));
     }
 
+    @Execute(name = "query-uid", validates = {
+            @Validate(validator = Validators.SIGN)
+    })
+    public Object queryUid() {
+        return accountService.query(request.get("uid"));
+    }
+
     @Execute(name = "deposit", validates = {
             @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "owner", failureCode = 1),
             @Validate(validator = Validators.BETWEEN, number = {0, 0}, parameter = "type", failureCode = 2),

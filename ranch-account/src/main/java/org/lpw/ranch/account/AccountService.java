@@ -26,6 +26,14 @@ public interface AccountService {
     JSONArray query(String user, String owner);
 
     /**
+     * 检索账户信息。
+     *
+     * @param uid 用户UID，为空则所有用户。
+     * @return 账户信息集。
+     */
+    JSONObject query(String uid);
+
+    /**
      * 存入。
      *
      * @param user   用户。

@@ -52,6 +52,14 @@ public interface UserHelper {
     JSONObject findByUid(String uid);
 
     /**
+     * 根据UID获取用户ID值。
+     *
+     * @param uid UID值。
+     * @return 用户ID值；如果不存在则返回null。
+     */
+    String findIdByUid(String uid);
+
+    /**
      * 填充用户信息。
      *
      * @param array 要填充的数据集。

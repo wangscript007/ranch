@@ -7,6 +7,7 @@ import org.lpw.ranch.account.log.LogService;
 import org.lpw.ranch.account.type.AccountTypes;
 import org.lpw.ranch.lock.LockHelper;
 import org.lpw.ranch.user.helper.UserHelper;
+import org.lpw.ranch.util.Pagination;
 import org.lpw.tephra.crypto.Digest;
 import org.lpw.tephra.dao.model.ModelHelper;
 import org.lpw.tephra.dao.orm.PageList;
@@ -33,6 +34,8 @@ public class AccountServiceImpl implements AccountService {
     private ModelHelper modelHelper;
     @Inject
     private LockHelper lockHelper;
+    @Inject
+    private Pagination pagination;
     @Inject
     private UserHelper userHelper;
     @Inject
@@ -61,6 +64,18 @@ public class AccountServiceImpl implements AccountService {
         JSONArray array = modelHelper.toJson(pl.getList());
 
         return userHelper.fill(array, new String[]{"user"});
+    }
+
+    @Override
+    public JSONObject query(String uid) {
+        String user = null;
+        if (!validator.isEmpty(uid)) {
+            user = userHelper.findIdByUid(uid);
+            if (user == null)
+                user = uid;
+        }
+
+        return accountDao.query(user, pagination.getPageSize(20), pagination.getPageNum()).toJson();
     }
 
     @Override
