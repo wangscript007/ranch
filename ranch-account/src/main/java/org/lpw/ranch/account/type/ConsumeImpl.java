@@ -26,7 +26,7 @@ public class ConsumeImpl extends AccountTypeSupport implements AccountType {
         account.setConsume(account.getConsume() + amount);
         account.setPending(account.getPending() + amount);
 
-        return log(account, amount, LogService.State.Complete, map);
+        return log(account, amount, LogService.State.New, map);
     }
 
     @Override

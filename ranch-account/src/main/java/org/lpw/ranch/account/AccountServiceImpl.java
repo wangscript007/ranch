@@ -123,8 +123,8 @@ public class AccountServiceImpl implements AccountService {
         if (account == null)
             return;
 
-        String lockId = lock(account.getUser());
-        if (lockId == null)
+        account = find(account.getUser(), account.getOwner(), account.getType());
+        if (account == null)
             return;
 
         accountTypes.get(log.getType()).complte(account, log);
@@ -132,7 +132,8 @@ public class AccountServiceImpl implements AccountService {
     }
 
     private AccountModel find(String user, String owner, int type) {
-        String lockId = lock(user);
+        String lockId = lockHelper.lock(LOCK_USER + user, 1000L);
+        ;
         if (lockId == null)
             return null;
 
@@ -149,10 +150,6 @@ public class AccountServiceImpl implements AccountService {
         account.setLockId(lockId);
 
         return account;
-    }
-
-    private String lock(String user) {
-        return lockHelper.lock(LOCK_USER + user, 1000L);
     }
 
     private void save(AccountModel account) {
