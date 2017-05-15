@@ -56,8 +56,8 @@ class ClassifyDaoImpl implements ClassifyDao {
     }
 
     @Override
-    public ClassifyModel findByCodeValue(String code, String value) {
-        return liteOrm.findOne(new LiteQuery(ClassifyModel.class).where(Recycle.No.getSql() + " and c_code=? and c_value=?"), new Object[]{code, value});
+    public ClassifyModel findByCodeKey(String code, String key) {
+        return liteOrm.findOne(new LiteQuery(ClassifyModel.class).where(Recycle.No.getSql() + " and c_code=? and c_key=?"), new Object[]{code, key});
     }
 
     @Override

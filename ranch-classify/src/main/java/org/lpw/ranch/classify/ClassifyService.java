@@ -15,9 +15,9 @@ public interface ClassifyService extends RecycleService {
      */
     String VALIDATOR_EXISTS = ClassifyModel.NAME + ".validator.exists";
     /**
-     * 分类code+value是否不存在验证器Bean名称。
+     * 分类code+key是否不存在验证器Bean名称。
      */
-    String VALIDATOR_CODE_VALUE_NOT_EXISTS = ClassifyModel.NAME + ".validator.code-value.not-exists";
+    String VALIDATOR_CODE_KEY_NOT_EXISTS = ClassifyModel.NAME + ".validator.code-key.not-exists";
 
     /**
      * 检索分类信息集。
@@ -50,10 +50,10 @@ public interface ClassifyService extends RecycleService {
      * 查找分类信息。
      *
      * @param code  编码。
-     * @param value 值。
+     * @param key key值。
      * @return 分类信息，如果不存在则返回空JSON。
      */
-    JSONObject find(String code, String value);
+    JSONObject find(String code, String key);
 
     /**
      * 检索指定关键词的分类信息集。

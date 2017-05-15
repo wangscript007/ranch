@@ -26,12 +26,12 @@ public class FindTest extends TestSupport {
         mockHelper.getRequest().addParameter("code", "code");
         mockHelper.mock("/classify/find");
         object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(1205, object.getIntValue("code"));
-        Assert.assertEquals(message.get(Validators.PREFIX + "empty", message.get(ClassifyModel.NAME + ".value")), object.getString("message"));
+        Assert.assertEquals(1204, object.getIntValue("code"));
+        Assert.assertEquals(message.get(Validators.PREFIX + "empty", message.get(ClassifyModel.NAME + ".key")), object.getString("message"));
 
         mockHelper.reset();
         mockHelper.getRequest().addParameter("code", "code");
-        mockHelper.getRequest().addParameter("value", "value");
+        mockHelper.getRequest().addParameter("key", "key");
         mockHelper.mock("/classify/find");
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(0, object.getIntValue("code"));
@@ -39,7 +39,7 @@ public class FindTest extends TestSupport {
 
         mockHelper.reset();
         mockHelper.getRequest().addParameter("code", "code 2");
-        mockHelper.getRequest().addParameter("value", "value 2");
+        mockHelper.getRequest().addParameter("key", "key 2");
         mockHelper.mock("/classify/find");
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(0, object.getIntValue("code"));
@@ -47,7 +47,7 @@ public class FindTest extends TestSupport {
 
         mockHelper.reset();
         mockHelper.getRequest().addParameter("code", "code 2");
-        mockHelper.getRequest().addParameter("value", "value 3");
+        mockHelper.getRequest().addParameter("key", "key 3");
         mockHelper.mock("/classify/find");
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(0, object.getIntValue("code"));
@@ -55,7 +55,7 @@ public class FindTest extends TestSupport {
 
         mockHelper.reset();
         mockHelper.getRequest().addParameter("code", "code 3");
-        mockHelper.getRequest().addParameter("value", "value 1");
+        mockHelper.getRequest().addParameter("key", "key 1");
         mockHelper.mock("/classify/find");
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(0, object.getIntValue("code"));
@@ -63,7 +63,7 @@ public class FindTest extends TestSupport {
 
         mockHelper.reset();
         mockHelper.getRequest().addParameter("code", "code 1");
-        mockHelper.getRequest().addParameter("value", "value 1");
+        mockHelper.getRequest().addParameter("key", "key 1");
         mockHelper.mock("/classify/find");
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(0, object.getIntValue("code"));
@@ -71,7 +71,7 @@ public class FindTest extends TestSupport {
 
         mockHelper.reset();
         mockHelper.getRequest().addParameter("code", "code 1");
-        mockHelper.getRequest().addParameter("value", "value 2");
+        mockHelper.getRequest().addParameter("key", "key 2");
         mockHelper.mock("/classify/find");
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(0, object.getIntValue("code"));
@@ -79,17 +79,17 @@ public class FindTest extends TestSupport {
 
         mockHelper.reset();
         mockHelper.getRequest().addParameter("code", "code 2");
-        mockHelper.getRequest().addParameter("value", "value 1");
+        mockHelper.getRequest().addParameter("key", "key 1");
         mockHelper.mock("/classify/find");
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(0, object.getIntValue("code"));
         equals(object.getJSONObject("data"), "code 2", 1);
 
-        classify11.setValue("value 3");
+        classify11.setKey("key 3");
         liteOrm.save(classify11);
         mockHelper.reset();
         mockHelper.getRequest().addParameter("code", "code 1");
-        mockHelper.getRequest().addParameter("value", "value 1");
+        mockHelper.getRequest().addParameter("key", "key 1");
         mockHelper.mock("/classify/find");
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(0, object.getIntValue("code"));
@@ -97,21 +97,21 @@ public class FindTest extends TestSupport {
 
         mockHelper.reset();
         mockHelper.getRequest().addParameter("code", "code 1");
-        mockHelper.getRequest().addParameter("value", "value 3");
+        mockHelper.getRequest().addParameter("key", "key 3");
         mockHelper.mock("/classify/find");
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(0, object.getIntValue("code"));
         JSONObject data = object.getJSONObject("data");
         Assert.assertEquals(36, data.getString("id").length());
         Assert.assertEquals("code 1", data.getString("code"));
-        Assert.assertEquals("value 3", data.getString("value"));
-        for (String name : new String[]{"key", "name"})
+        Assert.assertEquals("key 3", data.getString("key"));
+        for (String name : new String[]{"code", "name"})
             Assert.assertEquals(name + " " + 1, data.get(name));
 
         classifyService.refresh();
         mockHelper.reset();
         mockHelper.getRequest().addParameter("code", "code 1");
-        mockHelper.getRequest().addParameter("value", "value 1");
+        mockHelper.getRequest().addParameter("key", "key 1");
         mockHelper.mock("/classify/find");
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(0, object.getIntValue("code"));

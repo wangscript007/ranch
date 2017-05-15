@@ -42,7 +42,7 @@ public class RecycleTest extends TestSupport implements RecycleTesterDao<Recycle
         mockHelper.mock("/classify/restore");
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(1210, object.getIntValue("code"));
-        Assert.assertEquals(message.get(ClassifyModel.NAME + ".code-value.exists"), object.getString("message"));
+        Assert.assertEquals(message.get(ClassifyModel.NAME + ".code-key.exists"), object.getString("message"));
 
         liteOrm.delete(classify1);
         classifyService.refresh();

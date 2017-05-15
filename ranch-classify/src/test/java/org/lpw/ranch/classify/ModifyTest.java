@@ -35,6 +35,13 @@ public class ModifyTest extends TestSupport {
 
         mockHelper.reset();
         mockHelper.getRequest().addParameter("id", list.get(0).getId());
+        mockHelper.mock("/classify/modify");
+        object = mockHelper.getResponse().asJson();
+        Assert.assertEquals(1202, object.getIntValue("code"));
+        Assert.assertEquals(message.get(Validators.PREFIX + "empty", message.get(ClassifyModel.NAME + ".code")), object.getString("message"));
+
+        mockHelper.reset();
+        mockHelper.getRequest().addParameter("id", list.get(0).getId());
         mockHelper.getRequest().addParameter("code", generator.random(101));
         mockHelper.mock("/classify/modify");
         object = mockHelper.getResponse().asJson();
@@ -43,14 +50,25 @@ public class ModifyTest extends TestSupport {
 
         mockHelper.reset();
         mockHelper.getRequest().addParameter("id", list.get(0).getId());
-        mockHelper.getRequest().addParameter("key", generator.random(101));
+        mockHelper.getRequest().addParameter("code", "code");
         mockHelper.mock("/classify/modify");
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(1204, object.getIntValue("code"));
+        Assert.assertEquals(message.get(Validators.PREFIX + "empty", message.get(ClassifyModel.NAME + ".key")), object.getString("message"));
+
+        mockHelper.reset();
+        mockHelper.getRequest().addParameter("id", list.get(0).getId());
+        mockHelper.getRequest().addParameter("code", "code");
+        mockHelper.getRequest().addParameter("key", generator.random(101));
+        mockHelper.mock("/classify/modify");
+        object = mockHelper.getResponse().asJson();
+        Assert.assertEquals(1205, object.getIntValue("code"));
         Assert.assertEquals(message.get(Validators.PREFIX + "over-max-length", message.get(ClassifyModel.NAME + ".key"), 100), object.getString("message"));
 
         mockHelper.reset();
         mockHelper.getRequest().addParameter("id", list.get(0).getId());
+        mockHelper.getRequest().addParameter("code", "code");
+        mockHelper.getRequest().addParameter("key", "key");
         mockHelper.getRequest().addParameter("value", generator.random(101));
         mockHelper.mock("/classify/modify");
         object = mockHelper.getResponse().asJson();
@@ -59,6 +77,17 @@ public class ModifyTest extends TestSupport {
 
         mockHelper.reset();
         mockHelper.getRequest().addParameter("id", list.get(0).getId());
+        mockHelper.getRequest().addParameter("code", "code");
+        mockHelper.getRequest().addParameter("key", "key");
+        mockHelper.mock("/classify/modify");
+        object = mockHelper.getResponse().asJson();
+        Assert.assertEquals(1207, object.getIntValue("code"));
+        Assert.assertEquals(message.get(Validators.PREFIX + "empty", message.get(ClassifyModel.NAME + ".name")), object.getString("message"));
+
+        mockHelper.reset();
+        mockHelper.getRequest().addParameter("id", list.get(0).getId());
+        mockHelper.getRequest().addParameter("code", "code");
+        mockHelper.getRequest().addParameter("key", "key");
         mockHelper.getRequest().addParameter("name", generator.random(101));
         mockHelper.mock("/classify/modify");
         object = mockHelper.getResponse().asJson();
@@ -102,7 +131,7 @@ public class ModifyTest extends TestSupport {
         mockHelper.mock("/classify/modify");
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(1210, object.getIntValue("code"));
-        Assert.assertEquals(message.get(ClassifyModel.NAME + ".code-value.exists"), object.getString("message"));
+        Assert.assertEquals(message.get(ClassifyModel.NAME + ".code-key.exists"), object.getString("message"));
 
         mockHelper.reset();
         mockHelper.getRequest().addParameter("id", list.get(0).getId());
@@ -144,6 +173,10 @@ public class ModifyTest extends TestSupport {
 
         mockHelper.reset();
         mockHelper.getRequest().addParameter("id", list.get(0).getId());
+        mockHelper.getRequest().addParameter("code", "code 11");
+        mockHelper.getRequest().addParameter("key", "key 11");
+        mockHelper.getRequest().addParameter("value", "value 11");
+        mockHelper.getRequest().addParameter("name", "name 11");
         mockHelper.getRequest().addParameter("json", "json 111");
         mockHelper.getRequest().addParameter("-label", "label 11");
         sign.put(mockHelper.getRequest().getMap(), null);
@@ -212,6 +245,7 @@ public class ModifyTest extends TestSupport {
         mockHelper.getRequest().addParameter("id", list.get(2).getId());
         mockHelper.getRequest().addParameter("code", "code 22");
         mockHelper.getRequest().addParameter("key", "key 33");
+        mockHelper.getRequest().addParameter("value", "value 22");
         mockHelper.getRequest().addParameter("name", "name 33");
         mockHelper.getRequest().addParameter("label", "label 33");
         sign.put(mockHelper.getRequest().getMap(), null);

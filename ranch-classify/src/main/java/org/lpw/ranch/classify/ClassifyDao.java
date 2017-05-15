@@ -12,7 +12,7 @@ interface ClassifyDao {
 
     ClassifyModel findById(String id);
 
-    ClassifyModel findByCodeValue(String code, String value);
+    ClassifyModel findByCodeKey(String code, String key);
 
     void save(ClassifyModel classify);
 }

@@ -119,14 +119,11 @@ public class ClassifyServiceImpl implements ClassifyService, DateJob {
     }
 
     @Override
-    public JSONObject find(String code, String value) {
-        if (validator.isEmpty(code) || validator.isEmpty(value))
-            return new JSONObject();
-
-        String cacheKey = CACHE_GET + getRandom() + code + value;
+    public JSONObject find(String code, String key) {
+        String cacheKey = CACHE_GET + getRandom() + code + key;
         JSONObject object = cache.get(cacheKey);
         if (object == null) {
-            ClassifyModel classify = classifyDao.findByCodeValue(code, value);
+            ClassifyModel classify = classifyDao.findByCodeKey(code, key);
             if (classify == null)
                 return new JSONObject();
 
@@ -182,14 +179,10 @@ public class ClassifyServiceImpl implements ClassifyService, DateJob {
     @Override
     public JSONObject modify(ClassifyModel model, Map<String, String> map) {
         ClassifyModel classify = findById(model.getId());
-        if (!validator.isEmpty(model.getCode()))
-            classify.setCode(model.getCode());
-        if (!validator.isEmpty(model.getKey()))
-            classify.setKey(model.getKey());
-        if (!validator.isEmpty(model.getValue()))
-            classify.setValue(model.getValue());
-        if (!validator.isEmpty(model.getName()))
-            classify.setName(model.getName());
+        classify.setCode(model.getCode());
+        classify.setKey(model.getKey());
+        classify.setValue(model.getValue());
+        classify.setName(model.getName());
 
         return save(classify, validator.isEmpty(classify.getJson()) ? new JSONObject() : JSON.parseObject(classify.getJson()), map);
     }

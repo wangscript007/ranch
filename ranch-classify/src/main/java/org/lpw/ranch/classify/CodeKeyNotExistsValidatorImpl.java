@@ -10,8 +10,8 @@ import javax.inject.Inject;
 /**
  * @author lpw
  */
-@Controller(ClassifyService.VALIDATOR_CODE_VALUE_NOT_EXISTS)
-public class CodeValueNotExistsValidatorImpl extends ValidatorSupport {
+@Controller(ClassifyService.VALIDATOR_CODE_KEY_NOT_EXISTS)
+public class CodeKeyNotExistsValidatorImpl extends ValidatorSupport {
     @Inject
     private ClassifyService classifyService;
 
@@ -19,7 +19,7 @@ public class CodeValueNotExistsValidatorImpl extends ValidatorSupport {
     public boolean validate(ValidateWrapper validate, String parameter) {
         ClassifyModel classify = classifyService.findById(parameter);
 
-        return validate(classify.getId(), classify.getCode(), classify.getValue());
+        return validate(classify.getId(), classify.getCode(), classify.getKey());
     }
 
     @Override
@@ -27,14 +27,14 @@ public class CodeValueNotExistsValidatorImpl extends ValidatorSupport {
         return validate(parameters.length == 3 ? parameters[2] : null, parameters[0], parameters[1]);
     }
 
-    private boolean validate(String id, String code, String value) {
-        JSONObject object = classifyService.find(code, value);
+    private boolean validate(String id, String code, String key) {
+        JSONObject object = classifyService.find(code, key);
 
         return object.isEmpty() || object.getString("id").equals(id);
     }
 
     @Override
     protected String getDefaultFailureMessageKey() {
-        return ClassifyModel.NAME + ".code-value.exists";
+        return ClassifyModel.NAME + ".code-key.exists";
     }
 }

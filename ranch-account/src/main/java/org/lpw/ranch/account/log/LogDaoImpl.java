@@ -23,23 +23,34 @@ class LogDaoImpl implements LogDao {
 
     @Override
     public PageList<LogModel> query(String user, String type, int state, Timestamp start, Timestamp end, int pageSize, int pageNum) {
-        StringBuilder where = new StringBuilder("c_state=?");
+        StringBuilder where = new StringBuilder();
         List<Object> args = new ArrayList<>();
-        args.add(state);
         if (!validator.isEmpty(user)) {
-            where.append(" and c_user=?");
+            where.append("c_user=?");
             args.add(user);
         }
         if (!validator.isEmpty(type)) {
-            where.append(" and c_type=?");
+            if (!args.isEmpty())
+                where.append(" and ");
+            where.append("c_type=?");
             args.add(type);
         }
+        if (state > -1) {
+            if (!args.isEmpty())
+                where.append(" and ");
+            where.append("c_state=?");
+            args.add(state);
+        }
         if (start != null) {
-            where.append(" and c_start>=?");
+            if (!args.isEmpty())
+                where.append(" and ");
+            where.append("c_start>=?");
             args.add(start);
         }
         if (end != null) {
-            where.append(" and c_start<=?");
+            if (!args.isEmpty())
+                where.append(" and ");
+            where.append("c_start<=?");
             args.add(end);
         }
 

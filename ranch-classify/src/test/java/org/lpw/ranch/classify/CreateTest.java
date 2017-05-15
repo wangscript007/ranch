@@ -26,21 +26,22 @@ public class CreateTest extends TestSupport {
 
         mockHelper.reset();
         mockHelper.getRequest().addParameter("code", "code");
-        mockHelper.getRequest().addParameter("key", generator.random(101));
         mockHelper.mock("/classify/create");
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(1204, object.getIntValue("code"));
+        Assert.assertEquals(message.get(Validators.PREFIX + "empty", message.get(ClassifyModel.NAME + ".key")), object.getString("message"));
+
+        mockHelper.reset();
+        mockHelper.getRequest().addParameter("code", "code");
+        mockHelper.getRequest().addParameter("key", generator.random(101));
+        mockHelper.mock("/classify/create");
+        object = mockHelper.getResponse().asJson();
+        Assert.assertEquals(1205, object.getIntValue("code"));
         Assert.assertEquals(message.get(Validators.PREFIX + "over-max-length", message.get(ClassifyModel.NAME + ".key"), 100), object.getString("message"));
 
         mockHelper.reset();
         mockHelper.getRequest().addParameter("code", "code");
-        mockHelper.mock("/classify/create");
-        object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(1205, object.getIntValue("code"));
-        Assert.assertEquals(message.get(Validators.PREFIX + "empty", message.get(ClassifyModel.NAME + ".value")), object.getString("message"));
-
-        mockHelper.reset();
-        mockHelper.getRequest().addParameter("code", "code");
+        mockHelper.getRequest().addParameter("key", "key");
         mockHelper.getRequest().addParameter("value", generator.random(101));
         mockHelper.mock("/classify/create");
         object = mockHelper.getResponse().asJson();
@@ -49,7 +50,7 @@ public class CreateTest extends TestSupport {
 
         mockHelper.reset();
         mockHelper.getRequest().addParameter("code", "code");
-        mockHelper.getRequest().addParameter("value", "value");
+        mockHelper.getRequest().addParameter("key", "key");
         mockHelper.mock("/classify/create");
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(1207, object.getIntValue("code"));
@@ -57,7 +58,7 @@ public class CreateTest extends TestSupport {
 
         mockHelper.reset();
         mockHelper.getRequest().addParameter("code", "code");
-        mockHelper.getRequest().addParameter("value", "value");
+        mockHelper.getRequest().addParameter("key", "key");
         mockHelper.getRequest().addParameter("name", generator.random(101));
         mockHelper.mock("/classify/create");
         object = mockHelper.getResponse().asJson();
@@ -97,7 +98,7 @@ public class CreateTest extends TestSupport {
         mockHelper.mock("/classify/create");
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(1210, object.getIntValue("code"));
-        Assert.assertEquals(message.get(ClassifyModel.NAME + ".code-value.exists"), object.getString("message"));
+        Assert.assertEquals(message.get(ClassifyModel.NAME + ".code-key.exists"), object.getString("message"));
 
         mockHelper.reset();
         mockHelper.getRequest().addParameter("code", "code 2");

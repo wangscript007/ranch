@@ -6,8 +6,8 @@
 
 参数
 - code 编码，必须。
-- key 键。
-- value 值，必须。
+- key 键，必须。
+- value 值。
 - name 名称，必须。
 
 返回值

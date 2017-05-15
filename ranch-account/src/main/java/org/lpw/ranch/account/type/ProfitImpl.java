@@ -19,6 +19,9 @@ public class ProfitImpl extends AccountTypeSupport implements AccountType {
 
     @Override
     public String change(AccountModel account, int amount, Map<String, String> map) {
+        if (amount <= 0)
+            return null;
+
         account.setBalance(account.getBalance() + amount);
         account.setProfit(account.getProfit() + amount);
 

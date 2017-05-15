@@ -44,10 +44,10 @@ public class ClassifyCtrl extends RecycleCtrlSupport {
 
     @Execute(name = "find", validates = {
             @Validate(validator = Validators.NOT_EMPTY, parameter = "code", failureCode = 2),
-            @Validate(validator = Validators.NOT_EMPTY, parameter = "value", failureCode = 5)
+            @Validate(validator = Validators.NOT_EMPTY, parameter = "key", failureCode = 4)
     })
     public Object find() {
-        return templates.get().success(classifyService.find(request.get("code"), request.get("value")), null);
+        return templates.get().success(classifyService.find(request.get("code"), request.get("key")), null);
     }
 
     @Execute(name = "list", validates = {
@@ -60,13 +60,13 @@ public class ClassifyCtrl extends RecycleCtrlSupport {
     @Execute(name = "create", validates = {
             @Validate(validator = Validators.NOT_EMPTY, parameter = "code", failureCode = 2),
             @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "code", failureCode = 3),
-            @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "key", failureCode = 4),
-            @Validate(validator = Validators.NOT_EMPTY, parameter = "value", failureCode = 5),
+            @Validate(validator = Validators.NOT_EMPTY, parameter = "key", failureCode = 4),
+            @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "key", failureCode = 5),
             @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "value", failureCode = 6),
             @Validate(validator = Validators.NOT_EMPTY, parameter = "name", failureCode = 7),
             @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "name", failureCode = 8),
             @Validate(validator = Validators.SIGN),
-            @Validate(validator = ClassifyService.VALIDATOR_CODE_VALUE_NOT_EXISTS, parameters = {"code", "value"}, failureCode = 10)
+            @Validate(validator = ClassifyService.VALIDATOR_CODE_KEY_NOT_EXISTS, parameters = {"code", "key"}, failureCode = 10)
     })
     public Object create() {
         return templates.get().success(classifyService.create(request.getMap()), null);
@@ -74,13 +74,16 @@ public class ClassifyCtrl extends RecycleCtrlSupport {
 
     @Execute(name = "modify", validates = {
             @Validate(validator = Validators.ID, parameter = "id", failureCode = 1),
+            @Validate(validator = Validators.NOT_EMPTY, parameter = "code", failureCode = 2),
             @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "code", failureCode = 3),
-            @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "key", failureCode = 4),
+            @Validate(validator = Validators.NOT_EMPTY, parameter = "key", failureCode = 4),
+            @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "key", failureCode = 5),
             @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "value", failureCode = 6),
+            @Validate(validator = Validators.NOT_EMPTY, parameter = "name", failureCode = 7),
             @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "name", failureCode = 8),
             @Validate(validator = Validators.SIGN),
             @Validate(validator = ClassifyService.VALIDATOR_EXISTS, parameter = "id", failureCode = 9),
-            @Validate(validator = ClassifyService.VALIDATOR_CODE_VALUE_NOT_EXISTS, parameters = {"code", "value", "id"}, failureCode = 10)
+            @Validate(validator = ClassifyService.VALIDATOR_CODE_KEY_NOT_EXISTS, parameters = {"code", "key", "id"}, failureCode = 10)
     })
     public Object modify() {
         return templates.get().success(classifyService.modify(request.setToModel(new ClassifyModel()), request.getMap()), null);
@@ -99,7 +102,7 @@ public class ClassifyCtrl extends RecycleCtrlSupport {
             @Validate(validator = Validators.ID, parameter = "id", failureCode = 86),
             @Validate(validator = Validators.SIGN),
             @Validate(validator = ClassifyService.VALIDATOR_EXISTS, parameter = "id", failureCode = 9),
-            @Validate(validator = ClassifyService.VALIDATOR_CODE_VALUE_NOT_EXISTS, parameter = "id", failureCode = 10)
+            @Validate(validator = ClassifyService.VALIDATOR_CODE_KEY_NOT_EXISTS, parameter = "id", failureCode = 10)
     })
     public Object restore() {
         return super.restore();

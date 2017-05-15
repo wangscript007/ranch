@@ -1,4 +1,4 @@
-# 通过编码与值获取分类信息
+# 通过编码与key获取分类信息
 
 请求
 - Service Key - ranch.classify.find
@@ -6,7 +6,7 @@
 
 参数
 - code 编码，必须。
-- value 值，必须。
+- key KEY值，必须。
 
 返回值
 ```json
