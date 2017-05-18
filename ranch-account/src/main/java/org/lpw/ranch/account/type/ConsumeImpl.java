@@ -23,7 +23,6 @@ public class ConsumeImpl extends AccountTypeSupport implements AccountType {
             return null;
 
         account.setBalance(account.getBalance() - amount);
-        account.setConsume(account.getConsume() + amount);
         account.setPending(account.getPending() + amount);
 
         return log(account, amount, LogService.State.New, map);
@@ -35,5 +34,10 @@ public class ConsumeImpl extends AccountTypeSupport implements AccountType {
             return;
 
         account.setPending(account.getPending() - log.getAmount());
+        if (log.getState() == LogService.State.Reject.ordinal()) {
+            account.setBalance(account.getBalance() + log.getAmount());
+            log.setBalance(log.getBalance() + log.getAmount());
+        } else
+            account.setConsume(account.getConsume() + log.getAmount());
     }
 }
