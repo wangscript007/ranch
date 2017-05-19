@@ -95,16 +95,17 @@ public class UserServiceImpl implements UserService {
     }
 
     private String getWeixinOpenId(String appId, String code) {
-        String openId = weixinService.auth(appId, code).getString("openid");
+        JSONObject object = weixinService.auth(appId, code);
+        String openId = object.getString("openid");
         if (openId == null)
             return null;
 
         if (authService.findByUid(openId) == null) {
             signUp(openId, null, Type.WeiXin);
             UserModel user = new UserModel();
-            user.setNick(weixinService.getNickname());
+            user.setNick(object.getString("nickname"));
             modify(user);
-            portrait(weixinService.getPortrait());
+            portrait(object.getString("headimgurl"));
         }
 
         return openId;
@@ -136,6 +137,8 @@ public class UserServiceImpl implements UserService {
     @Override
     public void modify(UserModel user) {
         UserModel model = session.get(SESSION);
+        if (user.getIdcard() != null)
+            model.setIdcard(user.getIdcard());
         if (user.getName() != null)
             model.setName(user.getName());
         if (user.getNick() != null)
@@ -146,8 +149,6 @@ public class UserServiceImpl implements UserService {
             model.setEmail(user.getEmail());
         if (user.getGender() > 0)
             model.setGender(user.getGender());
-        if (user.getAddress() != null)
-            model.setAddress(user.getAddress());
         if (user.getBirthday() != null)
             model.setBirthday(user.getBirthday());
         userDao.save(model);

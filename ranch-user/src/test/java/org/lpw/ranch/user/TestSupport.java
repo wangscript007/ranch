@@ -56,13 +56,14 @@ public class TestSupport extends TephraTestSupport {
 
     UserModel set(UserModel user, int i, int state) {
         user.setPassword(digest.md5(UserModel.NAME + digest.sha1("password " + i + UserModel.NAME)));
+        user.setSecret(digest.md5(UserModel.NAME + digest.sha1("secret " + i + UserModel.NAME)));
+        user.setIdcard("idcard " + i);
         user.setName("name " + i);
         user.setNick("nick " + i);
         user.setMobile("123123456" + (10 + i));
         user.setEmail("email " + i);
         user.setPortrait("portrait " + i);
         user.setGender(i);
-        user.setAddress("address " + i);
         user.setBirthday(new Date(System.currentTimeMillis() - i * TimeUnit.Day.getTime()));
         user.setCode("code " + i);
         user.setRegister(new Timestamp(System.currentTimeMillis() - i * TimeUnit.Hour.getTime()));
@@ -86,13 +87,14 @@ public class TestSupport extends TephraTestSupport {
     void equals(UserModel user, JSONObject object) {
         Assert.assertEquals(user.getId(), object.getString("id"));
         Assert.assertFalse(object.containsKey("password"));
+        Assert.assertFalse(object.containsKey("secret"));
+        Assert.assertEquals(user.getIdcard(), object.getString("idcard"));
         Assert.assertEquals(user.getName(), object.getString("name"));
         Assert.assertEquals(user.getNick(), object.getString("nick"));
         Assert.assertEquals(user.getMobile(), object.getString("mobile"));
         Assert.assertEquals(user.getEmail(), object.getString("email"));
         Assert.assertEquals(user.getPortrait(), object.getString("portrait"));
         Assert.assertEquals(user.getGender(), object.getIntValue("gender"));
-        Assert.assertEquals(user.getAddress(), object.getString("address"));
         Assert.assertEquals(converter.toString(user.getBirthday()), object.getString("birthday"));
         Assert.assertEquals(user.getCode(), object.getString("code"));
         Assert.assertEquals(converter.toString(user.getRegister()), object.getString("register"));
@@ -131,12 +133,13 @@ public class TestSupport extends TephraTestSupport {
             Assert.assertNull(user.getPassword());
         else
             Assert.assertEquals(digest.md5(UserModel.NAME + digest.sha1(password + UserModel.NAME)), user.getPassword());
+        Assert.assertNull(user.getSecret());
+        Assert.assertNull(user.getIdcard());
         Assert.assertNull(user.getName());
         Assert.assertNull(user.getNick());
         Assert.assertNull(user.getMobile());
         Assert.assertNull(user.getEmail());
         Assert.assertNull(user.getPortrait());
-        Assert.assertNull(user.getAddress());
         Assert.assertNull(user.getBirthday());
         Assert.assertEquals(0, user.getGender());
         Assert.assertEquals(0, user.getGrade());

@@ -9,8 +9,9 @@ import org.springframework.stereotype.Component;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
-import java.sql.Date;
+
 import java.sql.Timestamp;
+import java.sql.Date;
 
 /**
  * @author lpw
@@ -23,13 +24,14 @@ public class UserModel extends ModelSupport {
     static final String NAME = "ranch.user";
 
     private String password; // 密码
+    private String secret; // 安全密码
+    private String idcard; // 身份证号
     private String name; // 姓名
     private String nick; // 昵称
     private String mobile; // 手机号
     private String email; // Email地址
     private String portrait; // 头像
     private int gender; // 性别：0-未知；1-男；2-女
-    private String address; // 详细地址
     private Date birthday; // 出生日期
     private String code; // 唯一编码
     private Timestamp register; // 注册时间
@@ -43,6 +45,25 @@ public class UserModel extends ModelSupport {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    @Column(name = "c_secret")
+    public String getSecret() {
+        return secret;
+    }
+
+    public void setSecret(String secret) {
+        this.secret = secret;
+    }
+
+    @Jsonable
+    @Column(name = "c_idcard")
+    public String getIdcard() {
+        return idcard;
+    }
+
+    public void setIdcard(String idcard) {
+        this.idcard = idcard;
     }
 
     @Jsonable
@@ -103,16 +124,6 @@ public class UserModel extends ModelSupport {
 
     public void setGender(int gender) {
         this.gender = gender;
-    }
-
-    @Jsonable
-    @Column(name = "c_address")
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
     }
 
     @Jsonable

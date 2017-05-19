@@ -230,12 +230,13 @@ public class SignInTest extends TestSupport {
 
             UserModel user = liteOrm.findById(UserModel.class, auth.getUser());
             Assert.assertNull(user.getPassword());
+            Assert.assertNull(user.getSecret());
+            Assert.assertNull(user.getIdcard());
             Assert.assertNull(user.getName());
             Assert.assertEquals("weixin nickname 0", user.getNick());
             Assert.assertNull(user.getMobile());
             Assert.assertNull(user.getEmail());
             Assert.assertEquals("weixin portrait 0", user.getPortrait());
-            Assert.assertNull(user.getAddress());
             Assert.assertNull(user.getBirthday());
             Assert.assertEquals(0, user.getGender());
             Assert.assertEquals(0, user.getGrade());
@@ -252,14 +253,10 @@ public class SignInTest extends TestSupport {
             code = user.getCode();
 
             List<Object[]> args = mockWeixin.getArgs();
-            Assert.assertEquals(i == 0 ? 3 : 1, args.size());
+            Assert.assertEquals(1, args.size());
             Assert.assertEquals(2, args.get(0).length);
             Assert.assertEquals("password 5", args.get(0)[0]);
             Assert.assertEquals("uid 5", args.get(0)[1]);
-            if (i == 0) {
-                Assert.assertEquals(0, args.get(1).length);
-                Assert.assertEquals(0, args.get(2).length);
-            }
             thread.sleep(3, TimeUnit.Second);
         }
     }
