@@ -18,10 +18,10 @@ public class ClassifyHelperImpl extends ServiceHelperSupport implements Classify
     private String key;
 
     @Override
-    public JSONObject find(String code, String value) {
+    public JSONObject find(String code, String key) {
         Map<String, String> parameter = new HashMap<>();
         parameter.put("code", code);
-        parameter.put("value", value);
+        parameter.put("key", key);
 
         return carousel.service(key + ".find", null, parameter, true, JSONObject.class);
     }

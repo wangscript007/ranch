@@ -21,10 +21,10 @@ public interface ClassifyHelper {
      * 查找分类信息。
      *
      * @param code  编码。
-     * @param value 值。
+     * @param key 值。
      * @return 分类JSON数据，如果不存在则返回空JSON数据。
      */
-    JSONObject find(String code, String value);
+    JSONObject find(String code, String key);
 
     /**
      * 获取分类信息集。
