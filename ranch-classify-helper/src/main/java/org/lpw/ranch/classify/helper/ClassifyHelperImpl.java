@@ -23,7 +23,7 @@ public class ClassifyHelperImpl extends ServiceHelperSupport implements Classify
         parameter.put("code", code);
         parameter.put("key", key);
 
-        return carousel.service(key + ".find", null, parameter, true, JSONObject.class);
+        return carousel.service(this.key + ".find", null, parameter, true, JSONObject.class);
     }
 
     @Override
