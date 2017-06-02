@@ -64,11 +64,11 @@ public class ClassifyHelperTest extends TephraTestSupport {
             return json.toJSONString();
         });
 
-        JSONObject object = classifyHelper.find("code", "value");
+        JSONObject object = classifyHelper.find("code", "key");
         Assert.assertEquals(4, object.size());
         Assert.assertEquals("header value", object.getString("header name"));
         Assert.assertEquals("code", object.getString("code"));
-        Assert.assertEquals("value", object.getString("value"));
+        Assert.assertEquals("key", object.getString("key"));
         Assert.assertEquals("5", object.getString("cacheTime"));
     }
 
@@ -116,7 +116,7 @@ public class ClassifyHelperTest extends TephraTestSupport {
     }
 
     @Test
-    public void fillByValue() {
+    public void fillByKey() {
         while (Calendar.getInstance().get(Calendar.SECOND) > 55)
             thread.sleep(5, TimeUnit.Second);
 
@@ -130,7 +130,7 @@ public class ClassifyHelperTest extends TephraTestSupport {
             JSONObject json = new JSONObject();
             json.put("code", 0);
             JSONObject data = new JSONObject();
-            if (converter.toInt(parameter.get("value")) > 4)
+            if (converter.toInt(parameter.get("key")) > 4)
                 data.putAll(parameter);
             json.put("data", data);
 
@@ -162,7 +162,7 @@ public class ClassifyHelperTest extends TephraTestSupport {
                 JSONObject obj = object.getJSONObject(name);
                 Assert.assertEquals(2, obj.size());
                 Assert.assertEquals("code", obj.getString("code"));
-                Assert.assertEquals("" + i, obj.getString("value"));
+                Assert.assertEquals("" + i, obj.getString("key"));
             }
         }
     }

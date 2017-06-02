@@ -27,6 +27,7 @@
         <module>ranch-address</module>
         <module>ranch-account</module>
         <module>ranch-dbtool</module>
+        <module>ranch-weixin</module>
         <module>ranch-archives</module>
         <module>ranch-web</module>
         <module>ranch-test</module>

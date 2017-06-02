@@ -46,7 +46,7 @@ public interface ClassifyHelper {
     JSONArray fill(JSONArray array, String[] names);
 
     /**
-     * 填充value对应分类信息。
+     * 填充key对应分类信息。
      *
      * @param array 要填充的数据集。
      * @param code  编码。

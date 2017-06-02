@@ -96,6 +96,9 @@ public class UserServiceImpl implements UserService {
 
     private String getWeixinOpenId(String appId, String code) {
         JSONObject object = weixinService.auth(appId, code);
+        if (object == null)
+            return null;
+
         String openId = object.getString("openid");
         if (openId == null)
             return null;
