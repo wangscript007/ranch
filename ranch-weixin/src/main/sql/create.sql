@@ -9,6 +9,9 @@ CREATE TABLE t_weixin
   c_token VARCHAR(255) DEFAULT NULL COMMENT '验证Token',
   c_mch_id VARCHAR(255) DEFAULT NULL COMMENT '商户ID',
   c_mch_key VARCHAR(255) DEFAULT NULL COMMENT '商户密钥',
+  c_access_token VARCHAR(255) DEFAULT NULL COMMENT 'Access Token',
+  c_jsapi_ticket VARCHAR(255) DEFAULT NULL COMMENT 'Jsapi Ticket',
+  c_time DATETIME DEFAULT NULL COMMENT '更新时间',
 
   PRIMARY KEY pk(c_id) USING HASH,
   UNIQUE KEY uk_key(c_key) USING HASH

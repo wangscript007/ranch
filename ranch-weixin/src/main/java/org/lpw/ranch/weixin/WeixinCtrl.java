@@ -2,8 +2,10 @@ package org.lpw.ranch.weixin;
 
 import org.lpw.tephra.ctrl.context.Request;
 import org.lpw.tephra.ctrl.execute.Execute;
+import org.lpw.tephra.ctrl.template.Templates;
 import org.lpw.tephra.ctrl.validate.Validate;
 import org.lpw.tephra.ctrl.validate.Validators;
+import org.lpw.tephra.util.Validator;
 import org.springframework.stereotype.Controller;
 
 import javax.inject.Inject;
@@ -15,9 +17,22 @@ import javax.inject.Inject;
 @Execute(name = "/weixin/", key = WeixinModel.NAME, code = "24")
 public class WeixinCtrl {
     @Inject
+    private Validator validator;
+    @Inject
     private Request request;
     @Inject
     private WeixinService weixinService;
+
+    @Execute(name = "wx.+", type = Templates.STRING)
+    public Object service() {
+        String uri = request.getUri();
+        String appId = uri.substring(uri.lastIndexOf('/') + 1);
+        String echostr = request.get("echostr");
+        if (!validator.isEmpty(echostr))
+            return weixinService.echo(appId, request.get("signature"), request.get("timestamp"), request.get("nonce"), echostr);
+
+        return null;
+    }
 
     @Execute(name = "query", validates = {
             @Validate(validator = Validators.SIGN)

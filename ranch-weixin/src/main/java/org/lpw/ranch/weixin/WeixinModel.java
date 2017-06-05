@@ -10,6 +10,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
+import java.sql.Timestamp;
+
 /**
  * @author lpw
  */
@@ -27,6 +29,9 @@ public class WeixinModel extends ModelSupport {
     private String token; // 验证Token
     private String mchId; // 商户ID
     private String mchKey; // 商户密钥
+    private String accessToken; // Access Token
+    private String jsapiTicket; // Jsapi Ticket
+    private Timestamp time; // 更新时间
 
     @Jsonable
     @Column(name = "c_key")
@@ -96,5 +101,35 @@ public class WeixinModel extends ModelSupport {
 
     public void setMchKey(String mchKey) {
         this.mchKey = mchKey;
+    }
+
+    @Jsonable
+    @Column(name = "c_access_token")
+    public String getAccessToken() {
+        return accessToken;
+    }
+
+    public void setAccessToken(String accessToken) {
+        this.accessToken = accessToken;
+    }
+
+    @Jsonable
+    @Column(name = "c_jsapi_ticket")
+    public String getJsapiTicket() {
+        return jsapiTicket;
+    }
+
+    public void setJsapiTicket(String jsapiTicket) {
+        this.jsapiTicket = jsapiTicket;
+    }
+
+    @Jsonable
+    @Column(name = "c_time")
+    public Timestamp getTime() {
+        return time;
+    }
+
+    public void setTime(Timestamp time) {
+        this.time = time;
     }
 }

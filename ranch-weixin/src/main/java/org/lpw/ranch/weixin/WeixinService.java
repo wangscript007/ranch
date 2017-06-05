@@ -7,6 +7,18 @@ import com.alibaba.fastjson.JSONArray;
  */
 public interface WeixinService {
     /**
+     * 验证echo信息是否正确。
+     *
+     * @param appId     微信公众号AppID。
+     * @param signature 签名。
+     * @param timestamp 时间戳。
+     * @param nonce     随机数。
+     * @param echostr   echo字符串。
+     * @return 如果验证成功则返回echostr原值；否则返回"failure"。
+     */
+    String echo(String appId, String signature, String timestamp, String nonce, String echostr);
+
+    /**
      * 获取微信配置集。
      *
      * @return 信配置集。

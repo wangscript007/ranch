@@ -26,6 +26,11 @@ class WeixinDaoImpl implements WeixinDao {
     }
 
     @Override
+    public WeixinModel findByAppId(String appId) {
+        return liteOrm.findOne(new LiteQuery(WeixinModel.class).where("c_app_id=?"), new Object[]{appId});
+    }
+
+    @Override
     public void save(WeixinModel weixin) {
         liteOrm.save(weixin);
     }
