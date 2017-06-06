@@ -115,6 +115,10 @@ public class TestSupport extends TephraTestSupport {
     }
 
     void equalsSignUp(JSONObject data, String uid, int type, String password, String code) {
+        equalsSignUp(data, uid, type, password, System.currentTimeMillis(), code);
+    }
+
+    void equalsSignUp(JSONObject data, String uid, int type, String password, long register, String code) {
         AuthModel auth = liteOrm.findOne(new LiteQuery(AuthModel.class).where("c_uid=?"), new Object[]{uid});
         Assert.assertEquals(type, auth.getType());
         Assert.assertEquals(auth.getUser(), data.getString("id"));
@@ -122,7 +126,7 @@ public class TestSupport extends TephraTestSupport {
             Assert.assertFalse(data.containsKey(name));
         for (String name : new String[]{"gender", "grade", "state"})
             Assert.assertEquals(0, data.getIntValue(name));
-        Assert.assertTrue(System.currentTimeMillis() - dateTime.toDate(data.getString("register")).getTime() < 2000L);
+        Assert.assertTrue(Math.abs(register - dateTime.toDate(data.getString("register")).getTime()) < 2000L);
         if (code == null)
             Assert.assertEquals(8, data.getString("code").length());
         else
@@ -144,7 +148,7 @@ public class TestSupport extends TephraTestSupport {
         Assert.assertEquals(0, user.getGender());
         Assert.assertEquals(0, user.getGrade());
         Assert.assertEquals(0, user.getState());
-        Assert.assertTrue(System.currentTimeMillis() - user.getRegister().getTime() < 2000L);
+        Assert.assertTrue(Math.abs(register - user.getRegister().getTime()) < 2000L);
         if (code == null)
             Assert.assertEquals(8, user.getCode().length());
         else

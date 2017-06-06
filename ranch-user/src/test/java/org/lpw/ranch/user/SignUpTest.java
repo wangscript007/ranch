@@ -5,8 +5,10 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.lpw.tephra.ctrl.validate.Validators;
 import org.lpw.tephra.test.GeneratorAspect;
+import org.lpw.tephra.util.TimeUnit;
 
 import javax.inject.Inject;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -57,12 +59,14 @@ public class SignUpTest extends TestSupport {
         Assert.assertEquals(message.get(Validators.PREFIX + "not-between", message.get(UserModel.NAME + ".type"), 0, 1), object.getString("message"));
 
         List<String> list = new ArrayList<>();
-        list.add("mock session id");
+        list.add("mock session id 1");
         list.add("code 0");
-        list.add("mock session id");
-        list.add("mock session id");
+        list.add("mock session id 2");
+        list.add("mock session id 3");
         list.add("code 0");
         list.add("code 1");
+        list.add("mock session id 4");
+        list.add("code 2");
         generatorAspect.randomString(list);
 
         mockHelper.reset();
@@ -89,6 +93,22 @@ public class SignUpTest extends TestSupport {
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(0, object.getIntValue("code"));
         equalsSignUp(object.getJSONObject("data"), "sign up uid 2", 1, "password 2", "code 1");
+
+        UserModel user = new UserModel();
+        user.setRegister(new Timestamp(System.currentTimeMillis() - TimeUnit.Hour.getTime()));
+        user.setCode("code 3");
+        liteOrm.save(user);
+
+        mockHelper.reset();
+        session.set(UserModel.NAME + ".service.session", user);
+        mockHelper.getRequest().addParameter("uid", "sign up uid 3");
+        mockHelper.getRequest().addParameter("password", "password 3");
+        mockHelper.getRequest().addParameter("type", "1");
+        mockHelper.mock("/user/sign-up");
+        object = mockHelper.getResponse().asJson();
+        Assert.assertEquals(0, object.getIntValue("code"));
+        equalsSignUp(object.getJSONObject("data"), "sign up uid 3", 1, "password 3",
+                System.currentTimeMillis() - TimeUnit.Hour.getTime(), "code 3");
 
         generatorAspect.randomString(null);
     }

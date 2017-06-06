@@ -53,10 +53,13 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void signUp(String uid, String password, Type type) {
-        UserModel user = new UserModel();
+        UserModel user = session.get(SESSION);
+        if (user == null)
+            user = new UserModel();
         if (type == Type.Self)
             user.setPassword(password(password));
-        user.setRegister(dateTime.now());
+        if (user.getRegister() == null)
+            user.setRegister(dateTime.now());
         while (user.getCode() == null) {
             String code = generator.random(8);
             if (userDao.findByCode(code) == null)
@@ -64,6 +67,7 @@ public class UserServiceImpl implements UserService {
         }
         userDao.save(user);
         authService.create(user.getId(), uid, type.ordinal());
+        cleanCache(user);
         session.set(SESSION, user);
     }
 
@@ -100,9 +104,6 @@ public class UserServiceImpl implements UserService {
             return null;
 
         String openId = object.getString("openid");
-        if (openId == null)
-            return null;
-
         if (authService.findByUid(openId) == null) {
             signUp(openId, null, Type.WeiXin);
             UserModel user = new UserModel();
