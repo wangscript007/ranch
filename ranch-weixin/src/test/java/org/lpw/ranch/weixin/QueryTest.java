@@ -15,6 +15,8 @@ import java.util.List;
 public class QueryTest extends TestSupport {
     @Test
     public void query() {
+        schedulerAspect.pause();
+
         mockHelper.reset();
         mockHelper.mock("/weixin/query");
         JSONObject object = mockHelper.getResponse().asJson();
@@ -56,5 +58,7 @@ public class QueryTest extends TestSupport {
             equals(data.getJSONObject(0), 1);
             equals(data.getJSONObject(1), 0);
         }
+
+        schedulerAspect.press();
     }
 }

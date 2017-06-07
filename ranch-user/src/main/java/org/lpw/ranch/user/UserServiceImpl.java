@@ -67,7 +67,7 @@ public class UserServiceImpl implements UserService {
         }
         userDao.save(user);
         authService.create(user.getId(), uid, type.ordinal());
-        cleanCache(user);
+        clearCache(user);
         session.set(SESSION, user);
     }
 
@@ -157,7 +157,7 @@ public class UserServiceImpl implements UserService {
             model.setBirthday(user.getBirthday());
         userDao.save(model);
         session.set(SESSION, model);
-        cleanCache(model);
+        clearCache(model);
     }
 
     @Override
@@ -169,7 +169,7 @@ public class UserServiceImpl implements UserService {
         user.setPassword(password(newPassword));
         userDao.save(user);
         session.set(SESSION, user);
-        cleanCache(user);
+        clearCache(user);
 
         return true;
     }
@@ -179,7 +179,7 @@ public class UserServiceImpl implements UserService {
         UserModel user = session.get(SESSION);
         user.setPortrait(uri);
         userDao.save(user);
-        cleanCache(user);
+        clearCache(user);
     }
 
     @Override
@@ -260,7 +260,7 @@ public class UserServiceImpl implements UserService {
         UserModel user = findById(id);
         user.setGrade(grade);
         userDao.save(user);
-        cleanCache(user);
+        clearCache(user);
     }
 
     @Override
@@ -268,10 +268,10 @@ public class UserServiceImpl implements UserService {
         UserModel user = findById(id);
         user.setState(state);
         userDao.save(user);
-        cleanCache(user);
+        clearCache(user);
     }
 
-    private void cleanCache(UserModel user) {
+    private void clearCache(UserModel user) {
         cache.remove(CACHE_MODEL + user.getId());
         cache.remove(CACHE_JSON + user.getId());
         cache.remove(CACHE_JSON + user.getCode());

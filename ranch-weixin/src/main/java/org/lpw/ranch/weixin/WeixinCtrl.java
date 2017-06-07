@@ -31,7 +31,17 @@ public class WeixinCtrl {
         if (!validator.isEmpty(echostr))
             return weixinService.echo(appId, request.get("signature"), request.get("timestamp"), request.get("nonce"), echostr);
 
-        return null;
+        return "";
+    }
+
+    @Execute(name = "auth", validates = {
+            @Validate(validator = Validators.NOT_EMPTY, parameter = "key", failureCode = 1),
+            @Validate(validator = Validators.NOT_EMPTY, parameter = "code", failureCode = 51),
+            @Validate(validator = Validators.SIGN),
+            @Validate(validator = WeixinService.VALIDATOR_EXISTS, parameter = "key", failureCode = 52)
+    })
+    public Object auth() {
+        return weixinService.auth(request.get("key"), request.get("code"));
     }
 
     @Execute(name = "query", validates = {
@@ -52,7 +62,9 @@ public class WeixinCtrl {
             @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "token", failureCode = 8),
             @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "mchId", failureCode = 9),
             @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "mchKey", failureCode = 10),
-            @Validate(validator = Validators.SIGN)
+            @Validate(validator = Validators.SIGN),
+            @Validate(validator = WeixinService.VALIDATOR_NOT_EXISTS, parameters = {"key", "appId"}, failureCode = 11)
+
     })
     public Object save() {
         weixinService.save(request.setToModel(new WeixinModel()));

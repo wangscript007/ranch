@@ -142,7 +142,7 @@ public class TestSupport extends TephraTestSupport implements AuditTesterDao<Doc
     }
 
     @Override
-    public void clean() {
+    public void clear() {
         liteOrm.delete(new LiteQuery(DocModel.class), null);
     }
 }

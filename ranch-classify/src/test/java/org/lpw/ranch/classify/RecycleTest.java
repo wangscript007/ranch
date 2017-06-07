@@ -66,7 +66,7 @@ public class RecycleTest extends TestSupport implements RecycleTesterDao<Recycle
     }
 
     @Override
-    public void clean() {
+    public void clear() {
         liteOrm.delete(new LiteQuery(ClassifyModel.class), null);
     }
 }

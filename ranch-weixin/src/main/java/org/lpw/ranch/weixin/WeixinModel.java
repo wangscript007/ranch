@@ -1,6 +1,7 @@
 package org.lpw.ranch.weixin;
 
 import org.lpw.tephra.dao.model.Jsonable;
+import org.lpw.tephra.dao.model.Memory;
 import org.lpw.tephra.dao.model.ModelSupport;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.Scope;
@@ -9,7 +10,6 @@ import org.springframework.stereotype.Component;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
-
 import java.sql.Timestamp;
 
 /**
@@ -19,6 +19,7 @@ import java.sql.Timestamp;
 @Scope(BeanDefinition.SCOPE_PROTOTYPE)
 @Entity(name = WeixinModel.NAME)
 @Table(name = "t_weixin")
+@Memory(name = "m_weixin")
 public class WeixinModel extends ModelSupport {
     static final String NAME = "ranch.weixin";
 

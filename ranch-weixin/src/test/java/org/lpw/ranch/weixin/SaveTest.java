@@ -12,6 +12,8 @@ import org.lpw.tephra.dao.orm.lite.LiteQuery;
 public class SaveTest extends TestSupport {
     @Test
     public void save() {
+        schedulerAspect.pause();
+
         mockHelper.reset();
         mockHelper.mock("/weixin/save");
         JSONObject object = mockHelper.getResponse().asJson();
@@ -121,6 +123,47 @@ public class SaveTest extends TestSupport {
         Assert.assertNull(weixin1.getToken());
         Assert.assertNull(weixin1.getMchId());
         Assert.assertNull(weixin1.getMchKey());
+        Assert.assertNull(weixin1.getAccessToken());
+        Assert.assertNull(weixin1.getJsapiTicket());
+        Assert.assertNull(weixin1.getTime());
+
+        mockHelper.reset();
+        mockHelper.getRequest().addParameter("key", "key 2");
+        mockHelper.getRequest().addParameter("appId", "app id");
+        mockHelper.getRequest().addParameter("secret", "secret");
+        sign.put(mockHelper.getRequest().getMap(), null);
+        mockHelper.mock("/weixin/save");
+        object = mockHelper.getResponse().asJson();
+        Assert.assertEquals(2411, object.getIntValue("code"));
+        Assert.assertEquals(message.get(WeixinModel.NAME + ".exists"), object.getString("message"));
+
+        mockHelper.reset();
+        mockHelper.getRequest().addParameter("key", "key");
+        mockHelper.getRequest().addParameter("appId", "app id");
+        mockHelper.getRequest().addParameter("secret", "secret 1");
+        mockHelper.getRequest().addParameter("secret", "secret 1");
+        mockHelper.getRequest().addParameter("token", "token 1");
+        mockHelper.getRequest().addParameter("mchId", "mch id 1");
+        mockHelper.getRequest().addParameter("mchKey", "mch key 1");
+        mockHelper.getRequest().addParameter("accessToken", "access token 1");
+        mockHelper.getRequest().addParameter("jsapiTicket", "jsapi ticket 1");
+        mockHelper.getRequest().addParameter("time", "2017-01-02 03:04:05");
+        sign.put(mockHelper.getRequest().getMap(), null);
+        mockHelper.mock("/weixin/save");
+        object = mockHelper.getResponse().asJson();
+        Assert.assertEquals(0, object.getIntValue("code"));
+        Assert.assertEquals("", object.getString("data"));
+        weixin1 = liteOrm.findOne(new LiteQuery(WeixinModel.class).where("c_key=?"), new Object[]{"key"});
+        Assert.assertEquals("key", weixin1.getKey());
+        Assert.assertNull(weixin1.getName());
+        Assert.assertEquals("app id", weixin1.getAppId());
+        Assert.assertEquals("secret 1", weixin1.getSecret());
+        Assert.assertEquals("token 1", weixin1.getToken());
+        Assert.assertEquals("mch id 1", weixin1.getMchId());
+        Assert.assertEquals("mch key 1", weixin1.getMchKey());
+        Assert.assertNull(weixin1.getAccessToken());
+        Assert.assertNull(weixin1.getJsapiTicket());
+        Assert.assertNull(weixin1.getTime());
 
         mockHelper.reset();
         mockHelper.getRequest().addParameter("key", "key");
@@ -130,6 +173,9 @@ public class SaveTest extends TestSupport {
         mockHelper.getRequest().addParameter("token", "token 2");
         mockHelper.getRequest().addParameter("mchId", "mch id 2");
         mockHelper.getRequest().addParameter("mchKey", "mch key 2");
+        mockHelper.getRequest().addParameter("accessToken", "access token 2");
+        mockHelper.getRequest().addParameter("jsapiTicket", "jsapi ticket 2");
+        mockHelper.getRequest().addParameter("time", "2017-01-02 03:04:22");
         sign.put(mockHelper.getRequest().getMap(), null);
         mockHelper.mock("/weixin/save");
         object = mockHelper.getResponse().asJson();
@@ -143,6 +189,9 @@ public class SaveTest extends TestSupport {
         Assert.assertEquals("token 2", weixin2.getToken());
         Assert.assertEquals("mch id 2", weixin2.getMchId());
         Assert.assertEquals("mch key 2", weixin2.getMchKey());
+        Assert.assertNull(weixin2.getAccessToken());
+        Assert.assertNull(weixin2.getJsapiTicket());
+        Assert.assertNull(weixin2.getTime());
 
         mockHelper.reset();
         mockHelper.getRequest().addParameter("id", weixin1.getId());
@@ -153,6 +202,9 @@ public class SaveTest extends TestSupport {
         mockHelper.getRequest().addParameter("token", "token 3");
         mockHelper.getRequest().addParameter("mchId", "mch id 3");
         mockHelper.getRequest().addParameter("mchKey", "mch key 3");
+        mockHelper.getRequest().addParameter("accessToken", "access token 3");
+        mockHelper.getRequest().addParameter("jsapiTicket", "jsapi ticket 3");
+        mockHelper.getRequest().addParameter("time", "2017-01-02 03:04:33");
         sign.put(mockHelper.getRequest().getMap(), null);
         mockHelper.mock("/weixin/save");
         object = mockHelper.getResponse().asJson();
@@ -167,5 +219,10 @@ public class SaveTest extends TestSupport {
         Assert.assertEquals("token 3", weixin3.getToken());
         Assert.assertEquals("mch id 3", weixin3.getMchId());
         Assert.assertEquals("mch key 3", weixin3.getMchKey());
+        Assert.assertNull(weixin3.getAccessToken());
+        Assert.assertNull(weixin3.getJsapiTicket());
+        Assert.assertNull(weixin3.getTime());
+
+        schedulerAspect.press();
     }
 }

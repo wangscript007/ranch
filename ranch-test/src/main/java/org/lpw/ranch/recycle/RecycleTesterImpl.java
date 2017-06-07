@@ -37,7 +37,7 @@ public class RecycleTesterImpl implements RecycleTester {
 
     @Override
     public <T extends RecycleModel> void delete(RecycleTesterDao<T> testerDao, String name, String uriPrefix, int codePrefix) {
-        testerDao.clean();
+        testerDao.clear();
         mockHelper.reset();
         mockHelper.mock("/" + uriPrefix + "/delete");
         JSONObject object = mockHelper.getResponse().asJson();
@@ -71,7 +71,7 @@ public class RecycleTesterImpl implements RecycleTester {
 
     @Override
     public <T extends RecycleModel> void restore(RecycleTesterDao<T> testerDao, String name, String uriPrefix, int codePrefix) {
-        testerDao.clean();
+        testerDao.clear();
         mockHelper.reset();
         mockHelper.mock("/" + uriPrefix + "/restore");
         JSONObject object = mockHelper.getResponse().asJson();
@@ -105,7 +105,7 @@ public class RecycleTesterImpl implements RecycleTester {
 
     @Override
     public <T extends RecycleModel> void recycle(RecycleTesterDao<T> testerDao, String name, String uriPrefix) {
-        testerDao.clean();
+        testerDao.clear();
         Set<String> ids = new HashSet<>();
         for (int i = 0; i < 10; i++) {
             RecycleModel model = testerDao.create(i, Recycle.values()[i % 2]);

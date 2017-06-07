@@ -95,7 +95,7 @@ public class TestSupport extends TephraTestSupport implements AuditTesterDao<Com
     }
 
     @Override
-    public void clean() {
+    public void clear() {
         liteOrm.delete(new LiteQuery(CommentModel.class), null);
     }
 }

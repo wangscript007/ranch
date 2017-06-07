@@ -24,5 +24,5 @@ public interface RecycleTesterDao<T extends RecycleModel> {
     /**
      * 清空数据。
      */
-    void clean();
+    void clear();
 }
