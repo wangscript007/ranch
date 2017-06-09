@@ -116,6 +116,7 @@ public class WeixinServiceImpl implements WeixinService, HourJob, ContextRefresh
             model = new WeixinModel();
             model.setKey(weixin.getKey());
         }
+        boolean modify = !weixin.getAppId().equals(model.getAppId()) || !weixin.getSecret().equals(model.getSecret());
         model.setName(weixin.getName());
         model.setAppId(weixin.getAppId());
         model.setSecret(weixin.getSecret());
@@ -123,6 +124,8 @@ public class WeixinServiceImpl implements WeixinService, HourJob, ContextRefresh
         model.setMchId(weixin.getMchId());
         model.setMchKey(weixin.getMchKey());
         weixinDao.save(model);
+        if (modify)
+            update(model);
     }
 
     @Override
@@ -137,29 +140,29 @@ public class WeixinServiceImpl implements WeixinService, HourJob, ContextRefresh
 
     @Override
     public void executeHourJob() {
-        if (!auto)
+        if (auto)
+            weixinDao.query().getList().forEach(this::update);
+    }
+
+    private void update(WeixinModel weixin) {
+        JSONObject object = json.toObject(http.get("https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=" + weixin.getAppId() + "&secret=" + weixin.getSecret(), null, ""));
+        if (object == null || !object.containsKey("access_token")) {
+            logger.warn(null, "获取微信公众号Token[{}]失败！", object);
+
             return;
+        }
 
-        weixinDao.query().getList().forEach(weixin -> {
-            JSONObject object = json.toObject(http.get("https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=" + weixin.getAppId() + "&secret=" + weixin.getSecret(), null, ""));
-            if (object == null || !object.containsKey("access_token")) {
-                logger.warn(null, "获取微信公众号Token[{}]失败！", object);
+        weixin.setAccessToken(object.getString("access_token"));
+        object = json.toObject(http.get("https://api.weixin.qq.com/cgi-bin/ticket/getticket?type=jsapi&access_token=" + weixin.getAccessToken(), null, ""));
+        if (object != null && object.containsKey("ticket"))
+            weixin.setJsapiTicket(object.getString("ticket"));
+        else
+            logger.warn(null, "获取微信公众号JSAPI Ticket[{}]失败！", object);
 
-                return;
-            }
+        weixin.setTime(dateTime.now());
+        weixinDao.save(weixin);
 
-            weixin.setAccessToken(object.getString("access_token"));
-            object = json.toObject(http.get("https://api.weixin.qq.com/cgi-bin/ticket/getticket?type=jsapi&access_token=" + weixin.getAccessToken(), null, ""));
-            if (object != null && object.containsKey("ticket"))
-                weixin.setJsapiTicket(object.getString("ticket"));
-            else
-                logger.warn(null, "获取微信公众号JSAPI Ticket[{}]失败！", object);
-
-            weixin.setTime(dateTime.now());
-            weixinDao.save(weixin);
-
-            if (logger.isInfoEnable())
-                logger.info("更新微信公众号[{}]Access Token[{}]与Jsapi Ticket[{}]。", weixin.getAppId(), weixin.getAccessToken(), weixin.getJsapiTicket());
-        });
+        if (logger.isInfoEnable())
+            logger.info("更新微信公众号[{}]Access Token[{}]与Jsapi Ticket[{}]。", weixin.getAppId(), weixin.getAccessToken(), weixin.getJsapiTicket());
     }
 }

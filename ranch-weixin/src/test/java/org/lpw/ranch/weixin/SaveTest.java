@@ -6,6 +6,9 @@ import org.junit.Test;
 import org.lpw.tephra.ctrl.validate.Validators;
 import org.lpw.tephra.dao.orm.lite.LiteQuery;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * @author lpw
  */
@@ -106,6 +109,13 @@ public class SaveTest extends TestSupport {
         Assert.assertEquals(9995, object.getIntValue("code"));
         Assert.assertEquals(message.get(Validators.PREFIX + "illegal-sign"), object.getString("message"));
 
+        httpAspect.reset();
+        List<String> urls = new ArrayList<>();
+        List<String> contents = new ArrayList<>();
+        for (int i = 0; i < 10; i++)
+            contents.add("");
+        httpAspect.get(urls, new ArrayList<>(), new ArrayList<>(), contents);
+
         mockHelper.reset();
         mockHelper.getRequest().addParameter("key", "key");
         mockHelper.getRequest().addParameter("appId", "app id");
@@ -126,6 +136,7 @@ public class SaveTest extends TestSupport {
         Assert.assertNull(weixin1.getAccessToken());
         Assert.assertNull(weixin1.getJsapiTicket());
         Assert.assertNull(weixin1.getTime());
+        Assert.assertEquals(1, urls.size());
 
         mockHelper.reset();
         mockHelper.getRequest().addParameter("key", "key 2");
@@ -164,6 +175,7 @@ public class SaveTest extends TestSupport {
         Assert.assertNull(weixin1.getAccessToken());
         Assert.assertNull(weixin1.getJsapiTicket());
         Assert.assertNull(weixin1.getTime());
+        Assert.assertEquals(2, urls.size());
 
         mockHelper.reset();
         mockHelper.getRequest().addParameter("key", "key");
@@ -192,6 +204,7 @@ public class SaveTest extends TestSupport {
         Assert.assertNull(weixin2.getAccessToken());
         Assert.assertNull(weixin2.getJsapiTicket());
         Assert.assertNull(weixin2.getTime());
+        Assert.assertEquals(3, urls.size());
 
         mockHelper.reset();
         mockHelper.getRequest().addParameter("id", weixin1.getId());
@@ -222,6 +235,38 @@ public class SaveTest extends TestSupport {
         Assert.assertNull(weixin3.getAccessToken());
         Assert.assertNull(weixin3.getJsapiTicket());
         Assert.assertNull(weixin3.getTime());
+        Assert.assertEquals(4, urls.size());
+
+        mockHelper.reset();
+        mockHelper.getRequest().addParameter("id", weixin1.getId());
+        mockHelper.getRequest().addParameter("key", "key 3");
+        mockHelper.getRequest().addParameter("name", "name 4");
+        mockHelper.getRequest().addParameter("appId", "app id 3");
+        mockHelper.getRequest().addParameter("secret", "secret 3");
+        mockHelper.getRequest().addParameter("token", "token 4");
+        mockHelper.getRequest().addParameter("mchId", "mch id 4");
+        mockHelper.getRequest().addParameter("mchKey", "mch key 4");
+        mockHelper.getRequest().addParameter("accessToken", "access token 4");
+        mockHelper.getRequest().addParameter("jsapiTicket", "jsapi ticket 4");
+        mockHelper.getRequest().addParameter("time", "2017-01-02 03:04:44");
+        sign.put(mockHelper.getRequest().getMap(), null);
+        mockHelper.mock("/weixin/save");
+        object = mockHelper.getResponse().asJson();
+        Assert.assertEquals(0, object.getIntValue("code"));
+        Assert.assertEquals("", object.getString("data"));
+        WeixinModel weixin4 = liteOrm.findOne(new LiteQuery(WeixinModel.class).where("c_key=?"), new Object[]{"key 3"});
+        Assert.assertNotEquals(weixin1.getId(), weixin4.getId());
+        Assert.assertEquals("key 3", weixin4.getKey());
+        Assert.assertEquals("name 4", weixin4.getName());
+        Assert.assertEquals("app id 3", weixin4.getAppId());
+        Assert.assertEquals("secret 3", weixin4.getSecret());
+        Assert.assertEquals("token 4", weixin4.getToken());
+        Assert.assertEquals("mch id 4", weixin4.getMchId());
+        Assert.assertEquals("mch key 4", weixin4.getMchKey());
+        Assert.assertNull(weixin4.getAccessToken());
+        Assert.assertNull(weixin4.getJsapiTicket());
+        Assert.assertNull(weixin4.getTime());
+        Assert.assertEquals(4, urls.size());
 
         schedulerAspect.press();
     }
