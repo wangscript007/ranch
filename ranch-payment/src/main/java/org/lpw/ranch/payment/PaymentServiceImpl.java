@@ -48,6 +48,20 @@ public class PaymentServiceImpl implements PaymentService {
     private PaymentDao paymentDao;
     private Set<String> ignores;
 
+    public PaymentServiceImpl() {
+        ignores = new HashSet<>();
+        ignores.add("id");
+        ignores.add("type");
+        ignores.add("user");
+        ignores.add("amount");
+        ignores.add("orderNo");
+        ignores.add("tradeNo");
+        ignores.add("notify");
+        ignores.add("state");
+        ignores.add("sign");
+        ignores.add("sign-time");
+    }
+
     @Override
     public JSONObject query(String type, String user, String orderNo, String tradeNo, int state, String start, String end) {
         return paymentDao.query(type, user, orderNo, tradeNo, state, dateTime.getStart(start),
@@ -130,20 +144,6 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     private JSONObject putToJson(JSONObject object, Map<String, String> map) {
-        if (ignores == null) {
-            ignores = new HashSet<>();
-            ignores.add("id");
-            ignores.add("type");
-            ignores.add("user");
-            ignores.add("amount");
-            ignores.add("orderNo");
-            ignores.add("tradeNo");
-            ignores.add("notify");
-            ignores.add("state");
-            ignores.add("sign");
-            ignores.add("sign-time");
-        }
-
         map.forEach((key, value) -> {
             if (ignores.contains(key))
                 return;

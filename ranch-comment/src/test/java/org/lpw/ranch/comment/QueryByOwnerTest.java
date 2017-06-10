@@ -47,9 +47,7 @@ public class QueryByOwnerTest extends TestSupport {
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(0, object.getIntValue("code"));
         JSONObject data = object.getJSONObject("data");
-        Assert.assertEquals(3, data.getIntValue("count"));
-        Assert.assertEquals(20, data.getIntValue("size"));
-        Assert.assertEquals(1, data.getIntValue("number"));
+        pageTester.assertCountSizeNumber(3, 20, 1, data);
         JSONArray array = data.getJSONArray("list");
         Assert.assertEquals(3, array.size());
         for (int i = 0; i < array.size(); i++)
@@ -66,9 +64,7 @@ public class QueryByOwnerTest extends TestSupport {
             object = mockHelper.getResponse().asJson();
             Assert.assertEquals(0, object.getIntValue("code"));
             data = object.getJSONObject("data");
-            Assert.assertEquals(4, data.getIntValue("count"));
-            Assert.assertEquals(20, data.getIntValue("size"));
-            Assert.assertEquals(1, data.getIntValue("number"));
+            pageTester.assertCountSizeNumber(4, 20, 1, data);
             array = data.getJSONArray("list");
             Assert.assertEquals(4, array.size());
             for (int i = 0; i < array.size(); i++)

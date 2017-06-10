@@ -6,6 +6,7 @@ import org.junit.Assert;
 import org.lpw.tephra.crypto.Sign;
 import org.lpw.tephra.ctrl.validate.Validators;
 import org.lpw.tephra.test.MockHelper;
+import org.lpw.tephra.test.PageTester;
 import org.lpw.tephra.util.Generator;
 import org.lpw.tephra.util.Message;
 import org.springframework.stereotype.Component;
@@ -25,6 +26,7 @@ public class RecycleTesterImpl implements RecycleTester {
     private Generator generator;
     @Inject
     private Sign sign;
+    @Inject private PageTester pageTester;
     @Inject
     private MockHelper mockHelper;
 
@@ -129,9 +131,7 @@ public class RecycleTesterImpl implements RecycleTester {
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(0, object.getIntValue("code"));
         JSONObject data = object.getJSONObject("data");
-        Assert.assertEquals(5, data.getIntValue("count"));
-        Assert.assertEquals(2, data.getIntValue("size"));
-        Assert.assertEquals(1, data.getIntValue("number"));
+        pageTester.assertCountSizeNumber(5, 2, 1, data);
         JSONArray list = data.getJSONArray("list");
         Assert.assertEquals(2, list.size());
         for (int i = 0; i < 2; i++)

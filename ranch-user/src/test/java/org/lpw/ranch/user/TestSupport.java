@@ -9,6 +9,7 @@ import org.lpw.tephra.ctrl.context.Session;
 import org.lpw.tephra.dao.orm.lite.LiteOrm;
 import org.lpw.tephra.dao.orm.lite.LiteQuery;
 import org.lpw.tephra.test.MockHelper;
+import org.lpw.tephra.test.PageTester;
 import org.lpw.tephra.test.TephraTestSupport;
 import org.lpw.tephra.util.Converter;
 import org.lpw.tephra.util.DateTime;
@@ -45,6 +46,8 @@ public class TestSupport extends TephraTestSupport {
     Session session;
     @Inject
     MockHelper mockHelper;
+    @Inject
+    PageTester pageTester;
 
     UserModel create(int i) {
         return create(i, 10 + i);

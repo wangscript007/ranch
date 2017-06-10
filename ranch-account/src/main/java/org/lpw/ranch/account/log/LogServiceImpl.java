@@ -15,9 +15,7 @@ import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
 import java.sql.Date;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * @author lpw
@@ -40,14 +38,6 @@ public class LogServiceImpl implements LogService {
     private AccountService accountService;
     @Inject
     private LogDao logDao;
-    private Set<String> ignores;
-
-    public LogServiceImpl() {
-        ignores = new HashSet<>();
-        ignores.add("user");
-        ignores.add("account");
-        ignores.add("json");
-    }
 
     @Override
     public JSONObject query(String uid, String type, int state, Date start, Date end) {
@@ -67,7 +57,7 @@ public class LogServiceImpl implements LogService {
     }
 
     private JSONObject toJson(LogModel log) {
-        JSONObject object = modelHelper.toJson(log, ignores);
+        JSONObject object = modelHelper.toJson(log);
         object.put("user", userHelper.get(log.getUser()));
         if (!validator.isEmpty(log.getJson()))
             object.putAll(json.toObject(log.getJson()));

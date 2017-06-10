@@ -10,6 +10,7 @@ import org.lpw.tephra.dao.orm.lite.LiteOrm;
 import org.lpw.tephra.dao.orm.lite.LiteQuery;
 import org.lpw.tephra.test.MockCarousel;
 import org.lpw.tephra.test.MockHelper;
+import org.lpw.tephra.test.PageTester;
 import org.lpw.tephra.test.SchedulerAspect;
 import org.lpw.tephra.test.TephraTestSupport;
 import org.lpw.tephra.util.DateTime;
@@ -41,6 +42,8 @@ public class TestSupport extends TephraTestSupport implements AuditTesterDao<Doc
     Sign sign;
     @Inject
     SchedulerAspect schedulerAspect;
+    @Inject
+    PageTester pageTester;
     @Inject
     MockHelper mockHelper;
     @Inject

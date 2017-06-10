@@ -34,9 +34,7 @@ public class QueryByAuthorTest extends TestSupport {
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(0, object.getIntValue("code"));
         JSONObject data = object.getJSONObject("data");
-        Assert.assertEquals(0, data.getIntValue("count"));
-        Assert.assertEquals(10, data.getIntValue("size"));
-        Assert.assertEquals(1, data.getIntValue("number"));
+        pageTester.assertCountSizeNumber(0, 10, 1, data);
         JSONArray list = data.getJSONArray("list");
         Assert.assertTrue(list.isEmpty());
 
@@ -49,9 +47,7 @@ public class QueryByAuthorTest extends TestSupport {
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(0, object.getIntValue("code"));
         data = object.getJSONObject("data");
-        Assert.assertEquals(5, data.getIntValue("count"));
-        Assert.assertEquals(10, data.getIntValue("size"));
-        Assert.assertEquals(1, data.getIntValue("number"));
+        pageTester.assertCountSizeNumber(5, 10, 1, data);
         list = data.getJSONArray("list");
         Assert.assertEquals(5, list.size());
         for (int i = 0; i < 10; i++)

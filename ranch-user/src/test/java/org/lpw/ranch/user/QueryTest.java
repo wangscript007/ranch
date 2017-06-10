@@ -42,9 +42,7 @@ public class QueryTest extends TestSupport {
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(0, object.getIntValue("code"));
         JSONObject data = object.getJSONObject("data");
-        Assert.assertEquals(20, data.getIntValue("count"));
-        Assert.assertEquals(10, data.getIntValue("size"));
-        Assert.assertEquals(1, data.getIntValue("number"));
+        pageTester.assertCountSizeNumber(20, 10, 1, data);
         JSONArray array = data.getJSONArray("list");
         Assert.assertEquals(10, array.size());
         for (int i = 0; i < 10; i++)
@@ -59,9 +57,7 @@ public class QueryTest extends TestSupport {
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(0, object.getIntValue("code"));
         data = object.getJSONObject("data");
-        Assert.assertEquals(0, data.getIntValue("count"));
-        Assert.assertEquals(0, data.getIntValue("size"));
-        Assert.assertEquals(0, data.getIntValue("number"));
+        pageTester.assertCountSizeNumber(0, 0, 0, data);
         array = data.getJSONArray("list");
         Assert.assertEquals(1, array.size());
         equals(list.get(0), array.getJSONObject(0));

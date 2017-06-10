@@ -7,6 +7,7 @@ import org.lpw.tephra.test.DateTimeAspect;
 import org.lpw.tephra.test.GeneratorAspect;
 import org.lpw.tephra.test.HttpAspect;
 import org.lpw.tephra.test.MockHelper;
+import org.lpw.tephra.test.PageTester;
 import org.lpw.tephra.test.TephraTestSupport;
 import org.lpw.tephra.util.DateTime;
 import org.lpw.tephra.util.Generator;
@@ -42,6 +43,8 @@ public class TestSupport extends TephraTestSupport {
     GeneratorAspect generatorAspect;
     @Inject
     HttpAspect httpAspect;
+    @Inject
+    PageTester pageTester;
     @Inject
     MockHelper mockHelper;
 

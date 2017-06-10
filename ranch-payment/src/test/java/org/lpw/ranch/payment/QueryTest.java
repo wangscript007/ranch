@@ -35,9 +35,7 @@ public class QueryTest extends TestSupport {
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(0, object.getIntValue("code"));
         JSONObject data = object.getJSONObject("data");
-        Assert.assertEquals(10, data.getIntValue("count"));
-        Assert.assertEquals(20, data.getIntValue("size"));
-        Assert.assertEquals(1, data.getIntValue("number"));
+        pageTester.assertCountSizeNumber(10, 20, 1, data);
         JSONArray array = data.getJSONArray("list");
         Assert.assertEquals(10, array.size());
         for (int i = 0; i < 10; i++)
@@ -50,9 +48,7 @@ public class QueryTest extends TestSupport {
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(0, object.getIntValue("code"));
         data = object.getJSONObject("data");
-        Assert.assertEquals(3, data.getIntValue("count"));
-        Assert.assertEquals(20, data.getIntValue("size"));
-        Assert.assertEquals(1, data.getIntValue("number"));
+        pageTester.assertCountSizeNumber(3, 20, 1, data);
         array = data.getJSONArray("list");
         Assert.assertEquals(3, array.size());
         for (int i = 0, j = 0; i < 10; i++)
@@ -66,9 +62,7 @@ public class QueryTest extends TestSupport {
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(0, object.getIntValue("code"));
         data = object.getJSONObject("data");
-        Assert.assertEquals(1, data.getIntValue("count"));
-        Assert.assertEquals(20, data.getIntValue("size"));
-        Assert.assertEquals(1, data.getIntValue("number"));
+        pageTester.assertCountSizeNumber(1, 20, 1, data);
         array = data.getJSONArray("list");
         Assert.assertEquals(1, array.size());
         Assert.assertEquals(list.get(1).getId(), array.getJSONObject(0).getString("id"));
@@ -81,9 +75,7 @@ public class QueryTest extends TestSupport {
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(0, object.getIntValue("code"));
         data = object.getJSONObject("data");
-        Assert.assertEquals(1, data.getIntValue("count"));
-        Assert.assertEquals(20, data.getIntValue("size"));
-        Assert.assertEquals(1, data.getIntValue("number"));
+        pageTester.assertCountSizeNumber(1, 20, 1, data);
         array = data.getJSONArray("list");
         Assert.assertEquals(1, array.size());
         Assert.assertEquals(list.get(1).getId(), array.getJSONObject(0).getString("id"));
@@ -96,9 +88,7 @@ public class QueryTest extends TestSupport {
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(0, object.getIntValue("code"));
         data = object.getJSONObject("data");
-        Assert.assertEquals(0, data.getIntValue("count"));
-        Assert.assertEquals(20, data.getIntValue("size"));
-        Assert.assertEquals(1, data.getIntValue("number"));
+        pageTester.assertCountSizeNumber(0, 20, 1, data);
         array = data.getJSONArray("list");
         Assert.assertEquals(0, array.size());
 
@@ -109,9 +99,7 @@ public class QueryTest extends TestSupport {
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(0, object.getIntValue("code"));
         data = object.getJSONObject("data");
-        Assert.assertEquals(1, data.getIntValue("count"));
-        Assert.assertEquals(20, data.getIntValue("size"));
-        Assert.assertEquals(1, data.getIntValue("number"));
+        pageTester.assertCountSizeNumber(1, 20, 1, data);
         array = data.getJSONArray("list");
         Assert.assertEquals(1, array.size());
         Assert.assertEquals(list.get(2).getId(), array.getJSONObject(0).getString("id"));
@@ -123,9 +111,7 @@ public class QueryTest extends TestSupport {
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(0, object.getIntValue("code"));
         data = object.getJSONObject("data");
-        Assert.assertEquals(1, data.getIntValue("count"));
-        Assert.assertEquals(20, data.getIntValue("size"));
-        Assert.assertEquals(1, data.getIntValue("number"));
+        pageTester.assertCountSizeNumber(1, 20, 1, data);
         array = data.getJSONArray("list");
         Assert.assertEquals(1, array.size());
         Assert.assertEquals(list.get(3).getId(), array.getJSONObject(0).getString("id"));
@@ -144,9 +130,7 @@ public class QueryTest extends TestSupport {
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(0, object.getIntValue("code"));
         data = object.getJSONObject("data");
-        Assert.assertEquals(5, data.getIntValue("count"));
-        Assert.assertEquals(20, data.getIntValue("size"));
-        Assert.assertEquals(1, data.getIntValue("number"));
+        pageTester.assertCountSizeNumber(5, 20, 1, data);
         array = data.getJSONArray("list");
         Assert.assertEquals(5, array.size());
         for (int i = 0; i < 5; i++)
@@ -160,9 +144,7 @@ public class QueryTest extends TestSupport {
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(0, object.getIntValue("code"));
         data = object.getJSONObject("data");
-        Assert.assertEquals(5, data.getIntValue("count"));
-        Assert.assertEquals(20, data.getIntValue("size"));
-        Assert.assertEquals(1, data.getIntValue("number"));
+        pageTester.assertCountSizeNumber(5, 20, 1, data);
         array = data.getJSONArray("list");
         Assert.assertEquals(5, array.size());
         for (int i = 0; i < 5; i++)
@@ -175,9 +157,7 @@ public class QueryTest extends TestSupport {
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(0, object.getIntValue("code"));
         data = object.getJSONObject("data");
-        Assert.assertEquals(5, data.getIntValue("count"));
-        Assert.assertEquals(20, data.getIntValue("size"));
-        Assert.assertEquals(1, data.getIntValue("number"));
+        pageTester.assertCountSizeNumber(5, 20, 1, data);
         array = data.getJSONArray("list");
         Assert.assertEquals(5, array.size());
         for (int i = 0; i < 5; i++)

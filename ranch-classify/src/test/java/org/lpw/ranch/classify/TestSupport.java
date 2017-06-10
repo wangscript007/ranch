@@ -7,6 +7,7 @@ import org.lpw.tephra.cache.Cache;
 import org.lpw.tephra.crypto.Sign;
 import org.lpw.tephra.dao.orm.lite.LiteOrm;
 import org.lpw.tephra.test.MockHelper;
+import org.lpw.tephra.test.PageTester;
 import org.lpw.tephra.test.SchedulerAspect;
 import org.lpw.tephra.test.TephraTestSupport;
 import org.lpw.tephra.util.Converter;
@@ -31,6 +32,8 @@ public class TestSupport extends TephraTestSupport {
     LiteOrm liteOrm;
     @Inject
     Sign sign;
+    @Inject
+    PageTester pageTester;
     @Inject
     MockHelper mockHelper;
     @Inject
