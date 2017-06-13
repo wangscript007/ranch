@@ -31,6 +31,7 @@ public interface AccountType {
      *
      * @param account 账户。
      * @param log     操作日志。
+     * @return 如果结算成功则返回true；否则返回false。
      */
-    void complte(AccountModel account, LogModel log);
+    boolean complete(AccountModel account, LogModel log);
 }

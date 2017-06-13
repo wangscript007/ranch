@@ -26,6 +26,7 @@ public class ProfitImpl extends AccountTypeSupport implements AccountType {
     }
 
     @Override
-    public void complte(AccountModel account, LogModel log) {
+    public boolean complete(AccountModel account, LogModel log) {
+        return true;
     }
 }

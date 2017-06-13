@@ -75,7 +75,6 @@ public class LogServiceImpl implements LogService {
         log.setBalance(account.getBalance());
         log.setState(state.ordinal());
         log.setStart(dateTime.now());
-        log.setEnd(dateTime.now());
         if (!validator.isEmpty(map)) {
             JSONObject json = new JSONObject();
             map.forEach(json::put);
@@ -110,7 +109,7 @@ public class LogServiceImpl implements LogService {
 
         log.setState(state.ordinal());
         log.setEnd(dateTime.now());
-        accountService.complete(log);
-        logDao.save(log);
+        if (accountService.complete(log))
+            logDao.save(log);
     }
 }

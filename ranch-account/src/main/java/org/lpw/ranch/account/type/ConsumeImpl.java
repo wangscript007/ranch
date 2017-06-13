@@ -29,9 +29,9 @@ public class ConsumeImpl extends AccountTypeSupport implements AccountType {
     }
 
     @Override
-    public void complte(AccountModel account, LogModel log) {
+    public boolean complete(AccountModel account, LogModel log) {
         if (account.getPending() < log.getAmount())
-            return;
+            return false;
 
         account.setPending(account.getPending() - log.getAmount());
         if (log.getState() == LogService.State.Reject.ordinal()) {
@@ -39,5 +39,7 @@ public class ConsumeImpl extends AccountTypeSupport implements AccountType {
             log.setBalance(log.getBalance() + log.getAmount());
         } else
             account.setConsume(account.getConsume() + log.getAmount());
+
+        return true;
     }
 }

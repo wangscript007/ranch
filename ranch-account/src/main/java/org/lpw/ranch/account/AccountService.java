@@ -26,14 +26,6 @@ public interface AccountService {
     JSONArray query(String user, String owner);
 
     /**
-     * 检索账户信息。
-     *
-     * @param uid 用户UID，为空则所有用户。
-     * @return 账户信息集。
-     */
-    JSONObject query(String uid);
-
-    /**
      * 存入。
      *
      * @param user   用户。
@@ -82,17 +74,19 @@ public interface AccountService {
     /**
      * 消费。
      *
+     * @param user   用户。
      * @param owner  所有者。
      * @param type   类型。
      * @param amount 数量。
      * @return 账户信息；如果消费失败则返回null。
      */
-    JSONObject consume(String owner, int type, int amount);
+    JSONObject consume(String user, String owner, int type, int amount);
 
     /**
      * 结算。
      *
      * @param log 操作日志。
+     * @return 结算成功则返回true；否则返回false。
      */
-    void complete(LogModel log);
+    boolean complete(LogModel log);
 }

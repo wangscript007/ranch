@@ -28,24 +28,17 @@ public class AccountCtrl {
     private AccountService accountService;
 
     @Execute(name = "query", validates = {
-            @Validate(validator = UserHelper.VALIDATOR_ID_OR_SIGN_IN, parameter = "user", failureCode = 10)
+            @Validate(validator = UserHelper.VALIDATOR_NOT_EMPTY_OR_SIGN_IN, parameter = "user", failureCode = 4)
     })
     public Object query() {
         return accountService.query(request.get("user"), request.get("owner"));
-    }
-
-    @Execute(name = "query-uid", validates = {
-            @Validate(validator = Validators.SIGN)
-    })
-    public Object queryUid() {
-        return accountService.query(request.get("uid"));
     }
 
     @Execute(name = "deposit", validates = {
             @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "owner", failureCode = 1),
             @Validate(validator = Validators.BETWEEN, number = {0, 0}, parameter = "type", failureCode = 2),
             @Validate(validator = Validators.GREATER_THAN, number = {0}, parameter = "amount", failureCode = 3),
-            @Validate(validator = UserHelper.VALIDATOR_ID_OR_SIGN_IN, parameter = "user", failureCode = 10)
+            @Validate(validator = UserHelper.VALIDATOR_NOT_EMPTY_OR_SIGN_IN, parameter = "user", failureCode = 4)
     })
     public Object deposit() {
         return execute(accountService.deposit(request.get("user"), request.get("owner"), request.getAsInt("type"), request.getAsInt("amount"), request.getMap()), 5, "deposit");
@@ -55,7 +48,7 @@ public class AccountCtrl {
             @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "owner", failureCode = 1),
             @Validate(validator = Validators.BETWEEN, number = {0, 0}, parameter = "type", failureCode = 2),
             @Validate(validator = Validators.GREATER_THAN, number = {0}, parameter = "amount", failureCode = 3),
-            @Validate(validator = UserHelper.VALIDATOR_ID_OR_SIGN_IN, parameter = "user", failureCode = 10)
+            @Validate(validator = UserHelper.VALIDATOR_NOT_EMPTY_OR_SIGN_IN, parameter = "user", failureCode = 4)
     })
     public Object withdraw() {
         return execute(accountService.withdraw(request.get("user"), request.get("owner"), request.getAsInt("type"), request.getAsInt("amount"), request.getMap()), 6, "withdraw");
@@ -66,7 +59,7 @@ public class AccountCtrl {
             @Validate(validator = Validators.BETWEEN, number = {0, 0}, parameter = "type", failureCode = 2),
             @Validate(validator = Validators.GREATER_THAN, number = {0}, parameter = "amount", failureCode = 3),
             @Validate(validator = Validators.SIGN),
-            @Validate(validator = UserHelper.VALIDATOR_EXISTS, parameter = "user", failureCode = 4)
+            @Validate(validator = UserHelper.VALIDATOR_NOT_EMPTY_OR_SIGN_IN, parameter = "user", failureCode = 4)
     })
     public Object reward() {
         return execute(accountService.reward(request.get("user"), request.get("owner"), request.getAsInt("type"), request.getAsInt("amount")), 7, "reward");
@@ -77,7 +70,7 @@ public class AccountCtrl {
             @Validate(validator = Validators.BETWEEN, number = {0, 0}, parameter = "type", failureCode = 2),
             @Validate(validator = Validators.GREATER_THAN, number = {0}, parameter = "amount", failureCode = 3),
             @Validate(validator = Validators.SIGN),
-            @Validate(validator = UserHelper.VALIDATOR_EXISTS, parameter = "user", failureCode = 4)
+            @Validate(validator = UserHelper.VALIDATOR_NOT_EMPTY_OR_SIGN_IN, parameter = "user", failureCode = 4)
     })
     public Object profit() {
         return execute(accountService.profit(request.get("user"), request.get("owner"), request.getAsInt("type"), request.getAsInt("amount")), 8, "profit");
@@ -87,10 +80,10 @@ public class AccountCtrl {
             @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "owner", failureCode = 1),
             @Validate(validator = Validators.BETWEEN, number = {0, 0}, parameter = "type", failureCode = 2),
             @Validate(validator = Validators.GREATER_THAN, number = {0}, parameter = "amount", failureCode = 3),
-            @Validate(validator = UserHelper.VALIDATOR_SIGN_IN)
+            @Validate(validator = UserHelper.VALIDATOR_NOT_EMPTY_OR_SIGN_IN, parameter = "user", failureCode = 4)
     })
     public Object consume() {
-        return execute(accountService.consume(request.get("owner"), request.getAsInt("type"), request.getAsInt("amount")), 9, "consume");
+        return execute(accountService.consume(request.get("user"), request.get("owner"), request.getAsInt("type"), request.getAsInt("amount")), 9, "consume");
     }
 
     private Object execute(JSONObject object, int code, String type) {

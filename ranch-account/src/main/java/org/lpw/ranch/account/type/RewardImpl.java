@@ -13,9 +13,6 @@ import java.util.Map;
  */
 @Service(AccountTypeSupport.NAME + AccountTypes.REWARD)
 public class RewardImpl extends AccountTypeSupport implements AccountType {
-    @Value("${ranch.account.reward.audit:false}")
-    private boolean audit;
-
     @Override
     public String getName() {
         return AccountTypes.REWARD;
@@ -23,30 +20,14 @@ public class RewardImpl extends AccountTypeSupport implements AccountType {
 
     @Override
     public String change(AccountModel account, int amount, Map<String, String> map) {
-        LogService.State state;
-        if (audit) {
-            account.setPending(account.getPending() + amount);
-            state = LogService.State.New;
-        } else {
-            account.setBalance(account.getBalance() + amount);
-            account.setReward(account.getReward() + amount);
-            state = LogService.State.Complete;
-        }
+        account.setBalance(account.getBalance() + amount);
+        account.setReward(account.getReward() + amount);
 
-        return log(account, amount, state, map);
+        return log(account, amount, LogService.State.Complete, map);
     }
 
     @Override
-    public void complte(AccountModel account, LogModel log) {
-        if (account.getPending() < log.getAmount())
-            return;
-
-        account.setPending(account.getPending() - log.getAmount());
-        if (log.getState() == LogService.State.Reject.ordinal())
-            return;
-
-        account.setBalance(account.getBalance() + log.getAmount());
-        account.setReward(account.getReward() + log.getAmount());
-        log.setBalance(account.getBalance());
+    public boolean complete(AccountModel account, LogModel log) {
+        return true;
     }
 }

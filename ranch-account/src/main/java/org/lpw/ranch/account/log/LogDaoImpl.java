@@ -25,36 +25,24 @@ class LogDaoImpl implements LogDao {
     public PageList<LogModel> query(String user, String type, int state, Timestamp start, Timestamp end, int pageSize, int pageNum) {
         StringBuilder where = new StringBuilder();
         List<Object> args = new ArrayList<>();
-        if (!validator.isEmpty(user)) {
-            where.append("c_user=?");
-            args.add(user);
-        }
-        if (!validator.isEmpty(type)) {
-            if (!args.isEmpty())
-                where.append(" and ");
-            where.append("c_type=?");
-            args.add(type);
-        }
-        if (state > -1) {
-            if (!args.isEmpty())
-                where.append(" and ");
-            where.append("c_state=?");
-            args.add(state);
-        }
-        if (start != null) {
-            if (!args.isEmpty())
-                where.append(" and ");
-            where.append("c_start>=?");
-            args.add(start);
-        }
-        if (end != null) {
-            if (!args.isEmpty())
-                where.append(" and ");
-            where.append("c_start<=?");
-            args.add(end);
-        }
+        append(where, args, "c_user", user, "=");
+        append(where, args, "c_type", type, "=");
+        if (state > -1)
+            append(where, args, "c_state", state, "=");
+        append(where, args, "c_start", start, ">=");
+        append(where, args, "c_start", end, "<=");
 
         return liteOrm.query(new LiteQuery(LogModel.class).where(where.toString()).order("c_start desc,c_index desc").size(pageSize).page(pageNum), args.toArray());
+    }
+
+    private void append(StringBuilder where, List<Object> args, String name, Object value, String operation) {
+        if (validator.isEmpty(value))
+            return;
+
+        if (!args.isEmpty())
+            where.append(" and ");
+        where.append(name).append(operation).append('?');
+        args.add(value);
     }
 
     @Override

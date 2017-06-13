@@ -22,6 +22,12 @@ public interface UserHelper {
     String VALIDATOR_ID_OR_SIGN_IN = "ranch.user.helper.validator.id-or-sign-in";
 
     /**
+     * 是否不为空（且长度不超过36个字符）或用户是否已登入验证器Bean名称。
+     * 默认错误信息key=ranch.user.helper.empty-and-not-sign-in。
+     */
+    String VALIDATOR_NOT_EMPTY_OR_SIGN_IN = "ranch.user.helper.validator.not-empty-or-sign-in";
+
+    /**
      * 用户是否存在验证器Bean名称。
      * 默认错误信息key=ranch.user.helper.not-exists。
      */

@@ -29,12 +29,6 @@ class AccountDaoImpl implements AccountDao {
     }
 
     @Override
-    public PageList<AccountModel> query(String user, int pageSize, int pageNum) {
-        return validator.isEmpty(user) ? liteOrm.query(new LiteQuery(AccountModel.class).order("c_balance desc").size(pageSize).page(pageNum), null) :
-                liteOrm.query(new LiteQuery(AccountModel.class).where("c_user=?").order("c_balance desc").size(pageSize).page(pageNum), new Object[]{user});
-    }
-
-    @Override
     public AccountModel findById(String id) {
         return liteOrm.findById(AccountModel.class, id);
     }

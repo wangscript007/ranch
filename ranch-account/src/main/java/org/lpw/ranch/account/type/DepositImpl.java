@@ -25,16 +25,17 @@ public class DepositImpl extends AccountTypeSupport implements AccountType {
     }
 
     @Override
-    public void complte(AccountModel account, LogModel log) {
+    public boolean complete(AccountModel account, LogModel log) {
         if (account.getPending() < log.getAmount())
-            return;
+            return false;
 
         account.setPending(account.getPending() - log.getAmount());
-        if (log.getState() == LogService.State.Reject.ordinal())
-            return;
+        if (log.getState() != LogService.State.Reject.ordinal()) {
+            account.setBalance(account.getBalance() + log.getAmount());
+            account.setDeposit(account.getDeposit() + log.getAmount());
+            log.setBalance(account.getBalance());
+        }
 
-        account.setBalance(account.getBalance() + log.getAmount());
-        account.setDeposit(account.getDeposit() + log.getAmount());
-        log.setBalance(account.getBalance());
+        return true;
     }
 }

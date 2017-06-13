@@ -51,37 +51,25 @@ public class AccountServiceImpl implements AccountService {
     public JSONArray query(String user, String owner) {
         if (validator.isEmpty(user))
             user = userHelper.id();
-        if (owner != null && owner.trim().length() == 0)
-            owner = "";
-        PageList<AccountModel> pl = owner == null ? accountDao.query(user) : accountDao.query(user, owner);
+        PageList<AccountModel> pl = queryFromDao(user, owner);
         if (pl.getList().isEmpty()) {
             if (balance > 0)
                 logService.complete(deposit(user, owner, 0, balance, null).getString("logId"));
             else
                 save(find(user, owner, 0));
-            pl = owner == null ? accountDao.query(user) : accountDao.query(user, owner);
+            pl = queryFromDao(user, owner);
         }
         JSONArray array = modelHelper.toJson(pl.getList());
 
         return userHelper.fill(array, new String[]{"user"});
     }
 
-    @Override
-    public JSONObject query(String uid) {
-        String user = null;
-        if (!validator.isEmpty(uid)) {
-            user = userHelper.findIdByUid(uid);
-            if (user == null)
-                user = uid;
-        }
-
-        return accountDao.query(user, pagination.getPageSize(20), pagination.getPageNum()).toJson();
+    private PageList<AccountModel> queryFromDao(String user, String owner) {
+        return owner == null ? accountDao.query(user) : accountDao.query(user, owner);
     }
 
     @Override
     public JSONObject deposit(String user, String owner, int type, int amount, Map<String, String> map) {
-        if (validator.isEmpty(user))
-            user = userHelper.id();
         AccountModel account = find(user, owner, type);
 
         return account == null ? null : save(account, accountTypes.get(AccountTypes.DEPOSIT).change(account, amount, map));
@@ -89,8 +77,6 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public JSONObject withdraw(String user, String owner, int type, int amount, Map<String, String> map) {
-        if (validator.isEmpty(user))
-            user = userHelper.id();
         AccountModel account = find(user, owner, type);
 
         return account == null ? null : save(account, accountTypes.get(AccountTypes.WITHDRAW).change(account, amount, map));
@@ -111,29 +97,28 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public JSONObject consume(String owner, int type, int amount) {
-        AccountModel account = find(userHelper.id(), owner, type);
+    public JSONObject consume(String user, String owner, int type, int amount) {
+        AccountModel account = find(user, owner, type);
 
         return account == null ? null : save(account, accountTypes.get(AccountTypes.CONSUME).change(account, amount, null));
     }
 
     @Override
-    public void complete(LogModel log) {
+    public boolean complete(LogModel log) {
         AccountModel account = accountDao.findById(log.getAccount());
-        if (account == null)
-            return;
-
         account = find(account.getUser(), account.getOwner(), account.getType());
-        if (account == null)
-            return;
+        if (account == null || !accountTypes.get(log.getType()).complete(account, log))
+            return false;
 
-        accountTypes.get(log.getType()).complte(account, log);
         save(account);
+
+        return true;
     }
 
     private AccountModel find(String user, String owner, int type) {
+        if (validator.isEmpty(user))
+            user = userHelper.id();
         String lockId = lockHelper.lock(LOCK_USER + user, 1000L);
-        ;
         if (lockId == null)
             return null;
 
@@ -152,16 +137,6 @@ public class AccountServiceImpl implements AccountService {
         return account;
     }
 
-    private void save(AccountModel account) {
-        StringBuilder sb = new StringBuilder(CHECKSUM);
-        for (Object object : new Object[]{account.getUser(), account.getOwner(), account.getType(), account.getBalance(),
-                account.getDeposit(), account.getWithdraw(), account.getReward(), account.getProfit(), account.getConsume(), account.getPending()})
-            sb.append('&').append(object);
-        account.setChecksum(digest.md5(sb.toString()));
-        accountDao.save(account);
-        lockHelper.unlock(account.getLockId());
-    }
-
     private JSONObject save(AccountModel account, String logId) {
         if (logId == null) {
             lockHelper.unlock(account.getLockId());
@@ -174,5 +149,13 @@ public class AccountServiceImpl implements AccountService {
         object.put("logId", logId);
 
         return object;
+    }
+
+    private void save(AccountModel account) {
+        account.setChecksum(digest.md5(CHECKSUM + "&" + account.getUser() + "&" + account.getOwner()
+                + "&" + account.getType() + "&" + account.getBalance() + "&" + account.getDeposit() + "&" + account.getWithdraw()
+                + "&" + account.getReward() + "&" + account.getProfit() + "&" + account.getConsume() + "&" + account.getPending()));
+        accountDao.save(account);
+        lockHelper.unlock(account.getLockId());
     }
 }
