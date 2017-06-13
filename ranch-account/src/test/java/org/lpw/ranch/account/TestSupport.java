@@ -56,7 +56,7 @@ public class TestSupport extends TephraTestSupport {
         });
     }
 
-    void validate(String action, int code, boolean sign) {
+    void validate(String action, int code) {
         mockUser();
         mockHelper.reset();
         mockHelper.getRequest().addParameter("owner", generator.random(101));
@@ -88,21 +88,9 @@ public class TestSupport extends TephraTestSupport {
         Assert.assertEquals(2203, object.getIntValue("code"));
         Assert.assertEquals(message.get(Validators.PREFIX + "not-greater-than", message.get(AccountModel.NAME + ".amount"), 0), object.getString("message"));
 
-        if (sign) {
-            mockUser();
-            mockHelper.reset();
-            mockHelper.getRequest().addParameter("amount", "1");
-            mockHelper.mock("/account/" + action);
-            object = mockHelper.getResponse().asJson();
-            Assert.assertEquals(9995, object.getIntValue("code"));
-            Assert.assertEquals(message.get(Validators.PREFIX + "illegal-sign"), object.getString("message"));
-        }
-
         mockUser();
         mockHelper.reset();
         mockHelper.getRequest().addParameter("amount", "1");
-        if (sign)
-            this.sign.put(mockHelper.getRequest().getMap(), null);
         mockHelper.mock("/account/" + action);
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(2204, object.getIntValue("code"));
@@ -112,8 +100,6 @@ public class TestSupport extends TephraTestSupport {
         mockHelper.reset();
         mockHelper.getRequest().addParameter("amount", "1");
         mockHelper.getRequest().addParameter("user", generator.random(37));
-        if (sign)
-            this.sign.put(mockHelper.getRequest().getMap(), null);
         mockHelper.mock("/account/" + action);
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(2204, object.getIntValue("code"));
@@ -124,8 +110,6 @@ public class TestSupport extends TephraTestSupport {
         mockCarousel.register("ranch.user.sign", "{\"code\":0,\"data\":{\"id\":\"sign in id\"}}");
         mockHelper.reset();
         mockHelper.getRequest().addParameter("amount", "1");
-        if (sign)
-            this.sign.put(mockHelper.getRequest().getMap(), null);
         mockHelper.mock("/account/" + action);
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(2200 + code, object.getIntValue("code"));

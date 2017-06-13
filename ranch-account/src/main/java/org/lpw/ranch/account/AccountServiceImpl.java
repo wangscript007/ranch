@@ -54,7 +54,7 @@ public class AccountServiceImpl implements AccountService {
         PageList<AccountModel> pl = queryFromDao(user, owner);
         if (pl.getList().isEmpty()) {
             if (balance > 0)
-                logService.complete(deposit(user, owner, 0, balance, null).getString("logId"));
+                logService.pass(new String[]{deposit(user, owner, 0, balance, null).getString("logId")});
             else
                 save(find(user, owner, 0));
             pl = queryFromDao(user, owner);

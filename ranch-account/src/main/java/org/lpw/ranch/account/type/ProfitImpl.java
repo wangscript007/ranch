@@ -19,14 +19,23 @@ public class ProfitImpl extends AccountTypeSupport implements AccountType {
 
     @Override
     public String change(AccountModel account, int amount, Map<String, String> map) {
-        account.setBalance(account.getBalance() + amount);
-        account.setProfit(account.getProfit() + amount);
+        account.setPending(account.getPending() + amount);
 
-        return log(account, amount, LogService.State.Complete, map);
+        return log(account, amount, LogService.State.New, map);
     }
 
     @Override
     public boolean complete(AccountModel account, LogModel log) {
+        if (account.getPending() < log.getAmount())
+            return false;
+
+        account.setPending(account.getPending() - log.getAmount());
+        if (log.getState() != LogService.State.Reject.ordinal()) {
+            account.setBalance(account.getBalance() + log.getAmount());
+            account.setProfit(account.getProfit() + log.getAmount());
+            log.setBalance(account.getBalance());
+        }
+
         return true;
     }
 }

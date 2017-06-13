@@ -142,7 +142,7 @@ public class QueryTest extends TestSupport {
             Assert.assertEquals("deposit", log.getType());
             Assert.assertEquals(100, log.getAmount());
             Assert.assertEquals(100, log.getBalance());
-            Assert.assertEquals(3, log.getState());
+            Assert.assertEquals(1, log.getState());
             if (i == 0) {
                 Assert.assertTrue(System.currentTimeMillis() - log.getStart().getTime() < 2000);
                 Assert.assertTrue(System.currentTimeMillis() - log.getEnd().getTime() < 2000);

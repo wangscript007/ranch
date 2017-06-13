@@ -25,11 +25,7 @@ public interface LogService {
         /**
          * 审核不通过。
          */
-        Reject,
-        /**
-         * 已完成。
-         */
-        Complete
+        Reject
     }
 
     /**
@@ -69,11 +65,4 @@ public interface LogService {
      * @param ids ID集。
      */
     void reject(String[] ids);
-
-    /**
-     * 设置为完成。
-     *
-     * @param id ID值。
-     */
-    void complete(String id);
 }

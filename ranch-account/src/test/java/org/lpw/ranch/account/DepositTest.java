@@ -12,7 +12,7 @@ import org.lpw.tephra.util.TimeUnit;
 public class DepositTest extends TestSupport {
     @Test
     public void deposit() {
-        validate("deposit", 5,false);
+        validate("deposit", 5);
 
         mockUser();
         mockHelper.reset();
@@ -58,7 +58,7 @@ public class DepositTest extends TestSupport {
         liteOrm.save(log);
         mockHelper.reset();
         mockHelper.getRequest().addParameter("ids", log.getId());
-        sign.put(mockHelper.getRequest().getMap(), null);
+        sign.put(mockHelper.getRequest().getMap(),null);
         mockHelper.mock("/account/log/pass");
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(0, object.getIntValue("code"));
@@ -90,7 +90,7 @@ public class DepositTest extends TestSupport {
         liteOrm.save(log);
         mockHelper.reset();
         mockHelper.getRequest().addParameter("ids", log.getId());
-        sign.put(mockHelper.getRequest().getMap(), null);
+        sign.put(mockHelper.getRequest().getMap(),null);
         mockHelper.mock("/account/log/pass");
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(0, object.getIntValue("code"));
@@ -161,7 +161,7 @@ public class DepositTest extends TestSupport {
         String lockId = lockHelper.lock(AccountModel.NAME + ".service.lock:sign in id", 1000L);
         mockHelper.reset();
         mockHelper.getRequest().addParameter("ids", log.getId());
-        sign.put(mockHelper.getRequest().getMap(), null);
+        sign.put(mockHelper.getRequest().getMap(),null);
         mockHelper.mock("/account/log/reject");
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(0, object.getIntValue("code"));
@@ -192,7 +192,7 @@ public class DepositTest extends TestSupport {
 
         mockHelper.reset();
         mockHelper.getRequest().addParameter("ids", log.getId());
-        sign.put(mockHelper.getRequest().getMap(), null);
+        sign.put(mockHelper.getRequest().getMap(),null);
         mockHelper.mock("/account/log/reject");
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(0, object.getIntValue("code"));

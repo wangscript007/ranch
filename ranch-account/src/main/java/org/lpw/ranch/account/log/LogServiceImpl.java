@@ -97,11 +97,6 @@ public class LogServiceImpl implements LogService {
             complete(id, State.Reject);
     }
 
-    @Override
-    public void complete(String id) {
-        complete(id, State.Complete);
-    }
-
     private void complete(String id, State state) {
         LogModel log = logDao.findById(id);
         if (log == null || log.getState() != State.New.ordinal())

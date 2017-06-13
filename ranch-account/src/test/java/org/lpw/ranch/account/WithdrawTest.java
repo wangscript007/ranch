@@ -12,7 +12,7 @@ import org.lpw.tephra.util.TimeUnit;
 public class WithdrawTest extends TestSupport {
     @Test
     public void withdraw() {
-        validate("withdraw", 6, false);
+        validate("withdraw", 6);
 
         AccountModel account = new AccountModel();
         account.setUser("user 1");
@@ -76,7 +76,7 @@ public class WithdrawTest extends TestSupport {
         liteOrm.save(log);
         mockHelper.reset();
         mockHelper.getRequest().addParameter("ids", log.getId());
-        sign.put(mockHelper.getRequest().getMap(), null);
+        sign.put(mockHelper.getRequest().getMap(),null);
         mockHelper.mock("/account/log/pass");
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(0, object.getIntValue("code"));
@@ -108,7 +108,7 @@ public class WithdrawTest extends TestSupport {
         liteOrm.save(log);
         mockHelper.reset();
         mockHelper.getRequest().addParameter("ids", log.getId());
-        sign.put(mockHelper.getRequest().getMap(), null);
+        sign.put(mockHelper.getRequest().getMap(),null);
         mockHelper.mock("/account/log/pass");
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(0, object.getIntValue("code"));
@@ -185,7 +185,7 @@ public class WithdrawTest extends TestSupport {
         String lockId = lockHelper.lock(AccountModel.NAME + ".service.lock:sign in id", 1000L);
         mockHelper.reset();
         mockHelper.getRequest().addParameter("ids", log.getId());
-        sign.put(mockHelper.getRequest().getMap(), null);
+        sign.put(mockHelper.getRequest().getMap(),null);
         mockHelper.mock("/account/log/reject");
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(0, object.getIntValue("code"));
@@ -216,7 +216,7 @@ public class WithdrawTest extends TestSupport {
 
         mockHelper.reset();
         mockHelper.getRequest().addParameter("ids", log.getId());
-        sign.put(mockHelper.getRequest().getMap(), null);
+        sign.put(mockHelper.getRequest().getMap(),null);
         mockHelper.mock("/account/log/reject");
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(0, object.getIntValue("code"));
