@@ -1,6 +1,7 @@
 package org.lpw.ranch.payment;
 
 import com.alibaba.fastjson.JSONObject;
+import org.lpw.ranch.account.helper.AccountHelper;
 import org.lpw.ranch.lock.LockHelper;
 import org.lpw.ranch.util.Pagination;
 import org.lpw.tephra.dao.model.ModelHelper;
@@ -44,6 +45,8 @@ public class PaymentServiceImpl implements PaymentService {
     private Pagination pagination;
     @Inject
     private LockHelper lockHelper;
+    @Inject
+    private AccountHelper accountHelper;
     @Inject
     private PaymentDao paymentDao;
     private Set<String> ignores;
@@ -140,6 +143,8 @@ public class PaymentServiceImpl implements PaymentService {
         json.put(name, putToJson(new JSONObject(), map));
         payment.setJson(json.toJSONString());
         paymentDao.save(payment);
+        if (state == 1)
+            accountHelper.pass(accountHelper.deposit(payment.getUser(), "", 0, payment.getAmount(), map).getString("logId"));
         notice(payment);
     }
 

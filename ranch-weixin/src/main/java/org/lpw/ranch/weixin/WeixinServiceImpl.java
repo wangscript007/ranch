@@ -43,6 +43,40 @@ public class WeixinServiceImpl implements WeixinService, HourJob, ContextRefresh
     private boolean auto;
 
     @Override
+    public JSONArray query() {
+        return modelHelper.toJson(weixinDao.query().getList());
+    }
+
+    @Override
+    public WeixinModel findByKey(String key) {
+        return weixinDao.findByKey(key);
+    }
+
+    @Override
+    public WeixinModel findByAppId(String appId) {
+        return weixinDao.findByAppId(appId);
+    }
+
+    @Override
+    public void save(WeixinModel weixin) {
+        WeixinModel model = weixinDao.findByKey(weixin.getKey());
+        if (model == null) {
+            model = new WeixinModel();
+            model.setKey(weixin.getKey());
+        }
+        boolean modify = !weixin.getAppId().equals(model.getAppId()) || !weixin.getSecret().equals(model.getSecret());
+        model.setName(weixin.getName());
+        model.setAppId(weixin.getAppId());
+        model.setSecret(weixin.getSecret());
+        model.setToken(weixin.getToken());
+        model.setMchId(weixin.getMchId());
+        model.setMchKey(weixin.getMchKey());
+        weixinDao.save(model);
+        if (modify)
+            update(model);
+    }
+
+    @Override
     public String echo(String appId, String signature, String timestamp, String nonce, String echostr) {
         WeixinModel weixin = weixinDao.findByAppId(appId);
         if (weixin == null)
@@ -92,40 +126,6 @@ public class WeixinServiceImpl implements WeixinService, HourJob, ContextRefresh
             logger.debug("获得微信用户认证信息[{}:{}]。", code, object);
 
         return object;
-    }
-
-    @Override
-    public JSONArray query() {
-        return modelHelper.toJson(weixinDao.query().getList());
-    }
-
-    @Override
-    public WeixinModel findByKey(String key) {
-        return weixinDao.findByKey(key);
-    }
-
-    @Override
-    public WeixinModel findByAppId(String appId) {
-        return weixinDao.findByAppId(appId);
-    }
-
-    @Override
-    public void save(WeixinModel weixin) {
-        WeixinModel model = weixinDao.findByKey(weixin.getKey());
-        if (model == null) {
-            model = new WeixinModel();
-            model.setKey(weixin.getKey());
-        }
-        boolean modify = !weixin.getAppId().equals(model.getAppId()) || !weixin.getSecret().equals(model.getSecret());
-        model.setName(weixin.getName());
-        model.setAppId(weixin.getAppId());
-        model.setSecret(weixin.getSecret());
-        model.setToken(weixin.getToken());
-        model.setMchId(weixin.getMchId());
-        model.setMchKey(weixin.getMchKey());
-        weixinDao.save(model);
-        if (modify)
-            update(model);
     }
 
     @Override

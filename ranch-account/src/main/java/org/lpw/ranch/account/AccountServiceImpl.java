@@ -118,12 +118,12 @@ public class AccountServiceImpl implements AccountService {
     private AccountModel find(String user, String owner, int type) {
         if (validator.isEmpty(user))
             user = userHelper.id();
-        String lockId = lockHelper.lock(LOCK_USER + user, 1000L);
+        if (validator.isEmpty(owner))
+            owner = "";
+        String lockId = lockHelper.lock(LOCK_USER + user + "-" + owner + "-" + type, 1000L);
         if (lockId == null)
             return null;
 
-        if (validator.isEmpty(owner))
-            owner = "";
         AccountModel account = accountDao.find(user, owner, type);
         if (account == null) {
             account = new AccountModel();

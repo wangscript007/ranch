@@ -105,7 +105,7 @@ public class TestSupport extends TephraTestSupport {
         Assert.assertEquals(2204, object.getIntValue("code"));
         Assert.assertEquals(message.get("ranch.user.helper.empty-and-not-sign-in", message.get(AccountModel.NAME + ".user")), object.getString("message"));
 
-        String lockId = lockHelper.lock(AccountModel.NAME + ".service.lock:sign in id", 1000L);
+        String lockId = lockHelper.lock(AccountModel.NAME + ".service.lock:sign in id--0", 1000L);
         mockUser();
         mockCarousel.register("ranch.user.sign", "{\"code\":0,\"data\":{\"id\":\"sign in id\"}}");
         mockHelper.reset();

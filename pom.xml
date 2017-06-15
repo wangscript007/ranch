@@ -26,9 +26,12 @@
         <module>ranch-last-helper</module>
         <module>ranch-address</module>
         <module>ranch-account</module>
+        <module>ranch-account-helper</module>
         <module>ranch-dbtool</module>
         <module>ranch-weixin</module>
         <module>ranch-payment</module>
+        <module>ranch-payment-helper</module>
+        <module>ranch-alipay</module>
         <module>ranch-archives</module>
         <module>ranch-web</module>
         <module>ranch-test</module>

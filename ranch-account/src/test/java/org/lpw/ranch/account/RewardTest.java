@@ -161,7 +161,7 @@ public class RewardTest extends TestSupport {
         Assert.assertNull(log.getJson());
 
         thread.sleep(3, TimeUnit.Second);
-        String lockId = lockHelper.lock(AccountModel.NAME + ".service.lock:sign in id", 1000L);
+        String lockId = lockHelper.lock(AccountModel.NAME + ".service.lock:sign in id-owner 2-0", 1000L);
         mockHelper.reset();
         mockHelper.getRequest().addParameter("ids", log.getId());
         sign.put(mockHelper.getRequest().getMap(),null);

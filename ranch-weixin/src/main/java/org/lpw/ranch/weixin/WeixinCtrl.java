@@ -23,27 +23,6 @@ public class WeixinCtrl {
     @Inject
     private WeixinService weixinService;
 
-    @Execute(name = "wx.+", type = Templates.STRING)
-    public Object service() {
-        String uri = request.getUri();
-        String appId = uri.substring(uri.lastIndexOf('/') + 1);
-        String echostr = request.get("echostr");
-        if (!validator.isEmpty(echostr))
-            return weixinService.echo(appId, request.get("signature"), request.get("timestamp"), request.get("nonce"), echostr);
-
-        return "";
-    }
-
-    @Execute(name = "auth", validates = {
-            @Validate(validator = Validators.NOT_EMPTY, parameter = "key", failureCode = 1),
-            @Validate(validator = Validators.NOT_EMPTY, parameter = "code", failureCode = 51),
-            @Validate(validator = Validators.SIGN),
-            @Validate(validator = WeixinService.VALIDATOR_EXISTS, parameter = "key", failureCode = 52)
-    })
-    public Object auth() {
-        return weixinService.auth(request.get("key"), request.get("code"));
-    }
-
     @Execute(name = "query", validates = {
             @Validate(validator = Validators.SIGN)
     })
@@ -70,5 +49,26 @@ public class WeixinCtrl {
         weixinService.save(request.setToModel(new WeixinModel()));
 
         return "";
+    }
+
+    @Execute(name = "wx.+", type = Templates.STRING)
+    public Object service() {
+        String uri = request.getUri();
+        String appId = uri.substring(uri.lastIndexOf('/') + 1);
+        String echostr = request.get("echostr");
+        if (!validator.isEmpty(echostr))
+            return weixinService.echo(appId, request.get("signature"), request.get("timestamp"), request.get("nonce"), echostr);
+
+        return "";
+    }
+
+    @Execute(name = "auth", validates = {
+            @Validate(validator = Validators.NOT_EMPTY, parameter = "key", failureCode = 1),
+            @Validate(validator = Validators.NOT_EMPTY, parameter = "code", failureCode = 51),
+            @Validate(validator = Validators.SIGN),
+            @Validate(validator = WeixinService.VALIDATOR_EXISTS, parameter = "key", failureCode = 52)
+    })
+    public Object auth() {
+        return weixinService.auth(request.get("key"), request.get("code"));
     }
 }

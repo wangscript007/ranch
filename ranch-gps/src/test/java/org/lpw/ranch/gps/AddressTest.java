@@ -4,15 +4,26 @@ import com.alibaba.fastjson.JSONObject;
 import org.junit.Assert;
 import org.junit.Test;
 import org.lpw.tephra.ctrl.validate.Validators;
+import org.lpw.tephra.test.MockHelper;
+import org.lpw.tephra.test.TephraTestSupport;
 import org.lpw.tephra.util.HttpImpl;
+import org.lpw.tephra.util.Message;
 
+import javax.inject.Inject;
 import java.lang.reflect.Field;
 import java.util.Map;
 
 /**
  * @author lpw
  */
-public class AddressTest extends TestSupport {
+public class AddressTest extends TephraTestSupport {
+    @Inject
+    private Message message;
+    @Inject
+    private MockHelper mockHelper;
+    @Inject
+    private GpsService gpsService;
+
     @Test
     public void address() throws Exception {
         mockHelper.reset();
@@ -71,13 +82,13 @@ public class AddressTest extends TestSupport {
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(0, object.getIntValue("code"));
         JSONObject data = object.getJSONObject("data");
-        Assert.assertEquals("北京市海淀区北四环西路66号彩和坊路", data.getString("address"));
+        Assert.assertEquals("北京市海淀区北四环西路66号", data.getString("address"));
         JSONObject component = data.getJSONObject("component");
         Assert.assertEquals("中国", component.getString("nation"));
         Assert.assertEquals("北京市", component.getString("province"));
         Assert.assertEquals("北京市", component.getString("city"));
         Assert.assertEquals("海淀区", component.getString("district"));
-        Assert.assertEquals("彩和坊路", component.getString("street"));
+        Assert.assertEquals("北四环西路", component.getString("street"));
         Assert.assertEquals("北四环西路66号", component.getString("street_number"));
         Assert.assertEquals("110108", data.getString("adcode"));
 

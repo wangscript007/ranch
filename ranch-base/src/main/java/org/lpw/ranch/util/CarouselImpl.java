@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import org.lpw.tephra.carousel.CarouselHelper;
 import org.lpw.tephra.ctrl.context.Header;
 import org.lpw.tephra.util.Json;
+import org.lpw.tephra.util.Logger;
 import org.lpw.tephra.util.Validator;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -22,6 +23,8 @@ public class CarouselImpl implements Carousel {
     private Validator validator;
     @Inject
     private Json json;
+    @Inject
+    private Logger logger;
     @Inject
     private Header header;
     @Inject
@@ -48,8 +51,12 @@ public class CarouselImpl implements Carousel {
     @Override
     public <T> T service(String key, Map<String, String> header, Map<String, String> parameter, int cacheTime, Class<T> jsonClass) {
         JSONObject object = service(key, header, parameter, cacheTime);
-        if (!object.containsKey("code") || object.getIntValue("code") != 0)
+        if (!object.containsKey("code") || object.getIntValue("code") != 0) {
+            if (logger.isDebugEnable())
+                logger.debug("执行服务[{}:{}]失败！", key, object.toJSONString());
+
             return (T) (jsonClass == JSONArray.class ? new JSONArray() : new JSONObject());
+        }
 
         return (T) (jsonClass == JSONArray.class ? object.getJSONArray("data") : object.getJSONObject("data"));
     }
