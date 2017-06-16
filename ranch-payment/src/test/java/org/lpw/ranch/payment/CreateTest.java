@@ -33,46 +33,38 @@ public class CreateTest extends TestSupport {
         mockHelper.mock("/payment/create");
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(2503, object.getIntValue("code"));
-        Assert.assertEquals(message.get(Validators.PREFIX + "empty", message.get(PaymentModel.NAME + ".user")), object.getString("message"));
-
-        mockHelper.reset();
-        mockHelper.getRequest().addParameter("type", "type value");
-        mockHelper.getRequest().addParameter("user", generator.random(101));
-        mockHelper.mock("/payment/create");
-        object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(2504, object.getIntValue("code"));
-        Assert.assertEquals(message.get(Validators.PREFIX + "over-max-length", message.get(PaymentModel.NAME + ".user"), 100), object.getString("message"));
-
-        mockHelper.reset();
-        mockHelper.getRequest().addParameter("type", "type value");
-        mockHelper.getRequest().addParameter("user", "user id");
-        mockHelper.mock("/payment/create");
-        object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(2505, object.getIntValue("code"));
         Assert.assertEquals(message.get(Validators.PREFIX + "not-greater-than", message.get(PaymentModel.NAME + ".amount"), 0), object.getString("message"));
 
         mockHelper.reset();
         mockHelper.getRequest().addParameter("type", "type value");
-        mockHelper.getRequest().addParameter("user", "user id");
         mockHelper.getRequest().addParameter("amount", "-1");
         mockHelper.mock("/payment/create");
         object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(2505, object.getIntValue("code"));
+        Assert.assertEquals(2503, object.getIntValue("code"));
         Assert.assertEquals(message.get(Validators.PREFIX + "not-greater-than", message.get(PaymentModel.NAME + ".amount"), 0), object.getString("message"));
 
         mockHelper.reset();
         mockHelper.getRequest().addParameter("type", "type value");
-        mockHelper.getRequest().addParameter("user", "user id");
         mockHelper.getRequest().addParameter("amount", "1");
         mockHelper.getRequest().addParameter("notify", generator.random(101));
         mockHelper.mock("/payment/create");
         object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(2506, object.getIntValue("code"));
+        Assert.assertEquals(2504, object.getIntValue("code"));
         Assert.assertEquals(message.get(Validators.PREFIX + "over-max-length", message.get(PaymentModel.NAME + ".notify"), 100), object.getString("message"));
+
+        mockCarousel.reset();
+        mockCarousel.register("ranch.user.sign", "{\"code\":0,\"data\":{}}");
+        mockHelper.reset();
+        mockHelper.getRequest().addParameter("type", "type value");
+        mockHelper.getRequest().addParameter("amount", "1");
+        mockHelper.getRequest().addParameter("notify", "notify");
+        mockHelper.mock("/payment/create");
+        object = mockHelper.getResponse().asJson();
+        Assert.assertEquals(2505, object.getIntValue("code"));
+        Assert.assertEquals(message.get("ranch.user.helper.empty-and-not-sign-in", message.get(PaymentModel.NAME + ".user")), object.getString("message"));
 
         String time = "20170102030405067";
         Timestamp timestamp = dateTime.toTime(time, "yyyyMMddHHmmssSSS");
-        System.out.println("### " + timestamp);
         List<Timestamp> nows = new ArrayList<>();
         for (int i = 0; i < 10; i++)
             nows.add(timestamp);
@@ -102,7 +94,7 @@ public class CreateTest extends TestSupport {
         Assert.assertEquals("", data.getString("tradeNo"));
         Assert.assertEquals(0, data.getIntValue("state"));
         Assert.assertEquals("notify url", data.getString("notify"));
-        Assert.assertEquals("2017-01-02 03:04:05",data.getString("start"));
+        Assert.assertEquals("2017-01-02 03:04:05", data.getString("start"));
         PaymentModel payment1 = findByOrderNo(data.getString("orderNo"));
         Assert.assertEquals("type value", payment1.getType());
         Assert.assertEquals("user id", payment1.getUser());
@@ -117,9 +109,10 @@ public class CreateTest extends TestSupport {
         Assert.assertEquals(9, nows.size());
         Assert.assertEquals(3, randoms.size());
 
+        mockCarousel.reset();
+        mockCarousel.register("ranch.user.sign", "{\"code\":0,\"data\":{\"id\":\"user id 2\"}}");
         mockHelper.reset();
         mockHelper.getRequest().addParameter("type", "type value 2");
-        mockHelper.getRequest().addParameter("user", "user id 2");
         mockHelper.getRequest().addParameter("amount", "2");
         mockHelper.getRequest().addParameter("notify", "notify url 2");
         mockHelper.getRequest().addParameter("state", "1");
@@ -137,7 +130,7 @@ public class CreateTest extends TestSupport {
         Assert.assertEquals("", data.getString("tradeNo"));
         Assert.assertEquals(0, data.getIntValue("state"));
         Assert.assertEquals("notify url 2", data.getString("notify"));
-        Assert.assertEquals("2017-01-02 03:04:05",data.getString("start"));
+        Assert.assertEquals("2017-01-02 03:04:05", data.getString("start"));
         PaymentModel payment2 = findByOrderNo(data.getString("orderNo"));
         Assert.assertEquals("type value 2", payment2.getType());
         Assert.assertEquals("user id 2", payment2.getUser());

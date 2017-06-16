@@ -1,6 +1,7 @@
 package org.lpw.ranch.alipay;
 
 import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.alipay.api.AlipayApiException;
 import com.alipay.api.AlipayClient;
 import com.alipay.api.DefaultAlipayClient;
@@ -57,7 +58,7 @@ public class AlipayServiceImpl implements AlipayService {
     }
 
     @Override
-    public void save(AlipayModel alipay) {
+    public JSONObject save(AlipayModel alipay) {
         AlipayModel model = alipayDao.findByKey(alipay.getKey());
         if (model == null) {
             model = new AlipayModel();
@@ -69,6 +70,8 @@ public class AlipayServiceImpl implements AlipayService {
         model.setPrivateKey(alipay.getPrivateKey());
         model.setPublicKey(alipay.getPublicKey());
         alipayDao.save(model);
+
+        return modelHelper.toJson(model);
     }
 
     @Override

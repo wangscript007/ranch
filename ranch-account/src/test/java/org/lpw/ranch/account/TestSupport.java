@@ -71,15 +71,15 @@ public class TestSupport extends TephraTestSupport {
         mockHelper.mock("/account/" + action);
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(2202, object.getIntValue("code"));
-        Assert.assertEquals(message.get(Validators.PREFIX + "not-between", message.get(AccountModel.NAME + ".type"), 0, 0), object.getString("message"));
+        Assert.assertEquals(message.get(Validators.PREFIX + "not-between", message.get(AccountModel.NAME + ".type"), 0, 9), object.getString("message"));
 
         mockUser();
         mockHelper.reset();
-        mockHelper.getRequest().addParameter("type", "1");
+        mockHelper.getRequest().addParameter("type", "10");
         mockHelper.mock("/account/" + action);
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(2202, object.getIntValue("code"));
-        Assert.assertEquals(message.get(Validators.PREFIX + "not-between", message.get(AccountModel.NAME + ".type"), 0, 0), object.getString("message"));
+        Assert.assertEquals(message.get(Validators.PREFIX + "not-between", message.get(AccountModel.NAME + ".type"), 0, 9), object.getString("message"));
 
         mockUser();
         mockHelper.reset();

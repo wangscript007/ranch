@@ -1,14 +1,14 @@
-# 审核不通过
+# 设置为成功
 
 请求
-- Service Key - ranch.account.log.reject
-- URI - /account/log/reject
+- Service Key - ranch.payment.success
+- URI - /payment/success
 
 参数
 
 |名称|类型|说明|
 |---|---|---|
-|ids|string|ID集，多个间以逗号分隔。|
+|id|string|ID值。|
 
 返回值
 ```text

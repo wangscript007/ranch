@@ -58,7 +58,7 @@ public class WeixinServiceImpl implements WeixinService, HourJob, ContextRefresh
     }
 
     @Override
-    public void save(WeixinModel weixin) {
+    public JSONObject save(WeixinModel weixin) {
         WeixinModel model = weixinDao.findByKey(weixin.getKey());
         if (model == null) {
             model = new WeixinModel();
@@ -74,6 +74,8 @@ public class WeixinServiceImpl implements WeixinService, HourJob, ContextRefresh
         weixinDao.save(model);
         if (modify)
             update(model);
+
+        return modelHelper.toJson(model);
     }
 
     @Override

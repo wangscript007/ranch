@@ -1,6 +1,7 @@
 package org.lpw.ranch.alipay;
 
 import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 
 import java.util.Map;
 
@@ -47,9 +48,10 @@ public interface AlipayService {
      * 保存支付宝配置。
      * 如果key存在则更新；key不存在则新增。
      *
-     * @param weixin 支付宝配置。
+     * @param alipay 支付宝配置。
+     * @return 配置值。
      */
-    void save(AlipayModel weixin);
+    JSONObject save(AlipayModel alipay);
 
     /**
      * 发起支付。

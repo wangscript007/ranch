@@ -46,9 +46,7 @@ public class WeixinCtrl {
 
     })
     public Object save() {
-        weixinService.save(request.setToModel(new WeixinModel()));
-
-        return "";
+        return weixinService.save(request.setToModel(new WeixinModel()));
     }
 
     @Execute(name = "wx.+", type = Templates.STRING)

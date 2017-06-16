@@ -6,6 +6,7 @@ import org.lpw.tephra.dao.orm.lite.LiteQuery;
 import org.lpw.tephra.test.DateTimeAspect;
 import org.lpw.tephra.test.GeneratorAspect;
 import org.lpw.tephra.test.HttpAspect;
+import org.lpw.tephra.test.MockCarousel;
 import org.lpw.tephra.test.MockHelper;
 import org.lpw.tephra.test.PageTester;
 import org.lpw.tephra.test.TephraTestSupport;
@@ -47,6 +48,8 @@ public class TestSupport extends TephraTestSupport {
     PageTester pageTester;
     @Inject
     MockHelper mockHelper;
+    @Inject
+    MockCarousel mockCarousel;
 
     PaymentModel create(int i, int state) {
         return create(i, state, new Timestamp(System.currentTimeMillis() - i * TimeUnit.Hour.getTime()));

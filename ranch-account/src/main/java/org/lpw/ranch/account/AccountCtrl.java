@@ -36,7 +36,7 @@ public class AccountCtrl {
 
     @Execute(name = "deposit", validates = {
             @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "owner", failureCode = 1),
-            @Validate(validator = Validators.BETWEEN, number = {0, 0}, parameter = "type", failureCode = 2),
+            @Validate(validator = Validators.BETWEEN, number = {0, 9}, parameter = "type", failureCode = 2),
             @Validate(validator = Validators.GREATER_THAN, number = {0}, parameter = "amount", failureCode = 3),
             @Validate(validator = UserHelper.VALIDATOR_NOT_EMPTY_OR_SIGN_IN, parameter = "user", failureCode = 4)
     })
@@ -46,7 +46,7 @@ public class AccountCtrl {
 
     @Execute(name = "withdraw", validates = {
             @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "owner", failureCode = 1),
-            @Validate(validator = Validators.BETWEEN, number = {0, 0}, parameter = "type", failureCode = 2),
+            @Validate(validator = Validators.BETWEEN, number = {0, 9}, parameter = "type", failureCode = 2),
             @Validate(validator = Validators.GREATER_THAN, number = {0}, parameter = "amount", failureCode = 3),
             @Validate(validator = UserHelper.VALIDATOR_NOT_EMPTY_OR_SIGN_IN, parameter = "user", failureCode = 4)
     })
@@ -56,7 +56,7 @@ public class AccountCtrl {
 
     @Execute(name = "reward", validates = {
             @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "owner", failureCode = 1),
-            @Validate(validator = Validators.BETWEEN, number = {0, 0}, parameter = "type", failureCode = 2),
+            @Validate(validator = Validators.BETWEEN, number = {0, 9}, parameter = "type", failureCode = 2),
             @Validate(validator = Validators.GREATER_THAN, number = {0}, parameter = "amount", failureCode = 3),
             @Validate(validator = UserHelper.VALIDATOR_NOT_EMPTY_OR_SIGN_IN, parameter = "user", failureCode = 4)
     })
@@ -66,7 +66,7 @@ public class AccountCtrl {
 
     @Execute(name = "profit", validates = {
             @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "owner", failureCode = 1),
-            @Validate(validator = Validators.BETWEEN, number = {0, 0}, parameter = "type", failureCode = 2),
+            @Validate(validator = Validators.BETWEEN, number = {0, 9}, parameter = "type", failureCode = 2),
             @Validate(validator = Validators.GREATER_THAN, number = {0}, parameter = "amount", failureCode = 3),
             @Validate(validator = UserHelper.VALIDATOR_NOT_EMPTY_OR_SIGN_IN, parameter = "user", failureCode = 4)
     })
@@ -76,7 +76,7 @@ public class AccountCtrl {
 
     @Execute(name = "consume", validates = {
             @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "owner", failureCode = 1),
-            @Validate(validator = Validators.BETWEEN, number = {0, 0}, parameter = "type", failureCode = 2),
+            @Validate(validator = Validators.BETWEEN, number = {0, 9}, parameter = "type", failureCode = 2),
             @Validate(validator = Validators.GREATER_THAN, number = {0}, parameter = "amount", failureCode = 3),
             @Validate(validator = UserHelper.VALIDATOR_NOT_EMPTY_OR_SIGN_IN, parameter = "user", failureCode = 4)
     })

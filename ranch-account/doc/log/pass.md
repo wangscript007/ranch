@@ -5,7 +5,10 @@
 - URI - /account/log/pass
 
 参数
-- ids ID集，多个间以逗号分隔。
+
+|名称|类型|说明|
+|---|---|---|
+|ids|string|ID集，多个间以逗号分隔。|
 
 返回值
 ```text

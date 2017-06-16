@@ -27,7 +27,7 @@ CREATE TABLE t_account_log
   c_type VARCHAR(255) DEFAULT NULL COMMENT '类型',
   c_amount INT DEFAULT 0 COMMENT '数量',
   c_balance INT DEFAULT 0 COMMENT '余额',
-  c_state INT DEFAULT 0 COMMENT '状态：0-待处理；1-审核通过；2-审核不通过；3-已完成',
+  c_state INT DEFAULT 0 COMMENT '状态：0-待处理；1-审核通过；2-审核不通过',
   c_start DATETIME DEFAULT NULL COMMENT '开始时间',
   c_end DATETIME DEFAULT NULL COMMENT '结束时间',
   c_json TEXT DEFAULT NULL COMMENT '扩展属性集',

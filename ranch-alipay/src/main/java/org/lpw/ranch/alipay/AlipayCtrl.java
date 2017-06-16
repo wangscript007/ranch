@@ -50,9 +50,7 @@ public class AlipayCtrl {
 
     })
     public Object save() {
-        alipayService.save(request.setToModel(new AlipayModel()));
-
-        return "";
+        return alipayService.save(request.setToModel(new AlipayModel()));
     }
 
     @Execute(name = "quick-wap-pay", type = Templates.STRING, validates = {

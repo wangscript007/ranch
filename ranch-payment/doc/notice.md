@@ -1,14 +1,14 @@
-# 审核不通过
+# 重发通知
 
 请求
-- Service Key - ranch.account.log.reject
-- URI - /account/log/reject
+- Service Key - ranch.payment.notice
+- URI - /payment/notice
 
 参数
 
 |名称|类型|说明|
 |---|---|---|
-|ids|string|ID集，多个间以逗号分隔。|
+|id|string|ID值。|
 
 返回值
 ```text

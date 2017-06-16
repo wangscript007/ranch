@@ -5,10 +5,13 @@
 - URI - /account/profit
 
 参数
-- user 用户ID。
-- owner 所有者。
-- type 类型。
-- amount 数量。
+
+|名称|类型|说明|
+|---|---|---|
+|user|char(36)|用户ID，为空则使用当前用户ID。|
+|owner|char(100)|所有者，可选。|
+|type|int|类型，0-9之间，默认：0。|
+|amount|int|数量，大于0。|
 
 返回值
 ```json

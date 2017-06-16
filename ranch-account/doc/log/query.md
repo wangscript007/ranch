@@ -5,11 +5,14 @@
 - URI - /account/log/query
 
 参数
-- uid 用户UID，如果为空则为所有用户。
-- start 开始日期，格式：yyyy-MM-dd，为空则不限制。
-- end 结束日期，格式：yyyy-MM-dd，为空则不限制。
-- pageSize 每页显示记录数，小于等于0则默认20。
-- pageNum 当前显示页数。
+
+|名称|类型|说明|
+|---|---|---|
+|uid|string|用户UID，如果为空则为所有用户。|
+|start|string|开始日期，格式：yyyy-MM-dd，为空则不限制。|
+|end|string|结束日期，格式：yyyy-MM-dd，为空则不限制。|
+|pageSize|int|每页显示记录数，小于等于0则默认20。|
+|pageNum|int|当前显示页数。|
 
 返回值
 ```json

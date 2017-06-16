@@ -46,8 +46,9 @@ public interface WeixinService {
      * 如果key存在则更新；key不存在则新增。
      *
      * @param weixin 微信配置。
+     * @return 配置信息。
      */
-    void save(WeixinModel weixin);
+    JSONObject save(WeixinModel weixin);
 
     /**
      * 验证echo信息是否正确。
