@@ -23,6 +23,7 @@ public class LogModel extends ModelSupport {
 
     private String user; // 用户
     private String account; // 账户
+    private String owner; // 所有者
     private String type; // 类型
     private int amount; // 数量
     private int balance; // 余额
@@ -50,6 +51,16 @@ public class LogModel extends ModelSupport {
 
     public void setAccount(String account) {
         this.account = account;
+    }
+
+    @Jsonable
+    @Column(name = "c_owner")
+    public String getOwner() {
+        return owner;
+    }
+
+    public void setOwner(String owner) {
+        this.owner = owner;
     }
 
     @Jsonable

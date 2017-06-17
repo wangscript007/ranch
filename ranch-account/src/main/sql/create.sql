@@ -24,6 +24,7 @@ CREATE TABLE t_account_log
   c_id CHAR(36) NOT NULL COMMENT '主键',
   c_user CHAR(36) NOT NULL COMMENT '用户',
   c_account CHAR(36) NOT NULL COMMENT '账户',
+  c_owner CHAR(36) DEFAULT NULL COMMENT '所有者',
   c_type VARCHAR(255) DEFAULT NULL COMMENT '类型',
   c_amount INT DEFAULT 0 COMMENT '数量',
   c_balance INT DEFAULT 0 COMMENT '余额',
@@ -36,5 +37,6 @@ CREATE TABLE t_account_log
   PRIMARY KEY pk(c_id) USING HASH,
   KEY k_user(c_user,c_start) USING BTREE,
   KEY k_account(c_account,c_start) USING BTREE,
+  KEY k_owner(c_owner,c_start) USING BTREE,
   UNIQUE KEY uk_index(c_index) USING HASH
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;

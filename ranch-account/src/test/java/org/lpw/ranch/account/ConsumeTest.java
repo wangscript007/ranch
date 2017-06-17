@@ -63,6 +63,7 @@ public class ConsumeTest extends TestSupport {
         LogModel log = liteOrm.findById(LogModel.class, data.getString("logId"));
         Assert.assertEquals("user 1", log.getUser());
         Assert.assertEquals(account.getId(), log.getAccount());
+        Assert.assertEquals("owner 1", log.getOwner());
         Assert.assertEquals("consume", log.getType());
         Assert.assertEquals(1, log.getAmount());
         Assert.assertEquals(1, log.getBalance());
@@ -76,7 +77,7 @@ public class ConsumeTest extends TestSupport {
         liteOrm.save(log);
         mockHelper.reset();
         mockHelper.getRequest().addParameter("ids", log.getId());
-        sign.put(mockHelper.getRequest().getMap(),null);
+        sign.put(mockHelper.getRequest().getMap(), null);
         mockHelper.mock("/account/log/pass");
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(0, object.getIntValue("code"));
@@ -108,7 +109,7 @@ public class ConsumeTest extends TestSupport {
         liteOrm.save(log);
         mockHelper.reset();
         mockHelper.getRequest().addParameter("ids", log.getId());
-        sign.put(mockHelper.getRequest().getMap(),null);
+        sign.put(mockHelper.getRequest().getMap(), null);
         mockHelper.mock("/account/log/pass");
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(0, object.getIntValue("code"));
@@ -173,6 +174,7 @@ public class ConsumeTest extends TestSupport {
         log = liteOrm.findById(LogModel.class, data.getString("logId"));
         Assert.assertEquals("sign in id", log.getUser());
         Assert.assertEquals(account.getId(), log.getAccount());
+        Assert.assertEquals("owner 2", log.getOwner());
         Assert.assertEquals("consume", log.getType());
         Assert.assertEquals(2, log.getAmount());
         Assert.assertEquals(0, log.getBalance());
@@ -185,7 +187,7 @@ public class ConsumeTest extends TestSupport {
         String lockId = lockHelper.lock(AccountModel.NAME + ".service.lock:sign in id-owner 2-0", 1000L);
         mockHelper.reset();
         mockHelper.getRequest().addParameter("ids", log.getId());
-        sign.put(mockHelper.getRequest().getMap(),null);
+        sign.put(mockHelper.getRequest().getMap(), null);
         mockHelper.mock("/account/log/reject");
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(0, object.getIntValue("code"));
@@ -216,7 +218,7 @@ public class ConsumeTest extends TestSupport {
 
         mockHelper.reset();
         mockHelper.getRequest().addParameter("ids", log.getId());
-        sign.put(mockHelper.getRequest().getMap(),null);
+        sign.put(mockHelper.getRequest().getMap(), null);
         mockHelper.mock("/account/log/reject");
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(0, object.getIntValue("code"));

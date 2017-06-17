@@ -75,6 +75,22 @@ public class QueryTest extends TestSupport {
         Assert.assertEquals(list.get(1).getId(), obj.getString("id"));
         equals(obj, 1, 1, false);
 
+        mockHelper.reset();
+        mockHelper.getRequest().addParameter("owner", "owner 1");
+        mockHelper.getRequest().addParameter("type", "type 1");
+        mockHelper.getRequest().addParameter("state", "1");
+        sign.put(mockHelper.getRequest().getMap(), null);
+        mockHelper.mock("/account/log/query");
+        object = mockHelper.getResponse().asJson();
+        Assert.assertEquals(0, object.getIntValue("code"));
+        data = object.getJSONObject("data");
+        pageTester.assertCountSizeNumber(1, 20, 1, data);
+        array = data.getJSONArray("list");
+        Assert.assertEquals(1, array.size());
+        obj = array.getJSONObject(0);
+        Assert.assertEquals(list.get(1).getId(), obj.getString("id"));
+        equals(obj, 1, 1, false);
+
         mockUser();
         mockHelper.reset();
         mockHelper.getRequest().addParameter("state", "2");

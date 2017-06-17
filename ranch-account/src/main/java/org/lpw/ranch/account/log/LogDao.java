@@ -8,7 +8,7 @@ import java.sql.Timestamp;
  * @author lpw
  */
 interface LogDao {
-    PageList<LogModel> query(String user, String type, int state, Timestamp start, Timestamp end, int pageSize, int pageNum);
+    PageList<LogModel> query(String user, String owner, String type, int state, Timestamp start, Timestamp end, int pageSize, int pageNum);
 
     LogModel findById(String id);
 

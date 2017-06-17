@@ -42,6 +42,7 @@ public class TestSupport extends TephraTestSupport {
         LogModel log = new LogModel();
         log.setUser("user " + i);
         log.setAccount("account " + i);
+        log.setOwner("owner " + i);
         log.setType("type " + i);
         log.setAmount(100 + i);
         log.setBalance(200 + i);
@@ -79,11 +80,12 @@ public class TestSupport extends TephraTestSupport {
     }
 
     void equals(JSONObject object, int i, int state, boolean label) {
-        Assert.assertEquals(label ? 10 : 9, object.size());
+        Assert.assertEquals(label ? 11 : 10, object.size());
         JSONObject user = object.getJSONObject("user");
         Assert.assertEquals("user " + i, user.getString("id"));
         Assert.assertEquals("name user " + i, user.getString("name"));
         Assert.assertEquals("account " + i, object.getString("account"));
+        Assert.assertEquals("owner " + i, object.getString("owner"));
         Assert.assertEquals("type " + i, object.getString("type"));
         Assert.assertEquals(100 + i, object.getIntValue("amount"));
         Assert.assertEquals(200 + i, object.getIntValue("balance"));

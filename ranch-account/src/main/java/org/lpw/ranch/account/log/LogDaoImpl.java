@@ -22,10 +22,11 @@ class LogDaoImpl implements LogDao {
     private LiteOrm liteOrm;
 
     @Override
-    public PageList<LogModel> query(String user, String type, int state, Timestamp start, Timestamp end, int pageSize, int pageNum) {
+    public PageList<LogModel> query(String user, String owner, String type, int state, Timestamp start, Timestamp end, int pageSize, int pageNum) {
         StringBuilder where = new StringBuilder();
         List<Object> args = new ArrayList<>();
         append(where, args, "c_user", user, "=");
+        append(where, args, "c_owner", owner, "=");
         append(where, args, "c_type", type, "=");
         if (state > -1)
             append(where, args, "c_state", state, "=");

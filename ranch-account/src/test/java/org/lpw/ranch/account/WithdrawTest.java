@@ -63,6 +63,7 @@ public class WithdrawTest extends TestSupport {
         LogModel log = liteOrm.findById(LogModel.class, data.getString("logId"));
         Assert.assertEquals("user 1", log.getUser());
         Assert.assertEquals(account.getId(), log.getAccount());
+        Assert.assertEquals("owner 1", log.getOwner());
         Assert.assertEquals("withdraw", log.getType());
         Assert.assertEquals(1, log.getAmount());
         Assert.assertEquals(1, log.getBalance());
@@ -173,6 +174,7 @@ public class WithdrawTest extends TestSupport {
         log = liteOrm.findById(LogModel.class, data.getString("logId"));
         Assert.assertEquals("sign in id", log.getUser());
         Assert.assertEquals(account.getId(), log.getAccount());
+        Assert.assertEquals("owner 2", log.getOwner());
         Assert.assertEquals("withdraw", log.getType());
         Assert.assertEquals(2, log.getAmount());
         Assert.assertEquals(0, log.getBalance());
