@@ -5,7 +5,10 @@
 - URI - /classify/get
 
 参数
-- ids 分类信息ID集，多个ID以逗号分隔。
+
+|名称|类型|说明|
+|---|---|---|
+|ids|string|分类信息ID集，多个ID以逗号分隔。|
 
 返回值
 ```json

@@ -48,7 +48,6 @@ public class QueryTest extends TestSupport {
         mockHelper.reset();
         mockHelper.getRequest().addParameter("key", "key 1");
         mockHelper.getRequest().addParameter("name", "name 1");
-        mockHelper.getRequest().addParameter("pageSize", "20");
         mockHelper.getRequest().addParameter("pageNum", "1");
         sign.put(mockHelper.getRequest().getMap(), null);
         mockHelper.mock("/classify/query");
@@ -63,7 +62,6 @@ public class QueryTest extends TestSupport {
 
         mockHelper.reset();
         mockHelper.getRequest().addParameter("code", "code 1");
-        mockHelper.getRequest().addParameter("pageSize", "20");
         mockHelper.getRequest().addParameter("pageNum", "1");
         sign.put(mockHelper.getRequest().getMap(), null);
         mockHelper.mock("/classify/query");
@@ -79,14 +77,14 @@ public class QueryTest extends TestSupport {
         mockHelper.getRequest().addParameter("code", "code 1");
         mockHelper.getRequest().addParameter("key", "key 1");
         mockHelper.getRequest().addParameter("name", "name 1");
-        mockHelper.getRequest().addParameter("pageSize", "20");
+        mockHelper.getRequest().addParameter("pageSize", "10");
         mockHelper.getRequest().addParameter("pageNum", "1");
         sign.put(mockHelper.getRequest().getMap(), null);
         mockHelper.mock("/classify/query");
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(0, object.getIntValue("code"));
         data = object.getJSONObject("data");
-        pageTester.assertCountSizeNumber(5, 20, 1, data);
+        pageTester.assertCountSizeNumber(5, 10, 1, data);
         array = data.getJSONArray("list");
         for (int i = 0; i < 5; i++)
             equals(array.getJSONObject(i), "code " + (10 + 2 * i), "key " + (10 + 2 * i), "value " + (10 + 2 * i), "name " + (10 + 2 * i));
@@ -95,14 +93,14 @@ public class QueryTest extends TestSupport {
         mockHelper.getRequest().addParameter("code", "code 1");
         mockHelper.getRequest().addParameter("value", "value 2");
         mockHelper.getRequest().addParameter("name", "name 3");
-        mockHelper.getRequest().addParameter("pageSize", "20");
+        mockHelper.getRequest().addParameter("pageSize", "10");
         mockHelper.getRequest().addParameter("pageNum", "1");
         sign.put(mockHelper.getRequest().getMap(), null);
         mockHelper.mock("/classify/query");
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(0, object.getIntValue("code"));
         data = object.getJSONObject("data");
-        pageTester.assertCountSizeNumber(0, 20, 1, data);
+        pageTester.assertCountSizeNumber(0, 10, 1, data);
         Assert.assertTrue(data.getJSONArray("list").isEmpty());
 
         String code = generator.random(32);
@@ -110,7 +108,6 @@ public class QueryTest extends TestSupport {
             create(code, i, null, false);
         mockHelper.reset();
         mockHelper.getRequest().addParameter("code", code);
-        mockHelper.getRequest().addParameter("pageSize", "20");
         mockHelper.getRequest().addParameter("pageNum", "1");
         sign.put(mockHelper.getRequest().getMap(), null);
         mockHelper.mock("/classify/query");

@@ -5,10 +5,13 @@
 - URI - /classify/create
 
 参数
-- code 编码，必须。
-- key 键，必须。
-- value 值。
-- name 名称，必须。
+
+|名称|类型|说明|
+|---|---|---|
+|code|char(100)|编码，必须。|
+|key|char(100)|键，必须。|
+|value|char(100)|值。|
+|name|char(100)|名称，必须。|
 
 返回值
 ```json

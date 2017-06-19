@@ -49,8 +49,8 @@ public interface ClassifyService extends RecycleService {
     /**
      * 查找分类信息。
      *
-     * @param code  编码。
-     * @param key key值。
+     * @param code 编码。
+     * @param key  key值。
      * @return 分类信息，如果不存在则返回空JSON。
      */
     JSONObject find(String code, String key);
@@ -68,19 +68,40 @@ public interface ClassifyService extends RecycleService {
     /**
      * 创建新分类。
      *
-     * @param map 参数集。
+     * @param code  编码。
+     * @param key   键。
+     * @param value 值。
+     * @param name  名称。
+     * @param map   参数集。
      * @return 分类JSON格式数据。
      */
-    JSONObject create(Map<String, String> map);
+    JSONObject create(String code, String key, String value, String name, Map<String, String> map);
 
     /**
      * 修改分类信息。
      *
-     * @param classify 分类参数。
-     * @param map      参数集。
+     * @param id    ID值。
+     * @param code  编码。
+     * @param key   键。
+     * @param value 值。
+     * @param name  名称。
+     * @param map   参数集。
      * @return 分类JSON格式数据。
      */
-    JSONObject modify(ClassifyModel classify, Map<String, String> map);
+    JSONObject modify(String id, String code, String key, String value, String name, Map<String, String> map);
+
+    /**
+     * 保存分类。
+     * 如果code+key已存在则修改；否则新增。
+     *
+     * @param code  编码。
+     * @param key   键。
+     * @param value 值。
+     * @param name  名称。
+     * @param map   参数集。
+     * @return 分类JSON格式数据。
+     */
+    JSONObject save(String code, String key, String value, String name, Map<String, String> map);
 
     /**
      * 刷新缓存。

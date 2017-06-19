@@ -1,14 +1,15 @@
-# 修改分类信息
+# 保存分类
+
+如果code+key已存在则修改，不存在则新增。
 
 请求
-- Service Key - ranch.classify.modify
-- URI - /classify/modify
+- Service Key - ranch.classify.save
+- URI - /classify/save
 
 参数
 
 |名称|类型|说明|
 |---|---|---|
-|id|char(36)|ID值，必须。|
 |code|char(100)|编码，必须。|
 |key|char(100)|键，必须。|
 |value|char(100)|值。|

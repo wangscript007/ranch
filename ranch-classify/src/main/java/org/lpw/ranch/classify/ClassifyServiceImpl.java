@@ -1,6 +1,5 @@
 package org.lpw.ranch.classify;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import org.lpw.ranch.recycle.Recycle;
@@ -49,10 +48,21 @@ public class ClassifyServiceImpl implements ClassifyService, DateJob {
     private ClassifyDao classifyDao;
     private Set<String> ignores;
 
+    public ClassifyServiceImpl() {
+        ignores = new HashSet<>();
+        ignores.add("id");
+        ignores.add("code");
+        ignores.add("key");
+        ignores.add("value");
+        ignores.add("name");
+        ignores.add("sign-time");
+        ignores.add("sign");
+    }
+
     @Override
     public JSONObject query(String code, String key, String value, String name) {
-        return toJson(validator.isEmpty(code) ? classifyDao.query(pagination.getPageSize(), pagination.getPageNum())
-                : classifyDao.query(code, key, value, name, pagination.getPageSize(), pagination.getPageNum()), Recycle.No);
+        return toJson(validator.isEmpty(code) ? classifyDao.query(pagination.getPageSize(20), pagination.getPageNum())
+                : classifyDao.query(code, key, value, name, pagination.getPageSize(20), pagination.getPageNum()), Recycle.No);
     }
 
     @Override
@@ -166,56 +176,48 @@ public class ClassifyServiceImpl implements ClassifyService, DateJob {
     }
 
     @Override
-    public JSONObject create(Map<String, String> map) {
-        ClassifyModel classify = new ClassifyModel();
-        classify.setCode(map.get("code"));
-        classify.setKey(map.get("key"));
-        classify.setValue(map.get("value"));
-        classify.setName(map.get("name"));
-
-        return save(classify, new JSONObject(), map);
+    public JSONObject create(String code, String key, String value, String name, Map<String, String> map) {
+        return save(new ClassifyModel(), code, key, value, name, new JSONObject(), map);
     }
 
     @Override
-    public JSONObject modify(ClassifyModel model, Map<String, String> map) {
-        ClassifyModel classify = findById(model.getId());
-        classify.setCode(model.getCode());
-        classify.setKey(model.getKey());
-        classify.setValue(model.getValue());
-        classify.setName(model.getName());
-
-        return save(classify, validator.isEmpty(classify.getJson()) ? new JSONObject() : JSON.parseObject(classify.getJson()), map);
+    public JSONObject modify(String id, String code, String key, String value, String name, Map<String, String> map) {
+        return modify(findById(id), code, key, value, name, map);
     }
 
-    private JSONObject save(ClassifyModel classify, JSONObject json, Map<String, String> map) {
-        map.forEach((key, value) -> {
-            if (ignore(key))
+    @Override
+    public JSONObject save(String code, String key, String value, String name, Map<String, String> map) {
+        ClassifyModel classify = classifyDao.findByCodeKey(code, key);
+
+        return classify == null ? save(new ClassifyModel(), code, key, value, name, new JSONObject(), map) :
+                modify(classify, code, key, value, name, map);
+    }
+
+    private JSONObject modify(ClassifyModel classify, String code, String key, String value, String name, Map<String, String> map) {
+        JSONObject json = validator.isEmpty(classify.getJson()) ? new JSONObject() : this.json.toObject(classify.getJson());
+
+        return save(classify, code, key, value, name, json, map);
+
+    }
+
+    private JSONObject save(ClassifyModel classify, String code, String key, String value, String name, JSONObject json, Map<String, String> map) {
+        classify.setCode(code);
+        classify.setKey(key);
+        classify.setValue(value);
+        classify.setName(name);
+        map.forEach((k, v) -> {
+            if (ignores.contains(k))
                 return;
 
-            if (key.charAt(0) == '-')
-                json.remove(key.substring(1));
+            if (k.charAt(0) == '-')
+                json.remove(k.substring(1));
             else
-                json.put(key, value);
+                json.put(k, v);
         });
         classify.setJson(json.toJSONString());
         classifyDao.save(classify);
 
         return getJson(classify.getId(), classify, Recycle.No);
-    }
-
-    private boolean ignore(String key) {
-        if (ignores == null) {
-            ignores = new HashSet<>();
-            ignores.add("id");
-            ignores.add("code");
-            ignores.add("key");
-            ignores.add("value");
-            ignores.add("name");
-            ignores.add("sign-time");
-            ignores.add("sign");
-        }
-
-        return ignores.contains(key);
     }
 
     private JSONObject getJson(String id, ClassifyModel classify, Recycle recycle) {

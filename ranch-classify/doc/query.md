@@ -5,12 +5,15 @@
 - URI - /classify/query
 
 参数
-- code 编码前缀，会自动匹配【code+%】。
-- key 包含的键值，仅当code不为空时有效。
-- value 包含的值，仅当code不为空时有效。
-- name 包含的名称，仅当code不为空时有效。
-- pageSize 每页显示记录数。
-- pageNum 当前显示页数。
+
+|名称|类型|说明|
+|---|---|---|
+|code|char(100)|编码前缀，会自动匹配【code+%】，必须。|
+|key|char(100)|包含的键值，仅当code不为空时有效|
+|value|char(100)|包含的值，仅当code不为空时有效。|
+|name|char(100)|包含的名称，仅当code不为空时有效。|
+|pageSize|int|每页显示记录数，默认20。|
+|pageNum|int|当前显示页数。|
 
 返回值
 ```json

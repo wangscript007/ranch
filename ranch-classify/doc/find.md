@@ -5,8 +5,11 @@
 - URI - /classify/find
 
 参数
-- code 编码，必须。
-- key KEY值，必须。
+
+|名称|类型|说明|
+|---|---|---|
+|code|char(100)|编码，必须。|
+|key|char(100)|键，必须。|
 
 返回值
 ```json

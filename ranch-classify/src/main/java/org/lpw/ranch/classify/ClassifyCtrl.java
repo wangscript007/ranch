@@ -69,7 +69,7 @@ public class ClassifyCtrl extends RecycleCtrlSupport {
             @Validate(validator = ClassifyService.VALIDATOR_CODE_KEY_NOT_EXISTS, parameters = {"code", "key"}, failureCode = 10)
     })
     public Object create() {
-        return templates.get().success(classifyService.create(request.getMap()), null);
+        return templates.get().success(classifyService.create(request.get("code"), request.get("key"), request.get("value"), request.get("name"), request.getMap()), null);
     }
 
     @Execute(name = "modify", validates = {
@@ -86,7 +86,21 @@ public class ClassifyCtrl extends RecycleCtrlSupport {
             @Validate(validator = ClassifyService.VALIDATOR_CODE_KEY_NOT_EXISTS, parameters = {"code", "key", "id"}, failureCode = 10)
     })
     public Object modify() {
-        return templates.get().success(classifyService.modify(request.setToModel(new ClassifyModel()), request.getMap()), null);
+        return templates.get().success(classifyService.modify(request.get("id"), request.get("code"), request.get("key"), request.get("value"), request.get("name"), request.getMap()), null);
+    }
+
+    @Execute(name = "save", validates = {
+            @Validate(validator = Validators.NOT_EMPTY, parameter = "code", failureCode = 2),
+            @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "code", failureCode = 3),
+            @Validate(validator = Validators.NOT_EMPTY, parameter = "key", failureCode = 4),
+            @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "key", failureCode = 5),
+            @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "value", failureCode = 6),
+            @Validate(validator = Validators.NOT_EMPTY, parameter = "name", failureCode = 7),
+            @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "name", failureCode = 8),
+            @Validate(validator = Validators.SIGN)
+    })
+    public Object save() {
+        return templates.get().success(classifyService.save(request.get("code"), request.get("key"), request.get("value"), request.get("name"), request.getMap()), null);
     }
 
     @Execute(name = "refresh", validates = {
