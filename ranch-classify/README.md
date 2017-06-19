@@ -28,6 +28,8 @@
 
 [修改分类信息](doc/modify.md)
 
+[保存分类信息](doc/save.md)
+
 [刷新缓存](doc/refresh.md)
 
 [检索回收站数据](../ranch-base/doc/recycle.md)
