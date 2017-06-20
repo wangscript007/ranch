@@ -24,6 +24,14 @@ public interface AccountTypes {
      * 消费。
      */
     String CONSUME = "consume";
+    /**
+     * 汇入。
+     */
+    String REMIT_IN = "remit-in";
+    /**
+     * 汇出。
+     */
+    String REMIT_OUT = "remit-out";
 
     /**
      * 获取账户操作类型。

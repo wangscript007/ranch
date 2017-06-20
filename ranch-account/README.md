@@ -15,6 +15,8 @@
 |reward|int|奖励总额。|
 |profit|int|盈利总额。|
 |consume|int|消费总额。|
+|remitIn|int|汇入总额。|
+|remitOut|int|汇出总额。|
 |pending|int|待结算总额。|
 |checksum|char(32)|校验值，上述属性的加盐MD5值。|
 
@@ -29,6 +31,10 @@
 [盈利](doc/profit.md)
 
 [消费](doc/consume.md)
+
+[汇入](doc/remit-in.md)
+
+[汇出](doc/remit-out.md)
 
 ## 变更日志
 

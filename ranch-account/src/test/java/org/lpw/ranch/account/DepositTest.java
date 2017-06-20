@@ -24,10 +24,10 @@ public class DepositTest extends TestSupport {
         JSONObject object = mockHelper.getResponse().asJson();
         Assert.assertEquals(0, object.getIntValue("code"));
         JSONObject data = object.getJSONObject("data");
-        Assert.assertEquals(12, data.size());
+        Assert.assertEquals(14, data.size());
         Assert.assertEquals("user 1", data.getString("user"));
         Assert.assertEquals("owner 1", data.getString("owner"));
-        for (String property : new String[]{"type", "balance", "deposit", "withdraw", "reward", "profit", "consume"})
+        for (String property : new String[]{"type", "balance", "deposit", "withdraw", "reward", "profit", "consume", "remitIn", "remitOut"})
             Assert.assertEquals(0, data.getIntValue(property));
         Assert.assertEquals(1, data.getIntValue("pending"));
         AccountModel account = liteOrm.findById(AccountModel.class, data.getString("id"));
@@ -40,8 +40,10 @@ public class DepositTest extends TestSupport {
         Assert.assertEquals(0, account.getReward());
         Assert.assertEquals(0, account.getProfit());
         Assert.assertEquals(0, account.getConsume());
+        Assert.assertEquals(0, account.getRemitIn());
+        Assert.assertEquals(0, account.getRemitOut());
         Assert.assertEquals(1, account.getPending());
-        Assert.assertEquals(digest.md5(AccountModel.NAME + ".service.checksum&user 1&owner 1&0&0&0&0&0&0&0&1"), account.getChecksum());
+        Assert.assertEquals(digest.md5(AccountModel.NAME + ".service.checksum&user 1&owner 1&0&0&0&0&0&0&0&0&0&1"), account.getChecksum());
         LogModel log = liteOrm.findById(LogModel.class, data.getString("logId"));
         Assert.assertEquals("user 1", log.getUser());
         Assert.assertEquals(account.getId(), log.getAccount());
@@ -59,7 +61,7 @@ public class DepositTest extends TestSupport {
         liteOrm.save(log);
         mockHelper.reset();
         mockHelper.getRequest().addParameter("ids", log.getId());
-        sign.put(mockHelper.getRequest().getMap(),null);
+        sign.put(mockHelper.getRequest().getMap(), null);
         mockHelper.mock("/account/log/pass");
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(0, object.getIntValue("code"));
@@ -74,8 +76,10 @@ public class DepositTest extends TestSupport {
         Assert.assertEquals(0, account.getReward());
         Assert.assertEquals(0, account.getProfit());
         Assert.assertEquals(0, account.getConsume());
+        Assert.assertEquals(0, account.getRemitIn());
+        Assert.assertEquals(0, account.getRemitOut());
         Assert.assertEquals(1, account.getPending());
-        Assert.assertEquals(digest.md5(AccountModel.NAME + ".service.checksum&user 1&owner 1&0&0&0&0&0&0&0&1"), account.getChecksum());
+        Assert.assertEquals(digest.md5(AccountModel.NAME + ".service.checksum&user 1&owner 1&0&0&0&0&0&0&0&0&0&1"), account.getChecksum());
         log = liteOrm.findById(LogModel.class, log.getId());
         Assert.assertEquals("user 1", log.getUser());
         Assert.assertEquals(account.getId(), log.getAccount());
@@ -91,7 +95,7 @@ public class DepositTest extends TestSupport {
         liteOrm.save(log);
         mockHelper.reset();
         mockHelper.getRequest().addParameter("ids", log.getId());
-        sign.put(mockHelper.getRequest().getMap(),null);
+        sign.put(mockHelper.getRequest().getMap(), null);
         mockHelper.mock("/account/log/pass");
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(0, object.getIntValue("code"));
@@ -106,8 +110,10 @@ public class DepositTest extends TestSupport {
         Assert.assertEquals(0, account.getReward());
         Assert.assertEquals(0, account.getProfit());
         Assert.assertEquals(0, account.getConsume());
+        Assert.assertEquals(0, account.getRemitIn());
+        Assert.assertEquals(0, account.getRemitOut());
         Assert.assertEquals(0, account.getPending());
-        Assert.assertEquals(digest.md5(AccountModel.NAME + ".service.checksum&user 1&owner 1&0&1&1&0&0&0&0&0"), account.getChecksum());
+        Assert.assertEquals(digest.md5(AccountModel.NAME + ".service.checksum&user 1&owner 1&0&1&1&0&0&0&0&0&0&0"), account.getChecksum());
         log = liteOrm.findById(LogModel.class, log.getId());
         Assert.assertEquals("user 1", log.getUser());
         Assert.assertEquals(account.getId(), log.getAccount());
@@ -129,10 +135,10 @@ public class DepositTest extends TestSupport {
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(0, object.getIntValue("code"));
         data = object.getJSONObject("data");
-        Assert.assertEquals(12, data.size());
+        Assert.assertEquals(14, data.size());
         Assert.assertEquals("sign in id", data.getString("user"));
         Assert.assertEquals("owner 2", data.getString("owner"));
-        for (String property : new String[]{"type", "balance", "deposit", "withdraw", "reward", "profit", "consume"})
+        for (String property : new String[]{"type", "balance", "deposit", "withdraw", "reward", "profit", "consume", "remitIn", "remitOut"})
             Assert.assertEquals(0, data.getIntValue(property));
         Assert.assertEquals(2, data.getIntValue("pending"));
         account = liteOrm.findById(AccountModel.class, data.getString("id"));
@@ -145,8 +151,10 @@ public class DepositTest extends TestSupport {
         Assert.assertEquals(0, account.getReward());
         Assert.assertEquals(0, account.getProfit());
         Assert.assertEquals(0, account.getConsume());
+        Assert.assertEquals(0, account.getRemitIn());
+        Assert.assertEquals(0, account.getRemitOut());
         Assert.assertEquals(2, account.getPending());
-        Assert.assertEquals(digest.md5(AccountModel.NAME + ".service.checksum&sign in id&owner 2&0&0&0&0&0&0&0&2"), account.getChecksum());
+        Assert.assertEquals(digest.md5(AccountModel.NAME + ".service.checksum&sign in id&owner 2&0&0&0&0&0&0&0&0&0&2"), account.getChecksum());
         log = liteOrm.findById(LogModel.class, data.getString("logId"));
         Assert.assertEquals("sign in id", log.getUser());
         Assert.assertEquals(account.getId(), log.getAccount());
@@ -163,7 +171,7 @@ public class DepositTest extends TestSupport {
         String lockId = lockHelper.lock(AccountModel.NAME + ".service.lock:sign in id-owner 2-0", 1000L);
         mockHelper.reset();
         mockHelper.getRequest().addParameter("ids", log.getId());
-        sign.put(mockHelper.getRequest().getMap(),null);
+        sign.put(mockHelper.getRequest().getMap(), null);
         mockHelper.mock("/account/log/reject");
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(0, object.getIntValue("code"));
@@ -178,8 +186,10 @@ public class DepositTest extends TestSupport {
         Assert.assertEquals(0, account.getReward());
         Assert.assertEquals(0, account.getProfit());
         Assert.assertEquals(0, account.getConsume());
+        Assert.assertEquals(0, account.getRemitIn());
+        Assert.assertEquals(0, account.getRemitOut());
         Assert.assertEquals(2, account.getPending());
-        Assert.assertEquals(digest.md5(AccountModel.NAME + ".service.checksum&sign in id&owner 2&0&0&0&0&0&0&0&2"), account.getChecksum());
+        Assert.assertEquals(digest.md5(AccountModel.NAME + ".service.checksum&sign in id&owner 2&0&0&0&0&0&0&0&0&0&2"), account.getChecksum());
         log = liteOrm.findById(LogModel.class, data.getString("logId"));
         Assert.assertEquals("sign in id", log.getUser());
         Assert.assertEquals(account.getId(), log.getAccount());
@@ -194,7 +204,7 @@ public class DepositTest extends TestSupport {
 
         mockHelper.reset();
         mockHelper.getRequest().addParameter("ids", log.getId());
-        sign.put(mockHelper.getRequest().getMap(),null);
+        sign.put(mockHelper.getRequest().getMap(), null);
         mockHelper.mock("/account/log/reject");
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(0, object.getIntValue("code"));
@@ -209,8 +219,10 @@ public class DepositTest extends TestSupport {
         Assert.assertEquals(0, account.getReward());
         Assert.assertEquals(0, account.getProfit());
         Assert.assertEquals(0, account.getConsume());
+        Assert.assertEquals(0, account.getRemitIn());
+        Assert.assertEquals(0, account.getRemitOut());
         Assert.assertEquals(0, account.getPending());
-        Assert.assertEquals(digest.md5(AccountModel.NAME + ".service.checksum&sign in id&owner 2&0&0&0&0&0&0&0&0"), account.getChecksum());
+        Assert.assertEquals(digest.md5(AccountModel.NAME + ".service.checksum&sign in id&owner 2&0&0&0&0&0&0&0&0&0&0"), account.getChecksum());
         log = liteOrm.findById(LogModel.class, data.getString("logId"));
         Assert.assertEquals("sign in id", log.getUser());
         Assert.assertEquals(account.getId(), log.getAccount());

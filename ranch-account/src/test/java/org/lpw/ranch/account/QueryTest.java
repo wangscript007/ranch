@@ -50,12 +50,12 @@ public class QueryTest extends TestSupport {
         JSONArray data = object.getJSONArray("data");
         Assert.assertEquals(1, data.size());
         JSONObject obj = data.getJSONObject(0);
-        Assert.assertEquals(11, obj.size());
+        Assert.assertEquals(13, obj.size());
         JSONObject user = obj.getJSONObject("user");
         Assert.assertEquals("user 1", user.getString("id"));
         Assert.assertEquals("name user 1", user.getString("name"));
         Assert.assertEquals("", obj.getString("owner"));
-        for (String property : new String[]{"type", "balance", "deposit", "withdraw", "reward", "profit", "consume", "pending"})
+        for (String property : new String[]{"type", "balance", "deposit", "withdraw", "reward", "profit", "consume", "remitIn", "remitOut", "pending"})
             Assert.assertEquals(0, obj.getIntValue(property));
         AccountModel account = liteOrm.findById(AccountModel.class, obj.getString("id"));
         Assert.assertEquals("user 1", account.getUser());
@@ -67,8 +67,10 @@ public class QueryTest extends TestSupport {
         Assert.assertEquals(0, account.getReward());
         Assert.assertEquals(0, account.getProfit());
         Assert.assertEquals(0, account.getConsume());
+        Assert.assertEquals(0, account.getRemitIn());
+        Assert.assertEquals(0, account.getRemitOut());
         Assert.assertEquals(0, account.getPending());
-        Assert.assertEquals(digest.md5(AccountModel.NAME + ".service.checksum&user 1&&0&0&0&0&0&0&0&0"), account.getChecksum());
+        Assert.assertEquals(digest.md5(AccountModel.NAME + ".service.checksum&user 1&&0&0&0&0&0&0&0&0&0&0"), account.getChecksum());
         Assert.assertEquals(0, liteOrm.count(new LiteQuery(LogModel.class), null));
 
         mockUser();
@@ -81,12 +83,12 @@ public class QueryTest extends TestSupport {
         data = object.getJSONArray("data");
         Assert.assertEquals(1, data.size());
         obj = data.getJSONObject(0);
-        Assert.assertEquals(11, obj.size());
+        Assert.assertEquals(13, obj.size());
         user = obj.getJSONObject("user");
         Assert.assertEquals("user 2", user.getString("id"));
         Assert.assertEquals("name user 2", user.getString("name"));
         Assert.assertEquals("owner 2", obj.getString("owner"));
-        for (String property : new String[]{"type", "balance", "deposit", "withdraw", "reward", "profit", "consume", "pending"})
+        for (String property : new String[]{"type", "balance", "deposit", "withdraw", "reward", "profit", "consume", "remitIn", "remitOut", "pending"})
             Assert.assertEquals(0, obj.getIntValue(property));
         account = liteOrm.findById(AccountModel.class, obj.getString("id"));
         Assert.assertEquals("user 2", account.getUser());
@@ -98,8 +100,10 @@ public class QueryTest extends TestSupport {
         Assert.assertEquals(0, account.getReward());
         Assert.assertEquals(0, account.getProfit());
         Assert.assertEquals(0, account.getConsume());
+        Assert.assertEquals(0, account.getRemitIn());
+        Assert.assertEquals(0, account.getRemitOut());
         Assert.assertEquals(0, account.getPending());
-        Assert.assertEquals(digest.md5(AccountModel.NAME + ".service.checksum&user 2&owner 2&0&0&0&0&0&0&0&0"), account.getChecksum());
+        Assert.assertEquals(digest.md5(AccountModel.NAME + ".service.checksum&user 2&owner 2&0&0&0&0&0&0&0&0&0&0"), account.getChecksum());
         Assert.assertEquals(0, liteOrm.count(new LiteQuery(LogModel.class), null));
 
         field.set(accountService, 100);
@@ -113,12 +117,12 @@ public class QueryTest extends TestSupport {
             data = object.getJSONArray("data");
             Assert.assertEquals(1, data.size());
             obj = data.getJSONObject(0);
-            Assert.assertEquals(11, obj.size());
+            Assert.assertEquals(13, obj.size());
             user = obj.getJSONObject("user");
             Assert.assertEquals("sign in id", user.getString("id"));
             Assert.assertEquals("name sign in id", user.getString("name"));
             Assert.assertEquals("", obj.getString("owner"));
-            for (String property : new String[]{"type", "withdraw", "reward", "profit", "consume", "pending"})
+            for (String property : new String[]{"type", "withdraw", "reward", "profit", "consume", "remitIn", "remitOut", "pending"})
                 Assert.assertEquals(0, obj.getIntValue(property));
             for (String property : new String[]{"balance", "deposit"})
                 Assert.assertEquals(100, obj.getIntValue(property));
@@ -132,8 +136,10 @@ public class QueryTest extends TestSupport {
             Assert.assertEquals(0, account.getReward());
             Assert.assertEquals(0, account.getProfit());
             Assert.assertEquals(0, account.getConsume());
+            Assert.assertEquals(0, account.getRemitIn());
+            Assert.assertEquals(0, account.getRemitOut());
             Assert.assertEquals(0, account.getPending());
-            Assert.assertEquals(digest.md5(AccountModel.NAME + ".service.checksum&sign in id&&0&100&100&0&0&0&0&0"), account.getChecksum());
+            Assert.assertEquals(digest.md5(AccountModel.NAME + ".service.checksum&sign in id&&0&100&100&0&0&0&0&0&0&0"), account.getChecksum());
             PageList<LogModel> pl = liteOrm.query(new LiteQuery(LogModel.class), null);
             Assert.assertEquals(1, pl.getList().size());
             LogModel log = pl.getList().get(0);

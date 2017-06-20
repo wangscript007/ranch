@@ -27,6 +27,22 @@ public abstract class AccountTypeSupport implements AccountType {
         ignores.add("amount");
     }
 
+    protected String in(AccountModel account, int amount, Map<String, String> map){
+        account.setPending(account.getPending() + amount);
+
+        return log(account, amount, LogService.State.New, map);
+    }
+
+    protected String out(AccountModel account, int amount, Map<String, String> map){
+        if (account.getBalance() < amount)
+            return null;
+
+        account.setBalance(account.getBalance() - amount);
+        account.setPending(account.getPending() + amount);
+
+        return log(account, amount, LogService.State.New, map);
+    }
+
     protected String log(AccountModel account, int amount, LogService.State state, Map<String, String> map) {
         Map<String, String> parameter = new HashMap<>();
         if (map != null) {

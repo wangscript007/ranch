@@ -26,6 +26,8 @@
     "reward": "奖励总额",
     "profit": "盈利总额",
     "consume": "消费总额",
+    "remitIn": "汇入总额",
+    "remitOut": "汇出总额",
     "logId": "账户日志ID"
 }
 ```

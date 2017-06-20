@@ -83,6 +83,28 @@ public interface AccountService {
     JSONObject consume(String user, String owner, int type, int amount);
 
     /**
+     * 汇入。
+     *
+     * @param user   用户。
+     * @param owner  所有者。
+     * @param type   类型。
+     * @param amount 数量。
+     * @return 账户信息；如果消费失败则返回null。
+     */
+    JSONObject remitIn(String user, String owner, int type, int amount);
+
+    /**
+     * 汇出。
+     *
+     * @param user   用户。
+     * @param owner  所有者。
+     * @param type   类型。
+     * @param amount 数量。
+     * @return 账户信息；如果消费失败则返回null。
+     */
+    JSONObject remitOut(String user, String owner, int type, int amount);
+
+    /**
      * 结算。
      *
      * @param log 操作日志。

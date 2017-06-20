@@ -70,37 +70,43 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public JSONObject deposit(String user, String owner, int type, int amount, Map<String, String> map) {
-        AccountModel account = find(user, owner, type);
-
-        return account == null ? null : save(account, accountTypes.get(AccountTypes.DEPOSIT).change(account, amount, map));
+        return change(user, owner, type, AccountTypes.DEPOSIT, amount, map);
     }
 
     @Override
     public JSONObject withdraw(String user, String owner, int type, int amount, Map<String, String> map) {
-        AccountModel account = find(user, owner, type);
-
-        return account == null ? null : save(account, accountTypes.get(AccountTypes.WITHDRAW).change(account, amount, map));
+        return change(user, owner, type, AccountTypes.WITHDRAW, amount, map);
     }
 
     @Override
     public JSONObject reward(String user, String owner, int type, int amount) {
-        AccountModel account = find(user, owner, type);
-
-        return account == null ? null : save(account, accountTypes.get(AccountTypes.REWARD).change(account, amount, null));
+        return change(user, owner, type, AccountTypes.REWARD, amount, null);
     }
 
     @Override
     public JSONObject profit(String user, String owner, int type, int amount) {
-        AccountModel account = find(user, owner, type);
-
-        return account == null ? null : save(account, accountTypes.get(AccountTypes.PROFIT).change(account, amount, null));
+        return change(user, owner, type, AccountTypes.PROFIT, amount, null);
     }
 
     @Override
     public JSONObject consume(String user, String owner, int type, int amount) {
+        return change(user, owner, type, AccountTypes.CONSUME, amount, null);
+    }
+
+    @Override
+    public JSONObject remitIn(String user, String owner, int type, int amount) {
+        return change(user, owner, type, AccountTypes.REMIT_IN, amount, null);
+    }
+
+    @Override
+    public JSONObject remitOut(String user, String owner, int type, int amount) {
+        return change(user, owner, type, AccountTypes.REMIT_OUT, amount, null);
+    }
+
+    private JSONObject change(String user, String owner, int type, String accountType, int amount, Map<String, String> map) {
         AccountModel account = find(user, owner, type);
 
-        return account == null ? null : save(account, accountTypes.get(AccountTypes.CONSUME).change(account, amount, null));
+        return account == null ? null : save(account, accountTypes.get(accountType).change(account, amount, map));
     }
 
     @Override
@@ -154,7 +160,8 @@ public class AccountServiceImpl implements AccountService {
     private void save(AccountModel account) {
         account.setChecksum(digest.md5(CHECKSUM + "&" + account.getUser() + "&" + account.getOwner()
                 + "&" + account.getType() + "&" + account.getBalance() + "&" + account.getDeposit() + "&" + account.getWithdraw()
-                + "&" + account.getReward() + "&" + account.getProfit() + "&" + account.getConsume() + "&" + account.getPending()));
+                + "&" + account.getReward() + "&" + account.getProfit() + "&" + account.getConsume()
+                + "&" + account.getRemitIn() + "&" + account.getRemitOut() + "&" + account.getPending()));
         accountDao.save(account);
         lockHelper.unlock(account.getLockId());
     }

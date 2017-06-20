@@ -11,6 +11,8 @@ CREATE TABLE t_account
   c_reward INT DEFAULT 0 COMMENT '奖励总额',
   c_profit INT DEFAULT 0 COMMENT '盈利总额',
   c_consume INT DEFAULT 0 COMMENT '消费总额',
+  c_remit_in INT DEFAULT 0 COMMENT '汇入总额',
+  c_remit_out INT DEFAULT 0 COMMENT '汇出总额',
   c_pending INT DEFAULT 0 COMMENT '待结算总额',
   c_checksum CHAR(32) DEFAULT NULL COMMENT '校验值',
 

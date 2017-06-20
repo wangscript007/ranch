@@ -84,6 +84,26 @@ public class AccountCtrl {
         return execute(accountService.consume(request.get("user"), request.get("owner"), request.getAsInt("type"), request.getAsInt("amount")), 9, "consume");
     }
 
+    @Execute(name = "remit-in", validates = {
+            @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "owner", failureCode = 1),
+            @Validate(validator = Validators.BETWEEN, number = {0, 9}, parameter = "type", failureCode = 2),
+            @Validate(validator = Validators.GREATER_THAN, number = {0}, parameter = "amount", failureCode = 3),
+            @Validate(validator = UserHelper.VALIDATOR_NOT_EMPTY_OR_SIGN_IN, parameter = "user", failureCode = 4)
+    })
+    public Object remitIn() {
+        return execute(accountService.remitIn(request.get("user"), request.get("owner"), request.getAsInt("type"), request.getAsInt("amount")), 10, "remit-in");
+    }
+
+    @Execute(name = "remit-out", validates = {
+            @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "owner", failureCode = 1),
+            @Validate(validator = Validators.BETWEEN, number = {0, 9}, parameter = "type", failureCode = 2),
+            @Validate(validator = Validators.GREATER_THAN, number = {0}, parameter = "amount", failureCode = 3),
+            @Validate(validator = UserHelper.VALIDATOR_NOT_EMPTY_OR_SIGN_IN, parameter = "user", failureCode = 4)
+    })
+    public Object remitOut() {
+        return execute(accountService.remitOut(request.get("user"), request.get("owner"), request.getAsInt("type"), request.getAsInt("amount")), 11, "remit-out");
+    }
+
     private Object execute(JSONObject object, int code, String type) {
         return object == null ? templates.get().failure(2200 + code, message.get(AccountModel.NAME + "." + type + ".failure"), null, null) : object;
     }

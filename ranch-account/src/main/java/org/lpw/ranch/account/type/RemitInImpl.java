@@ -10,11 +10,11 @@ import java.util.Map;
 /**
  * @author lpw
  */
-@Service(AccountTypeSupport.NAME + AccountTypes.DEPOSIT)
-public class DepositImpl extends AccountTypeSupport implements AccountType {
+@Service(AccountTypeSupport.NAME + AccountTypes.REMIT_IN)
+public class RemitInImpl extends AccountTypeSupport implements AccountType {
     @Override
     public String getName() {
-        return AccountTypes.DEPOSIT;
+        return AccountTypes.REMIT_IN;
     }
 
     @Override
@@ -30,7 +30,7 @@ public class DepositImpl extends AccountTypeSupport implements AccountType {
         account.setPending(account.getPending() - log.getAmount());
         if (log.getState() == LogService.State.Pass.ordinal()) {
             account.setBalance(account.getBalance() + log.getAmount());
-            account.setDeposit(account.getDeposit() + log.getAmount());
+            account.setRemitIn(account.getRemitIn() + log.getAmount());
             log.setBalance(account.getBalance());
         }
 

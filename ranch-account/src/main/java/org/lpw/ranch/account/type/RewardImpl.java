@@ -19,9 +19,7 @@ public class RewardImpl extends AccountTypeSupport implements AccountType {
 
     @Override
     public String change(AccountModel account, int amount, Map<String, String> map) {
-        account.setPending(account.getPending() + amount);
-
-        return log(account, amount, LogService.State.New, map);
+        return in(account, amount, map);
     }
 
     @Override
@@ -30,7 +28,7 @@ public class RewardImpl extends AccountTypeSupport implements AccountType {
             return false;
 
         account.setPending(account.getPending() - log.getAmount());
-        if (log.getState() != LogService.State.Reject.ordinal()) {
+        if (log.getState() == LogService.State.Pass.ordinal()) {
             account.setBalance(account.getBalance() + log.getAmount());
             account.setReward(account.getReward() + log.getAmount());
             log.setBalance(account.getBalance());

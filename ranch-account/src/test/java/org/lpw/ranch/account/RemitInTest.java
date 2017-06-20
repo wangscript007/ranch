@@ -4,18 +4,15 @@ import com.alibaba.fastjson.JSONObject;
 import org.junit.Assert;
 import org.junit.Test;
 import org.lpw.ranch.account.log.LogModel;
-import org.lpw.ranch.account.type.AccountTypes;
 import org.lpw.tephra.util.TimeUnit;
-
-import javax.inject.Inject;
 
 /**
  * @author lpw
  */
-public class RewardTest extends TestSupport {
+public class RemitInTest extends TestSupport {
     @Test
-    public void reward() {
-        validate("reward", 7);
+    public void remitIn() {
+        validate("remit-in", 10);
 
         mockUser();
         mockHelper.reset();
@@ -23,7 +20,7 @@ public class RewardTest extends TestSupport {
         mockHelper.getRequest().addParameter("owner", "owner 1");
         mockHelper.getRequest().addParameter("amount", "1");
         mockHelper.getRequest().addParameter("label", "label 1");
-        mockHelper.mock("/account/reward");
+        mockHelper.mock("/account/remit-in");
         JSONObject object = mockHelper.getResponse().asJson();
         Assert.assertEquals(0, object.getIntValue("code"));
         JSONObject data = object.getJSONObject("data");
@@ -51,7 +48,7 @@ public class RewardTest extends TestSupport {
         Assert.assertEquals("user 1", log.getUser());
         Assert.assertEquals(account.getId(), log.getAccount());
         Assert.assertEquals("owner 1", log.getOwner());
-        Assert.assertEquals("reward", log.getType());
+        Assert.assertEquals("remit-in", log.getType());
         Assert.assertEquals(1, log.getAmount());
         Assert.assertEquals(0, log.getBalance());
         Assert.assertEquals(0, log.getState());
@@ -64,7 +61,7 @@ public class RewardTest extends TestSupport {
         liteOrm.save(log);
         mockHelper.reset();
         mockHelper.getRequest().addParameter("ids", log.getId());
-        sign.put(mockHelper.getRequest().getMap(),null);
+        sign.put(mockHelper.getRequest().getMap(), null);
         mockHelper.mock("/account/log/pass");
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(0, object.getIntValue("code"));
@@ -86,7 +83,7 @@ public class RewardTest extends TestSupport {
         log = liteOrm.findById(LogModel.class, log.getId());
         Assert.assertEquals("user 1", log.getUser());
         Assert.assertEquals(account.getId(), log.getAccount());
-        Assert.assertEquals("reward", log.getType());
+        Assert.assertEquals("remit-in", log.getType());
         Assert.assertEquals(2, log.getAmount());
         Assert.assertEquals(0, log.getBalance());
         Assert.assertEquals(0, log.getState());
@@ -98,7 +95,7 @@ public class RewardTest extends TestSupport {
         liteOrm.save(log);
         mockHelper.reset();
         mockHelper.getRequest().addParameter("ids", log.getId());
-        sign.put(mockHelper.getRequest().getMap(),null);
+        sign.put(mockHelper.getRequest().getMap(), null);
         mockHelper.mock("/account/log/pass");
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(0, object.getIntValue("code"));
@@ -110,17 +107,17 @@ public class RewardTest extends TestSupport {
         Assert.assertEquals(1, account.getBalance());
         Assert.assertEquals(0, account.getDeposit());
         Assert.assertEquals(0, account.getWithdraw());
-        Assert.assertEquals(1, account.getReward());
+        Assert.assertEquals(0, account.getReward());
         Assert.assertEquals(0, account.getProfit());
         Assert.assertEquals(0, account.getConsume());
-        Assert.assertEquals(0, account.getRemitIn());
+        Assert.assertEquals(1, account.getRemitIn());
         Assert.assertEquals(0, account.getRemitOut());
         Assert.assertEquals(0, account.getPending());
-        Assert.assertEquals(digest.md5(AccountModel.NAME + ".service.checksum&user 1&owner 1&0&1&0&0&1&0&0&0&0&0"), account.getChecksum());
+        Assert.assertEquals(digest.md5(AccountModel.NAME + ".service.checksum&user 1&owner 1&0&1&0&0&0&0&0&1&0&0"), account.getChecksum());
         log = liteOrm.findById(LogModel.class, log.getId());
         Assert.assertEquals("user 1", log.getUser());
         Assert.assertEquals(account.getId(), log.getAccount());
-        Assert.assertEquals("reward", log.getType());
+        Assert.assertEquals("remit-in", log.getType());
         Assert.assertEquals(1, log.getAmount());
         Assert.assertEquals(1, log.getBalance());
         Assert.assertEquals(1, log.getState());
@@ -134,7 +131,7 @@ public class RewardTest extends TestSupport {
         mockHelper.getRequest().addParameter("owner", "owner 2");
         mockHelper.getRequest().addParameter("amount", "2");
         mockHelper.getRequest().addParameter("label", "label 2");
-        mockHelper.mock("/account/reward");
+        mockHelper.mock("/account/remit-in");
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(0, object.getIntValue("code"));
         data = object.getJSONObject("data");
@@ -162,7 +159,7 @@ public class RewardTest extends TestSupport {
         Assert.assertEquals("sign in id", log.getUser());
         Assert.assertEquals(account.getId(), log.getAccount());
         Assert.assertEquals("owner 2", log.getOwner());
-        Assert.assertEquals("reward", log.getType());
+        Assert.assertEquals("remit-in", log.getType());
         Assert.assertEquals(2, log.getAmount());
         Assert.assertEquals(0, log.getBalance());
         Assert.assertEquals(0, log.getState());
@@ -174,7 +171,7 @@ public class RewardTest extends TestSupport {
         String lockId = lockHelper.lock(AccountModel.NAME + ".service.lock:sign in id-owner 2-0", 1000L);
         mockHelper.reset();
         mockHelper.getRequest().addParameter("ids", log.getId());
-        sign.put(mockHelper.getRequest().getMap(),null);
+        sign.put(mockHelper.getRequest().getMap(), null);
         mockHelper.mock("/account/log/reject");
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(0, object.getIntValue("code"));
@@ -196,7 +193,7 @@ public class RewardTest extends TestSupport {
         log = liteOrm.findById(LogModel.class, data.getString("logId"));
         Assert.assertEquals("sign in id", log.getUser());
         Assert.assertEquals(account.getId(), log.getAccount());
-        Assert.assertEquals("reward", log.getType());
+        Assert.assertEquals("remit-in", log.getType());
         Assert.assertEquals(2, log.getAmount());
         Assert.assertEquals(0, log.getBalance());
         Assert.assertEquals(0, log.getState());
@@ -207,7 +204,7 @@ public class RewardTest extends TestSupport {
 
         mockHelper.reset();
         mockHelper.getRequest().addParameter("ids", log.getId());
-        sign.put(mockHelper.getRequest().getMap(),null);
+        sign.put(mockHelper.getRequest().getMap(), null);
         mockHelper.mock("/account/log/reject");
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(0, object.getIntValue("code"));
@@ -229,7 +226,7 @@ public class RewardTest extends TestSupport {
         log = liteOrm.findById(LogModel.class, data.getString("logId"));
         Assert.assertEquals("sign in id", log.getUser());
         Assert.assertEquals(account.getId(), log.getAccount());
-        Assert.assertEquals("reward", log.getType());
+        Assert.assertEquals("remit-in", log.getType());
         Assert.assertEquals(2, log.getAmount());
         Assert.assertEquals(0, log.getBalance());
         Assert.assertEquals(2, log.getState());

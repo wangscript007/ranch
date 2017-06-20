@@ -1,8 +1,8 @@
-# 盈利
+# 汇出
 
 请求
-- Service Key - ranch.account.profit
-- URI - /account/profit
+- Service Key - ranch.account.remit-out
+- URI - /account/remit-out
 
 参数
 

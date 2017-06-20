@@ -19,13 +19,7 @@ public class WithdrawImpl extends AccountTypeSupport implements AccountType {
 
     @Override
     public String change(AccountModel account, int amount, Map<String, String> map) {
-        if (account.getBalance() < amount)
-            return null;
-
-        account.setBalance(account.getBalance() - amount);
-        account.setPending(account.getPending() + amount);
-
-        return log(account, amount, LogService.State.New, map);
+        return out(account, amount, map);
     }
 
     @Override
@@ -34,11 +28,12 @@ public class WithdrawImpl extends AccountTypeSupport implements AccountType {
             return false;
 
         account.setPending(account.getPending() - log.getAmount());
-        if (log.getState() == LogService.State.Reject.ordinal()) {
+        if (log.getState() == LogService.State.Pass.ordinal())
+            account.setWithdraw(account.getWithdraw() + log.getAmount());
+        else {
             account.setBalance(account.getBalance() + log.getAmount());
             log.setBalance(log.getBalance() + log.getAmount());
-        } else
-            account.setWithdraw(account.getWithdraw() + log.getAmount());
+        }
 
         return true;
     }
