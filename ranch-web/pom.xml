@@ -37,6 +37,61 @@
             <version>${version.ranch}</version>
         </dependency>
         <dependency>
+            <groupId>org.lpw.ranch</groupId>
+            <artifactId>ranch-friend</artifactId>
+            <version>${version.ranch}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.lpw.ranch</groupId>
+            <artifactId>ranch-group</artifactId>
+            <version>${version.ranch}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.lpw.ranch</groupId>
+            <artifactId>ranch-message</artifactId>
+            <version>${version.ranch}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.lpw.ranch</groupId>
+            <artifactId>ranch-snapshot</artifactId>
+            <version>${version.ranch}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.lpw.ranch</groupId>
+            <artifactId>ranch-last</artifactId>
+            <version>${version.ranch}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.lpw.ranch</groupId>
+            <artifactId>ranch-address</artifactId>
+            <version>${version.ranch}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.lpw.ranch</groupId>
+            <artifactId>ranch-account</artifactId>
+            <version>${version.ranch}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.lpw.ranch</groupId>
+            <artifactId>ranch-dbtool</artifactId>
+            <version>${version.ranch}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.lpw.ranch</groupId>
+            <artifactId>ranch-weixin</artifactId>
+            <version>${version.ranch}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.lpw.ranch</groupId>
+            <artifactId>ranch-payment</artifactId>
+            <version>${version.ranch}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.lpw.ranch</groupId>
+            <artifactId>ranch-alipay</artifactId>
+            <version>${version.ranch}</version>
+        </dependency>
+        <dependency>
             <groupId>org.lpw.tephra</groupId>
             <artifactId>tephra-web</artifactId>
             <version>LATEST</version>
