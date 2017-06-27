@@ -27,6 +27,11 @@ public class ClassifyHelperImpl extends ServiceHelperSupport implements Classify
     }
 
     @Override
+    public String value(String code, String key) {
+        return find(code, key).getString("value");
+    }
+
+    @Override
     public JSONArray list(String code, String key, String name) {
         Map<String, String> parameter = new HashMap<>();
         parameter.put("code", code);

@@ -20,11 +20,20 @@ public interface ClassifyHelper {
     /**
      * 查找分类信息。
      *
-     * @param code  编码。
-     * @param key 值。
+     * @param code 编码。
+     * @param key  值。
      * @return 分类JSON数据，如果不存在则返回空JSON数据。
      */
     JSONObject find(String code, String key);
+
+    /**
+     * 查找分类value值。
+     *
+     * @param code 编码。
+     * @param key  值。
+     * @return 分类value值；如果未找到则返回null。
+     */
+    String value(String code, String key);
 
     /**
      * 获取分类信息集。

@@ -73,6 +73,33 @@ public class ClassifyHelperTest extends TephraTestSupport {
     }
 
     @Test
+    public void value() {
+        while (Calendar.getInstance().get(Calendar.SECOND) > 55)
+            thread.sleep(5, TimeUnit.Second);
+
+        mockHelper.reset();
+        Map<String, String> map = new HashMap<>();
+        map.put("value", "value from header");
+        mockHelper.getHeader().setMap(map);
+        mockHelper.mock("/carousel");
+        mockCarousel.reset();
+        mockCarousel.register("ranch.classify.find", (key, header, parameter, cacheTime) -> {
+            JSONObject json = new JSONObject();
+            json.put("code", 0);
+            JSONObject data = new JSONObject();
+            if (header != null)
+                data.putAll(header);
+            if (parameter != null)
+                data.putAll(parameter);
+            data.put("cacheTime", cacheTime);
+            json.put("data", data);
+
+            return json.toJSONString();
+        });
+        Assert.assertEquals("value from header", classifyHelper.value("code", "key"));
+    }
+
+    @Test
     public void list() {
         while (Calendar.getInstance().get(Calendar.SECOND) > 55)
             thread.sleep(5, TimeUnit.Second);
