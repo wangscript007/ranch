@@ -10,6 +10,8 @@ import org.lpw.tephra.util.Message;
 import org.springframework.stereotype.Controller;
 
 import javax.inject.Inject;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author lpw
@@ -42,31 +44,30 @@ public class AlipayCtrl {
             @Validate(validator = Validators.NOT_EMPTY, parameter = "appId", failureCode = 6),
             @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "appId", failureCode = 7),
             @Validate(validator = Validators.NOT_EMPTY, parameter = "privateKey", failureCode = 8),
-            @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "privateKey", failureCode = 9),
-            @Validate(validator = Validators.NOT_EMPTY, parameter = "publicKey", failureCode = 10),
-            @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "publicKey", failureCode = 11),
+            @Validate(validator = Validators.NOT_EMPTY, parameter = "publicKey", failureCode = 9),
             @Validate(validator = Validators.SIGN),
-            @Validate(validator = AlipayService.VALIDATOR_NOT_EXISTS, parameters = {"key", "appId"}, failureCode = 12)
+            @Validate(validator = AlipayService.VALIDATOR_NOT_EXISTS, parameters = {"key", "appId"}, failureCode = 10)
 
     })
     public Object save() {
         return alipayService.save(request.setToModel(new AlipayModel()));
     }
 
-    @Execute(name = "quick-wap-pay", type = Templates.STRING, validates = {
+    @Execute(name = "quick-wap-pay", type = Templates.FREEMARKER, template = "quick-wap-pay", validates = {
             @Validate(validator = Validators.NOT_EMPTY, parameter = "key", failureCode = 1),
-            @Validate(validator = Validators.NOT_EMPTY, parameter = "subject", failureCode = 13),
-            @Validate(validator = Validators.GREATER_THAN, number = {0}, parameter = "amount", failureCode = 14),
-            @Validate(validator = Validators.NOT_EMPTY, parameter = "notifyUrl", failureCode = 15),
-            @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "notifyUrl", failureCode = 16),
-            @Validate(validator = UserHelper.VALIDATOR_NOT_EMPTY_OR_SIGN_IN, parameter = "user", failureCode = 17),
-            @Validate(validator = AlipayService.VALIDATOR_EXISTS, parameter = "key", failureCode = 18)
+            @Validate(validator = Validators.NOT_EMPTY, parameter = "subject", failureCode = 11),
+            @Validate(validator = Validators.GREATER_THAN, number = {0}, parameter = "amount", failureCode = 12),
+            @Validate(validator = Validators.NOT_EMPTY, parameter = "notifyUrl", failureCode = 13),
+            @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "notifyUrl", failureCode = 14),
+            @Validate(validator = UserHelper.VALIDATOR_NOT_EMPTY_OR_SIGN_IN, parameter = "user", failureCode = 15),
+            @Validate(validator = AlipayService.VALIDATOR_EXISTS, parameter = "key", failureCode = 16)
     })
     public Object quickWapPay() {
-        String string = alipayService.quickWapPay(request.get("key"), request.get("user"), request.get("subject"),
-                request.getAsInt("amount"), request.get("notifyUrl"), request.get("returnUrl"));
+        Map<String, String> map = new HashMap<>();
+        map.put("html", alipayService.quickWapPay(request.get("key"), request.get("user"), request.get("subject"),
+                request.getAsInt("amount"), request.get("notifyUrl"), request.get("returnUrl")));
 
-        return string == null ? templates.get().failure(2619, message.get("ranch.alipay.quick-wap-pay.failure"), null, null) : string;
+        return map;
     }
 
     @Execute(name = "notify", type = Templates.STRING)

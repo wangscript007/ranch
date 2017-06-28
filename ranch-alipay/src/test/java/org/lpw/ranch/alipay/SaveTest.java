@@ -78,32 +78,11 @@ public class SaveTest extends TestSupport {
         mockHelper.getRequest().addParameter("key", "key");
         mockHelper.getRequest().addParameter("url", "url");
         mockHelper.getRequest().addParameter("appId", "app id");
-        mockHelper.getRequest().addParameter("privateKey", generator.random(101));
+        mockHelper.getRequest().addParameter("privateKey", "private key");
         mockHelper.mock("/alipay/save");
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(2609, object.getIntValue("code"));
-        Assert.assertEquals(message.get(Validators.PREFIX + "over-max-length", message.get(AlipayModel.NAME + ".privateKey"), 100), object.getString("message"));
-
-        mockHelper.reset();
-        mockHelper.getRequest().addParameter("key", "key");
-        mockHelper.getRequest().addParameter("url", "url");
-        mockHelper.getRequest().addParameter("appId", "app id");
-        mockHelper.getRequest().addParameter("privateKey", "private key");
-        mockHelper.mock("/alipay/save");
-        object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(2610, object.getIntValue("code"));
         Assert.assertEquals(message.get(Validators.PREFIX + "empty", message.get(AlipayModel.NAME + ".publicKey")), object.getString("message"));
-
-        mockHelper.reset();
-        mockHelper.getRequest().addParameter("key", "key");
-        mockHelper.getRequest().addParameter("url", "url");
-        mockHelper.getRequest().addParameter("appId", "app id");
-        mockHelper.getRequest().addParameter("privateKey", "private key");
-        mockHelper.getRequest().addParameter("publicKey", generator.random(101));
-        mockHelper.mock("/alipay/save");
-        object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(2611, object.getIntValue("code"));
-        Assert.assertEquals(message.get(Validators.PREFIX + "over-max-length", message.get(AlipayModel.NAME + ".publicKey"), 100), object.getString("message"));
 
         mockHelper.reset();
         mockHelper.getRequest().addParameter("key", "key");
@@ -150,7 +129,7 @@ public class SaveTest extends TestSupport {
         sign.put(mockHelper.getRequest().getMap(), null);
         mockHelper.mock("/alipay/save");
         object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(2612, object.getIntValue("code"));
+        Assert.assertEquals(2610, object.getIntValue("code"));
         Assert.assertEquals(message.get(AlipayModel.NAME + ".exists"), object.getString("message"));
 
         mockHelper.reset();
