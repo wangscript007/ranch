@@ -53,7 +53,7 @@ public class AlipayCtrl {
         return alipayService.save(request.setToModel(new AlipayModel()));
     }
 
-    @Execute(name = "quick-wap-pay", type = Templates.FREEMARKER, template = "quick-wap-pay", validates = {
+    @Execute(name = "quick-wap-pay", type = Templates.FREEMARKER, template = "prepay", validates = {
             @Validate(validator = Validators.NOT_EMPTY, parameter = "key", failureCode = 1),
             @Validate(validator = Validators.NOT_EMPTY, parameter = "subject", failureCode = 11),
             @Validate(validator = Validators.GREATER_THAN, number = {0}, parameter = "amount", failureCode = 12),
@@ -70,9 +70,26 @@ public class AlipayCtrl {
         return map;
     }
 
+    @Execute(name = "fast-instant-trade-pay", type = Templates.FREEMARKER, template = "prepay", validates = {
+            @Validate(validator = Validators.NOT_EMPTY, parameter = "key", failureCode = 1),
+            @Validate(validator = Validators.NOT_EMPTY, parameter = "subject", failureCode = 11),
+            @Validate(validator = Validators.GREATER_THAN, number = {0}, parameter = "amount", failureCode = 12),
+            @Validate(validator = Validators.NOT_EMPTY, parameter = "notifyUrl", failureCode = 13),
+            @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "notifyUrl", failureCode = 14),
+            @Validate(validator = UserHelper.VALIDATOR_NOT_EMPTY_OR_SIGN_IN, parameter = "user", failureCode = 15),
+            @Validate(validator = AlipayService.VALIDATOR_EXISTS, parameter = "key", failureCode = 16)
+    })
+    public Object fastInstantTradePay() {
+        Map<String, String> map = new HashMap<>();
+        map.put("html", alipayService.fastInstantTradePay(request.get("key"), request.get("user"), request.get("subject"),
+                request.getAsInt("amount"), request.get("notifyUrl"), request.get("returnUrl")));
+
+        return map;
+    }
+
     @Execute(name = "notify", type = Templates.STRING)
     public Object notice() {
         return alipayService.notify(request.get("app_id"), request.get("out_trade_no"), request.get("trade_no"),
-                request.get("total_amount"), request.get("trade_status"), request.get("sign_type"), request.getMap()) ? "success" : "failure";
+                request.get("total_amount"), request.get("trade_status"), request.getMap()) ? "success" : "failure";
     }
 }

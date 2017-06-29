@@ -54,7 +54,7 @@ public interface AlipayService {
     JSONObject save(AlipayModel alipay);
 
     /**
-     * 发起支付。
+     * 发起手机WEB端支付。
      *
      * @param key       引用key。
      * @param user      用户ID。
@@ -67,16 +67,28 @@ public interface AlipayService {
     String quickWapPay(String key, String user, String subject, int amount, String notifyUrl, String returnUrl);
 
     /**
+     * 发起PC端支付。
+     *
+     * @param key       引用key。
+     * @param user      用户ID。
+     * @param subject   订单名称。
+     * @param amount    支付金额，单位：分。
+     * @param notifyUrl 异步通知URL地址。
+     * @param returnUrl 同步结果URL地址。
+     * @return 支付内容；如果发起失败则返回null。
+     */
+    String fastInstantTradePay(String key, String user, String subject, int amount, String notifyUrl, String returnUrl);
+
+    /**
      * 异步通知。
      *
-     * @param appId    APP ID。
-     * @param orderNo  订单号。
-     * @param tradeNo  网关订单号。
-     * @param amount   金额。
-     * @param signType 签名类型。
-     * @param status   状态。
-     * @param map      参数集。
+     * @param appId   APP ID。
+     * @param orderNo 订单号。
+     * @param tradeNo 网关订单号。
+     * @param amount  金额。
+     * @param status  状态。
+     * @param map     参数集。
      * @return 执行成功则返回true；否则返回false。
      */
-    boolean notify(String appId, String orderNo, String tradeNo, String amount, String status, String signType, Map<String, String> map);
+    boolean notify(String appId, String orderNo, String tradeNo, String amount, String status, Map<String, String> map);
 }
