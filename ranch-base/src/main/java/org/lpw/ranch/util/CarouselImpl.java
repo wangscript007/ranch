@@ -49,6 +49,7 @@ public class CarouselImpl implements Carousel {
     }
 
     @Override
+    @SuppressWarnings({"unchecked"})
     public <T> T service(String key, Map<String, String> header, Map<String, String> parameter, int cacheTime, Class<T> jsonClass) {
         JSONObject object = service(key, header, parameter, cacheTime);
         if (!object.containsKey("code") || object.getIntValue("code") != 0) {

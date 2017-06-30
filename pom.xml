@@ -32,6 +32,7 @@
         <module>ranch-payment</module>
         <module>ranch-payment-helper</module>
         <module>ranch-alipay</module>
+        <module>ranch-link</module>
         <module>ranch-archives</module>
         <module>ranch-web</module>
         <module>ranch-test</module>
