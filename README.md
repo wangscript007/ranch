@@ -24,7 +24,14 @@ Ranch目前包含以下模块：
 - [address](ranch-address/) —— 地址。
 - [account](ranch-account/) —— 账户。
 - [dbtool](ranch-dbtool/) —— 数据库助手。
+- [weixin](ranch-weixin/) —— 微信。
+- [payment](ranch-payment/) —— 支付。
+- [payment-helper](ranch-payment-helper/) —— 支付支持。
+- [alipay](ranch-alipay/) —— 支付宝。
+- [link](ranch-link/) —— 关联。
 - [archives](ranch-archives/) —— 档案。
+- [web](ranch-web/) —— API web。
+- [console](ranch-console/) —— 控制台web。
 - [test](ranch-test/) —— 单元测试支持。
 
 ![Ranch模块图](doc/module.png)

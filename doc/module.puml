@@ -8,12 +8,20 @@
 [base] <-u- [friend]
 [base] <-u- [group]
 [base] <-u- [message]
-[base] <-- [snapshot]
+[base] <-u- [snapshot]
 [base] <-- [last]
 [base] <-- [address]
 [base] <-- [account]
 [base] <-- [dbtool]
+[base] <-- [weixin]
+[base] <-- [payment]
+[base] <-- [payment-helper]
+[base] <-- [alipay]
+[base] <-- [link]
 [base] <-- [archives]
+
+[web] <-- [console]
+
 [test]
 
 @enduml

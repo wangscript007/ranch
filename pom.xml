@@ -35,6 +35,7 @@
         <module>ranch-link</module>
         <module>ranch-archives</module>
         <module>ranch-web</module>
+        <module>ranch-console</module>
         <module>ranch-test</module>
     </modules>
 

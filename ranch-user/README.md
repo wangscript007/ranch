@@ -26,4 +26,8 @@
 
 [修改用户状态](doc/state.md)
 
-[获取用户认证信息集](doc/auth-query.md)
+[获取用户认证信息集](doc/auth/query.md)
+
+[获取在线用户信息集](doc/online/query.md)
+
+[强制用户下线](doc/online/sign-out.md)

@@ -3,6 +3,7 @@ package org.lpw.ranch.user;
 import com.alibaba.fastjson.JSONObject;
 import org.lpw.ranch.user.auth.AuthModel;
 import org.lpw.ranch.user.auth.AuthService;
+import org.lpw.ranch.user.online.OnlineService;
 import org.lpw.ranch.util.Pagination;
 import org.lpw.tephra.cache.Cache;
 import org.lpw.tephra.crypto.Digest;
@@ -49,6 +50,8 @@ public class UserServiceImpl implements UserService {
     @Inject
     private AuthService authService;
     @Inject
+    private OnlineService onlineService;
+    @Inject
     private UserDao userDao;
 
     @Override
@@ -68,6 +71,7 @@ public class UserServiceImpl implements UserService {
         userDao.save(user);
         authService.create(user.getId(), uid, type.ordinal());
         clearCache(user);
+        onlineService.signIn(user.getId());
         session.set(SESSION, user);
     }
 
@@ -93,6 +97,7 @@ public class UserServiceImpl implements UserService {
             authService.bind(user.getId(), macId);
             authService.bind(user.getId(), session.getId());
         }
+        onlineService.signIn(user.getId());
         session.set(SESSION, user);
 
         return true;
@@ -117,6 +122,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public JSONObject sign() {
+        if (!onlineService.isSign())
+            return new JSONObject();
+
         UserModel user = session.get(SESSION);
         if (user == null) {
             AuthModel auth = authService.findByUid(session.getId());
@@ -135,7 +143,14 @@ public class UserServiceImpl implements UserService {
     @Override
     public void signOut() {
         authService.unbind(session.getId());
+        onlineService.signOut();
         session.remove(SESSION);
+    }
+
+    @Override
+    public void signOut(String sid) {
+        authService.unbind(sid);
+        session.remove(sid, SESSION);
     }
 
     @Override

@@ -74,6 +74,13 @@ public interface UserService {
     void signOut();
 
     /**
+     * 登出。
+     *
+     * @param sid Session ID。
+     */
+    void signOut(String sid);
+
+    /**
      * 修改当前用户信息。
      *
      * @param user 用户信息。
