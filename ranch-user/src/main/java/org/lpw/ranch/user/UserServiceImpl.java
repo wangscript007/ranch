@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import org.lpw.ranch.user.auth.AuthModel;
 import org.lpw.ranch.user.auth.AuthService;
 import org.lpw.ranch.user.online.OnlineService;
+import org.lpw.ranch.util.Carousel;
 import org.lpw.ranch.util.Pagination;
 import org.lpw.tephra.cache.Cache;
 import org.lpw.tephra.crypto.Digest;
@@ -13,10 +14,12 @@ import org.lpw.tephra.util.Converter;
 import org.lpw.tephra.util.DateTime;
 import org.lpw.tephra.util.Generator;
 import org.lpw.tephra.util.Validator;
-import org.lpw.tephra.weixin.WeixinService;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author lpw
@@ -44,7 +47,7 @@ public class UserServiceImpl implements UserService {
     @Inject
     private Session session;
     @Inject
-    private WeixinService weixinService;
+    private Carousel carousel;
     @Inject
     private Pagination pagination;
     @Inject
@@ -53,6 +56,8 @@ public class UserServiceImpl implements UserService {
     private OnlineService onlineService;
     @Inject
     private UserDao userDao;
+    @Value("${ranch.weixin.key:ranch.weixin}")
+    private String weixinKey;
 
     @Override
     public void signUp(String uid, String password, Type type) {
@@ -103,9 +108,12 @@ public class UserServiceImpl implements UserService {
         return true;
     }
 
-    private String getWeixinOpenId(String appId, String code) {
-        JSONObject object = weixinService.auth(appId, code);
-        if (object == null)
+    private String getWeixinOpenId(String key, String code) {
+        Map<String, String> parameter = new HashMap<>();
+        parameter.put("key", key);
+        parameter.put("code", code);
+        JSONObject object = carousel.service(weixinKey + ".auth", null, parameter, false, JSONObject.class);
+        if (validator.isEmpty(object))
             return null;
 
         String openId = object.getString("openid");

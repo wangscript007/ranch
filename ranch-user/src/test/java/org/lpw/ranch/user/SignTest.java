@@ -57,6 +57,7 @@ public class SignTest extends TestSupport {
         liteOrm.save(auth);
         mockHelper.reset();
         mockHelper.getSession().setId("sign session id");
+        online(list.get(0));
         mockHelper.mock("/user/sign");
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(0, object.getIntValue("code"));
@@ -65,6 +66,7 @@ public class SignTest extends TestSupport {
         list.forEach(user -> {
             mockHelper.reset();
             mockHelper.getSession().setId("new sign session id");
+            online(user);
             session.set(UserModel.NAME + ".service.session", user);
             mockHelper.mock("/user/sign");
             JSONObject obj = mockHelper.getResponse().asJson();

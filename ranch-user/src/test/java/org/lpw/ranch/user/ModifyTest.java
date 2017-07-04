@@ -3,6 +3,7 @@ package org.lpw.ranch.user;
 import com.alibaba.fastjson.JSONObject;
 import org.junit.Assert;
 import org.junit.Test;
+import org.lpw.ranch.user.online.OnlineModel;
 import org.lpw.tephra.ctrl.context.Session;
 import org.lpw.tephra.ctrl.validate.Validators;
 import org.lpw.tephra.util.TimeUnit;
@@ -34,7 +35,7 @@ public class ModifyTest extends TestSupport {
         mockHelper.reset();
         mockHelper.getRequest().addParameter("name", generator.random(101));
         mockHelper.mock("/user/modify");
-         object = mockHelper.getResponse().asJson();
+        object = mockHelper.getResponse().asJson();
         Assert.assertEquals(1508, object.getIntValue("code"));
         Assert.assertEquals(message.get(Validators.PREFIX + "over-max-length", message.get(UserModel.NAME + ".name"), 100), object.getString("message"));
 
@@ -80,6 +81,14 @@ public class ModifyTest extends TestSupport {
         Assert.assertEquals(message.get(UserModel.NAME + ".need-sign-in"), object.getString("message"));
 
         mockHelper.reset();
+        online(user1);
+        mockHelper.mock("/user/modify");
+        object = mockHelper.getResponse().asJson();
+        Assert.assertEquals(9901, object.getIntValue("code"));
+        Assert.assertEquals(message.get(UserModel.NAME + ".need-sign-in"), object.getString("message"));
+
+        mockHelper.reset();
+        online(user1);
         session.set(UserModel.NAME + ".service.session", user1);
         mockHelper.mock("/user/modify");
         object = mockHelper.getResponse().asJson();
@@ -87,6 +96,7 @@ public class ModifyTest extends TestSupport {
         equals(user1, object.getJSONObject("data"));
 
         mockHelper.reset();
+        online(user1);
         session.set(UserModel.NAME + ".service.session", user1);
         mockHelper.getRequest().addParameter("password", "password");
         mockHelper.getRequest().addParameter("secret", "secret");

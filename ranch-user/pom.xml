@@ -15,20 +15,9 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.lpw.tephra</groupId>
-            <artifactId>tephra-weixin</artifactId>
-            <version>LATEST</version>
-        </dependency>
-        <dependency>
             <groupId>org.lpw.ranch</groupId>
             <artifactId>ranch-base</artifactId>
             <version>${version.ranch}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.lpw.tephra</groupId>
-            <artifactId>tephra-weixin-test</artifactId>
-            <version>LATEST</version>
-            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.lpw.ranch</groupId>

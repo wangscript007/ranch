@@ -27,6 +27,7 @@ public class PortraitUploadListenerTest extends TestSupport {
         mockHelper.reset();
         mockHelper.mock("/user/modify");
         UserModel user = create(0);
+        online(user);
 
         session.set(UserModel.NAME + ".service.session", user);
         Assert.assertFalse(uploadListener.isUploadEnable(null, null, null));

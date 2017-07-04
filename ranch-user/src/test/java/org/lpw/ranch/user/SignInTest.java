@@ -6,12 +6,13 @@ import org.junit.Test;
 import org.lpw.ranch.user.auth.AuthModel;
 import org.lpw.tephra.ctrl.validate.Validators;
 import org.lpw.tephra.dao.orm.lite.LiteQuery;
-import org.lpw.tephra.test.MockWeixin;
+import org.lpw.tephra.test.MockCarousel;
 import org.lpw.tephra.util.Thread;
 import org.lpw.tephra.util.TimeUnit;
 
 import javax.inject.Inject;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author lpw
@@ -20,7 +21,7 @@ public class SignInTest extends TestSupport {
     @Inject
     private Thread thread;
     @Inject
-    private MockWeixin mockWeixin;
+    private MockCarousel mockCarousel;
 
     @Test
     public void signIn() {
@@ -112,7 +113,16 @@ public class SignInTest extends TestSupport {
         Assert.assertEquals(1506, object.getIntValue("code"));
         Assert.assertEquals(message.get(UserModel.NAME + ".sign-in.failure"), object.getString("message"));
 
-        mockWeixin.reset();
+        mockCarousel.reset();
+        Map<String, String> map = new HashMap<>();
+        mockCarousel.register("ranch.weixin.auth", (key, header, parameter, cacheTime) -> {
+            String data = map.get("data");
+            map.clear();
+            map.putAll(parameter);
+
+            return data;
+        });
+        map.put("data", "{\"code\":0,\"data\":{}}");
         mockHelper.reset();
         mockHelper.getRequest().addParameter("uid", "uid 4");
         mockHelper.getRequest().addParameter("password", "password 4");
@@ -121,11 +131,9 @@ public class SignInTest extends TestSupport {
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(1506, object.getIntValue("code"));
         Assert.assertEquals(message.get(UserModel.NAME + ".sign-in.failure"), object.getString("message"));
-        List<Object[]> args = mockWeixin.getArgs();
-        Assert.assertEquals(1, args.size());
-        Assert.assertEquals(2, args.get(0).length);
-        Assert.assertEquals("password 4", args.get(0)[0]);
-        Assert.assertEquals("uid 4", args.get(0)[1]);
+        Assert.assertEquals(2, map.size());
+        Assert.assertEquals("password 4", map.get("key"));
+        Assert.assertEquals("uid 4", map.get("code"));
 
         mockHelper.reset();
         mockHelper.getSession().setId("session id");
@@ -192,15 +200,22 @@ public class SignInTest extends TestSupport {
         auth(user1.getId(), "new session id", 0, new long[]{0, 2000});
         Assert.assertEquals(count + 1, liteOrm.count(new LiteQuery(AuthModel.class), null));
 
-        signInByWeixin();
+        signInByWeixin(map);
     }
 
-    private void signInByWeixin() {
+    private void signInByWeixin(Map<String, String> map) {
         long time = 0L;
         String code = null;
         for (int i = 0; i < 2; i++) {
-            mockWeixin.reset();
-            mockWeixin.auth("weixin open id", "weixin nickname " + i, "weixin portrait " + i);
+            map.clear();
+            JSONObject json = new JSONObject();
+            json.put("code", 0);
+            JSONObject data = new JSONObject();
+            data.put("openid", "weixin open id");
+            data.put("nickname", "weixin nickname " + i);
+            data.put("headimgurl", "weixin portrait " + i);
+            json.put("data", data);
+            map.put("data", json.toJSONString());
             mockHelper.reset();
             mockHelper.getRequest().addParameter("uid", "uid 5");
             mockHelper.getRequest().addParameter("password", "password 5");
@@ -211,7 +226,7 @@ public class SignInTest extends TestSupport {
 
             AuthModel auth = liteOrm.findOne(new LiteQuery(AuthModel.class).where("c_uid=?"), new Object[]{"weixin open id"});
             Assert.assertEquals(2, auth.getType());
-            JSONObject data = object.getJSONObject("data");
+            data = object.getJSONObject("data");
             Assert.assertEquals(auth.getUser(), data.getString("id"));
             for (String name : new String[]{"password", "name", "mobile", "email", "address", "birthday"})
                 Assert.assertFalse(data.containsKey(name));
@@ -252,11 +267,9 @@ public class SignInTest extends TestSupport {
             time = user.getRegister().getTime();
             code = user.getCode();
 
-            List<Object[]> args = mockWeixin.getArgs();
-            Assert.assertEquals(1, args.size());
-            Assert.assertEquals(2, args.get(0).length);
-            Assert.assertEquals("password 5", args.get(0)[0]);
-            Assert.assertEquals("uid 5", args.get(0)[1]);
+            Assert.assertEquals(2, map.size());
+            Assert.assertEquals("password 5", map.get("key"));
+            Assert.assertEquals("uid 5", map.get("code"));
             thread.sleep(3, TimeUnit.Second);
         }
     }

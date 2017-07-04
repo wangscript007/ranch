@@ -3,6 +3,7 @@ package org.lpw.ranch.user;
 import com.alibaba.fastjson.JSONObject;
 import org.junit.Assert;
 import org.lpw.ranch.user.auth.AuthModel;
+import org.lpw.ranch.user.online.OnlineModel;
 import org.lpw.tephra.crypto.Digest;
 import org.lpw.tephra.ctrl.context.Request;
 import org.lpw.tephra.ctrl.context.Session;
@@ -85,6 +86,18 @@ public class TestSupport extends TephraTestSupport {
         liteOrm.save(auth);
 
         return auth;
+    }
+
+    void online(UserModel user) {
+        OnlineModel online = liteOrm.findOne(new LiteQuery(OnlineModel.class).where("c_sid=?"), new Object[]{session.getId()});
+        if (online == null)
+            online = new OnlineModel();
+        online.setUser(user.getId());
+        online.setIp("ip");
+        online.setSid(session.getId());
+        online.setSignIn(dateTime.now());
+        online.setLastVisit(dateTime.now());
+        liteOrm.save(online);
     }
 
     void equals(UserModel user, JSONObject object) {

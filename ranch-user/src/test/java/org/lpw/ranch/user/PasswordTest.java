@@ -50,6 +50,16 @@ public class PasswordTest extends TestSupport {
         Assert.assertEquals(message.get(UserModel.NAME + ".need-sign-in"), object.getString("message"));
 
         mockHelper.reset();
+        online(user1);
+        mockHelper.getRequest().addParameter("new", "new password");
+        mockHelper.getRequest().addParameter("repeat", "new password");
+        mockHelper.mock("/user/password");
+        object = mockHelper.getResponse().asJson();
+        Assert.assertEquals(9901, object.getIntValue("code"));
+        Assert.assertEquals(message.get(UserModel.NAME + ".need-sign-in"), object.getString("message"));
+
+        mockHelper.reset();
+        online(user1);
         session.set(UserModel.NAME + ".service.session", user1);
         mockHelper.getRequest().addParameter("new", "new password");
         mockHelper.getRequest().addParameter("repeat", "new password");
@@ -59,6 +69,7 @@ public class PasswordTest extends TestSupport {
         Assert.assertEquals(message.get(UserModel.NAME + ".password.illegal"), object.getString("message"));
 
         mockHelper.reset();
+        online(user1);
         session.set(UserModel.NAME + ".service.session", user1);
         mockHelper.getRequest().addParameter("old", "old password");
         mockHelper.getRequest().addParameter("new", "new password");
@@ -69,6 +80,7 @@ public class PasswordTest extends TestSupport {
         Assert.assertEquals(message.get(UserModel.NAME + ".password.illegal"), object.getString("message"));
 
         mockHelper.reset();
+        online(user1);
         session.set(UserModel.NAME + ".service.session", user1);
         mockHelper.getRequest().addParameter("old", "password 1");
         mockHelper.getRequest().addParameter("new", "new password");
@@ -83,6 +95,7 @@ public class PasswordTest extends TestSupport {
         user11.setPassword(null);
         liteOrm.save(user11);
         mockHelper.reset();
+        online(user1);
         session.set(UserModel.NAME + ".service.session", user11);
         mockHelper.getRequest().addParameter("new", "new password 11");
         mockHelper.getRequest().addParameter("repeat", "new password 11");
