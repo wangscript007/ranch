@@ -46,7 +46,7 @@ public interface MemberService {
     /**
      * 当前用户是否为成员本身或群组管理员验证器Bean名称。
      */
-    String VALIDATOR_SELF_MANAGER = MemberModel.NAME + ".validator.self-manager";
+    String VALIDATOR_SELF_OR_MANAGER = MemberModel.NAME + ".validator.self-or-manager";
 
     /**
      * 获取成员信息。
@@ -129,8 +129,16 @@ public interface MemberService {
 
     /**
      * 推出/踢出群组。
+     * 如果离开成员为群主则解散群组。
      *
      * @param id 成员ID。
      */
     void leave(String id);
+
+    /**
+     * 解散群组。
+     *
+     * @param group 群组ID。
+     */
+    void dismiss(String group);
 }

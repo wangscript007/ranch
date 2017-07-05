@@ -192,6 +192,12 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public void leave(String id) {
         MemberModel member = findById(id);
+        if (member.getType() == Type.Owner.ordinal()) {
+            groupService.dismiss(member.getGroup());
+
+            return;
+        }
+
         if (member.getType() >= Type.Normal.ordinal()) {
             groupService.member(member.getGroup(), -1);
             boolean self = member.getUser().equals(userHelper.id());
@@ -215,5 +221,10 @@ public class MemberServiceImpl implements MemberService {
         object.put("user", userHelper.get(member.getUser()));
 
         return object;
+    }
+
+    @Override
+    public void dismiss(String group) {
+        memberDao.deleteByGroup(group);
     }
 }

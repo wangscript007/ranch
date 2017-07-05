@@ -16,7 +16,7 @@ public class ManagerValidatorImpl extends ManagerValidatorSupport {
 
     @Override
     public boolean validate(ValidateWrapper validate, String parameter) {
-        return validate(memberService.findById(parameter).getGroup(), userHelper.id());
+        return validate(memberService.findById(parameter), userHelper.id());
     }
 
     @Override

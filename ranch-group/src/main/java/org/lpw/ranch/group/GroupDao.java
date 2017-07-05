@@ -7,4 +7,6 @@ interface GroupDao {
     GroupModel findById(String id);
 
     void save(GroupModel group);
+
+    void delete(String id);
 }

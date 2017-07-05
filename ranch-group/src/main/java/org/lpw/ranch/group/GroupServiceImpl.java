@@ -112,6 +112,12 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
+    public void dismiss(String id) {
+        groupDao.delete(id);
+        memberService.dismiss(id);
+    }
+
+    @Override
     public JSONObject get(String id) {
         return getJson(id, null);
     }

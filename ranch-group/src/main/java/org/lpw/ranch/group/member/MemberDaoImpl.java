@@ -53,4 +53,9 @@ class MemberDaoImpl implements MemberDao {
     public void delete(String id) {
         liteOrm.deleteById(MemberModel.class, id);
     }
+
+    @Override
+    public void deleteByGroup(String group) {
+        liteOrm.delete(new LiteQuery(MemberModel.class).where("c_group=?"), new Object[]{group});
+    }
 }

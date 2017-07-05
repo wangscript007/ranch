@@ -22,4 +22,9 @@ class GroupDaoImpl implements GroupDao {
     public void save(GroupModel group) {
         liteOrm.save(group);
     }
+
+    @Override
+    public void delete(String id) {
+        liteOrm.deleteById(GroupModel.class, id);
+    }
 }

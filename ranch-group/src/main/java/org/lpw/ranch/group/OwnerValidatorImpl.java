@@ -10,8 +10,8 @@ import javax.inject.Inject;
 /**
  * @author lpw
  */
-@Controller(GroupService.VALIDATOR_MODIFY_ENABLE)
-public class ModifyEnableValidatorImpl extends ValidatorSupport {
+@Controller(GroupService.VALIDATOR_OWNER)
+public class OwnerValidatorImpl extends ValidatorSupport {
     @Inject
     private UserHelper userHelper;
     @Inject
@@ -26,6 +26,6 @@ public class ModifyEnableValidatorImpl extends ValidatorSupport {
 
     @Override
     protected String getDefaultFailureMessageKey() {
-        return GroupModel.NAME + ".modify.disable";
+        return GroupModel.NAME + ".need-owner";
     }
 }

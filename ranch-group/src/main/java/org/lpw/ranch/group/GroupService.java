@@ -10,7 +10,7 @@ public interface GroupService {
     /**
      * 是否可修改验证器Bean名称。
      */
-    String VALIDATOR_MODIFY_ENABLE = GroupModel.NAME + ".validator.modify-enable";
+    String VALIDATOR_OWNER = GroupModel.NAME + ".validator.owner";
     /**
      * 是否存在验证器Bean名称。
      */
@@ -84,6 +84,13 @@ public interface GroupService {
      * @param count 成员数：正数为增加，负数为减少。
      */
     void member(String id, int count);
+
+    /**
+     * 解散群组。
+     *
+     * @param id 群组ID值。
+     */
+    void dismiss(String id);
 
     /**
      * 获取群组信息。

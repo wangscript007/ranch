@@ -49,7 +49,7 @@ public class GroupCtrl {
     @Execute(name = "name", validates = {
             @Validate(validator = Validators.NOT_EMPTY, parameter = "name", failureCode = 1),
             @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "name", failureCode = 2),
-            @Validate(validator = GroupService.VALIDATOR_MODIFY_ENABLE, parameter = "id", failureCode = 5)
+            @Validate(validator = GroupService.VALIDATOR_OWNER, parameter = "id", failureCode = 5)
     })
     public Object name() {
         return groupService.name(request.get("id"), request.get("name"));
@@ -58,7 +58,7 @@ public class GroupCtrl {
     @Execute(name = "portrait", validates = {
             @Validate(validator = Validators.NOT_EMPTY, parameter = "portrait", failureCode = 6),
             @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "portrait", failureCode = 7),
-            @Validate(validator = GroupService.VALIDATOR_MODIFY_ENABLE, parameter = "id", failureCode = 5)
+            @Validate(validator = GroupService.VALIDATOR_OWNER, parameter = "id", failureCode = 5)
     })
     public Object portrait() {
         return groupService.portrait(request.get("id"), request.get("portrait"));
@@ -66,7 +66,7 @@ public class GroupCtrl {
 
     @Execute(name = "note", validates = {
             @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "note", failureCode = 3),
-            @Validate(validator = GroupService.VALIDATOR_MODIFY_ENABLE, parameter = "id", failureCode = 5)
+            @Validate(validator = GroupService.VALIDATOR_OWNER, parameter = "id", failureCode = 5)
     })
     public Object note() {
         return groupService.note(request.get("id"), request.get("note"));
@@ -74,9 +74,18 @@ public class GroupCtrl {
 
     @Execute(name = "audit", validates = {
             @Validate(validator = Validators.BETWEEN, number = {0, 1}, parameter = "audit", failureCode = 4),
-            @Validate(validator = GroupService.VALIDATOR_MODIFY_ENABLE, parameter = "id", failureCode = 5)
+            @Validate(validator = GroupService.VALIDATOR_OWNER, parameter = "id", failureCode = 5)
     })
     public Object audit() {
         return groupService.audit(request.get("id"), request.getAsInt("audit"));
+    }
+
+    @Execute(name = "dismiss", validates = {
+            @Validate(validator = GroupService.VALIDATOR_OWNER, parameter = "id", failureCode = 5)
+    })
+    public Object dismiss() {
+        groupService.dismiss(request.get("id"));
+
+        return "";
     }
 }

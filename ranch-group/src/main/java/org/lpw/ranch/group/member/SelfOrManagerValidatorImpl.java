@@ -6,14 +6,14 @@ import org.springframework.stereotype.Controller;
 /**
  * @author lpw
  */
-@Controller(MemberService.VALIDATOR_SELF_MANAGER)
-public class SelfManagerValidatorImpl extends ManagerValidatorSupport {
+@Controller(MemberService.VALIDATOR_SELF_OR_MANAGER)
+public class SelfOrManagerValidatorImpl extends ManagerValidatorSupport {
     @Override
     public boolean validate(ValidateWrapper validate, String parameter) {
         MemberModel member = memberService.findById(parameter);
         String user = userHelper.id();
 
-        return member.getUser().equals(user) || validate(member.getGroup(), user);
+        return member.getUser().equals(user) || validate(member, user);
     }
 
     @Override

@@ -19,4 +19,6 @@ interface MemberDao {
     void save(MemberModel member);
 
     void delete(String id);
+
+    void deleteByGroup(String group);
 }

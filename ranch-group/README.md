@@ -14,6 +14,10 @@
 
 [修改群组新成员审核设置](doc/audit.md)
 
+[解散群组](doc/dismiss.md)
+
+---
+
 [检索群组成员集](doc/member/query-by-group.md)
 
 [查找群成员信息](doc/member/find.md)

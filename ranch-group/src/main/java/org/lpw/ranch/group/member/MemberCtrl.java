@@ -89,7 +89,7 @@ public class MemberCtrl {
             @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "nick", failureCode = 26),
             @Validate(validator = UserHelper.VALIDATOR_SIGN_IN),
             @Validate(validator = MemberService.VALIDATOR_EXISTS, parameter = "id", failureCode = 24),
-            @Validate(validator = MemberService.VALIDATOR_SELF_MANAGER, parameter = "id", failureCode = 27)
+            @Validate(validator = MemberService.VALIDATOR_SELF_OR_MANAGER, parameter = "id", failureCode = 27)
     })
     public Object nick() {
         memberService.nick(request.get("id"), request.get("nick"));
@@ -101,7 +101,7 @@ public class MemberCtrl {
             @Validate(validator = Validators.NOT_EMPTY, parameter = "id", failureCode = 23),
             @Validate(validator = UserHelper.VALIDATOR_SIGN_IN),
             @Validate(validator = MemberService.VALIDATOR_EXISTS, parameter = "id", failureCode = 24),
-            @Validate(validator = MemberService.VALIDATOR_SELF_MANAGER, parameter = "id", failureCode = 27)
+            @Validate(validator = MemberService.VALIDATOR_SELF_OR_MANAGER, parameter = "id", failureCode = 27)
     })
     public Object leave() {
         memberService.leave(request.get("id"));

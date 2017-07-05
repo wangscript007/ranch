@@ -15,9 +15,13 @@ public abstract class ManagerValidatorSupport extends ValidatorSupport {
     @Inject
     MemberService memberService;
 
-    protected boolean validate(String group, String user) {
-        JSONObject manager = memberService.find(group, user);
+    protected boolean validate(MemberModel member, String user) {
+        JSONObject manager = memberService.find(member.getGroup(), user);
+        if (manager.isEmpty())
+            return false;
 
-        return !manager.isEmpty() && manager.getIntValue("type") >= MemberService.Type.Manager.ordinal();
+        int type = manager.getIntValue("type");
+
+        return type >= MemberService.Type.Manager.ordinal() && type >= member.getType();
     }
 }
