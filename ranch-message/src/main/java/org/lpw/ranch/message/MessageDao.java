@@ -11,7 +11,7 @@ import java.util.Set;
 interface MessageDao {
     void save(MessageModel message);
 
-    PageList<MessageModel> query(Timestamp time, String sender, Set<String> receivers);
+    PageList<MessageModel> query(Timestamp time, Timestamp deadline, String sender, Set<String> receivers);
 
     MessageModel findByCode(String code);
 }

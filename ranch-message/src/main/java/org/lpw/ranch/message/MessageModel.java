@@ -10,7 +10,6 @@ import org.springframework.stereotype.Component;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
-
 import java.sql.Timestamp;
 
 /**
@@ -30,6 +29,7 @@ public class MessageModel extends ModelSupport {
     private int format; // 消息格式：0-文本；1-图片；2-音频；3-视频；4-文件；5-红包；6-转账；7-名片；8-公告；9-通知
     private String content; // 内容
     private Timestamp time; // 发送时间
+    private Timestamp deadline; // 失效时间
     private String code; // 校验码
 
     @Jsonable
@@ -90,6 +90,16 @@ public class MessageModel extends ModelSupport {
 
     public void setTime(Timestamp time) {
         this.time = time;
+    }
+
+    @Jsonable
+    @Column(name = "c_deadline")
+    public Timestamp getDeadline() {
+        return deadline;
+    }
+
+    public void setDeadline(Timestamp deadline) {
+        this.deadline = deadline;
     }
 
     @Column(name = "c_code")

@@ -25,10 +25,11 @@ class MessageDaoImpl implements MessageDao {
     }
 
     @Override
-    public PageList<MessageModel> query(Timestamp time, String sender, Set<String> receivers) {
-        StringBuilder where = new StringBuilder("c_time>=? and (c_sender=? or c_receiver in(?");
+    public PageList<MessageModel> query(Timestamp time,Timestamp deadline,  String sender, Set<String> receivers) {
+        StringBuilder where = new StringBuilder("c_time>=? and c_deadline>=? and (c_sender=? or c_receiver in(?");
         List<Object> args = new ArrayList<>();
         args.add(time);
+        args.add(deadline);
         args.add(sender);
         args.add(sender);
         receivers.forEach(receiver -> {

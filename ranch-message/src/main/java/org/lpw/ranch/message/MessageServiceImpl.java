@@ -45,17 +45,19 @@ public class MessageServiceImpl implements MessageService {
     private String friendKey;
     @Value("${ranch.group.key:ranch.group}")
     private String groupKey;
+    @Value("${" + MessageModel.NAME + ".deadline:2592000}")
+    private int deadline;
 
     @Override
-    public String send(int type, String receiver, int format, String content, String code) {
+    public String send(int type, String receiver, int format, String content, int deadline, String code) {
         MessageModel message = messageDao.findByCode(code);
         if (message != null)
             return message.getId();
 
-        return type == 1 ? sendToGroup(receiver, format, content, code) : sendToFriend(receiver, format, content, code);
+        return type == 1 ? sendToGroup(receiver, format, content, deadline, code) : sendToFriend(receiver, format, content, deadline, code);
     }
 
-    private String sendToFriend(String receiver, int format, String content, String code) {
+    private String sendToFriend(String receiver, int format, String content, int deadline, String code) {
         JSONObject friend = carousel.get(friendKey + ".get", receiver);
         if (friend.size() <= 1) {
             if (logger.isDebugEnable())
@@ -64,10 +66,10 @@ public class MessageServiceImpl implements MessageService {
             return null;
         }
 
-        return send(userHelper.id(), 0, friend.getString("user"), format, content, code);
+        return send(userHelper.id(), 0, friend.getString("user"), format, content, deadline, code);
     }
 
-    private String sendToGroup(String receiver, int format, String content, String code) {
+    private String sendToGroup(String receiver, int format, String content, int deadline, String code) {
         String user = userHelper.id();
         Map<String, String> parameter = new HashMap<>();
         parameter.put("group", receiver);
@@ -80,19 +82,19 @@ public class MessageServiceImpl implements MessageService {
             return null;
         }
 
-        return send(member.getString("id"), 1, receiver, format, content, code);
+        return send(member.getString("id"), 1, receiver, format, content, deadline, code);
     }
 
     @Override
-    public String notify(int type, String receiver, String content, String code) {
+    public String notify(int type, String receiver, String content, int deadline, String code) {
         MessageModel message = messageDao.findByCode(code);
         if (message != null)
             return message.getId();
 
-        return send("", type, receiver, 9, content, code);
+        return send("", type, receiver, 9, content, deadline, code);
     }
 
-    private String send(String sender, int type, String receiver, int format, String content, String code) {
+    private String send(String sender, int type, String receiver, int format, String content, int deadline, String code) {
         MessageModel message = new MessageModel();
         message.setSender(sender);
         message.setType(type);
@@ -100,6 +102,7 @@ public class MessageServiceImpl implements MessageService {
         message.setFormat(format);
         message.setContent(content);
         message.setTime(dateTime.now());
+        message.setDeadline(new Timestamp(System.currentTimeMillis() + 1000L * (deadline > 0 ? deadline : this.deadline)));
         message.setCode(code);
         messageDao.save(message);
 
@@ -128,7 +131,7 @@ public class MessageServiceImpl implements MessageService {
         Map<String, List<MessageModel>> map = new HashMap<>();
         List<String> list = new ArrayList<>();
         String sender = userHelper.id();
-        messageDao.query(lastTime(time), sender, groups).getList().forEach(message -> {
+        messageDao.query(lastTime(time), dateTime.now(), sender, groups).getList().forEach(message -> {
             String key;
             if (message.getFormat() == 9)
                 key = "notify";

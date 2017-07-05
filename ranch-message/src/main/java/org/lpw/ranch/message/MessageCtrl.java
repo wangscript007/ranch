@@ -37,7 +37,7 @@ public class MessageCtrl {
     })
     public Object send() {
         int type = request.getAsInt("type");
-        String id = messageService.send(type, request.get("receiver"), request.getAsInt("format"), request.get("content"), request.get("code"));
+        String id = messageService.send(type, request.get("receiver"), request.getAsInt("format"), request.get("content"), request.getAsInt("deadline"), request.get("code"));
         if (id != null)
             return id;
 
@@ -53,7 +53,7 @@ public class MessageCtrl {
             @Validate(validator = Validators.SIGN)
     })
     public Object sendNotify() {
-        return messageService.notify(request.getAsInt("type"), request.get("receiver"), request.get("content"), request.get("code"));
+        return messageService.notify(request.getAsInt("type"), request.get("receiver"), request.get("content"), request.getAsInt("deadline"), request.get("code"));
     }
 
     @Execute(name = "newest", validates = {
