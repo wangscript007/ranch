@@ -16,7 +16,12 @@
     <dependencies>
         <dependency>
             <groupId>org.lpw.ranch</groupId>
-            <artifactId>ranch-base</artifactId>
+            <artifactId>ranch-user-helper</artifactId>
+            <version>${version.ranch}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.lpw.ranch</groupId>
+            <artifactId>ranch-payment-helper</artifactId>
             <version>${version.ranch}</version>
         </dependency>
         <dependency>

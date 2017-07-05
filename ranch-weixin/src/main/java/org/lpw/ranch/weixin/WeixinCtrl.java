@@ -1,6 +1,8 @@
 package org.lpw.ranch.weixin;
 
+import org.lpw.ranch.user.helper.UserHelper;
 import org.lpw.tephra.ctrl.context.Request;
+import org.lpw.tephra.ctrl.context.Response;
 import org.lpw.tephra.ctrl.execute.Execute;
 import org.lpw.tephra.ctrl.template.Templates;
 import org.lpw.tephra.ctrl.validate.Validate;
@@ -20,6 +22,8 @@ public class WeixinCtrl {
     private Validator validator;
     @Inject
     private Request request;
+    @Inject
+    private Response response;
     @Inject
     private WeixinService weixinService;
 
@@ -68,5 +72,21 @@ public class WeixinCtrl {
     })
     public Object auth() {
         return weixinService.auth(request.get("key"), request.get("code"));
+    }
+
+    @Execute(name = "prepay-qr-code", validates = {
+            @Validate(validator = Validators.NOT_EMPTY, parameter = "key", failureCode = 1),
+            @Validate(validator = Validators.NOT_EMPTY, parameter = "subject", failureCode = 21),
+            @Validate(validator = Validators.GREATER_THAN, number = {0}, parameter = "amount", failureCode = 22),
+            @Validate(validator = Validators.NOT_EMPTY, parameter = "notifyUrl", failureCode = 23),
+            @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "notifyUrl", failureCode = 24),
+            @Validate(validator = UserHelper.VALIDATOR_NOT_EMPTY_OR_SIGN_IN, parameter = "user", failureCode = 25),
+            @Validate(validator = WeixinService.VALIDATOR_EXISTS, parameter = "key", failureCode = 26)
+    })
+    public Object prepayQrCode() {
+        weixinService.prepayQrCode(request.get("key"), request.get("user"), request.get("subject"),
+                request.getAsInt("amount"), request.get("notifyUrl"), request.getAsInt("size"), response.getOutputStream());
+
+        return null;
     }
 }

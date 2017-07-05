@@ -2,18 +2,27 @@ package org.lpw.ranch.weixin;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import org.lpw.ranch.payment.helper.PaymentHelper;
 import org.lpw.tephra.bean.ContextRefreshedListener;
 import org.lpw.tephra.crypto.Digest;
+import org.lpw.tephra.ctrl.context.Header;
 import org.lpw.tephra.dao.model.ModelHelper;
 import org.lpw.tephra.scheduler.HourJob;
+import org.lpw.tephra.storage.Storages;
+import org.lpw.tephra.util.Converter;
 import org.lpw.tephra.util.DateTime;
+import org.lpw.tephra.util.Generator;
 import org.lpw.tephra.util.Http;
 import org.lpw.tephra.util.Json;
 import org.lpw.tephra.util.Logger;
+import org.lpw.tephra.util.QrCode;
+import org.lpw.tephra.util.Validator;
+import org.lpw.tephra.util.Xml;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -28,19 +37,42 @@ public class WeixinServiceImpl implements WeixinService, HourJob, ContextRefresh
     @Inject
     private Digest digest;
     @Inject
+    private Converter converter;
+    @Inject
+    private Generator generator;
+    @Inject
+    private Validator validator;
+    @Inject
     private Http http;
     @Inject
     private Json json;
     @Inject
     private DateTime dateTime;
     @Inject
+    private Xml xml;
+    @Inject
+    private QrCode qrCode;
+    @Inject
     private Logger logger;
+    @Inject
+    private Storages storages;
     @Inject
     private ModelHelper modelHelper;
     @Inject
+    private Header header;
+    @Inject
+    private PaymentHelper paymentHelper;
+    @Inject
     private WeixinDao weixinDao;
+    @Value("${tephra.ctrl.service-root:}")
+    private String root;
+    @Value("${" + WeixinModel.NAME + ".qr-code.size:256}")
+    private int qrCodeSize;
+    @Value("${" + WeixinModel.NAME + ".qr-code.logo:}")
+    private String qrCodeLogo;
     @Value("${" + WeixinModel.NAME + ".auto:false}")
     private boolean auto;
+    private String logo;
 
     @Override
     public JSONArray query() {
@@ -128,6 +160,75 @@ public class WeixinServiceImpl implements WeixinService, HourJob, ContextRefresh
             logger.debug("获得微信用户认证信息[{}:{}]。", code, object);
 
         return object;
+    }
+
+    @Override
+    public void prepayQrCode(String key, String user, String subject, int amount, String notifyUrl, int size, OutputStream outputStream) {
+        Map<String, String> map = new HashMap<>();
+        String xml = prepay(key, user, subject, amount, notifyUrl, "NATIVE", map);
+        if (xml == null)
+            return;
+
+        qrCode.create(xml, size > 0 ? size : qrCodeSize, getLogo(), outputStream);
+    }
+
+    private String prepay(String key, String user, String subject, int amount, String notifyUrl, String type, Map<String, String> map) {
+        WeixinModel weixin = findByKey(key);
+        if (weixin == null)
+            return null;
+
+        String orderNo = paymentHelper.create("weixin", user, amount, notifyUrl);
+        if (validator.isEmpty(orderNo))
+            return null;
+
+        map.put("appid", weixin.getAppId());
+        map.put("mch_id", weixin.getMchId());
+        map.put("nonce_str", generator.random(32));
+        map.put("body", subject);
+        map.put("out_trade_no", orderNo);
+        map.put("total_fee", converter.toString(amount, "0"));
+        map.put("spbill_create_ip", header.getIp());
+        map.put("notify_url", root + "/weixin/notify");
+        map.put("trade_type", type);
+        map.put("sign", sign(map, weixin.getMchKey()));
+
+        StringBuilder xml = new StringBuilder("<xml>");
+        map.forEach((name, value) -> xml.append('<').append(name).append("><![CDATA[").append(value).append("]]></").append(name).append('>'));
+        xml.append("</xml>");
+        String html = http.post("https://api.mch.weixin.qq.com/pay/unifiedorder", null, xml.toString());
+        if (validator.isEmpty(html)) {
+            logger.warn(null, "微信预支付[{}:{}]失败！", xml, map);
+
+            return null;
+        }
+
+        map.clear();
+        map.putAll(this.xml.toMap(html, false));
+        if (!"SUCCESS".equals(map.get("return_code")) || !"SUCCESS".equals(map.get("result_code"))) {
+            logger.warn(null, "微信预支付[{}:{}]失败！", xml, map);
+
+            return null;
+        }
+
+        return html;
+    }
+
+    private String sign(Map<String, String> map, String mchKey) {
+        List<String> list = new ArrayList<>(map.keySet());
+        Collections.sort(list);
+        StringBuilder sb = new StringBuilder();
+        list.forEach(key -> sb.append(key).append('=').append(map.get(key)).append('&'));
+        sb.append("key=").append(mchKey);
+
+        return digest.md5(sb.toString()).toUpperCase();
+    }
+
+    private String getLogo() {
+        if (logo == null)
+            logo = validator.isEmpty(qrCodeLogo) ? "" :
+                    storages.get(Storages.TYPE_DISK).getAbsolutePath(qrCodeLogo);
+
+        return logo;
     }
 
     @Override

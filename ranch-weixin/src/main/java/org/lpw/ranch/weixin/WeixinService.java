@@ -3,6 +3,8 @@ package org.lpw.ranch.weixin;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
+import java.io.OutputStream;
+
 /**
  * @author lpw
  */
@@ -70,4 +72,17 @@ public interface WeixinService {
      * @return 如果认证通过则返回用户授权信息，否则返回空JSON。
      */
     JSONObject auth(String key, String code);
+
+    /**
+     * 生成支付二维码。
+     *
+     * @param key          引用key。
+     * @param user         用户ID。
+     * @param subject      订单名称。
+     * @param amount       支付金额，单位：分。
+     * @param notifyUrl    异步通知URL地址。
+     * @param size         二维码图片大小，小于等于0则使用默认值。
+     * @param outputStream 输出流。
+     */
+    void prepayQrCode(String key, String user, String subject, int amount, String notifyUrl, int size, OutputStream outputStream);
 }
