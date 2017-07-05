@@ -17,7 +17,7 @@ class AuthDaoImpl implements AuthDao {
     private LiteOrm liteOrm;
 
     @Override
-    public PageList<AuditModel> query(String user) {
+    public PageList<AuthModel> query(String user) {
         return liteOrm.query(new LiteQuery(AuthModel.class).where("c_user=?"), new Object[]{user});
     }
 
