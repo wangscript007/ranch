@@ -39,14 +39,12 @@ public class AlipayCtrl {
             @Validate(validator = Validators.NOT_EMPTY, parameter = "key", failureCode = 1),
             @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "key", failureCode = 2),
             @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "name", failureCode = 3),
-            @Validate(validator = Validators.NOT_EMPTY, parameter = "url", failureCode = 4),
-            @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "url", failureCode = 5),
-            @Validate(validator = Validators.NOT_EMPTY, parameter = "appId", failureCode = 6),
-            @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "appId", failureCode = 7),
-            @Validate(validator = Validators.NOT_EMPTY, parameter = "privateKey", failureCode = 8),
-            @Validate(validator = Validators.NOT_EMPTY, parameter = "publicKey", failureCode = 9),
+            @Validate(validator = Validators.NOT_EMPTY, parameter = "appId", failureCode = 4),
+            @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "appId", failureCode = 5),
+            @Validate(validator = Validators.NOT_EMPTY, parameter = "privateKey", failureCode = 6),
+            @Validate(validator = Validators.NOT_EMPTY, parameter = "publicKey", failureCode = 7),
             @Validate(validator = Validators.SIGN),
-            @Validate(validator = AlipayService.VALIDATOR_NOT_EXISTS, parameters = {"key", "appId"}, failureCode = 10)
+            @Validate(validator = AlipayService.VALIDATOR_NOT_EXISTS, parameters = {"key", "appId"}, failureCode = 8)
 
     })
     public Object save() {

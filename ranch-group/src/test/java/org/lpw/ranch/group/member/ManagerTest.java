@@ -93,7 +93,7 @@ public class ManagerTest extends TestSupport {
         Assert.assertEquals(MemberService.Type.Manager.ordinal(), member22.getType());
         Assert.assertEquals(1, liteOrm.findById(GroupModel.class, group.getId()).getMember());
 
-        member11.setType(MemberService.Type.Owner.ordinal());
+        member11.setType(MemberService.Type.Manager.ordinal());
         liteOrm.save(member11);
         mockHelper.reset();
         mockHelper.getRequest().addParameter("id", member1.getId());
@@ -102,7 +102,7 @@ public class ManagerTest extends TestSupport {
         Assert.assertEquals(0, object.getIntValue("code"));
         Assert.assertEquals("", object.getString("data"));
         MemberModel member111 = liteOrm.findById(MemberModel.class, member1.getId());
-        Assert.assertEquals(MemberService.Type.Owner.ordinal(), member111.getType());
+        Assert.assertEquals(MemberService.Type.Manager.ordinal(), member111.getType());
         Assert.assertEquals(1, liteOrm.findById(GroupModel.class, group.getId()).getMember());
     }
 }

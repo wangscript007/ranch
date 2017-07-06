@@ -31,7 +31,7 @@ public class NoteTest extends TestSupport {
         mockHelper.mock("/group/note");
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(1705, object.getIntValue("code"));
-        Assert.assertEquals(message.get(GroupModel.NAME + ".modify.disable"), object.getString("message"));
+        Assert.assertEquals(message.get(GroupModel.NAME + ".need-owner"), object.getString("message"));
 
         mockCarousel.register("ranch.user.sign", "{\"code\":0,\"data\":{\"id\":\"sign in id\"}}");
         mockHelper.reset();
@@ -39,7 +39,7 @@ public class NoteTest extends TestSupport {
         mockHelper.mock("/group/note");
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(1705, object.getIntValue("code"));
-        Assert.assertEquals(message.get(GroupModel.NAME + ".modify.disable"), object.getString("message"));
+        Assert.assertEquals(message.get(GroupModel.NAME + ".need-owner"), object.getString("message"));
 
         mockHelper.reset();
         mockHelper.getRequest().addParameter("id", group1.getId());
@@ -47,7 +47,7 @@ public class NoteTest extends TestSupport {
         mockHelper.mock("/group/note");
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(1705, object.getIntValue("code"));
-        Assert.assertEquals(message.get(GroupModel.NAME + ".modify.disable"), object.getString("message"));
+        Assert.assertEquals(message.get(GroupModel.NAME + ".need-owner"), object.getString("message"));
 
         mockHelper.reset();
         mockHelper.getRequest().addParameter("id", group2.getId());
@@ -55,7 +55,7 @@ public class NoteTest extends TestSupport {
         mockHelper.mock("/group/note");
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(1705, object.getIntValue("code"));
-        Assert.assertEquals(message.get(GroupModel.NAME + ".modify.disable"), object.getString("message"));
+        Assert.assertEquals(message.get(GroupModel.NAME + ".need-owner"), object.getString("message"));
 
         mockCarousel.register("ranch.user.sign", "{\"code\":0,\"data\":{\"id\":\"owner 1\"}}");
         mockHelper.reset();
@@ -64,7 +64,7 @@ public class NoteTest extends TestSupport {
         mockHelper.mock("/group/note");
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(1705, object.getIntValue("code"));
-        Assert.assertEquals(message.get(GroupModel.NAME + ".modify.disable"), object.getString("message"));
+        Assert.assertEquals(message.get(GroupModel.NAME + ".need-owner"), object.getString("message"));
 
         mockHelper.reset();
         mockHelper.getRequest().addParameter("id", group1.getId());

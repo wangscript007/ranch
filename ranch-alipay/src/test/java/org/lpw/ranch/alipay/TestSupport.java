@@ -34,7 +34,6 @@ public class TestSupport extends TephraTestSupport {
         AlipayModel alipay = new AlipayModel();
         alipay.setKey("key " + i);
         alipay.setName("name " + i);
-        alipay.setUrl("url " + i);
         alipay.setAppId(appId);
         alipay.setPrivateKey("private key " + i);
         alipay.setPublicKey("public key " + i);
@@ -46,7 +45,6 @@ public class TestSupport extends TephraTestSupport {
     void equals(JSONObject object, int i) {
         Assert.assertEquals("key " + i, object.getString("key"));
         Assert.assertEquals("name " + i, object.getString("name"));
-        Assert.assertEquals("url " + i, object.getString("url"));
         Assert.assertEquals("app id " + i, object.getString("appId"));
         Assert.assertEquals("private key " + i, object.getString("privateKey"));
         Assert.assertEquals("public key " + i, object.getString("publicKey"));

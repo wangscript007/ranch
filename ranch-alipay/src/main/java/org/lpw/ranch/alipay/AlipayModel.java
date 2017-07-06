@@ -22,7 +22,6 @@ public class AlipayModel extends ModelSupport {
 
     private String key; // 引用key
     private String name; // 名称
-    private String url; // URL地址
     private String appId; // APP ID
     private String privateKey; // 私钥
     private String publicKey; // 公钥
@@ -45,16 +44,6 @@ public class AlipayModel extends ModelSupport {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    @Jsonable
-    @Column(name = "c_url")
-    public String getUrl() {
-        return url;
-    }
-
-    public void setUrl(String url) {
-        this.url = url;
     }
 
     @Jsonable

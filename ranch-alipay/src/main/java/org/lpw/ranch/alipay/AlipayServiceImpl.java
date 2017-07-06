@@ -68,7 +68,6 @@ public class AlipayServiceImpl implements AlipayService {
             model.setKey(alipay.getKey());
         }
         model.setName(alipay.getName());
-        model.setUrl(alipay.getUrl());
         model.setAppId(alipay.getAppId());
         model.setPrivateKey(alipay.getPrivateKey());
         model.setPublicKey(alipay.getPublicKey());
@@ -131,7 +130,7 @@ public class AlipayServiceImpl implements AlipayService {
     }
 
     private AlipayClient newAlipayClient(AlipayModel alipay) {
-        return new DefaultAlipayClient(alipay.getUrl(), alipay.getAppId(), alipay.getPrivateKey(),
+        return new DefaultAlipayClient("https://openapi.alipay.com/gateway.do", alipay.getAppId(), alipay.getPrivateKey(),
                 "json", "UTF-8", alipay.getPublicKey(), AlipayConstants.SIGN_TYPE_RSA2);
     }
 
