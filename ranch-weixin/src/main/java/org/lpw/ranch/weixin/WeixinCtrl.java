@@ -8,9 +8,11 @@ import org.lpw.tephra.ctrl.template.Templates;
 import org.lpw.tephra.ctrl.validate.Validate;
 import org.lpw.tephra.ctrl.validate.Validators;
 import org.lpw.tephra.util.Validator;
+import org.lpw.tephra.util.Xml;
 import org.springframework.stereotype.Controller;
 
 import javax.inject.Inject;
+import java.util.Map;
 
 /**
  * @author lpw
@@ -20,6 +22,8 @@ import javax.inject.Inject;
 public class WeixinCtrl {
     @Inject
     private Validator validator;
+    @Inject
+    private Xml xml;
     @Inject
     private Request request;
     @Inject
@@ -84,9 +88,18 @@ public class WeixinCtrl {
             @Validate(validator = WeixinService.VALIDATOR_EXISTS, parameter = "key", failureCode = 26)
     })
     public Object prepayQrCode() {
-        weixinService.prepayQrCode(request.get("key"), request.get("user"), request.get("subject"),
-                request.getAsInt("amount"), request.get("notifyUrl"), request.getAsInt("size"), response.getOutputStream());
+        weixinService.prepayQrCode(request.get("key"), request.get("user"), request.get("subject"), request.getAsInt("amount"),
+                request.get("notifyUrl"), request.getAsInt("size"), request.get("logo"), response.getOutputStream());
 
         return null;
+    }
+
+    @Execute(name = "notify", type = Templates.STRING)
+    public Object notice() {
+        Map<String, String> map = xml.toMap(request.getFromInputStream(), false);
+        String code = weixinService.notify(map.get("appid"), map.get("out_trade_no"), map.get("transaction_id"),
+                map.get("total_fee"), map.get("return_code"), map.get("result_code"), map) ? "SUCCESS" : "FAIL";
+
+        return "<xml><return_code><![CDATA[" + code + "]]></return_code></xml>";
     }
 }

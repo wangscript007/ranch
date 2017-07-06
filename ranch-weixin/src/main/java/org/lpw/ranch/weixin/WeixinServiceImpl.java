@@ -163,16 +163,22 @@ public class WeixinServiceImpl implements WeixinService, HourJob, ContextRefresh
     }
 
     @Override
-    public void prepayQrCode(String key, String user, String subject, int amount, String notifyUrl, int size, OutputStream outputStream) {
+    public void prepayQrCode(String key, String user, String subject, int amount, String notifyUrl, int size, String logo, OutputStream outputStream) {
         Map<String, String> map = new HashMap<>();
-        String xml = prepay(key, user, subject, amount, notifyUrl, "NATIVE", map);
+        map = prepay(key, user, subject, amount, notifyUrl, "NATIVE", map);
         if (xml == null)
             return;
 
-        qrCode.create(xml, size > 0 ? size : qrCodeSize, getLogo(), outputStream);
+        qrCode.create(map.get("code_url"), size > 0 ? size : qrCodeSize, getLogo(logo), outputStream);
     }
 
-    private String prepay(String key, String user, String subject, int amount, String notifyUrl, String type, Map<String, String> map) {
+    private String getLogo(String logo) {
+        String path = validator.isEmpty(logo) ? qrCodeLogo : logo;
+
+        return validator.isEmpty(path) ? null : storages.get(Storages.TYPE_DISK).getAbsolutePath(path);
+    }
+
+    private Map<String, String> prepay(String key, String user, String subject, int amount, String notifyUrl, String type, Map<String, String> map) {
         WeixinModel weixin = findByKey(key);
         if (weixin == null)
             return null;
@@ -202,15 +208,39 @@ public class WeixinServiceImpl implements WeixinService, HourJob, ContextRefresh
             return null;
         }
 
-        map.clear();
-        map.putAll(this.xml.toMap(html, false));
+        map = this.xml.toMap(html, false);
         if (!"SUCCESS".equals(map.get("return_code")) || !"SUCCESS".equals(map.get("result_code"))) {
             logger.warn(null, "微信预支付[{}:{}]失败！", xml, map);
 
             return null;
         }
 
-        return html;
+        return map;
+    }
+
+    @Override
+    public boolean notify(String appId, String orderNo, String tradeNo, String amount, String returnCode, String resultCode, Map<String, String> map) {
+        if (logger.isDebugEnable())
+            logger.debug("微信支付结果回调[{}]。", converter.toString(map));
+
+        WeixinModel weixin = findByAppId(appId);
+        if (weixin == null)
+            return false;
+
+        if (!"SUCCESS".equals(map.get("return_code")) || !"SUCCESS".equals(map.get("result_code"))) {
+            logger.warn(null, "微信支付回调[{}]返回失败！", converter.toString(map));
+
+            return false;
+        }
+
+        String sign = map.remove("sign");
+        if (!sign(map, weixin.getMchKey()).equals(sign)) {
+            logger.warn(null, "微信支付回调签名认证[{}]失败！", converter.toString(map));
+
+            return false;
+        }
+
+        return orderNo.equals(paymentHelper.complete(orderNo, converter.toInt(amount), tradeNo, 1));
     }
 
     private String sign(Map<String, String> map, String mchKey) {
@@ -221,14 +251,6 @@ public class WeixinServiceImpl implements WeixinService, HourJob, ContextRefresh
         sb.append("key=").append(mchKey);
 
         return digest.md5(sb.toString()).toUpperCase();
-    }
-
-    private String getLogo() {
-        if (logo == null)
-            logo = validator.isEmpty(qrCodeLogo) ? "" :
-                    storages.get(Storages.TYPE_DISK).getAbsolutePath(qrCodeLogo);
-
-        return logo;
     }
 
     @Override

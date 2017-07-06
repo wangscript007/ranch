@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
 import java.io.OutputStream;
+import java.util.Map;
 
 /**
  * @author lpw
@@ -82,7 +83,22 @@ public interface WeixinService {
      * @param amount       支付金额，单位：分。
      * @param notifyUrl    异步通知URL地址。
      * @param size         二维码图片大小，小于等于0则使用默认值。
+     * @param logo         LOGO图片名。
      * @param outputStream 输出流。
      */
-    void prepayQrCode(String key, String user, String subject, int amount, String notifyUrl, int size, OutputStream outputStream);
+    void prepayQrCode(String key, String user, String subject, int amount, String notifyUrl, int size, String logo, OutputStream outputStream);
+
+    /**
+     * 异步通知。
+     *
+     * @param appId      APP ID。
+     * @param orderNo    订单号。
+     * @param tradeNo    网关订单号。
+     * @param amount     金额。
+     * @param returnCode 状态码。
+     * @param resultCode 业务结果。
+     * @param map        参数集。
+     * @return 执行成功则返回true；否则返回false。
+     */
+    boolean notify(String appId, String orderNo, String tradeNo, String amount, String returnCode, String resultCode, Map<String, String> map);
 }
