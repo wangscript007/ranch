@@ -25,6 +25,7 @@ public class LogModel extends ModelSupport {
     private String account; // 账户
     private String owner; // 所有者
     private String type; // 类型
+    private String channel; // 渠道
     private int amount; // 数量
     private int balance; // 余额
     private int state; // 状态：0-待处理；1-审核通过；2-审核不通过
@@ -71,6 +72,16 @@ public class LogModel extends ModelSupport {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    @Jsonable
+    @Column(name = "c_channel")
+    public String getChannel() {
+        return channel;
+    }
+
+    public void setChannel(String channel) {
+        this.channel = channel;
     }
 
     @Jsonable

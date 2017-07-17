@@ -24,26 +24,27 @@ public abstract class AccountTypeSupport implements AccountType {
         ignores.add("user");
         ignores.add("owner");
         ignores.add("type");
+        ignores.add("channel");
         ignores.add("amount");
     }
 
-    protected String in(AccountModel account, int amount, Map<String, String> map){
+    protected String in(AccountModel account, String channel, int amount, Map<String, String> map) {
         account.setPending(account.getPending() + amount);
 
-        return log(account, amount, LogService.State.New, map);
+        return log(account, channel, amount, LogService.State.New, map);
     }
 
-    protected String out(AccountModel account, int amount, Map<String, String> map){
+    protected String out(AccountModel account, String channel, int amount, Map<String, String> map) {
         if (account.getBalance() < amount)
             return null;
 
         account.setBalance(account.getBalance() - amount);
         account.setPending(account.getPending() + amount);
 
-        return log(account, amount, LogService.State.New, map);
+        return log(account, channel, amount, LogService.State.New, map);
     }
 
-    protected String log(AccountModel account, int amount, LogService.State state, Map<String, String> map) {
+    protected String log(AccountModel account, String channel, int amount, LogService.State state, Map<String, String> map) {
         Map<String, String> parameter = new HashMap<>();
         if (map != null) {
             parameter.putAll(map);
@@ -51,6 +52,6 @@ public abstract class AccountTypeSupport implements AccountType {
                 parameter.remove(key);
         }
 
-        return logService.create(account, getName(), amount, state, parameter);
+        return logService.create(account, getName(), channel, amount, state, parameter);
     }
 }

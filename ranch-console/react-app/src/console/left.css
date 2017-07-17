@@ -1,0 +1,20 @@
+.console-left {
+    position: absolute;
+    width: 16%;
+    top: 32px;
+    bottom: 20px;
+    background-color: #ececec;
+    overflow: auto;
+}
+
+.console-left .menu {
+    display: block;
+    text-decoration: none;
+    text-indent: 32px;
+    color: #777;
+}
+
+.console-left .menu:hover,
+.console-left .menu-active {
+    background-color: #eee;
+}

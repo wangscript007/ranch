@@ -18,8 +18,8 @@ public class WithdrawImpl extends AccountTypeSupport implements AccountType {
     }
 
     @Override
-    public String change(AccountModel account, int amount, Map<String, String> map) {
-        return out(account, amount, map);
+    public String change(AccountModel account, String channel, int amount, Map<String, String> map) {
+        return out(account, channel, amount, map);
     }
 
     @Override

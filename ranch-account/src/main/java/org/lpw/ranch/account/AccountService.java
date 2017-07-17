@@ -11,12 +11,6 @@ import java.util.Map;
  */
 public interface AccountService {
     /**
-     * 消费验证器Bean名称。
-     * 验证失败key=ranch.account.consume.failure。
-     */
-    String VALIDATOR_CONSUME = AccountModel.NAME + ".validator.consume";
-
-    /**
      * 检索账户信息集。
      *
      * @param user  用户ID，为空则为当前用户。
@@ -28,81 +22,88 @@ public interface AccountService {
     /**
      * 存入。
      *
-     * @param user   用户。
-     * @param owner  所有者。
-     * @param type   类型。
-     * @param amount 数量。
-     * @param map    参数集。
+     * @param user    用户。
+     * @param owner   所有者。
+     * @param type    类型。
+     * @param channel 渠道。
+     * @param amount  数量。
+     * @param map     参数集。
      * @return 账户信息；如果存入失败则返回null。
      */
-    JSONObject deposit(String user, String owner, int type, int amount, Map<String, String> map);
+    JSONObject deposit(String user, String owner, int type, String channel, int amount, Map<String, String> map);
 
     /**
      * 取出。
      *
-     * @param user   用户。
-     * @param owner  所有者。
-     * @param type   类型。
-     * @param amount 数量。
-     * @param map    参数集。
+     * @param user    用户。
+     * @param owner   所有者。
+     * @param type    类型。
+     * @param channel 渠道。
+     * @param amount  数量。
+     * @param map     参数集。
      * @return 账户信息；如果取出失败则返回null。
      */
-    JSONObject withdraw(String user, String owner, int type, int amount, Map<String, String> map);
+    JSONObject withdraw(String user, String owner, int type, String channel, int amount, Map<String, String> map);
 
     /**
      * 奖励。
      *
-     * @param user   用户。
-     * @param owner  所有者。
-     * @param type   类型。
-     * @param amount 数量。
+     * @param user    用户。
+     * @param owner   所有者。
+     * @param type    类型。
+     * @param channel 渠道。
+     * @param amount  数量。
      * @return 账户信息；如果奖励失败则返回null。
      */
-    JSONObject reward(String user, String owner, int type, int amount);
+    JSONObject reward(String user, String owner, int type, String channel, int amount);
 
     /**
      * 盈利。
      *
-     * @param user   用户。
-     * @param owner  所有者。
-     * @param type   类型。
-     * @param amount 数量。
+     * @param user    用户。
+     * @param owner   所有者。
+     * @param type    类型。
+     * @param channel 渠道。
+     * @param amount  数量。
      * @return 账户信息；如果盈利失败则返回null。
      */
-    JSONObject profit(String user, String owner, int type, int amount);
+    JSONObject profit(String user, String owner, int type, String channel, int amount);
 
     /**
      * 消费。
      *
-     * @param user   用户。
-     * @param owner  所有者。
-     * @param type   类型。
-     * @param amount 数量。
+     * @param user    用户。
+     * @param owner   所有者。
+     * @param type    类型。
+     * @param channel 渠道。
+     * @param amount  数量。
      * @return 账户信息；如果消费失败则返回null。
      */
-    JSONObject consume(String user, String owner, int type, int amount);
+    JSONObject consume(String user, String owner, int type, String channel, int amount);
 
     /**
      * 汇入。
      *
-     * @param user   用户。
-     * @param owner  所有者。
-     * @param type   类型。
-     * @param amount 数量。
+     * @param user    用户。
+     * @param owner   所有者。
+     * @param type    类型。
+     * @param channel 渠道。
+     * @param amount  数量。
      * @return 账户信息；如果消费失败则返回null。
      */
-    JSONObject remitIn(String user, String owner, int type, int amount);
+    JSONObject remitIn(String user, String owner, int type, String channel, int amount);
 
     /**
      * 汇出。
      *
-     * @param user   用户。
-     * @param owner  所有者。
-     * @param type   类型。
-     * @param amount 数量。
+     * @param user    用户。
+     * @param owner   所有者。
+     * @param type    类型。
+     * @param channel 渠道。
+     * @param amount  数量。
      * @return 账户信息；如果消费失败则返回null。
      */
-    JSONObject remitOut(String user, String owner, int type, int amount);
+    JSONObject remitOut(String user, String owner, int type, String channel, int amount);
 
     /**
      * 结算。

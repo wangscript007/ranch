@@ -1,0 +1,21 @@
+.console-bottom {
+    position: absolute;
+    bottom: 0;
+    height: 20px;
+    width: 100%;
+    line-height: 20px;
+    background-color: #ececec;
+    text-align: center;
+    font-size: 12px;
+    color: #888;
+}
+
+.console-bottom a {
+    font-size: 12px;
+    color: #888;
+    text-decoration: none;
+}
+
+.console-bottom a:hover {
+    text-decoration: underline;
+}

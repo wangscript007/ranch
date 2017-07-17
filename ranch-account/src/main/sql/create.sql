@@ -28,6 +28,7 @@ CREATE TABLE t_account_log
   c_account CHAR(36) NOT NULL COMMENT '账户',
   c_owner CHAR(36) DEFAULT NULL COMMENT '所有者',
   c_type VARCHAR(255) DEFAULT NULL COMMENT '类型',
+  c_channel VARCHAR(255) DEFAULT NULL COMMENT '渠道',
   c_amount INT DEFAULT 0 COMMENT '数量',
   c_balance INT DEFAULT 0 COMMENT '余额',
   c_state INT DEFAULT 0 COMMENT '状态：0-待处理；1-审核通过；2-审核不通过',

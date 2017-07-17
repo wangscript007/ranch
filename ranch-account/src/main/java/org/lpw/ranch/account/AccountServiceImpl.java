@@ -5,14 +5,15 @@ import com.alibaba.fastjson.JSONObject;
 import org.lpw.ranch.account.log.LogModel;
 import org.lpw.ranch.account.log.LogService;
 import org.lpw.ranch.account.type.AccountTypes;
+import org.lpw.ranch.classify.helper.ClassifyHelper;
 import org.lpw.ranch.lock.LockHelper;
 import org.lpw.ranch.user.helper.UserHelper;
 import org.lpw.ranch.util.Pagination;
 import org.lpw.tephra.crypto.Digest;
 import org.lpw.tephra.dao.model.ModelHelper;
 import org.lpw.tephra.dao.orm.PageList;
+import org.lpw.tephra.util.Converter;
 import org.lpw.tephra.util.Validator;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
@@ -29,6 +30,8 @@ public class AccountServiceImpl implements AccountService {
     @Inject
     private Validator validator;
     @Inject
+    private Converter converter;
+    @Inject
     private Digest digest;
     @Inject
     private ModelHelper modelHelper;
@@ -39,13 +42,13 @@ public class AccountServiceImpl implements AccountService {
     @Inject
     private UserHelper userHelper;
     @Inject
+    private ClassifyHelper classifyHelper;
+    @Inject
     private AccountTypes accountTypes;
     @Inject
     private LogService logService;
     @Inject
     private AccountDao accountDao;
-    @Value("${ranch.account.balance:0}")
-    private int balance;
 
     @Override
     public JSONArray query(String user, String owner) {
@@ -53,10 +56,10 @@ public class AccountServiceImpl implements AccountService {
             user = userHelper.id();
         PageList<AccountModel> pl = queryFromDao(user, owner);
         if (pl.getList().isEmpty()) {
-            if (balance > 0)
-                logService.pass(new String[]{deposit(user, owner, 0, balance, null).getString("logId")});
-            else
-                save(find(user, owner, 0));
+            save(find(user, owner, 0));
+            int amount = valueFromClassify("amount");
+            if (amount > 0)
+                logService.pass(new String[]{reward(user, owner, valueFromClassify("type"), "sign-up", amount).getString("logId")});
             pl = queryFromDao(user, owner);
         }
         JSONArray array = modelHelper.toJson(pl.getList());
@@ -68,45 +71,49 @@ public class AccountServiceImpl implements AccountService {
         return owner == null ? accountDao.query(user) : accountDao.query(user, owner);
     }
 
-    @Override
-    public JSONObject deposit(String user, String owner, int type, int amount, Map<String, String> map) {
-        return change(user, owner, type, AccountTypes.DEPOSIT, amount, map);
+    private int valueFromClassify(String key) {
+        return converter.toInt(classifyHelper.value("ranch.account.reward.sign-up", key));
     }
 
     @Override
-    public JSONObject withdraw(String user, String owner, int type, int amount, Map<String, String> map) {
-        return change(user, owner, type, AccountTypes.WITHDRAW, amount, map);
+    public JSONObject deposit(String user, String owner, int type, String channel, int amount, Map<String, String> map) {
+        return change(user, owner, type, AccountTypes.DEPOSIT, channel, amount, map);
     }
 
     @Override
-    public JSONObject reward(String user, String owner, int type, int amount) {
-        return change(user, owner, type, AccountTypes.REWARD, amount, null);
+    public JSONObject withdraw(String user, String owner, int type, String channel, int amount, Map<String, String> map) {
+        return change(user, owner, type, AccountTypes.WITHDRAW, channel, amount, map);
     }
 
     @Override
-    public JSONObject profit(String user, String owner, int type, int amount) {
-        return change(user, owner, type, AccountTypes.PROFIT, amount, null);
+    public JSONObject reward(String user, String owner, int type, String channel, int amount) {
+        return change(user, owner, type, AccountTypes.REWARD, channel, amount, null);
     }
 
     @Override
-    public JSONObject consume(String user, String owner, int type, int amount) {
-        return change(user, owner, type, AccountTypes.CONSUME, amount, null);
+    public JSONObject profit(String user, String owner, int type, String channel, int amount) {
+        return change(user, owner, type, AccountTypes.PROFIT, channel, amount, null);
     }
 
     @Override
-    public JSONObject remitIn(String user, String owner, int type, int amount) {
-        return change(user, owner, type, AccountTypes.REMIT_IN, amount, null);
+    public JSONObject consume(String user, String owner, int type, String channel, int amount) {
+        return change(user, owner, type, AccountTypes.CONSUME, channel, amount, null);
     }
 
     @Override
-    public JSONObject remitOut(String user, String owner, int type, int amount) {
-        return change(user, owner, type, AccountTypes.REMIT_OUT, amount, null);
+    public JSONObject remitIn(String user, String owner, int type, String channel, int amount) {
+        return change(user, owner, type, AccountTypes.REMIT_IN, channel, amount, null);
     }
 
-    private JSONObject change(String user, String owner, int type, String accountType, int amount, Map<String, String> map) {
+    @Override
+    public JSONObject remitOut(String user, String owner, int type, String channel, int amount) {
+        return change(user, owner, type, AccountTypes.REMIT_OUT, channel, amount, null);
+    }
+
+    private JSONObject change(String user, String owner, int type, String accountType, String channel, int amount, Map<String, String> map) {
         AccountModel account = find(user, owner, type);
 
-        return account == null ? null : save(account, accountTypes.get(accountType).change(account, amount, map));
+        return account == null ? null : save(account, accountTypes.get(accountType).change(account, channel, amount, map));
     }
 
     @Override
