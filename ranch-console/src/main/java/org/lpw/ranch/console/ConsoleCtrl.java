@@ -40,7 +40,9 @@ public class ConsoleCtrl {
     @Execute(name = "service")
     public Object service() {
         JSONObject object = new JSONObject();
-        object.put("page", "grid");
+        String service = request.get("service");
+        object.put("service", service);
+        object.put("page", service.contains("0") ? "grid" : "form");
 
         return object;
     }
