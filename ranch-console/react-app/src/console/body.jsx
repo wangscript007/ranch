@@ -1,11 +1,12 @@
 import React from "react";
 import "./body.css";
+import Page from "../page";
 
 class Body extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            data: "Hello body"
+            data: { page: "dashboard" }
         };
         window.service.register("console.body", this);
     }
@@ -13,8 +14,20 @@ class Body extends React.Component {
     render() {
         return (
             <div className="console-body">
-                {this.state.loading ? "loading" : JSON.stringify(this.state.data)}
+                <div className="body-area">{this.state.loading ? this.loading() : this.page()}</div>
             </div>
+        );
+    }
+
+    loading() {
+        return (
+            <div className="loading">loading...</div>
+        );
+    }
+
+    page() {
+        return (
+            <Page data={this.state.data} />
         );
     }
 }

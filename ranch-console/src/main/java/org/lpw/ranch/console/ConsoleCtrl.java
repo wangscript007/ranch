@@ -39,6 +39,9 @@ public class ConsoleCtrl {
 
     @Execute(name = "service")
     public Object service() {
-        return request.get("service");
+        JSONObject object = new JSONObject();
+        object.put("page", "grid");
+
+        return object;
     }
 }

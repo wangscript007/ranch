@@ -1,0 +1,17 @@
+.grid table {
+    width: 100%;
+    background-color: #ccc;
+}
+
+.grid table th {
+    background-color: #ddd;
+}
+
+.grid table td {
+    padding: 5px 5px 3px 5px;
+    background-color: #fff;
+}
+
+.grid table tr:hover td {
+    background-color: #eee;
+}

@@ -22,9 +22,11 @@ class Service {
         if (!object)
             return;
 
-        object.setState(prevState => ({
-            data: loading
-        }));
+        if (loading) {
+            object.setState(prevState => ({
+                loading: true
+            }));
+        }
 
         window.ajax("/console/service", args).then(json => {
             if (!json || !json.hasOwnProperty("code")) {
