@@ -42,7 +42,10 @@ public class ConsoleCtrl {
         JSONObject object = new JSONObject();
         String service = request.get("service");
         object.put("service", service);
-        object.put("page", service.contains("0") ? "grid" : "form");
+        if (service.equals("dashboard"))
+            object.put("page", service);
+        else
+            object.put("page", service.contains("0") ? "grid" : "form");
 
         return object;
     }
