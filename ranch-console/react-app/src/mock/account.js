@@ -6,18 +6,25 @@ class Account {
     query(mock) {
         mock.put("/console/meta", "ranch.account.query", {
             page: "grid",
-            headers: [{
-                label: "用户"
+            cols: [{
+                label: "用户",
+                name: "user"
             }, {
-                label: "所有者"
+                label: "所有者",
+                name: "owner"
             }, {
-                label: "余额"
+                label: "余额",
+                name: "balance",
+                type: "number"
             }, {
-                label: "存入"
+                label: "存入",
+                name: "deposit",
+                type: "number"
             }, {
-                label: "取出"
-            }],
-            names: ["user", "owner", "balance", "deposit", "withdraw"]
+                label: "取出",
+                name: "withdraw",
+                type: "number"
+            }]
         });
 
         var list = [];

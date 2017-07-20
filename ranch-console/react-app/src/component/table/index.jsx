@@ -9,20 +9,20 @@ class Table extends React.Component {
                 <thead>
                     <tr>
                         <th className="index"></th>
-                        {this.props.meta.headers.map((th, index) => this.th(index, th))}
+                        {this.props.meta.cols.map((col, index) => this.th(index, col))}
                     </tr>
                 </thead>
                 <tbody>
-                    {!this.props.list || this.props.list.length === 0 ? this.empty() : this.props.list.map((tr, index) => this.tr(index, tr))}
+                    {!this.props.list || this.props.list.length === 0 ? this.empty() : this.props.list.map((row, index) => this.tr(index, row))}
                 </tbody>
             </table>
         );
     }
 
-    th(index, th) {
+    th(index, col) {
         return (
             <th key={index}>
-                {window.message(this.props.meta.message, th.label)}
+                {window.message(this.props.meta.message, col.label)}
             </th>
         );
     }
@@ -30,23 +30,25 @@ class Table extends React.Component {
     empty() {
         return (
             <tr>
-                <td colSpan={this.props.meta.headers.length + 1} className="empty">{window.message(message, "table.list.empty")}</td>
+                <td colSpan={this.props.meta.cols.length + 1} className="empty">{window.message(message, "table.list.empty")}</td>
             </tr>
         );
     }
 
-    tr(index, tr) {
+    tr(index, row) {
         return (
             <tr key={index}>
                 <th className="index">{index + 1}</th>
-                {this.props.meta.names.map((td, i) => this.td(tr, i, td))}
+                {this.props.meta.cols.map((col, i) => this.td(row, i, col))}
             </tr>
         );
     }
 
-    td(tr, index, td) {
+    td(row, index, col) {
         return (
-            <td key={index}>{tr.hasOwnProperty(td) ? tr[td] : ""}</td>
+            <td key={index} className={col.type || ""}>
+                {row.hasOwnProperty(col.name) ? row[col.name] : ""}
+            </td>
         );
     }
 }

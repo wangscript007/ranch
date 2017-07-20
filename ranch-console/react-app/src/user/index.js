@@ -3,16 +3,20 @@ import message from "./message.json";
 window.meta.put("ranch.user.query", {
     page: "grid",
     message: message,
-    headers: [{
-        label: "身份证"
+    cols: [{
+        label: "身份证",
+        name: "idcard"
     }, {
-        label: "姓名"
+        label: "姓名",
+        name: "name"
     }, {
-        label: "昵称"
+        label: "昵称",
+        name: "nick"
     }, {
-        label: "user.email"
+        label: "user.email",
+        name: "email"
     }, {
-        label: "user.mobile"
-    }],
-    names: ["idcard", "name", "nick", "email", "mobile"]
+        label: "user.mobile",
+        name: "mobile"
+    }]
 });
