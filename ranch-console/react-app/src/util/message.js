@@ -9,10 +9,10 @@ window.message = function (message, key) {
     if (typeof (msg) !== "object")
         return msg;
 
-    var local = "zh_CN".toLowerCase().split("_");
-    for (var i = local.length - 1; i > -1; i--)
-        if (msg.hasOwnProperty(local[i]))
-            return msg[local[i]];
+    var lang = (navigator.language || navigator.userLanguage || "zh-cn").toLowerCase().split("-");
+    for (var i = lang.length - 1; i > -1; i--)
+        if (msg.hasOwnProperty(lang[i]))
+            return msg[lang[i]];
 
     for (var k in msg)
         return msg[k];
