@@ -1,0 +1,11 @@
+.console-left .menu {
+    display: block;
+    text-decoration: none;
+    text-indent: 32px;
+    color: #777;
+}
+
+.console-left .menu:hover,
+.console-left .menu-active {
+    background-color: #ddd;
+}
