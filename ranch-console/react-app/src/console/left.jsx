@@ -10,7 +10,9 @@ class Left extends React.Component {
         this.state = { data: [] };
 
         window.ajax("/console/menu").then(json => {
-            this.setState(prevState => ({ data: json.data }));
+            this.setState(prevState => ({
+                data: json.data
+            }));
         });
     }
 

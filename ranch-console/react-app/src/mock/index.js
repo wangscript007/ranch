@@ -14,13 +14,13 @@ class Mock {
         this.map[key] = object;
     }
 
-    get(uri, params) {
-        var map = this.map;
-        var key = params && params.hasOwnProperty("service") ? params.service : uri;
+    get(uri, params, headers) {
+        var key = headers && headers.hasOwnProperty("service") ? headers.service : uri;
+        var data = this.map.hasOwnProperty(key) ? this.map[key] : {};
         return new Promise(function (resolve, reject) {
             resolve({
                 code: 0,
-                data: map.hasOwnProperty(key) ? map[key] : {}
+                data: data
             });
         });
     }

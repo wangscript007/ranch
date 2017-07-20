@@ -12,16 +12,13 @@ class Body extends React.Component {
         window.bean.put("console.body", this);
     }
 
-    service(key, loading, args) {
+    service(key, loading, params) {
         window.bean.get("loading").setState(prevState => ({
             active: loading
         }));
 
-        if (!args)
-            args = {};
-        args["service"] = key;
-
-        window.ajax("/console/service", args).then(json => {
+        var headers = { service: key };
+        window.ajax("/console/service", params, headers).then(json => {
             if (!json || !json.hasOwnProperty("code")) {
                 console.log("failure:" + JSON.stringify(json));
 
@@ -38,7 +35,7 @@ class Body extends React.Component {
             if (window.meta.get(key)) {
                 this.set(window.meta.get(key), json.data);
             } else {
-                window.ajax("/console/meta", args).then(meta => {
+                window.ajax("/console/meta", params, headers).then(meta => {
                     window.meta.put(key, meta.data);
                     this.set(meta.data, json.data);
                 });
