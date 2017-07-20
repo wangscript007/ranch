@@ -1,14 +1,21 @@
 window.message = function (message, key) {
-    var msg = message[key];
-    if (!msg)
+    if (!key)
+        return "";
+
+    if (!message || !message.hasOwnProperty(key))
         return key;
 
-    if (typeof (msg) === "string")
+    var msg = message[key];
+    if (typeof (msg) !== "object")
         return msg;
 
     var local = "zh_CN".toLowerCase().split("_");
-    if (local.length === 1)
-        return msg[local[0]];
+    for (var i = local.length - 1; i > -1; i--)
+        if (msg.hasOwnProperty(local[i]))
+            return msg[local[i]];
 
-    return msg[local[1]] ? msg[local[1]] : msg[local[0]];
+    for (var k in msg)
+        return msg[k];
+
+    return key;
 };

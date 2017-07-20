@@ -1,4 +1,9 @@
+import mock from "../mock";
+
 window.ajax = function (uri, params, headers) {
+    if (mock.enable())
+        return mock.get(uri, params);
+
     var object = {
         method: "POST",
         headers: {

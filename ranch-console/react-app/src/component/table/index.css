@@ -1,0 +1,32 @@
+.table {
+    width: 100%;
+    background-color: #bbb;
+    border-spacing: 1px;
+}
+
+.table th {
+    background-color: #ccc;
+}
+
+.table .index {
+    width: 32px;
+    color: #888;
+}
+
+.table td {
+    padding: 3px 5px;
+    background-color: #fff;
+}
+
+.table tr:nth-child(even) td {
+    background-color: #eee;
+}
+
+.table tr:hover td {
+    background-color: #ddd;
+}
+
+.table .empty {
+    color: #ccc;
+    text-align: center;
+}

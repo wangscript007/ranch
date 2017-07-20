@@ -13,13 +13,13 @@
     <dependencies>
         <dependency>
             <groupId>org.lpw.ranch</groupId>
-            <artifactId>ranch-base</artifactId>
-            <version>0.7.0-RELEASE</version>
+            <artifactId>ranch-classify-helper</artifactId>
+            <version>${version.ranch}</version>
         </dependency>
         <dependency>
             <groupId>org.lpw.ranch</groupId>
             <artifactId>ranch-web</artifactId>
-            <version>0.7.0-RELEASE</version>
+            <version>${version.ranch}</version>
             <type>war</type>
         </dependency>
     </dependencies>

@@ -9,7 +9,7 @@ class Menu extends React.Component {
     }
 
     click() {
-        window.service.execute("console.body", { service: this.props.service }, true);
+        window.bean.get("console.body").service(this.props.service, true);
     }
 
     render() {

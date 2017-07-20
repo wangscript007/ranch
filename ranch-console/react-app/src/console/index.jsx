@@ -4,17 +4,23 @@ import Top from "./top";
 import Left from "./left";
 import Footer from "./footer";
 import Body from "./body";
+import Loading from "./loading";
 
 class Console extends React.Component {
-    render() {
-        window.document.title = window.message(message, "project-name");
+    constructor(props) {
+        super(props);
 
+        window.document.title = window.message(message, "project-name");
+    }
+
+    render() {
         return (
-            <div>
+            <div className="console">
                 <Top />
-                <Left  console={this}/>
+                <Left />
                 <Footer />
-                <Body console={this}/>
+                <Body />
+                <Loading />
             </div>
         );
     }

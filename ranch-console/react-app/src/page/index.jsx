@@ -5,11 +5,11 @@ import pages from "./pages";
 class Page extends React.Component {
     render() {
         const tag = {
-            name: pages[this.props.data.page]
+            name: pages[this.props.meta.page ? this.props.meta.page : "dashboard"]
         };
 
         return (
-            <div className="page"><tag.name data={this.props.data} /></div>
+            <div className="page"><tag.name meta={this.props.meta} data={this.props.data} /></div>
         );
     }
 }

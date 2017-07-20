@@ -1,6 +1,5 @@
 package org.lpw.ranch.console;
 
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import org.lpw.tephra.ctrl.context.Request;
 import org.lpw.tephra.ctrl.execute.Execute;
@@ -11,30 +10,22 @@ import javax.inject.Inject;
 /**
  * @author lpw
  */
-@Controller("ranch.console.ctrl")
+@Controller(ConsoleModel.NAME + ".ctrl")
 @Execute(name = "/console/")
 public class ConsoleCtrl {
     @Inject
     private Request request;
+    @Inject
+    private ConsoleService consoleService;
 
     @Execute(name = "menu")
     public Object menu() {
-        JSONArray menus = new JSONArray();
-        for (int i = 0; i < 5; i++) {
-            JSONObject menu = new JSONObject();
-            menu.put("name", "主菜单" + i);
-            JSONArray items = new JSONArray();
-            for (int j = 0; j < 5; j++) {
-                JSONObject item = new JSONObject();
-                item.put("name", "子菜单" + i + j);
-                item.put("service", "service:" + i + "-" + j);
-                items.add(item);
-            }
-            menu.put("items", items);
-            menus.add(menu);
-        }
+        return consoleService.menus();
+    }
 
-        return menus;
+    @Execute(name = "meta")
+    public Object meta() {
+        return consoleService.meta(request.get("service"));
     }
 
     @Execute(name = "service")
