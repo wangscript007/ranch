@@ -1,5 +1,6 @@
 import menu from "./menu";
 import user from "./user";
+import account from "./account";
 
 class Mock {
     constructor() {
@@ -10,12 +11,12 @@ class Mock {
         return true;
     }
 
-    put(key, object) {
-        this.map[key] = object;
+    put(uri, service, object) {
+        this.map[uri + service] = object;
     }
 
     get(uri, params, headers) {
-        var key = headers && headers.hasOwnProperty("service") ? headers.service : uri;
+        var key = uri + (headers && headers.hasOwnProperty("service") ? headers.service : "");
         var data = this.map.hasOwnProperty(key) ? this.map[key] : {};
         return new Promise(function (resolve, reject) {
             resolve({
@@ -29,5 +30,6 @@ class Mock {
 var mock = new Mock();
 menu.mock(mock);
 user.mock(mock);
+account.mock(mock);
 
 export default mock;

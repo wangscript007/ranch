@@ -1,6 +1,6 @@
 class Menu {
     mock(mock) {
-        mock.put("/console/menu", [{
+        mock.put("/console/menu", "", [{
             "name": "系统设置",
             "items": [{
                 "name": "用户管理",

@@ -15,7 +15,7 @@ class User {
                 mobile: "1231234567" + i
             };
         }
-        mock.put("ranch.user.query", {
+        mock.put("/console/service", "ranch.user.query", {
             list: list
         });
     }
