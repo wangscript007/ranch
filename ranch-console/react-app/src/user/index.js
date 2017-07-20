@@ -3,6 +3,7 @@ import message from "./message.json";
 window.meta.put("ranch.user.query", {
     page: "grid",
     message: message,
+    search: [],
     cols: [{
         label: "身份证",
         name: "idcard"

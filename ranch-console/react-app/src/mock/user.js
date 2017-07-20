@@ -11,13 +11,11 @@ class User {
                 idcard: "1234567890" + i,
                 name: "姓名 " + i,
                 nick: "昵称 " + i,
-                email: "Email " + i,
+                email: "e" + i + "@mail ",
                 mobile: "1231234567" + i
             };
         }
-        mock.put("/console/service", "ranch.user.query", {
-            list: list
-        });
+        mock.put("/console/service", "ranch.user.query", list);
     }
 }
 
