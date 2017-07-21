@@ -1,3 +1,21 @@
 .pagination {
-    text-align: right;
+    padding-top: 5px;
+    float: right;
+}
+
+.pagination span,
+.pagination a {
+    display: inline-block;
+    padding: 5px 5px 2px 5px;
+    color: #888;
+    text-decoration: none;
+}
+
+.pagination span {
+    color: #ccc;
+}
+
+.pagination a:hover {
+    color: #ccc;
+    background-color: #333;
 }
