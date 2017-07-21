@@ -12,7 +12,8 @@ class User {
                 name: "姓名 " + i,
                 nick: "昵称 " + i,
                 email: "e" + i + "@mail ",
-                mobile: "1231234567" + i
+                mobile: "1231234567" + i,
+                gender: i % 3
             };
         }
         mock.put("/console/service", "ranch.user.query", list);

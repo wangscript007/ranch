@@ -19,5 +19,9 @@ window.meta.put("ranch.user.query", {
     }, {
         label: "user.mobile",
         name: "mobile"
+    }, {
+        label: "user.gender",
+        name: "gender",
+        select: ["", "男", "user.gender.female"]
     }]
 });

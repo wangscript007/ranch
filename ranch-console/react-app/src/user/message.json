@@ -4,5 +4,11 @@
     },
     "user.mobile": {
         "cn": "手机号"
+    },
+    "user.gender": {
+        "cn": "性别"
+    },
+    "user.gender.female": {
+        "cn": "女"
     }
 }
