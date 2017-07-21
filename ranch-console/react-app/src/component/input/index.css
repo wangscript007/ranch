@@ -1,0 +1,13 @@
+.input-new-line,
+.input-inline {
+    padding: 5px 10px 5px 0;
+}
+
+.input-inline {
+    display: inline-block;
+}
+
+.input-new-line label,
+.input-inline label {
+    padding: 0 5px 0 0;
+}

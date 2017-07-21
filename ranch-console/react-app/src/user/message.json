@@ -1,4 +1,7 @@
 {
+    "user.name.placeholder": {
+        "cn": "查询的姓名"
+    },
     "user.email": {
         "": "Email"
     },

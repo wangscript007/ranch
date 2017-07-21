@@ -46,11 +46,19 @@ class Table extends React.Component {
 
     td(row, index, col) {
         var value = row.hasOwnProperty(col.name) ? row[col.name] : "";
-        if (col.hasOwnProperty("select"))
-            value = window.message(this.props.meta.message, col.select[value]);
+        var label = value;
+        if (col.hasOwnProperty("select")) {
+            for (var i = 0; i < col.select.length; i++) {
+                if (col.select[i].value === value) {
+                    label = window.message(this.props.meta.message, col.select[i].label);
+
+                    break;
+                }
+            }
+        }
 
         return (
-            <td key={index} className={col.type || ""}>{value}</td>
+            <td key={index} className={col.type || ""}>{label}</td>
         );
     }
 }

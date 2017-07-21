@@ -6,10 +6,13 @@ window.meta.put("ranch.user.query", {
     search: [],
     cols: [{
         label: "身份证",
-        name: "idcard"
+        name: "idcard",
+        search: "hello"
     }, {
         label: "姓名",
-        name: "name"
+        name: "name",
+        search: "input",
+        placeholder:"user.name.placeholder"
     }, {
         label: "昵称",
         name: "nick"
@@ -22,6 +25,19 @@ window.meta.put("ranch.user.query", {
     }, {
         label: "user.gender",
         name: "gender",
-        select: ["", "男", "user.gender.female"]
+        select: [{
+            value: -1,
+            label: "全部"
+        }, {
+            value: 0,
+            label: "未知"
+        }, {
+            value: 1,
+            label: "男"
+        }, {
+            value: 2,
+            label: "user.gender.female"
+        }],
+        search: "select"
     }]
 });

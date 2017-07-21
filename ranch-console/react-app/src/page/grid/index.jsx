@@ -11,7 +11,7 @@ class Grid extends React.Component {
 
         return (
             <div className="grid">
-                {this.props.meta && this.props.meta.hasOwnProperty("search") ? <Search meta={this.props.meta.search} /> : null}
+                <Search meta={this.props.meta} />
                 <Table meta={this.props.meta} list={list} />
                 {hasList ? <Pagination /> : null}
             </div>
