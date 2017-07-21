@@ -4,8 +4,9 @@ import pages from "./pages";
 
 class Page extends React.Component {
     render() {
-        const tag = {
-            name: pages[this.props.meta.page ? this.props.meta.page : "dashboard"]
+        var hasPage = this.props.meta && this.props.meta.hasOwnProperty("page");
+        var tag = {
+            name: pages[hasPage ? this.props.meta.page : "dashboard"]
         };
 
         return (
