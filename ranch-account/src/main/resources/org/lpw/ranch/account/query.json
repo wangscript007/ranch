@@ -1,0 +1,39 @@
+{
+    "page": "grid",
+    "cols": [
+        {
+            "name": "user"
+        },
+        {
+            "name": "owner"
+        },
+        {
+            "name": "type",
+            "type": "number"
+        },
+        {
+            "name": "balance",
+            "type": "number"
+        },
+        {
+            "name": "deposit",
+            "type": "number"
+        },
+        {
+            "name": "withdraw",
+            "type": "number"
+        },
+        {
+            "name": "reward",
+            "type": "number"
+        },
+        {
+            "name": "profit",
+            "type": "number"
+        },
+        {
+            "name": "consume",
+            "type": "number"
+        }
+    ]
+}

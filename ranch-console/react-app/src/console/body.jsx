@@ -13,14 +13,13 @@ class Body extends React.Component {
     }
 
     service(key, loading, params) {
-        window.bean.get("loading").setState(prevState => ({
-            active: loading
-        }));
+        this.loading(loading);
 
         var headers = { service: key };
         window.ajax("/console/service", params, headers).then(json => {
             if (!json || !json.hasOwnProperty("code")) {
                 console.log("failure:" + JSON.stringify(json));
+                this.loading(false);
 
                 return;
             }
@@ -28,6 +27,8 @@ class Body extends React.Component {
             if (json.code !== 0) {
                 // TODO 弹出提示。
                 console.log(JSON.stringify(json));
+                alert(json.message);
+                this.loading(false);
 
                 return;
             }
@@ -43,15 +44,18 @@ class Body extends React.Component {
         });
     }
 
+    loading(active) {
+        window.bean.get("loading").setState(prevState => ({
+            active: active
+        }));
+    }
+
     set(meta, data) {
         this.setState(prevState => ({
             meta: meta,
             data: data
         }));
-
-        window.bean.get("loading").setState(prevState => ({
-            active: false
-        }));
+        this.loading(false);
     }
 
     render() {

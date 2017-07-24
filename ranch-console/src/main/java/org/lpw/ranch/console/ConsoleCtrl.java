@@ -1,8 +1,11 @@
 package org.lpw.ranch.console;
 
-import com.alibaba.fastjson.JSONObject;
+import org.lpw.tephra.ctrl.context.Header;
 import org.lpw.tephra.ctrl.context.Request;
 import org.lpw.tephra.ctrl.execute.Execute;
+import org.lpw.tephra.ctrl.validate.Validate;
+import org.lpw.tephra.ctrl.validate.Validators;
+import org.lpw.tephra.util.Validator;
 import org.springframework.stereotype.Controller;
 
 import javax.inject.Inject;
@@ -11,8 +14,12 @@ import javax.inject.Inject;
  * @author lpw
  */
 @Controller(ConsoleModel.NAME + ".ctrl")
-@Execute(name = "/console/")
+@Execute(name = "/console/", key = ConsoleModel.NAME, code = "98")
 public class ConsoleCtrl {
+    @Inject
+    private Validator validator;
+    @Inject
+    private Header header;
     @Inject
     private Request request;
     @Inject
@@ -23,21 +30,17 @@ public class ConsoleCtrl {
         return consoleService.menus();
     }
 
-    @Execute(name = "meta")
+    @Execute(name = "meta", validates = {
+            @Validate(validator = Validators.NOT_EMPTY, scope = Validate.Scope.Header, parameter = "service", failureCode = 1)
+    })
     public Object meta() {
-        return consoleService.meta(request.get("service"));
+        return consoleService.meta(header.get("service"));
     }
 
-    @Execute(name = "service")
+    @Execute(name = "service", validates = {
+            @Validate(validator = Validators.NOT_EMPTY, scope = Validate.Scope.Header, parameter = "service", failureCode = 1)
+    })
     public Object service() {
-        JSONObject object = new JSONObject();
-        String service = request.get("service");
-        object.put("service", service);
-        if (service.equals("dashboard"))
-            object.put("page", service);
-        else
-            object.put("page", service.contains("0") ? "grid" : "form");
-
-        return object;
+        return consoleService.service(header.get("service"), request.getMap());
     }
 }
