@@ -1,6 +1,7 @@
 package org.lpw.ranch.user;
 
 import com.alibaba.fastjson.JSONObject;
+import org.lpw.ranch.classify.helper.ClassifyHelper;
 import org.lpw.ranch.user.auth.AuthModel;
 import org.lpw.ranch.user.auth.AuthService;
 import org.lpw.ranch.user.online.OnlineService;
@@ -28,6 +29,7 @@ import java.util.Map;
 public class UserServiceImpl implements UserService {
     private static final String CACHE_MODEL = UserModel.NAME + ".service.model:";
     private static final String CACHE_JSON = UserModel.NAME + ".service.json:";
+    private static final String CACHE_PASS = UserModel.NAME + ".service.pass:";
     private static final String SESSION = UserModel.NAME + ".service.session";
 
     @Inject
@@ -50,6 +52,8 @@ public class UserServiceImpl implements UserService {
     private Carousel carousel;
     @Inject
     private Pagination pagination;
+    @Inject
+    private ClassifyHelper classifyHelper;
     @Inject
     private AuthService authService;
     @Inject
@@ -96,7 +100,7 @@ public class UserServiceImpl implements UserService {
             return false;
 
         if (auth.getType() == 1) {
-            if (validator.isEmpty(password) || !user.getPassword().equals(password(password)))
+            if (!pass(user, password))
                 return false;
 
             authService.bind(user.getId(), macId);
@@ -126,6 +130,26 @@ public class UserServiceImpl implements UserService {
         }
 
         return openId;
+    }
+
+    private boolean pass(UserModel user, String password) {
+        if (validator.isEmpty(password))
+            return false;
+
+        String key = CACHE_PASS + user.getId();
+        int failure = converter.toInt(cache.get(key));
+        int max = failure > 0 ? converter.toInt(classifyHelper.value(UserModel.NAME + ".pass", "max-failure")) : 0;
+        if (max <= 0)
+            max = 5;
+        if (failure <= max && user.getPassword().equals(password(password))) {
+            cache.remove(key);
+
+            return true;
+        }
+
+        cache.put(key, failure + 1, false);
+
+        return false;
     }
 
     @Override

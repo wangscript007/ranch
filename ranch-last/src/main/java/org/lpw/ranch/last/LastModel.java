@@ -47,7 +47,6 @@ public class LastModel extends ModelSupport {
         this.type = type;
     }
 
-    @Jsonable
     @Column(name = "c_json")
     public String getJson() {
         return json;

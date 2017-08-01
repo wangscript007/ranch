@@ -8,7 +8,7 @@ class Mock {
     }
 
     enable() {
-        return false;
+        return true;
     }
 
     put(uri, service, object) {

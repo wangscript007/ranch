@@ -147,7 +147,7 @@ public class PaymentServiceImpl implements PaymentService {
         payment.setJson(json.toJSONString());
         paymentDao.save(payment);
         if (state == 1)
-            accountHelper.pass(accountHelper.deposit(payment.getUser(), "", 0, payment.getAmount(), map).getString("logId"));
+            accountHelper.pass(accountHelper.deposit(payment.getUser(), "", 0, payment.getType(), payment.getAmount(), map).getString("logId"));
         notice(payment);
     }
 
@@ -163,6 +163,9 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     private void notice(PaymentModel payment) {
+        if (validator.isEmpty(payment.getNotify()))
+            return;
+
         Map<String, String> parameters = new HashMap<>();
         parameters.put("type", payment.getType());
         parameters.put("user", payment.getUser());

@@ -57,10 +57,11 @@ public class LastServiceImpl implements LastService {
 
         JSONObject object = modelHelper.toJson(last);
         object.put("millisecond", last.getTime().getTime());
-        JSONObject json = this.json.toObject(object.getString("json"));
-        if (json != null)
-            object.putAll(this.json.toObject(json));
-        object.remove("json");
+        if(!validator.isEmpty(last.getJson())){
+            JSONObject json = this.json.toObject(last.getJson());
+            if (json != null)
+                object.putAll(json);
+        }
 
         return object;
     }

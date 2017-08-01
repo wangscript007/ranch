@@ -50,17 +50,25 @@ public class MetaServiceImpl implements MetaService, ExecuteListener {
             inputStream.close();
             outputStream.close();
             JSONObject meta = json.toObject(outputStream.toString());
-            JSONArray cols = meta.getJSONArray("cols");
-            for (int i = 0, size = cols.size(); i < size; i++) {
-                JSONObject col = cols.getJSONObject(i);
-                if (col.containsKey("label"))
-                    continue;
-
-                col.put("label", message.get(classExecute.key() + "." + col.getString("name")));
-            }
+            if (meta.containsKey("cols"))
+                cols(classExecute, meta);
             map.put(key, meta);
         } catch (Throwable e) {
             logger.warn(e, "读取META[{}]时发生异常！", key);
+        }
+    }
+
+    private void cols(Execute classExecute, JSONObject meta) {
+        JSONArray cols = meta.getJSONArray("cols");
+        for (int i = 0, size = cols.size(); i < size; i++) {
+            JSONObject col = cols.getJSONObject(i);
+            if (col.containsKey("label"))
+                continue;
+
+            String key = col.getString("name");
+            if (classExecute != null)
+                key = classExecute.key() + "." + key;
+            col.put("label", message.get(key));
         }
     }
 }

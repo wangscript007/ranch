@@ -23,10 +23,11 @@ public class AccountHelperImpl implements AccountHelper {
     private String key;
 
     @Override
-    public JSONObject deposit(String user, String owner, int type, int amount, Map<String, String> map) {
+    public JSONObject deposit(String user, String owner, int type, String channel, int amount, Map<String, String> map) {
         map.put("user", user);
         map.put("owner", owner);
         map.put("type", converter.toString(type, "0"));
+        map.put("channel", channel);
         map.put("amount", converter.toString(amount, "0"));
 
         return carousel.service(key + ".deposit", null, map, false, JSONObject.class);
