@@ -15,7 +15,7 @@ import javax.inject.Inject;
 public class RewardTest extends TestSupport {
     @Test
     public void reward() {
-        validate("reward", 7);
+        validate("reward", 13);
 
         mockUser();
         mockHelper.reset();

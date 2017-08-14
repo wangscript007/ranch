@@ -17,7 +17,7 @@ import java.util.Calendar;
 /**
  * @author lpw
  */
-public class IdOrSignInValidatorTest extends TephraTestSupport {
+public class ExistsOrSignInValidatorTest extends TephraTestSupport {
     @Inject
     private Message message;
     @Inject
@@ -37,43 +37,53 @@ public class IdOrSignInValidatorTest extends TephraTestSupport {
         mockCarousel.reset();
         mockCarousel.register("ranch.user.sign", "{\"code\":0,\"data\":{}}");
         mockHelper.reset();
-        mockHelper.mock("/user/id-or-sign-in");
+        mockHelper.mock("/user/exists-or-sign-in");
         JSONObject object = mockHelper.getResponse().asJson();
         Assert.assertEquals(1091, object.getIntValue("code"));
-        Assert.assertEquals(message.get("ranch.user.helper.not-id-and-sign-in", "ranch.user.helper.id"), object.getString("message"));
+        Assert.assertEquals(message.get("ranch.user.helper.not-exists-and-not-sign-in", "ranch.user.helper.id"), object.getString("message"));
 
         mockHelper.reset();
         mockHelper.getRequest().addParameter("id", "id value");
-        mockHelper.mock("/user/id-or-sign-in");
+        mockHelper.mock("/user/exists-or-sign-in");
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(1091, object.getIntValue("code"));
-        Assert.assertEquals(message.get("ranch.user.helper.not-id-and-sign-in", "ranch.user.helper.id"), object.getString("message"));
+        Assert.assertEquals(message.get("ranch.user.helper.not-exists-and-not-sign-in", "ranch.user.helper.id"), object.getString("message"));
 
         mockCarousel.reset();
         mockCarousel.register("ranch.user.sign", "{\"code\":0,\"data\":{\"id\":\"sign in id\"}}");
         mockHelper.reset();
         mockHelper.getRequest().addParameter("id", "id value");
-        mockHelper.mock("/user/id-or-sign-in");
+        mockHelper.mock("/user/exists-or-sign-in");
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(1091, object.getIntValue("code"));
-        Assert.assertEquals(message.get("ranch.user.helper.not-id-and-sign-in", "ranch.user.helper.id"), object.getString("message"));
+        Assert.assertEquals(message.get("ranch.user.helper.not-exists-and-not-sign-in", "ranch.user.helper.id"), object.getString("message"));
+
+        mockCarousel.reset();
+        mockCarousel.register("ranch.user.sign", "{\"code\":0,\"data\":{\"id\":\"sign in id\"}}");
+        mockHelper.reset();
+        mockHelper.getRequest().addParameter("id", generator.uuid());
+        mockHelper.mock("/user/exists-or-sign-in");
+        object = mockHelper.getResponse().asJson();
+        Assert.assertEquals(1091, object.getIntValue("code"));
+        Assert.assertEquals(message.get("ranch.user.helper.not-exists-and-not-sign-in", "ranch.user.helper.id"), object.getString("message"));
 
         mockHelper.reset();
-        mockHelper.mock("/user/id-or-sign-in");
+        mockHelper.mock("/user/exists-or-sign-in");
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(0, object.getIntValue("code"));
         JSONObject data = object.getJSONObject("data");
         Assert.assertEquals(1, data.size());
-        Assert.assertEquals("id or sign in", data.getString("state"));
+        Assert.assertEquals("exists or sign in", data.getString("state"));
 
         mockCarousel.register("ranch.user.sign", "{\"code\":0,\"data\":{}}");
+        mockCarousel.register("ranch.user.get", "{\"code\":0,\"data\":{\"id value\":{\"id\":\"id value\",\"name\":\"user name\"}}}");
         mockHelper.reset();
-        mockHelper.getRequest().addParameter("id", generator.uuid());
-        mockHelper.mock("/user/id-or-sign-in");
+        mockHelper.getRequest().addParameter("id", "id value");
+        mockHelper.mock("/user/exists-or-sign-in");
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(0, object.getIntValue("code"));
         data = object.getJSONObject("data");
         Assert.assertEquals(1, data.size());
-        Assert.assertEquals("id or sign in", data.getString("state"));
+        Assert.assertEquals("exists or sign in", data.getString("state"));
     }
 }

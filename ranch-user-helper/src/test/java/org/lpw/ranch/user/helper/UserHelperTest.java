@@ -90,6 +90,32 @@ public class UserHelperTest extends TephraTestSupport {
     }
 
     @Test
+    public void findIdByUid() {
+        while (Calendar.getInstance().get(Calendar.SECOND) > 55)
+            thread.sleep(5, TimeUnit.Second);
+
+        mockHelper.reset();
+        mockHelper.mock("/carousel");
+        mockCarousel.reset();
+        mockCarousel.register("key", "{\"code\":0,\"data\":{\"id 1\":{\"id\":\"new id\",\"name\":\"carousel\"}}}");
+        JSONObject object = userHelper.findByUid("code value");
+        Assert.assertTrue(object.isEmpty());
+
+        mockCarousel.register("ranch.user.find-by-uid", (key, header, parameter, cacheTime) -> {
+            JSONObject json = new JSONObject();
+            json.put("code", 0);
+            JSONObject data = new JSONObject();
+            data.putAll(parameter);
+            data.put("cacheTime", cacheTime);
+            data.put("id", "id value");
+            json.put("data", data);
+
+            return json.toJSONString();
+        });
+        Assert.assertEquals("id value", userHelper.findIdByUid("uid value"));
+    }
+
+    @Test
     public void fill() {
         serviceHelperTester.fill((UserHelperImpl) userHelper, "ranch.user");
     }

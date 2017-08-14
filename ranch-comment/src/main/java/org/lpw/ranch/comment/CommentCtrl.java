@@ -62,7 +62,7 @@ public class CommentCtrl extends AuditCtrlSupport {
             @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "label", failureCode = 6),
             @Validate(validator = Validators.NOT_EMPTY, parameter = "content", failureCode = 7),
             @Validate(validator = Validators.BETWEEN, number = {0, 5}, parameter = "score", failureCode = 8),
-            @Validate(validator = UserHelper.VALIDATOR_ID_OR_SIGN_IN, parameter = "author", failureCode = 4)
+            @Validate(validator = UserHelper.VALIDATOR_EXISTS_OR_SIGN_IN, parameter = "author", failureCode = 4)
     })
     public Object create() {
         return commentService.create(request.setToModel(new CommentModel()));

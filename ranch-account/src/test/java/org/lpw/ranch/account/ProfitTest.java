@@ -12,7 +12,7 @@ import org.lpw.tephra.util.TimeUnit;
 public class ProfitTest extends TestSupport {
     @Test
     public void profit() {
-        validate("profit", 8);
+        validate("profit", 14);
 
         mockUser();
         mockHelper.reset();

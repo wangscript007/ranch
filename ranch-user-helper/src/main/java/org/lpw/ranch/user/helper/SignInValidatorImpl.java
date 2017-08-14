@@ -16,7 +16,7 @@ public class SignInValidatorImpl extends ValidatorSupport {
 
     @Override
     public boolean validate(ValidateWrapper validate, String parameter) {
-        return !userHelper.sign().isEmpty();
+        return userHelper.signIn();
     }
 
     @Override

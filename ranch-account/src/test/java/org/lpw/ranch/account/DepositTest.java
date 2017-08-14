@@ -12,7 +12,7 @@ import org.lpw.tephra.util.TimeUnit;
 public class DepositTest extends TestSupport {
     @Test
     public void deposit() {
-        validate("deposit", 5);
+        validate("deposit", 11);
 
         mockUser();
         mockHelper.reset();
