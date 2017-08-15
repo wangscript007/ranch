@@ -13,4 +13,6 @@ interface AlipayDao {
     AlipayModel findByAppId(String appId);
 
     void save(AlipayModel alipay);
+
+    void delete(String id);
 }

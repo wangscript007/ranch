@@ -1,5 +1,11 @@
 {
-    "table.list.empty":{
-        "cn":"没有可显示的数据"
+    "table.list.empty": {
+        "cn": "没有可显示的数据"
+    },
+    "table.ops.modify": {
+        "cn": "修改"
+    },
+    "table.ops.delete": {
+        "cn": "删除"
     }
 }

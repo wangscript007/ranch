@@ -62,9 +62,8 @@ public class ClassifyCtrl extends RecycleCtrlSupport {
             @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "code", failureCode = 3),
             @Validate(validator = Validators.NOT_EMPTY, parameter = "key", failureCode = 4),
             @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "key", failureCode = 5),
-            @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "value", failureCode = 6),
-            @Validate(validator = Validators.NOT_EMPTY, parameter = "name", failureCode = 7),
-            @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "name", failureCode = 8),
+            @Validate(validator = Validators.NOT_EMPTY, parameter = "name", failureCode = 6),
+            @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "name", failureCode = 7),
             @Validate(validator = Validators.SIGN),
             @Validate(validator = ClassifyService.VALIDATOR_CODE_KEY_NOT_EXISTS, parameters = {"code", "key"}, failureCode = 10)
     })
@@ -78,9 +77,8 @@ public class ClassifyCtrl extends RecycleCtrlSupport {
             @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "code", failureCode = 3),
             @Validate(validator = Validators.NOT_EMPTY, parameter = "key", failureCode = 4),
             @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "key", failureCode = 5),
-            @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "value", failureCode = 6),
-            @Validate(validator = Validators.NOT_EMPTY, parameter = "name", failureCode = 7),
-            @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "name", failureCode = 8),
+            @Validate(validator = Validators.NOT_EMPTY, parameter = "name", failureCode = 6),
+            @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "name", failureCode = 7),
             @Validate(validator = Validators.SIGN),
             @Validate(validator = ClassifyService.VALIDATOR_EXISTS, parameter = "id", failureCode = 9),
             @Validate(validator = ClassifyService.VALIDATOR_CODE_KEY_NOT_EXISTS, parameters = {"code", "key", "id"}, failureCode = 10)
@@ -94,9 +92,8 @@ public class ClassifyCtrl extends RecycleCtrlSupport {
             @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "code", failureCode = 3),
             @Validate(validator = Validators.NOT_EMPTY, parameter = "key", failureCode = 4),
             @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "key", failureCode = 5),
-            @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "value", failureCode = 6),
-            @Validate(validator = Validators.NOT_EMPTY, parameter = "name", failureCode = 7),
-            @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "name", failureCode = 8),
+            @Validate(validator = Validators.NOT_EMPTY, parameter = "name", failureCode = 6),
+            @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "name", failureCode = 7),
             @Validate(validator = Validators.SIGN)
     })
     public Object save() {

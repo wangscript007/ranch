@@ -34,4 +34,9 @@ class AlipayDaoImpl implements AlipayDao {
     public void save(AlipayModel alipay) {
         liteOrm.save(alipay);
     }
+
+    @Override
+    public void delete(String id) {
+        liteOrm.deleteById(AlipayModel.class, id);
+    }
 }

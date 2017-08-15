@@ -16,7 +16,7 @@ public class ExistsValidatorImpl extends ValidatorSupport {
 
     @Override
     public boolean validate(ValidateWrapper validate, String parameter) {
-        return userHelper.get(parameter).size() > 1;
+        return !userHelper.get(parameter).isEmpty();
     }
 
     @Override

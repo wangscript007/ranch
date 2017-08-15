@@ -89,6 +89,18 @@ public interface WeixinService {
     void prepayQrCode(String key, String user, String subject, int amount, String notifyUrl, int size, String logo, OutputStream outputStream);
 
     /**
+     * 生成APP支付参数。
+     *
+     * @param key       引用key。
+     * @param user      用户ID。
+     * @param subject   订单名称。
+     * @param amount    支付金额，单位：分。
+     * @param notifyUrl 异步通知URL地址。
+     * @return 支付参数。
+     */
+    JSONObject prepayApp(String key, String user, String subject, int amount, String notifyUrl);
+
+    /**
      * 异步通知。
      *
      * @param appId      APP ID。

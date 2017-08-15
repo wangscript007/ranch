@@ -54,6 +54,13 @@ public interface AlipayService {
     JSONObject save(AlipayModel alipay);
 
     /**
+     * 删除支付宝配置。
+     *
+     * @param id ID值。
+     */
+    void delete(String id);
+
+    /**
      * 发起手机WEB端支付。
      *
      * @param key       引用key。
@@ -67,7 +74,7 @@ public interface AlipayService {
     String quickWapPay(String key, String user, String subject, int amount, String notifyUrl, String returnUrl);
 
     /**
-     * 发起PC端支付。
+     * 发起PC WEB端支付。
      *
      * @param key       引用key。
      * @param user      用户ID。
@@ -78,6 +85,18 @@ public interface AlipayService {
      * @return 支付内容；如果发起失败则返回null。
      */
     String fastInstantTradePay(String key, String user, String subject, int amount, String notifyUrl, String returnUrl);
+
+    /**
+     * 发起APP端支付。
+     *
+     * @param key       引用key。
+     * @param user      用户ID。
+     * @param subject   订单名称。
+     * @param amount    支付金额，单位：分。
+     * @param notifyUrl 异步通知URL地址。
+     * @return 支付内容；如果发起失败则返回null。
+     */
+    String quickMsecurityPay(String key, String user, String subject, int amount, String notifyUrl);
 
     /**
      * 异步通知。

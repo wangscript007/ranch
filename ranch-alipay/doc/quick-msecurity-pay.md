@@ -1,8 +1,8 @@
-# 发起手机WEB端支付
+# 发起APP端支付
 
 请求
-- Service Key - ranch.alipay.quick-wap-pay
-- URI - /alipay/quick-wap-pay
+- Service Key - ranch.alipay.quick-msecurity-pay
+- URI - /alipay/quick-msecurity-pay
 
 参数
 
@@ -13,9 +13,8 @@
 |subject|string|交易说明，必须。|
 |amount|int|金额，单位：分。|
 |notifyUrl|char(100)|支付完成（成功/失败）异步通知地址，必须。|
-|returnUrl|char(100)|支付完成（成功/失败）同步通知地址。|
 
 返回值
-```html
-"页面支付表单HTML代码"
+```json
+"orderString"
 ```

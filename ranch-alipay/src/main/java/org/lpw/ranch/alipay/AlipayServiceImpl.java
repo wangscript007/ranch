@@ -9,6 +9,7 @@ import com.alipay.api.AlipayRequest;
 import com.alipay.api.AlipayResponse;
 import com.alipay.api.DefaultAlipayClient;
 import com.alipay.api.internal.util.AlipaySignature;
+import com.alipay.api.request.AlipayTradeAppPayRequest;
 import com.alipay.api.request.AlipayTradePagePayRequest;
 import com.alipay.api.request.AlipayTradeWapPayRequest;
 import org.lpw.ranch.payment.helper.PaymentHelper;
@@ -77,6 +78,11 @@ public class AlipayServiceImpl implements AlipayService {
     }
 
     @Override
+    public void delete(String id) {
+        alipayDao.delete(id);
+    }
+
+    @Override
     public String quickWapPay(String key, String user, String subject, int amount, String notifyUrl, String returnUrl) {
         String content = getBizContent(user, subject, amount, notifyUrl, "QUICK_WAP_PAY");
         if (content == null)
@@ -100,6 +106,18 @@ public class AlipayServiceImpl implements AlipayService {
         return prepay(key, returnUrl, request);
     }
 
+    @Override
+    public String quickMsecurityPay(String key, String user, String subject, int amount, String notifyUrl) {
+        String content = getBizContent(user, subject, amount, notifyUrl, "QUICK_MSECURITY_PAY");
+        if (content == null)
+            return null;
+
+        AlipayTradeAppPayRequest request = new AlipayTradeAppPayRequest();
+        request.setBizContent(content);
+
+        return prepay(key, null, request);
+    }
+
     private String getBizContent(String user, String subject, int amount, String notifyUrl, String code) {
         if (validator.isEmpty(user))
             user = userHelper.id();
@@ -118,7 +136,8 @@ public class AlipayServiceImpl implements AlipayService {
 
     private String prepay(String key, String returnUrl, AlipayRequest<? extends AlipayResponse> request) {
         request.setNotifyUrl(root + "/alipay/notify");
-        request.setReturnUrl(returnUrl);
+        if (!validator.isEmpty(returnUrl))
+            request.setReturnUrl(returnUrl);
 
         try {
             return newAlipayClient(alipayDao.findByKey(key)).pageExecute(request).getBody();

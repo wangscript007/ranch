@@ -1,0 +1,20 @@
+{
+    "page":"form",
+    "cols": [
+        {
+            "name": "key"
+        },
+        {
+            "name": "name"
+        },
+        {
+            "name": "appId"
+        },
+        {
+            "name": "privateKey"
+        },
+        {
+            "name": "publicKey"
+        }
+    ]
+}

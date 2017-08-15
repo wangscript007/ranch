@@ -1,0 +1,27 @@
+{
+    "page": "grid",
+    "cols": [
+        {
+            "name": "key"
+        },
+        {
+            "name": "name"
+        },
+        {
+            "name": "appId"
+        }
+    ],
+    "ops": [
+        {
+            "type": "modify",
+            "service": "ranch.alipay.modify"
+        },
+        {
+            "type": "delete",
+            "service": "ranch.alipay.delete",
+            "success": {
+                "service": "ranch.alipay.query"
+            }
+        }
+    ]
+}

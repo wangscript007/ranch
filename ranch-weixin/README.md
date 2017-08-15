@@ -20,3 +20,9 @@
 [检索配置集](doc/query.md)
 
 [保存配置](doc/save.md)
+
+[接收微信通知](doc/wx.+.md)
+
+[微信登入认证](doc/auth.md)
+
+[生成支付二维码](doc/prepay-qr-code.md)

@@ -1,0 +1,29 @@
+{
+    "page": "grid",
+    "cols": [
+        {
+            "name": "type"
+        },
+        {
+            "name": "user"
+        },
+        {
+            "name": "amount"
+        },
+        {
+            "name": "orderNo"
+        },
+        {
+            "name": "tradeNo"
+        },
+        {
+            "name": "state"
+        },
+        {
+            "name": "start"
+        },
+        {
+            "name": "end"
+        }
+    ]
+}

@@ -1,8 +1,8 @@
-# 发起手机WEB端支付
+# 发起PC WEB端支付
 
 请求
-- Service Key - ranch.alipay.quick-wap-pay
-- URI - /alipay/quick-wap-pay
+- Service Key - ranch.alipay.fast-instant-trade-pay
+- URI - /alipay/fast-instant-trade-pay
 
 参数
 

@@ -12,7 +12,7 @@ class Body extends React.Component {
         window.bean.put("console.body", this);
     }
 
-    service(key, loading, params) {
+    service(key, loading, params, success) {
         this.loading(loading);
 
         var headers = { service: key };
@@ -34,11 +34,11 @@ class Body extends React.Component {
             }
 
             if (window.meta.get(key)) {
-                this.set(window.meta.get(key), json.data);
+                this.set(window.meta.get(key), json.data, success);
             } else {
                 window.ajax("/console/meta", params, headers).then(meta => {
                     window.meta.put(key, meta.data);
-                    this.set(meta.data, json.data);
+                    this.set(meta.data, json.data, success);
                 });
             }
         });
@@ -50,7 +50,13 @@ class Body extends React.Component {
         }));
     }
 
-    set(meta, data) {
+    set(meta, data, success) {
+        if (success) {
+            this.service(success.service, true, success.params);
+
+            return;
+        }
+
         this.setState(prevState => ({
             meta: meta,
             data: data

@@ -27,25 +27,7 @@ public class ConsoleServiceImpl implements ConsoleService {
 
     @Override
     public JSONArray menus() {
-        return json.toArray(" [{\n" +
-                "            \"name\": \"主菜单\",\n" +
-                "            \"items\": [{\n" +
-                "                \"name\": \"子菜单一\",\n" +
-                "                \"service\": \"service key\"\n" +
-                "            }, {\n" +
-                "                \"name\": \"子菜单二\",\n" +
-                "                \"service\": \"ranch.account.query\"\n" +
-                "            }]\n" +
-                "        }, {\n" +
-                "            \"name\": \"系统设置\",\n" +
-                "            \"items\": [{\n" +
-                "                \"name\": \"用户管理\",\n" +
-                "                \"service\": \"ranch.user.query\"\n" +
-                "            }, {\n" +
-                "                \"name\": \"账户管理\",\n" +
-                "                \"service\": \"ranch.account.query\"\n" +
-                "            }]\n" +
-                "        }]");
+        return json.toArray(classifyHelper.value(ConsoleModel.NAME, "menu"));
     }
 
     @Override

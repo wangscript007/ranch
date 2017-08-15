@@ -51,6 +51,16 @@ public class AlipayCtrl {
         return alipayService.save(request.setToModel(new AlipayModel()));
     }
 
+    @Execute(name = "delete", validates = {
+            @Validate(validator = Validators.ID, parameter = "id", failureCode = 9),
+            @Validate(validator = Validators.SIGN)
+    })
+    public Object delete() {
+        alipayService.delete(request.get("id"));
+
+        return "";
+    }
+
     @Execute(name = "quick-wap-pay", type = Templates.FREEMARKER, template = "prepay", validates = {
             @Validate(validator = Validators.NOT_EMPTY, parameter = "key", failureCode = 1),
             @Validate(validator = Validators.NOT_EMPTY, parameter = "subject", failureCode = 11),
@@ -83,6 +93,20 @@ public class AlipayCtrl {
                 request.getAsInt("amount"), request.get("notifyUrl"), request.get("returnUrl")));
 
         return map;
+    }
+
+    @Execute(name = "quick-msecurity-pay", validates = {
+            @Validate(validator = Validators.NOT_EMPTY, parameter = "key", failureCode = 1),
+            @Validate(validator = Validators.NOT_EMPTY, parameter = "subject", failureCode = 11),
+            @Validate(validator = Validators.GREATER_THAN, number = {0}, parameter = "amount", failureCode = 12),
+            @Validate(validator = Validators.NOT_EMPTY, parameter = "notifyUrl", failureCode = 13),
+            @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "notifyUrl", failureCode = 14),
+            @Validate(validator = UserHelper.VALIDATOR_NOT_EMPTY_OR_SIGN_IN, parameter = "user", failureCode = 15),
+            @Validate(validator = AlipayService.VALIDATOR_EXISTS, parameter = "key", failureCode = 16)
+    })
+    public Object quickMsecurityPay() {
+        return alipayService.quickMsecurityPay(request.get("key"), request.get("user"), request.get("subject"),
+                request.getAsInt("amount"), request.get("notifyUrl"));
     }
 
     @Execute(name = "notify", type = Templates.STRING)

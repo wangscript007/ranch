@@ -164,8 +164,7 @@ public class WeixinServiceImpl implements WeixinService, HourJob, ContextRefresh
 
     @Override
     public void prepayQrCode(String key, String user, String subject, int amount, String notifyUrl, int size, String logo, OutputStream outputStream) {
-        Map<String, String> map = new HashMap<>();
-        map = prepay(key, user, subject, amount, notifyUrl, "NATIVE", map);
+        Map<String, String> map = prepay(key, user, subject, amount, notifyUrl, "NATIVE", new HashMap<>());
         if (xml == null)
             return;
 
@@ -176,6 +175,27 @@ public class WeixinServiceImpl implements WeixinService, HourJob, ContextRefresh
         String path = validator.isEmpty(logo) ? qrCodeLogo : logo;
 
         return validator.isEmpty(path) ? null : storages.get(Storages.TYPE_DISK).getAbsolutePath(path);
+    }
+
+    @Override
+    public JSONObject prepayApp(String key, String user, String subject, int amount, String notifyUrl) {
+        Map<String, String> map = prepay(key, user, subject, amount, notifyUrl, "APP", new HashMap<>());
+        if (map == null)
+            return null;
+
+        Map<String, String> param = new HashMap<>();
+        param.put("appId", map.get("appid"));
+        param.put("partnerId", map.get("mch_id"));
+        param.put("prepayId", map.get("prepay_id"));
+        param.put("package", "Sign=WXPay");
+        param.put("nonceStr", generator.random(32));
+        param.put("timeStamp", converter.toString(System.currentTimeMillis() / 1000, "0"));
+
+        JSONObject object = new JSONObject();
+        object.putAll(param);
+        object.put("sign", sign(param, findByKey(key).getMchKey()));
+
+        return object;
     }
 
     private Map<String, String> prepay(String key, String user, String subject, int amount, String notifyUrl, String type, Map<String, String> map) {
