@@ -12,7 +12,7 @@ import org.lpw.tephra.util.TimeUnit;
 public class ConsumeTest extends TestSupport {
     @Test
     public void consume() {
-        validate("consume", 9);
+        validate("consume", 15);
 
         AccountModel account = new AccountModel();
         account.setUser("user 1");
@@ -26,7 +26,7 @@ public class ConsumeTest extends TestSupport {
         mockHelper.getRequest().addParameter("label", "label 1");
         mockHelper.mock("/account/consume");
         JSONObject object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(2209, object.getIntValue("code"));
+        Assert.assertEquals(2215, object.getIntValue("code"));
         Assert.assertEquals(message.get(AccountModel.NAME + ".consume.failure"), object.getString("message"));
 
         account.setBalance(2);

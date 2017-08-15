@@ -61,7 +61,7 @@ public class PaymentCtrl {
             @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "type", failureCode = 2),
             @Validate(validator = Validators.GREATER_THAN, number = {0}, parameter = "amount", failureCode = 3),
             @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "notify", failureCode = 4),
-            @Validate(validator = UserHelper.VALIDATOR_NOT_EMPTY_OR_SIGN_IN, parameter = "user", failureCode = 5)
+            @Validate(validator = UserHelper.VALIDATOR_EXISTS_OR_SIGN_IN, parameter = "user", failureCode = 5)
     })
     public Object create() {
         return paymentService.create(request.get("type"), request.get("user"), request.getAsInt("amount"), request.get("notify"), request.getMap());

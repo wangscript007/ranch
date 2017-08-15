@@ -12,7 +12,7 @@ import org.lpw.tephra.util.TimeUnit;
 public class WithdrawTest extends TestSupport {
     @Test
     public void withdraw() {
-        validate("withdraw", 6);
+        validate("withdraw", 12);
 
         AccountModel account = new AccountModel();
         account.setUser("user 1");
@@ -26,7 +26,7 @@ public class WithdrawTest extends TestSupport {
         mockHelper.getRequest().addParameter("label", "label 1");
         mockHelper.mock("/account/withdraw");
         JSONObject object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(2206, object.getIntValue("code"));
+        Assert.assertEquals(2212, object.getIntValue("code"));
         Assert.assertEquals(message.get(AccountModel.NAME + ".withdraw.failure"), object.getString("message"));
 
         account.setBalance(2);

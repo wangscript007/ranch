@@ -62,8 +62,11 @@ public class MetaServiceImpl implements MetaService, ExecuteListener {
         JSONArray cols = meta.getJSONArray("cols");
         for (int i = 0, size = cols.size(); i < size; i++) {
             JSONObject col = cols.getJSONObject(i);
-            if (col.containsKey("label"))
+            if (col.containsKey("label")) {
+                col.put("label", message.get(col.getString("label")));
+
                 continue;
+            }
 
             String key = col.getString("name");
             if (classExecute != null)

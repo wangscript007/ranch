@@ -9,18 +9,18 @@ import javax.inject.Inject;
 /**
  * @author lpw
  */
-@Controller(UserHelper.VALIDATOR_ID_OR_SIGN_IN)
-public class IdOrSignInValidatorImpl extends IdValidatorSupport {
+@Controller(UserHelper.VALIDATOR_EXISTS_OR_SIGN_IN)
+public class ExistsOrSignInValidatorImpl extends IdValidatorSupport {
     @Inject
     private UserHelper userHelper;
 
     @Override
     public boolean validate(ValidateWrapper validate, String parameter) {
-        return super.validate(validate, parameter) || (validator.isEmpty(parameter) && !userHelper.sign().isEmpty());
+        return validator.isEmpty(parameter) ? userHelper.signIn() : userHelper.exists(parameter);
     }
 
     @Override
     protected String getDefaultFailureMessageKey() {
-        return "ranch.user.helper.not-id-and-sign-in";
+        return "ranch.user.helper.not-exists-and-not-sign-in";
     }
 }

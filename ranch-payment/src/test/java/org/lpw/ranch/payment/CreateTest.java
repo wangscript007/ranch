@@ -61,7 +61,7 @@ public class CreateTest extends TestSupport {
         mockHelper.mock("/payment/create");
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(2505, object.getIntValue("code"));
-        Assert.assertEquals(message.get("ranch.user.helper.empty-and-not-sign-in", message.get(PaymentModel.NAME + ".user")), object.getString("message"));
+        Assert.assertEquals(message.get("ranch.user.helper.not-exists-and-not-sign-in", message.get(PaymentModel.NAME + ".user")), object.getString("message"));
 
         String time = "20170102030405067";
         Timestamp timestamp = dateTime.toTime(time, "yyyyMMddHHmmssSSS");
@@ -77,6 +77,8 @@ public class CreateTest extends TestSupport {
         randoms.add("0002");
         generatorAspect.randomString(randoms);
 
+        mockCarousel.reset();
+        mockCarousel.register("ranch.user.get", "{\"code\":0,\"data\":{\"user id\":{\"id\":\"user id 2\",\"name\":\"user name\"}}}");
         mockHelper.reset();
         mockHelper.getRequest().addParameter("type", "type value");
         mockHelper.getRequest().addParameter("user", "user id");

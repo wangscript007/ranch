@@ -13,4 +13,19 @@ public class TestMetaCtrl1 {
     public Object query() {
         return "";
     }
+
+    @Execute(name = "col")
+    public Object col() {
+        return "";
+    }
+
+    @Execute(name = "not-exists")
+    public Object notExists() {
+        return "";
+    }
+
+    @Execute(name = "not-json")
+    public Object notJson() {
+        return "";
+    }
 }

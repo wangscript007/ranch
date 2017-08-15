@@ -28,7 +28,7 @@ public class AccountCtrl {
     private AccountService accountService;
 
     @Execute(name = "query", validates = {
-            @Validate(validator = UserHelper.VALIDATOR_NOT_EMPTY_OR_SIGN_IN, parameter = "user", failureCode = 5)
+            @Validate(validator = UserHelper.VALIDATOR_EXISTS_OR_SIGN_IN, parameter = "user", failureCode = 5)
     })
     public Object query() {
         return accountService.query(request.get("user"), request.get("owner"));
@@ -39,10 +39,10 @@ public class AccountCtrl {
             @Validate(validator = Validators.BETWEEN, number = {0, 9}, parameter = "type", failureCode = 2),
             @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "channel", failureCode = 3),
             @Validate(validator = Validators.GREATER_THAN, number = {0}, parameter = "amount", failureCode = 4),
-            @Validate(validator = UserHelper.VALIDATOR_NOT_EMPTY_OR_SIGN_IN, parameter = "user", failureCode = 5)
+            @Validate(validator = UserHelper.VALIDATOR_EXISTS_OR_SIGN_IN, parameter = "user", failureCode = 5)
     })
     public Object deposit() {
-        return execute(accountService.deposit(request.get("user"), request.get("owner"), request.getAsInt("type"), request.get("channel"), request.getAsInt("amount"), request.getMap()), 6, "deposit");
+        return execute(accountService.deposit(request.get("user"), request.get("owner"), request.getAsInt("type"), request.get("channel"), request.getAsInt("amount"), request.getMap()), 11, "deposit");
     }
 
     @Execute(name = "withdraw", validates = {
@@ -50,10 +50,10 @@ public class AccountCtrl {
             @Validate(validator = Validators.BETWEEN, number = {0, 9}, parameter = "type", failureCode = 2),
             @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "channel", failureCode = 3),
             @Validate(validator = Validators.GREATER_THAN, number = {0}, parameter = "amount", failureCode = 4),
-            @Validate(validator = UserHelper.VALIDATOR_NOT_EMPTY_OR_SIGN_IN, parameter = "user", failureCode = 5)
+            @Validate(validator = UserHelper.VALIDATOR_EXISTS_OR_SIGN_IN, parameter = "user", failureCode = 5)
     })
     public Object withdraw() {
-        return execute(accountService.withdraw(request.get("user"), request.get("owner"), request.getAsInt("type"), request.get("channel"), request.getAsInt("amount"), request.getMap()), 7, "withdraw");
+        return execute(accountService.withdraw(request.get("user"), request.get("owner"), request.getAsInt("type"), request.get("channel"), request.getAsInt("amount"), request.getMap()), 12, "withdraw");
     }
 
     @Execute(name = "reward", validates = {
@@ -61,10 +61,10 @@ public class AccountCtrl {
             @Validate(validator = Validators.BETWEEN, number = {0, 9}, parameter = "type", failureCode = 2),
             @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "channel", failureCode = 3),
             @Validate(validator = Validators.GREATER_THAN, number = {0}, parameter = "amount", failureCode = 4),
-            @Validate(validator = UserHelper.VALIDATOR_NOT_EMPTY_OR_SIGN_IN, parameter = "user", failureCode = 5)
+            @Validate(validator = UserHelper.VALIDATOR_EXISTS_OR_SIGN_IN, parameter = "user", failureCode = 5)
     })
     public Object reward() {
-        return execute(accountService.reward(request.get("user"), request.get("owner"), request.getAsInt("type"), request.get("channel"), request.getAsInt("amount")), 8, "reward");
+        return execute(accountService.reward(request.get("user"), request.get("owner"), request.getAsInt("type"), request.get("channel"), request.getAsInt("amount")), 13, "reward");
     }
 
     @Execute(name = "profit", validates = {
@@ -72,10 +72,10 @@ public class AccountCtrl {
             @Validate(validator = Validators.BETWEEN, number = {0, 9}, parameter = "type", failureCode = 2),
             @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "channel", failureCode = 3),
             @Validate(validator = Validators.GREATER_THAN, number = {0}, parameter = "amount", failureCode = 4),
-            @Validate(validator = UserHelper.VALIDATOR_NOT_EMPTY_OR_SIGN_IN, parameter = "user", failureCode = 5)
+            @Validate(validator = UserHelper.VALIDATOR_EXISTS_OR_SIGN_IN, parameter = "user", failureCode = 5)
     })
     public Object profit() {
-        return execute(accountService.profit(request.get("user"), request.get("owner"), request.getAsInt("type"), request.get("channel"), request.getAsInt("amount")), 9, "profit");
+        return execute(accountService.profit(request.get("user"), request.get("owner"), request.getAsInt("type"), request.get("channel"), request.getAsInt("amount")), 14, "profit");
     }
 
     @Execute(name = "consume", validates = {
@@ -83,10 +83,10 @@ public class AccountCtrl {
             @Validate(validator = Validators.BETWEEN, number = {0, 9}, parameter = "type", failureCode = 2),
             @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "channel", failureCode = 3),
             @Validate(validator = Validators.GREATER_THAN, number = {0}, parameter = "amount", failureCode = 4),
-            @Validate(validator = UserHelper.VALIDATOR_NOT_EMPTY_OR_SIGN_IN, parameter = "user", failureCode = 5)
+            @Validate(validator = UserHelper.VALIDATOR_EXISTS_OR_SIGN_IN, parameter = "user", failureCode = 5)
     })
     public Object consume() {
-        return execute(accountService.consume(request.get("user"), request.get("owner"), request.getAsInt("type"), request.get("channel"), request.getAsInt("amount")), 10, "consume");
+        return execute(accountService.consume(request.get("user"), request.get("owner"), request.getAsInt("type"), request.get("channel"), request.getAsInt("amount")), 15, "consume");
     }
 
     @Execute(name = "remit-in", validates = {
@@ -94,10 +94,10 @@ public class AccountCtrl {
             @Validate(validator = Validators.BETWEEN, number = {0, 9}, parameter = "type", failureCode = 2),
             @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "channel", failureCode = 3),
             @Validate(validator = Validators.GREATER_THAN, number = {0}, parameter = "amount", failureCode = 4),
-            @Validate(validator = UserHelper.VALIDATOR_NOT_EMPTY_OR_SIGN_IN, parameter = "user", failureCode = 5)
+            @Validate(validator = UserHelper.VALIDATOR_EXISTS_OR_SIGN_IN, parameter = "user", failureCode = 5)
     })
     public Object remitIn() {
-        return execute(accountService.remitIn(request.get("user"), request.get("owner"), request.getAsInt("type"), request.get("channel"), request.getAsInt("amount")), 11, "remit-in");
+        return execute(accountService.remitIn(request.get("user"), request.get("owner"), request.getAsInt("type"), request.get("channel"), request.getAsInt("amount")), 16, "remit-in");
     }
 
     @Execute(name = "remit-out", validates = {
@@ -105,10 +105,10 @@ public class AccountCtrl {
             @Validate(validator = Validators.BETWEEN, number = {0, 9}, parameter = "type", failureCode = 2),
             @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "channel", failureCode = 3),
             @Validate(validator = Validators.GREATER_THAN, number = {0}, parameter = "amount", failureCode = 4),
-            @Validate(validator = UserHelper.VALIDATOR_NOT_EMPTY_OR_SIGN_IN, parameter = "user", failureCode = 5)
+            @Validate(validator = UserHelper.VALIDATOR_EXISTS_OR_SIGN_IN, parameter = "user", failureCode = 5)
     })
     public Object remitOut() {
-        return execute(accountService.remitOut(request.get("user"), request.get("owner"), request.getAsInt("type"), request.get("channel"), request.getAsInt("amount")), 12, "remit-out");
+        return execute(accountService.remitOut(request.get("user"), request.get("owner"), request.getAsInt("type"), request.get("channel"), request.getAsInt("amount")), 17, "remit-out");
     }
 
     private Object execute(JSONObject object, int code, String type) {

@@ -92,7 +92,7 @@ public class UserServiceImpl implements UserService {
             return false;
 
         AuthModel auth = authService.findByUid(uid);
-        if (auth == null)
+        if (auth == null || auth.getType() != type.ordinal())
             return false;
 
         UserModel user = findById(auth.getUser());

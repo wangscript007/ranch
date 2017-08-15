@@ -12,7 +12,7 @@ import org.lpw.tephra.util.TimeUnit;
 public class RemitInTest extends TestSupport {
     @Test
     public void remitIn() {
-        validate("remit-in", 10);
+        validate("remit-in", 16);
 
         mockUser();
         mockHelper.reset();

@@ -105,7 +105,7 @@ public class CreateTest extends TestSupport {
         mockHelper.mock("/comment/create");
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(1304, object.getIntValue("code"));
-        Assert.assertEquals(message.get("ranch.user.helper.not-id-and-sign-in", message.get(CommentModel.NAME + ".author")), object.getString("message"));
+        Assert.assertEquals(message.get("ranch.user.helper.not-exists-and-not-sign-in", message.get(CommentModel.NAME + ".author")), object.getString("message"));
 
         mockHelper.reset();
         mockHelper.getRequest().addParameter("key", "service key");
@@ -118,15 +118,24 @@ public class CreateTest extends TestSupport {
         mockHelper.mock("/comment/create");
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(1304, object.getIntValue("code"));
-        Assert.assertEquals(message.get("ranch.user.helper.not-id-and-sign-in", message.get(CommentModel.NAME + ".author")), object.getString("message"));
+        Assert.assertEquals(message.get("ranch.user.helper.not-exists-and-not-sign-in", message.get(CommentModel.NAME + ".author")), object.getString("message"));
 
-        String authorId = generator.uuid();
         mockCarousel.register("service key.get", "{\n" +
                 "  \"code\":0,\n" +
                 "  \"data\":{\n" +
                 "    \"" + ownerId + "\":{\n" +
                 "      \"id\":\"" + ownerId + "\",\n" +
                 "      \"key\":\"owner key\"\n" +
+                "    }\n" +
+                "  }\n" +
+                "}");
+        String authorId = generator.uuid();
+        mockCarousel.register("ranch.user.get", "{\n" +
+                "  \"code\":0,\n" +
+                "  \"data\":{\n" +
+                "    \"" + authorId + "\":{\n" +
+                "      \"id\":\"" + authorId + "\",\n" +
+                "      \"key\":\"author key\"\n" +
                 "    }\n" +
                 "  }\n" +
                 "}");

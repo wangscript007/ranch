@@ -12,7 +12,7 @@ import org.lpw.tephra.util.TimeUnit;
 public class RemitOutTest extends TestSupport {
     @Test
     public void remitOut() {
-        validate("remit-out", 11);
+        validate("remit-out", 17);
 
         AccountModel account = new AccountModel();
         account.setUser("user 1");
@@ -26,7 +26,7 @@ public class RemitOutTest extends TestSupport {
         mockHelper.getRequest().addParameter("label", "label 1");
         mockHelper.mock("/account/remit-out");
         JSONObject object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(2211, object.getIntValue("code"));
+        Assert.assertEquals(2217, object.getIntValue("code"));
         Assert.assertEquals(message.get(AccountModel.NAME + ".remit-out.failure"), object.getString("message"));
 
         account.setBalance(2);

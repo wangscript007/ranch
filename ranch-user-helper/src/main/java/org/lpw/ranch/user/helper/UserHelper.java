@@ -16,22 +16,16 @@ public interface UserHelper {
     String VALIDATOR_SIGN_IN = "ranch.user.helper.validator.sign-in";
 
     /**
-     * 是否为ID值或用户是否已登入验证器Bean名称。
-     * 默认错误信息key=ranch.user.helper.not-id-and-sign-in。
-     */
-    String VALIDATOR_ID_OR_SIGN_IN = "ranch.user.helper.validator.id-or-sign-in";
-
-    /**
-     * 是否不为空（且长度不超过36个字符）或用户是否已登入验证器Bean名称。
-     * 默认错误信息key=ranch.user.helper.empty-and-not-sign-in。
-     */
-    String VALIDATOR_NOT_EMPTY_OR_SIGN_IN = "ranch.user.helper.validator.not-empty-or-sign-in";
-
-    /**
      * 用户是否存在验证器Bean名称。
      * 默认错误信息key=ranch.user.helper.not-exists。
      */
     String VALIDATOR_EXISTS = "ranch.user.helper.validator.exists";
+
+    /**
+     * 用户是否存在验证器Bean名称。
+     * 默认错误信息key=ranch.user.helper.not-exists-and-not-sign-in。
+     */
+    String VALIDATOR_EXISTS_OR_SIGN_IN = "ranch.user.helper.validator.exists-or-sign-in";
 
     /**
      * 获取用户信息。
@@ -64,6 +58,21 @@ public interface UserHelper {
      * @return 用户ID值；如果不存在则返回null。
      */
     String findIdByUid(String uid);
+
+    /**
+     * 判断ID是否存在。
+     *
+     * @param id ID值。
+     * @return 如果存在则返回true；否则返回false。
+     */
+    boolean exists(String id);
+
+    /**
+     * 判断用户是否已登入。
+     *
+     * @return 如果已登入则返回true；否则返回false。
+     */
+    boolean signIn();
 
     /**
      * 填充用户信息。

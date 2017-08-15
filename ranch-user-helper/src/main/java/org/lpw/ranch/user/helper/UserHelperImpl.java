@@ -47,6 +47,16 @@ public class UserHelperImpl extends ServiceHelperSupport implements UserHelper {
     }
 
     @Override
+    public boolean exists(String id) {
+        return get(id).size() > 1;
+    }
+
+    @Override
+    public boolean signIn() {
+        return !sign().isEmpty();
+    }
+
+    @Override
     public JSONObject sign() {
         if (signKey == null)
             signKey = key + ".sign";

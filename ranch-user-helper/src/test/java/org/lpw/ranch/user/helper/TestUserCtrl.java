@@ -21,12 +21,12 @@ public class TestUserCtrl {
         return object;
     }
 
-    @Execute(name = "id-or-sign-in", validates = {
-            @Validate(validator = UserHelper.VALIDATOR_ID_OR_SIGN_IN, parameter = "id", failureCode = 91)
+    @Execute(name = "exists-or-sign-in", validates = {
+            @Validate(validator = UserHelper.VALIDATOR_EXISTS_OR_SIGN_IN, parameter = "id", failureCode = 91)
     })
-    public Object idOrSignIn() {
+    public Object existsOrSignIn() {
         JSONObject object = new JSONObject();
-        object.put("state", "id or sign in");
+        object.put("state", "exists or sign in");
 
         return object;
     }

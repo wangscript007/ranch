@@ -67,7 +67,7 @@ public class AlipayCtrl {
             @Validate(validator = Validators.GREATER_THAN, number = {0}, parameter = "amount", failureCode = 12),
             @Validate(validator = Validators.NOT_EMPTY, parameter = "notifyUrl", failureCode = 13),
             @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "notifyUrl", failureCode = 14),
-            @Validate(validator = UserHelper.VALIDATOR_NOT_EMPTY_OR_SIGN_IN, parameter = "user", failureCode = 15),
+            @Validate(validator = UserHelper.VALIDATOR_EXISTS_OR_SIGN_IN, parameter = "user", failureCode = 15),
             @Validate(validator = AlipayService.VALIDATOR_EXISTS, parameter = "key", failureCode = 16)
     })
     public Object quickWapPay() {
@@ -84,7 +84,7 @@ public class AlipayCtrl {
             @Validate(validator = Validators.GREATER_THAN, number = {0}, parameter = "amount", failureCode = 12),
             @Validate(validator = Validators.NOT_EMPTY, parameter = "notifyUrl", failureCode = 13),
             @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "notifyUrl", failureCode = 14),
-            @Validate(validator = UserHelper.VALIDATOR_NOT_EMPTY_OR_SIGN_IN, parameter = "user", failureCode = 15),
+            @Validate(validator = UserHelper.VALIDATOR_EXISTS_OR_SIGN_IN, parameter = "user", failureCode = 15),
             @Validate(validator = AlipayService.VALIDATOR_EXISTS, parameter = "key", failureCode = 16)
     })
     public Object fastInstantTradePay() {
