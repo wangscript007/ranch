@@ -67,7 +67,6 @@ public class CaptchaCtrl {
 
     @Execute(name = "validate", validates = {
             @Validate(validator = Validators.NOT_EMPTY, parameter = "key", failureCode = 2),
-            @Validate(validator = Validators.NOT_EMPTY, parameter = "code", failureCode = 21),
             @Validate(validator = Validators.SIGN)
     })
     public Object validate() {
