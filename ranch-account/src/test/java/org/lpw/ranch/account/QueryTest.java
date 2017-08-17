@@ -119,6 +119,7 @@ public class QueryTest extends TestSupport {
         Assert.assertTrue(System.currentTimeMillis() - log.getEnd().getTime() < 2000L);
         Assert.assertNull(log.getJson());
 
+        thread.sleep(2, TimeUnit.Second);
         mockUser();
         setClassify(100, 1);
         mockCarousel.register("ranch.user.sign", "{\"code\":0,data:{\"id\":\"sign in id\"}}");
