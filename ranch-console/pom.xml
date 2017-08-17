@@ -8,7 +8,7 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>ranch-console</artifactId>
     <packaging>war</packaging>
-    <name>ranch-console Maven Webapp</name>
+    <name>ranch-console</name>
     <url>http://maven.apache.org</url>
     <dependencies>
         <dependency>
