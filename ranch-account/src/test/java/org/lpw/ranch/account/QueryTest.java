@@ -205,7 +205,7 @@ public class QueryTest extends TestSupport {
             JSONObject json = new JSONObject();
             json.put("code", 0);
             JSONObject data = new JSONObject();
-            data.put("value", parameter.get("key").equals("type") ? type : balance);
+            data.put("value", parameter.get("key").equals("sign-up.type") ? type : balance);
             json.put("data", data);
 
             return json.toJSONString();

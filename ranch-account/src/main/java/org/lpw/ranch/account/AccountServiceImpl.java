@@ -57,9 +57,9 @@ public class AccountServiceImpl implements AccountService {
         PageList<AccountModel> pl = queryFromDao(user, owner);
         if (pl.getList().isEmpty()) {
             save(find(user, owner, 0));
-            int amount = fromClassify("amount");
+            int amount = fromClassify("sign-up.amount");
             if (amount > 0)
-                logService.pass(new String[]{reward(user, owner, fromClassify("type"), "sign-up", amount).getString("logId")});
+                logService.pass(new String[]{reward(user, owner, fromClassify("sign-up.type"), "sign-up", amount).getString("logId")});
             pl = queryFromDao(user, owner);
         }
         JSONArray array = modelHelper.toJson(pl.getList());
@@ -72,7 +72,7 @@ public class AccountServiceImpl implements AccountService {
     }
 
     private int fromClassify(String key) {
-        return converter.toInt(classifyHelper.value("ranch.account.reward.sign-up", key));
+        return converter.toInt(classifyHelper.value("ranch.account.reward", key));
     }
 
     @Override
