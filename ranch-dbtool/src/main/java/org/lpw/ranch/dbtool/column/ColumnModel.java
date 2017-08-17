@@ -21,6 +21,7 @@ public class ColumnModel extends ModelSupport {
     static final String NAME = "ranch.dbtool.column";
 
     private String table; // 表
+    private int sort; // 显示顺序
     private String name; // 名称
     private String type; // 数据类型
     private int nullable; // 是否可为NULL：0-否；1-是
@@ -34,6 +35,16 @@ public class ColumnModel extends ModelSupport {
 
     public void setTable(String table) {
         this.table = table;
+    }
+
+    @Jsonable
+    @Column(name = "c_sort")
+    public int getSort() {
+        return sort;
+    }
+
+    public void setSort(int sort) {
+        this.sort = sort;
     }
 
     @Jsonable

@@ -20,6 +20,7 @@ import javax.persistence.Table;
 public class SchemaModel extends ModelSupport {
     static final String NAME = "ranch.dbtool.schema";
 
+    private int sort; // 显示顺序
     private String group; // 分组ID
     private String key; // 数据源key
     private String type; // 类型
@@ -29,6 +30,16 @@ public class SchemaModel extends ModelSupport {
     private String password; // 密码
     private String memo; // 备注
     private int tables; // 表数量
+
+    @Jsonable
+    @Column(name = "c_sort")
+    public int getSort() {
+        return sort;
+    }
+
+    public void setSort(int sort) {
+        this.sort = sort;
+    }
 
     @Jsonable
     @Column(name = "c_group")

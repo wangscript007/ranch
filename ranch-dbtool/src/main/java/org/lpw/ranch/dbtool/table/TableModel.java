@@ -21,6 +21,7 @@ public class TableModel extends ModelSupport {
     static final String NAME = "ranch.dbtool.table";
 
     private String schema; // 数据库
+    private int sort; // 显示顺序
     private String group; // 分组ID
     private String name; // 名称
     private String memo; // 备注
@@ -34,6 +35,16 @@ public class TableModel extends ModelSupport {
 
     public void setSchema(String schema) {
         this.schema = schema;
+    }
+
+    @Jsonable
+    @Column(name = "c_sort")
+    public int getSort() {
+        return sort;
+    }
+
+    public void setSort(int sort) {
+        this.sort = sort;
     }
 
     @Jsonable

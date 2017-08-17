@@ -33,7 +33,7 @@ class SchemaDaoImpl implements SchemaDao {
         append(where, args, "ip", ip, false);
         append(where, args, "name", name, false);
 
-        return liteOrm.query(new LiteQuery(SchemaModel.class).where(where.toString()), args.toArray());
+        return liteOrm.query(new LiteQuery(SchemaModel.class).where(where.toString()).order("c_sort"), args.toArray());
     }
 
     private void append(StringBuilder where, List<Object> args, String name, String value, boolean equals) {

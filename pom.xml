@@ -33,10 +33,12 @@
         <module>ranch-payment-helper</module>
         <module>ranch-alipay</module>
         <module>ranch-link</module>
+        <module>ranch-captcha</module>
         <module>ranch-archives</module>
         <module>ranch-web</module>
         <module>ranch-console</module>
         <module>ranch-test</module>
+        <module>ranch-captcha-helper</module>
     </modules>
 
     <properties>

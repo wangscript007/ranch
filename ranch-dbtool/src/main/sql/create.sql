@@ -2,6 +2,7 @@ DROP TABLE IF EXISTS t_dbtool_schema;
 CREATE TABLE t_dbtool_schema
 (
   c_id CHAR(36) NOT NULL COMMENT '主键',
+  c_sort INT DEFAULT 0 COMMENT '显示顺序',
   c_group CHAR(36) DEFAULT NULL COMMENT '分组ID',
   c_key VARCHAR(255) DEFAULT NULL COMMENT '数据源key',
   c_type VARCHAR(255) DEFAULT NULL COMMENT '类型',
@@ -20,6 +21,7 @@ CREATE TABLE t_dbtool_table
 (
   c_id CHAR(36) NOT NULL COMMENT '主键',
   c_schema CHAR(36) NOT NULL COMMENT '数据库',
+  c_sort INT DEFAULT 0 COMMENT '显示顺序',
   c_group CHAR(36) DEFAULT NULL COMMENT '分组ID',
   c_name VARCHAR(255) DEFAULT NULL COMMENT '名称',
   c_memo VARCHAR(255) DEFAULT NULL COMMENT '备注',
@@ -34,6 +36,7 @@ CREATE TABLE t_dbtool_column
 (
   c_id CHAR(36) NOT NULL COMMENT '主键',
   c_table CHAR(36) NOT NULL COMMENT '表',
+  c_sort INT DEFAULT 0 COMMENT '显示顺序',
   c_name VARCHAR(255) DEFAULT NULL COMMENT '名称',
   c_type VARCHAR(255) DEFAULT NULL COMMENT '数据类型',
   c_nullable INT DEFAULT 0 COMMENT '是否可为NULL：0-否；1-是',

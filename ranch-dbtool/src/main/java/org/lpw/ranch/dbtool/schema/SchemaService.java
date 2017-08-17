@@ -67,4 +67,12 @@ public interface SchemaService {
      * @param id ID值。
      */
     void delete(String id);
+
+    /**
+     * 设置表数量。
+     *
+     * @param id     ID值。
+     * @param tables 表数量。
+     */
+    void setTables(String id, int tables);
 }

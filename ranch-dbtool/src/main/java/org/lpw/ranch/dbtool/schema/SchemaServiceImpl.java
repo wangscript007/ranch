@@ -38,6 +38,7 @@ public class SchemaServiceImpl implements SchemaService {
     @Override
     public JSONObject save(SchemaModel model) {
         SchemaModel schema = validator.isEmpty(model.getId()) ? new SchemaModel() : schemaDao.findById(model.getId());
+        schema.setSort(model.getSort());
         schema.setGroup(validator.isEmpty(model.getGroup()) ? null : model.getGroup());
         schema.setKey(model.getKey());
         schema.setType(model.getType());
@@ -54,5 +55,12 @@ public class SchemaServiceImpl implements SchemaService {
     @Override
     public void delete(String id) {
         schemaDao.delete(id);
+    }
+
+    @Override
+    public void setTables(String id, int tables) {
+        SchemaModel schema = schemaDao.findById(id);
+        schema.setTables(tables);
+        schemaDao.save(schema);
     }
 }
