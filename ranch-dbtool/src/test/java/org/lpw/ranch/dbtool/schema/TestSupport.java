@@ -48,6 +48,7 @@ public class TestSupport extends TephraTestSupport {
 
     void equals(SchemaModel schema, JSONObject object) {
         Assert.assertEquals(schema.getId(), object.getString("id"));
+        Assert.assertEquals(schema.getSort(), object.getIntValue("sort"));
         Assert.assertEquals(schema.getGroup(), object.getString("group"));
         Assert.assertEquals(schema.getKey(), object.getString("key"));
         Assert.assertEquals(schema.getType(), object.getString("type"));

@@ -124,6 +124,7 @@ public class SaveTest extends TestSupport {
         Assert.assertEquals(message.get(SchemaModel.NAME + ".not-exists"), object.getString("message"));
 
         mockHelper.reset();
+        mockHelper.getRequest().addParameter("sort", "1");
         mockHelper.getRequest().addParameter("key", "key value");
         mockHelper.getRequest().addParameter("type", "mysql");
         mockHelper.getRequest().addParameter("ip", "ip value");
@@ -133,14 +134,16 @@ public class SaveTest extends TestSupport {
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(0, object.getIntValue("code"));
         JSONObject data = object.getJSONObject("data");
-        Assert.assertEquals(5, data.size());
+        Assert.assertEquals(6, data.size());
         Assert.assertNotNull(data.getString("id"));
+        Assert.assertEquals(1, data.getIntValue("sort"));
         Assert.assertEquals("key value", data.getString("key"));
         Assert.assertEquals("mysql", data.getString("type"));
         Assert.assertEquals("ip value", data.getString("ip"));
         Assert.assertEquals(0, data.getIntValue("tables"));
         SchemaModel schema = liteOrm.findById(SchemaModel.class, data.getString("id"));
         Assert.assertNull(schema.getGroup());
+        Assert.assertEquals(1, schema.getSort());
         Assert.assertEquals("key value", schema.getKey());
         Assert.assertEquals("mysql", schema.getType());
         Assert.assertEquals("ip value", schema.getIp());
@@ -165,6 +168,7 @@ public class SaveTest extends TestSupport {
         String group = generator.uuid();
         mockHelper.reset();
         mockHelper.getRequest().addParameter("id", schema.getId());
+        mockHelper.getRequest().addParameter("sort", "2");
         mockHelper.getRequest().addParameter("group", group);
         mockHelper.getRequest().addParameter("key", "key value");
         mockHelper.getRequest().addParameter("type", "mysql");
@@ -179,8 +183,9 @@ public class SaveTest extends TestSupport {
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(0, object.getIntValue("code"));
         data = object.getJSONObject("data");
-        Assert.assertEquals(10, data.size());
+        Assert.assertEquals(11, data.size());
         Assert.assertEquals(schema.getId(), data.getString("id"));
+        Assert.assertEquals(2, data.getIntValue("sort"));
         Assert.assertEquals(group, data.getString("group"));
         Assert.assertEquals("key value", data.getString("key"));
         Assert.assertEquals("mysql", data.getString("type"));
