@@ -1,4 +1,7 @@
-.input-new-line,
+.input-new-line{
+    padding: 5px 10px;
+}
+
 .input-inline {
     padding: 5px 10px 5px 0;
 }
@@ -9,5 +12,10 @@
 
 .input-new-line label,
 .input-inline label {
+    display: inline-block;
     padding: 0 5px 0 0;
+}
+
+.input-new-line label{
+    width:20%;
 }

@@ -1,0 +1,50 @@
+{
+    "page": "grid",
+    "cols": [
+        {
+            "name": "group"
+        },
+        {
+            "name": "key"
+        },
+        {
+            "name": "ip"
+        },
+        {
+            "name": "name"
+        },
+        {
+            "name": "username"
+        },
+        {
+            "name": "password",
+            "type": "password"
+        },
+        {
+            "name": "tables",
+            "type": "number"
+        },
+        {
+            "name": "memo"
+        }
+    ],
+    "ops": [
+        {
+            "type": "modify",
+            "page": "form"
+        },
+        {
+            "type": "delete",
+            "service": "ranch.dbtool.schema.delete",
+            "success": {
+                "service": "ranch.dbtool.schema.query"
+            }
+        }
+    ],
+    "toolbar": [
+        {
+            "type": "create",
+            "page": "form"
+        }
+    ]
+}

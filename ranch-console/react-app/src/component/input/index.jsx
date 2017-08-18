@@ -21,7 +21,7 @@ class Input extends React.Component {
 
     input() {
         return (
-            <input type={this.type()} name={this.props.meta.name} value={this.state.value}
+            <input type={this.type()} name={this.props.meta.name} defaultValue={this.state.value}
                 placeholder={window.message(this.props.message, this.props.meta.placeholder)} />
         );
     }

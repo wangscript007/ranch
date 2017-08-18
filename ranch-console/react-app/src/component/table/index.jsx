@@ -60,7 +60,8 @@ class Table extends React.Component {
                     break;
                 }
             }
-        }
+        } else if (col.type === "password")
+            label = "******";
 
         return (
             <td key={index} className={col.type || ""}>{label}</td>
@@ -78,9 +79,8 @@ class Table extends React.Component {
     op(row, index, op) {
         var label = op.label || ("table.ops." + op.type);
         var data = {
-            type: op.type,
-            service: op.service,
-            success: op.success,
+            meta: this.props.meta,
+            op: op,
             row: row
         };
 
@@ -90,9 +90,19 @@ class Table extends React.Component {
     }
 
     opClick(data) {
-        console.log(JSON.stringify(data));
-        if (data.type === "delete")
-            window.bean.get("console.body").service(data.service, true, { id1: data.row.id }, data.success);
+        if (data.op.service) {
+            if (data.op.type === "delete")
+                window.bean.get("console.body").service(data.op.service, true, { id: data.row.id }, data.op.success);
+
+            return;
+        }
+
+        var meta = {};
+        for (var key in data.meta)
+            meta[key] = data.meta[key];
+        for (key in data.op)
+            meta[key] = data.op[key];
+        window.bean.get("console.body").set(meta, data.row, false);
     }
 }
 
