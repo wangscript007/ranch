@@ -6,16 +6,16 @@ class Body extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            meta: { page: "dashboard" }
+            service: "",
+            data: {}
         };
-        this.meta = {};
         window.bean.put("console.body", this);
     }
 
     service(key, loading, params, success) {
         this.loading(loading);
 
-        var headers = { service: key };
+        var headers = { key: key };
         window.ajax("/console/service", params, headers).then(json => {
             if (!json || !json.hasOwnProperty("code")) {
                 console.log("failure:" + JSON.stringify(json));
@@ -33,14 +33,7 @@ class Body extends React.Component {
                 return;
             }
 
-            if (window.meta.get(key)) {
-                this.set(window.meta.get(key), json.data, success);
-            } else {
-                window.ajax("/console/meta", params, headers).then(meta => {
-                    window.meta.put(key, meta.data);
-                    this.set(meta.data, json.data, success);
-                });
-            }
+            window.meta.load(key).then(meta => this.set(key, json.data, success));
         });
     }
 
@@ -50,15 +43,17 @@ class Body extends React.Component {
         }));
     }
 
-    set(meta, data, success) {
+    set(service, data, success) {
         if (success) {
-            this.service(success.service, true, success.params);
+            this.service(success, true);
 
             return;
         }
 
+        console.log(service + ";" + data);
+
         this.setState(prevState => ({
-            meta: meta,
+            service: service,
             data: data
         }));
         this.loading(false);
@@ -67,7 +62,7 @@ class Body extends React.Component {
     render() {
         return (
             <div className="console-body">
-                <Page meta={this.state.meta} data={this.state.data} />
+                <Page service={this.state.service} data={this.state.data} />
             </div>
         );
     }

@@ -7,15 +7,12 @@ import Pagination from "../../component/pagination";
 
 class Grid extends React.Component {
     render() {
-        var hasList = this.props.data.hasOwnProperty("list");
-        var list = hasList ? this.props.data.list : this.props.data;
-
         return (
             <div className="grid">
-                <Search meta={this.props.meta} />
-                <Table meta={this.props.meta} list={list} />
-                <Toolbar meta={this.props.meta} />
-                {hasList ? <Pagination /> : null}
+                <Search service={this.props.service} />
+                <Table service={this.props.service} list={this.props.data.list || this.props.data} />
+                <Toolbar service={this.props.service} />
+                {this.props.data.hasOwnProperty("list") ? <Pagination /> : null}
             </div>
         );
     }

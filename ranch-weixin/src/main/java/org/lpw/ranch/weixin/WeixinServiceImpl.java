@@ -111,6 +111,11 @@ public class WeixinServiceImpl implements WeixinService, HourJob, ContextRefresh
     }
 
     @Override
+    public void delete(String id) {
+        weixinDao.delete(id);
+    }
+
+    @Override
     public String echo(String appId, String signature, String timestamp, String nonce, String echostr) {
         WeixinModel weixin = weixinDao.findByAppId(appId);
         if (weixin == null)

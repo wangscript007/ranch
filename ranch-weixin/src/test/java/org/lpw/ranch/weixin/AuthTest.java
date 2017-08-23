@@ -27,7 +27,7 @@ public class AuthTest extends TestSupport {
         mockHelper.reset();
         mockHelper.mock("/weixin/auth");
         JSONObject object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(2401, object.getIntValue("code"));
+        Assert.assertEquals(2402, object.getIntValue("code"));
         Assert.assertEquals(message.get(Validators.PREFIX + "empty", message.get(WeixinModel.NAME + ".key")), object.getString("message"));
 
         mockHelper.reset();

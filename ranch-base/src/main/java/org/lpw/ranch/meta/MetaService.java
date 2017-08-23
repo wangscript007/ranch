@@ -9,8 +9,8 @@ public interface MetaService {
     /**
      * 获取元数据。
      *
-     * @param service 服务KEY。
+     * @param key 模块KEY。
      * @return 元数据；如果不存在则返回null。
      */
-    JSONObject get(String service);
+    JSONObject get(String key);
 }

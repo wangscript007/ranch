@@ -45,22 +45,32 @@ public class WeixinCtrl {
     }
 
     @Execute(name = "save", validates = {
-            @Validate(validator = Validators.NOT_EMPTY, parameter = "key", failureCode = 1),
-            @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "key", failureCode = 2),
-            @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "name", failureCode = 3),
-            @Validate(validator = Validators.NOT_EMPTY, parameter = "appId", failureCode = 4),
-            @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "appId", failureCode = 5),
-            @Validate(validator = Validators.NOT_EMPTY, parameter = "secret", failureCode = 6),
-            @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "secret", failureCode = 7),
-            @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "token", failureCode = 8),
-            @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "mchId", failureCode = 9),
-            @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "mchKey", failureCode = 10),
+            @Validate(validator = Validators.NOT_EMPTY, parameter = "key", failureCode = 2),
+            @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "key", failureCode = 3),
+            @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "name", failureCode = 4),
+            @Validate(validator = Validators.NOT_EMPTY, parameter = "appId", failureCode = 5),
+            @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "appId", failureCode = 6),
+            @Validate(validator = Validators.NOT_EMPTY, parameter = "secret", failureCode = 7),
+            @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "secret", failureCode = 8),
+            @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "token", failureCode = 9),
+            @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "mchId", failureCode = 10),
+            @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "mchKey", failureCode = 11),
             @Validate(validator = Validators.SIGN),
-            @Validate(validator = WeixinService.VALIDATOR_NOT_EXISTS, parameters = {"key", "appId"}, failureCode = 11)
+            @Validate(validator = WeixinService.VALIDATOR_NOT_EXISTS, parameters = {"key", "appId"}, failureCode = 12)
 
     })
     public Object save() {
         return weixinService.save(request.setToModel(new WeixinModel()));
+    }
+
+    @Execute(name = "delete", validates = {
+            @Validate(validator = Validators.ID, parameter = "id", failureCode = 1),
+            @Validate(validator = Validators.SIGN)
+    })
+    public Object delete() {
+        weixinService.delete(request.get("id"));
+
+        return "";
     }
 
     @Execute(name = "wx.+", type = Templates.STRING)
@@ -75,7 +85,7 @@ public class WeixinCtrl {
     }
 
     @Execute(name = "auth", validates = {
-            @Validate(validator = Validators.NOT_EMPTY, parameter = "key", failureCode = 1),
+            @Validate(validator = Validators.NOT_EMPTY, parameter = "key", failureCode = 2),
             @Validate(validator = Validators.NOT_EMPTY, parameter = "code", failureCode = 51),
             @Validate(validator = Validators.SIGN),
             @Validate(validator = WeixinService.VALIDATOR_EXISTS, parameter = "key", failureCode = 52)
@@ -85,7 +95,7 @@ public class WeixinCtrl {
     }
 
     @Execute(name = "prepay-qr-code", validates = {
-            @Validate(validator = Validators.NOT_EMPTY, parameter = "key", failureCode = 1),
+            @Validate(validator = Validators.NOT_EMPTY, parameter = "key", failureCode = 2),
             @Validate(validator = Validators.NOT_EMPTY, parameter = "subject", failureCode = 21),
             @Validate(validator = Validators.GREATER_THAN, number = {0}, parameter = "amount", failureCode = 22),
             @Validate(validator = Validators.NOT_EMPTY, parameter = "notifyUrl", failureCode = 23),
@@ -101,7 +111,7 @@ public class WeixinCtrl {
     }
 
     @Execute(name = "prepay-app", validates = {
-            @Validate(validator = Validators.NOT_EMPTY, parameter = "key", failureCode = 1),
+            @Validate(validator = Validators.NOT_EMPTY, parameter = "key", failureCode = 2),
             @Validate(validator = Validators.NOT_EMPTY, parameter = "subject", failureCode = 21),
             @Validate(validator = Validators.GREATER_THAN, number = {0}, parameter = "amount", failureCode = 22),
             @Validate(validator = Validators.NOT_EMPTY, parameter = "notifyUrl", failureCode = 23),

@@ -17,12 +17,12 @@ public interface ConsoleService {
     JSONArray menus();
 
     /**
-     * 获取页面元数据。
+     * 获取模块元数据。
      *
-     * @param service 服务key。
-     * @return 页面元数据；如果不存在则返回空JSON。
+     * @param key 模块key。
+     * @return 模块元数据；如果不存在则返回空JSON。
      */
-    JSONObject meta(String service);
+    JSONObject meta(String key);
 
     /**
      * 执行服务。

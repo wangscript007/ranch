@@ -1,3 +1,11 @@
 .form .input-new-line:nth-child(even) {
     background-color: #eee;
 }
+
+.form .toolbar {
+    padding: 5px 0 0 20%;
+}
+
+.form .toolbar button {
+    margin-left: 10px;
+}

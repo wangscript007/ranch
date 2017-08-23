@@ -11,6 +11,9 @@ const inputs = {
 
 class Search extends React.Component {
     render() {
+        if (!this.props.meta)
+            return null;
+
         var cols = [];
         this.props.meta.cols.map(col => {
             if (col.hasOwnProperty("search"))

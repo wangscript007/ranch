@@ -16,6 +16,8 @@
 .table td {
     padding: 3px 5px;
     background-color: #fff;
+    max-width: 100px;
+    word-wrap: break-word;
 }
 
 .table tr:nth-child(even) td {

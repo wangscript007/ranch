@@ -13,4 +13,6 @@ interface WeixinDao {
     WeixinModel findByAppId(String appId);
 
     void save(WeixinModel weixin);
+
+    void delete(String id);
 }

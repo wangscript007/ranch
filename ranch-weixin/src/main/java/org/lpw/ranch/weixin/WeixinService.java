@@ -54,6 +54,13 @@ public interface WeixinService {
     JSONObject save(WeixinModel weixin);
 
     /**
+     * 删除微信配置。
+     *
+     * @param id ID值。
+     */
+    void delete(String id);
+
+    /**
      * 验证echo信息是否正确。
      *
      * @param appId     微信公众号AppID。

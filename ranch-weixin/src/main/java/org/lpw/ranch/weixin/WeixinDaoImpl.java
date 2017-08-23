@@ -34,4 +34,9 @@ class WeixinDaoImpl implements WeixinDao {
     public void save(WeixinModel weixin) {
         liteOrm.save(weixin);
     }
+
+    @Override
+    public void delete(String id) {
+        liteOrm.deleteById(WeixinModel.class, id);
+    }
 }

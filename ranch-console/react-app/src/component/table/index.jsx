@@ -5,19 +5,24 @@ import message from "./message.json";
 
 class Table extends React.Component {
     render() {
-        var hasOp = this.props.meta.ops && this.props.meta.ops.length > 0;
+        this.meta = {
+            props: window.meta.props(this.props.service),
+            ops: window.meta.ops(this.props.service)
+        };
+        this.meta.hasOp = this.meta.ops && this.meta.ops.length > 0;
+        var hasList = !this.props.list || this.props.list.length === 0;
 
         return (
             <table className="table">
                 <thead>
                     <tr>
                         <th className="index"></th>
-                        {this.props.meta.cols.map((col, index) => this.th(index, col))}
-                        {hasOp ? <th></th> : null}
+                        {this.meta.props.map((col, index) => this.th(index, col))}
+                        {this.meta.hasOp ? <th></th> : null}
                     </tr>
                 </thead>
                 <tbody>
-                    {!this.props.list || this.props.list.length === 0 ? this.empty(hasOp) : this.props.list.map((row, index) => this.tr(index, row, hasOp))}
+                    {hasList ? this.empty() : this.props.list.map((row, index) => this.tr(index, row))}
                 </tbody>
             </table>
         );
@@ -26,25 +31,25 @@ class Table extends React.Component {
     th(index, col) {
         return (
             <th key={index}>
-                {window.message(this.props.meta.message, col.label)}
+                {window.message(this.props.message, col.label)}
             </th>
         );
     }
 
-    empty(hasOp) {
+    empty() {
         return (
             <tr>
-                <td colSpan={this.props.meta.cols.length + (hasOp ? 2 : 1)} className="empty">{window.message(message, "table.list.empty")}</td>
+                <td colSpan={this.meta.props.length + (this.meta.hasOp ? 2 : 1)} className="empty">{window.message(message, "table.list.empty")}</td>
             </tr>
         );
     }
 
-    tr(index, row, hasOp) {
+    tr(index, row) {
         return (
             <tr key={index}>
                 <th className="index">{index + 1}</th>
-                {this.props.meta.cols.map((col, i) => this.td(row, i, col))}
-                {hasOp ? this.ops(row) : null}
+                {this.meta.props.map((col, i) => this.td(row, i, col))}
+                {this.meta.hasOp ? this.ops(row) : null}
             </tr>
         );
     }
@@ -64,22 +69,22 @@ class Table extends React.Component {
             label = "******";
 
         return (
-            <td key={index} className={col.type || ""}>{label}</td>
+            <td key={index} className={col.format || ""}>{label}</td>
         );
     }
 
     ops(row) {
         return (
             <td className="ops">
-                {this.props.meta.ops.map((op, index) => this.op(row, index, op))}
+                {this.meta.ops.map((op, index) => this.op(index, op, row))}
             </td>
         );
     }
 
-    op(row, index, op) {
+    op(index, op, row) {
         var label = op.label || ("table.ops." + op.type);
         var data = {
-            meta: this.props.meta,
+            service: this.props.service,
             op: op,
             row: row
         };
@@ -91,18 +96,13 @@ class Table extends React.Component {
 
     opClick(data) {
         if (data.op.service) {
-            if (data.op.type === "delete")
-                window.bean.get("console.body").service(data.op.service, true, { id: data.row.id }, data.op.success);
+            window.bean.get("console.body").service(data.op.service, true, data.row, data.op.success);
 
             return;
         }
 
-        var meta = {};
-        for (var key in data.meta)
-            meta[key] = data.meta[key];
-        for (key in data.op)
-            meta[key] = data.op[key];
-        window.bean.get("console.body").set(meta, data.row, false);
+        var service = window.meta.prefix(data.service, 1) + data.op.type;
+        window.bean.get("console.body").set(service, data.row, false);
     }
 }
 

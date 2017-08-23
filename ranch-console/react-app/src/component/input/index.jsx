@@ -8,6 +8,8 @@ class Input extends React.Component {
         this.state = {
             value: props.value
         };
+
+        this.change = this.change.bind(this);
     }
 
     render() {
@@ -21,13 +23,22 @@ class Input extends React.Component {
 
     input() {
         return (
-            <input type={this.type()} name={this.props.meta.name} defaultValue={this.state.value}
-                placeholder={window.message(this.props.message, this.props.meta.placeholder)} />
+            <input type={this.type()} name={this.props.meta.name} value={this.state.value}
+                placeholder={window.message(this.props.message, this.props.meta.placeholder)}
+                onChange={this.change} />
         );
     }
 
     type() {
         return "text";
+    }
+
+    change(event) {
+        this.setState({
+            value: event.target.value
+        });
+        if (this.props.owner)
+            this.props.owner.put(this.props.meta.name, event.target.value);
     }
 }
 

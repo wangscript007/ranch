@@ -1,0 +1,7 @@
+.input-new-line .readonly {
+    display: inline-block;
+    width: 50%;
+    padding: 3px;
+    border: 1px solid #ccc;
+    word-wrap: break-word;
+}

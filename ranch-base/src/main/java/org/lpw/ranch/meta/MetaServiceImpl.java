@@ -1,14 +1,11 @@
 package org.lpw.ranch.meta;
 
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import org.lpw.tephra.ctrl.execute.Execute;
-import org.lpw.tephra.ctrl.execute.ExecuteListener;
-import org.lpw.tephra.ctrl.execute.Executor;
+import org.lpw.tephra.bean.ContextRefreshedListener;
+import org.lpw.tephra.dao.model.ModelTables;
 import org.lpw.tephra.util.Io;
 import org.lpw.tephra.util.Json;
 import org.lpw.tephra.util.Logger;
-import org.lpw.tephra.util.Message;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
@@ -21,57 +18,46 @@ import java.util.Map;
  * @author lpw
  */
 @Service(MetaModel.NAME + ".service")
-public class MetaServiceImpl implements MetaService, ExecuteListener {
+public class MetaServiceImpl implements MetaService, ContextRefreshedListener {
     @Inject
     private Io io;
     @Inject
     private Json json;
     @Inject
-    private Message message;
-    @Inject
     private Logger logger;
-    private Map<String, JSONObject> map = new HashMap<>();
+    @Inject
+    private ModelTables modelTables;
+    private Map<String, JSONObject> map;
 
     @Override
-    public JSONObject get(String service) {
-        return map.get(service);
+    public JSONObject get(String key) {
+        return map.get(key);
     }
 
     @Override
-    public void definition(Execute classExecute, Execute methodExecute, Executor executor) {
-        InputStream inputStream = executor.getBean().getClass().getResourceAsStream(methodExecute.name() + ".json");
-        if (inputStream == null)
-            return;
-
-        String key = classExecute == null ? methodExecute.name() : (classExecute.key() + "." + methodExecute.name());
-        try {
-            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-            io.copy(inputStream, outputStream);
-            inputStream.close();
-            outputStream.close();
-            JSONObject meta = json.toObject(outputStream.toString());
-            if (meta.containsKey("cols"))
-                cols(classExecute, meta);
-            map.put(key, meta);
-        } catch (Throwable e) {
-            logger.warn(e, "读取META[{}]时发生异常！", key);
-        }
+    public int getContextRefreshedSort() {
+        return 11;
     }
 
-    private void cols(Execute classExecute, JSONObject meta) {
-        JSONArray cols = meta.getJSONArray("cols");
-        for (int i = 0, size = cols.size(); i < size; i++) {
-            JSONObject col = cols.getJSONObject(i);
-            if (col.containsKey("label")) {
-                col.put("label", message.get(col.getString("label")));
+    @Override
+    public void onContextRefreshed() {
+        map = new HashMap<>();
+        modelTables.getModelClasses().forEach(modelClass -> {
+            try {
+                InputStream inputStream = modelClass.getResourceAsStream("meta.json");
+                if (inputStream == null)
+                    return;
 
-                continue;
+                ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+                io.copy(inputStream, outputStream);
+                inputStream.close();
+                outputStream.close();
+                JSONObject object = json.toObject(outputStream.toString());
+                if (object != null)
+                    map.put(object.getString("key"), object);
+            } catch (Throwable throwable) {
+                logger.warn(throwable, "解析Model[{}]元数据时发生异常！", modelClass);
             }
-
-            String key = col.getString("name");
-            if (classExecute != null)
-                key = classExecute.key() + "." + key;
-            col.put("label", message.get(key));
-        }
+        });
     }
 }

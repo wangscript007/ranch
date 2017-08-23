@@ -31,16 +31,16 @@ public class ConsoleCtrl {
     }
 
     @Execute(name = "meta", validates = {
-            @Validate(validator = Validators.NOT_EMPTY, scope = Validate.Scope.Header, parameter = "service", failureCode = 1)
+            @Validate(validator = Validators.NOT_EMPTY, scope = Validate.Scope.Header, parameter = "key", failureCode = 1)
     })
     public Object meta() {
-        return consoleService.meta(header.get("service"));
+        return consoleService.meta(header.get("key"));
     }
 
     @Execute(name = "service", validates = {
-            @Validate(validator = Validators.NOT_EMPTY, scope = Validate.Scope.Header, parameter = "service", failureCode = 1)
+            @Validate(validator = Validators.NOT_EMPTY, scope = Validate.Scope.Header, parameter = "key", failureCode = 1)
     })
     public Object service() {
-        return consoleService.service(header.get("service"), request.getMap());
+        return consoleService.service(header.get("key"), request.getMap());
     }
 }

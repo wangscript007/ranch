@@ -22,7 +22,7 @@ public class SchemaModel extends ModelSupport {
 
     private int sort; // 显示顺序
     private String group; // 分组ID
-    private String key; // 数据源key
+    private String key; // 引用KEY
     private String type; // 类型
     private String ip; // IP地址
     private String name; // 名称

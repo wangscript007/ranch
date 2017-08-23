@@ -18,7 +18,7 @@ class Mock {
     get(uri, params, headers) {
         var key = uri + (headers && headers.hasOwnProperty("service") ? headers.service : "");
         var data = this.map.hasOwnProperty(key) ? this.map[key] : {};
-        return new Promise(function (resolve, reject) {
+        return new Promise((resolve, reject) => {
             resolve({
                 code: 0,
                 data: data

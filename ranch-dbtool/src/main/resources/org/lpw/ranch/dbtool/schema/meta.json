@@ -1,0 +1,75 @@
+{
+    "key": "ranch.dbtool.schema",
+    "props": [
+        {
+            "name": "group"
+        },
+        {
+            "name": "key"
+        },
+        {
+            "name": "type"
+        },
+        {
+            "name": "ip"
+        },
+        {
+            "name": "name"
+        },
+        {
+            "name": "username"
+        },
+        {
+            "name": "password",
+            "type": "password"
+        },
+        {
+            "name": "tables",
+            "type": "readonly",
+            "format": "number"
+        },
+        {
+            "name": "memo"
+        }
+    ],
+    "query": {
+        "page": "grid",
+        "ops": [
+            {
+                "type": "modify"
+            },
+            {
+                "type": "delete",
+                "service": "delete",
+                "success": "query"
+            }
+        ],
+        "toolbar": [
+            {
+                "type": "create"
+            }
+        ]
+    },
+    "create": {
+        "page": "form",
+        "toolbar": [
+            {
+                "type": "save",
+                "service": "save",
+                "success": "query",
+                "data": "true"
+            }
+        ]
+    },
+    "modify": {
+        "page": "form",
+        "toolbar": [
+            {
+                "type": "save",
+                "service": "save",
+                "success": "query",
+                "data": "true"
+            }
+        ]
+    }
+}

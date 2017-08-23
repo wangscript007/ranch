@@ -20,14 +20,14 @@ public class SaveTest extends TestSupport {
         mockHelper.reset();
         mockHelper.mock("/weixin/save");
         JSONObject object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(2401, object.getIntValue("code"));
+        Assert.assertEquals(2402, object.getIntValue("code"));
         Assert.assertEquals(message.get(Validators.PREFIX + "empty", message.get(WeixinModel.NAME + ".key")), object.getString("message"));
 
         mockHelper.reset();
         mockHelper.getRequest().addParameter("key", generator.random(101));
         mockHelper.mock("/weixin/save");
         object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(2402, object.getIntValue("code"));
+        Assert.assertEquals(2403, object.getIntValue("code"));
         Assert.assertEquals(message.get(Validators.PREFIX + "over-max-length", message.get(WeixinModel.NAME + ".key"), 100), object.getString("message"));
 
         mockHelper.reset();
@@ -35,14 +35,14 @@ public class SaveTest extends TestSupport {
         mockHelper.getRequest().addParameter("name", generator.random(101));
         mockHelper.mock("/weixin/save");
         object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(2403, object.getIntValue("code"));
+        Assert.assertEquals(2404, object.getIntValue("code"));
         Assert.assertEquals(message.get(Validators.PREFIX + "over-max-length", message.get(WeixinModel.NAME + ".name"), 100), object.getString("message"));
 
         mockHelper.reset();
         mockHelper.getRequest().addParameter("key", "key");
         mockHelper.mock("/weixin/save");
         object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(2404, object.getIntValue("code"));
+        Assert.assertEquals(2405, object.getIntValue("code"));
         Assert.assertEquals(message.get(Validators.PREFIX + "empty", message.get(WeixinModel.NAME + ".appId")), object.getString("message"));
 
         mockHelper.reset();
@@ -50,7 +50,7 @@ public class SaveTest extends TestSupport {
         mockHelper.getRequest().addParameter("appId", generator.random(101));
         mockHelper.mock("/weixin/save");
         object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(2405, object.getIntValue("code"));
+        Assert.assertEquals(2406, object.getIntValue("code"));
         Assert.assertEquals(message.get(Validators.PREFIX + "over-max-length", message.get(WeixinModel.NAME + ".appId"), 100), object.getString("message"));
 
         mockHelper.reset();
@@ -58,7 +58,7 @@ public class SaveTest extends TestSupport {
         mockHelper.getRequest().addParameter("appId", "app id");
         mockHelper.mock("/weixin/save");
         object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(2406, object.getIntValue("code"));
+        Assert.assertEquals(2407, object.getIntValue("code"));
         Assert.assertEquals(message.get(Validators.PREFIX + "empty", message.get(WeixinModel.NAME + ".secret")), object.getString("message"));
 
         mockHelper.reset();
@@ -67,7 +67,7 @@ public class SaveTest extends TestSupport {
         mockHelper.getRequest().addParameter("secret", generator.random(101));
         mockHelper.mock("/weixin/save");
         object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(2407, object.getIntValue("code"));
+        Assert.assertEquals(2408, object.getIntValue("code"));
         Assert.assertEquals(message.get(Validators.PREFIX + "over-max-length", message.get(WeixinModel.NAME + ".secret"), 100), object.getString("message"));
 
         mockHelper.reset();
@@ -77,7 +77,7 @@ public class SaveTest extends TestSupport {
         mockHelper.getRequest().addParameter("token", generator.random(101));
         mockHelper.mock("/weixin/save");
         object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(2408, object.getIntValue("code"));
+        Assert.assertEquals(2409, object.getIntValue("code"));
         Assert.assertEquals(message.get(Validators.PREFIX + "over-max-length", message.get(WeixinModel.NAME + ".token"), 100), object.getString("message"));
 
         mockHelper.reset();
@@ -87,7 +87,7 @@ public class SaveTest extends TestSupport {
         mockHelper.getRequest().addParameter("mchId", generator.random(101));
         mockHelper.mock("/weixin/save");
         object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(2409, object.getIntValue("code"));
+        Assert.assertEquals(2410, object.getIntValue("code"));
         Assert.assertEquals(message.get(Validators.PREFIX + "over-max-length", message.get(WeixinModel.NAME + ".mchId"), 100), object.getString("message"));
 
         mockHelper.reset();
@@ -97,7 +97,7 @@ public class SaveTest extends TestSupport {
         mockHelper.getRequest().addParameter("mchKey", generator.random(101));
         mockHelper.mock("/weixin/save");
         object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(2410, object.getIntValue("code"));
+        Assert.assertEquals(2411, object.getIntValue("code"));
         Assert.assertEquals(message.get(Validators.PREFIX + "over-max-length", message.get(WeixinModel.NAME + ".mchKey"), 100), object.getString("message"));
 
         mockHelper.reset();
@@ -149,7 +149,7 @@ public class SaveTest extends TestSupport {
         sign.put(mockHelper.getRequest().getMap(), null);
         mockHelper.mock("/weixin/save");
         object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(2411, object.getIntValue("code"));
+        Assert.assertEquals(2412, object.getIntValue("code"));
         Assert.assertEquals(message.get(WeixinModel.NAME + ".exists"), object.getString("message"));
 
         mockHelper.reset();

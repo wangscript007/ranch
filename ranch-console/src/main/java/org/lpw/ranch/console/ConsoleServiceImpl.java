@@ -6,6 +6,8 @@ import org.lpw.ranch.classify.helper.ClassifyHelper;
 import org.lpw.ranch.meta.MetaService;
 import org.lpw.ranch.util.Carousel;
 import org.lpw.tephra.util.Json;
+import org.lpw.tephra.util.Message;
+import org.lpw.tephra.util.Validator;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
@@ -17,7 +19,11 @@ import java.util.Map;
 @Service(ConsoleModel.NAME + ".service")
 public class ConsoleServiceImpl implements ConsoleService {
     @Inject
+    private Validator validator;
+    @Inject
     private Json json;
+    @Inject
+    private Message message;
     @Inject
     private Carousel carousel;
     @Inject
@@ -31,12 +37,25 @@ public class ConsoleServiceImpl implements ConsoleService {
     }
 
     @Override
-    public JSONObject meta(String service) {
-        JSONObject object = json.toObject(classifyHelper.value(ConsoleModel.NAME + ".meta", service));
-        if (object == null)
-            object = metaService.get(service);
+    public JSONObject meta(String key) {
+        JSONObject meta = json.toObject(classifyHelper.value(ConsoleModel.NAME + ".meta", key));
+        if (meta == null)
+            meta = metaService.get(key);
+        setLabel(meta);
 
-        return object == null ? new JSONObject() : object;
+        return meta == null ? new JSONObject() : meta;
+    }
+
+    private void setLabel(JSONObject meta) {
+        if (validator.isEmpty(meta) || !meta.containsKey("props"))
+            return;
+
+        JSONArray props = meta.getJSONArray("props");
+        for (int i = 0, size = props.size(); i < size; i++) {
+            JSONObject prop = props.getJSONObject(i);
+            String label = prop.containsKey("label") ? prop.getString("label") : (meta.getString("key") + "." + prop.getString("name"));
+            prop.put("label", message.get(label));
+        }
     }
 
     @Override
