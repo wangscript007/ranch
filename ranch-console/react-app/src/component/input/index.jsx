@@ -30,6 +30,9 @@ class Input extends React.Component {
     }
 
     type() {
+        if (this.props.meta.format === "number")
+            return "number";
+
         return "text";
     }
 

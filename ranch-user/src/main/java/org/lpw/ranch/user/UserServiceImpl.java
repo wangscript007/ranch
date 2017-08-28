@@ -91,7 +91,7 @@ public class UserServiceImpl implements UserService {
         if (uid == null)
             return false;
 
-        AuthModel auth = authService.findByUid(uid);
+        AuthModel auth = type == Type.Bind ? findByBind(uid) : authService.findByUid(uid);
         if (auth == null || auth.getType() != type.ordinal())
             return false;
 
@@ -110,6 +110,16 @@ public class UserServiceImpl implements UserService {
         session.set(SESSION, user);
 
         return true;
+    }
+
+    private AuthModel findByBind(String uid) {
+        AuthModel auth = authService.findByUid(uid);
+        if (auth != null)
+            return auth;
+
+        signUp(uid, null, Type.Bind);
+
+        return authService.findByUid(uid);
     }
 
     private String getWeixinOpenId(String key, String code) {
