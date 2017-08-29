@@ -43,24 +43,15 @@ public class CreateTest extends TestSupport {
         Assert.assertEquals(2503, object.getIntValue("code"));
         Assert.assertEquals(message.get(Validators.PREFIX + "not-greater-than", message.get(PaymentModel.NAME + ".amount"), 0), object.getString("message"));
 
-        mockHelper.reset();
-        mockHelper.getRequest().addParameter("type", "type value");
-        mockHelper.getRequest().addParameter("amount", "1");
-        mockHelper.getRequest().addParameter("notify", generator.random(101));
-        mockHelper.mock("/payment/create");
-        object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(2504, object.getIntValue("code"));
-        Assert.assertEquals(message.get(Validators.PREFIX + "over-max-length", message.get(PaymentModel.NAME + ".notify"), 100), object.getString("message"));
-
         mockCarousel.reset();
         mockCarousel.register("ranch.user.sign", "{\"code\":0,\"data\":{}}");
         mockHelper.reset();
         mockHelper.getRequest().addParameter("type", "type value");
         mockHelper.getRequest().addParameter("amount", "1");
-        mockHelper.getRequest().addParameter("notify", "notify");
+        mockHelper.getRequest().addParameter("notice", "notice");
         mockHelper.mock("/payment/create");
         object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(2505, object.getIntValue("code"));
+        Assert.assertEquals(2504, object.getIntValue("code"));
         Assert.assertEquals(message.get("ranch.user.helper.not-exists-and-not-sign-in", message.get(PaymentModel.NAME + ".user")), object.getString("message"));
 
         String time = "20170102030405067";
@@ -83,7 +74,7 @@ public class CreateTest extends TestSupport {
         mockHelper.getRequest().addParameter("type", "type value");
         mockHelper.getRequest().addParameter("user", "user id");
         mockHelper.getRequest().addParameter("amount", "1");
-        mockHelper.getRequest().addParameter("notify", "notify url");
+        mockHelper.getRequest().addParameter("notice", "notice");
         mockHelper.mock("/payment/create");
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(0, object.getIntValue("code"));
@@ -95,7 +86,7 @@ public class CreateTest extends TestSupport {
         Assert.assertEquals(time + "0000", data.getString("orderNo"));
         Assert.assertEquals("", data.getString("tradeNo"));
         Assert.assertEquals(0, data.getIntValue("state"));
-        Assert.assertEquals("notify url", data.getString("notify"));
+        Assert.assertEquals("notice", data.getString("notice"));
         Assert.assertEquals("2017-01-02 03:04:05", data.getString("start"));
         PaymentModel payment1 = findByOrderNo(data.getString("orderNo"));
         Assert.assertEquals("type value", payment1.getType());
@@ -104,7 +95,7 @@ public class CreateTest extends TestSupport {
         Assert.assertEquals(time + "0000", payment1.getOrderNo());
         Assert.assertEquals("", payment1.getTradeNo());
         Assert.assertEquals(0, payment1.getState());
-        Assert.assertEquals("notify url", payment1.getNotify());
+        Assert.assertEquals("notice", payment1.getNotice());
         Assert.assertEquals(timestamp.getTime() / 1000, payment1.getStart().getTime() / 1000);
         Assert.assertNull(payment1.getEnd());
         Assert.assertEquals("{\"create\":{}}", payment1.getJson());
@@ -116,7 +107,7 @@ public class CreateTest extends TestSupport {
         mockHelper.reset();
         mockHelper.getRequest().addParameter("type", "type value 2");
         mockHelper.getRequest().addParameter("amount", "2");
-        mockHelper.getRequest().addParameter("notify", "notify url 2");
+        mockHelper.getRequest().addParameter("notice", "notice 2");
         mockHelper.getRequest().addParameter("state", "1");
         mockHelper.getRequest().addParameter("label", "label 2");
         mockHelper.mock("/payment/create");
@@ -131,7 +122,7 @@ public class CreateTest extends TestSupport {
         Assert.assertTrue(data.getString("orderNo").endsWith("0002"));
         Assert.assertEquals("", data.getString("tradeNo"));
         Assert.assertEquals(0, data.getIntValue("state"));
-        Assert.assertEquals("notify url 2", data.getString("notify"));
+        Assert.assertEquals("notice 2", data.getString("notice"));
         Assert.assertEquals("2017-01-02 03:04:05", data.getString("start"));
         PaymentModel payment2 = findByOrderNo(data.getString("orderNo"));
         Assert.assertEquals("type value 2", payment2.getType());
@@ -140,7 +131,7 @@ public class CreateTest extends TestSupport {
         Assert.assertEquals(time + "0002", payment2.getOrderNo());
         Assert.assertEquals("", payment2.getTradeNo());
         Assert.assertEquals(0, payment2.getState());
-        Assert.assertEquals("notify url 2", payment2.getNotify());
+        Assert.assertEquals("notice 2", payment2.getNotice());
         Assert.assertEquals(timestamp.getTime() / 1000, payment2.getStart().getTime() / 1000);
         Assert.assertNull(payment2.getEnd());
         JSONObject json = this.json.toObject(payment2.getJson());

@@ -3,9 +3,11 @@ package org.lpw.ranch.classify.helper;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import org.lpw.ranch.util.ServiceHelperSupport;
+import org.lpw.tephra.util.Numeric;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import javax.inject.Inject;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -14,6 +16,8 @@ import java.util.Map;
  */
 @Service("ranch.classify.helper")
 public class ClassifyHelperImpl extends ServiceHelperSupport implements ClassifyHelper {
+    @Inject
+    private Numeric numeric;
     @Value("${ranch.classify.key:ranch.classify}")
     private String key;
 
@@ -29,6 +33,16 @@ public class ClassifyHelperImpl extends ServiceHelperSupport implements Classify
     @Override
     public String value(String code, String key) {
         return find(code, key).getString("value");
+    }
+
+    @Override
+    public int valueAsInt(String code, String key, int defaultValue) {
+        return numeric.toInt(value(code, key), defaultValue);
+    }
+
+    @Override
+    public double valueAsDouble(String code, String key, double defaultValue) {
+        return numeric.toDouble(value(code, key), defaultValue);
     }
 
     @Override

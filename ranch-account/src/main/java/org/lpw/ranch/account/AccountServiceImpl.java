@@ -12,11 +12,12 @@ import org.lpw.ranch.util.Pagination;
 import org.lpw.tephra.crypto.Digest;
 import org.lpw.tephra.dao.model.ModelHelper;
 import org.lpw.tephra.dao.orm.PageList;
-import org.lpw.tephra.util.Converter;
+import org.lpw.tephra.util.Numeric;
 import org.lpw.tephra.util.Validator;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -30,7 +31,7 @@ public class AccountServiceImpl implements AccountService {
     @Inject
     private Validator validator;
     @Inject
-    private Converter converter;
+    private Numeric numeric;
     @Inject
     private Digest digest;
     @Inject
@@ -51,28 +52,68 @@ public class AccountServiceImpl implements AccountService {
     private AccountDao accountDao;
 
     @Override
-    public JSONArray query(String user, String owner) {
+    public JSONArray query(String user, String owner, boolean fill) {
+        JSONArray array = modelHelper.toJson(queryPageList(user, owner).getList());
+
+        return fill ? userHelper.fill(array, new String[]{"user"}) : array;
+    }
+
+    @Override
+    public JSONObject merge(String user, String owner, boolean fill) {
+        List<AccountModel> list = queryPageList(user, owner).getList();
+        AccountModel account = null;
+        for (AccountModel model : list) {
+            if (model.getOwner().equals("") && model.getType() == 0) {
+                account = model;
+                break;
+            }
+        }
+        if (account == null)
+            return new JSONObject();
+
+        for (AccountModel model : list) {
+            if (model.equals(account))
+                continue;
+
+            double rate = classifyHelper.valueAsDouble(AccountModel.NAME, "merge.rate." + model.getType(), 1.0D);
+            account.setBalance(account.getBalance() + rate(rate, model.getBalance()));
+            account.setDeposit(account.getDeposit() + rate(rate, model.getDeposit()));
+            account.setWithdraw(account.getWithdraw() + rate(rate, model.getWithdraw()));
+            account.setReward(account.getReward() + rate(rate, model.getReward()));
+            account.setProfit(account.getProfit() + rate(rate, model.getProfit()));
+            account.setConsume(account.getConsume() + rate(rate, model.getConsume()));
+            account.setRemitIn(account.getRemitIn() + rate(rate, model.getRemitIn()));
+            account.setRemitOut(account.getRemitOut() + rate(rate, model.getRemitOut()));
+            account.setPending(account.getPending() + rate(rate, model.getPending()));
+        }
+
+        JSONObject object = modelHelper.toJson(account);
+        object.put("user", fill ? userHelper.get(user) : user);
+
+        return object;
+    }
+
+    private int rate(double rate, int n) {
+        return rate == 1.0D ? n : numeric.toInt(rate * n);
+    }
+
+    private PageList<AccountModel> queryPageList(String user, String owner) {
         if (validator.isEmpty(user))
             user = userHelper.id();
         PageList<AccountModel> pl = queryFromDao(user, owner);
         if (pl.getList().isEmpty()) {
             save(find(user, owner, 0));
-            int amount = fromClassify("sign-up.amount");
+            int amount = classifyHelper.valueAsInt(AccountModel.NAME, "reward.sign-up.amount", 0);
             if (amount > 0)
-                logService.pass(new String[]{reward(user, owner, fromClassify("sign-up.type"), "sign-up", amount).getString("logId")});
+                logService.pass(new String[]{reward(user, owner, classifyHelper.valueAsInt(AccountModel.NAME, "reward.sign-up.type", 0), "sign-up", amount).getString("logId")});
             pl = queryFromDao(user, owner);
         }
-        JSONArray array = modelHelper.toJson(pl.getList());
 
-        return userHelper.fill(array, new String[]{"user"});
+        return pl;
     }
 
     private PageList<AccountModel> queryFromDao(String user, String owner) {
         return owner == null ? accountDao.query(user) : accountDao.query(user, owner);
-    }
-
-    private int fromClassify(String key) {
-        return converter.toInt(classifyHelper.value("ranch.account.reward", key));
     }
 
     @Override

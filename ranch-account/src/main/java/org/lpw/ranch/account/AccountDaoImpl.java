@@ -20,7 +20,7 @@ class AccountDaoImpl implements AccountDao {
 
     @Override
     public PageList<AccountModel> query(String user) {
-        return liteOrm.query(new LiteQuery(AccountModel.class).where("c_user=?").order("c_type"), new Object[]{user});
+        return liteOrm.query(new LiteQuery(AccountModel.class).where("c_user=?").order("c_owner,c_type"), new Object[]{user});
     }
 
     @Override

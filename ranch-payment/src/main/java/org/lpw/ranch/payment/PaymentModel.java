@@ -9,7 +9,6 @@ import org.springframework.stereotype.Component;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
-
 import java.sql.Timestamp;
 
 /**
@@ -28,7 +27,7 @@ public class PaymentModel extends ModelSupport {
     private String orderNo; // 订单号
     private String tradeNo; // 网关订单号
     private int state; // 状态：0-新建；1-成功；2-失败
-    private String notify; // 通知URL地址
+    private String notice; // 通知
     private Timestamp start; // 开始时间
     private Timestamp end; // 结束时间
     private String json; // 扩展数据
@@ -94,13 +93,13 @@ public class PaymentModel extends ModelSupport {
     }
 
     @Jsonable
-    @Column(name = "c_notify")
-    public String getNotify() {
-        return notify;
+    @Column(name = "c_notice")
+    public String getNotice() {
+        return notice;
     }
 
-    public void setNotify(String notify) {
-        this.notify = notify;
+    public void setNotice(String notice) {
+        this.notice = notice;
     }
 
     @Jsonable

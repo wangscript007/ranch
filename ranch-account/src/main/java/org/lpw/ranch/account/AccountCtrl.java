@@ -31,7 +31,20 @@ public class AccountCtrl {
             @Validate(validator = UserHelper.VALIDATOR_EXISTS_OR_SIGN_IN, parameter = "user", failureCode = 5)
     })
     public Object query() {
-        return accountService.query(request.get("user"), request.get("owner"));
+        return accountService.query(request.get("user"), request.get("owner"), getFill());
+    }
+
+    @Execute(name = "merge", validates = {
+            @Validate(validator = UserHelper.VALIDATOR_EXISTS_OR_SIGN_IN, parameter = "user", failureCode = 5)
+    })
+    public Object merge() {
+        return accountService.merge(request.get("user"), request.get("owner"), getFill());
+    }
+
+    private boolean getFill() {
+        String fill = request.get("fill");
+
+        return !"false".equals(fill);
     }
 
     @Execute(name = "deposit", validates = {

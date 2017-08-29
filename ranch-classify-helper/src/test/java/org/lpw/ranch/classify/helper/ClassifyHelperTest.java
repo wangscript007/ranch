@@ -8,7 +8,7 @@ import org.lpw.ranch.util.ServiceHelperTester;
 import org.lpw.tephra.test.MockCarousel;
 import org.lpw.tephra.test.MockHelper;
 import org.lpw.tephra.test.TephraTestSupport;
-import org.lpw.tephra.util.Converter;
+import org.lpw.tephra.util.Numeric;
 import org.lpw.tephra.util.Thread;
 import org.lpw.tephra.util.TimeUnit;
 
@@ -22,7 +22,7 @@ import java.util.Map;
  */
 public class ClassifyHelperTest extends TephraTestSupport {
     @Inject
-    private Converter converter;
+    private Numeric numeric;
     @Inject
     private Thread thread;
     @Inject
@@ -157,7 +157,7 @@ public class ClassifyHelperTest extends TephraTestSupport {
             JSONObject json = new JSONObject();
             json.put("code", 0);
             JSONObject data = new JSONObject();
-            if (converter.toInt(parameter.get("key")) > 4)
+            if (numeric.toInt(parameter.get("key")) > 4)
                 data.putAll(parameter);
             json.put("data", data);
 

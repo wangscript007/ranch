@@ -84,7 +84,9 @@ public class CompleteTest extends TestSupport {
         Assert.assertEquals(9995, object.getIntValue("code"));
         Assert.assertEquals(message.get(Validators.PREFIX + "illegal-sign"), object.getString("message"));
 
-        PaymentModel payment1 = create(1, 0);
+        JSONObject notice = new JSONObject();
+        notice.put("http", "notice 1");
+        PaymentModel payment1 = create(1, 0, notice.toJSONString());
         mockHelper.reset();
         mockHelper.getRequest().addParameter("orderNo", "order no");
         mockHelper.getRequest().addParameter("amount", "1");
@@ -143,7 +145,7 @@ public class CompleteTest extends TestSupport {
         Assert.assertEquals("order no 1", data.getString("orderNo"));
         Assert.assertEquals("trade no", data.getString("tradeNo"));
         Assert.assertEquals(1, data.getIntValue("state"));
-        Assert.assertEquals("notify 1", data.getString("notify"));
+        Assert.assertEquals(notice.toJSONString(), data.getString("notice"));
         long time = dateTime.toTime(data.getString("start")).getTime();
         Assert.assertTrue(System.currentTimeMillis() - time > TimeUnit.Hour.getTime() - 2000L);
         Assert.assertTrue(System.currentTimeMillis() - time < TimeUnit.Hour.getTime() + 2000L);
@@ -156,7 +158,7 @@ public class CompleteTest extends TestSupport {
         Assert.assertEquals("order no 1", payment11.getOrderNo());
         Assert.assertEquals("trade no", payment11.getTradeNo());
         Assert.assertEquals(1, payment11.getState());
-        Assert.assertEquals("notify 1", payment11.getNotify());
+        Assert.assertEquals(notice.toJSONString(), payment11.getNotice());
         time = payment11.getStart().getTime();
         Assert.assertTrue(System.currentTimeMillis() - time > TimeUnit.Hour.getTime() - 2000L);
         Assert.assertTrue(System.currentTimeMillis() - time < TimeUnit.Hour.getTime() + 2000L);
@@ -166,7 +168,7 @@ public class CompleteTest extends TestSupport {
         Assert.assertEquals("label 1", json.getString("label"));
         Assert.assertEquals("{\"label\":\"label 1\"}", json.getJSONObject("complete").toJSONString());
         Assert.assertEquals(1, urls.size());
-        Assert.assertEquals("notify 1", urls.get(0));
+        Assert.assertEquals("notice 1", urls.get(0));
         Assert.assertEquals("user 1", deposit.get("user"));
         Assert.assertEquals("", deposit.get("owner"));
         Assert.assertEquals("2", deposit.get("amount"));
@@ -192,7 +194,7 @@ public class CompleteTest extends TestSupport {
         Assert.assertEquals("order no 1", data.getString("orderNo"));
         Assert.assertEquals("trade no", data.getString("tradeNo"));
         Assert.assertEquals(1, data.getIntValue("state"));
-        Assert.assertEquals("notify 1", data.getString("notify"));
+        Assert.assertEquals(notice.toJSONString(), data.getString("notice"));
         time = dateTime.toTime(data.getString("start")).getTime();
         Assert.assertTrue(System.currentTimeMillis() - time > TimeUnit.Hour.getTime() - 2000L);
         Assert.assertTrue(System.currentTimeMillis() - time < TimeUnit.Hour.getTime() + 2000L);
@@ -205,7 +207,7 @@ public class CompleteTest extends TestSupport {
         Assert.assertEquals("order no 1", payment111.getOrderNo());
         Assert.assertEquals("trade no", payment11.getTradeNo());
         Assert.assertEquals(1, payment111.getState());
-        Assert.assertEquals("notify 1", payment111.getNotify());
+        Assert.assertEquals(notice.toJSONString(), payment111.getNotice());
         time = payment111.getStart().getTime();
         Assert.assertTrue(System.currentTimeMillis() - time > TimeUnit.Hour.getTime() - 2000L);
         Assert.assertTrue(System.currentTimeMillis() - time < TimeUnit.Hour.getTime() + 2000L);
@@ -218,7 +220,8 @@ public class CompleteTest extends TestSupport {
         Assert.assertTrue(deposit.isEmpty());
         Assert.assertTrue(pass.isEmpty());
 
-        PaymentModel payment2 = create(2, 0);
+        notice.put("http", "notice 2");
+        PaymentModel payment2 = create(2, 0, notice.toJSONString());
         urls.clear();
         deposit.clear();
         pass.clear();
@@ -240,7 +243,7 @@ public class CompleteTest extends TestSupport {
         Assert.assertEquals("order no 2", data.getString("orderNo"));
         Assert.assertEquals("trade no 2", data.getString("tradeNo"));
         Assert.assertEquals(2, data.getIntValue("state"));
-        Assert.assertEquals("notify 2", data.getString("notify"));
+        Assert.assertEquals(notice.toJSONString(), data.getString("notice"));
         time = dateTime.toTime(data.getString("start")).getTime();
         Assert.assertTrue(System.currentTimeMillis() - time > 2 * TimeUnit.Hour.getTime() - 2000L);
         Assert.assertTrue(System.currentTimeMillis() - time < 2 * TimeUnit.Hour.getTime() + 2000L);
@@ -253,7 +256,7 @@ public class CompleteTest extends TestSupport {
         Assert.assertEquals("order no 2", payment22.getOrderNo());
         Assert.assertEquals("trade no 2", payment22.getTradeNo());
         Assert.assertEquals(2, payment22.getState());
-        Assert.assertEquals("notify 2", payment22.getNotify());
+        Assert.assertEquals(notice.toJSONString(), payment22.getNotice());
         time = payment22.getStart().getTime();
         Assert.assertTrue(System.currentTimeMillis() - time > 2 * TimeUnit.Hour.getTime() - 2000L);
         Assert.assertTrue(System.currentTimeMillis() - time < 2 * TimeUnit.Hour.getTime() + 2000L);
@@ -263,7 +266,7 @@ public class CompleteTest extends TestSupport {
         Assert.assertEquals("label 2", json.getString("label"));
         Assert.assertEquals("{\"label\":\"label 2\"}", json.getJSONObject("complete").toJSONString());
         Assert.assertEquals(1, urls.size());
-        Assert.assertEquals("notify 2", urls.get(0));
+        Assert.assertEquals("notice 2", urls.get(0));
         Assert.assertTrue(deposit.isEmpty());
         Assert.assertTrue(pass.isEmpty());
     }

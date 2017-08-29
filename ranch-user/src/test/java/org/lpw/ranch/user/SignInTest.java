@@ -73,41 +73,10 @@ public class SignInTest extends TestSupport {
         Assert.assertEquals(message.get(Validators.PREFIX + "not-between", message.get(UserModel.NAME + ".type"), 0, 2), object.getString("message"));
 
         mockHelper.reset();
-        mockHelper.getRequest().addParameter("uid", "uid");
-        mockHelper.getRequest().addParameter("macId", "mac id");
-        mockHelper.mock("/user/sign-in");
-        object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(1506, object.getIntValue("code"));
-        Assert.assertEquals(message.get(UserModel.NAME + ".sign-in.failure"), object.getString("message"));
-
-        mockHelper.reset();
-        mockHelper.getRequest().addParameter("uid", "uid 1");
-        mockHelper.getRequest().addParameter("macId", "mac id");
-        mockHelper.mock("/user/sign-in");
-        object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(1506, object.getIntValue("code"));
-        Assert.assertEquals(message.get(UserModel.NAME + ".sign-in.failure"), object.getString("message"));
-
-        mockHelper.reset();
-        mockHelper.getRequest().addParameter("uid", "uid 2");
-        mockHelper.getRequest().addParameter("macId", "mac id");
-        mockHelper.mock("/user/sign-in");
-        object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(1506, object.getIntValue("code"));
-        Assert.assertEquals(message.get(UserModel.NAME + ".sign-in.failure"), object.getString("message"));
-
-        mockHelper.reset();
         mockHelper.getRequest().addParameter("uid", "uid 1");
         mockHelper.getRequest().addParameter("password", "password");
         mockHelper.getRequest().addParameter("macId", "mac id");
-        mockHelper.mock("/user/sign-in");
-        object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(1506, object.getIntValue("code"));
-        Assert.assertEquals(message.get(UserModel.NAME + ".sign-in.failure"), object.getString("message"));
-
-        mockHelper.reset();
-        mockHelper.getRequest().addParameter("uid", "uid 4");
-        mockHelper.getRequest().addParameter("macId", "mac id");
+        mockHelper.getRequest().addParameter("type", "1");
         mockHelper.mock("/user/sign-in");
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(1506, object.getIntValue("code"));

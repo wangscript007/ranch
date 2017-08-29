@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import org.lpw.ranch.account.helper.AccountHelper;
 import org.lpw.ranch.lock.LockHelper;
 import org.lpw.ranch.user.helper.UserHelper;
+import org.lpw.ranch.util.Carousel;
 import org.lpw.ranch.util.Pagination;
 import org.lpw.tephra.dao.model.ModelHelper;
 import org.lpw.tephra.util.Converter;
@@ -47,6 +48,8 @@ public class PaymentServiceImpl implements PaymentService {
     @Inject
     private LockHelper lockHelper;
     @Inject
+    private Carousel carousel;
+    @Inject
     private UserHelper userHelper;
     @Inject
     private AccountHelper accountHelper;
@@ -62,7 +65,7 @@ public class PaymentServiceImpl implements PaymentService {
         ignores.add("amount");
         ignores.add("orderNo");
         ignores.add("tradeNo");
-        ignores.add("notify");
+        ignores.add("notice");
         ignores.add("state");
         ignores.add("sign");
         ignores.add("sign-time");
@@ -99,7 +102,7 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     @Override
-    public JSONObject create(String type, String user, int amount, String notify, Map<String, String> map) {
+    public JSONObject create(String type, String user, int amount, String notice, Map<String, String> map) {
         PaymentModel payment = new PaymentModel();
         payment.setType(type);
         payment.setUser(validator.isEmpty(user) ? userHelper.id() : user);
@@ -107,7 +110,7 @@ public class PaymentServiceImpl implements PaymentService {
         payment.setStart(dateTime.now());
         payment.setOrderNo(newOrderNo(payment.getStart()));
         payment.setTradeNo("");
-        payment.setNotify(notify);
+        payment.setNotice(notice);
         JSONObject json = new JSONObject();
         json.put("create", putToJson(new JSONObject(), map));
         payment.setJson(json.toJSONString());
@@ -163,7 +166,11 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     private void notice(PaymentModel payment) {
-        if (validator.isEmpty(payment.getNotify()))
+        if (validator.isEmpty(payment.getNotice()))
+            return;
+
+        JSONObject notice = json.toObject(payment.getNotice());
+        if (notice == null)
             return;
 
         Map<String, String> parameters = new HashMap<>();
@@ -174,6 +181,17 @@ public class PaymentServiceImpl implements PaymentService {
         parameters.put("state", converter.toString(payment.getState(), "0"));
         parameters.put("start", dateTime.toString(payment.getStart()));
         parameters.put("end", dateTime.toString(payment.getEnd()));
-        http.post(payment.getNotify(), null, parameters);
+
+        JSONObject params = notice.getJSONObject("params");
+        if (!validator.isEmpty(params)) {
+            for (String key : params.keySet())
+                parameters.put(key, params.getString(key));
+        }
+
+        if (!validator.isEmpty(notice.getString("service")))
+            carousel.service(notice.getString("service"), null, parameters, false);
+
+        if (!validator.isEmpty(notice.getString("http")))
+            http.post(notice.getString("http"), null, parameters);
     }
 }

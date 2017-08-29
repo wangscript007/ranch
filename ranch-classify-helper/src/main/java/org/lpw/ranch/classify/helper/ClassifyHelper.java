@@ -36,6 +36,26 @@ public interface ClassifyHelper {
     String value(String code, String key);
 
     /**
+     * 查找分类value整数值。
+     *
+     * @param code         编码。
+     * @param key          值。
+     * @param defaultValue 默认值。
+     * @return 分类value整数值；如果未找到则返回默认值。
+     */
+    int valueAsInt(String code, String key, int defaultValue);
+
+    /**
+     * 查找分类value浮点数值。
+     *
+     * @param code         编码。
+     * @param key          值。
+     * @param defaultValue 默认值。
+     * @return 分类value浮点数值；如果未找到则返回默认值。
+     */
+    double valueAsDouble(String code, String key, double defaultValue);
+
+    /**
      * 获取分类信息集。
      *
      * @param code 编码前缀，会自动匹配【code+%】。

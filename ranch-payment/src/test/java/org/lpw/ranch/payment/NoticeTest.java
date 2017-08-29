@@ -53,7 +53,9 @@ public class NoticeTest extends TestSupport {
             contents.add("content " + i);
         httpAspect.post(urls, headers, parameters, contents);
 
-        PaymentModel payment1 = create(1, 0);
+        JSONObject notice = new JSONObject();
+        notice.put("http", "notice 1");
+        PaymentModel payment1 = create(1, 0, notice.toJSONString(), dateTime.now());
         mockHelper.reset();
         mockHelper.getRequest().addParameter("id", payment1.getId());
         sign.put(mockHelper.getRequest().getMap(), null);
@@ -61,7 +63,7 @@ public class NoticeTest extends TestSupport {
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(0, object.getIntValue("code"));
         Assert.assertEquals(1, urls.size());
-        Assert.assertEquals("notify 1", urls.get(0));
+        Assert.assertEquals("notice 1", urls.get(0));
         Assert.assertEquals(1, parameters.size());
         Map<String, String> parameter = (Map<String, String>) parameters.get(0);
         Assert.assertEquals("type 1", parameter.get("type"));

@@ -98,14 +98,12 @@ public class WeixinCtrl {
             @Validate(validator = Validators.NOT_EMPTY, parameter = "key", failureCode = 2),
             @Validate(validator = Validators.NOT_EMPTY, parameter = "subject", failureCode = 21),
             @Validate(validator = Validators.GREATER_THAN, number = {0}, parameter = "amount", failureCode = 22),
-            @Validate(validator = Validators.NOT_EMPTY, parameter = "notifyUrl", failureCode = 23),
-            @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "notifyUrl", failureCode = 24),
-            @Validate(validator = UserHelper.VALIDATOR_EXISTS_OR_SIGN_IN, parameter = "user", failureCode = 25),
-            @Validate(validator = WeixinService.VALIDATOR_EXISTS, parameter = "key", failureCode = 26)
+            @Validate(validator = UserHelper.VALIDATOR_EXISTS_OR_SIGN_IN, parameter = "user", failureCode = 23),
+            @Validate(validator = WeixinService.VALIDATOR_EXISTS, parameter = "key", failureCode = 24)
     })
     public Object prepayQrCode() {
         weixinService.prepayQrCode(request.get("key"), request.get("user"), request.get("subject"), request.getAsInt("amount"),
-                request.get("notifyUrl"), request.getAsInt("size"), request.get("logo"), response.getOutputStream());
+                request.get("notice"), request.getAsInt("size"), request.get("logo"), response.getOutputStream());
 
         return null;
     }
@@ -114,21 +112,19 @@ public class WeixinCtrl {
             @Validate(validator = Validators.NOT_EMPTY, parameter = "key", failureCode = 2),
             @Validate(validator = Validators.NOT_EMPTY, parameter = "subject", failureCode = 21),
             @Validate(validator = Validators.GREATER_THAN, number = {0}, parameter = "amount", failureCode = 22),
-            @Validate(validator = Validators.NOT_EMPTY, parameter = "notifyUrl", failureCode = 23),
-            @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "notifyUrl", failureCode = 24),
-            @Validate(validator = UserHelper.VALIDATOR_EXISTS_OR_SIGN_IN, parameter = "user", failureCode = 25),
-            @Validate(validator = WeixinService.VALIDATOR_EXISTS, parameter = "key", failureCode = 26)
+            @Validate(validator = UserHelper.VALIDATOR_EXISTS_OR_SIGN_IN, parameter = "user", failureCode = 23),
+            @Validate(validator = WeixinService.VALIDATOR_EXISTS, parameter = "key", failureCode = 24)
     })
     public Object prepayApp() {
-        JSONObject object = weixinService.prepayApp(request.get("key"), request.get("user"), request.get("subject"), request.getAsInt("amount"), request.get("notifyUrl"));
+        JSONObject object = weixinService.prepayApp(request.get("key"), request.get("user"), request.get("subject"), request.getAsInt("amount"), request.get("notice"));
 
         return object == null ? templates.get().failure(2427, message.get(WeixinModel.NAME + ".prepay.failure"), null, null) : object;
     }
 
-    @Execute(name = "notify", type = Templates.STRING)
+    @Execute(name = "notice", type = Templates.STRING)
     public Object notice() {
         Map<String, String> map = xml.toMap(request.getFromInputStream(), false);
-        String code = weixinService.notify(map.get("appid"), map.get("out_trade_no"), map.get("transaction_id"),
+        String code = weixinService.notice(map.get("appid"), map.get("out_trade_no"), map.get("transaction_id"),
                 map.get("total_fee"), map.get("return_code"), map.get("result_code"), map) ? "SUCCESS" : "FAIL";
 
         return "<xml><return_code><![CDATA[" + code + "]]></return_code></xml>";

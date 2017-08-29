@@ -65,15 +65,13 @@ public class AlipayCtrl {
             @Validate(validator = Validators.NOT_EMPTY, parameter = "key", failureCode = 1),
             @Validate(validator = Validators.NOT_EMPTY, parameter = "subject", failureCode = 11),
             @Validate(validator = Validators.GREATER_THAN, number = {0}, parameter = "amount", failureCode = 12),
-            @Validate(validator = Validators.NOT_EMPTY, parameter = "notifyUrl", failureCode = 13),
-            @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "notifyUrl", failureCode = 14),
-            @Validate(validator = UserHelper.VALIDATOR_EXISTS_OR_SIGN_IN, parameter = "user", failureCode = 15),
-            @Validate(validator = AlipayService.VALIDATOR_EXISTS, parameter = "key", failureCode = 16)
+            @Validate(validator = UserHelper.VALIDATOR_EXISTS_OR_SIGN_IN, parameter = "user", failureCode = 13),
+            @Validate(validator = AlipayService.VALIDATOR_EXISTS, parameter = "key", failureCode = 14)
     })
     public Object quickWapPay() {
         Map<String, String> map = new HashMap<>();
         map.put("html", alipayService.quickWapPay(request.get("key"), request.get("user"), request.get("subject"),
-                request.getAsInt("amount"), request.get("notifyUrl"), request.get("returnUrl")));
+                request.getAsInt("amount"), request.get("notice"), request.get("returnUrl")));
 
         return map;
     }
@@ -82,15 +80,13 @@ public class AlipayCtrl {
             @Validate(validator = Validators.NOT_EMPTY, parameter = "key", failureCode = 1),
             @Validate(validator = Validators.NOT_EMPTY, parameter = "subject", failureCode = 11),
             @Validate(validator = Validators.GREATER_THAN, number = {0}, parameter = "amount", failureCode = 12),
-            @Validate(validator = Validators.NOT_EMPTY, parameter = "notifyUrl", failureCode = 13),
-            @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "notifyUrl", failureCode = 14),
-            @Validate(validator = UserHelper.VALIDATOR_EXISTS_OR_SIGN_IN, parameter = "user", failureCode = 15),
-            @Validate(validator = AlipayService.VALIDATOR_EXISTS, parameter = "key", failureCode = 16)
+            @Validate(validator = UserHelper.VALIDATOR_EXISTS_OR_SIGN_IN, parameter = "user", failureCode = 13),
+            @Validate(validator = AlipayService.VALIDATOR_EXISTS, parameter = "key", failureCode = 14)
     })
     public Object fastInstantTradePay() {
         Map<String, String> map = new HashMap<>();
         map.put("html", alipayService.fastInstantTradePay(request.get("key"), request.get("user"), request.get("subject"),
-                request.getAsInt("amount"), request.get("notifyUrl"), request.get("returnUrl")));
+                request.getAsInt("amount"), request.get("notice"), request.get("returnUrl")));
 
         return map;
     }
@@ -99,19 +95,17 @@ public class AlipayCtrl {
             @Validate(validator = Validators.NOT_EMPTY, parameter = "key", failureCode = 1),
             @Validate(validator = Validators.NOT_EMPTY, parameter = "subject", failureCode = 11),
             @Validate(validator = Validators.GREATER_THAN, number = {0}, parameter = "amount", failureCode = 12),
-            @Validate(validator = Validators.NOT_EMPTY, parameter = "notifyUrl", failureCode = 13),
-            @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "notifyUrl", failureCode = 14),
-            @Validate(validator = UserHelper.VALIDATOR_EXISTS_OR_SIGN_IN, parameter = "user", failureCode = 15),
-            @Validate(validator = AlipayService.VALIDATOR_EXISTS, parameter = "key", failureCode = 16)
+            @Validate(validator = UserHelper.VALIDATOR_EXISTS_OR_SIGN_IN, parameter = "user", failureCode = 13),
+            @Validate(validator = AlipayService.VALIDATOR_EXISTS, parameter = "key", failureCode = 14)
     })
     public Object quickMsecurityPay() {
         return alipayService.quickMsecurityPay(request.get("key"), request.get("user"), request.get("subject"),
-                request.getAsInt("amount"), request.get("notifyUrl"));
+                request.getAsInt("amount"), request.get("notice"));
     }
 
-    @Execute(name = "notify", type = Templates.STRING)
+    @Execute(name = "notice", type = Templates.STRING)
     public Object notice() {
-        return alipayService.notify(request.get("app_id"), request.get("out_trade_no"), request.get("trade_no"),
+        return alipayService.notice(request.get("app_id"), request.get("out_trade_no"), request.get("trade_no"),
                 request.get("total_amount"), request.get("trade_status"), request.getMap()) ? "success" : "failure";
     }
 }

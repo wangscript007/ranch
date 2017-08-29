@@ -5,7 +5,7 @@ import org.lpw.tephra.ctrl.context.Request;
 import org.lpw.tephra.ctrl.execute.Execute;
 import org.lpw.tephra.ctrl.validate.Validate;
 import org.lpw.tephra.ctrl.validate.Validators;
-import org.lpw.tephra.util.Converter;
+import org.lpw.tephra.util.Numeric;
 import org.lpw.tephra.util.Validator;
 import org.springframework.stereotype.Controller;
 
@@ -20,7 +20,7 @@ public class PaymentCtrl {
     @Inject
     private Validator validator;
     @Inject
-    private Converter converter;
+    private Numeric numeric;
     @Inject
     private Request request;
     @Inject
@@ -35,7 +35,7 @@ public class PaymentCtrl {
             state = "-1";
 
         return paymentService.query(request.get("type"), request.get("user"), request.get("orderNo"),
-                request.get("tradeNo"), converter.toInt(state), request.get("start"), request.get("end"));
+                request.get("tradeNo"), numeric.toInt(state), request.get("start"), request.get("end"));
     }
 
     @Execute(name = "success", validates = {
@@ -60,11 +60,10 @@ public class PaymentCtrl {
             @Validate(validator = Validators.NOT_EMPTY, parameter = "type", failureCode = 1),
             @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "type", failureCode = 2),
             @Validate(validator = Validators.GREATER_THAN, number = {0}, parameter = "amount", failureCode = 3),
-            @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "notify", failureCode = 4),
-            @Validate(validator = UserHelper.VALIDATOR_EXISTS_OR_SIGN_IN, parameter = "user", failureCode = 5)
+            @Validate(validator = UserHelper.VALIDATOR_EXISTS_OR_SIGN_IN, parameter = "user", failureCode = 4)
     })
     public Object create() {
-        return paymentService.create(request.get("type"), request.get("user"), request.getAsInt("amount"), request.get("notify"), request.getMap());
+        return paymentService.create(request.get("type"), request.get("user"), request.getAsInt("amount"), request.get("notice"), request.getMap());
     }
 
     @Execute(name = "complete", validates = {

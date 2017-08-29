@@ -4,7 +4,7 @@ import org.lpw.tephra.dao.jdbc.Sql;
 import org.lpw.tephra.dao.orm.PageList;
 import org.lpw.tephra.dao.orm.lite.LiteOrm;
 import org.lpw.tephra.dao.orm.lite.LiteQuery;
-import org.lpw.tephra.util.Converter;
+import org.lpw.tephra.util.Numeric;
 import org.springframework.stereotype.Repository;
 
 import javax.inject.Inject;
@@ -15,7 +15,7 @@ import javax.inject.Inject;
 @Repository(LinkModel.NAME + ".dao")
 class LinkDaoImpl implements LinkDao {
     @Inject
-    private Converter converter;
+    private Numeric numeric;
     @Inject
     private Sql sql;
     @Inject
@@ -46,7 +46,7 @@ class LinkDaoImpl implements LinkDao {
     }
 
     private int count(String type, int i, String value) {
-        return converter.toInt(sql.query("select count(*) from t_link where c_type=? and c_id" + i + "=?",
+        return numeric.toInt(sql.query("select count(*) from t_link where c_type=? and c_id" + i + "=?",
                 new Object[]{type, value}).get(0, 0));
     }
 

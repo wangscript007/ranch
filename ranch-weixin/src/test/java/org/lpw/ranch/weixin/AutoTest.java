@@ -57,7 +57,7 @@ public class AutoTest extends TestSupport {
             Assert.assertEquals("access token" + index, weixin.getAccessToken());
             Assert.assertEquals("jsapi ticket" + index, weixin.getJsapiTicket());
             Assert.assertTrue(Math.abs(System.currentTimeMillis() - weixin.getTime().getTime()
-                    - converter.toInt(index.trim()) * TimeUnit.Hour.getTime()) < 2000L);
+                    - numeric.toInt(index.trim()) * TimeUnit.Hour.getTime()) < 2000L);
         }
 
         String url = urls.get(2);

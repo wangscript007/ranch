@@ -52,10 +52,18 @@ public class TestSupport extends TephraTestSupport {
     MockCarousel mockCarousel;
 
     PaymentModel create(int i, int state) {
-        return create(i, state, new Timestamp(System.currentTimeMillis() - i * TimeUnit.Hour.getTime()));
+        return create(i, state, "notice " + i, new Timestamp(System.currentTimeMillis() - i * TimeUnit.Hour.getTime()));
     }
 
     PaymentModel create(int i, int state, Timestamp start) {
+        return create(i, state, "notice " + i, start);
+    }
+
+    PaymentModel create(int i, int state, String notice) {
+        return create(i, state, notice, new Timestamp(System.currentTimeMillis() - i * TimeUnit.Hour.getTime()));
+    }
+
+    PaymentModel create(int i, int state, String notice, Timestamp start) {
         PaymentModel payment = new PaymentModel();
         payment.setType("type " + i);
         payment.setUser("user " + i);
@@ -63,7 +71,7 @@ public class TestSupport extends TephraTestSupport {
         payment.setOrderNo("order no " + i);
         payment.setTradeNo("trade no " + i);
         payment.setState(state);
-        payment.setNotify("notify " + i);
+        payment.setNotice(notice);
         payment.setStart(start);
         payment.setEnd(new Timestamp(System.currentTimeMillis() - i * TimeUnit.Day.getTime()));
         payment.setJson("{\"label\":\"label " + i + "\"}");

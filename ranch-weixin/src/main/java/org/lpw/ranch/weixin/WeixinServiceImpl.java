@@ -15,6 +15,7 @@ import org.lpw.tephra.util.Generator;
 import org.lpw.tephra.util.Http;
 import org.lpw.tephra.util.Json;
 import org.lpw.tephra.util.Logger;
+import org.lpw.tephra.util.Numeric;
 import org.lpw.tephra.util.QrCode;
 import org.lpw.tephra.util.Validator;
 import org.lpw.tephra.util.Xml;
@@ -38,6 +39,8 @@ public class WeixinServiceImpl implements WeixinService, HourJob, ContextRefresh
     private Digest digest;
     @Inject
     private Converter converter;
+    @Inject
+    private Numeric numeric;
     @Inject
     private Generator generator;
     @Inject
@@ -168,8 +171,8 @@ public class WeixinServiceImpl implements WeixinService, HourJob, ContextRefresh
     }
 
     @Override
-    public void prepayQrCode(String key, String user, String subject, int amount, String notifyUrl, int size, String logo, OutputStream outputStream) {
-        Map<String, String> map = prepay(key, user, subject, amount, notifyUrl, "NATIVE", new HashMap<>());
+    public void prepayQrCode(String key, String user, String subject, int amount, String notice, int size, String logo, OutputStream outputStream) {
+        Map<String, String> map = prepay(key, user, subject, amount, notice, "NATIVE", new HashMap<>());
         if (xml == null)
             return;
 
@@ -183,8 +186,8 @@ public class WeixinServiceImpl implements WeixinService, HourJob, ContextRefresh
     }
 
     @Override
-    public JSONObject prepayApp(String key, String user, String subject, int amount, String notifyUrl) {
-        Map<String, String> map = prepay(key, user, subject, amount, notifyUrl, "APP", new HashMap<>());
+    public JSONObject prepayApp(String key, String user, String subject, int amount, String notice) {
+        Map<String, String> map = prepay(key, user, subject, amount, notice, "APP", new HashMap<>());
         if (map == null)
             return null;
 
@@ -203,12 +206,12 @@ public class WeixinServiceImpl implements WeixinService, HourJob, ContextRefresh
         return object;
     }
 
-    private Map<String, String> prepay(String key, String user, String subject, int amount, String notifyUrl, String type, Map<String, String> map) {
+    private Map<String, String> prepay(String key, String user, String subject, int amount, String notice, String type, Map<String, String> map) {
         WeixinModel weixin = findByKey(key);
         if (weixin == null)
             return null;
 
-        String orderNo = paymentHelper.create("weixin", user, amount, notifyUrl);
+        String orderNo = paymentHelper.create("weixin", user, amount, notice);
         if (validator.isEmpty(orderNo))
             return null;
 
@@ -219,7 +222,7 @@ public class WeixinServiceImpl implements WeixinService, HourJob, ContextRefresh
         map.put("out_trade_no", orderNo);
         map.put("total_fee", converter.toString(amount, "0"));
         map.put("spbill_create_ip", header.getIp());
-        map.put("notify_url", root + "/weixin/notify");
+        map.put("notify_url", root + "/weixin/notice");
         map.put("trade_type", type);
         map.put("sign", sign(map, weixin.getMchKey()));
 
@@ -244,7 +247,7 @@ public class WeixinServiceImpl implements WeixinService, HourJob, ContextRefresh
     }
 
     @Override
-    public boolean notify(String appId, String orderNo, String tradeNo, String amount, String returnCode, String resultCode, Map<String, String> map) {
+    public boolean notice(String appId, String orderNo, String tradeNo, String amount, String returnCode, String resultCode, Map<String, String> map) {
         if (logger.isDebugEnable())
             logger.debug("微信支付结果回调[{}]。", converter.toString(map));
 
@@ -265,7 +268,7 @@ public class WeixinServiceImpl implements WeixinService, HourJob, ContextRefresh
             return false;
         }
 
-        return orderNo.equals(paymentHelper.complete(orderNo, converter.toInt(amount), tradeNo, 1));
+        return orderNo.equals(paymentHelper.complete(orderNo, numeric.toInt(amount), tradeNo, 1));
     }
 
     private String sign(Map<String, String> map, String mchKey) {

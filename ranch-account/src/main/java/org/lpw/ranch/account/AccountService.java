@@ -15,9 +15,20 @@ public interface AccountService {
      *
      * @param user  用户ID，为空则为当前用户。
      * @param owner 所有者ID，null则表示所有。
+     * @param fill  是否填充关联数据。
      * @return 账户信息集。
      */
-    JSONArray query(String user, String owner);
+    JSONArray query(String user, String owner, boolean fill);
+
+    /**
+     * 检索账户信息并合并。
+     *
+     * @param user  用户ID，为空则为当前用户。
+     * @param owner 所有者ID，null则表示所有。
+     * @param fill  是否填充关联数据。
+     * @return 账户信息。
+     */
+    JSONObject merge(String user, String owner, boolean fill);
 
     /**
      * 存入。

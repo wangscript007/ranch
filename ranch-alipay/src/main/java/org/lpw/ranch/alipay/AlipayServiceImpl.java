@@ -17,6 +17,7 @@ import org.lpw.ranch.user.helper.UserHelper;
 import org.lpw.tephra.dao.model.ModelHelper;
 import org.lpw.tephra.util.Converter;
 import org.lpw.tephra.util.Logger;
+import org.lpw.tephra.util.Numeric;
 import org.lpw.tephra.util.Validator;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -33,6 +34,8 @@ public class AlipayServiceImpl implements AlipayService {
     private Validator validator;
     @Inject
     private Converter converter;
+    @Inject
+    private Numeric numeric;
     @Inject
     private Logger logger;
     @Inject
@@ -83,8 +86,8 @@ public class AlipayServiceImpl implements AlipayService {
     }
 
     @Override
-    public String quickWapPay(String key, String user, String subject, int amount, String notifyUrl, String returnUrl) {
-        String content = getBizContent(user, subject, amount, notifyUrl, "QUICK_WAP_PAY");
+    public String quickWapPay(String key, String user, String subject, int amount, String notice, String returnUrl) {
+        String content = getBizContent(user, subject, amount, notice, "QUICK_WAP_PAY");
         if (content == null)
             return null;
 
@@ -95,8 +98,8 @@ public class AlipayServiceImpl implements AlipayService {
     }
 
     @Override
-    public String fastInstantTradePay(String key, String user, String subject, int amount, String notifyUrl, String returnUrl) {
-        String content = getBizContent(user, subject, amount, notifyUrl, "FAST_INSTANT_TRADE_PAY");
+    public String fastInstantTradePay(String key, String user, String subject, int amount, String notice, String returnUrl) {
+        String content = getBizContent(user, subject, amount, notice, "FAST_INSTANT_TRADE_PAY");
         if (content == null)
             return null;
 
@@ -107,8 +110,8 @@ public class AlipayServiceImpl implements AlipayService {
     }
 
     @Override
-    public String quickMsecurityPay(String key, String user, String subject, int amount, String notifyUrl) {
-        String content = getBizContent(user, subject, amount, notifyUrl, "QUICK_MSECURITY_PAY");
+    public String quickMsecurityPay(String key, String user, String subject, int amount, String notice) {
+        String content = getBizContent(user, subject, amount, notice, "QUICK_MSECURITY_PAY");
         if (content == null)
             return null;
 
@@ -118,10 +121,10 @@ public class AlipayServiceImpl implements AlipayService {
         return prepay(key, null, request);
     }
 
-    private String getBizContent(String user, String subject, int amount, String notifyUrl, String code) {
+    private String getBizContent(String user, String subject, int amount, String notice, String code) {
         if (validator.isEmpty(user))
             user = userHelper.id();
-        String orderNo = paymentHelper.create("alipay", user, amount, notifyUrl);
+        String orderNo = paymentHelper.create("alipay", user, amount, notice);
         if (validator.isEmpty(orderNo))
             return null;
 
@@ -135,7 +138,7 @@ public class AlipayServiceImpl implements AlipayService {
     }
 
     private String prepay(String key, String returnUrl, AlipayRequest<? extends AlipayResponse> request) {
-        request.setNotifyUrl(root + "/alipay/notify");
+        request.setNotifyUrl(root + "/alipay/notice");
         if (!validator.isEmpty(returnUrl))
             request.setReturnUrl(returnUrl);
 
@@ -154,7 +157,7 @@ public class AlipayServiceImpl implements AlipayService {
     }
 
     @Override
-    public boolean notify(String appId, String orderNo, String tradeNo, String amount, String status, Map<String, String> map) {
+    public boolean notice(String appId, String orderNo, String tradeNo, String amount, String status, Map<String, String> map) {
         if (status.equals("WAIT_BUYER_PAY"))
             return false;
 
@@ -184,8 +187,8 @@ public class AlipayServiceImpl implements AlipayService {
     private int getAmount(String amount) {
         int indexOf = amount.indexOf('.');
         if (indexOf == -1)
-            return converter.toInt(amount) * 100;
+            return numeric.toInt(amount) * 100;
 
-        return converter.toInt(amount.substring(0, indexOf)) * 100 + converter.toInt(amount.substring(indexOf + 1)) % 100;
+        return numeric.toInt(amount.substring(0, indexOf)) * 100 + numeric.toInt(amount.substring(indexOf + 1)) % 100;
     }
 }

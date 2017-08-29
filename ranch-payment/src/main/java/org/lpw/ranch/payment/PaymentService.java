@@ -59,11 +59,11 @@ public interface PaymentService {
      * @param type   类型。
      * @param user   用户ID；如果为空则使用当前用户ID。
      * @param amount 金额，单位：分。
-     * @param notify 通知URL地址。
+     * @param notice 通知。
      * @param map    参数集。
      * @return 订单信息。
      */
-    JSONObject create(String type, String user, int amount, String notify, Map<String, String> map);
+    JSONObject create(String type, String user, int amount, String notice, Map<String, String> map);
 
     /**
      * 订单完成。

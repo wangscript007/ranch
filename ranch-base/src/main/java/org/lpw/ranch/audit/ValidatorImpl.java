@@ -11,7 +11,7 @@ import org.springframework.stereotype.Controller;
 public class ValidatorImpl extends ValidatorSupport {
     @Override
     public boolean validate(ValidateWrapper validate, String parameter) {
-        int n = converter.toInt(parameter);
+        int n = numeric.toInt(parameter);
 
         return n >= Audit.Normal.ordinal() && n <= Audit.Reject.ordinal();
     }

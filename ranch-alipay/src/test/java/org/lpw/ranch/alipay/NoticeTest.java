@@ -5,8 +5,8 @@ import org.junit.Test;
 /**
  * @author lpw
  */
-public class NotifyTest extends TestSupport {
+public class NoticeTest extends TestSupport {
     @Test
-    public void notifi() {
+    public void notice() {
     }
 }

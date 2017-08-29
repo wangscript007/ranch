@@ -11,9 +11,9 @@ import org.lpw.tephra.cache.Cache;
 import org.lpw.tephra.crypto.Digest;
 import org.lpw.tephra.ctrl.context.Session;
 import org.lpw.tephra.dao.model.ModelHelper;
-import org.lpw.tephra.util.Converter;
 import org.lpw.tephra.util.DateTime;
 import org.lpw.tephra.util.Generator;
+import org.lpw.tephra.util.Numeric;
 import org.lpw.tephra.util.Validator;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -37,7 +37,7 @@ public class UserServiceImpl implements UserService {
     @Inject
     private Digest digest;
     @Inject
-    private Converter converter;
+    private Numeric numeric;
     @Inject
     private Validator validator;
     @Inject
@@ -147,8 +147,8 @@ public class UserServiceImpl implements UserService {
             return false;
 
         String key = CACHE_PASS + user.getId();
-        int failure = converter.toInt(cache.get(key));
-        int max = failure > 0 ? converter.toInt(classifyHelper.value(UserModel.NAME + ".pass", "max-failure")) : 0;
+        int failure = numeric.toInt(cache.get(key));
+        int max = failure > 0 ? numeric.toInt(classifyHelper.value(UserModel.NAME + ".pass", "max-failure")) : 0;
         if (max <= 0)
             max = 5;
         if (failure <= max && user.getPassword().equals(password(password))) {

@@ -7,6 +7,7 @@ import org.lpw.tephra.ctrl.validate.Validators;
 import org.lpw.tephra.util.TimeUnit;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -53,7 +54,30 @@ public class SuccessTest extends TestSupport {
             contents.add("content " + i);
         httpAspect.post(urls, headers, parameters, contents);
 
-        PaymentModel payment1 = create(1, 0);
+        mockCarousel.reset();
+        Map<String, String> deposit = new HashMap<>();
+        mockCarousel.register("ranch.account.deposit", (key, header, parameter, cacheTime) -> {
+            deposit.putAll(parameter);
+            JSONObject json = new JSONObject();
+            json.put("code", 0);
+            JSONObject data = new JSONObject();
+            data.put("logId", "log id");
+            json.put("data", data);
+
+            return json.toJSONString();
+        });
+        Map<String, String> pass = new HashMap<>();
+        mockCarousel.register("ranch.account.log.pass", (key, header, parameter, cacheTime) -> {
+            pass.putAll(parameter);
+            JSONObject json = new JSONObject();
+            json.put("code", 0);
+
+            return json.toJSONString();
+        });
+
+        JSONObject notice = new JSONObject();
+        notice.put("http", "notice 1");
+        PaymentModel payment1 = create(1, 0, notice.toJSONString());
         mockHelper.reset();
         mockHelper.getRequest().addParameter("id", payment1.getId());
         mockHelper.getRequest().addParameter("label", "label 1");
@@ -69,7 +93,7 @@ public class SuccessTest extends TestSupport {
         Assert.assertEquals("order no 1", data.getString("orderNo"));
         Assert.assertEquals("trade no 1", data.getString("tradeNo"));
         Assert.assertEquals(1, data.getIntValue("state"));
-        Assert.assertEquals("notify 1", data.getString("notify"));
+        Assert.assertEquals(notice.toJSONString(), data.getString("notice"));
         long time = dateTime.toTime(data.getString("start")).getTime();
         Assert.assertTrue(System.currentTimeMillis() - time > TimeUnit.Hour.getTime() - 2000L);
         Assert.assertTrue(System.currentTimeMillis() - time < TimeUnit.Hour.getTime() + 2000L);
@@ -82,7 +106,7 @@ public class SuccessTest extends TestSupport {
         Assert.assertEquals("order no 1", payment11.getOrderNo());
         Assert.assertEquals("trade no 1", payment11.getTradeNo());
         Assert.assertEquals(1, payment11.getState());
-        Assert.assertEquals("notify 1", payment11.getNotify());
+        Assert.assertEquals(notice.toJSONString(), payment11.getNotice());
         time = payment11.getStart().getTime();
         Assert.assertTrue(System.currentTimeMillis() - time > TimeUnit.Hour.getTime() - 2000L);
         Assert.assertTrue(System.currentTimeMillis() - time < TimeUnit.Hour.getTime() + 2000L);
@@ -92,7 +116,7 @@ public class SuccessTest extends TestSupport {
         Assert.assertEquals("label 1", json.getString("label"));
         Assert.assertEquals("{\"label\":\"label 1\"}", json.getJSONObject("success").toJSONString());
         Assert.assertEquals(1, urls.size());
-        Assert.assertEquals("notify 1", urls.get(0));
+        Assert.assertEquals("notice 1", urls.get(0));
 
         thread.sleep(3, TimeUnit.Second);
         mockHelper.reset();
@@ -110,7 +134,7 @@ public class SuccessTest extends TestSupport {
         Assert.assertEquals("order no 1", data.getString("orderNo"));
         Assert.assertEquals("trade no 1", data.getString("tradeNo"));
         Assert.assertEquals(1, data.getIntValue("state"));
-        Assert.assertEquals("notify 1", data.getString("notify"));
+        Assert.assertEquals(notice.toJSONString(), data.getString("notice"));
         time = dateTime.toTime(data.getString("start")).getTime();
         Assert.assertTrue(System.currentTimeMillis() - time > TimeUnit.Hour.getTime() + 1000L);
         Assert.assertTrue(System.currentTimeMillis() - time < TimeUnit.Hour.getTime() + 5000L);
@@ -124,7 +148,7 @@ public class SuccessTest extends TestSupport {
         Assert.assertEquals("order no 1", payment111.getOrderNo());
         Assert.assertEquals("trade no 1", payment111.getTradeNo());
         Assert.assertEquals(1, payment11.getState());
-        Assert.assertEquals("notify 1", payment11.getNotify());
+        Assert.assertEquals(notice.toJSONString(), payment11.getNotice());
         time = payment11.getStart().getTime();
         Assert.assertTrue(System.currentTimeMillis() - time > TimeUnit.Hour.getTime() + 1000L);
         Assert.assertTrue(System.currentTimeMillis() - time < TimeUnit.Hour.getTime() + 5000L);
