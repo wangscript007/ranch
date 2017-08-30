@@ -271,7 +271,12 @@ public class UserServiceImpl implements UserService {
         if (object == null) {
             if (user == null)
                 user = findById(id);
-            object = user == null ? new JSONObject() : modelHelper.toJson(user);
+            if (user == null)
+                object = new JSONObject();
+            else {
+                object = modelHelper.toJson(user);
+                object.put("auth", authService.query(user.getId()));
+            }
             cache.put(cacheKey, object, false);
         }
 
