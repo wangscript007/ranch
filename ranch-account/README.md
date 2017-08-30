@@ -22,6 +22,8 @@
 
 [检索账户集](doc/query.md)
 
+[获取合并账户信息](doc/merge.md)
+
 [存入](doc/deposit.md)
 
 [取出](doc/withdraw.md)

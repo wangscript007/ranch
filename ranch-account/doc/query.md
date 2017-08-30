@@ -10,6 +10,7 @@
 |---|---|---|
 |user|char(36)|用户ID，为空则使用当前用户ID。|
 |owner|char(100)|所有者，可选。|
+|fill|boolean|是否填充用户信息，仅当为false时不填充。|
 
 返回值
 ```json
