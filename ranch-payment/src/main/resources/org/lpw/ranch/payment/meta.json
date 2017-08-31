@@ -1,0 +1,49 @@
+{
+    "key": "ranch.payment",
+    "props": [
+        {
+            "name": "type"
+        },
+        {
+            "name": "user"
+        },
+        {
+            "name": "amount"
+        },
+        {
+            "name": "orderNo"
+        },
+        {
+            "name": "tradeNo"
+        },
+        {
+            "name": "state"
+        },
+        {
+            "name": "notice"
+        },
+        {
+            "name": "start"
+        },
+        {
+            "name": "end"
+        }
+    ],
+    "query": {
+        "page": "grid",
+        "ops": [
+            {
+                "type": "success",
+                "label": "ranch.payment.success",
+                "service": "success",
+                "success": "query"
+            },
+            {
+                "type": "notice",
+                "label": "ranch.payment.notice",
+                "service": "notice",
+                "success": "query"
+            }
+        ]
+    }
+}

@@ -19,6 +19,7 @@ import org.lpw.tephra.util.Converter;
 import org.lpw.tephra.util.Logger;
 import org.lpw.tephra.util.Numeric;
 import org.lpw.tephra.util.Validator;
+import org.lpw.tephra.util.Xml;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -36,6 +37,8 @@ public class AlipayServiceImpl implements AlipayService {
     private Converter converter;
     @Inject
     private Numeric numeric;
+    @Inject
+    private Xml xml;
     @Inject
     private Logger logger;
     @Inject
@@ -117,8 +120,10 @@ public class AlipayServiceImpl implements AlipayService {
 
         AlipayTradeAppPayRequest request = new AlipayTradeAppPayRequest();
         request.setBizContent(content);
+        String string = prepay(key, null, request);
 
-        return prepay(key, null, request);
+        return string == null ? null : string.substring(string.indexOf('?') + 1, string.indexOf('>') - 1) + "&biz_content=" +
+                converter.encodeUrl(string.substring(string.indexOf('{'), string.indexOf('}') + 1).replaceAll("&quot;", "\""), null);
     }
 
     private String getBizContent(String user, String subject, int amount, String notice, String code) {

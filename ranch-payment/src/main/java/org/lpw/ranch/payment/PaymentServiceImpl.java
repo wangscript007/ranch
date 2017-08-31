@@ -183,10 +183,9 @@ public class PaymentServiceImpl implements PaymentService {
         parameters.put("end", dateTime.toString(payment.getEnd()));
 
         JSONObject params = notice.getJSONObject("params");
-        if (!validator.isEmpty(params)) {
+        if (!validator.isEmpty(params))
             for (String key : params.keySet())
                 parameters.put(key, params.getString(key));
-        }
 
         if (!validator.isEmpty(notice.getString("service")))
             carousel.service(notice.getString("service"), null, parameters, false);

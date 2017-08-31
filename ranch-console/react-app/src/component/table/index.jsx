@@ -67,6 +67,8 @@ class Table extends React.Component {
             }
         } else if (col.type === "password")
             label = "******";
+        if (typeof (label) === "object")
+            label = JSON.stringify(label);
 
         return (
             <td key={index} className={col.format || ""}>{label}</td>
