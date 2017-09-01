@@ -5,7 +5,8 @@
             "name": "type"
         },
         {
-            "name": "user"
+            "name": "user.code",
+            "label": "ranch.payment.user"
         },
         {
             "name": "amount"

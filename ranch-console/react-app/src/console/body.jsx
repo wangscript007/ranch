@@ -50,8 +50,6 @@ class Body extends React.Component {
             return;
         }
 
-        console.log(service + ";" + data);
-
         this.setState(prevState => ({
             service: service,
             data: data

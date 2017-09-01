@@ -16,7 +16,7 @@ class A extends React.Component {
     render() {
         return (
             // eslint-disable-next-line
-            <a href={this.props.href || "javascript:void(0);"} onClick={this.click}>
+            <a href={this.props.href || "javascript:void(0);"} title={window.message(this.props.message, this.props.title)} onClick={this.click}>
                 {window.message(this.props.message, this.props.children || this.props.label)}
             </a>
         );

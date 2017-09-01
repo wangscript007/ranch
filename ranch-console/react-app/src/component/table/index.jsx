@@ -55,7 +55,7 @@ class Table extends React.Component {
     }
 
     td(row, index, col) {
-        var value = row.hasOwnProperty(col.name) ? row[col.name] : "";
+        var value = window.json.get(row, col.name);
         var label = value;
         if (col.hasOwnProperty("select")) {
             for (var i = 0; i < col.select.length; i++) {

@@ -11,8 +11,8 @@ class Grid extends React.Component {
             <div className="grid">
                 <Search service={this.props.service} />
                 <Table service={this.props.service} list={this.props.data.list || this.props.data} />
+                {this.props.data.hasOwnProperty("list") ? <Pagination service={this.props.service} data={this.props.data} /> : null}
                 <Toolbar service={this.props.service} />
-                {this.props.data.hasOwnProperty("list") ? <Pagination /> : null}
             </div>
         );
     }
