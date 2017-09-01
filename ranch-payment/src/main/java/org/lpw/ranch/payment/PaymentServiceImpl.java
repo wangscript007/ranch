@@ -73,15 +73,17 @@ public class PaymentServiceImpl implements PaymentService {
 
     @Override
     public JSONObject query(String type, String user, String orderNo, String tradeNo, int state, String start, String end) {
-        return paymentDao.query(type, user, orderNo, tradeNo, state, dateTime.getStart(start),
+        JSONObject object = paymentDao.query(type, user, orderNo, tradeNo, state, dateTime.getStart(start),
                 dateTime.getEnd(end), pagination.getPageSize(20), pagination.getPageNum()).toJson();
+        userHelper.fill(object.getJSONArray("list"), new String[]{"user"});
+
+        return object;
     }
 
     @Override
     public JSONObject success(String id, Map<String, String> map) {
         PaymentModel payment = find(id);
-        if (payment.getState() != 1)
-            complete(payment, 1, "success", map);
+        complete(payment, 1, "success", map);
 
         return modelHelper.toJson(payment);
     }

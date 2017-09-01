@@ -13,6 +13,11 @@ public interface PaymentService {
      * 默认错误信息key=PaymentModel.NAME+.not-exists。
      */
     String VALIDATOR_EXISTS = PaymentModel.NAME + ".validator.exists";
+    /**
+     * 是否可以设置为成功验证器Bean名称。
+     * 默认错误信息key=PaymentModel.NAME+success.disable。
+     */
+    String VALIDATOR_SUCCESS=PaymentModel.NAME+".validator.success";
 
     /**
      * 检索订单信息集。

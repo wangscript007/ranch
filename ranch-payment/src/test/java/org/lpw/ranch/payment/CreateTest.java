@@ -18,21 +18,21 @@ public class CreateTest extends TestSupport {
         mockHelper.reset();
         mockHelper.mock("/payment/create");
         JSONObject object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(2501, object.getIntValue("code"));
+        Assert.assertEquals(2502, object.getIntValue("code"));
         Assert.assertEquals(message.get(Validators.PREFIX + "empty", message.get(PaymentModel.NAME + ".type")), object.getString("message"));
 
         mockHelper.reset();
         mockHelper.getRequest().addParameter("type", generator.random(101));
         mockHelper.mock("/payment/create");
         object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(2502, object.getIntValue("code"));
+        Assert.assertEquals(2503, object.getIntValue("code"));
         Assert.assertEquals(message.get(Validators.PREFIX + "over-max-length", message.get(PaymentModel.NAME + ".type"), 100), object.getString("message"));
 
         mockHelper.reset();
         mockHelper.getRequest().addParameter("type", "type value");
         mockHelper.mock("/payment/create");
         object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(2503, object.getIntValue("code"));
+        Assert.assertEquals(2504, object.getIntValue("code"));
         Assert.assertEquals(message.get(Validators.PREFIX + "not-greater-than", message.get(PaymentModel.NAME + ".amount"), 0), object.getString("message"));
 
         mockHelper.reset();
@@ -40,7 +40,7 @@ public class CreateTest extends TestSupport {
         mockHelper.getRequest().addParameter("amount", "-1");
         mockHelper.mock("/payment/create");
         object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(2503, object.getIntValue("code"));
+        Assert.assertEquals(2504, object.getIntValue("code"));
         Assert.assertEquals(message.get(Validators.PREFIX + "not-greater-than", message.get(PaymentModel.NAME + ".amount"), 0), object.getString("message"));
 
         mockCarousel.reset();
@@ -51,7 +51,7 @@ public class CreateTest extends TestSupport {
         mockHelper.getRequest().addParameter("notice", "notice");
         mockHelper.mock("/payment/create");
         object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(2504, object.getIntValue("code"));
+        Assert.assertEquals(2505, object.getIntValue("code"));
         Assert.assertEquals(message.get("ranch.user.helper.not-exists-and-not-sign-in", message.get(PaymentModel.NAME + ".user")), object.getString("message"));
 
         String time = "20170102030405067";

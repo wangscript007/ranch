@@ -20,14 +20,14 @@ public class CompleteTest extends TestSupport {
         mockHelper.reset();
         mockHelper.mock("/payment/complete");
         JSONObject object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(2507, object.getIntValue("code"));
+        Assert.assertEquals(2506, object.getIntValue("code"));
         Assert.assertEquals(message.get(Validators.PREFIX + "empty", message.get(PaymentModel.NAME + ".orderNo")), object.getString("message"));
 
         mockHelper.reset();
         mockHelper.getRequest().addParameter("orderNo", "order no");
         mockHelper.mock("/payment/complete");
         object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(2503, object.getIntValue("code"));
+        Assert.assertEquals(2504, object.getIntValue("code"));
         Assert.assertEquals(message.get(Validators.PREFIX + "not-greater-than", message.get(PaymentModel.NAME + ".amount"), 0), object.getString("message"));
 
         mockHelper.reset();
@@ -35,7 +35,7 @@ public class CompleteTest extends TestSupport {
         mockHelper.getRequest().addParameter("amount", "-1");
         mockHelper.mock("/payment/complete");
         object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(2503, object.getIntValue("code"));
+        Assert.assertEquals(2504, object.getIntValue("code"));
         Assert.assertEquals(message.get(Validators.PREFIX + "not-greater-than", message.get(PaymentModel.NAME + ".amount"), 0), object.getString("message"));
 
         mockHelper.reset();
@@ -43,7 +43,7 @@ public class CompleteTest extends TestSupport {
         mockHelper.getRequest().addParameter("amount", "1");
         mockHelper.mock("/payment/complete");
         object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(2508, object.getIntValue("code"));
+        Assert.assertEquals(2507, object.getIntValue("code"));
         Assert.assertEquals(message.get(Validators.PREFIX + "empty", message.get(PaymentModel.NAME + ".tradeNo")), object.getString("message"));
 
         mockHelper.reset();
@@ -52,7 +52,7 @@ public class CompleteTest extends TestSupport {
         mockHelper.getRequest().addParameter("tradeNo", generator.random(101));
         mockHelper.mock("/payment/complete");
         object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(2509, object.getIntValue("code"));
+        Assert.assertEquals(2508, object.getIntValue("code"));
         Assert.assertEquals(message.get(Validators.PREFIX + "over-max-length", message.get(PaymentModel.NAME + ".tradeNo"), 100), object.getString("message"));
 
         mockHelper.reset();
@@ -61,7 +61,7 @@ public class CompleteTest extends TestSupport {
         mockHelper.getRequest().addParameter("tradeNo", "trade no");
         mockHelper.mock("/payment/complete");
         object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(2510, object.getIntValue("code"));
+        Assert.assertEquals(2509, object.getIntValue("code"));
         Assert.assertEquals(message.get(Validators.PREFIX + "not-between", message.get(PaymentModel.NAME + ".state"), 1, 2), object.getString("message"));
 
         mockHelper.reset();
@@ -71,7 +71,7 @@ public class CompleteTest extends TestSupport {
         mockHelper.getRequest().addParameter("state", "3");
         mockHelper.mock("/payment/complete");
         object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(2510, object.getIntValue("code"));
+        Assert.assertEquals(2509, object.getIntValue("code"));
         Assert.assertEquals(message.get(Validators.PREFIX + "not-between", message.get(PaymentModel.NAME + ".state"), 1, 2), object.getString("message"));
 
         mockHelper.reset();
@@ -95,7 +95,7 @@ public class CompleteTest extends TestSupport {
         sign.put(mockHelper.getRequest().getMap(), null);
         mockHelper.mock("/payment/complete");
         object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(2511, object.getIntValue("code"));
+        Assert.assertEquals(2510, object.getIntValue("code"));
         Assert.assertEquals(message.get(PaymentModel.NAME + ".not-exists"), object.getString("message"));
 
         httpAspect.reset();

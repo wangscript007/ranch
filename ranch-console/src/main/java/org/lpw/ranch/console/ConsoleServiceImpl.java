@@ -57,20 +57,35 @@ public class ConsoleServiceImpl implements ConsoleService, StorageListener {
         JSONObject meta = json.toObject(classifyHelper.value(ConsoleModel.NAME + ".meta", key));
         if (meta == null)
             meta = metaService.get(key);
-        setLabel(meta);
+        if (meta == null)
+            return new JSONObject();
 
-        return meta == null ? new JSONObject() : meta;
+        String prefix = meta.getString("key") + ".";
+        setLabel(prefix, meta.getJSONArray("props"), "name");
+        for (String k : meta.keySet()) {
+            if (k.equals("key") || k.equals("props"))
+                continue;
+
+            JSONObject object = meta.getJSONObject(k);
+            if (object.containsKey("ops"))
+                setLabel(prefix, object.getJSONArray("ops"), null);
+            if (object.containsKey("toolbar"))
+                setLabel(prefix, object.getJSONArray("toolbar"), null);
+        }
+
+        return meta;
     }
 
-    private void setLabel(JSONObject meta) {
-        if (validator.isEmpty(meta) || !meta.containsKey("props"))
-            return;
-
-        JSONArray props = meta.getJSONArray("props");
-        for (int i = 0, size = props.size(); i < size; i++) {
-            JSONObject prop = props.getJSONObject(i);
-            String label = prop.containsKey("label") ? prop.getString("label") : (meta.getString("key") + "." + prop.getString("name"));
-            prop.put("label", message.get(label));
+    private void setLabel(String prefix, JSONArray array, String key) {
+        for (int i = 0, size = array.size(); i < size; i++) {
+            JSONObject obj = array.getJSONObject(i);
+            String label = null;
+            if (obj.containsKey("label"))
+                label = obj.getString("label");
+            else if (key != null && obj.containsKey(key))
+                label = prefix + obj.getString(key);
+            if (label != null)
+                obj.put("label", message.get(label));
         }
     }
 

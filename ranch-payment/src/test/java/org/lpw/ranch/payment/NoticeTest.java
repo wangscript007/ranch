@@ -19,14 +19,14 @@ public class NoticeTest extends TestSupport {
         mockHelper.reset();
         mockHelper.mock("/payment/notice");
         JSONObject object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(2512, object.getIntValue("code"));
+        Assert.assertEquals(2501, object.getIntValue("code"));
         Assert.assertEquals(message.get(Validators.PREFIX + "illegal-id", message.get(PaymentModel.NAME + ".id")), object.getString("message"));
 
         mockHelper.reset();
         mockHelper.getRequest().addParameter("id", "id value");
         mockHelper.mock("/payment/notice");
         object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(2512, object.getIntValue("code"));
+        Assert.assertEquals(2501, object.getIntValue("code"));
         Assert.assertEquals(message.get(Validators.PREFIX + "illegal-id", message.get(PaymentModel.NAME + ".id")), object.getString("message"));
 
         mockHelper.reset();

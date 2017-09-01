@@ -12,6 +12,7 @@ import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author lpw
@@ -28,6 +29,20 @@ public class QueryTest extends TestSupport {
         JSONObject object = mockHelper.getResponse().asJson();
         Assert.assertEquals(9995, object.getIntValue("code"));
         Assert.assertEquals(message.get(Validators.PREFIX + "illegal-sign"), object.getString("message"));
+
+        mockCarousel.reset();
+        mockCarousel.register("ranch.user.get", (String key, Map<String, String> header, Map<String, String> parameter, int cacheTime) -> {
+            JSONObject json = new JSONObject();
+            json.put("code", 0);
+            JSONObject data = new JSONObject();
+            JSONObject user = new JSONObject();
+            user.put("id", parameter.get("ids"));
+            user.put("name", "name " + parameter.get("ids"));
+            data.put(parameter.get("ids"), user);
+            json.put("data", data);
+
+            return json.toJSONString();
+        });
 
         mockHelper.reset();
         sign.put(mockHelper.getRequest().getMap(), null);
