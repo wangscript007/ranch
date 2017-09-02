@@ -192,12 +192,12 @@ public class WeixinServiceImpl implements WeixinService, HourJob, ContextRefresh
             return null;
 
         Map<String, String> param = new HashMap<>();
-        param.put("appId", map.get("appid"));
-        param.put("partnerId", map.get("mch_id"));
-        param.put("prepayId", map.get("prepay_id"));
+        param.put("appid", map.get("appid"));
+        param.put("partnerid", map.get("mch_id"));
+        param.put("prepayid", map.get("prepay_id"));
         param.put("package", "Sign=WXPay");
-        param.put("nonceStr", generator.random(32));
-        param.put("timeStamp", converter.toString(System.currentTimeMillis() / 1000, "0"));
+        param.put("noncestr", generator.random(32));
+        param.put("timestamp", converter.toString(System.currentTimeMillis() / 1000, "0"));
 
         JSONObject object = new JSONObject();
         object.putAll(param);

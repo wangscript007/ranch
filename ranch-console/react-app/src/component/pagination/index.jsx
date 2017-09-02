@@ -6,10 +6,10 @@ import message from "./message.json";
 class Pagination extends React.Component {
     render() {
         let prev = [];
-        for (let i = 1; i < this.props.data.number; i++)
+        for (let i = this.props.data.pageStart; i < this.props.data.number; i++)
             prev.push(this.page(i, i));
         let next = [];
-        for (let i = this.props.data.number + 1; i <= this.props.data.page; i++)
+        for (let i = this.props.data.number + 1; i <= this.props.data.pageEnd; i++)
             next.push(this.page(i, i));
 
         return (
