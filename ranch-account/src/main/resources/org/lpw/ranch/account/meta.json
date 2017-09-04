@@ -1,8 +1,9 @@
 {
-    "page": "grid",
-    "cols": [
+    "key": "ranch.account",
+    "props": [
         {
-            "name": "user"
+            "name": "user.code",
+            "label": "ranch.account.user"
         },
         {
             "name": "owner"
@@ -34,6 +35,25 @@
         {
             "name": "consume",
             "type": "number"
+        },
+        {
+            "name": "remitIn",
+            "type": "number"
+        },
+        {
+            "name": "remitOut",
+            "type": "number"
+        },
+        {
+            "name": "refund",
+            "type": "number"
+        },
+        {
+            "name": "pending",
+            "type": "number"
         }
-    ]
+    ],
+    "query": {
+        "page": "grid"
+    }
 }

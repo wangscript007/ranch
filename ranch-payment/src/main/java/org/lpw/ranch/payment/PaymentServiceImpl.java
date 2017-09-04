@@ -152,7 +152,7 @@ public class PaymentServiceImpl implements PaymentService {
         payment.setJson(json.toJSONString());
         paymentDao.save(payment);
         if (state == 1)
-            accountHelper.pass(accountHelper.deposit(payment.getUser(), "", 0, payment.getType(), payment.getAmount(), map).getString("logId"));
+            accountHelper.deposit(payment.getUser(), "", 0, payment.getType(), payment.getAmount(), true, map);
         notice(payment);
     }
 

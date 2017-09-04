@@ -52,7 +52,23 @@ public class AccountServiceImpl implements AccountService {
     private AccountDao accountDao;
 
     @Override
-    public JSONArray query(String user, String owner, boolean fill) {
+    public JSONObject query(String uid, String owner, int type, int minBalance, int maxBalance) {
+        String user = null;
+        if (!validator.isEmpty(uid)) {
+            user = userHelper.findIdByUid(uid);
+            if (user == null)
+                user = uid;
+        }
+        if ("all".equals(owner))
+            owner = null;
+        JSONObject object = accountDao.query(user, owner, type, minBalance, maxBalance).toJson();
+        userHelper.fill(object.getJSONArray("list"), new String[]{"user"});
+
+        return object;
+    }
+
+    @Override
+    public JSONArray queryUser(String user, String owner, boolean fill) {
         JSONArray array = modelHelper.toJson(queryPageList(user, owner).getList());
 
         return fill ? userHelper.fill(array, new String[]{"user"}) : array;
@@ -100,6 +116,8 @@ public class AccountServiceImpl implements AccountService {
     private PageList<AccountModel> queryPageList(String user, String owner) {
         if (validator.isEmpty(user))
             user = userHelper.id();
+        if (validator.isEmpty(owner))
+            owner = "";
         PageList<AccountModel> pl = queryFromDao(user, owner);
         if (pl.getList().isEmpty()) {
             save(find(user, owner, 0));
@@ -113,7 +131,7 @@ public class AccountServiceImpl implements AccountService {
     }
 
     private PageList<AccountModel> queryFromDao(String user, String owner) {
-        return owner == null ? accountDao.query(user) : accountDao.query(user, owner);
+        return accountDao.query(user, owner, -1, -1, -1);
     }
 
     @Override
@@ -149,6 +167,11 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public JSONObject remitOut(String user, String owner, int type, String channel, int amount) {
         return change(user, owner, type, AccountTypes.REMIT_OUT, channel, amount, null);
+    }
+
+    @Override
+    public JSONObject refund(String user, String owner, int type, String channel, int amount) {
+        return change(user, owner, type, AccountTypes.REFUND, channel, amount, null);
     }
 
     private JSONObject change(String user, String owner, int type, String accountType, String channel, int amount, Map<String, String> map) {
@@ -209,7 +232,7 @@ public class AccountServiceImpl implements AccountService {
         account.setChecksum(digest.md5(CHECKSUM + "&" + account.getUser() + "&" + account.getOwner()
                 + "&" + account.getType() + "&" + account.getBalance() + "&" + account.getDeposit() + "&" + account.getWithdraw()
                 + "&" + account.getReward() + "&" + account.getProfit() + "&" + account.getConsume()
-                + "&" + account.getRemitIn() + "&" + account.getRemitOut() + "&" + account.getPending()));
+                + "&" + account.getRemitIn() + "&" + account.getRemitOut() + "&" + account.getRefund() + "&" + account.getPending()));
         accountDao.save(account);
         lockHelper.unlock(account.getLockId());
     }

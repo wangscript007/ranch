@@ -32,6 +32,10 @@ public interface AccountTypes {
      * 汇出。
      */
     String REMIT_OUT = "remit-out";
+    /**
+     * 退款。
+     */
+    String REFUND = "refund";
 
     /**
      * 获取账户操作类型。

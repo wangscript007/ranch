@@ -13,6 +13,7 @@ CREATE TABLE t_account
   c_consume INT DEFAULT 0 COMMENT '消费总额',
   c_remit_in INT DEFAULT 0 COMMENT '汇入总额',
   c_remit_out INT DEFAULT 0 COMMENT '汇出总额',
+  c_refund INT DEFAULT 0 COMMENT '退款总额',
   c_pending INT DEFAULT 0 COMMENT '待结算总额',
   c_checksum CHAR(32) DEFAULT NULL COMMENT '校验值',
 

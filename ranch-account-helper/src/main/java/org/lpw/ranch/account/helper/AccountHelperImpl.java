@@ -24,9 +24,8 @@ public class AccountHelperImpl implements AccountHelper {
     private String key;
 
     @Override
-    public JSONArray query(String user, String owner, boolean fill) {
-
-        return carousel.service(key + ".query", null, queryParameter(user, owner, fill), false, JSONArray.class);
+    public JSONArray queryUser(String user, String owner, boolean fill) {
+        return carousel.service(key + ".query-user", null, queryParameter(user, owner, fill), false, JSONArray.class);
     }
 
     @Override
@@ -39,23 +38,27 @@ public class AccountHelperImpl implements AccountHelper {
         parameter.put("user", user);
         if (owner != null)
             parameter.put("owner", owner);
-        if (!fill)
-            parameter.put("fill", "false");
+        parameter.put("fill", "" + fill);
 
         return parameter;
     }
 
     @Override
-    public JSONObject deposit(String user, String owner, int type, String channel, int amount, Map<String, String> map) {
-        return change(".deposit", user, owner, type, channel, amount, map);
+    public JSONObject deposit(String user, String owner, int type, String channel, int amount, boolean pass, Map<String, String> map) {
+        return change(".deposit", user, owner, type, channel, amount, pass, map);
     }
 
     @Override
-    public JSONObject consume(String user, String owner, int type, String channel, int amount, Map<String, String> map) {
-        return change(".consume", user, owner, type, channel, amount, map);
+    public JSONObject consume(String user, String owner, int type, String channel, int amount, boolean pass, Map<String, String> map) {
+        return change(".consume", user, owner, type, channel, amount, pass, map);
     }
 
-    private JSONObject change(String key, String user, String owner, int type, String channel, int amount, Map<String, String> map) {
+    @Override
+    public JSONObject refund(String user, String owner, int type, String channel, int amount, boolean pass, Map<String, String> map) {
+        return change(".refund", user, owner, type, channel, amount, pass, map);
+    }
+
+    private JSONObject change(String key, String user, String owner, int type, String channel, int amount, boolean pass, Map<String, String> map) {
         if (map == null)
             map = new HashMap<>();
         map.put("user", user);
@@ -63,8 +66,11 @@ public class AccountHelperImpl implements AccountHelper {
         map.put("type", converter.toString(type, "0"));
         map.put("channel", channel);
         map.put("amount", converter.toString(amount, "0"));
+        JSONObject object = carousel.service(this.key + key, null, map, false, JSONObject.class);
+        if (pass)
+            pass(object.getString("logId"));
 
-        return carousel.service(this.key + key, null, map, false, JSONObject.class);
+        return object;
     }
 
     @Override

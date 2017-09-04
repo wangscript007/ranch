@@ -27,24 +27,23 @@ public class AccountCtrl {
     @Inject
     private AccountService accountService;
 
-    @Execute(name = "query", validates = {
+    @Execute(name = "query")
+    public Object query() {
+        return accountService.query(request.get("uid"), request.get("owner"), request.getAsInt("type", -1), request.getAsInt("minBalance", -1), request.getAsInt("maxBalance", -1));
+    }
+
+    @Execute(name = "query-user", validates = {
             @Validate(validator = UserHelper.VALIDATOR_EXISTS_OR_SIGN_IN, parameter = "user", failureCode = 5)
     })
-    public Object query() {
-        return accountService.query(request.get("user"), request.get("owner"), getFill());
+    public Object queryUser() {
+        return accountService.queryUser(request.get("user"), request.get("owner"), request.getAsBoolean("fill"));
     }
 
     @Execute(name = "merge", validates = {
             @Validate(validator = UserHelper.VALIDATOR_EXISTS_OR_SIGN_IN, parameter = "user", failureCode = 5)
     })
     public Object merge() {
-        return accountService.merge(request.get("user"), request.get("owner"), getFill());
-    }
-
-    private boolean getFill() {
-        String fill = request.get("fill");
-
-        return !"false".equals(fill);
+        return accountService.merge(request.get("user"), request.get("owner"), request.getAsBoolean("fill"));
     }
 
     @Execute(name = "deposit", validates = {
@@ -122,6 +121,17 @@ public class AccountCtrl {
     })
     public Object remitOut() {
         return execute(accountService.remitOut(request.get("user"), request.get("owner"), request.getAsInt("type"), request.get("channel"), request.getAsInt("amount")), 17, "remit-out");
+    }
+
+    @Execute(name = "refund", validates = {
+            @Validate(validator = Validators.MAX_LENGTH, number = {36}, parameter = "owner", failureCode = 1),
+            @Validate(validator = Validators.BETWEEN, number = {0, 9}, parameter = "type", failureCode = 2),
+            @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "channel", failureCode = 3),
+            @Validate(validator = Validators.GREATER_THAN, number = {0}, parameter = "amount", failureCode = 4),
+            @Validate(validator = UserHelper.VALIDATOR_EXISTS_OR_SIGN_IN, parameter = "user", failureCode = 5)
+    })
+    public Object refund() {
+        return execute(accountService.refund(request.get("user"), request.get("owner"), request.getAsInt("type"), request.get("channel"), request.getAsInt("amount")), 18, "refund");
     }
 
     private Object execute(JSONObject object, int code, String type) {

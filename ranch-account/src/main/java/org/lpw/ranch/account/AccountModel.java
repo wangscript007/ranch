@@ -31,6 +31,7 @@ public class AccountModel extends ModelSupport {
     private int consume; // 消费总额
     private int remitIn; // 汇入总额
     private int remitOut; // 汇出总额
+    private int refund; // 退款总额
     private int pending; // 待结算总额
     private String checksum; // 校验值
     private String lockId; // 全局锁ID
@@ -143,6 +144,16 @@ public class AccountModel extends ModelSupport {
 
     public void setRemitOut(int remitOut) {
         this.remitOut = remitOut;
+    }
+
+    @Jsonable
+    @Column(name = "c_refund")
+    public int getRefund() {
+        return refund;
+    }
+
+    public void setRefund(int refund) {
+        this.refund = refund;
     }
 
     @Jsonable

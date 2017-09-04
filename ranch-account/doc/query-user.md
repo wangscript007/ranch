@@ -1,18 +1,16 @@
-# 检索账户集
+# 检索用户账户集
 
 请求
-- Service Key - ranch.account.query
-- URI - /account/query
+- Service Key - ranch.account.query-user
+- URI - /account/query-user
 
 参数
 
 |名称|类型|说明|
 |---|---|---|
-|uid|string|用户ID或UID，为空表示全部。|
-|owner|char(100)|所有者ID，null或all表示所有。|
-|type|int|类型，-1表示全部。|
-|minBalance|int|最小余额，-1表示不限制。|
-|maxBalance|int|最大余额，-1表示不限制。|
+|user|char(36)|用户ID，为空则使用当前用户ID。|
+|owner|char(100)|所有者，可选。|
+|fill|boolean|是否填充用户信息，true or false。|
 
 返回值
 ```json
@@ -33,5 +31,3 @@
     }
 ]
 ```
-
-> 后台管理接口，需验证[请求参数签名](https://github.com/heisedebaise/tephra/blob/master/tephra-ctrl/doc/sign.md)。

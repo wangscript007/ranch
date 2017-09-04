@@ -10,14 +10,14 @@ import java.util.Map;
  */
 public interface AccountHelper {
     /**
-     * 检索账户集。
+     * 检索用户账户集。
      *
      * @param user  用户，为空则使用当前用户。
      * @param owner 所有者；为null表示所有。
      * @param fill  是否填充关联数据。
      * @return 账户集。
      */
-    JSONArray query(String user, String owner, boolean fill);
+    JSONArray queryUser(String user, String owner, boolean fill);
 
     /**
      * 检索账户信息并合并。
@@ -37,10 +37,11 @@ public interface AccountHelper {
      * @param type    类型。
      * @param channel 渠道。
      * @param amount  数量。
+     * @param pass    自动设置审核通过。
      * @param map     参数集。
      * @return 账户信息；如果存入失败则返回空JSON。
      */
-    JSONObject deposit(String user, String owner, int type, String channel, int amount, Map<String, String> map);
+    JSONObject deposit(String user, String owner, int type, String channel, int amount, boolean pass, Map<String, String> map);
 
     /**
      * 消费。
@@ -50,10 +51,25 @@ public interface AccountHelper {
      * @param type    类型。
      * @param channel 渠道。
      * @param amount  数量。
+     * @param pass    自动设置审核通过。
      * @param map     参数集。
      * @return 账户信息；如果消费失败则返回空JSON。
      */
-    JSONObject consume(String user, String owner, int type, String channel, int amount, Map<String, String> map);
+    JSONObject consume(String user, String owner, int type, String channel, int amount, boolean pass, Map<String, String> map);
+
+    /**
+     * 退款。
+     *
+     * @param user    用户，为空则使用当前用户。
+     * @param owner   所有者。
+     * @param type    类型。
+     * @param channel 渠道。
+     * @param amount  数量。
+     * @param pass    自动设置审核通过。
+     * @param map     参数集。
+     * @return 账户信息；如果消费失败则返回空JSON。
+     */
+    JSONObject refund(String user, String owner, int type, String channel, int amount, boolean pass, Map<String, String> map);
 
 
     /**
