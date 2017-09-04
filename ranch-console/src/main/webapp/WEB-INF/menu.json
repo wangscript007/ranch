@@ -3,6 +3,10 @@
         "name": "资金管理",
         "items": [
             {
+                "name": "用户账户",
+                "service": "ranch.payment.query"
+            },
+            {
                 "name": "充值订单",
                 "service": "ranch.payment.query"
             },

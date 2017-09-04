@@ -57,15 +57,9 @@ class Table extends React.Component {
     td(row, index, col) {
         var value = window.json.get(row, col.name);
         var label = value;
-        if (col.hasOwnProperty("select")) {
-            for (var i = 0; i < col.select.length; i++) {
-                if (col.select[i].value === value) {
-                    label = window.message(this.props.meta.message, col.select[i].label);
-
-                    break;
-                }
-            }
-        } else if (col.type === "password")
+        if (col.hasOwnProperty("select"))
+            label = this.select(value, col.select);
+        else if (col.type === "password")
             label = "******";
         if (typeof (label) === "object")
             label = JSON.stringify(label);
@@ -73,6 +67,17 @@ class Table extends React.Component {
         return (
             <td key={index} className={col.format || ""}>{label}</td>
         );
+    }
+
+    select(value, select) {
+        if (select.hasOwnProperty("label")) {
+            if (!select.array)
+                select.array = select.label.split(",");
+
+            return select.array[value];
+        }
+
+        return value;
     }
 
     ops(row) {

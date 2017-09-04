@@ -44,7 +44,7 @@ class Pagination extends React.Component {
         };
 
         return (
-            <A message={message} title={title} label={label} data={data} click={this.click} />
+            <A key={num} message={message} title={title} label={label} data={data} click={this.click} />
         );
     }
 

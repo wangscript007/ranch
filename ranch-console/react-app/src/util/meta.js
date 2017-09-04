@@ -5,7 +5,6 @@ class Meta {
 
     load(key) {
         var k = this.prefix(key, 0);
-        console.log(this.map[k]);
         if (this.map[k])
             return new Promise((resolve, reject) => resolve(this.map[k]));
 
@@ -20,7 +19,6 @@ class Meta {
     }
 
     put(key, meta) {
-        console.log(meta);
         this.map[key] = meta;
     }
 

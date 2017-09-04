@@ -61,32 +61,37 @@ public class ConsoleServiceImpl implements ConsoleService, StorageListener {
             return new JSONObject();
 
         String prefix = meta.getString("key") + ".";
-        setLabel(prefix, meta.getJSONArray("props"), "name");
+        setLabel(prefix, meta.getJSONArray("props"), "name", "select");
         for (String k : meta.keySet()) {
             if (k.equals("key") || k.equals("props"))
                 continue;
 
             JSONObject object = meta.getJSONObject(k);
             if (object.containsKey("ops"))
-                setLabel(prefix, object.getJSONArray("ops"), null);
+                setLabel(prefix, object.getJSONArray("ops"), null, null);
             if (object.containsKey("toolbar"))
-                setLabel(prefix, object.getJSONArray("toolbar"), null);
+                setLabel(prefix, object.getJSONArray("toolbar"), null, null);
         }
 
         return meta;
     }
 
-    private void setLabel(String prefix, JSONArray array, String key) {
-        for (int i = 0, size = array.size(); i < size; i++) {
-            JSONObject obj = array.getJSONObject(i);
-            String label = null;
-            if (obj.containsKey("label"))
-                label = obj.getString("label");
-            else if (key != null && obj.containsKey(key))
-                label = prefix + obj.getString(key);
-            if (label != null)
-                obj.put("label", message.get(label));
-        }
+    private void setLabel(String prefix, JSONArray array, String key, String child) {
+        for (int i = 0, size = array.size(); i < size; i++)
+            setLabel(prefix, array.getJSONObject(i), key, child);
+    }
+
+    private void setLabel(String prefix, JSONObject object, String key, String child) {
+        String label = null;
+        if (object.containsKey("label"))
+            label = object.getString("label");
+        else if (key != null && object.containsKey(key))
+            label = prefix + object.getString(key);
+        if (label != null)
+            object.put("label", message.get(label));
+
+        if (child != null && object.containsKey(child))
+            setLabel(prefix, object.getJSONObject(child), key, child);
     }
 
     @Override
