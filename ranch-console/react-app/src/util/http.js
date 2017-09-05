@@ -12,5 +12,5 @@ window.ajax = function (uri, params, headers) {
     if (params)
         object.body = JSON.stringify(params);
 
-    return fetch(uri, object).then(res => res.json());
+    return fetch("http://localhost:8080" + uri, object).then(res => res.json());
 };

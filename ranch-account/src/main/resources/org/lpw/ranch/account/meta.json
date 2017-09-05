@@ -2,8 +2,8 @@
     "key": "ranch.account",
     "props": [
         {
-            "name": "user.code",
-            "label": "ranch.account.user"
+            "name": "user.auth.uid",
+            "label": "ranch.account.uid"
         },
         {
             "name": "owner"
@@ -54,6 +54,22 @@
         }
     ],
     "query": {
-        "page": "grid"
+        "page": "grid",
+        "search": [
+            {
+                "name": "uid"
+            },
+            {
+                "name": "owner"
+            },
+            {
+                "name": "type"
+            },
+            {
+                "label": "ranch.account.balance",
+                "min": "minBalance",
+                "max": "maxBalance"
+            }
+        ]
     }
 }

@@ -61,24 +61,27 @@ public class ConsoleServiceImpl implements ConsoleService, StorageListener {
             return new JSONObject();
 
         String prefix = meta.getString("key") + ".";
-        setLabel(prefix, meta.getJSONArray("props"), "name", "select");
+        setLabel(prefix, meta, "props", "name", "select");
         for (String k : meta.keySet()) {
             if (k.equals("key") || k.equals("props"))
                 continue;
 
             JSONObject object = meta.getJSONObject(k);
+            if (object.containsKey("search"))
+                setLabel(prefix, object, "search", "name", null);
             if (object.containsKey("ops"))
-                setLabel(prefix, object.getJSONArray("ops"), null, null);
+                setLabel(prefix, object, "ops", null, null);
             if (object.containsKey("toolbar"))
-                setLabel(prefix, object.getJSONArray("toolbar"), null, null);
+                setLabel(prefix, object, "toolbar", null, null);
         }
 
         return meta;
     }
 
-    private void setLabel(String prefix, JSONArray array, String key, String child) {
+    private void setLabel(String prefix, JSONObject object, String key, String k, String child) {
+        JSONArray array = object.getJSONArray(key);
         for (int i = 0, size = array.size(); i < size; i++)
-            setLabel(prefix, array.getJSONObject(i), key, child);
+            setLabel(prefix, array.getJSONObject(i), k, child);
     }
 
     private void setLabel(String prefix, JSONObject object, String key, String child) {

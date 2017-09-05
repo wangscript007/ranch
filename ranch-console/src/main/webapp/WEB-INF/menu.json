@@ -4,7 +4,7 @@
         "items": [
             {
                 "name": "用户账户",
-                "service": "ranch.payment.query"
+                "service": "ranch.account.query"
             },
             {
                 "name": "充值订单",

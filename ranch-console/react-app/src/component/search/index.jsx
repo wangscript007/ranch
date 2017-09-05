@@ -11,22 +11,13 @@ const inputs = {
 
 class Search extends React.Component {
     render() {
-        if (!this.props.meta)
-            return null;
-
-        var cols = [];
-        this.props.meta.cols.map(col => {
-            if (col.hasOwnProperty("search"))
-                cols[cols.length] = col;
-
-            return null;
-        });
-        if (cols.length === 0)
+        var search = window.meta.search(this.props.service);
+        if (!search || !search.length)
             return null;
 
         return (
             <div className="search">
-                {cols.map((col, index) => this.input(index, col))}
+                {search.map((col, index) => this.input(index, col))}
                 <button>{window.message(message, "button.search")}</button>
             </div>
         );

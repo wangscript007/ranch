@@ -38,6 +38,10 @@ class Meta {
         return this.service(key).page;
     }
 
+    search(key) {
+        return this.service(key).search;
+    }
+
     ops(key) {
         return this.buttons(key, "ops");
     }

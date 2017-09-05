@@ -19,5 +19,5 @@ CREATE TABLE t_account_log
   KEY k_user(c_user,c_start) USING BTREE,
   KEY k_account(c_account,c_start) USING BTREE,
   KEY k_owner(c_owner,c_start) USING BTREE,
-  UNIQUE KEY uk_index(c_index) USING HASH
+  UNIQUE KEY uk_index(c_index) USING BTREE
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
