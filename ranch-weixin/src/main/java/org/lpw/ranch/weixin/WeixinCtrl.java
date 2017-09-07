@@ -108,6 +108,18 @@ public class WeixinCtrl {
         return null;
     }
 
+    @Execute(name = "prepay-qr-code-base64", validates = {
+            @Validate(validator = Validators.NOT_EMPTY, parameter = "key", failureCode = 2),
+            @Validate(validator = Validators.NOT_EMPTY, parameter = "subject", failureCode = 21),
+            @Validate(validator = Validators.GREATER_THAN, number = {0}, parameter = "amount", failureCode = 22),
+            @Validate(validator = UserHelper.VALIDATOR_EXISTS_OR_SIGN_IN, parameter = "user", failureCode = 23),
+            @Validate(validator = WeixinService.VALIDATOR_EXISTS, parameter = "key", failureCode = 24)
+    })
+    public Object prepayQrCodeBase64() {
+        return weixinService.prepayQrCodeBase64(request.get("key"), request.get("user"), request.get("subject"), request.getAsInt("amount"),
+                request.get("notice"), request.getAsInt("size"), request.get("logo"));
+    }
+
     @Execute(name = "prepay-app", validates = {
             @Validate(validator = Validators.NOT_EMPTY, parameter = "key", failureCode = 2),
             @Validate(validator = Validators.NOT_EMPTY, parameter = "subject", failureCode = 21),

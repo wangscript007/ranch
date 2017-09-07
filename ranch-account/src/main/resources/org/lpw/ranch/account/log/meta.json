@@ -1,0 +1,42 @@
+{
+    "key": "ranch.account.log",
+    "props": [
+        {
+            "name": "user.auth.uid",
+            "label": "ranch.account.log.uid"
+        },
+        {
+            "name": "owner"
+        },
+        {
+            "name": "type",
+            "format": "number"
+        },
+        {
+            "name": "channel"
+        },
+        {
+            "name": "amount",
+            "format": "number"
+        },
+        {
+            "name": "balance",
+            "format": "number"
+        },
+        {
+            "name": "state",
+            "select": {
+                "name": "states"
+            }
+        },
+        {
+            "name": "start"
+        },
+        {
+            "name": "end"
+        }
+    ],
+    "query": {
+        "page": "grid"
+    }
+}

@@ -6,7 +6,7 @@ import org.lpw.tephra.dao.orm.PageList;
  * @author lpw
  */
 interface AccountDao {
-    PageList<AccountModel> query(String user, String owner, int type, int minBalance, int maxBalance);
+    PageList<AccountModel> query(String user, String owner, int type, int minBalance, int maxBalance, int pageSize, int pageNum);
 
     AccountModel findById(String id);
 

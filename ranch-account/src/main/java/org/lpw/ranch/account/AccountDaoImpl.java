@@ -21,7 +21,7 @@ class AccountDaoImpl implements AccountDao {
     private LiteOrm liteOrm;
 
     @Override
-    public PageList<AccountModel> query(String user, String owner, int type, int minBalance, int maxBalance) {
+    public PageList<AccountModel> query(String user, String owner, int type, int minBalance, int maxBalance, int pageSize, int pageNum) {
         StringBuilder where = new StringBuilder();
         List<Object> args = new ArrayList<>();
         append(where, args, "c_user", user);
@@ -30,11 +30,11 @@ class AccountDaoImpl implements AccountDao {
         append(where, args, "c_balance", minBalance, ">=");
         append(where, args, "c_balance", maxBalance, "<=");
 
-        return liteOrm.query(new LiteQuery(AccountModel.class).where(where.toString()).order("c_user,c_owner,c_type"), args.toArray());
+        return liteOrm.query(new LiteQuery(AccountModel.class).where(where.toString()).order("c_user,c_owner,c_type").size(pageSize).page(pageNum), args.toArray());
     }
 
     private void append(StringBuilder where, List<Object> args, String column, String value) {
-        if (value==null)
+        if (value == null)
             return;
 
         if (!args.isEmpty())

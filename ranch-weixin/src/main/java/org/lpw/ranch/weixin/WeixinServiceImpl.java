@@ -179,6 +179,13 @@ public class WeixinServiceImpl implements WeixinService, HourJob, ContextRefresh
         qrCode.create(map.get("code_url"), size > 0 ? size : qrCodeSize, getLogo(logo), outputStream);
     }
 
+    @Override
+    public String prepayQrCodeBase64(String key, String user, String subject, int amount, String notice, int size, String logo) {
+        Map<String, String> map = prepay(key, user, subject, amount, notice, "NATIVE", new HashMap<>());
+
+        return map == null ? null : qrCode.create(map.get("code_url"), size > 0 ? size : qrCodeSize, getLogo(logo));
+    }
+
     private String getLogo(String logo) {
         String path = validator.isEmpty(logo) ? qrCodeLogo : logo;
 

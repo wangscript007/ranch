@@ -61,7 +61,7 @@ public class AccountServiceImpl implements AccountService {
         }
         if ("all".equals(owner))
             owner = null;
-        JSONObject object = accountDao.query(user, owner, type, minBalance, maxBalance).toJson();
+        JSONObject object = accountDao.query(user, owner, type, minBalance, maxBalance, pagination.getPageSize(20), pagination.getPageNum()).toJson();
         userHelper.fill(object.getJSONArray("list"), new String[]{"user"});
 
         return object;
@@ -131,7 +131,7 @@ public class AccountServiceImpl implements AccountService {
     }
 
     private PageList<AccountModel> queryFromDao(String user, String owner) {
-        return accountDao.query(user, owner, -1, -1, -1);
+        return accountDao.query(user, owner, -1, -1, -1, 0, 0);
     }
 
     @Override

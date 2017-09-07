@@ -96,6 +96,20 @@ public interface WeixinService {
     void prepayQrCode(String key, String user, String subject, int amount, String notice, int size, String logo, OutputStream outputStream);
 
     /**
+     * 生成支付二维码；并输出Base64数据。
+     *
+     * @param key     引用key。
+     * @param user    用户ID。
+     * @param subject 订单名称。
+     * @param amount  支付金额，单位：分。
+     * @param notice  异步通知。
+     * @param size    二维码图片大小，小于等于0则使用默认值。
+     * @param logo    LOGO图片名。
+     * @return Base64数据，如果生成失败则返回null。
+     */
+    String prepayQrCodeBase64(String key, String user, String subject, int amount, String notice, int size, String logo);
+
+    /**
      * 生成APP支付参数。
      *
      * @param key     引用key。

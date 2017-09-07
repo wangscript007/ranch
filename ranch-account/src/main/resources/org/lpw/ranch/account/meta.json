@@ -10,47 +10,47 @@
         },
         {
             "name": "type",
-            "type": "number"
+            "format": "number"
         },
         {
             "name": "balance",
-            "type": "number"
+            "format": "number"
         },
         {
             "name": "deposit",
-            "type": "number"
+            "format": "number"
         },
         {
             "name": "withdraw",
-            "type": "number"
+            "format": "number"
         },
         {
             "name": "reward",
-            "type": "number"
+            "format": "number"
         },
         {
             "name": "profit",
-            "type": "number"
+            "format": "number"
         },
         {
             "name": "consume",
-            "type": "number"
+            "format": "number"
         },
         {
             "name": "remitIn",
-            "type": "number"
+            "format": "number"
         },
         {
             "name": "remitOut",
-            "type": "number"
+            "format": "number"
         },
         {
             "name": "refund",
-            "type": "number"
+            "format": "number"
         },
         {
             "name": "pending",
-            "type": "number"
+            "format": "number"
         }
     ],
     "query": {

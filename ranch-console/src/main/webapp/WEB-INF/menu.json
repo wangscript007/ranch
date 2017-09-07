@@ -7,6 +7,10 @@
                 "service": "ranch.account.query"
             },
             {
+                "name": "账变日志",
+                "service": "ranch.account.log.query"
+            },
+            {
                 "name": "充值订单",
                 "service": "ranch.payment.query"
             },
