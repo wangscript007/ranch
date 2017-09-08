@@ -24,15 +24,12 @@ class Search extends React.Component {
     }
 
     input(index, col) {
-        if (!col.hasOwnProperty("search"))
-            return null;
-
         var tag = {
-            name: inputs.hasOwnProperty(col.search) ? inputs[col.search] : Input
+            name: col.type && inputs.hasOwnProperty(col.type) ? inputs[col.type] : Input
         };
 
         return (
-            <tag.name key={index} message={this.props.meta.message} meta={col} inline={true} />
+            <tag.name key={index} meta={col} inline={true} />
         );
     }
 }

@@ -34,13 +34,14 @@
         "page": "grid",
         "ops": [
             {
-                "type": "success",
+                "when": {
+                    "state": 0
+                },
                 "label": "ranch.payment.success",
                 "service": "success",
                 "success": "query"
             },
             {
-                "type": "notice",
                 "label": "ranch.payment.notice",
                 "service": "notice",
                 "success": "query"

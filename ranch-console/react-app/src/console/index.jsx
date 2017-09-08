@@ -1,6 +1,6 @@
 import React from "react";
 import message from "./message.json";
-import Top from "./top";
+import Header from "./header";
 import Left from "./left";
 import Footer from "./footer";
 import Body from "./body";
@@ -16,7 +16,7 @@ class Console extends React.Component {
     render() {
         return (
             <div className="console">
-                <Top />
+                <Header />
                 <Left />
                 <Footer />
                 <Body />

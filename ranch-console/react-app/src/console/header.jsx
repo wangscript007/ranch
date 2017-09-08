@@ -1,12 +1,12 @@
 import React from "react";
 import message from "./message.json";
-import "./top.css";
+import "./header.css";
 import Menu from "./menu";
 
-class Top extends React.Component {
+class Header extends React.Component {
     render() {
         return (
-            <div className="console-top">
+            <div className="console-header">
                 <span className="project-name">{window.message(message, "project-name")}</span>
                 {this.link(window.message(message, "sign-out"))}
                 <Menu service="dashboard">{window.message(message, "dashboard")}</Menu>
@@ -22,4 +22,4 @@ class Top extends React.Component {
     }
 }
 
-export default Top;
+export default Header;

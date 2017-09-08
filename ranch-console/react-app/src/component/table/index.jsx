@@ -89,6 +89,11 @@ class Table extends React.Component {
     }
 
     op(index, op, row) {
+        if (op.hasOwnProperty("when"))
+            for (var key in op.when)
+                if (op.when[key] !== row[key])
+                    return null;
+
         var label = op.label || ("table.ops." + op.type);
         var data = {
             service: this.props.service,

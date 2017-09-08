@@ -27,7 +27,7 @@ class Body extends React.Component {
             if (json.code !== 0) {
                 // TODO 弹出提示。
                 console.log(JSON.stringify(json));
-                alert(json.message);
+                alert(json.message || json.msg);
                 this.loading(false);
 
                 return;
