@@ -346,10 +346,27 @@ public class WeixinServiceImpl implements WeixinService, ContextRefreshedListene
         if (object == null)
             return;
 
-        List<WeixinModel> list = modelHelper.fromJson(object.getJSONArray("data"), WeixinModel.class);
-        if (validator.isEmpty(list))
+        JSONArray array = object.getJSONArray("data");
+        if (validator.isEmpty(array))
             return;
 
-        list.forEach(this::save);
+        for (int i = 0, size = array.size(); i < size; i++) {
+            JSONObject obj = array.getJSONObject(i);
+            WeixinModel weixin = weixinDao.findByKey(obj.getString("key"));
+            if (weixin == null) {
+                weixin = new WeixinModel();
+                weixin.setKey(obj.getString("key"));
+            }
+            weixin.setName(obj.getString("name"));
+            weixin.setAppId(obj.getString("appId"));
+            weixin.setSecret(obj.getString("secret"));
+            weixin.setToken(obj.getString("token"));
+            weixin.setMchId(obj.getString("mchId"));
+            weixin.setMchKey(obj.getString("mchKey"));
+            weixin.setAccessToken(obj.getString("accessToken"));
+            weixin.setJsapiTicket(obj.getString("jsapiTicket"));
+            weixin.setTime(dateTime.now());
+            weixinDao.save(weixin);
+        }
     }
 }
