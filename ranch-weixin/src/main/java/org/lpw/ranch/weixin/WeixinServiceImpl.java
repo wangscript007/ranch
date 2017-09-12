@@ -80,9 +80,9 @@ public class WeixinServiceImpl implements WeixinService, ContextRefreshedListene
     private String qrCodeLogo;
     @Value("${" + WeixinModel.NAME + ".auto:false}")
     private boolean auto;
-    @Value("${" + WeixinModel.NAME + ".synch.url=}")
+    @Value("${" + WeixinModel.NAME + ".synch.url:}")
     private String synchUrl;
-    @Value("${" + WeixinModel.NAME + ".synch.key=}")
+    @Value("${" + WeixinModel.NAME + ".synch.key:}")
     private String synchKey;
     private String logo;
 
