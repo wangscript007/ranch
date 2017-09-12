@@ -29,6 +29,7 @@
         <module>ranch-account-helper</module>
         <module>ranch-dbtool</module>
         <module>ranch-weixin</module>
+        <module>ranch-weixin-helper</module>
         <module>ranch-payment</module>
         <module>ranch-payment-helper</module>
         <module>ranch-alipay</module>

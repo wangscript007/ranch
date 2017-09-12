@@ -7,6 +7,7 @@ import org.lpw.ranch.user.auth.AuthService;
 import org.lpw.ranch.user.online.OnlineService;
 import org.lpw.ranch.util.Carousel;
 import org.lpw.ranch.util.Pagination;
+import org.lpw.ranch.weixin.helper.WeixinHelper;
 import org.lpw.tephra.cache.Cache;
 import org.lpw.tephra.crypto.Digest;
 import org.lpw.tephra.ctrl.context.Session;
@@ -15,12 +16,9 @@ import org.lpw.tephra.util.DateTime;
 import org.lpw.tephra.util.Generator;
 import org.lpw.tephra.util.Numeric;
 import org.lpw.tephra.util.Validator;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * @author lpw
@@ -55,13 +53,13 @@ public class UserServiceImpl implements UserService {
     @Inject
     private ClassifyHelper classifyHelper;
     @Inject
+    private WeixinHelper weixinHelper;
+    @Inject
     private AuthService authService;
     @Inject
     private OnlineService onlineService;
     @Inject
     private UserDao userDao;
-    @Value("${ranch.weixin.key:ranch.weixin}")
-    private String weixinKey;
 
     @Override
     public void signUp(String uid, String password, Type type) {
@@ -87,7 +85,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public boolean signIn(String uid, String password, String macId, Type type) {
         if (type == Type.WeiXin)
-            uid = getWeixinOpenId(password, uid);
+            uid = getWeixinId(password, uid);
         if (uid == null)
             return false;
 
@@ -122,24 +120,21 @@ public class UserServiceImpl implements UserService {
         return authService.findByUid(uid);
     }
 
-    private String getWeixinOpenId(String key, String code) {
-        Map<String, String> parameter = new HashMap<>();
-        parameter.put("key", key);
-        parameter.put("code", code);
-        JSONObject object = carousel.service(weixinKey + ".auth", null, parameter, false, JSONObject.class);
-        if (validator.isEmpty(object))
+    private String getWeixinId(String key, String code) {
+        JSONObject object = weixinHelper.auth(key, code);
+        String uid = weixinHelper.getId(object);
+        if (uid == null)
             return null;
 
-        String openId = object.getString("openid");
-        if (authService.findByUid(openId) == null) {
-            signUp(openId, null, Type.WeiXin);
+        if (authService.findByUid(uid) == null) {
+            signUp(uid, null, Type.WeiXin);
             UserModel user = new UserModel();
             user.setNick(object.getString("nickname"));
             modify(user);
             portrait(object.getString("headimgurl"));
         }
 
-        return openId;
+        return uid;
     }
 
     private boolean pass(UserModel user, String password) {
