@@ -5,9 +5,11 @@ import com.alibaba.fastjson.JSONObject;
 import org.lpw.ranch.payment.helper.PaymentHelper;
 import org.lpw.tephra.bean.ContextRefreshedListener;
 import org.lpw.tephra.crypto.Digest;
+import org.lpw.tephra.crypto.Sign;
 import org.lpw.tephra.ctrl.context.Header;
 import org.lpw.tephra.dao.model.ModelHelper;
 import org.lpw.tephra.scheduler.HourJob;
+import org.lpw.tephra.scheduler.MinuteJob;
 import org.lpw.tephra.storage.Storages;
 import org.lpw.tephra.util.Converter;
 import org.lpw.tephra.util.DateTime;
@@ -25,6 +27,7 @@ import org.springframework.stereotype.Service;
 import javax.inject.Inject;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -34,7 +37,7 @@ import java.util.Map;
  * @author lpw
  */
 @Service(WeixinModel.NAME + ".service")
-public class WeixinServiceImpl implements WeixinService, HourJob, ContextRefreshedListener {
+public class WeixinServiceImpl implements WeixinService, ContextRefreshedListener, HourJob, MinuteJob {
     @Inject
     private Digest digest;
     @Inject
@@ -53,6 +56,8 @@ public class WeixinServiceImpl implements WeixinService, HourJob, ContextRefresh
     private DateTime dateTime;
     @Inject
     private Xml xml;
+    @Inject
+    private Sign sign;
     @Inject
     private QrCode qrCode;
     @Inject
@@ -75,6 +80,10 @@ public class WeixinServiceImpl implements WeixinService, HourJob, ContextRefresh
     private String qrCodeLogo;
     @Value("${" + WeixinModel.NAME + ".auto:false}")
     private boolean auto;
+    @Value("${" + WeixinModel.NAME + ".synch.url=}")
+    private String synchUrl;
+    @Value("${" + WeixinModel.NAME + ".synch.key=}")
+    private String synchKey;
     private String logo;
 
     @Override
@@ -107,7 +116,7 @@ public class WeixinServiceImpl implements WeixinService, HourJob, ContextRefresh
         model.setMchId(weixin.getMchId());
         model.setMchKey(weixin.getMchKey());
         weixinDao.save(model);
-        if (modify)
+        if (modify && auto && validator.isEmpty(synchUrl))
             update(model);
 
         return modelHelper.toJson(model);
@@ -173,7 +182,7 @@ public class WeixinServiceImpl implements WeixinService, HourJob, ContextRefresh
     @Override
     public void prepayQrCode(String key, String user, String subject, int amount, String notice, int size, String logo, OutputStream outputStream) {
         Map<String, String> map = prepay(key, user, subject, amount, notice, "NATIVE", new HashMap<>());
-        if (xml == null)
+        if (map == null)
             return;
 
         qrCode.create(map.get("code_url"), size > 0 ? size : qrCodeSize, getLogo(logo), outputStream);
@@ -300,7 +309,7 @@ public class WeixinServiceImpl implements WeixinService, HourJob, ContextRefresh
 
     @Override
     public void executeHourJob() {
-        if (auto)
+        if (auto && validator.isEmpty(synchUrl))
             weixinDao.query().getList().forEach(this::update);
     }
 
@@ -324,5 +333,23 @@ public class WeixinServiceImpl implements WeixinService, HourJob, ContextRefresh
 
         if (logger.isInfoEnable())
             logger.info("更新微信公众号[{}]Access Token[{}]与Jsapi Ticket[{}]。", weixin.getAppId(), weixin.getAccessToken(), weixin.getJsapiTicket());
+    }
+
+    @Override
+    public void executeMinuteJob() {
+        if (!auto || validator.isEmpty(synchUrl) || Calendar.getInstance().get(Calendar.MINUTE) % 5 > 0)
+            return;
+
+        Map<String, String> parameter = new HashMap<>();
+        sign.put(parameter, synchKey);
+        JSONObject object = json.toObject(http.get(synchUrl + "/weixin/query", null, parameter));
+        if (object == null)
+            return;
+
+        List<WeixinModel> list = modelHelper.fromJson(object.getJSONArray("data"), WeixinModel.class);
+        if (validator.isEmpty(list))
+            return;
+
+        list.forEach(this::save);
     }
 }
