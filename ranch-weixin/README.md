@@ -23,6 +23,8 @@
 
 [接收微信通知](doc/wx.+.md)
 
+[获取APP ID](doc/app-id.md)
+
 [微信登入认证](doc/auth.md)
 
 [生成支付二维码](doc/prepay-qr-code.md)

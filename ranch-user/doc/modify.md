@@ -5,13 +5,16 @@
 - URI - /user/modify
 
 参数
-- name 姓名。
-- nick 昵称。
-- mobile 手机号。
-- email Email地址。
-- gender 性别：0-未知；1-男；2-女。
-- address 详细地址。
-- birthday 出生日期。
+
+|名称|类型|说明|
+|---|---|---|
+|name|char(100)|姓名。|
+|nick|char(100)|昵称。|
+|mobile|char(100)|手机号。|
+|email|char(100)|Email地址。|
+|gender|int|性别：0-未知；1-男；2-女。|
+|address|char(100)|详细地址。|
+|birthday|date|出生日期，格式：yyyy-MM-dd。|
 
 > 参数未提供（is null）则表示不修改，保留原值。
 

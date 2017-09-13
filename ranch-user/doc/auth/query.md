@@ -5,7 +5,10 @@
 - URI - /user/auth/query
 
 参数
-- user 用户ID。
+
+|名称|类型|说明|
+|---|---|---|
+|user|char(36)|用户ID。|
 
 返回值
 ```json

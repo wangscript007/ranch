@@ -16,6 +16,7 @@ import org.lpw.tephra.util.DateTime;
 import org.lpw.tephra.util.Generator;
 import org.lpw.tephra.util.Numeric;
 import org.lpw.tephra.util.Validator;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
@@ -60,6 +61,8 @@ public class UserServiceImpl implements UserService {
     private OnlineService onlineService;
     @Inject
     private UserDao userDao;
+    @Value("${tephra.ctrl.service-root:}")
+    private String root;
 
     @Override
     public void signUp(String uid, String password, Type type) {
@@ -155,6 +158,23 @@ public class UserServiceImpl implements UserService {
         cache.put(key, failure + 1, false);
 
         return false;
+    }
+
+    @Override
+    public String signInWxPc(String key, String redirectUrl) {
+        session.set("sign-in-wx-pc-key", key);
+        session.set("sign-in-wx-pc-redirect-url", redirectUrl);
+
+        return weixinHelper.getPcSignInUrl(key, root + "/user/sign-in-wx-pc-redirect?tephra-session-id=" + session.getId());
+    }
+
+    @Override
+    public String signInWxPcRedirect(String code) {
+        String key = session.get("sign-in-wx-pc-key");
+        String redirectUrl = session.get("sign-in-wx-pc-redirect-url");
+        boolean success = !validator.isEmpty(key) && !validator.isEmpty(code) && signIn(code, key, null, Type.WeiXin);
+
+        return redirectUrl + (redirectUrl.indexOf('?') == -1 ? "?" : "&") + "state=" + (success ? "success" : "failure");
     }
 
     @Override

@@ -5,9 +5,12 @@
 - URI - /user/password
 
 参数
-- old 旧密码，如果尚未设置旧密码则为空。
-- new 新密码。
-- repeat 重复新密码。
+
+|名称|类型|说明|
+|---|---|---|
+|old|string|旧密码，如果尚未设置旧密码则为空。|
+|new|string|新密码。|
+|repeat|string|重复新密码。|
 
 返回值
 ```text

@@ -5,7 +5,10 @@
 - URI - /user/find-by-uid
 
 参数
-- uid UID值。
+
+|名称|类型|说明|
+|---|---|---|
+|uid|char(100)|UID值。|
 
 返回值
 ```json

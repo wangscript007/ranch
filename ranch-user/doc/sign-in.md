@@ -5,10 +5,13 @@
 - URI - /user/sign-in
 
 参数
-- uid UID值：type=0则uid为MacID；type=1则uid为用户名（手机号、Email、账号等）；type=2则uid为微信认证code。
-- password 密码，如果为第三方认证类型则password为第三方AppID，为空表示使用默认AppID。
-- macId 客户端机器码。
-- type 认证类型：0-机器码；1-自有账号；2-微信。
+
+|名称|类型|说明|
+|---|---|---|
+|uid|char(100)|UID值：type=0则uid为MacID；type=1则uid为用户名（手机号、Email、账号等）；type=2则uid为微信认证code。|
+|password|string|密码，如果为第三方认证类型则password为第三方AppID，为空表示使用默认AppID。|
+|macId|char(100)|客户端机器码。|
+|type|int|认证类型：0-机器码；1-自有账号；2-微信。|
 
 返回值
 ```json

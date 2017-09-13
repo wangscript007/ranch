@@ -5,7 +5,10 @@
 - URI - /user/find-by-code
 
 参数
-- code 唯一编码。
+
+|名称|类型|说明|
+|---|---|---|
+|code|char(8)|唯一编码。|
 
 返回值
 ```json

@@ -5,9 +5,12 @@
 - URI - /user/online/sign-out
 
 参数
-- user 用户ID。
-- uid 认证ID，仅当user为空时有效。
-- ip IP地址。
+
+|名称|类型|说明|
+|---|---|---|
+|user|char(36)|用户ID。|
+|uid|char(100)|认证ID，仅当user为空时有效。|
+|ip|char(100)|IP地址。|
 
 返回值
 ```json

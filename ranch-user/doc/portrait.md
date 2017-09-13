@@ -4,7 +4,10 @@
 - URI - /tephra/ctrl-http/upload
 
 参数
-- ranch.user.portrait 头像文件
+
+|名称|类型|说明|
+|---|---|---|
+|ranch.user.portrait|string|头像文件。|
 
 返回值
 ```text

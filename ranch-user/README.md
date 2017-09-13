@@ -26,6 +26,8 @@
 
 [登入](doc/sign-in.md)
 
+[微信PC端登入跳转](doc/sign-in-wx-pc.md)
+
 [获取当前登入用户信息](doc/sign.md)
 
 [登出](doc/sign-out.md)

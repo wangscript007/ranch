@@ -1,6 +1,8 @@
 package org.lpw.ranch.user;
 
 import org.lpw.ranch.user.auth.AuthService;
+import org.lpw.ranch.weixin.helper.WeixinHelper;
+import org.lpw.tephra.ctrl.Forward;
 import org.lpw.tephra.ctrl.context.Request;
 import org.lpw.tephra.ctrl.execute.Execute;
 import org.lpw.tephra.ctrl.template.Templates;
@@ -23,6 +25,8 @@ public class UserCtrl {
     private Request request;
     @Inject
     private Templates templates;
+    @Inject
+    private Forward forward;
     @Inject
     private UserService userService;
 
@@ -48,6 +52,23 @@ public class UserCtrl {
     })
     public Object signIn() {
         return sign();
+    }
+
+    @Execute(name = "sign-in-wx-pc", validates = {
+            @Validate(validator = Validators.NOT_EMPTY, parameter = "redirectUrl", failureCode = 29),
+            @Validate(validator = WeixinHelper.VALIDATOR_EXISTS, parameter = "key", failureCode = 30)
+    })
+    public Object signInWxPc() {
+        forward.redirectTo(userService.signInWxPc(request.get("key"), request.get("redirectUrl")));
+
+        return null;
+    }
+
+    @Execute(name = "sign-in-wx-pc-redirect")
+    public Object signInWxPcRedirect() {
+        forward.redirectTo(userService.signInWxPcRedirect(request.get("code")));
+
+        return null;
     }
 
     @Execute(name = "sign")

@@ -62,6 +62,23 @@ public interface UserService {
     boolean signIn(String uid, String password, String macId, Type type);
 
     /**
+     * 获取微信PC端登入跳转URL地址。
+     *
+     * @param key         微信引用KEY。
+     * @param redirectUrl 返回跳转URL地址。
+     * @return 微信PC端登入跳转URL地址。
+     */
+    String signInWxPc(String key, String redirectUrl);
+
+    /**
+     * 验证微信PC端登入回调。
+     *
+     * @param code 认证code。
+     * @return 跳转地址。
+     */
+    String signInWxPcRedirect(String code);
+
+    /**
      * 获取当前用户登入信息。
      *
      * @return 当前用户登入信息；如果未登入则返回空JSON数据。

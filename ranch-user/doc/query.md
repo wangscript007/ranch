@@ -5,9 +5,12 @@
 - URI - /user/query
 
 参数
-- mobile 手机号，为空则检索全部。
-- pageSize 每页显示记录数。
-- pageNum 当前显示页数。
+
+|名称|类型|说明|
+|---|---|---|
+|mobile|char(100)|手机号，为空则检索全部。|
+|rpageSize|int|每页显示记录数，默认20。|
+|pageNum|int|当前显示页数。|
 
 返回值
 ```json
