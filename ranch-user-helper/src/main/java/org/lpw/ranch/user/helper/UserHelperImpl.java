@@ -32,6 +32,9 @@ public class UserHelperImpl extends ServiceHelperSupport implements UserHelper {
 
     @Override
     public JSONObject findByUid(String uid) {
+        if (validator.isEmpty(uid))
+            return new JSONObject();
+
         if (uidKey == null)
             uidKey = key + ".find-by-uid";
 
@@ -43,6 +46,9 @@ public class UserHelperImpl extends ServiceHelperSupport implements UserHelper {
 
     @Override
     public String findIdByUid(String uid, String defaultValue) {
+        if (validator.isEmpty(uid))
+            return defaultValue;
+
         String id = findByUid(uid).getString("id");
 
         return validator.isEmpty(id) ? defaultValue : id;
