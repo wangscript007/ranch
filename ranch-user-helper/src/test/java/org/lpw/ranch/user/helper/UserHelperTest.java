@@ -97,9 +97,18 @@ public class UserHelperTest extends TephraTestSupport {
         mockHelper.reset();
         mockHelper.mock("/carousel");
         mockCarousel.reset();
-        mockCarousel.register("key", "{\"code\":0,\"data\":{\"id 1\":{\"id\":\"new id\",\"name\":\"carousel\"}}}");
-        JSONObject object = userHelper.findByUid("code value");
-        Assert.assertTrue(object.isEmpty());
+        mockCarousel.register("key", (key, header, parameter, cacheTime) -> {
+            JSONObject json = new JSONObject();
+            json.put("code", 0);
+            JSONObject data = new JSONObject();
+            data.putAll(parameter);
+            data.put("cacheTime", cacheTime);
+            data.put("id", "id value");
+            json.put("data", data);
+
+            return json.toJSONString();
+        });
+        Assert.assertEquals("default value", userHelper.findIdByUid("uid value", "default value"));
 
         mockCarousel.register("ranch.user.find-by-uid", (key, header, parameter, cacheTime) -> {
             JSONObject json = new JSONObject();
@@ -112,7 +121,7 @@ public class UserHelperTest extends TephraTestSupport {
 
             return json.toJSONString();
         });
-        Assert.assertEquals("id value", userHelper.findIdByUid("uid value"));
+        Assert.assertEquals("id value", userHelper.findIdByUid("uid value", "default value"));
     }
 
     @Test

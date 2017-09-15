@@ -54,10 +54,11 @@ public interface UserHelper {
     /**
      * 根据UID获取用户ID值。
      *
-     * @param uid UID值。
-     * @return 用户ID值；如果不存在则返回null。
+     * @param uid          UID值。
+     * @param defaultValue 默认值。
+     * @return 用户ID值；如果不存在则返回默认值。
      */
-    String findIdByUid(String uid);
+    String findIdByUid(String uid, String defaultValue);
 
     /**
      * 判断ID是否存在。

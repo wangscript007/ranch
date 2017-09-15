@@ -54,11 +54,8 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public JSONObject query(String uid, String owner, int type, int minBalance, int maxBalance) {
         String user = null;
-        if (!validator.isEmpty(uid)) {
-            user = userHelper.findIdByUid(uid);
-            if (user == null)
-                user = uid;
-        }
+        if (!validator.isEmpty(uid))
+            user = userHelper.findIdByUid(uid, uid);
         if ("all".equals(owner))
             owner = null;
         JSONObject object = accountDao.query(user, owner, type, minBalance, maxBalance, pagination.getPageSize(20), pagination.getPageNum()).toJson();

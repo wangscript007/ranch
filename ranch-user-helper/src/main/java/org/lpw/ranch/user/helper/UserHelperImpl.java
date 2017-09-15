@@ -42,8 +42,10 @@ public class UserHelperImpl extends ServiceHelperSupport implements UserHelper {
     }
 
     @Override
-    public String findIdByUid(String uid) {
-        return findByUid(uid).getString("id");
+    public String findIdByUid(String uid, String defaultValue) {
+        String id = findByUid(uid).getString("id");
+
+        return validator.isEmpty(id) ? defaultValue : id;
     }
 
     @Override
