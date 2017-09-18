@@ -58,6 +58,20 @@ public interface AccountHelper {
     JSONObject consume(String user, String owner, int type, String channel, int amount, boolean pass, Map<String, String> map);
 
     /**
+     * 盈利。
+     *
+     * @param user    用户，为空则使用当前用户。
+     * @param owner   所有者。
+     * @param type    类型。
+     * @param channel 渠道。
+     * @param amount  数量。
+     * @param pass    自动设置审核通过。
+     * @param map     参数集。
+     * @return 账户信息；如果盈利失败则返回空JSON。
+     */
+    JSONObject profit(String user, String owner, int type, String channel, int amount, boolean pass, Map<String, String> map);
+
+    /**
      * 退款。
      *
      * @param user    用户，为空则使用当前用户。
@@ -67,7 +81,7 @@ public interface AccountHelper {
      * @param amount  数量。
      * @param pass    自动设置审核通过。
      * @param map     参数集。
-     * @return 账户信息；如果消费失败则返回空JSON。
+     * @return 账户信息；如果退款失败则返回空JSON。
      */
     JSONObject refund(String user, String owner, int type, String channel, int amount, boolean pass, Map<String, String> map);
 

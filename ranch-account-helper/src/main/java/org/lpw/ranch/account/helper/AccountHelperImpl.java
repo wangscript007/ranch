@@ -54,6 +54,11 @@ public class AccountHelperImpl implements AccountHelper {
     }
 
     @Override
+    public JSONObject profit(String user, String owner, int type, String channel, int amount, boolean pass, Map<String, String> map) {
+        return change(".profit", user, owner, type, channel, amount, pass, map);
+    }
+
+    @Override
     public JSONObject refund(String user, String owner, int type, String channel, int amount, boolean pass, Map<String, String> map) {
         return change(".refund", user, owner, type, channel, amount, pass, map);
     }
