@@ -7,28 +7,22 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>ranch-captcha</artifactId>
+    <artifactId>ranch-chrome</artifactId>
     <packaging>jar</packaging>
 
-    <name>ranch-captcha</name>
+    <name>ranch-chrome</name>
     <url>http://maven.apache.org</url>
 
     <dependencies>
         <dependency>
+            <groupId>io.webfolder</groupId>
+            <artifactId>cdp4j</artifactId>
+            <version>LATEST</version>
+        </dependency>
+        <dependency>
             <groupId>org.lpw.ranch</groupId>
             <artifactId>ranch-base</artifactId>
             <version>${version.ranch}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.octo.captcha</groupId>
-            <artifactId>jcaptcha</artifactId>
-            <version>1.0</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>com.jhlabs</groupId>
-                    <artifactId>imaging</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.lpw.ranch</groupId>

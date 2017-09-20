@@ -12,7 +12,7 @@
 |orderNo|char(21)|订单号。|
 |tradeNo|char(100)|网关订单号。|
 |state|int|状态：0-新建；1-成功；2-失败。|
-|notify|char(100)|通知URL地址。|
+|notify|string|通知配置。|
 |start|timestamp|开始时间。|
 |end|timestamp|结束时间。|
 |json|string|扩展数据。|

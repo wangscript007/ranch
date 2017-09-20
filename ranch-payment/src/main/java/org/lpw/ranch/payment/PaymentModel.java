@@ -27,7 +27,7 @@ public class PaymentModel extends ModelSupport {
     private String orderNo; // 订单号
     private String tradeNo; // 网关订单号
     private int state; // 状态：0-新建；1-成功；2-失败
-    private String notice; // 通知
+    private String notice; // 通知配置
     private Timestamp start; // 开始时间
     private Timestamp end; // 结束时间
     private String json; // 扩展数据

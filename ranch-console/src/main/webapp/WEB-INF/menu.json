@@ -25,6 +25,15 @@
         ]
     },
     {
+        "name": "基础配置",
+        "items": [
+            {
+                "name": "Chrome导出",
+                "service": "ranch.chrome.query"
+            }
+        ]
+    },
+    {
         "name": "数据库助手",
         "items": [
             {
