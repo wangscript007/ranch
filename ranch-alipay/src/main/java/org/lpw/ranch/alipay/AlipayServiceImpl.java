@@ -90,46 +90,49 @@ public class AlipayServiceImpl implements AlipayService {
 
     @Override
     public String quickWapPay(String key, String user, String subject, int amount, String notice, String returnUrl) {
-        String content = getBizContent(user, subject, amount, notice, "QUICK_WAP_PAY");
+        AlipayModel alipay = alipayDao.findByKey(key);
+        String content = getBizContent(user, alipay.getAppId(), subject, amount, notice, "QUICK_WAP_PAY");
         if (content == null)
             return null;
 
         AlipayTradeWapPayRequest request = new AlipayTradeWapPayRequest();
         request.setBizContent(content);
 
-        return prepay(key, returnUrl, request);
+        return prepay(alipay, returnUrl, request);
     }
 
     @Override
     public String fastInstantTradePay(String key, String user, String subject, int amount, String notice, String returnUrl) {
-        String content = getBizContent(user, subject, amount, notice, "FAST_INSTANT_TRADE_PAY");
+        AlipayModel alipay = alipayDao.findByKey(key);
+        String content = getBizContent(user, alipay.getAppId(), subject, amount, notice, "FAST_INSTANT_TRADE_PAY");
         if (content == null)
             return null;
 
         AlipayTradePagePayRequest request = new AlipayTradePagePayRequest();
         request.setBizContent(content);
 
-        return prepay(key, returnUrl, request);
+        return prepay(alipay, returnUrl, request);
     }
 
     @Override
     public String quickMsecurityPay(String key, String user, String subject, int amount, String notice) {
-        String content = getBizContent(user, subject, amount, notice, "QUICK_MSECURITY_PAY");
+        AlipayModel alipay = alipayDao.findByKey(key);
+        String content = getBizContent(user, alipay.getAppId(), subject, amount, notice, "QUICK_MSECURITY_PAY");
         if (content == null)
             return null;
 
         AlipayTradeAppPayRequest request = new AlipayTradeAppPayRequest();
         request.setBizContent(content);
-        String string = prepay(key, null, request);
+        String string = prepay(alipay, null, request);
 
         return string == null ? null : string.substring(string.indexOf('?') + 1, string.indexOf('>') - 1) + "&biz_content=" +
                 converter.encodeUrl(string.substring(string.indexOf('{'), string.indexOf('}') + 1).replaceAll("&quot;", "\""), null);
     }
 
-    private String getBizContent(String user, String subject, int amount, String notice, String code) {
+    private String getBizContent(String user, String appId, String subject, int amount, String notice, String code) {
         if (validator.isEmpty(user))
             user = userHelper.id();
-        String orderNo = paymentHelper.create("alipay", user, amount, notice);
+        String orderNo = paymentHelper.create("alipay", user, appId, amount, notice);
         if (validator.isEmpty(orderNo))
             return null;
 
@@ -142,13 +145,13 @@ public class AlipayServiceImpl implements AlipayService {
         return object.toJSONString();
     }
 
-    private String prepay(String key, String returnUrl, AlipayRequest<? extends AlipayResponse> request) {
+    private String prepay(AlipayModel alipay, String returnUrl, AlipayRequest<? extends AlipayResponse> request) {
         request.setNotifyUrl(root + "/alipay/notice");
         if (!validator.isEmpty(returnUrl))
             request.setReturnUrl(returnUrl);
 
         try {
-            return newAlipayClient(alipayDao.findByKey(key)).pageExecute(request).getBody();
+            return newAlipayClient(alipay).pageExecute(request).getBody();
         } catch (Throwable e) {
             logger.warn(e, "执行支付宝付款时发生异常！");
 

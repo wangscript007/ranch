@@ -23,6 +23,7 @@ public class PaymentModel extends ModelSupport {
 
     private String type; // 类型
     private String user; // 用户ID
+    private String appId; // 支付APP ID
     private int amount; // 金额，单位：分
     private String orderNo; // 订单号
     private String tradeNo; // 网关订单号
@@ -50,6 +51,16 @@ public class PaymentModel extends ModelSupport {
 
     public void setUser(String user) {
         this.user = user;
+    }
+
+    @Jsonable
+    @Column(name = "c_app_id")
+    public String getAppId() {
+        return appId;
+    }
+
+    public void setAppId(String appId) {
+        this.appId = appId;
     }
 
     @Jsonable

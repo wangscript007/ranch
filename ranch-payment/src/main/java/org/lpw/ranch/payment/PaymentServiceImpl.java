@@ -72,8 +72,8 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     @Override
-    public JSONObject query(String type, String user, String orderNo, String tradeNo, int state, String start, String end) {
-        JSONObject object = paymentDao.query(type, user, orderNo, tradeNo, state, dateTime.getStart(start),
+    public JSONObject query(String type, String user, String appId, String orderNo, String tradeNo, int state, String start, String end) {
+        JSONObject object = paymentDao.query(type, userHelper.findIdByUid(user, user), appId, orderNo, tradeNo, state, dateTime.getStart(start),
                 dateTime.getEnd(end), pagination.getPageSize(20), pagination.getPageNum()).toJson();
         userHelper.fill(object.getJSONArray("list"), new String[]{"user"});
 
@@ -104,10 +104,11 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     @Override
-    public JSONObject create(String type, String user, int amount, String notice, Map<String, String> map) {
+    public JSONObject create(String type, String user, String appId, int amount, String notice, Map<String, String> map) {
         PaymentModel payment = new PaymentModel();
         payment.setType(type);
         payment.setUser(validator.isEmpty(user) ? userHelper.id() : user);
+        payment.setAppId(appId);
         payment.setAmount(amount);
         payment.setStart(dateTime.now());
         payment.setOrderNo(newOrderNo(payment.getStart()));
@@ -134,7 +135,7 @@ public class PaymentServiceImpl implements PaymentService {
     public JSONObject complete(String orderNo, int amount, String tradeNo, int state, Map<String, String> map) {
         String lock = lockHelper.lock(LOCK_ORDER_NO + orderNo, 1000L);
         PaymentModel payment = find(orderNo);
-        if (payment.getState() == 0&&payment.getAmount()==amount) {
+        if (payment.getState() == 0 && payment.getAmount() == amount) {
             payment.setTradeNo(tradeNo);
             complete(payment, state, "complete", map);
         }

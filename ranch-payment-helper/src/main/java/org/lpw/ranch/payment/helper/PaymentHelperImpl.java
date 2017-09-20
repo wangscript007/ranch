@@ -26,10 +26,11 @@ public class PaymentHelperImpl implements PaymentHelper {
     private String paymentKey;
 
     @Override
-    public String create(String type, String user, int amount, String notice) {
+    public String create(String type, String user, String appId, int amount, String notice) {
         Map<String, String> parameter = new HashMap<>(request.getMap());
         parameter.put("type", type);
         parameter.put("user", user);
+        parameter.put("appId", appId);
         parameter.put("amount", converter.toString(amount, "0"));
         parameter.put("notice", notice);
         JSONObject object = carousel.service(paymentKey + ".create", null, parameter, false, JSONObject.class);

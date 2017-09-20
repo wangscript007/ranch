@@ -9,11 +9,12 @@ public interface PaymentHelper {
      *
      * @param type   支付类型。
      * @param user   用户ID。
+     * @param appId  支付APP ID。
      * @param amount 支付金额，单位：分。
      * @param notice 通知。
      * @return 订单号；创建失败则返回null。
      */
-    String create(String type, String user, int amount, String notice);
+    String create(String type, String user, String appId, int amount, String notice);
 
     /**
      * 支付完成。

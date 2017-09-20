@@ -227,7 +227,7 @@ public class WeixinServiceImpl implements WeixinService, ContextRefreshedListene
         if (weixin == null)
             return null;
 
-        String orderNo = paymentHelper.create("weixin", user, amount, notice);
+        String orderNo = paymentHelper.create("weixin", user, weixin.getAppId(), amount, notice);
         if (validator.isEmpty(orderNo))
             return null;
 

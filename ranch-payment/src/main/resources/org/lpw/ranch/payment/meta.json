@@ -9,6 +9,9 @@
             "label": "ranch.payment.user"
         },
         {
+            "name": "appId"
+        },
+        {
             "name": "amount"
         },
         {
