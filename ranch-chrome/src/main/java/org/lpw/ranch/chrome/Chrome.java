@@ -11,7 +11,8 @@ public interface Chrome {
      */
     enum Type {
         Pdf,
-        Img
+        Png,
+        Jpg
     }
 
     /**

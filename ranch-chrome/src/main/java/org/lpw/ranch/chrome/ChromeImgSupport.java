@@ -2,11 +2,9 @@ package org.lpw.ranch.chrome;
 
 import io.webfolder.cdp.session.Session;
 import org.lpw.tephra.util.Logger;
-import org.springframework.stereotype.Service;
 
 import javax.imageio.ImageIO;
 import javax.inject.Inject;
-import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -16,15 +14,9 @@ import java.io.InputStream;
 /**
  * @author lpw
  */
-@Service(ChromeModel.NAME + ".img")
-public class ChromeImgImpl extends ChromeSupport {
+public abstract class ChromeImgSupport extends ChromeSupport {
     @Inject
     private Logger logger;
-
-    @Override
-    public Type getType() {
-        return Type.Img;
-    }
 
     @Override
     byte[] execute(ChromeModel chrome, Session session) {
@@ -50,14 +42,15 @@ public class ChromeImgImpl extends ChromeSupport {
             height = image.getHeight();
         else
             height = Math.min(height, image.getHeight());
-        BufferedImage subImage = image.getSubimage(x, y, width, height);
-        BufferedImage jpegImage = new BufferedImage(subImage.getWidth(), subImage.getHeight(), BufferedImage.TYPE_INT_RGB);
-        jpegImage.createGraphics().drawImage(subImage, 0, 0, Color.WHITE, null);
 
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        ImageIO.write(jpegImage, "JPEG", outputStream);
+        ImageIO.write(format(image.getSubimage(x, y, width, height)), formatName(), outputStream);
         outputStream.close();
 
         return outputStream.toByteArray();
     }
+
+    abstract BufferedImage format(BufferedImage subImage);
+
+    abstract String formatName();
 }

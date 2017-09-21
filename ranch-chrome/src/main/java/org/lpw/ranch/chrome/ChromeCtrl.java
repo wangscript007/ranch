@@ -80,14 +80,25 @@ public class ChromeCtrl {
         return chromeService.pdf(request.get("key"), request.get("url"), request.getAsInt("width"), request.getAsInt("height"), request.get("pages"), request.getAsInt("wait"));
     }
 
-    @Execute(name = "img", type = Templates.STREAM, validates = {
+    @Execute(name = "png", type = Templates.STREAM, validates = {
             @Validate(validator = Validators.NOT_EMPTY, parameter = "key", failureCode = 1),
             @Validate(validator = Validators.NOT_EMPTY, parameter = "url", failureCode = 6),
             @Validate(validator = ChromeService.VALIDATOR_KEY_EXISTS, parameter = "key", failureCode = 7)
     })
-    public Object img() {
+    public Object png() {
+        response.setContentType("image/png");
+
+        return chromeService.png(request.get("key"), request.get("url"), request.getAsInt("x"), request.getAsInt("y"), request.getAsInt("width"), request.getAsInt("height"), request.getAsInt("wait"));
+    }
+
+    @Execute(name = "jpg", type = Templates.STREAM, validates = {
+            @Validate(validator = Validators.NOT_EMPTY, parameter = "key", failureCode = 1),
+            @Validate(validator = Validators.NOT_EMPTY, parameter = "url", failureCode = 6),
+            @Validate(validator = ChromeService.VALIDATOR_KEY_EXISTS, parameter = "key", failureCode = 7)
+    })
+    public Object jpg() {
         response.setContentType("image/jpeg");
 
-        return chromeService.img(request.get("key"), request.get("url"), request.getAsInt("x"), request.getAsInt("y"), request.getAsInt("width"), request.getAsInt("height"), request.getAsInt("wait"));
+        return chromeService.jpg(request.get("key"), request.get("url"), request.getAsInt("x"), request.getAsInt("y"), request.getAsInt("width"), request.getAsInt("height"), request.getAsInt("wait"));
     }
 }

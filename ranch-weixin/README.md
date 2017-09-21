@@ -21,6 +21,8 @@
 
 [保存配置](doc/save.md)
 
+[删除配置](doc/delete.md)
+
 [接收微信通知](doc/wx.+.md)
 
 [获取APP ID](doc/app-id.md)

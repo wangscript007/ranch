@@ -21,5 +21,7 @@ public interface ChromeService {
 
     byte[] pdf(String key, String url, int width, int height, String pages, int wait);
 
-    byte[] img(String key, String url, int x, int y, int width, int height, int wait);
+    byte[] png(String key, String url, int x, int y, int width, int height, int wait);
+
+    byte[] jpg(String key, String url, int x, int y, int width, int height, int wait);
 }

@@ -69,8 +69,13 @@ public class ChromeServiceImpl implements ChromeService {
     }
 
     @Override
-    public byte[] img(String key, String url, int x, int y, int width, int height, int wait) {
-        return chromes.get(Chrome.Type.Img).execute(findByKey(key, x, y, width, height, null, wait), url);
+    public byte[] png(String key, String url, int x, int y, int width, int height, int wait) {
+        return chromes.get(Chrome.Type.Png).execute(findByKey(key, x, y, width, height, null, wait), url);
+    }
+
+    @Override
+    public byte[] jpg(String key, String url, int x, int y, int width, int height, int wait) {
+        return chromes.get(Chrome.Type.Jpg).execute(findByKey(key, x, y, width, height, null, wait), url);
     }
 
     private ChromeModel findByKey(String key, int x, int y, int width, int height, String pages, int wait) {

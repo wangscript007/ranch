@@ -17,6 +17,8 @@
 
 [保存配置](doc/save.md)
 
+[删除配置](doc/delete.md)
+
 [发起手机WEB端支付](doc/quick-wap-pay.md)
 
 [发起PC WEB端支付](doc/fast-instant-trade-pay.md)
