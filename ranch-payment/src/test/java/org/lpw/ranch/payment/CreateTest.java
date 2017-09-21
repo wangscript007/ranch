@@ -73,15 +73,17 @@ public class CreateTest extends TestSupport {
         mockHelper.reset();
         mockHelper.getRequest().addParameter("type", "type value");
         mockHelper.getRequest().addParameter("user", "user id");
+        mockHelper.getRequest().addParameter("appId", "app id");
         mockHelper.getRequest().addParameter("amount", "1");
         mockHelper.getRequest().addParameter("notice", "notice");
         mockHelper.mock("/payment/create");
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(0, object.getIntValue("code"));
         JSONObject data = object.getJSONObject("data");
-        Assert.assertEquals(9, data.size());
+        Assert.assertEquals(10, data.size());
         Assert.assertEquals("type value", data.getString("type"));
         Assert.assertEquals("user id", data.getString("user"));
+        Assert.assertEquals("app id", data.getString("appId"));
         Assert.assertEquals(1, data.getIntValue("amount"));
         Assert.assertEquals(time + "0000", data.getString("orderNo"));
         Assert.assertEquals("", data.getString("tradeNo"));

@@ -29,31 +29,34 @@ public class PaymentHelperTest extends TephraTestSupport {
 
         Map<String, String> map = new HashMap<>();
         mockCarousel("create", 1, "orderNo", map);
-        Assert.assertNull(paymentHelper.create("type", "user", 1, "notice"));
-        Assert.assertEquals(5, map.size());
+        Assert.assertNull(paymentHelper.create("type", "user", "app id", 1, "notice"));
+        Assert.assertEquals(6, map.size());
         Assert.assertEquals("helper", map.get("payment"));
         Assert.assertEquals("type", map.get("type"));
         Assert.assertEquals("user", map.get("user"));
+        Assert.assertEquals("app id", map.get("appId"));
         Assert.assertEquals("1", map.get("amount"));
         Assert.assertEquals("notice", map.get("notice"));
 
         map.clear();
         mockCarousel("create", 0, "id", map);
-        Assert.assertNull(paymentHelper.create("type", "user", 1, "notice"));
-        Assert.assertEquals(5, map.size());
+        Assert.assertNull(paymentHelper.create("type", "user", "app id", 1, "notice"));
+        Assert.assertEquals(6, map.size());
         Assert.assertEquals("helper", map.get("payment"));
         Assert.assertEquals("type", map.get("type"));
         Assert.assertEquals("user", map.get("user"));
+        Assert.assertEquals("app id", map.get("appId"));
         Assert.assertEquals("1", map.get("amount"));
         Assert.assertEquals("notice", map.get("notice"));
 
         map.clear();
         mockCarousel("create", 0, "orderNo", map);
-        Assert.assertEquals("order no", paymentHelper.create("type", "user", 1, "notice"));
-        Assert.assertEquals(5, map.size());
+        Assert.assertEquals("order no", paymentHelper.create("type", "user", "app id", 1, "notice"));
+        Assert.assertEquals(6, map.size());
         Assert.assertEquals("helper", map.get("payment"));
         Assert.assertEquals("type", map.get("type"));
         Assert.assertEquals("user", map.get("user"));
+        Assert.assertEquals("app id", map.get("appId"));
         Assert.assertEquals("1", map.get("amount"));
         Assert.assertEquals("notice", map.get("notice"));
     }

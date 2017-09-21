@@ -62,6 +62,7 @@ public class PaymentServiceImpl implements PaymentService {
         ignores.add("id");
         ignores.add("type");
         ignores.add("user");
+        ignores.add("appId");
         ignores.add("amount");
         ignores.add("orderNo");
         ignores.add("tradeNo");
@@ -83,7 +84,7 @@ public class PaymentServiceImpl implements PaymentService {
     @Override
     public JSONObject success(String id, Map<String, String> map) {
         PaymentModel payment = find(id);
-        complete(payment, 0, "success", map);
+        complete(payment, 1, "success", map);
 
         return modelHelper.toJson(payment);
     }
@@ -135,7 +136,8 @@ public class PaymentServiceImpl implements PaymentService {
     public JSONObject complete(String orderNo, int amount, String tradeNo, int state, Map<String, String> map) {
         String lock = lockHelper.lock(LOCK_ORDER_NO + orderNo, 1000L);
         PaymentModel payment = find(orderNo);
-        if (payment.getState() == 0 && payment.getAmount() == amount) {
+        if (payment.getState() == 0) {
+            payment.setAmount(amount);
             payment.setTradeNo(tradeNo);
             complete(payment, state, "complete", map);
         }
