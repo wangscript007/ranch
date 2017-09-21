@@ -22,6 +22,15 @@ public interface Chrome {
     Type getType();
 
     /**
+     * 设置Chrome服务地址及端口号。
+     *
+     * @param host 服务器地址。
+     * @param port 端口号。
+     * @return 当前Chrome实例。
+     */
+    Chrome set(String host, int port);
+
+    /**
      * 执行Chrome操作。
      *
      * @param chrome 参数。

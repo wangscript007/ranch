@@ -86,7 +86,7 @@ public class ChromeCtrl {
             @Validate(validator = ChromeService.VALIDATOR_KEY_EXISTS, parameter = "key", failureCode = 7)
     })
     public Object img() {
-        response.setContentType("image/png");
+        response.setContentType("image/jpeg");
 
         return chromeService.img(request.get("key"), request.get("url"), request.getAsInt("x"), request.getAsInt("y"), request.getAsInt("width"), request.getAsInt("height"), request.getAsInt("wait"));
     }

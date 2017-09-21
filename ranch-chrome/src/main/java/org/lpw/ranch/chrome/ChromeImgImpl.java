@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import javax.imageio.ImageIO;
 import javax.inject.Inject;
+import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -50,9 +51,11 @@ public class ChromeImgImpl extends ChromeSupport {
         else
             height = Math.min(height, image.getHeight());
         BufferedImage subImage = image.getSubimage(x, y, width, height);
+        BufferedImage jpegImage = new BufferedImage(subImage.getWidth(), subImage.getHeight(), BufferedImage.TYPE_INT_RGB);
+        jpegImage.createGraphics().drawImage(subImage, 0, 0, Color.WHITE, null);
 
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        ImageIO.write(subImage, "PNG", outputStream);
+        ImageIO.write(jpegImage, "JPEG", outputStream);
         outputStream.close();
 
         return outputStream.toByteArray();
