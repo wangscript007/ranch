@@ -1,8 +1,8 @@
-# 导出图片
+# 导出JPEG图片
 
 请求
-- Service Key - ranch.chrome.img
-- URI - /chrome/img
+- Service Key - ranch.chrome.jpg
+- URI - /chrome/jpg
 
 参数
 
