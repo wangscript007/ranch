@@ -3,11 +3,16 @@ package org.lpw.ranch.chrome;
 import io.webfolder.cdp.Launcher;
 import io.webfolder.cdp.session.Session;
 import io.webfolder.cdp.session.SessionFactory;
+import org.lpw.tephra.util.Logger;
+
+import javax.inject.Inject;
 
 /**
  * @author lpw
  */
 public abstract class ChromeSupport implements Chrome {
+    @Inject
+    protected Logger logger;
     private String host;
     private int port;
 
@@ -21,6 +26,9 @@ public abstract class ChromeSupport implements Chrome {
 
     @Override
     public byte[] execute(ChromeModel chrome, String url) {
+        if (logger.isDebugEnable())
+            logger.debug("使用远程Chrome[{}:{}]服务导出[{}:{}]。", host, port, getType().name(), url);
+
         SessionFactory sessionFactory = new SessionFactory(host, port);
         Launcher launcher = new Launcher(sessionFactory);
         launcher.launch();

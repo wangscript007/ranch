@@ -15,9 +15,6 @@ import java.io.InputStream;
  * @author lpw
  */
 public abstract class ChromeImgSupport extends ChromeSupport {
-    @Inject
-    private Logger logger;
-
     @Override
     byte[] execute(ChromeModel chrome, Session session) {
         try {

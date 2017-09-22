@@ -1,17 +1,9 @@
 package org.lpw.ranch.chrome;
 
-import io.webfolder.cdp.session.Session;
-import org.lpw.tephra.util.Logger;
 import org.springframework.stereotype.Service;
 
-import javax.imageio.ImageIO;
-import javax.inject.Inject;
 import java.awt.Color;
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
 
 /**
  * @author lpw
