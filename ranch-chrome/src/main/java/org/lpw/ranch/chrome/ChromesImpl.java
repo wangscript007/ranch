@@ -73,7 +73,7 @@ public class ChromesImpl implements Chromes, ContextRefreshedListener, StorageLi
         Set<String> set = new HashSet<>();
         for (String string : converter.toArray(io.readAsString(absolutePath), "\n")) {
             string = string.trim();
-            if (string.equals("") || string.startsWith("#") || string.indexOf(':') == -1)
+            if (string.length() == 0 || string.charAt(0) == '#' || string.indexOf(':') == -1)
                 continue;
 
             set.add(string);
