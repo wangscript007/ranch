@@ -38,7 +38,8 @@ public class ConsoleCtrl {
     }
 
     @Execute(name = "service", validates = {
-            @Validate(validator = Validators.NOT_EMPTY, scope = Validate.Scope.Header, parameter = "key", failureCode = 1)
+            @Validate(validator = Validators.NOT_EMPTY, scope = Validate.Scope.Header, parameter = "key", failureCode = 1),
+            @Validate(validator = ConsoleService.VALIDATOR_PERMIT, scope = Validate.Scope.Header, parameter = "key", failureCode = 2)
     })
     public Object service() {
         return consoleService.service(header.get("key"), request.getMap());

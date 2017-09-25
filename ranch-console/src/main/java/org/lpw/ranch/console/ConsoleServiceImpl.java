@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import org.lpw.ranch.classify.helper.ClassifyHelper;
 import org.lpw.ranch.meta.MetaService;
+import org.lpw.ranch.user.helper.UserHelper;
 import org.lpw.ranch.util.Carousel;
 import org.lpw.tephra.storage.StorageListener;
 import org.lpw.tephra.storage.Storages;
@@ -39,12 +40,22 @@ public class ConsoleServiceImpl implements ConsoleService, StorageListener {
     private MetaService metaService;
     @Inject
     private ClassifyHelper classifyHelper;
+    @Inject
+    private UserHelper userHelper;
     @Value("${" + ConsoleModel.NAME + ".menu:/WEB-INF/menu.json}")
     private String menu;
     private JSONArray menus;
 
     @Override
+    public boolean permit() {
+        return userHelper.sign().getIntValue("grade") == 99;
+    }
+
+    @Override
     public JSONArray menus() {
+        if (!permit())
+            return new JSONArray();
+
         String menu = classifyHelper.value(ConsoleModel.NAME, "menu");
         if (validator.isEmpty(menu))
             return menus;

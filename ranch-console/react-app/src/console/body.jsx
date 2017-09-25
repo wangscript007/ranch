@@ -15,8 +15,7 @@ class Body extends React.Component {
     service(key, loading, params, success) {
         this.loading(loading);
 
-        var headers = { key: key };
-        window.ajax("/console/service", params, headers).then(json => {
+        window.ajax("/console/service", params, { key: key }).then(json => {
             if (!json || !json.hasOwnProperty("code")) {
                 console.log("failure:" + JSON.stringify(json));
                 this.loading(false);

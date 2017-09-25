@@ -6,11 +6,14 @@ window.ajax = function (uri, params, headers) {
 
     var object = {
         method: "POST",
+        mode: "cors",
+        credentials: "include",
         headers: headers || {}
     };
+    // credentials: "same-origin"
     object.headers["Content-Type"] = "appliaction/json";
     if (params)
         object.body = JSON.stringify(params);
 
-    return fetch("http://dev3.nutsb.com" + uri, object).then(res => res.json());
+    return fetch("http://localhost:8080" + uri, object).then(res => res.json());
 };

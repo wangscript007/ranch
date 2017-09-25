@@ -2,8 +2,15 @@ import React from "react";
 import message from "./message.json";
 import "./header.css";
 import Menu from "./menu";
+import A from "../component/a";
 
 class Header extends React.Component {
+    constructor(props) {
+        super(props);
+
+        this.signOut = this.signOut.bind(this);
+    }
+
     render() {
         return (
             <div className="console-header">
@@ -16,9 +23,16 @@ class Header extends React.Component {
 
     link(label) {
         return (
-            // eslint-disable-next-line
-            <a href="javascript:void(0);">{label}</a>
+            <A message={message} label="sign-out" click={this.signOut} />
         );
+    }
+
+    signOut() {
+        window.ajax("/console/service", {}, { key: "ranch.user.sign-out" }).then(json => {
+            this.props.owner.setState(prevState => ({
+                sign: {}
+            }));
+        });
     }
 }
 

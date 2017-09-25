@@ -10,6 +10,18 @@ import java.util.Map;
  */
 public interface ConsoleService {
     /**
+     * 是否允许访问验证器Bean名称。
+     */
+    String VALIDATOR_PERMIT = ConsoleModel.NAME + ".valiator.permit";
+
+    /**
+     * 验证用户权限。
+     *
+     * @return 如果允许则返回true；否则返回fale。
+     */
+    boolean permit();
+
+    /**
      * 获取菜单集。
      *
      * @return 菜单集。
