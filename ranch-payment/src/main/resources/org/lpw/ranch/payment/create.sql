@@ -3,8 +3,8 @@ CREATE TABLE t_payment
 (
   c_id CHAR(36) NOT NULL COMMENT '主键',
   c_type VARCHAR(255) NOT NULL COMMENT '类型',
-  c_user CHAR(36) NOT NULL COMMENT '用户ID',
   c_app_id VARCHAR(255) DEFAULT NULL COMMENT '支付APP ID',
+  c_user CHAR(36) NOT NULL COMMENT '用户ID',
   c_amount INT DEFAULT 0 COMMENT '金额，单位：分',
   c_order_no CHAR(21) NOT NULL COMMENT '订单号',
   c_trade_no VARCHAR(255) NOT NULL COMMENT '网关订单号',

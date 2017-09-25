@@ -87,9 +87,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean signIn(String uid, String password, String macId, Type type) {
-
-        System.out.println("#### "+password + "=" + password(password));
-
         if (type == Type.WeiXin)
             uid = getWeixinId(password, uid);
         if (uid == null)

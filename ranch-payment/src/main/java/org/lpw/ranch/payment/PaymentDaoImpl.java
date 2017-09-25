@@ -22,12 +22,12 @@ class PaymentDaoImpl implements PaymentDao {
     private LiteOrm liteOrm;
 
     @Override
-    public PageList<PaymentModel> query(String type, String user, String appId, String orderNo, String tradeNo, int state, Timestamp start, Timestamp end, int pageSize, int pageNum) {
+    public PageList<PaymentModel> query(String type, String appId, String user, String orderNo, String tradeNo, int state, Timestamp start, Timestamp end, int pageSize, int pageNum) {
         StringBuilder where = new StringBuilder();
         List<Object> args = new ArrayList<>();
         append(where, args, "c_type", "=", type);
-        append(where, args, "c_user", "=", user);
         append(where, args, "c_app_id", "=", appId);
+        append(where, args, "c_user", "=", user);
         append(where, args, "c_order_no", "=", orderNo);
         append(where, args, "c_trade_no", "=", tradeNo);
         if (state > -1)

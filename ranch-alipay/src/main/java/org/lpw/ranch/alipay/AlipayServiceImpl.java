@@ -91,7 +91,7 @@ public class AlipayServiceImpl implements AlipayService {
     @Override
     public String quickWapPay(String key, String user, String subject, int amount, String notice, String returnUrl) {
         AlipayModel alipay = alipayDao.findByKey(key);
-        String content = getBizContent(user, alipay.getAppId(), subject, amount, notice, "QUICK_WAP_PAY");
+        String content = getBizContent(alipay.getAppId(), user, subject, amount, notice, "QUICK_WAP_PAY");
         if (content == null)
             return null;
 
@@ -104,7 +104,7 @@ public class AlipayServiceImpl implements AlipayService {
     @Override
     public String fastInstantTradePay(String key, String user, String subject, int amount, String notice, String returnUrl) {
         AlipayModel alipay = alipayDao.findByKey(key);
-        String content = getBizContent(user, alipay.getAppId(), subject, amount, notice, "FAST_INSTANT_TRADE_PAY");
+        String content = getBizContent(alipay.getAppId(), user, subject, amount, notice, "FAST_INSTANT_TRADE_PAY");
         if (content == null)
             return null;
 
@@ -117,7 +117,7 @@ public class AlipayServiceImpl implements AlipayService {
     @Override
     public String quickMsecurityPay(String key, String user, String subject, int amount, String notice) {
         AlipayModel alipay = alipayDao.findByKey(key);
-        String content = getBizContent(user, alipay.getAppId(), subject, amount, notice, "QUICK_MSECURITY_PAY");
+        String content = getBizContent(alipay.getAppId(), user, subject, amount, notice, "QUICK_MSECURITY_PAY");
         if (content == null)
             return null;
 
@@ -129,10 +129,10 @@ public class AlipayServiceImpl implements AlipayService {
                 converter.encodeUrl(string.substring(string.indexOf('{'), string.indexOf('}') + 1).replaceAll("&quot;", "\""), null);
     }
 
-    private String getBizContent(String user, String appId, String subject, int amount, String notice, String code) {
+    private String getBizContent(String appId, String user, String subject, int amount, String notice, String code) {
         if (validator.isEmpty(user))
             user = userHelper.id();
-        String orderNo = paymentHelper.create("alipay", user, appId, amount, notice);
+        String orderNo = paymentHelper.create("alipay", appId, user, amount, notice);
         if (validator.isEmpty(orderNo))
             return null;
 

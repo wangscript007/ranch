@@ -34,7 +34,7 @@ public class PaymentCtrl {
         if (validator.isEmpty(state))
             state = "-1";
 
-        return paymentService.query(request.get("type"), request.get("user"), request.get("appId"), request.get("orderNo"),
+        return paymentService.query(request.get("type"), request.get("appId"), request.get("user"), request.get("orderNo"),
                 request.get("tradeNo"), numeric.toInt(state), request.get("start"), request.get("end"));
     }
 
@@ -65,7 +65,7 @@ public class PaymentCtrl {
             @Validate(validator = UserHelper.VALIDATOR_EXISTS_OR_SIGN_IN, parameter = "user", failureCode = 5)
     })
     public Object create() {
-        return paymentService.create(request.get("type"), request.get("user"), request.get("appId"), request.getAsInt("amount"), request.get("notice"), request.getMap());
+        return paymentService.create(request.get("type"), request.get("appId"), request.get("user"), request.getAsInt("amount"), request.get("notice"), request.getMap());
     }
 
     @Execute(name = "complete", validates = {

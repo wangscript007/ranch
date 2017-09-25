@@ -22,8 +22,8 @@ public class PaymentModel extends ModelSupport {
     static final String NAME = "ranch.payment";
 
     private String type; // 类型
-    private String user; // 用户ID
     private String appId; // 支付APP ID
+    private String user; // 用户ID
     private int amount; // 金额，单位：分
     private String orderNo; // 订单号
     private String tradeNo; // 网关订单号
@@ -44,16 +44,6 @@ public class PaymentModel extends ModelSupport {
     }
 
     @Jsonable
-    @Column(name = "c_user")
-    public String getUser() {
-        return user;
-    }
-
-    public void setUser(String user) {
-        this.user = user;
-    }
-
-    @Jsonable
     @Column(name = "c_app_id")
     public String getAppId() {
         return appId;
@@ -61,6 +51,16 @@ public class PaymentModel extends ModelSupport {
 
     public void setAppId(String appId) {
         this.appId = appId;
+    }
+
+    @Jsonable
+    @Column(name = "c_user")
+    public String getUser() {
+        return user;
+    }
+
+    public void setUser(String user) {
+        this.user = user;
     }
 
     @Jsonable

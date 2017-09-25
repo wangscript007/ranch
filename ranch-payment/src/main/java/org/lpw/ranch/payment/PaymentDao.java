@@ -8,7 +8,7 @@ import java.sql.Timestamp;
  * @author lpw
  */
 interface PaymentDao {
-    PageList<PaymentModel> query(String type, String user, String appId, String orderNo, String tradeNo, int state, Timestamp start, Timestamp end, int pageSize, int pageNum);
+    PageList<PaymentModel> query(String type, String appId, String user, String orderNo, String tradeNo, int state, Timestamp start, Timestamp end, int pageSize, int pageNum);
 
     PaymentModel findById(String id);
 

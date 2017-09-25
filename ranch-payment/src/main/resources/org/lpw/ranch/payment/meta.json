@@ -5,11 +5,11 @@
             "name": "type"
         },
         {
-            "name": "user.code",
-            "label": "ranch.payment.user"
+            "name": "appId"
         },
         {
-            "name": "appId"
+            "name": "user.code",
+            "label": "ranch.payment.user"
         },
         {
             "name": "amount"
