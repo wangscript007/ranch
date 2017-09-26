@@ -154,7 +154,7 @@ public class PaymentServiceImpl implements PaymentService {
         payment.setJson(json.toJSONString());
         paymentDao.save(payment);
         if (state == 1)
-            accountHelper.deposit(payment.getUser(), "", 0, payment.getType(), payment.getAmount(), true, map);
+            accountHelper.deposit(payment.getUser(), "", 0, payment.getType(), payment.getAmount(), true, merge(json.getJSONObject("create"), map));
         notice(payment);
     }
 
@@ -167,6 +167,17 @@ public class PaymentServiceImpl implements PaymentService {
         });
 
         return object;
+    }
+
+    private Map<String, String> merge(JSONObject object, Map<String, String> map) {
+        Map<String, String> m = new HashMap<>();
+        if (!validator.isEmpty(object))
+            for (String key : object.keySet())
+                m.put(key, object.getString(key));
+        if (!validator.isEmpty(map))
+            m.putAll(map);
+
+        return m;
     }
 
     private void notice(PaymentModel payment) {
