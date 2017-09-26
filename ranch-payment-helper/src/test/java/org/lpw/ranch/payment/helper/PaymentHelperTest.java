@@ -29,7 +29,7 @@ public class PaymentHelperTest extends TephraTestSupport {
 
         Map<String, String> map = new HashMap<>();
         mockCarousel("create", 1, "orderNo", map);
-        Assert.assertNull(paymentHelper.create("type", "app id", "user", 1, "notice"));
+        Assert.assertNull(paymentHelper.create("type", "app id", "user", 1, "notice", null));
         Assert.assertEquals(6, map.size());
         Assert.assertEquals("helper", map.get("payment"));
         Assert.assertEquals("type", map.get("type"));
@@ -40,7 +40,7 @@ public class PaymentHelperTest extends TephraTestSupport {
 
         map.clear();
         mockCarousel("create", 0, "id", map);
-        Assert.assertNull(paymentHelper.create("type", "app id", "user", 1, "notice"));
+        Assert.assertNull(paymentHelper.create("type", "app id", "user", 1, "notice", new HashMap<>()));
         Assert.assertEquals(6, map.size());
         Assert.assertEquals("helper", map.get("payment"));
         Assert.assertEquals("type", map.get("type"));
@@ -51,14 +51,17 @@ public class PaymentHelperTest extends TephraTestSupport {
 
         map.clear();
         mockCarousel("create", 0, "orderNo", map);
-        Assert.assertEquals("order no", paymentHelper.create("type", "app id", "user", 1, "notice"));
-        Assert.assertEquals(6, map.size());
+        Map<String, String> m = new HashMap<>();
+        m.put("name", "value");
+        Assert.assertEquals("order no", paymentHelper.create("type", "app id", "user", 1, "notice", m));
+        Assert.assertEquals(7, map.size());
         Assert.assertEquals("helper", map.get("payment"));
         Assert.assertEquals("type", map.get("type"));
         Assert.assertEquals("user", map.get("user"));
         Assert.assertEquals("app id", map.get("appId"));
         Assert.assertEquals("1", map.get("amount"));
         Assert.assertEquals("notice", map.get("notice"));
+        Assert.assertEquals("value", map.get("name"));
     }
 
     @Test
@@ -68,7 +71,7 @@ public class PaymentHelperTest extends TephraTestSupport {
 
         Map<String, String> map = new HashMap<>();
         mockCarousel("complete", 1, "orderNo", map);
-        Assert.assertNull(paymentHelper.complete("order no", 1, "trade no", 2));
+        Assert.assertNull(paymentHelper.complete("order no", 1, "trade no", 2, null));
         Assert.assertEquals(5, map.size());
         Assert.assertEquals("helper", map.get("payment"));
         Assert.assertEquals("order no", map.get("orderNo"));
@@ -78,7 +81,7 @@ public class PaymentHelperTest extends TephraTestSupport {
 
         map.clear();
         mockCarousel("complete", 0, "id", map);
-        Assert.assertNull(paymentHelper.complete("order no", 1, "trade no", 2));
+        Assert.assertNull(paymentHelper.complete("order no", 1, "trade no", 2, new HashMap<>()));
         Assert.assertEquals(5, map.size());
         Assert.assertEquals("helper", map.get("payment"));
         Assert.assertEquals("order no", map.get("orderNo"));
@@ -88,13 +91,16 @@ public class PaymentHelperTest extends TephraTestSupport {
 
         map.clear();
         mockCarousel("complete", 0, "orderNo", map);
-        Assert.assertEquals("order no", paymentHelper.complete("order no", 1, "trade no", 2));
-        Assert.assertEquals(5, map.size());
+        Map<String, String> m = new HashMap<>();
+        m.put("name", "value");
+        Assert.assertEquals("order no", paymentHelper.complete("order no", 1, "trade no", 2, m));
+        Assert.assertEquals(6, map.size());
         Assert.assertEquals("helper", map.get("payment"));
         Assert.assertEquals("order no", map.get("orderNo"));
         Assert.assertEquals("1", map.get("amount"));
         Assert.assertEquals("trade no", map.get("tradeNo"));
         Assert.assertEquals("2", map.get("state"));
+        Assert.assertEquals("value", map.get("name"));
     }
 
     private void mockCarousel(String name, int code, String property, Map<String, String> map) {

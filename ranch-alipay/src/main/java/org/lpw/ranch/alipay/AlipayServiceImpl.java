@@ -132,7 +132,7 @@ public class AlipayServiceImpl implements AlipayService {
     private String getBizContent(String appId, String user, String subject, int amount, String notice, String code) {
         if (validator.isEmpty(user))
             user = userHelper.id();
-        String orderNo = paymentHelper.create("alipay", appId, user, amount, notice);
+        String orderNo = paymentHelper.create("alipay", appId, user, amount, notice, null);
         if (validator.isEmpty(orderNo))
             return null;
 
@@ -182,7 +182,7 @@ public class AlipayServiceImpl implements AlipayService {
 
         int state = status.equals("TRADE_SUCCESS") || status.equals("TRADE_FINISHED") ? 1 : 0;
 
-        return orderNo.equals(paymentHelper.complete(orderNo, getAmount(amount), tradeNo, state));
+        return orderNo.equals(paymentHelper.complete(orderNo, getAmount(amount), tradeNo, state, map));
     }
 
     private boolean failure(Throwable e, AlipayModel alipay, Map<String, String> map) {

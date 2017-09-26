@@ -227,7 +227,7 @@ public class WeixinServiceImpl implements WeixinService, ContextRefreshedListene
         if (weixin == null)
             return null;
 
-        String orderNo = paymentHelper.create("weixin", weixin.getAppId(), user, amount, notice);
+        String orderNo = paymentHelper.create("weixin", weixin.getAppId(), user, amount, notice, map);
         if (validator.isEmpty(orderNo))
             return null;
 
@@ -284,7 +284,7 @@ public class WeixinServiceImpl implements WeixinService, ContextRefreshedListene
             return false;
         }
 
-        return orderNo.equals(paymentHelper.complete(orderNo, numeric.toInt(amount), tradeNo, 1));
+        return orderNo.equals(paymentHelper.complete(orderNo, numeric.toInt(amount), tradeNo, 1, map));
     }
 
     private String sign(Map<String, String> map, String mchKey) {

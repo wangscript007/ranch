@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import org.lpw.ranch.util.Carousel;
 import org.lpw.tephra.ctrl.context.Request;
 import org.lpw.tephra.util.Converter;
+import org.lpw.tephra.util.Validator;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +18,8 @@ import java.util.Map;
 @Service("ranch.payment.helper")
 public class PaymentHelperImpl implements PaymentHelper {
     @Inject
+    private Validator validator;
+    @Inject
     private Converter converter;
     @Inject
     private Request request;
@@ -26,8 +29,8 @@ public class PaymentHelperImpl implements PaymentHelper {
     private String paymentKey;
 
     @Override
-    public String create(String type, String appId, String user, int amount, String notice) {
-        Map<String, String> parameter = new HashMap<>(request.getMap());
+    public String create(String type, String appId, String user, int amount, String notice, Map<String, String> map) {
+        Map<String, String> parameter = getParameter(map);
         parameter.put("type", type);
         parameter.put("appId", appId);
         parameter.put("user", user);
@@ -39,8 +42,8 @@ public class PaymentHelperImpl implements PaymentHelper {
     }
 
     @Override
-    public String complete(String orderNo, int amount, String tradeNo, int state) {
-        Map<String, String> parameter = new HashMap<>(request.getMap());
+    public String complete(String orderNo, int amount, String tradeNo, int state, Map<String, String> map) {
+        Map<String, String> parameter = getParameter(map);
         parameter.put("orderNo", orderNo);
         parameter.put("amount", converter.toString(amount, "0"));
         parameter.put("tradeNo", tradeNo);
@@ -48,5 +51,13 @@ public class PaymentHelperImpl implements PaymentHelper {
         JSONObject object = carousel.service(paymentKey + ".complete", null, parameter, false, JSONObject.class);
 
         return object.getString("orderNo");
+    }
+
+    private Map<String, String> getParameter(Map<String, String> map) {
+        Map<String, String> parameter = new HashMap<>(request.getMap());
+        if (!validator.isEmpty(map))
+            parameter.putAll(map);
+
+        return parameter;
     }
 }

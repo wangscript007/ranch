@@ -1,5 +1,7 @@
 package org.lpw.ranch.payment.helper;
 
+import java.util.Map;
+
 /**
  * @author lpw
  */
@@ -12,9 +14,10 @@ public interface PaymentHelper {
      * @param user   用户ID。
      * @param amount 支付金额，单位：分。
      * @param notice 通知。
+     * @param map    参数集。
      * @return 订单号；创建失败则返回null。
      */
-    String create(String type, String appId, String user, int amount, String notice);
+    String create(String type, String appId, String user, int amount, String notice, Map<String, String> map);
 
     /**
      * 支付完成。
@@ -23,7 +26,8 @@ public interface PaymentHelper {
      * @param amount  金额，单位：分。
      * @param tradeNo 网关订单号。
      * @param state   状态：1-成功；2-失败。
+     * @param map     参数集。
      * @return 订单号；失败则返回null。
      */
-    String complete(String orderNo, int amount, String tradeNo, int state);
+    String complete(String orderNo, int amount, String tradeNo, int state, Map<String, String> map);
 }
