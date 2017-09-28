@@ -6,6 +6,8 @@ import org.junit.Test;
 import org.lpw.tephra.ctrl.validate.Validators;
 import org.lpw.tephra.dao.orm.lite.LiteQuery;
 
+import javax.inject.Inject;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,9 +15,15 @@ import java.util.List;
  * @author lpw
  */
 public class SaveTest extends TestSupport {
+    @Inject
+    private WeixinService weixinService;
+
     @Test
-    public void save() {
+    public void save() throws Exception {
         schedulerAspect.pause();
+        Field auto = WeixinServiceImpl.class.getDeclaredField("auto");
+        auto.setAccessible(true);
+        auto.set(weixinService, false);
 
         mockHelper.reset();
         mockHelper.mock("/weixin/save");
@@ -140,7 +148,7 @@ public class SaveTest extends TestSupport {
         Assert.assertNull(weixin1.getAccessToken());
         Assert.assertNull(weixin1.getJsapiTicket());
         Assert.assertNull(weixin1.getTime());
-        Assert.assertEquals(1, urls.size());
+        Assert.assertEquals(0, urls.size());
 
         mockHelper.reset();
         mockHelper.getRequest().addParameter("key", "key 2");
@@ -152,6 +160,7 @@ public class SaveTest extends TestSupport {
         Assert.assertEquals(2412, object.getIntValue("code"));
         Assert.assertEquals(message.get(WeixinModel.NAME + ".exists"), object.getString("message"));
 
+        auto.set(weixinService, true);
         mockHelper.reset();
         mockHelper.getRequest().addParameter("key", "key");
         mockHelper.getRequest().addParameter("appId", "app id");
@@ -186,7 +195,7 @@ public class SaveTest extends TestSupport {
         Assert.assertNull(weixin1.getAccessToken());
         Assert.assertNull(weixin1.getJsapiTicket());
         Assert.assertNull(weixin1.getTime());
-        Assert.assertEquals(2, urls.size());
+        Assert.assertEquals(1, urls.size());
 
         mockHelper.reset();
         mockHelper.getRequest().addParameter("key", "key");
@@ -223,7 +232,7 @@ public class SaveTest extends TestSupport {
         Assert.assertNull(weixin2.getAccessToken());
         Assert.assertNull(weixin2.getJsapiTicket());
         Assert.assertNull(weixin2.getTime());
-        Assert.assertEquals(3, urls.size());
+        Assert.assertEquals(2, urls.size());
 
         mockHelper.reset();
         mockHelper.getRequest().addParameter("id", weixin1.getId());
@@ -262,7 +271,7 @@ public class SaveTest extends TestSupport {
         Assert.assertNull(weixin3.getAccessToken());
         Assert.assertNull(weixin3.getJsapiTicket());
         Assert.assertNull(weixin3.getTime());
-        Assert.assertEquals(4, urls.size());
+        Assert.assertEquals(3, urls.size());
 
         mockHelper.reset();
         mockHelper.getRequest().addParameter("id", weixin1.getId());
@@ -301,8 +310,9 @@ public class SaveTest extends TestSupport {
         Assert.assertNull(weixin4.getAccessToken());
         Assert.assertNull(weixin4.getJsapiTicket());
         Assert.assertNull(weixin4.getTime());
-        Assert.assertEquals(4, urls.size());
+        Assert.assertEquals(3, urls.size());
 
+        auto.set(weixinService, false);
         schedulerAspect.press();
     }
 }

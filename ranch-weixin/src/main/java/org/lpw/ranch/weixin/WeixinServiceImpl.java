@@ -74,16 +74,16 @@ public class WeixinServiceImpl implements WeixinService, ContextRefreshedListene
     private WeixinDao weixinDao;
     @Value("${tephra.ctrl.service-root:}")
     private String root;
-    @Value("${" + WeixinModel.NAME + ".qr-code.size:256}")
-    private int qrCodeSize;
-    @Value("${" + WeixinModel.NAME + ".qr-code.logo:}")
-    private String qrCodeLogo;
     @Value("${" + WeixinModel.NAME + ".auto:false}")
     private boolean auto;
     @Value("${" + WeixinModel.NAME + ".synch.url:}")
     private String synchUrl;
     @Value("${" + WeixinModel.NAME + ".synch.key:}")
     private String synchKey;
+    @Value("${" + WeixinModel.NAME + ".qr-code.size:256}")
+    private int qrCodeSize;
+    @Value("${" + WeixinModel.NAME + ".qr-code.logo:}")
+    private String qrCodeLogo;
     private String logo;
 
     @Override
