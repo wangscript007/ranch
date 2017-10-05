@@ -19,6 +19,7 @@
         <module>ranch-user-helper</module>
         <module>ranch-friend</module>
         <module>ranch-group</module>
+        <module>ranch-group-helper</module>
         <module>ranch-message</module>
         <module>ranch-message-helper</module>
         <module>ranch-snapshot</module>
