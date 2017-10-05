@@ -9,6 +9,11 @@ import com.alibaba.fastjson.JSONObject;
  */
 public interface GroupHelper {
     /**
+     * 群组信息是否存在验证器Bean名称。
+     */
+    String VALIDATOR_EXISTS = "ranch.group.exists";
+
+    /**
      * 获取群组信息。
      *
      * @param id ID值。
