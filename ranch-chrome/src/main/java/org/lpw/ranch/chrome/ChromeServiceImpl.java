@@ -2,6 +2,7 @@ package org.lpw.ranch.chrome;
 
 import com.alibaba.fastjson.JSONObject;
 import org.lpw.ranch.util.Pagination;
+import org.lpw.tephra.chrome.Chrome;
 import org.lpw.tephra.dao.model.ModelHelper;
 import org.lpw.tephra.util.Logger;
 import org.lpw.tephra.util.Validator;
@@ -24,7 +25,7 @@ public class ChromeServiceImpl implements ChromeService {
     @Inject
     private Pagination pagination;
     @Inject
-    private Chromes chromes;
+    private Chrome chrome;
     @Inject
     private ChromeDao chromeDao;
 
@@ -65,17 +66,23 @@ public class ChromeServiceImpl implements ChromeService {
 
     @Override
     public byte[] pdf(String key, String url, int width, int height, String pages, int wait) {
-        return chromes.get(Chrome.Type.Pdf).execute(findByKey(key, 0, 0, width, height, pages, wait), url);
+        ChromeModel chrome = findByKey(key, 0, 0, width, height, pages, wait);
+
+        return this.chrome.pdf(url, chrome.getWait(), chrome.getWidth(), chrome.getHeight(), chrome.getPages());
     }
 
     @Override
     public byte[] png(String key, String url, int x, int y, int width, int height, int wait) {
-        return chromes.get(Chrome.Type.Png).execute(findByKey(key, x, y, width, height, null, wait), url);
+        ChromeModel chrome = findByKey(key, x, y, width, height, null, wait);
+
+        return this.chrome.png(url, chrome.getWait(), chrome.getX(), chrome.getY(), chrome.getWidth(), chrome.getHeight());
     }
 
     @Override
     public byte[] jpg(String key, String url, int x, int y, int width, int height, int wait) {
-        return chromes.get(Chrome.Type.Jpg).execute(findByKey(key, x, y, width, height, null, wait), url);
+        ChromeModel chrome = findByKey(key, x, y, width, height, null, wait);
+
+        return this.chrome.png(url, chrome.getWait(), chrome.getX(), chrome.getY(), chrome.getWidth(), chrome.getHeight());
     }
 
     private ChromeModel findByKey(String key, int x, int y, int width, int height, String pages, int wait) {
