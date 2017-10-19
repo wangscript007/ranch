@@ -39,4 +39,9 @@ class WeixinDaoImpl implements WeixinDao {
     public void delete(String id) {
         liteOrm.deleteById(WeixinModel.class, id);
     }
+
+    @Override
+    public void close() {
+        liteOrm.close();
+    }
 }

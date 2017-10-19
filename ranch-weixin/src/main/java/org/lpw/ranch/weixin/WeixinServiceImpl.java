@@ -309,8 +309,12 @@ public class WeixinServiceImpl implements WeixinService, ContextRefreshedListene
 
     @Override
     public void executeHourJob() {
-        if (auto && validator.isEmpty(synchUrl))
-            weixinDao.query().getList().forEach(this::update);
+        if (!auto || !validator.isEmpty(synchUrl))
+            return;
+
+        List<WeixinModel> list = weixinDao.query().getList();
+        weixinDao.close();
+        list.forEach(this::update);
     }
 
     private void update(WeixinModel weixin) {
@@ -330,6 +334,7 @@ public class WeixinServiceImpl implements WeixinService, ContextRefreshedListene
 
         weixin.setTime(dateTime.now());
         weixinDao.save(weixin);
+        weixinDao.close();
 
         if (logger.isInfoEnable())
             logger.info("更新微信公众号[{}]Access Token[{}]与Jsapi Ticket[{}]。", weixin.getAppId(), weixin.getAccessToken(), weixin.getJsapiTicket());

@@ -15,4 +15,6 @@ interface WeixinDao {
     void save(WeixinModel weixin);
 
     void delete(String id);
+
+    void close();
 }
