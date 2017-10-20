@@ -162,7 +162,7 @@ public class MessageServiceImpl implements MessageService {
     private Timestamp lastTime(long time) {
         if (time <= 0) {
             JSONObject last = lastHelper.find(LAST_TYPE_NEWEST);
-            time = last.isEmpty() ? 0L : last.getLongValue("millisecond");
+            time = last.isEmpty() ? 0L : last.getLongValue("time");
         }
         lastHelper.save(LAST_TYPE_NEWEST, null);
 
