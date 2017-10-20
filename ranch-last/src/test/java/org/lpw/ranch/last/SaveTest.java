@@ -6,8 +6,6 @@ import org.junit.Test;
 import org.lpw.tephra.ctrl.validate.Validators;
 import org.lpw.tephra.util.TimeUnit;
 
-import java.sql.Timestamp;
-
 /**
  * @author lpw
  */
@@ -45,9 +43,7 @@ public class SaveTest extends TestSupport {
         JSONObject data = object.getJSONObject("data");
         Assert.assertEquals("sign in id", data.getString("user"));
         Assert.assertEquals("type value", data.getString("type"));
-        long time = data.getLongValue("millisecond");
-        Assert.assertTrue(System.currentTimeMillis() - time < 2000L);
-        Assert.assertEquals(dateTime.toString(new Timestamp(time)), data.getString("time"));
+        Assert.assertTrue(System.currentTimeMillis() - data.getLongValue("time") < 2000L);
 
         thread.sleep(3, TimeUnit.Second);
         String id = data.getString("id");
@@ -60,9 +56,7 @@ public class SaveTest extends TestSupport {
         Assert.assertEquals(id, data.getString("id"));
         Assert.assertEquals("sign in id", data.getString("user"));
         Assert.assertEquals("type value", data.getString("type"));
-        time = data.getLongValue("millisecond");
-        Assert.assertTrue(System.currentTimeMillis() - time < 2000L);
-        Assert.assertEquals(dateTime.toString(new Timestamp(time)), data.getString("time"));
+        Assert.assertTrue(System.currentTimeMillis() - data.getLongValue("time") < 2000L);
 
         mockHelper.reset();
         mockHelper.getRequest().addParameter("type", "new type value");
@@ -73,9 +67,7 @@ public class SaveTest extends TestSupport {
         Assert.assertNotEquals(id, data.getString("id"));
         Assert.assertEquals("sign in id", data.getString("user"));
         Assert.assertEquals("new type value", data.getString("type"));
-        time = data.getLongValue("millisecond");
-        Assert.assertTrue(System.currentTimeMillis() - time < 2000L);
-        Assert.assertEquals(dateTime.toString(new Timestamp(time)), data.getString("time"));
+        Assert.assertTrue(System.currentTimeMillis() - data.getLongValue("time") < 2000L);
         Assert.assertFalse(data.containsKey("json"));
 
         mockCarousel.register("ranch.user.sign", "{\"code\":0,\"data\":{\"id\":\"new sign in id\"}}");
@@ -89,9 +81,7 @@ public class SaveTest extends TestSupport {
         Assert.assertNotEquals(id, data.getString("id"));
         Assert.assertEquals("new sign in id", data.getString("user"));
         Assert.assertEquals("type value", data.getString("type"));
-        time = data.getLongValue("millisecond");
-        Assert.assertTrue(System.currentTimeMillis() - time < 2000L);
-        Assert.assertEquals(dateTime.toString(new Timestamp(time)), data.getString("time"));
+        Assert.assertTrue(System.currentTimeMillis() - data.getLongValue("time") < 2000L);
         Assert.assertEquals("name value", data.getString("name"));
         Assert.assertFalse(data.containsKey("json"));
     }

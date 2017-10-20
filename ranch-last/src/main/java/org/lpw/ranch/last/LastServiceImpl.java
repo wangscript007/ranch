@@ -56,7 +56,6 @@ public class LastServiceImpl implements LastService {
             return new JSONObject();
 
         JSONObject object = modelHelper.toJson(last);
-        object.put("millisecond", last.getTime().getTime());
         if(!validator.isEmpty(last.getJson())){
             JSONObject json = this.json.toObject(last.getJson());
             if (json != null)
@@ -83,7 +82,7 @@ public class LastServiceImpl implements LastService {
             json.put(key, value);
         });
         last.setJson(json.toJSONString());
-        last.setTime(dateTime.now());
+        last.setTime(System.currentTimeMillis());
         lastDao.save(last);
         cache.remove(CACHE_USER_TYPE + user + type);
 

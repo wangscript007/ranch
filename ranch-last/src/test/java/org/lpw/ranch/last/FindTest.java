@@ -7,8 +7,6 @@ import org.lpw.tephra.ctrl.validate.Validators;
 import org.lpw.tephra.dao.orm.lite.LiteQuery;
 import org.lpw.tephra.util.TimeUnit;
 
-import java.sql.Timestamp;
-
 /**
  * @author lpw
  */
@@ -70,20 +68,18 @@ public class FindTest extends TestSupport {
         }
     }
 
-    private LastModel create(int i) {
+    private void create(int i) {
         LastModel last = new LastModel();
         last.setUser("user " + i);
         last.setType("type " + i);
-        last.setTime(new Timestamp(time - i * TimeUnit.Hour.getTime()));
+        last.setTime(time - i * TimeUnit.Hour.getTime());
         liteOrm.save(last);
-
-        return last;
     }
 
     private void equals(JSONObject object, int i) {
         Assert.assertEquals("user " + i, object.getString("user"));
         Assert.assertEquals("type " + i, object.getString("type"));
-        Assert.assertEquals(dateTime.toString(new Timestamp(time - i * TimeUnit.Hour.getTime())), object.getString("time"));
+        Assert.assertEquals(time - i * TimeUnit.Hour.getTime(), object.getLongValue("time"));
         Assert.assertTrue(Math.abs(time - i * TimeUnit.Hour.getTime() - object.getLongValue("time")) < 1000L);
         Assert.assertTrue(Math.abs(object.getLongValue("time") - time + i * TimeUnit.Hour.getTime()) < 1000L);
     }
