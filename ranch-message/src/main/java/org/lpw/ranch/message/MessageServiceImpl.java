@@ -8,6 +8,7 @@ import org.lpw.ranch.util.Carousel;
 import org.lpw.tephra.dao.model.ModelHelper;
 import org.lpw.tephra.util.DateTime;
 import org.lpw.tephra.util.Logger;
+import org.lpw.tephra.util.TimeUnit;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -86,7 +87,7 @@ public class MessageServiceImpl implements MessageService {
     }
 
     @Override
-    public String notify(int type, String receiver, String content, int deadline, String code) {
+    public String notice(int type, String receiver, String content, int deadline, String code) {
         MessageModel message = messageDao.findByCode(code);
         if (message != null)
             return message.getId();
@@ -102,7 +103,7 @@ public class MessageServiceImpl implements MessageService {
         message.setFormat(format);
         message.setContent(content);
         message.setTime(dateTime.now());
-        message.setDeadline(new Timestamp(System.currentTimeMillis() + 1000L * (deadline > 0 ? deadline : this.deadline)));
+        message.setDeadline(new Timestamp(System.currentTimeMillis() + (deadline > 0 ? deadline : this.deadline) * TimeUnit.Second.getTime()));
         message.setCode(code);
         messageDao.save(message);
 

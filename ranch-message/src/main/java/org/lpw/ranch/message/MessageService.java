@@ -29,7 +29,7 @@ public interface MessageService {
      * @param code     校验码。
      * @return 消息ID，如果发送失败则返回null。
      */
-    String notify(int type, String receiver, String content, int deadline, String code);
+    String notice(int type, String receiver, String content, int deadline, String code);
 
     /**
      * 检索当前用户最新信息集。

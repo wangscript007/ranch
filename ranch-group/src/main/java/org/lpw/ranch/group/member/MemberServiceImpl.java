@@ -128,8 +128,7 @@ public class MemberServiceImpl implements MemberService {
     }
 
     private void newcomer(MemberModel member) {
-        memberDao.queryManager(member.getGroup()).getList().forEach(manager ->
-                notify(member, manager.getUser(), "group.member.new", ""));
+        memberDao.queryManager(member.getGroup()).getList().forEach(manager -> notice(member, manager.getUser(), "group.member.new", ""));
     }
 
     @Override
@@ -152,8 +151,8 @@ public class MemberServiceImpl implements MemberService {
         MemberModel introducer = member.getIntroducer() == null ? null : findById(member.getIntroducer());
         String content = introducer == null ? message.get(MemberModel.NAME + ".pass.join", getNick(member)) :
                 message.get(MemberModel.NAME + ".pass", getNick(introducer), getNick(member));
-        notify(member, member.getGroup(), "group.member.pass", content);
-        notify(member, member.getUser(), "group.member.pass.id", member.getGroup());
+        notice(member, member.getGroup(), "group.member.pass", content);
+        notice(member, member.getUser(), "group.member.pass.id", member.getGroup());
     }
 
     private String getNick(MemberModel member) {
@@ -167,7 +166,7 @@ public class MemberServiceImpl implements MemberService {
             return;
 
         memberDao.delete(id);
-        notify(member, member.getUser(), "group.member.refuse", message.get(MemberModel.NAME + ".refuse"));
+        notice(member, member.getUser(), "group.member.refuse", message.get(MemberModel.NAME + ".refuse"));
     }
 
     @Override
@@ -201,19 +200,19 @@ public class MemberServiceImpl implements MemberService {
         if (member.getType() >= Type.Normal.ordinal()) {
             groupService.member(member.getGroup(), -1);
             boolean self = member.getUser().equals(userHelper.id());
-            notify(member, member.getGroup(), "group.member.leave", message.get(MemberModel.NAME + (self ? ".leave.self" : ".leave"), getNick(member)));
+            notice(member, member.getGroup(), "group.member.leave", message.get(MemberModel.NAME + (self ? ".leave.self" : ".leave"), getNick(member)));
             if (!self)
-                notify(member, member.getUser(), "group.member.leave.note", message.get(MemberModel.NAME + ".leave.note"));
+                notice(member, member.getUser(), "group.member.leave.note", message.get(MemberModel.NAME + ".leave.note"));
         }
         memberDao.delete(member.getId());
     }
 
-    private void notify(MemberModel member, String receiver, String operate, Object message) {
+    private void notice(MemberModel member, String receiver, String operate, Object message) {
         JSONObject object = new JSONObject();
         object.put("operate", operate);
         object.put("member", getJson(member));
         object.put("message", message);
-        messageHelper.notify(MessageHelper.Type.Group, receiver, object.toJSONString());
+        messageHelper.notice(MessageHelper.Type.Group, receiver, object.toJSONString(), 0);
     }
 
     private JSONObject getJson(MemberModel member) {

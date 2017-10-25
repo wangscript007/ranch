@@ -67,9 +67,10 @@ public interface MessageHelper {
      * @param receiver 接收者ID。
      * @param format   消息格式。
      * @param content  内容。
+     * @param deadline 失效时长，单位：秒。
      * @return 消息ID。
      */
-    String send(Type type, String receiver, Format format, String content);
+    String send(Type type, String receiver, Format format, String content, int deadline);
 
     /**
      * 发送通知。
@@ -77,7 +78,8 @@ public interface MessageHelper {
      * @param type     接收者类型。
      * @param receiver 接收者ID。
      * @param content  内容。
+     * @param deadline 失效时长，单位：秒。
      * @return 消息ID。
      */
-    String notify(Type type, String receiver, String content);
+    String notice(Type type, String receiver, String content, int deadline);
 }

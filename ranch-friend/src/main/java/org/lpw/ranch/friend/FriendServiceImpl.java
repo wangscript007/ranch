@@ -92,7 +92,7 @@ public class FriendServiceImpl implements FriendService {
         friend.setCreate(dateTime.now());
         friendDao.save(friend);
         if (state == 1)
-            notify(friend, owner, "friend.newcomer", "");
+            notice(friend, owner, "friend.newcomer", "");
     }
 
     @Override
@@ -111,7 +111,7 @@ public class FriendServiceImpl implements FriendService {
             friend.setMemo(memo);
         friend.setState(2);
         friendDao.save(friend);
-        notify(friend, owner, "friend.pass", message.get(FriendModel.NAME + ".pass"));
+        notice(friend, owner, "friend.pass", message.get(FriendModel.NAME + ".pass"));
     }
 
     @Override
@@ -140,7 +140,7 @@ public class FriendServiceImpl implements FriendService {
         friend.setState(3);
         friendDao.save(friend);
         if (state == 0)
-            notify(friend, owner, "friend.refuse", message.get(FriendModel.NAME + ".refuse"));
+            notice(friend, owner, "friend.refuse", message.get(FriendModel.NAME + ".refuse"));
     }
 
     @Override
@@ -162,12 +162,12 @@ public class FriendServiceImpl implements FriendService {
         return friendDao.find(owner, user);
     }
 
-    private void notify(FriendModel friend, String receiver, String operate, Object message) {
+    private void notice(FriendModel friend, String receiver, String operate, Object message) {
         JSONObject object = new JSONObject();
         object.put("operate", operate);
         object.put("friend", getJson(friend));
         object.put("message", message);
-        messageHelper.notify(MessageHelper.Type.Friend, receiver, object.toJSONString());
+        messageHelper.notice(MessageHelper.Type.Friend, receiver, object.toJSONString(), 0);
     }
 
     private JSONObject getJson(FriendModel friend) {

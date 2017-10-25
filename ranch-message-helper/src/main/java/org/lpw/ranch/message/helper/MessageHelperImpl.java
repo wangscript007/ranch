@@ -28,30 +28,31 @@ public class MessageHelperImpl implements MessageHelper {
     private String notifyKey;
 
     @Override
-    public String send(Type type, String receiver, Format format, String content) {
+    public String send(Type type, String receiver, Format format, String content, int deadline) {
         if (sendKey == null)
             sendKey = key + ".send";
 
-        return send(sendKey, newParameter(type, receiver, format, content));
+        return send(sendKey, newParameter(type, receiver, format, content, deadline));
     }
 
     @Override
-    public String notify(Type type, String receiver, String content) {
+    public String notice(Type type, String receiver, String content, int deadline) {
         if (notifyKey == null)
-            notifyKey = key + ".notify";
+            notifyKey = key + ".notice";
 
-        Map<String, String> parameter = newParameter(type, receiver, Format.Notify, content);
+        Map<String, String> parameter = newParameter(type, receiver, Format.Notify, content, deadline);
         sign.put(parameter, null);
 
         return send(notifyKey, parameter);
     }
 
-    private Map<String, String> newParameter(Type type, String receiver, Format format, String content) {
+    private Map<String, String> newParameter(Type type, String receiver, Format format, String content, int deadline) {
         Map<String, String> parameter = new HashMap<>();
         parameter.put("type", "" + type.ordinal());
         parameter.put("receiver", receiver);
         parameter.put("format", "" + format.ordinal());
         parameter.put("content", content);
+        parameter.put("deadline", "" + deadline);
         parameter.put("code", generator.random(32));
 
         return parameter;
