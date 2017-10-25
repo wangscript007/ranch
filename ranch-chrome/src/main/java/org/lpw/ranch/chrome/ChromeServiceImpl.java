@@ -82,7 +82,7 @@ public class ChromeServiceImpl implements ChromeService {
     public byte[] jpg(String key, String url, int x, int y, int width, int height, int wait) {
         ChromeModel chrome = findByKey(key, x, y, width, height, null, wait);
 
-        return this.chrome.png(url, chrome.getWait(), chrome.getX(), chrome.getY(), chrome.getWidth(), chrome.getHeight());
+        return this.chrome.jpeg(url, chrome.getWait(), chrome.getX(), chrome.getY(), chrome.getWidth(), chrome.getHeight());
     }
 
     private ChromeModel findByKey(String key, int x, int y, int width, int height, String pages, int wait) {
