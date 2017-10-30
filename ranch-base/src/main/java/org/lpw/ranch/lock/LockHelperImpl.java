@@ -5,7 +5,6 @@ import org.lpw.tephra.crypto.Digest;
 import org.lpw.tephra.util.Thread;
 import org.lpw.tephra.util.TimeUnit;
 import org.lpw.tephra.util.Validator;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
@@ -54,6 +53,9 @@ public class LockHelperImpl implements LockHelper, Atomicable {
 
     @Override
     public void unlock(String id) {
+        if (id == null)
+            return;
+
         lockDao.delete(id);
         ids.get().remove(id);
     }
