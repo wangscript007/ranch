@@ -9,6 +9,7 @@ import org.lpw.tephra.ctrl.validate.Validators;
 import org.lpw.tephra.util.Context;
 import org.lpw.tephra.util.Converter;
 import org.lpw.tephra.util.Generator;
+import org.lpw.tephra.util.Message;
 import org.lpw.tephra.util.Validator;
 import org.springframework.stereotype.Controller;
 
@@ -29,7 +30,11 @@ public class ChromeCtrl {
     @Inject
     private Generator generator;
     @Inject
+    private Message message;
+    @Inject
     private Request request;
+    @Inject
+    private Templates templates;
     @Inject
     private Response response;
     @Inject
@@ -69,6 +74,10 @@ public class ChromeCtrl {
             @Validate(validator = ChromeService.VALIDATOR_KEY_EXISTS, parameter = "key", failureCode = 7)
     })
     public Object pdf() {
+        byte[] pdf = chromeService.pdf(request.get("key"), request.get("url"), request.getAsInt("width"), request.getAsInt("height"), request.get("pages"), request.getAsInt("wait"));
+        if (pdf == null)
+            return templates.get().failure(2911, message.get(ChromeModel.NAME + ".pdf.null"), null, null);
+
         String filename = request.get("filename");
         if (validator.isEmpty(filename))
             filename = chromeService.findByKey(request.get("key")).getFilename();
@@ -77,7 +86,7 @@ public class ChromeCtrl {
         response.setHeader("Content-Disposition", "attachment; filename*=" + context.getCharset(null) + "''" + converter.encodeUrl(filename, null) + ".pdf");
         response.setContentType("application/pdf");
 
-        return chromeService.pdf(request.get("key"), request.get("url"), request.getAsInt("width"), request.getAsInt("height"), request.get("pages"), request.getAsInt("wait"));
+        return pdf;
     }
 
     @Execute(name = "png", type = Templates.STREAM, validates = {
@@ -86,9 +95,13 @@ public class ChromeCtrl {
             @Validate(validator = ChromeService.VALIDATOR_KEY_EXISTS, parameter = "key", failureCode = 7)
     })
     public Object png() {
+        byte[] png = chromeService.png(request.get("key"), request.get("url"), request.getAsInt("x"), request.getAsInt("y"), request.getAsInt("width"), request.getAsInt("height"), request.getAsInt("wait"));
+        if (png == null)
+            return templates.get().failure(2912, message.get(ChromeModel.NAME + ".png.null"), null, null);
+
         response.setContentType("image/png");
 
-        return chromeService.png(request.get("key"), request.get("url"), request.getAsInt("x"), request.getAsInt("y"), request.getAsInt("width"), request.getAsInt("height"), request.getAsInt("wait"));
+        return png;
     }
 
     @Execute(name = "jpg", type = Templates.STREAM, validates = {
@@ -97,8 +110,12 @@ public class ChromeCtrl {
             @Validate(validator = ChromeService.VALIDATOR_KEY_EXISTS, parameter = "key", failureCode = 7)
     })
     public Object jpg() {
+        byte[] jpg = chromeService.jpg(request.get("key"), request.get("url"), request.getAsInt("x"), request.getAsInt("y"), request.getAsInt("width"), request.getAsInt("height"), request.getAsInt("wait"));
+        if (jpg == null)
+            return templates.get().failure(2913, message.get(ChromeModel.NAME + ".jpg.null"), null, null);
+
         response.setContentType("image/jpeg");
 
-        return chromeService.jpg(request.get("key"), request.get("url"), request.getAsInt("x"), request.getAsInt("y"), request.getAsInt("width"), request.getAsInt("height"), request.getAsInt("wait"));
+        return jpg;
     }
 }
