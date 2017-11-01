@@ -79,7 +79,7 @@ public class PaymentHelperImpl implements PaymentHelper, MinuteJob, ContextRefre
             return;
 
         Map<String, String> parameter = new HashMap<>();
-        parameter.put("start", dateTime.toString(new Date(System.currentTimeMillis() - TimeUnit.Day.getTime())));
+        parameter.put("start", dateTime.toString(new Date(System.currentTimeMillis() - 30L * TimeUnit.Day.getTime())));
         parameter.put("state", "0");
         parameter.put("pageSize", "1024");
         parameter.put("pageNum", "1");
