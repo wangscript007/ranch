@@ -15,6 +15,6 @@ CREATE TABLE t_payment
   c_json TEXT DEFAULT NULL COMMENT '扩展数据',
 
   PRIMARY KEY pk(c_id) USING HASH,
-  KEY k_user_start(c_user,c_start) USING BTREE,
-  UNIQUE KEY uk_order_no(c_order_no) USING HASH
+  UNIQUE KEY uk_order_no(c_order_no) USING HASH,
+  KEY k_start_state(c_start,c_state) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

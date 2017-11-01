@@ -25,6 +25,8 @@ class PaymentDaoImpl implements PaymentDao {
     public PageList<PaymentModel> query(String type, String appId, String user, String orderNo, String tradeNo, int state, Timestamp start, Timestamp end, int pageSize, int pageNum) {
         StringBuilder where = new StringBuilder();
         List<Object> args = new ArrayList<>();
+        append(where, args, "c_start", ">=", start);
+        append(where, args, "c_start", "<=", end);
         append(where, args, "c_type", "=", type);
         append(where, args, "c_app_id", "=", appId);
         append(where, args, "c_user", "=", user);
@@ -32,8 +34,6 @@ class PaymentDaoImpl implements PaymentDao {
         append(where, args, "c_trade_no", "=", tradeNo);
         if (state > -1)
             append(where, args, "c_state", "=", state);
-        append(where, args, "c_start", ">=", start);
-        append(where, args, "c_start", "<=", end);
 
         return liteOrm.query(new LiteQuery(PaymentModel.class).where(where.toString()).order("c_start desc").size(pageSize).page(pageNum), args.toArray());
     }
