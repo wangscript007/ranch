@@ -59,9 +59,6 @@ public class PaymentHelperImpl implements PaymentHelper, MinuteJob, ContextRefre
         parameter.put("tradeNo", tradeNo);
         parameter.put("state", converter.toString(state, "0"));
         JSONObject object = carousel.service(key + ".complete", null, parameter, false, JSONObject.class);
-        System.out.println("#########################################");
-        System.out.println(object.toJSONString());
-        System.out.println("#########################################");
 
         return object.getString("orderNo");
     }
