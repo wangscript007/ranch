@@ -73,11 +73,6 @@ public class CarouselImpl implements Carousel {
         put(map, this.header.getMap());
         put(map, header);
         String service = carouselHelper.service(key, map, parameter, cacheTime);
-        if (key.contains("complete")) {
-            System.out.println("#################################################################");
-            System.out.println(service);
-            System.out.println("#################################################################");
-        }
 
         return validator.isEmpty(service) ? new JSONObject() : json.toObject(service);
     }
