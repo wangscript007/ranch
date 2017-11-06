@@ -27,7 +27,8 @@ public class PaymentModel extends ModelSupport {
     private int amount; // 金额，单位：分
     private String orderNo; // 订单号
     private String tradeNo; // 网关订单号
-    private int state; // 状态：0-新建；1-成功；2-失败
+    private int state; // 状态：0-新建；1-成功；2-失败；3-处理中
+    private String repass; // 需再次Pass的帐变ID
     private String notice; // 通知配置
     private Timestamp start; // 开始时间
     private Timestamp end; // 结束时间
@@ -101,6 +102,16 @@ public class PaymentModel extends ModelSupport {
 
     public void setState(int state) {
         this.state = state;
+    }
+
+    @Jsonable
+    @Column(name = "c_repass")
+    public String getRepass() {
+        return repass;
+    }
+
+    public void setRepass(String repass) {
+        this.repass = repass;
     }
 
     @Jsonable

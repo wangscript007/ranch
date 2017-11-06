@@ -4,7 +4,6 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
 import java.util.Map;
-import java.util.Set;
 
 /**
  * @author lpw
@@ -93,7 +92,7 @@ public interface AccountHelper {
      * @param logIds 日志ID集，多个ID间以逗号分隔。
      * @return 设置成功的ID值集。
      */
-    Set<String> pass(String logIds);
+    JSONArray pass(String logIds);
 
 
     /**
@@ -102,5 +101,5 @@ public interface AccountHelper {
      * @param logIds 日志ID集，多个ID间以逗号分隔。
      * @return 设置成功的ID值集。
      */
-    Set<String> reject(String logIds);
+    JSONArray reject(String logIds);
 }

@@ -49,6 +49,11 @@ class PaymentDaoImpl implements PaymentDao {
     }
 
     @Override
+    public PageList<PaymentModel> query(Timestamp start, int state) {
+        return liteOrm.query(new LiteQuery(PaymentModel.class).where("c_start>? and c_state=?"), new Object[]{start, state});
+    }
+
+    @Override
     public PaymentModel findById(String id) {
         return liteOrm.findById(PaymentModel.class, id);
     }
@@ -61,5 +66,6 @@ class PaymentDaoImpl implements PaymentDao {
     @Override
     public void save(PaymentModel payment) {
         liteOrm.save(payment);
+        liteOrm.close();
     }
 }

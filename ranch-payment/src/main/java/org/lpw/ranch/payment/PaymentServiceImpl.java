@@ -7,11 +7,13 @@ import org.lpw.ranch.user.helper.UserHelper;
 import org.lpw.ranch.util.Carousel;
 import org.lpw.ranch.util.Pagination;
 import org.lpw.tephra.dao.model.ModelHelper;
+import org.lpw.tephra.scheduler.MinuteJob;
 import org.lpw.tephra.util.Converter;
 import org.lpw.tephra.util.DateTime;
 import org.lpw.tephra.util.Generator;
 import org.lpw.tephra.util.Http;
 import org.lpw.tephra.util.Json;
+import org.lpw.tephra.util.TimeUnit;
 import org.lpw.tephra.util.Validator;
 import org.springframework.stereotype.Service;
 
@@ -26,7 +28,7 @@ import java.util.Set;
  * @author lpw
  */
 @Service(PaymentModel.NAME + ".service")
-public class PaymentServiceImpl implements PaymentService {
+public class PaymentServiceImpl implements PaymentService, MinuteJob {
     private static final String LOCK_ORDER_NO = PaymentModel.NAME + ".service.order-no:";
 
     @Inject
@@ -152,9 +154,12 @@ public class PaymentServiceImpl implements PaymentService {
         JSONObject json = this.json.toObject(payment.getJson());
         json.put(name, putToJson(new JSONObject(), map));
         payment.setJson(json.toJSONString());
+        if (state == 1) {
+            JSONObject object = accountHelper.deposit(payment.getUser(), "", 0, payment.getType(), payment.getAmount(), true, merge(json.getJSONObject("create"), map));
+            if (object.getJSONArray("pass").isEmpty())
+                payment.setRepass(object.getString("logId"));
+        }
         paymentDao.save(payment);
-        if (state == 1)
-            accountHelper.deposit(payment.getUser(), "", 0, payment.getType(), payment.getAmount(), true, merge(json.getJSONObject("create"), map));
         notice(payment);
     }
 
@@ -207,5 +212,18 @@ public class PaymentServiceImpl implements PaymentService {
 
         if (!validator.isEmpty(notice.getString("http")))
             http.post(notice.getString("http"), null, parameters);
+    }
+
+    @Override
+    public void executeMinuteJob() {
+        paymentDao.query(new Timestamp(System.currentTimeMillis() - TimeUnit.Day.getTime()), 3).getList().forEach(payment -> {
+            if (validator.isEmpty(payment.getRepass()) || accountHelper.pass(payment.getRepass()).isEmpty())
+                return;
+
+            payment.setState(1);
+            payment.setRepass(null);
+            payment.setEnd(dateTime.now());
+            paymentDao.save(payment);
+        });
     }
 }

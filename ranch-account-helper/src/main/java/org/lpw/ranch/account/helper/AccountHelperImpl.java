@@ -9,9 +9,7 @@ import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * @author lpw
@@ -81,24 +79,20 @@ public class AccountHelperImpl implements AccountHelper {
     }
 
     @Override
-    public Set<String> pass(String logIds) {
+    public JSONArray pass(String logIds) {
         return log("pass", logIds);
     }
 
     @Override
-    public Set<String> reject(String logIds) {
+    public JSONArray reject(String logIds) {
         return log("reject", logIds);
     }
 
-    private Set<String> log(String type, String ids) {
+    private JSONArray log(String type, String ids) {
         Map<String, String> parameter = new HashMap<>();
         parameter.put("ids", ids);
         JSONObject object = carousel.service(key + ".log." + type, null, parameter, false);
-        Set<String> set = new HashSet<>();
-        JSONArray array = object.getJSONArray("data");
-        for (int i = 0, size = array.size(); i < size; i++)
-            set.add(array.getString(i));
 
-        return set;
+        return object.getIntValue("code") == 0 && object.containsKey("data") ? object.getJSONArray("data") : new JSONArray();
     }
 }
