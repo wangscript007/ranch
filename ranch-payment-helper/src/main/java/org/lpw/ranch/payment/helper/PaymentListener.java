@@ -16,10 +16,9 @@ public interface PaymentListener {
     String getType();
 
     /**
-     * 获取支付订单状态。
+     * 重置支付订单状态。
      *
      * @param object 订单信息。
-     * @return 状态：0-新建；1-成功；2-失败。
      */
-    int getState(JSONObject object);
+    void resetState(JSONObject object);
 }

@@ -90,12 +90,8 @@ public class PaymentHelperImpl implements PaymentHelper, MinuteJob, ContextRefre
         for (int i = 0, size = array.size(); i < size; i++) {
             JSONObject object = array.getJSONObject(i);
             String type = object.getString("type");
-            if (!listeners.containsKey(type))
-                continue;
-
-            int state = listeners.get(type).getState(object);
-            if (state == 1 || state == 2)
-                complete(object.getString("orderNo"), object.getIntValue("amount"), object.getString("tradeNo"), state, null);
+            if (listeners.containsKey(type))
+                listeners.get(type).resetState(object);
         }
     }
 
