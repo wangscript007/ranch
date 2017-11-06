@@ -88,25 +88,33 @@ public class LogServiceImpl implements LogService {
     }
 
     @Override
-    public void pass(String[] ids) {
+    public JSONArray pass(String[] ids) {
+        JSONArray array = new JSONArray();
         for (String id : ids)
-            complete(id, State.Pass);
+            complete(id, State.Pass, array);
+
+        return array;
     }
 
     @Override
-    public void reject(String[] ids) {
+    public JSONArray reject(String[] ids) {
+        JSONArray array = new JSONArray();
         for (String id : ids)
-            complete(id, State.Reject);
+            complete(id, State.Reject, array);
+
+        return array;
     }
 
-    private void complete(String id, State state) {
+    private void complete(String id, State state, JSONArray array) {
         LogModel log = logDao.findById(id);
         if (log == null || log.getState() != State.New.ordinal())
             return;
 
         log.setState(state.ordinal());
         log.setEnd(dateTime.now());
-        if (accountService.complete(log))
+        if (accountService.complete(log)) {
             logDao.save(log);
+            array.add(id);
+        }
     }
 }

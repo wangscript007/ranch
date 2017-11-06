@@ -34,9 +34,7 @@ public class LogCtrl {
             @Validate(validator = Validators.SIGN)
     })
     public Object pass() {
-        logService.pass(request.getAsArray("ids"));
-
-        return "";
+        return logService.pass(request.getAsArray("ids"));
     }
 
     @Execute(name = "reject", validates = {
@@ -44,8 +42,6 @@ public class LogCtrl {
             @Validate(validator = Validators.SIGN)
     })
     public Object reject() {
-        logService.reject(request.getAsArray("ids"));
-
-        return "";
+        return logService.reject(request.getAsArray("ids"));
     }
 }

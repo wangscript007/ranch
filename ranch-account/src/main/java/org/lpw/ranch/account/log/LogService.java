@@ -1,5 +1,6 @@
 package org.lpw.ranch.account.log;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import org.lpw.ranch.account.AccountModel;
 
@@ -59,13 +60,14 @@ public interface LogService {
      * 设置审核通过。
      *
      * @param ids ID集。
+     *            @return 已完成的日志
      */
-    void pass(String[] ids);
+    JSONArray pass(String[] ids);
 
     /**
      * 设置审核不通过。
      *
      * @param ids ID集。
      */
-    void reject(String[] ids);
+    JSONArray reject(String[] ids);
 }
