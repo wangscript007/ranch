@@ -2,11 +2,12 @@ package org.lpw.ranch.payment.helper;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import org.lpw.ranch.lock.LockHelper;
 import org.lpw.ranch.util.Carousel;
 import org.lpw.tephra.bean.BeanFactory;
 import org.lpw.tephra.bean.ContextRefreshedListener;
 import org.lpw.tephra.ctrl.context.Request;
-import org.lpw.tephra.scheduler.MinuteJob;
+import org.lpw.tephra.scheduler.SecondsJob;
 import org.lpw.tephra.util.Converter;
 import org.lpw.tephra.util.DateTime;
 import org.lpw.tephra.util.TimeUnit;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
 import java.sql.Date;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -23,7 +25,7 @@ import java.util.Map;
  * @author lpw
  */
 @Service("ranch.payment.helper")
-public class PaymentHelperImpl implements PaymentHelper, MinuteJob, ContextRefreshedListener {
+public class PaymentHelperImpl implements PaymentHelper, SecondsJob, ContextRefreshedListener {
     @Inject
     private Validator validator;
     @Inject
@@ -34,6 +36,8 @@ public class PaymentHelperImpl implements PaymentHelper, MinuteJob, ContextRefre
     private Request request;
     @Inject
     private Carousel carousel;
+    @Inject
+    private LockHelper lockHelper;
     @Value("${ranch.payment.key:ranch.payment}")
     private String key;
     private Map<String, PaymentListener> listeners;
@@ -74,18 +78,22 @@ public class PaymentHelperImpl implements PaymentHelper, MinuteJob, ContextRefre
     }
 
     @Override
-    public void executeMinuteJob() {
-        if (validator.isEmpty(listeners))
+    public void executeSecondsJob() {
+        if (validator.isEmpty(listeners) || Calendar.getInstance().get(Calendar.SECOND) % 30 > 0)
             return;
 
+        String lockId = lockHelper.lock("ranch.payment.helper.seconds", 1L);
         Map<String, String> parameter = new HashMap<>();
         parameter.put("start", dateTime.toString(new Date(System.currentTimeMillis() - TimeUnit.Day.getTime())));
         parameter.put("state", "0");
         parameter.put("pageSize", "1024");
         parameter.put("pageNum", "1");
         JSONArray array = carousel.service(key + ".query", null, parameter, false, JSONObject.class).getJSONArray("list");
-        if (array.isEmpty())
+        if (array.isEmpty()) {
+            lockHelper.unlock(lockId);
+
             return;
+        }
 
         for (int i = 0, size = array.size(); i < size; i++) {
             JSONObject object = array.getJSONObject(i);
@@ -93,6 +101,7 @@ public class PaymentHelperImpl implements PaymentHelper, MinuteJob, ContextRefre
             if (listeners.containsKey(type))
                 listeners.get(type).resetState(object);
         }
+        lockHelper.unlock(lockId);
     }
 
     @Override
