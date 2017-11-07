@@ -99,7 +99,7 @@ public class PaymentHelperImpl implements PaymentHelper, SecondsJob, ContextRefr
             JSONObject object = array.getJSONObject(i);
             String type = object.getString("type");
             if (listeners.containsKey(type))
-                listeners.get(type).resetState(object);
+                listeners.get(type).resetState(object, System.currentTimeMillis() - dateTime.toTime(object.getString("start")).getTime() > 5 * TimeUnit.Minute.getTime());
         }
         lockHelper.unlock(lockId);
     }

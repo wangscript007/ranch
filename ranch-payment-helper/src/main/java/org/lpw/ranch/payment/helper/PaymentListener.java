@@ -18,7 +18,8 @@ public interface PaymentListener {
     /**
      * 重置支付订单状态。
      *
-     * @param object 订单信息。
+     * @param object      订单信息。
+     * @param failureAble 是否允许标记失败。
      */
-    void resetState(JSONObject object);
+    void resetState(JSONObject object, boolean failureAble);
 }
