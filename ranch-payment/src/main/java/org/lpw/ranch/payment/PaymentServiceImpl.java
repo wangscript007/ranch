@@ -136,14 +136,17 @@ public class PaymentServiceImpl implements PaymentService, MinuteJob {
 
     @Override
     public JSONObject complete(String orderNo, int amount, String tradeNo, int state, Map<String, String> map) {
-        String lock = lockHelper.lock(LOCK_ORDER_NO + orderNo, 1000L);
+        String lockId = lockHelper.lock(LOCK_ORDER_NO + orderNo, 1L);
+        if (lockId == null)
+            return new JSONObject();
+
         PaymentModel payment = find(orderNo);
         if (payment.getState() == 0) {
             payment.setAmount(amount);
             payment.setTradeNo(tradeNo);
             complete(payment, state, "complete", map);
         }
-        lockHelper.unlock(lock);
+        lockHelper.unlock(lockId);
 
         return modelHelper.toJson(payment);
     }
