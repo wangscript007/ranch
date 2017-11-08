@@ -4,10 +4,12 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import org.lpw.ranch.account.AccountModel;
 import org.lpw.ranch.account.AccountService;
+import org.lpw.ranch.lock.LockHelper;
 import org.lpw.ranch.user.helper.UserHelper;
 import org.lpw.ranch.util.Pagination;
 import org.lpw.tephra.dao.model.ModelHelper;
 import org.lpw.tephra.dao.orm.PageList;
+import org.lpw.tephra.scheduler.SecondsJob;
 import org.lpw.tephra.util.DateTime;
 import org.lpw.tephra.util.Json;
 import org.lpw.tephra.util.Validator;
@@ -21,7 +23,7 @@ import java.util.Map;
  * @author lpw
  */
 @Service(LogModel.NAME + ".service")
-public class LogServiceImpl implements LogService {
+public class LogServiceImpl implements LogService, SecondsJob {
     @Inject
     private Validator validator;
     @Inject
@@ -32,6 +34,8 @@ public class LogServiceImpl implements LogService {
     private ModelHelper modelHelper;
     @Inject
     private Pagination pagination;
+    @Inject
+    private LockHelper lockHelper;
     @Inject
     private UserHelper userHelper;
     @Inject
@@ -106,15 +110,54 @@ public class LogServiceImpl implements LogService {
     }
 
     private void complete(String id, State state, JSONArray array) {
-        LogModel log = logDao.findById(id);
-        if (log == null || log.getState() != State.New.ordinal())
+        String lockId = lockHelper.lock(LogModel.NAME + ".service.complete:" + id, 1L, 0);
+        if (lockId == null)
             return;
 
-        log.setState(state.ordinal());
-        log.setEnd(dateTime.now());
-        if (accountService.complete(log)) {
-            logDao.save(log);
-            array.add(id);
+        LogModel log = logDao.findById(id);
+        if (log == null || log.getState() != State.New.ordinal()) {
+            lockHelper.unlock(lockId);
+
+            return;
         }
+
+        log.setState(state.ordinal());
+        switch (accountService.complete(log)) {
+            case Success:
+                if (log.getRestate() > 0)
+                    log.setRestate(0);
+                log.setEnd(dateTime.now());
+                if (array != null)
+                    array.add(id);
+                break;
+            case Locked:
+                log.setState(State.New.ordinal());
+                log.setRestate(state.ordinal());
+                break;
+            case Failure:
+                lockHelper.unlock(lockId);
+                return;
+        }
+        logDao.save(log);
+        lockHelper.unlock(lockId);
+    }
+
+    @Override
+    public void executeSecondsJob() {
+        String lockId = lockHelper.lock(LogModel.NAME + ".service.seconds", 1L, 0);
+        if (lockId == null)
+            return;
+
+        logDao.query(1).getList().forEach(log -> {
+            if (log.getState() == 0)
+                complete(log.getId(), State.Pass, null);
+        });
+
+        logDao.query(2).getList().forEach(log -> {
+            if (log.getState() == 0)
+                complete(log.getId(), State.Reject, null);
+        });
+
+        lockHelper.unlock(lockId);
     }
 }

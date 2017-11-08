@@ -24,18 +24,18 @@ public class LockHelperTest extends TephraTestSupport {
 
     @Test
     public void lockUnlock() {
-        Assert.assertNull(lockHelper.lock(null, 10));
-        String id1 = lockHelper.lock("key 1", 10);
-        String id2 = lockHelper.lock("key 1", 10);
+        Assert.assertNull(lockHelper.lock(null, 10, 20));
+        String id1 = lockHelper.lock("key 1", 10, 20);
+        String id2 = lockHelper.lock("key 1", 10, 0);
         Assert.assertNotNull(id1);
         Assert.assertNull(id2);
         PageList<LockModel> pl = liteOrm.query(new LiteQuery(LockModel.class), null);
         Assert.assertEquals(1, pl.getList().size());
         Assert.assertEquals(id1, pl.getList().get(0).getId());
 
-        String id3 = lockHelper.lock("key 1", 10);
+        String id3 = lockHelper.lock("key 1", 10, 20);
         Assert.assertNull(id3);
-        String id4 = lockHelper.lock("key 4", 10);
+        String id4 = lockHelper.lock("key 4", 10, 20);
         Assert.assertNotNull(id4);
         pl = liteOrm.query(new LiteQuery(LockModel.class).order("c_index"), null);
         Assert.assertEquals(2, pl.getList().size());
@@ -51,7 +51,7 @@ public class LockHelperTest extends TephraTestSupport {
         pl = liteOrm.query(new LiteQuery(LockModel.class), null);
         Assert.assertEquals(0, pl.getList().size());
 
-        String id5 = lockHelper.lock("key 1", 10);
+        String id5 = lockHelper.lock("key 1", 10, 20);
         Assert.assertNotNull(id5);
         pl = liteOrm.query(new LiteQuery(LockModel.class), null);
         Assert.assertEquals(1, pl.getList().size());
@@ -59,6 +59,8 @@ public class LockHelperTest extends TephraTestSupport {
         lockHelper.unlock(id5);
         pl = liteOrm.query(new LiteQuery(LockModel.class), null);
         Assert.assertEquals(0, pl.getList().size());
+
+        lockHelper.unlock(null);
     }
 
     @Test
@@ -67,8 +69,8 @@ public class LockHelperTest extends TephraTestSupport {
         atomicable.fail(null);
         atomicable.close();
 
-        String id = lockHelper.lock("key", 10);
-        Assert.assertNull(lockHelper.lock("key", 10));
+        String id = lockHelper.lock("key", 10, 20);
+        Assert.assertNull(lockHelper.lock("key", 10, 20));
         PageList<LockModel> pl = liteOrm.query(new LiteQuery(LockModel.class), null);
         Assert.assertEquals(1, pl.getList().size());
         Assert.assertEquals(id, pl.getList().get(0).getId());
@@ -76,14 +78,26 @@ public class LockHelperTest extends TephraTestSupport {
         pl = liteOrm.query(new LiteQuery(LockModel.class), null);
         Assert.assertEquals(0, pl.getList().size());
 
-
-        id = lockHelper.lock("key", 10);
-        Assert.assertNull(lockHelper.lock("key", 10));
+        id = lockHelper.lock("key", 10, 20);
+        Assert.assertNull(lockHelper.lock("key", 10, 20));
         pl = liteOrm.query(new LiteQuery(LockModel.class), null);
         Assert.assertEquals(1, pl.getList().size());
         Assert.assertEquals(id, pl.getList().get(0).getId());
         atomicable.close();
         pl = liteOrm.query(new LiteQuery(LockModel.class), null);
         Assert.assertEquals(0, pl.getList().size());
+    }
+
+    @Test
+    public void expire() throws Exception {
+        Assert.assertNotNull(lockHelper.lock("key", 10 * 1000, 0));
+        Assert.assertNotNull(lockHelper.lock("key 2", 10 * 1000, 20));
+        Assert.assertNull(lockHelper.lock("key", 1, 0));
+        Thread.sleep(6 * 1000);
+        Assert.assertNotNull(lockHelper.lock("key", 10 * 1000, 0));
+        Thread.sleep(6 * 1000);
+        PageList<LockModel> pl = liteOrm.query(new LiteQuery(LockModel.class), null);
+        Assert.assertEquals(1, pl.getList().size());
+        Assert.assertEquals("key 2", pl.getList().get(0).getKey());
     }
 }

@@ -178,15 +178,17 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public boolean complete(LogModel log) {
+    public Complete complete(LogModel log) {
         AccountModel account = accountDao.findById(log.getAccount());
-        account = find(account.getUser(), account.getOwner(), account.getType());
-        if (account == null || !accountTypes.get(log.getType()).complete(account, log))
-            return false;
+        if ((account = find(account.getUser(), account.getOwner(), account.getType())) == null)
+            return Complete.Locked;
+
+        if (!accountTypes.get(log.getType()).complete(account, log))
+            return Complete.Failure;
 
         save(account);
 
-        return true;
+        return Complete.Success;
     }
 
     private AccountModel find(String user, String owner, int type) {
@@ -194,7 +196,7 @@ public class AccountServiceImpl implements AccountService {
             user = userHelper.id();
         if (validator.isEmpty(owner))
             owner = "";
-        String lockId = lockHelper.lock(LOCK_USER + user + "-" + owner + "-" + type, 1000L);
+        String lockId = lockHelper.lock(LOCK_USER + user + "-" + owner + "-" + type, 1000L, 0);
         if (lockId == null)
             return null;
 

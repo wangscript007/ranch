@@ -82,7 +82,10 @@ public class PaymentHelperImpl implements PaymentHelper, SecondsJob, ContextRefr
         if (validator.isEmpty(listeners) || Calendar.getInstance().get(Calendar.SECOND) % 30 > 0)
             return;
 
-        String lockId = lockHelper.lock("ranch.payment.helper.seconds", 1L);
+        String lockId = lockHelper.lock("ranch.payment.helper.seconds", 1L, 10);
+        if (lockId == null)
+            return;
+
         Map<String, String> parameter = new HashMap<>();
         parameter.put("start", dateTime.toString(new Date(System.currentTimeMillis() - TimeUnit.Day.getTime())));
         parameter.put("state", "0");

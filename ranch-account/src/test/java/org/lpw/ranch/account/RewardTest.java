@@ -66,7 +66,7 @@ public class RewardTest extends TestSupport {
         mockHelper.mock("/account/log/pass");
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(0, object.getIntValue("code"));
-        Assert.assertEquals("", object.getString("data"));
+        Assert.assertEquals(0, object.getJSONArray("data").size());
         account = liteOrm.findById(AccountModel.class, account.getId());
         Assert.assertEquals("user 1", account.getUser());
         Assert.assertEquals("owner 1", account.getOwner());
@@ -101,7 +101,8 @@ public class RewardTest extends TestSupport {
         mockHelper.mock("/account/log/pass");
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(0, object.getIntValue("code"));
-        Assert.assertEquals("", object.getString("data"));
+        Assert.assertEquals(1, object.getJSONArray("data").size());
+        Assert.assertEquals(log.getId(), object.getJSONArray("data").getString(0));
         account = liteOrm.findById(AccountModel.class, account.getId());
         Assert.assertEquals("user 1", account.getUser());
         Assert.assertEquals("owner 1", account.getOwner());
@@ -172,14 +173,14 @@ public class RewardTest extends TestSupport {
         Assert.assertNull(log.getJson());
 
         thread.sleep(3, TimeUnit.Second);
-        String lockId = lockHelper.lock(AccountModel.NAME + ".service.lock:sign in id-owner 2-0", 1000L);
+        String lockId = lockHelper.lock(AccountModel.NAME + ".service.lock:sign in id-owner 2-0", 1000L, 0);
         mockHelper.reset();
         mockHelper.getRequest().addParameter("ids", log.getId());
         sign.put(mockHelper.getRequest().getMap(), null);
         mockHelper.mock("/account/log/reject");
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(0, object.getIntValue("code"));
-        Assert.assertEquals("", object.getString("data"));
+        Assert.assertEquals(0, object.getJSONArray("data").size());
         account = liteOrm.findById(AccountModel.class, account.getId());
         Assert.assertEquals("sign in id", account.getUser());
         Assert.assertEquals("owner 2", account.getOwner());
@@ -213,7 +214,8 @@ public class RewardTest extends TestSupport {
         mockHelper.mock("/account/log/reject");
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(0, object.getIntValue("code"));
-        Assert.assertEquals("", object.getString("data"));
+        Assert.assertEquals(1, object.getJSONArray("data").size());
+        Assert.assertEquals(log.getId(), object.getJSONArray("data").getString(0));
         account = liteOrm.findById(AccountModel.class, account.getId());
         Assert.assertEquals("sign in id", account.getUser());
         Assert.assertEquals("owner 2", account.getOwner());

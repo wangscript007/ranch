@@ -11,6 +11,24 @@ import java.util.Map;
  */
 public interface AccountService {
     /**
+     * 结算状态。
+     */
+    enum Complete {
+        /**
+         * 成功。
+         */
+        Success,
+        /**
+         * 锁定。
+         */
+        Locked,
+        /**
+         * 失败。
+         */
+        Failure
+    }
+
+    /**
      * 检索账户信息集。
      *
      * @param uid        用户ID或UID，为空表示全部。
@@ -144,7 +162,7 @@ public interface AccountService {
      * 结算。
      *
      * @param log 操作日志。
-     * @return 结算成功则返回true；否则返回false。
+     * @return 结算状态。
      */
-    boolean complete(LogModel log);
+    Complete complete(LogModel log);
 }

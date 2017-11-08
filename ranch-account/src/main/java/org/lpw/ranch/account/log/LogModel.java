@@ -29,6 +29,7 @@ public class LogModel extends ModelSupport {
     private int amount; // 数量
     private int balance; // 余额
     private int state; // 状态：0-待处理；1-审核通过；2-审核不通过
+    private int restate; // 重置状态：0-待处理；1-审核通过；2-审核不通过
     private Timestamp start; // 开始时间
     private Timestamp end; // 结束时间
     private String json; // 扩展属性集
@@ -112,6 +113,16 @@ public class LogModel extends ModelSupport {
 
     public void setState(int state) {
         this.state = state;
+    }
+
+    @Jsonable
+    @Column(name = "c_restate")
+    public int getRestate() {
+        return restate;
+    }
+
+    public void setRestate(int restate) {
+        this.restate = restate;
     }
 
     @Jsonable

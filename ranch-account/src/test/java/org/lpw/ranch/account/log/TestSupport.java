@@ -47,6 +47,7 @@ public class TestSupport extends TephraTestSupport {
         log.setAmount(100 + i);
         log.setBalance(200 + i);
         log.setState(state);
+        log.setRestate(300 + i);
         if (time == 0) {
             log.setStart(new Timestamp(this.time - i * TimeUnit.Hour.getTime()));
             log.setEnd(new Timestamp(this.time - (i - 1) * TimeUnit.Hour.getTime()));
@@ -56,7 +57,7 @@ public class TestSupport extends TephraTestSupport {
         }
         if (label)
             log.setJson("{\"label\":\"label " + i + "\"}");
-        log.setIndex(300 + i);
+        log.setIndex(400 + i);
         liteOrm.save(log);
 
         return log;
@@ -80,7 +81,7 @@ public class TestSupport extends TephraTestSupport {
     }
 
     void equals(JSONObject object, int i, int state, boolean label) {
-        Assert.assertEquals(label ? 11 : 10, object.size());
+        Assert.assertEquals(label ? 12 : 11, object.size());
         JSONObject user = object.getJSONObject("user");
         Assert.assertEquals("user " + i, user.getString("id"));
         Assert.assertEquals("name user " + i, user.getString("name"));
@@ -90,6 +91,7 @@ public class TestSupport extends TephraTestSupport {
         Assert.assertEquals(100 + i, object.getIntValue("amount"));
         Assert.assertEquals(200 + i, object.getIntValue("balance"));
         Assert.assertEquals(state, object.getIntValue("state"));
+        Assert.assertEquals(300 + i, object.getIntValue("restate"));
         Assert.assertEquals(dateTime.toString(new Timestamp(time - i * TimeUnit.Hour.getTime())), object.getString("start"));
         Assert.assertEquals(dateTime.toString(new Timestamp(time - (i - 1) * TimeUnit.Hour.getTime())), object.getString("end"));
         if (label)

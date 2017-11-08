@@ -18,13 +18,8 @@ class LockDaoImpl implements LockDao {
     private String dataSource;
 
     @Override
-    public LockModel findById(String id) {
-        return liteOrm.findById(dataSource, LockModel.class, id);
-    }
-
-    @Override
-    public LockModel findByKey(String key) {
-        return liteOrm.findOne(new LiteQuery(LockModel.class).dataSource(dataSource).where("c_key=?").order("c_index"), new Object[]{key});
+    public LockModel findByMd5(String md5) {
+        return liteOrm.findOne(new LiteQuery(LockModel.class).dataSource(dataSource).where("c_md5=?").order("c_index"), new Object[]{md5});
     }
 
     @Override
@@ -36,6 +31,12 @@ class LockDaoImpl implements LockDao {
     @Override
     public void delete(String id) {
         liteOrm.deleteById(dataSource, LockModel.class, id);
+        liteOrm.close();
+    }
+
+    @Override
+    public void delete(long expire) {
+        liteOrm.delete(new LiteQuery(LockModel.class).where("c_expire<?"), new Object[]{expire});
         liteOrm.close();
     }
 }

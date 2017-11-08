@@ -10,6 +10,7 @@ CREATE TABLE t_account_log
   c_amount INT DEFAULT 0 COMMENT '数量',
   c_balance INT DEFAULT 0 COMMENT '余额',
   c_state INT DEFAULT 0 COMMENT '状态：0-待处理；1-审核通过；2-审核不通过',
+  c_restate INT DEFAULT 0 COMMENT '重置状态：0-待处理；1-审核通过；2-审核不通过',
   c_start DATETIME DEFAULT NULL COMMENT '开始时间',
   c_end DATETIME DEFAULT NULL COMMENT '结束时间',
   c_json TEXT DEFAULT NULL COMMENT '扩展属性集',
@@ -19,5 +20,6 @@ CREATE TABLE t_account_log
   KEY k_user(c_user,c_start) USING BTREE,
   KEY k_account(c_account,c_start) USING BTREE,
   KEY k_owner(c_owner,c_start) USING BTREE,
+  KEY k_restate(c_restate) USING HASH,
   UNIQUE KEY uk_index(c_index) USING BTREE
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;

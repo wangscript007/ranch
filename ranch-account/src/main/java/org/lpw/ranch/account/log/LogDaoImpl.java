@@ -48,6 +48,11 @@ class LogDaoImpl implements LogDao {
     }
 
     @Override
+    public PageList<LogModel> query(int restate) {
+        return liteOrm.query(new LiteQuery(LogModel.class).where("c_restate=?"), new Object[]{restate});
+    }
+
+    @Override
     public LogModel findById(String id) {
         return liteOrm.findById(LogModel.class, id);
     }

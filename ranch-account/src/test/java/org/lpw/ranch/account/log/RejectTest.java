@@ -50,7 +50,8 @@ public class RejectTest extends TestSupport {
         mockHelper.mock("/account/log/reject");
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(0, object.getIntValue("code"));
-        Assert.assertEquals("", object.getString("data"));
+        Assert.assertEquals(1, object.getJSONArray("data").size());
+        Assert.assertEquals(log1.getId(), object.getJSONArray("data").getString(0));
         AccountModel account11 = liteOrm.findById(AccountModel.class, account1.getId());
         Assert.assertEquals(0, account11.getBalance());
         Assert.assertEquals(0, account11.getDeposit());
@@ -73,7 +74,8 @@ public class RejectTest extends TestSupport {
         mockHelper.mock("/account/log/reject");
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(0, object.getIntValue("code"));
-        Assert.assertEquals("", object.getString("data"));
+        Assert.assertEquals(1, object.getJSONArray("data").size());
+        Assert.assertEquals(log2.getId(), object.getJSONArray("data").getString(0));
         AccountModel account111 = liteOrm.findById(AccountModel.class, account1.getId());
         Assert.assertEquals(0, account111.getBalance());
         Assert.assertEquals(0, account111.getDeposit());

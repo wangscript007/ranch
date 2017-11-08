@@ -2,6 +2,8 @@ package org.lpw.ranch.lock;
 
 import org.lpw.tephra.atomic.Atomicable;
 import org.lpw.tephra.crypto.Digest;
+import org.lpw.tephra.scheduler.SecondsJob;
+import org.lpw.tephra.util.DateTime;
 import org.lpw.tephra.util.Thread;
 import org.lpw.tephra.util.TimeUnit;
 import org.lpw.tephra.util.Validator;
@@ -15,7 +17,7 @@ import java.util.Set;
  * @author lpw
  */
 @Service(LockModel.NAME + ".helper")
-public class LockHelperImpl implements LockHelper, Atomicable {
+public class LockHelperImpl implements LockHelper, Atomicable, SecondsJob {
     @Inject
     private Digest digest;
     @Inject
@@ -27,20 +29,23 @@ public class LockHelperImpl implements LockHelper, Atomicable {
     private ThreadLocal<Set<String>> ids = new ThreadLocal<>();
 
     @Override
-    public String lock(String key, long wait) {
+    public String lock(String key, long wait, int alive) {
         if (key == null)
             return null;
 
         String md5 = digest.md5(key);
         LockModel lock = new LockModel();
-        lock.setKey(md5);
+        lock.setMd5(md5);
+        lock.setKey(key);
+        lock.setCreate(System.currentTimeMillis());
+        lock.setExpire(System.currentTimeMillis() + (alive > 0 ? alive : 5) * 1000);
         lockDao.save(lock);
+
         if (ids.get() == null)
             ids.set(new HashSet<>());
         ids.get().add(lock.getId());
-        lock = lockDao.findById(lock.getId());
         for (long i = 0L; i < wait; i++) {
-            LockModel model = lockDao.findByKey(md5);
+            LockModel model = lockDao.findByMd5(md5);
             if (lock.getId().equals(model.getId()))
                 return lock.getId();
 
@@ -72,5 +77,10 @@ public class LockHelperImpl implements LockHelper, Atomicable {
 
         Set<String> set = new HashSet<>(ids.get());
         set.forEach(this::unlock);
+    }
+
+    @Override
+    public void executeSecondsJob() {
+        lockDao.delete(System.currentTimeMillis());
     }
 }
