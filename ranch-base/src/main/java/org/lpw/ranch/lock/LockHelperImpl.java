@@ -3,7 +3,6 @@ package org.lpw.ranch.lock;
 import org.lpw.tephra.atomic.Atomicable;
 import org.lpw.tephra.crypto.Digest;
 import org.lpw.tephra.scheduler.SecondsJob;
-import org.lpw.tephra.util.DateTime;
 import org.lpw.tephra.util.Thread;
 import org.lpw.tephra.util.TimeUnit;
 import org.lpw.tephra.util.Validator;
@@ -38,7 +37,7 @@ public class LockHelperImpl implements LockHelper, Atomicable, SecondsJob {
         lock.setMd5(md5);
         lock.setKey(key);
         lock.setCreate(System.currentTimeMillis());
-        lock.setExpire(System.currentTimeMillis() + (alive > 0 ? alive : 5) * 1000);
+        lock.setExpire(lock.getCreate() + (alive > 0 ? alive : 5) * 1000);
         lockDao.save(lock);
 
         if (ids.get() == null)
