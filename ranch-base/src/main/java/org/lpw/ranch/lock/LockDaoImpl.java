@@ -14,7 +14,7 @@ import javax.inject.Inject;
 class LockDaoImpl implements LockDao {
     @Inject
     private LiteOrm liteOrm;
-    @Value("${ranch.lock.data-source.key:}")
+    @Value("${ranch.lock.data-source:}")
     private String dataSource;
 
     @Override
