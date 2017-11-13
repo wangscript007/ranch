@@ -24,7 +24,7 @@ public class AddressTest extends TephraTestSupport {
     @Inject
     private GpsService gpsService;
 
-    @Test
+//    @Test
     public void address() throws Exception {
         mockHelper.reset();
         mockHelper.mock("/gps/address");

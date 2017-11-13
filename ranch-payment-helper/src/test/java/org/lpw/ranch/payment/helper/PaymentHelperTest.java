@@ -29,37 +29,40 @@ public class PaymentHelperTest extends TephraTestSupport {
 
         Map<String, String> map = new HashMap<>();
         mockCarousel("create", 1, "orderNo", map);
-        Assert.assertNull(paymentHelper.create("type", "app id", "user", 1, "notice", null));
-        Assert.assertEquals(6, map.size());
-        Assert.assertEquals("helper", map.get("payment"));
-        Assert.assertEquals("type", map.get("type"));
-        Assert.assertEquals("user", map.get("user"));
-        Assert.assertEquals("app id", map.get("appId"));
-        Assert.assertEquals("1", map.get("amount"));
-        Assert.assertEquals("notice", map.get("notice"));
-
-        map.clear();
-        mockCarousel("create", 0, "id", map);
-        Assert.assertNull(paymentHelper.create("type", "app id", "user", 1, "notice", new HashMap<>()));
-        Assert.assertEquals(6, map.size());
-        Assert.assertEquals("helper", map.get("payment"));
-        Assert.assertEquals("type", map.get("type"));
-        Assert.assertEquals("user", map.get("user"));
-        Assert.assertEquals("app id", map.get("appId"));
-        Assert.assertEquals("1", map.get("amount"));
-        Assert.assertEquals("notice", map.get("notice"));
-
-        map.clear();
-        mockCarousel("create", 0, "orderNo", map);
-        Map<String, String> m = new HashMap<>();
-        m.put("name", "value");
-        Assert.assertEquals("order no", paymentHelper.create("type", "app id", "user", 1, "notice", m));
+        Assert.assertNull(paymentHelper.create("type", "app id", "user", 1, "bill no", "notice", null));
         Assert.assertEquals(7, map.size());
         Assert.assertEquals("helper", map.get("payment"));
         Assert.assertEquals("type", map.get("type"));
         Assert.assertEquals("user", map.get("user"));
         Assert.assertEquals("app id", map.get("appId"));
         Assert.assertEquals("1", map.get("amount"));
+        Assert.assertEquals("bill no", map.get("billNo"));
+        Assert.assertEquals("notice", map.get("notice"));
+
+        map.clear();
+        mockCarousel("create", 0, "id", map);
+        Assert.assertNull(paymentHelper.create("type", "app id", "user", 1, "bill no", "notice", new HashMap<>()));
+        Assert.assertEquals(7, map.size());
+        Assert.assertEquals("helper", map.get("payment"));
+        Assert.assertEquals("type", map.get("type"));
+        Assert.assertEquals("user", map.get("user"));
+        Assert.assertEquals("app id", map.get("appId"));
+        Assert.assertEquals("1", map.get("amount"));
+        Assert.assertEquals("bill no", map.get("billNo"));
+        Assert.assertEquals("notice", map.get("notice"));
+
+        map.clear();
+        mockCarousel("create", 0, "orderNo", map);
+        Map<String, String> m = new HashMap<>();
+        m.put("name", "value");
+        Assert.assertEquals("order no", paymentHelper.create("type", "app id", "user", 1, "bill no", "notice", m));
+        Assert.assertEquals(8, map.size());
+        Assert.assertEquals("helper", map.get("payment"));
+        Assert.assertEquals("type", map.get("type"));
+        Assert.assertEquals("user", map.get("user"));
+        Assert.assertEquals("app id", map.get("appId"));
+        Assert.assertEquals("1", map.get("amount"));
+        Assert.assertEquals("bill no", map.get("billNo"));
         Assert.assertEquals("notice", map.get("notice"));
         Assert.assertEquals("value", map.get("name"));
     }

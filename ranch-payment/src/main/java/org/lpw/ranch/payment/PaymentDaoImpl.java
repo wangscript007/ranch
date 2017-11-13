@@ -22,7 +22,7 @@ class PaymentDaoImpl implements PaymentDao {
     private LiteOrm liteOrm;
 
     @Override
-    public PageList<PaymentModel> query(String type, String appId, String user, String orderNo, String tradeNo, int state, Timestamp start, Timestamp end, int pageSize, int pageNum) {
+    public PageList<PaymentModel> query(String type, String appId, String user, String orderNo, String billNo, String tradeNo, int state, Timestamp start, Timestamp end, int pageSize, int pageNum) {
         StringBuilder where = new StringBuilder();
         List<Object> args = new ArrayList<>();
         append(where, args, "c_start", ">=", start);
@@ -31,6 +31,7 @@ class PaymentDaoImpl implements PaymentDao {
         append(where, args, "c_app_id", "=", appId);
         append(where, args, "c_user", "=", user);
         append(where, args, "c_order_no", "=", orderNo);
+        append(where, args, "c_bill_no", "=", billNo);
         append(where, args, "c_trade_no", "=", tradeNo);
         if (state > -1)
             append(where, args, "c_state", "=", state);
@@ -46,11 +47,6 @@ class PaymentDaoImpl implements PaymentDao {
             where.append(" and ");
         where.append(name).append(operation).append("?");
         args.add(value);
-    }
-
-    @Override
-    public PageList<PaymentModel> query(Timestamp start, int state) {
-        return liteOrm.query(new LiteQuery(PaymentModel.class).where("c_start>? and c_state=?"), new Object[]{start, state});
     }
 
     @Override

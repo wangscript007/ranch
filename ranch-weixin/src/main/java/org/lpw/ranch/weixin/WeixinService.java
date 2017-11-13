@@ -88,12 +88,13 @@ public interface WeixinService {
      * @param user         用户ID。
      * @param subject      订单名称。
      * @param amount       支付金额，单位：分。
+     * @param billNo       单据号。
      * @param notice       异步通知。
      * @param size         二维码图片大小，小于等于0则使用默认值。
      * @param logo         LOGO图片名。
      * @param outputStream 输出流。
      */
-    void prepayQrCode(String key, String user, String subject, int amount, String notice, int size, String logo, OutputStream outputStream);
+    void prepayQrCode(String key, String user, String subject, int amount, String billNo, String notice, int size, String logo, OutputStream outputStream);
 
     /**
      * 生成支付二维码；并输出Base64数据。
@@ -102,12 +103,13 @@ public interface WeixinService {
      * @param user    用户ID。
      * @param subject 订单名称。
      * @param amount  支付金额，单位：分。
+     * @param billNo  单据号。
      * @param notice  异步通知。
      * @param size    二维码图片大小，小于等于0则使用默认值。
      * @param logo    LOGO图片名。
      * @return Base64数据，如果生成失败则返回null。
      */
-    String prepayQrCodeBase64(String key, String user, String subject, int amount, String notice, int size, String logo);
+    String prepayQrCodeBase64(String key, String user, String subject, int amount, String billNo, String notice, int size, String logo);
 
     /**
      * 生成APP支付参数。
@@ -116,10 +118,11 @@ public interface WeixinService {
      * @param user    用户ID。
      * @param subject 订单名称。
      * @param amount  支付金额，单位：分。
+     * @param billNo  单据号。
      * @param notice  异步通知。
      * @return 支付参数。
      */
-    JSONObject prepayApp(String key, String user, String subject, int amount, String notice);
+    JSONObject prepayApp(String key, String user, String subject, int amount, String billNo, String notice);
 
     /**
      * 异步通知。

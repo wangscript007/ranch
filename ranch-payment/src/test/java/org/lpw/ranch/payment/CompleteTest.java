@@ -138,11 +138,12 @@ public class CompleteTest extends TestSupport {
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(0, object.getIntValue("code"));
         JSONObject data = object.getJSONObject("data");
-        Assert.assertEquals(10, data.size());
+        Assert.assertEquals(11, data.size());
         Assert.assertEquals("type 1", data.getString("type"));
         Assert.assertEquals("user 1", data.getString("user"));
         Assert.assertEquals(2, data.getIntValue("amount"));
         Assert.assertEquals("order no 1", data.getString("orderNo"));
+        Assert.assertEquals("bill no 1", data.getString("billNo"));
         Assert.assertEquals("trade no", data.getString("tradeNo"));
         Assert.assertEquals(1, data.getIntValue("state"));
         Assert.assertEquals(notice.toJSONString(), data.getString("notice"));
@@ -156,6 +157,7 @@ public class CompleteTest extends TestSupport {
         Assert.assertEquals("user 1", payment11.getUser());
         Assert.assertEquals(2, payment11.getAmount());
         Assert.assertEquals("order no 1", payment11.getOrderNo());
+        Assert.assertEquals("bill no 1", payment11.getBillNo());
         Assert.assertEquals("trade no", payment11.getTradeNo());
         Assert.assertEquals(1, payment11.getState());
         Assert.assertEquals(notice.toJSONString(), payment11.getNotice());
@@ -187,11 +189,12 @@ public class CompleteTest extends TestSupport {
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(0, object.getIntValue("code"));
         data = object.getJSONObject("data");
-        Assert.assertEquals(10, data.size());
+        Assert.assertEquals(11, data.size());
         Assert.assertEquals("type 1", data.getString("type"));
         Assert.assertEquals("user 1", data.getString("user"));
         Assert.assertEquals(2, data.getIntValue("amount"));
         Assert.assertEquals("order no 1", data.getString("orderNo"));
+        Assert.assertEquals("bill no 1", data.getString("billNo"));
         Assert.assertEquals("trade no", data.getString("tradeNo"));
         Assert.assertEquals(1, data.getIntValue("state"));
         Assert.assertEquals(notice.toJSONString(), data.getString("notice"));
@@ -205,6 +208,7 @@ public class CompleteTest extends TestSupport {
         Assert.assertEquals("user 1", payment111.getUser());
         Assert.assertEquals(2, payment111.getAmount());
         Assert.assertEquals("order no 1", payment111.getOrderNo());
+        Assert.assertEquals("bill no 1", payment111.getBillNo());
         Assert.assertEquals("trade no", payment11.getTradeNo());
         Assert.assertEquals(1, payment111.getState());
         Assert.assertEquals(notice.toJSONString(), payment111.getNotice());
@@ -236,11 +240,12 @@ public class CompleteTest extends TestSupport {
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(0, object.getIntValue("code"));
         data = object.getJSONObject("data");
-        Assert.assertEquals(10, data.size());
+        Assert.assertEquals(11, data.size());
         Assert.assertEquals("type 2", data.getString("type"));
         Assert.assertEquals("user 2", data.getString("user"));
         Assert.assertEquals(2, data.getIntValue("amount"));
         Assert.assertEquals("order no 2", data.getString("orderNo"));
+        Assert.assertEquals("bill no 2", data.getString("billNo"));
         Assert.assertEquals("trade no 2", data.getString("tradeNo"));
         Assert.assertEquals(2, data.getIntValue("state"));
         Assert.assertEquals(notice.toJSONString(), data.getString("notice"));
@@ -254,6 +259,7 @@ public class CompleteTest extends TestSupport {
         Assert.assertEquals("user 2", payment22.getUser());
         Assert.assertEquals(2, payment22.getAmount());
         Assert.assertEquals("order no 2", payment22.getOrderNo());
+        Assert.assertEquals("bill no 2", payment22.getBillNo());
         Assert.assertEquals("trade no 2", payment22.getTradeNo());
         Assert.assertEquals(2, payment22.getState());
         Assert.assertEquals(notice.toJSONString(), payment22.getNotice());

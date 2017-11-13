@@ -65,6 +65,7 @@ public class PaymentServiceImpl implements PaymentService {
         ignores.add("appId");
         ignores.add("amount");
         ignores.add("orderNo");
+        ignores.add("billNo");
         ignores.add("tradeNo");
         ignores.add("notice");
         ignores.add("state");
@@ -73,8 +74,8 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     @Override
-    public JSONObject query(String type, String appId, String user, String orderNo, String tradeNo, int state, String start, String end) {
-        JSONObject object = paymentDao.query(type, appId, userHelper.findIdByUid(user, user), orderNo, tradeNo, state, dateTime.getStart(start),
+    public JSONObject query(String type, String appId, String user, String orderNo, String billNo, String tradeNo, int state, String start, String end) {
+        JSONObject object = paymentDao.query(type, appId, userHelper.findIdByUid(user, user), orderNo, billNo, tradeNo, state, dateTime.getStart(start),
                 dateTime.getEnd(end), pagination.getPageSize(20), pagination.getPageNum()).toJson();
         userHelper.fill(object.getJSONArray("list"), new String[]{"user"});
 
@@ -105,7 +106,7 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     @Override
-    public JSONObject create(String type, String appId, String user, int amount, String notice, Map<String, String> map) {
+    public JSONObject create(String type, String appId, String user, int amount, String billNo, String notice, Map<String, String> map) {
         PaymentModel payment = new PaymentModel();
         payment.setType(type);
         payment.setAppId(appId);
@@ -113,6 +114,7 @@ public class PaymentServiceImpl implements PaymentService {
         payment.setAmount(amount);
         payment.setStart(dateTime.now());
         payment.setOrderNo(newOrderNo(payment.getStart()));
+        payment.setBillNo(billNo == null ? "" : billNo);
         payment.setTradeNo("");
         payment.setNotice(notice);
         JSONObject json = new JSONObject();

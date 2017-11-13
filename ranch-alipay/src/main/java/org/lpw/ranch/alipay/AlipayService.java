@@ -67,11 +67,12 @@ public interface AlipayService {
      * @param user      用户ID。
      * @param subject   订单名称。
      * @param amount    支付金额，单位：分。
-     * @param notice 异步通知。
+     * @param billNo    单据号。
+     * @param notice    异步通知。
      * @param returnUrl 同步结果URL地址。
      * @return 支付内容；如果发起失败则返回null。
      */
-    String quickWapPay(String key, String user, String subject, int amount, String notice, String returnUrl);
+    String quickWapPay(String key, String user, String subject, int amount, String billNo, String notice, String returnUrl);
 
     /**
      * 发起PC WEB端支付。
@@ -80,23 +81,24 @@ public interface AlipayService {
      * @param user      用户ID。
      * @param subject   订单名称。
      * @param amount    支付金额，单位：分。
-     * @param notice 异步通知。
+     * @param billNo    单据号。
+     * @param notice    异步通知。
      * @param returnUrl 同步结果URL地址。
      * @return 支付内容；如果发起失败则返回null。
      */
-    String fastInstantTradePay(String key, String user, String subject, int amount, String notice, String returnUrl);
+    String fastInstantTradePay(String key, String user, String subject, int amount, String billNo, String notice, String returnUrl);
 
     /**
      * 发起APP端支付。
      *
-     * @param key       引用key。
-     * @param user      用户ID。
-     * @param subject   订单名称。
-     * @param amount    支付金额，单位：分。
-     * @param notice 异步通知。
+     * @param key     引用key。
+     * @param user    用户ID。
+     * @param subject 订单名称。
+     * @param amount  支付金额，单位：分。
+     * @param notice  异步通知。
      * @return 支付内容；如果发起失败则返回null。
      */
-    String quickMsecurityPay(String key, String user, String subject, int amount, String notice);
+    String quickMsecurityPay(String key, String user, String subject, int amount, String billNo, String notice);
 
     /**
      * 异步通知。

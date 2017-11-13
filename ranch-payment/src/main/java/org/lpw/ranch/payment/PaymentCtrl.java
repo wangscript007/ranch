@@ -35,7 +35,7 @@ public class PaymentCtrl {
             state = "-1";
 
         return paymentService.query(request.get("type"), request.get("appId"), request.get("user"), request.get("orderNo"),
-                request.get("tradeNo"), numeric.toInt(state), request.get("start"), request.get("end"));
+                request.get("billNo"), request.get("tradeNo"), numeric.toInt(state), request.get("start"), request.get("end"));
     }
 
     @Execute(name = "success", validates = {
@@ -62,10 +62,12 @@ public class PaymentCtrl {
             @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "type", failureCode = 3),
             @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "appId", failureCode = 13),
             @Validate(validator = Validators.GREATER_THAN, number = {0}, parameter = "amount", failureCode = 4),
+            @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "billNo", failureCode = 14),
             @Validate(validator = UserHelper.VALIDATOR_EXISTS_OR_SIGN_IN, parameter = "user", failureCode = 5)
     })
     public Object create() {
-        return paymentService.create(request.get("type"), request.get("appId"), request.get("user"), request.getAsInt("amount"), request.get("notice"), request.getMap());
+        return paymentService.create(request.get("type"), request.get("appId"), request.get("user"), request.getAsInt("amount"),
+                request.get("billNo"), request.get("notice"), request.getMap());
     }
 
     @Execute(name = "complete", validates = {
@@ -78,6 +80,7 @@ public class PaymentCtrl {
             @Validate(validator = PaymentService.VALIDATOR_EXISTS, parameter = "orderNo", failureCode = 10)
     })
     public Object complete() {
-        return paymentService.complete(request.get("orderNo"), request.getAsInt("amount"), request.get("tradeNo"), request.getAsInt("state"), request.getMap());
+        return paymentService.complete(request.get("orderNo"), request.getAsInt("amount"), request.get("tradeNo"),
+                request.getAsInt("state"), request.getMap());
     }
 }

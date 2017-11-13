@@ -18,6 +18,9 @@
             "name": "orderNo"
         },
         {
+            "name": "billNo"
+        },
+        {
             "name": "tradeNo"
         },
         {

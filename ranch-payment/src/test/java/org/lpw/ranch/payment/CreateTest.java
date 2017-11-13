@@ -80,12 +80,13 @@ public class CreateTest extends TestSupport {
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(0, object.getIntValue("code"));
         JSONObject data = object.getJSONObject("data");
-        Assert.assertEquals(10, data.size());
+        Assert.assertEquals(11, data.size());
         Assert.assertEquals("type value", data.getString("type"));
         Assert.assertEquals("user id", data.getString("user"));
         Assert.assertEquals("app id", data.getString("appId"));
         Assert.assertEquals(1, data.getIntValue("amount"));
         Assert.assertEquals(time + "0000", data.getString("orderNo"));
+        Assert.assertEquals("", data.getString("billNo"));
         Assert.assertEquals("", data.getString("tradeNo"));
         Assert.assertEquals(0, data.getIntValue("state"));
         Assert.assertEquals("notice", data.getString("notice"));
@@ -109,6 +110,7 @@ public class CreateTest extends TestSupport {
         mockHelper.reset();
         mockHelper.getRequest().addParameter("type", "type value 2");
         mockHelper.getRequest().addParameter("amount", "2");
+        mockHelper.getRequest().addParameter("billNo", "bill no");
         mockHelper.getRequest().addParameter("notice", "notice 2");
         mockHelper.getRequest().addParameter("state", "1");
         mockHelper.getRequest().addParameter("label", "label 2");
@@ -116,12 +118,13 @@ public class CreateTest extends TestSupport {
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(0, object.getIntValue("code"));
         data = object.getJSONObject("data");
-        Assert.assertEquals(9, data.size());
+        Assert.assertEquals(10, data.size());
         Assert.assertEquals("type value 2", data.getString("type"));
         Assert.assertEquals("user id 2", data.getString("user"));
         Assert.assertEquals(2, data.getIntValue("amount"));
         Assert.assertEquals(time + "0002", data.getString("orderNo"));
         Assert.assertTrue(data.getString("orderNo").endsWith("0002"));
+        Assert.assertEquals("bill no", data.getString("billNo"));
         Assert.assertEquals("", data.getString("tradeNo"));
         Assert.assertEquals(0, data.getIntValue("state"));
         Assert.assertEquals("notice 2", data.getString("notice"));

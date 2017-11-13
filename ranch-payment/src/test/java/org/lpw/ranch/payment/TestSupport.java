@@ -69,6 +69,7 @@ public class TestSupport extends TephraTestSupport {
         payment.setUser("user " + i);
         payment.setAmount(100 + i);
         payment.setOrderNo("order no " + i);
+        payment.setBillNo("bill no " + i);
         payment.setTradeNo("trade no " + i);
         payment.setState(state);
         payment.setNotice(notice);

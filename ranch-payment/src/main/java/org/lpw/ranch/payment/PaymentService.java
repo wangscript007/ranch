@@ -26,13 +26,14 @@ public interface PaymentService {
      * @param appId   支付APP ID。
      * @param user    用户ID或UID，为空则表示全部。
      * @param orderNo 订单号，为空则表示全部。
+     * @param billNo  单据号，为空则表示全部。
      * @param tradeNo 网关订单号，为空则表示全部。
      * @param state   状态，-1则表示全部。
      * @param start   开始日期，格式yyyy-MM-dd，为空则表示全部。
      * @param end     结束日期，格式yyyy-MM-dd，为空则表示全部。
      * @return 订单信息集。
      */
-    JSONObject query(String type, String appId, String user, String orderNo, String tradeNo, int state, String start, String end);
+    JSONObject query(String type, String appId, String user, String orderNo, String billNo, String tradeNo, int state, String start, String end);
 
     /**
      * 设置订单信息为成功。
@@ -66,11 +67,12 @@ public interface PaymentService {
      * @param user   用户ID；如果为空则使用当前用户ID。
      * @param appId  支付APP ID。
      * @param amount 金额，单位：分。
+     * @param billNo 单据号。
      * @param notice 通知。
      * @param map    参数集。
      * @return 订单信息。
      */
-    JSONObject create(String type, String appId, String user, int amount, String notice, Map<String, String> map);
+    JSONObject create(String type, String appId, String user, int amount, String billNo, String notice, Map<String, String> map);
 
     /**
      * 订单完成。

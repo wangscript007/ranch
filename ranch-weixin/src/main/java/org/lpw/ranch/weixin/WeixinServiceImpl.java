@@ -180,8 +180,8 @@ public class WeixinServiceImpl implements WeixinService, ContextRefreshedListene
     }
 
     @Override
-    public void prepayQrCode(String key, String user, String subject, int amount, String notice, int size, String logo, OutputStream outputStream) {
-        Map<String, String> map = prepay(key, user, subject, amount, notice, "NATIVE", new HashMap<>());
+    public void prepayQrCode(String key, String user, String subject, int amount, String billNo, String notice, int size, String logo, OutputStream outputStream) {
+        Map<String, String> map = prepay(key, user, subject, amount, billNo, notice, "NATIVE", new HashMap<>());
         if (map == null)
             return;
 
@@ -189,8 +189,8 @@ public class WeixinServiceImpl implements WeixinService, ContextRefreshedListene
     }
 
     @Override
-    public String prepayQrCodeBase64(String key, String user, String subject, int amount, String notice, int size, String logo) {
-        Map<String, String> map = prepay(key, user, subject, amount, notice, "NATIVE", new HashMap<>());
+    public String prepayQrCodeBase64(String key, String user, String subject, int amount, String billNo, String notice, int size, String logo) {
+        Map<String, String> map = prepay(key, user, subject, amount, billNo, notice, "NATIVE", new HashMap<>());
 
         return map == null ? null : qrCode.create(map.get("code_url"), size > 0 ? size : qrCodeSize, getLogo(logo));
     }
@@ -202,8 +202,8 @@ public class WeixinServiceImpl implements WeixinService, ContextRefreshedListene
     }
 
     @Override
-    public JSONObject prepayApp(String key, String user, String subject, int amount, String notice) {
-        Map<String, String> map = prepay(key, user, subject, amount, notice, "APP", new HashMap<>());
+    public JSONObject prepayApp(String key, String user, String subject, int amount, String billNo, String notice) {
+        Map<String, String> map = prepay(key, user, subject, amount, billNo, notice, "APP", new HashMap<>());
         if (map == null)
             return null;
 
@@ -222,12 +222,12 @@ public class WeixinServiceImpl implements WeixinService, ContextRefreshedListene
         return object;
     }
 
-    private Map<String, String> prepay(String key, String user, String subject, int amount, String notice, String type, Map<String, String> map) {
+    private Map<String, String> prepay(String key, String user, String subject, int amount, String billNo, String notice, String type, Map<String, String> map) {
         WeixinModel weixin = findByKey(key);
         if (weixin == null)
             return null;
 
-        String orderNo = paymentHelper.create("weixin", weixin.getAppId(), user, amount, notice, map);
+        String orderNo = paymentHelper.create("weixin", weixin.getAppId(), user, amount, billNo, notice, map);
         if (validator.isEmpty(orderNo))
             return null;
 

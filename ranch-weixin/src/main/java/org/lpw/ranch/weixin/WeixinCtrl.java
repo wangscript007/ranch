@@ -112,7 +112,7 @@ public class WeixinCtrl {
     })
     public Object prepayQrCode() {
         weixinService.prepayQrCode(request.get("key"), request.get("user"), request.get("subject"), request.getAsInt("amount"),
-                request.get("notice"), request.getAsInt("size"), request.get("logo"), response.getOutputStream());
+                request.get("billNo"), request.get("notice"), request.getAsInt("size"), request.get("logo"), response.getOutputStream());
 
         return null;
     }
@@ -126,7 +126,7 @@ public class WeixinCtrl {
     })
     public Object prepayQrCodeBase64() {
         return weixinService.prepayQrCodeBase64(request.get("key"), request.get("user"), request.get("subject"), request.getAsInt("amount"),
-                request.get("notice"), request.getAsInt("size"), request.get("logo"));
+                request.get("billNo"), request.get("notice"), request.getAsInt("size"), request.get("logo"));
     }
 
     @Execute(name = "prepay-app", validates = {
@@ -137,7 +137,8 @@ public class WeixinCtrl {
             @Validate(validator = WeixinService.VALIDATOR_EXISTS, parameter = "key", failureCode = 24)
     })
     public Object prepayApp() {
-        JSONObject object = weixinService.prepayApp(request.get("key"), request.get("user"), request.get("subject"), request.getAsInt("amount"), request.get("notice"));
+        JSONObject object = weixinService.prepayApp(request.get("key"), request.get("user"), request.get("subject"), request.getAsInt("amount"),
+                request.get("billNo"), request.get("notice"));
 
         return object == null ? templates.get().failure(2427, message.get(WeixinModel.NAME + ".prepay.failure"), null, null) : object;
     }

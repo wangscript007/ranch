@@ -7,6 +7,7 @@ CREATE TABLE t_payment
   c_user CHAR(36) NOT NULL COMMENT '用户ID',
   c_amount INT DEFAULT 0 COMMENT '金额，单位：分',
   c_order_no CHAR(21) NOT NULL COMMENT '订单号',
+  c_bill_no VARCHAR(255) NOT NULL COMMENT '单据号',
   c_trade_no VARCHAR(255) NOT NULL COMMENT '网关订单号',
   c_state INT DEFAULT 0 COMMENT '状态：0-新建；1-成功；2-失败；3-处理中',
   c_notice TEXT DEFAULT NULL COMMENT '通知配置',
@@ -16,5 +17,7 @@ CREATE TABLE t_payment
 
   PRIMARY KEY pk(c_id) USING HASH,
   UNIQUE KEY uk_order_no(c_order_no) USING HASH,
-  KEY k_start_state(c_start,c_state) USING BTREE
+  KEY k_start_state(c_start,c_state) USING BTREE,
+  KEY k_bill_no(c_bill_no) USING HASH,
+  KEY k_trade_no(c_trade_no) USING HASH
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

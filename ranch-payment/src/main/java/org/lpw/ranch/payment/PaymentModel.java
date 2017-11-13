@@ -26,6 +26,7 @@ public class PaymentModel extends ModelSupport {
     private String user; // 用户ID
     private int amount; // 金额，单位：分
     private String orderNo; // 订单号
+    private String billNo; // 单据号
     private String tradeNo; // 网关订单号
     private int state; // 状态：0-新建；1-成功；2-失败；3-处理中
     private String notice; // 通知配置
@@ -81,6 +82,16 @@ public class PaymentModel extends ModelSupport {
 
     public void setOrderNo(String orderNo) {
         this.orderNo = orderNo;
+    }
+
+    @Jsonable
+    @Column(name = "c_bill_no")
+    public String getBillNo() {
+        return billNo;
+    }
+
+    public void setBillNo(String billNo) {
+        this.billNo = billNo;
     }
 
     @Jsonable

@@ -86,11 +86,12 @@ public class SuccessTest extends TestSupport {
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(0, object.getIntValue("code"));
         JSONObject data = object.getJSONObject("data");
-        Assert.assertEquals(10, data.size());
+        Assert.assertEquals(11, data.size());
         Assert.assertEquals("type 1", data.getString("type"));
         Assert.assertEquals("user 1", data.getString("user"));
         Assert.assertEquals(101, data.getIntValue("amount"));
         Assert.assertEquals("order no 1", data.getString("orderNo"));
+        Assert.assertEquals("bill no 1", data.getString("billNo"));
         Assert.assertEquals("trade no 1", data.getString("tradeNo"));
         Assert.assertEquals(1, data.getIntValue("state"));
         Assert.assertEquals(notice.toJSONString(), data.getString("notice"));
@@ -104,6 +105,7 @@ public class SuccessTest extends TestSupport {
         Assert.assertEquals("user 1", payment11.getUser());
         Assert.assertEquals(101, payment11.getAmount());
         Assert.assertEquals("order no 1", payment11.getOrderNo());
+        Assert.assertEquals("bill no 1", payment11.getBillNo());
         Assert.assertEquals("trade no 1", payment11.getTradeNo());
         Assert.assertEquals(1, payment11.getState());
         Assert.assertEquals(notice.toJSONString(), payment11.getNotice());

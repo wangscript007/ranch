@@ -71,7 +71,7 @@ public class AlipayCtrl {
     public Object quickWapPay() {
         Map<String, String> map = new HashMap<>();
         map.put("html", alipayService.quickWapPay(request.get("key"), request.get("user"), request.get("subject"),
-                request.getAsInt("amount"), request.get("notice"), request.get("returnUrl")));
+                request.getAsInt("amount"), request.get("billNo"), request.get("notice"), request.get("returnUrl")));
 
         return map;
     }
@@ -86,7 +86,7 @@ public class AlipayCtrl {
     public Object fastInstantTradePay() {
         Map<String, String> map = new HashMap<>();
         map.put("html", alipayService.fastInstantTradePay(request.get("key"), request.get("user"), request.get("subject"),
-                request.getAsInt("amount"), request.get("notice"), request.get("returnUrl")));
+                request.getAsInt("amount"), request.get("billNo"), request.get("notice"), request.get("returnUrl")));
 
         return map;
     }
@@ -100,7 +100,7 @@ public class AlipayCtrl {
     })
     public Object quickMsecurityPay() {
         return alipayService.quickMsecurityPay(request.get("key"), request.get("user"), request.get("subject"),
-                request.getAsInt("amount"), request.get("notice"));
+                request.getAsInt("amount"), request.get("billNo"), request.get("notice"));
     }
 
     @Execute(name = "notice", type = Templates.STRING)

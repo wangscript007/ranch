@@ -43,12 +43,13 @@ public class PaymentHelperImpl implements PaymentHelper, SecondsJob, ContextRefr
     private Map<String, PaymentListener> listeners;
 
     @Override
-    public String create(String type, String appId, String user, int amount, String notice, Map<String, String> map) {
+    public String create(String type, String appId, String user, int amount, String billNo, String notice, Map<String, String> map) {
         Map<String, String> parameter = getParameter(map);
         parameter.put("type", type);
         parameter.put("appId", appId);
         parameter.put("user", user);
         parameter.put("amount", converter.toString(amount, "0"));
+        parameter.put("billNo", billNo);
         parameter.put("notice", notice);
         JSONObject object = carousel.service(key + ".create", null, parameter, false, JSONObject.class);
 
