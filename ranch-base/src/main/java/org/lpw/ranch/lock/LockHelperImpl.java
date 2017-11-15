@@ -45,7 +45,6 @@ public class LockHelperImpl implements LockHelper, Atomicable, SecondsJob {
         ids.get().add(lock.getId());
         for (long i = 0L; i < wait; i++) {
             LockModel model = lockDao.findByMd5(md5);
-            System.out.println("zzzzzzz11:" + key + ";" + model + ";" + lockDao.findById(lock.getId()));
             if (model == null)
                 return null;
 
