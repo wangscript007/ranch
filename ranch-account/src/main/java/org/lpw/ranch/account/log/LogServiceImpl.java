@@ -17,7 +17,9 @@ import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
 import java.sql.Date;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * @author lpw
@@ -42,6 +44,22 @@ public class LogServiceImpl implements LogService, SecondsJob {
     private AccountService accountService;
     @Inject
     private LogDao logDao;
+    private Set<String> ignores;
+
+    public LogServiceImpl() {
+        ignores = new HashSet<>();
+        ignores.add("user");
+        ignores.add("account");
+        ignores.add("owner");
+        ignores.add("type");
+        ignores.add("channel");
+        ignores.add("amount");
+        ignores.add("balance");
+        ignores.add("state");
+        ignores.add("restate");
+        ignores.add("start");
+        ignores.add("end");
+    }
 
     @Override
     public JSONObject query(String uid, String owner, String type, String channel, int state, Date start, Date end) {
@@ -63,8 +81,17 @@ public class LogServiceImpl implements LogService, SecondsJob {
     private JSONObject toJson(LogModel log) {
         JSONObject object = modelHelper.toJson(log);
         object.put("user", userHelper.get(log.getUser()));
-        if (!validator.isEmpty(log.getJson()))
-            object.putAll(json.toObject(log.getJson()));
+        if (!validator.isEmpty(log.getJson())) {
+            JSONObject obj = json.toObject(log.getJson());
+            if (obj != null) {
+                obj.forEach((key, value) -> {
+                    if (ignores.contains(key))
+                        return;
+
+                    object.put(key, value);
+                });
+            }
+        }
 
         return object;
     }
