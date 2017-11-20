@@ -58,7 +58,8 @@ public class AccountServiceImpl implements AccountService {
             user = userHelper.findIdByUid(uid, uid);
         if ("all".equals(owner))
             owner = null;
-        JSONObject object = accountDao.query(user, owner, type, minBalance, maxBalance, pagination.getPageSize(20), pagination.getPageNum()).toJson();
+        JSONObject object = accountDao.query(user, owner, type, minBalance, maxBalance,
+                pagination.getPageSize(20), pagination.getPageNum()).toJson();
         userHelper.fill(object.getJSONArray("list"), new String[]{"user"});
 
         return object;
@@ -120,7 +121,8 @@ public class AccountServiceImpl implements AccountService {
             save(find(user, owner, 0));
             int amount = classifyHelper.valueAsInt(AccountModel.NAME, "reward.sign-up.amount", 0);
             if (amount > 0)
-                logService.pass(new String[]{reward(user, owner, classifyHelper.valueAsInt(AccountModel.NAME, "reward.sign-up.type", 0), "sign-up", amount).getString("logId")});
+                logService.pass(new String[]{reward(user, owner, classifyHelper.valueAsInt(AccountModel.NAME,
+                        "reward.sign-up.type", 0), "sign-up", amount).getString("logId")});
             pl = queryFromDao(user, owner);
         }
 
