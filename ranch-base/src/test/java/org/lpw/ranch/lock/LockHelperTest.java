@@ -60,6 +60,15 @@ public class LockHelperTest extends TephraTestSupport {
         pl = liteOrm.query(new LiteQuery(LockModel.class), null);
         Assert.assertEquals(0, pl.getList().size());
 
+        String id6 = lockHelper.lock("key 1", 10, 3);
+        Assert.assertNotNull(id6);
+        pl = liteOrm.query(new LiteQuery(LockModel.class), null);
+        Assert.assertEquals(1, pl.getList().size());
+        Assert.assertEquals(id6, pl.getList().get(0).getId());
+        long time = System.currentTimeMillis();
+        Assert.assertNull(lockHelper.lock("key 1", 10 * 1000L, 1));
+        Assert.assertTrue(System.currentTimeMillis() - time < 4 * 1000L);
+
         lockHelper.unlock(null);
     }
 

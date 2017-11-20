@@ -18,11 +18,6 @@ class LockDaoImpl implements LockDao {
     private String dataSource;
 
     @Override
-    public LockModel findById(String id) {
-        return liteOrm.findById(LockModel.class, id);
-    }
-
-    @Override
     public LockModel findByMd5(String md5) {
         return liteOrm.findOne(new LiteQuery(LockModel.class).dataSource(dataSource).where("c_md5=?").order("c_index"), new Object[]{md5});
     }
