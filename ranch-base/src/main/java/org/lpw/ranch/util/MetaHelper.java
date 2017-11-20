@@ -1,11 +1,11 @@
-package org.lpw.ranch.meta;
+package org.lpw.ranch.util;
 
 import com.alibaba.fastjson.JSONObject;
 
 /**
  * @author lpw
  */
-public interface MetaService {
+public interface MetaHelper {
     /**
      * 获取元数据。
      *

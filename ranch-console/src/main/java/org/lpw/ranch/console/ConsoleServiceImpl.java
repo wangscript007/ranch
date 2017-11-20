@@ -3,9 +3,9 @@ package org.lpw.ranch.console;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import org.lpw.ranch.classify.helper.ClassifyHelper;
-import org.lpw.ranch.meta.MetaService;
 import org.lpw.ranch.user.helper.UserHelper;
 import org.lpw.ranch.util.Carousel;
+import org.lpw.ranch.util.MetaHelper;
 import org.lpw.tephra.storage.StorageListener;
 import org.lpw.tephra.storage.Storages;
 import org.lpw.tephra.util.Context;
@@ -37,7 +37,7 @@ public class ConsoleServiceImpl implements ConsoleService, StorageListener {
     @Inject
     private Carousel carousel;
     @Inject
-    private MetaService metaService;
+    private MetaHelper metaHelper;
     @Inject
     private ClassifyHelper classifyHelper;
     @Inject
@@ -67,7 +67,7 @@ public class ConsoleServiceImpl implements ConsoleService, StorageListener {
     public JSONObject meta(String key) {
         JSONObject meta = json.toObject(classifyHelper.value(ConsoleModel.NAME + ".meta", key));
         if (meta == null)
-            meta = metaService.get(key);
+            meta = metaHelper.get(key);
         if (meta == null)
             return new JSONObject();
 

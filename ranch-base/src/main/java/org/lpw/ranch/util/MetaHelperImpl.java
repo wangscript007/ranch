@@ -1,4 +1,4 @@
-package org.lpw.ranch.meta;
+package org.lpw.ranch.util;
 
 import com.alibaba.fastjson.JSONObject;
 import org.lpw.tephra.bean.ContextRefreshedListener;
@@ -17,8 +17,8 @@ import java.util.Map;
 /**
  * @author lpw
  */
-@Service(MetaModel.NAME + ".service")
-public class MetaServiceImpl implements MetaService, ContextRefreshedListener {
+@Service("ranch.meta.helper")
+public class MetaHelperImpl implements MetaHelper,ContextRefreshedListener {
     @Inject
     private Io io;
     @Inject
