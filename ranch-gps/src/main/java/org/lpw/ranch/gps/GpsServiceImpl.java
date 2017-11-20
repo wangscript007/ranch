@@ -41,7 +41,6 @@ public class GpsServiceImpl implements GpsService {
         JSONObject result = json.getJSONObject("result");
         object.put("address", result.getString("address"));
         object.put("component", result.getJSONObject("address_component"));
-        object.put("adcode", result.getJSONObject("ad_info").getString("adcode"));
 
         return object;
     }
