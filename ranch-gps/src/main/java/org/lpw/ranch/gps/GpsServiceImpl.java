@@ -29,8 +29,7 @@ public class GpsServiceImpl implements GpsService {
         if (validator.isEmpty(qqlbsKey))
             return object;
 
-        String string = http.get(new StringBuilder(ADDRESS[0]).append(lat).append(',').append(lng)
-                .append(ADDRESS[1]).append(qqlbsKey).toString(), null, "");
+        String string = http.get(ADDRESS[0] + lat + "," + lng + ADDRESS[1] + qqlbsKey, null, "");
         if (validator.isEmpty(string))
             return object;
 
