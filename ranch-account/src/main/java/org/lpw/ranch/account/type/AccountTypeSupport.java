@@ -16,10 +16,10 @@ public abstract class AccountTypeSupport implements AccountType {
     static final String NAME = "ranch.account.type.";
 
     @Inject
-    protected LogService logService;
+    private LogService logService;
     private Set<String> ignores;
 
-    public AccountTypeSupport() {
+    AccountTypeSupport() {
         ignores = new HashSet<>();
         ignores.add("user");
         ignores.add("owner");

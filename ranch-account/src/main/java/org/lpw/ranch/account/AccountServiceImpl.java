@@ -107,8 +107,8 @@ public class AccountServiceImpl implements AccountService {
         return object;
     }
 
-    private int rate(double rate, int n) {
-        return rate == 1.0D ? n : numeric.toInt(rate * n);
+    private long rate(double rate, long n) {
+        return rate == 1.0D ? n : numeric.toLong(rate * n);
     }
 
     private PageList<AccountModel> queryPageList(String user, String owner) {

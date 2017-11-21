@@ -26,8 +26,8 @@ public class LogModel extends ModelSupport {
     private String owner; // 所有者
     private String type; // 类型
     private String channel; // 渠道
-    private int amount; // 数量
-    private int balance; // 余额
+    private long amount; // 数量
+    private long balance; // 余额
     private int state; // 状态：0-待处理；1-审核通过；2-审核不通过
     private int restate; // 重置状态：0-待处理；1-审核通过；2-审核不通过
     private Timestamp start; // 开始时间
@@ -87,21 +87,21 @@ public class LogModel extends ModelSupport {
 
     @Jsonable
     @Column(name = "c_amount")
-    public int getAmount() {
+    public long getAmount() {
         return amount;
     }
 
-    public void setAmount(int amount) {
+    public void setAmount(long amount) {
         this.amount = amount;
     }
 
     @Jsonable
     @Column(name = "c_balance")
-    public int getBalance() {
+    public long getBalance() {
         return balance;
     }
 
-    public void setBalance(int balance) {
+    public void setBalance(long balance) {
         this.balance = balance;
     }
 
