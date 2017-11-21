@@ -54,7 +54,7 @@ public interface LogService {
      * @param map     参数集。
      * @return 日志ID值。
      */
-    String create(AccountModel account, String type, String channel, int amount, State state, Map<String, String> map);
+    String create(AccountModel account, String type, String channel, long amount, State state, Map<String, String> map);
 
     /**
      * 设置审核通过。

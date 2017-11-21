@@ -28,13 +28,13 @@ public abstract class AccountTypeSupport implements AccountType {
         ignores.add("amount");
     }
 
-    protected String in(AccountModel account, String channel, int amount, Map<String, String> map) {
+    protected String in(AccountModel account, String channel, long amount, Map<String, String> map) {
         account.setPending(account.getPending() + amount);
 
         return log(account, channel, amount, LogService.State.New, map);
     }
 
-    protected String out(AccountModel account, String channel, int amount, Map<String, String> map) {
+    protected String out(AccountModel account, String channel, long amount, Map<String, String> map) {
         if (account.getBalance() < amount)
             return null;
 
@@ -44,7 +44,7 @@ public abstract class AccountTypeSupport implements AccountType {
         return log(account, channel, amount, LogService.State.New, map);
     }
 
-    protected String log(AccountModel account, String channel, int amount, LogService.State state, Map<String, String> map) {
+    protected String log(AccountModel account, String channel, long amount, LogService.State state, Map<String, String> map) {
         Map<String, String> parameter = new HashMap<>();
         if (map != null) {
             parameter.putAll(map);

@@ -18,7 +18,7 @@ public class RewardImpl extends AccountTypeSupport implements AccountType {
     }
 
     @Override
-    public String change(AccountModel account, String channel, int amount, Map<String, String> map) {
+    public String change(AccountModel account, String channel, long amount, Map<String, String> map) {
         return in(account, channel, amount, map);
     }
 

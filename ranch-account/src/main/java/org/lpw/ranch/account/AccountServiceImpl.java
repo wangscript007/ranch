@@ -134,46 +134,46 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public JSONObject deposit(String user, String owner, int type, String channel, int amount, Map<String, String> map) {
+    public JSONObject deposit(String user, String owner, int type, String channel, long amount, Map<String, String> map) {
         return change(user, owner, type, AccountTypes.DEPOSIT, channel, amount, map);
     }
 
     @Override
-    public JSONObject withdraw(String user, String owner, int type, String channel, int amount, Map<String, String> map) {
+    public JSONObject withdraw(String user, String owner, int type, String channel, long amount, Map<String, String> map) {
         return change(user, owner, type, AccountTypes.WITHDRAW, channel, amount, map);
     }
 
     @Override
-    public JSONObject reward(String user, String owner, int type, String channel, int amount) {
+    public JSONObject reward(String user, String owner, int type, String channel, long amount) {
         return change(user, owner, type, AccountTypes.REWARD, channel, amount, null);
     }
 
     @Override
-    public JSONObject profit(String user, String owner, int type, String channel, int amount) {
+    public JSONObject profit(String user, String owner, int type, String channel, long amount) {
         return change(user, owner, type, AccountTypes.PROFIT, channel, amount, null);
     }
 
     @Override
-    public JSONObject consume(String user, String owner, int type, String channel, int amount) {
+    public JSONObject consume(String user, String owner, int type, String channel, long amount) {
         return change(user, owner, type, AccountTypes.CONSUME, channel, amount, null);
     }
 
     @Override
-    public JSONObject remitIn(String user, String owner, int type, String channel, int amount) {
+    public JSONObject remitIn(String user, String owner, int type, String channel, long amount) {
         return change(user, owner, type, AccountTypes.REMIT_IN, channel, amount, null);
     }
 
     @Override
-    public JSONObject remitOut(String user, String owner, int type, String channel, int amount) {
+    public JSONObject remitOut(String user, String owner, int type, String channel, long amount) {
         return change(user, owner, type, AccountTypes.REMIT_OUT, channel, amount, null);
     }
 
     @Override
-    public JSONObject refund(String user, String owner, int type, String channel, int amount) {
+    public JSONObject refund(String user, String owner, int type, String channel, long amount) {
         return change(user, owner, type, AccountTypes.REFUND, channel, amount, null);
     }
 
-    private JSONObject change(String user, String owner, int type, String accountType, String channel, int amount, Map<String, String> map) {
+    private JSONObject change(String user, String owner, int type, String accountType, String channel, long amount, Map<String, String> map) {
         AccountModel account = find(user, owner, type);
 
         return account == null ? null : save(account, accountTypes.get(accountType).change(account, channel, amount, map));

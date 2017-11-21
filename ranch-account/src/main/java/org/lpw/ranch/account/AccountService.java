@@ -71,7 +71,7 @@ public interface AccountService {
      * @param map     参数集。
      * @return 账户信息；如果存入失败则返回null。
      */
-    JSONObject deposit(String user, String owner, int type, String channel, int amount, Map<String, String> map);
+    JSONObject deposit(String user, String owner, int type, String channel, long amount, Map<String, String> map);
 
     /**
      * 取出。
@@ -84,7 +84,7 @@ public interface AccountService {
      * @param map     参数集。
      * @return 账户信息；如果取出失败则返回null。
      */
-    JSONObject withdraw(String user, String owner, int type, String channel, int amount, Map<String, String> map);
+    JSONObject withdraw(String user, String owner, int type, String channel, long amount, Map<String, String> map);
 
     /**
      * 奖励。
@@ -96,7 +96,7 @@ public interface AccountService {
      * @param amount  数量。
      * @return 账户信息；如果奖励失败则返回null。
      */
-    JSONObject reward(String user, String owner, int type, String channel, int amount);
+    JSONObject reward(String user, String owner, int type, String channel, long amount);
 
     /**
      * 盈利。
@@ -108,7 +108,7 @@ public interface AccountService {
      * @param amount  数量。
      * @return 账户信息；如果盈利失败则返回null。
      */
-    JSONObject profit(String user, String owner, int type, String channel, int amount);
+    JSONObject profit(String user, String owner, int type, String channel, long amount);
 
     /**
      * 消费。
@@ -120,7 +120,7 @@ public interface AccountService {
      * @param amount  数量。
      * @return 账户信息；如果消费失败则返回null。
      */
-    JSONObject consume(String user, String owner, int type, String channel, int amount);
+    JSONObject consume(String user, String owner, int type, String channel, long amount);
 
     /**
      * 汇入。
@@ -132,7 +132,7 @@ public interface AccountService {
      * @param amount  数量。
      * @return 账户信息；如果消费失败则返回null。
      */
-    JSONObject remitIn(String user, String owner, int type, String channel, int amount);
+    JSONObject remitIn(String user, String owner, int type, String channel, long amount);
 
     /**
      * 汇出。
@@ -144,7 +144,7 @@ public interface AccountService {
      * @param amount  数量。
      * @return 账户信息；如果消费失败则返回null。
      */
-    JSONObject remitOut(String user, String owner, int type, String channel, int amount);
+    JSONObject remitOut(String user, String owner, int type, String channel, long amount);
 
     /**
      * 退款。
@@ -156,7 +156,7 @@ public interface AccountService {
      * @param amount  数量。
      * @return 账户信息；如果消费失败则返回null。
      */
-    JSONObject refund(String user, String owner, int type, String channel, int amount);
+    JSONObject refund(String user, String owner, int type, String channel, long amount);
 
     /**
      * 结算。

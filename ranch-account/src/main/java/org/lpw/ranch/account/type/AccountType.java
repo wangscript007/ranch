@@ -25,7 +25,7 @@ public interface AccountType {
      * @param map     参数集。
      * @return 日志ID值。
      */
-    String change(AccountModel account, String channel, int amount, Map<String, String> map);
+    String change(AccountModel account, String channel, long amount, Map<String, String> map);
 
     /**
      * 结算。

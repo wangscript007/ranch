@@ -69,7 +69,8 @@ public class LogServiceImpl implements LogService, SecondsJob {
             userId = user.isEmpty() ? uid : user.getString("id");
         }
 
-        PageList<LogModel> pl = logDao.query(userId, owner, type, channel, state, dateTime.getStart(start), dateTime.getEnd(end), pagination.getPageSize(20), pagination.getPageNum());
+        PageList<LogModel> pl = logDao.query(userId, owner, type, channel, state, dateTime.getStart(start),
+                dateTime.getEnd(end), pagination.getPageSize(20), pagination.getPageNum());
         JSONObject object = pl.toJson(false);
         JSONArray list = new JSONArray();
         pl.getList().forEach(log -> list.add(toJson(log)));
@@ -97,7 +98,7 @@ public class LogServiceImpl implements LogService, SecondsJob {
     }
 
     @Override
-    public String create(AccountModel account, String type, String channel, int amount, State state, Map<String, String> map) {
+    public String create(AccountModel account, String type, String channel, long amount, State state, Map<String, String> map) {
         LogModel log = new LogModel();
         log.setUser(account.getUser());
         log.setAccount(account.getId());
