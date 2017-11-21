@@ -45,31 +45,12 @@ public class ClassifyHelperTest extends TephraTestSupport {
             thread.sleep(5, TimeUnit.Second);
 
         mockHelper.reset();
-        Map<String, String> map = new HashMap<>();
-        map.put("header name", "header value");
-        mockHelper.getHeader().setMap(map);
         mockHelper.mock("/carousel");
         mockCarousel.reset();
-        mockCarousel.register("ranch.classify.find", (key, header, parameter, cacheTime) -> {
-            JSONObject json = new JSONObject();
-            json.put("code", 0);
-            JSONObject data = new JSONObject();
-            if (header != null)
-                data.putAll(header);
-            if (parameter != null)
-                data.putAll(parameter);
-            data.put("cacheTime", cacheTime);
-            json.put("data", data);
-
-            return json.toJSONString();
-        });
-
+        mockCarousel.register("ranch.classify.find", "{\"code\":0,\"data\":{\"id\":\"id value\"}}");
         JSONObject object = classifyHelper.find("code", "key");
-        Assert.assertEquals(4, object.size());
-        Assert.assertEquals("header value", object.getString("header name"));
-        Assert.assertEquals("code", object.getString("code"));
-        Assert.assertEquals("key", object.getString("key"));
-        Assert.assertEquals("5", object.getString("cacheTime"));
+        Assert.assertEquals(1, object.size());
+        Assert.assertEquals("id value", object.getString("id"));
     }
 
     @Test
@@ -83,20 +64,44 @@ public class ClassifyHelperTest extends TephraTestSupport {
         mockHelper.getHeader().setMap(map);
         mockHelper.mock("/carousel");
         mockCarousel.reset();
-        mockCarousel.register("ranch.classify.find", (key, header, parameter, cacheTime) -> {
-            JSONObject json = new JSONObject();
-            json.put("code", 0);
-            JSONObject data = new JSONObject();
-            if (header != null)
-                data.putAll(header);
-            if (parameter != null)
-                data.putAll(parameter);
-            data.put("cacheTime", cacheTime);
-            json.put("data", data);
+        mockCarousel.register("ranch.classify.find", "{\"code\":0,\"data\":{\"id\":\"id value\",\"value\":\"value 1\"}}");
+        Assert.assertEquals("value 1", classifyHelper.value("code", "key"));
+        mockCarousel.register("ranch.classify.find", "{\"code\":0,\"data\":{\"id\":\"id value\",\"value 1\":\"value 1\"}}");
+        Assert.assertNull(classifyHelper.value("code", "key"));
+    }
 
-            return json.toJSONString();
-        });
-        Assert.assertEquals("value from header", classifyHelper.value("code", "key"));
+    @Test
+    public void valueAsInt() {
+        while (Calendar.getInstance().get(Calendar.SECOND) > 55)
+            thread.sleep(5, TimeUnit.Second);
+
+        mockHelper.reset();
+        Map<String, String> map = new HashMap<>();
+        map.put("value", "value from header");
+        mockHelper.getHeader().setMap(map);
+        mockHelper.mock("/carousel");
+        mockCarousel.reset();
+        mockCarousel.register("ranch.classify.find", "{\"code\":0,\"data\":{\"id\":\"id value\",\"value\":\"1\"}}");
+        Assert.assertEquals(1, classifyHelper.valueAsInt("code", "key", -1));
+        mockCarousel.register("ranch.classify.find", "{\"code\":0,\"data\":{\"id\":\"id value\",\"value1\":\"1\"}}");
+        Assert.assertEquals(-1, classifyHelper.valueAsInt("code", "key", -1));
+    }
+
+    @Test
+    public void valueAsDouble() {
+        while (Calendar.getInstance().get(Calendar.SECOND) > 55)
+            thread.sleep(5, TimeUnit.Second);
+
+        mockHelper.reset();
+        Map<String, String> map = new HashMap<>();
+        map.put("value", "value from header");
+        mockHelper.getHeader().setMap(map);
+        mockHelper.mock("/carousel");
+        mockCarousel.reset();
+        mockCarousel.register("ranch.classify.find", "{\"code\":0,\"data\":{\"id\":\"id value\",\"value\":\"1.2\"}}");
+        Assert.assertEquals(1.2D, classifyHelper.valueAsDouble("code", "key", -1), 0.001D);
+        mockCarousel.register("ranch.classify.find", "{\"code\":0,\"data\":{\"id\":\"id value\",\"value1\":\"1.2\"}}");
+        Assert.assertEquals(-1.0D, classifyHelper.valueAsInt("code", "key", -1), 0.001D);
     }
 
     @Test
