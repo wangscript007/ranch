@@ -10,7 +10,6 @@ window.ajax = function (uri, params, headers) {
         credentials: "include",
         headers: headers || {}
     };
-    // credentials: "same-origin"
     object.headers["Content-Type"] = "appliaction/json";
     if (params)
         object.body = JSON.stringify(params);

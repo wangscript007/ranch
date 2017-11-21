@@ -19,7 +19,6 @@ import java.sql.Timestamp;
 @Scope(BeanDefinition.SCOPE_PROTOTYPE)
 @Entity(name = MessageModel.NAME)
 @Table(name = "t_message")
-@Memory(name = "m_message")
 public class MessageModel extends ModelSupport {
     static final String NAME = "ranch.message";
 
