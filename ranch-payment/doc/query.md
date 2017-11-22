@@ -10,8 +10,9 @@
 |---|---|---|
 |type|string|类型，如果为空则为所有。|
 |user|string|用户ID，如果为空则为所有用户。|
-|orderNo|string|开始日期，格式：yyyy-MM-dd，为空则不限制。|
-|tradeNo|string|结束日期，格式：yyyy-MM-dd，为空则不限制。|
+|orderNo|string|订单号，为空则不限制。|
+|billNo|string|单据号，为空则不限制。|
+|tradeNo|string|网关订单号，为空则不限制。|
 |state|int|状态：-1-全部；0-新建；1-成功；2-失败。|
 |start|string|开始日期，格式：yyyy-MM-dd，为空则不限制。|
 |end|string|结束日期，格式：yyyy-MM-dd，为空则不限制。|
@@ -30,6 +31,7 @@
       "user": "用户ID",
       "amount": "金额，单位：分",
       "orderNo": "订单号",
+      "billNo": "单据号",
       "tradeNo": "网关订单号",
       "state": "状态：0-新建；1-成功；2-失败",
       "notify": "通知URL地址",

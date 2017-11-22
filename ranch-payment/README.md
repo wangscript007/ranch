@@ -10,6 +10,7 @@
 |user|char(36)|用户ID，为空则使用当前用户ID。|
 |amount|int|金额，单位：分。|
 |orderNo|char(21)|订单号。|
+|billNo|char(100)|单据号。|
 |tradeNo|char(100)|网关订单号。|
 |state|int|状态：0-新建；1-成功；2-失败。|
 |notify|string|通知配置。|
