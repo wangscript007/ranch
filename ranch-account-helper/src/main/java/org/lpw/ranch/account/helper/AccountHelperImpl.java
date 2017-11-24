@@ -3,7 +3,7 @@ package org.lpw.ranch.account.helper;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import org.lpw.ranch.util.Carousel;
-import org.lpw.tephra.util.Converter;
+import org.lpw.tephra.util.Numeric;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -17,7 +17,7 @@ import java.util.Map;
 @Service("ranch.account.helper")
 public class AccountHelperImpl implements AccountHelper {
     @Inject
-    private Converter converter;
+    private Numeric numeric;
     @Inject
     private Carousel carousel;
     @Value("${ranch.account.key:ranch.account}")
@@ -68,9 +68,9 @@ public class AccountHelperImpl implements AccountHelper {
             map = new HashMap<>();
         map.put("user", user);
         map.put("owner", owner);
-        map.put("type", converter.toString(type, "0"));
+        map.put("type", numeric.toString(type, "0"));
         map.put("channel", channel);
-        map.put("amount", converter.toString(amount, "0"));
+        map.put("amount", numeric.toString(amount, "0"));
         JSONObject object = carousel.service(this.key + key, null, map, false, JSONObject.class);
         if (pass)
             object.put("pass", pass(object.getString("logId")));

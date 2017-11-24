@@ -2,7 +2,7 @@ package org.lpw.ranch.weixin.helper;
 
 import com.alibaba.fastjson.JSONObject;
 import org.lpw.ranch.util.Carousel;
-import org.lpw.tephra.util.Converter;
+import org.lpw.tephra.util.Coder;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -16,7 +16,7 @@ import java.util.Map;
 @Service("ranch.weixin.helper")
 public class WeixinHelperImpl implements WeixinHelper {
     @Inject
-    private Converter converter;
+    private Coder coder;
     @Inject
     private Carousel carousel;
     @Value("${ranch.weixin.key:ranch.weixin}")
@@ -33,7 +33,7 @@ public class WeixinHelperImpl implements WeixinHelper {
     @Override
     public String getPcSignInUrl(String key, String redirectUri) {
         return "https://open.weixin.qq.com/connect/qrconnect?appid=" + getAppId(key)
-                + "&redirect_uri=" + converter.encodeUrl(redirectUri, null)
+                + "&redirect_uri=" + coder.encodeUrl(redirectUri, null)
                 + "&response_type=code&scope=snsapi_login#wechat_redirect";
     }
 

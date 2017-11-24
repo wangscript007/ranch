@@ -7,11 +7,11 @@ import org.lpw.ranch.user.helper.UserHelper;
 import org.lpw.ranch.util.Carousel;
 import org.lpw.ranch.util.Pagination;
 import org.lpw.tephra.dao.model.ModelHelper;
-import org.lpw.tephra.util.Converter;
 import org.lpw.tephra.util.DateTime;
 import org.lpw.tephra.util.Generator;
 import org.lpw.tephra.util.Http;
 import org.lpw.tephra.util.Json;
+import org.lpw.tephra.util.Numeric;
 import org.lpw.tephra.util.Validator;
 import org.springframework.stereotype.Service;
 
@@ -36,7 +36,7 @@ public class PaymentServiceImpl implements PaymentService {
     @Inject
     private Validator validator;
     @Inject
-    private Converter converter;
+    private Numeric numeric;
     @Inject
     private Json json;
     @Inject
@@ -196,9 +196,9 @@ public class PaymentServiceImpl implements PaymentService {
         Map<String, String> parameters = new HashMap<>();
         parameters.put("type", payment.getType());
         parameters.put("user", payment.getUser());
-        parameters.put("amount", converter.toString(payment.getAmount(), "0"));
+        parameters.put("amount", numeric.toString(payment.getAmount(), "0"));
         parameters.put("orderNo", payment.getOrderNo());
-        parameters.put("state", converter.toString(payment.getState(), "0"));
+        parameters.put("state", numeric.toString(payment.getState(), "0"));
         parameters.put("start", dateTime.toString(payment.getStart()));
         parameters.put("end", dateTime.toString(payment.getEnd()));
 

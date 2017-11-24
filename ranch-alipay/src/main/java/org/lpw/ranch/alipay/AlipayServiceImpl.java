@@ -15,11 +15,11 @@ import com.alipay.api.request.AlipayTradeWapPayRequest;
 import org.lpw.ranch.payment.helper.PaymentHelper;
 import org.lpw.ranch.user.helper.UserHelper;
 import org.lpw.tephra.dao.model.ModelHelper;
+import org.lpw.tephra.util.Coder;
 import org.lpw.tephra.util.Converter;
 import org.lpw.tephra.util.Logger;
 import org.lpw.tephra.util.Numeric;
 import org.lpw.tephra.util.Validator;
-import org.lpw.tephra.util.Xml;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -38,7 +38,7 @@ public class AlipayServiceImpl implements AlipayService {
     @Inject
     private Numeric numeric;
     @Inject
-    private Xml xml;
+    private Coder coder;
     @Inject
     private Logger logger;
     @Inject
@@ -126,7 +126,8 @@ public class AlipayServiceImpl implements AlipayService {
         String string = prepay(alipay, null, request);
 
         return string == null ? null : string.substring(string.indexOf('?') + 1, string.indexOf('>') - 1) + "&biz_content=" +
-                converter.encodeUrl(string.substring(string.indexOf('{'), string.indexOf('}') + 1).replaceAll("&quot;", "\""), null);
+                coder.encodeUrl(string.substring(string.indexOf('{'), string.indexOf('}') + 1)
+                        .replaceAll("&quot;", "\""), null);
     }
 
     private String getBizContent(String appId, String user, String subject, int amount, String billNo, String notice, String code) {
@@ -139,7 +140,7 @@ public class AlipayServiceImpl implements AlipayService {
         JSONObject object = new JSONObject();
         object.put("out_trade_no", orderNo);
         object.put("subject", subject);
-        object.put("total_amount", converter.toString(amount * 0.01D, "0.00"));
+        object.put("total_amount", numeric.toString(amount * 0.01D, "0.00"));
         object.put("product_code", code);
 
         return object.toJSONString();

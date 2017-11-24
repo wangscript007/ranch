@@ -13,6 +13,7 @@ import org.lpw.tephra.test.TephraTestSupport;
 import org.lpw.tephra.util.Converter;
 import org.lpw.tephra.util.Generator;
 import org.lpw.tephra.util.Message;
+import org.lpw.tephra.util.Numeric;
 
 import javax.inject.Inject;
 
@@ -25,7 +26,7 @@ public class TestSupport extends TephraTestSupport {
     @Inject
     Generator generator;
     @Inject
-    Converter converter;
+    Numeric numeric;
     @Inject
     Cache cache;
     @Inject

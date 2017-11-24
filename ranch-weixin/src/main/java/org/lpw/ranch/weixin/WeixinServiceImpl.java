@@ -143,7 +143,8 @@ public class WeixinServiceImpl implements WeixinService, ContextRefreshedListene
         boolean success = digest.sha1(sb.toString()).equals(signature);
 
         if (logger.isInfoEnable())
-            logger.info("验证微信服务[{}:signature={};timestamp={};nonce={};echostr={}]。", success, signature, timestamp, nonce, echostr);
+            logger.info("验证微信服务[{}:signature={};timestamp={};nonce={};echostr={}]。",
+                    success, signature, timestamp, nonce, echostr);
 
         return success ? echostr : "failure";
     }
@@ -180,7 +181,8 @@ public class WeixinServiceImpl implements WeixinService, ContextRefreshedListene
     }
 
     @Override
-    public void prepayQrCode(String key, String user, String subject, int amount, String billNo, String notice, int size, String logo, OutputStream outputStream) {
+    public void prepayQrCode(String key, String user, String subject, int amount, String billNo, String notice, int size,
+                             String logo, OutputStream outputStream) {
         Map<String, String> map = prepay(key, user, subject, amount, billNo, notice, "NATIVE", new HashMap<>());
         if (map == null)
             return;
@@ -189,7 +191,8 @@ public class WeixinServiceImpl implements WeixinService, ContextRefreshedListene
     }
 
     @Override
-    public String prepayQrCodeBase64(String key, String user, String subject, int amount, String billNo, String notice, int size, String logo) {
+    public String prepayQrCodeBase64(String key, String user, String subject, int amount, String billNo, String notice,
+                                     int size, String logo) {
         Map<String, String> map = prepay(key, user, subject, amount, billNo, notice, "NATIVE", new HashMap<>());
 
         return map == null ? null : qrCode.create(map.get("code_url"), size > 0 ? size : qrCodeSize, getLogo(logo));
@@ -213,7 +216,7 @@ public class WeixinServiceImpl implements WeixinService, ContextRefreshedListene
         param.put("prepayid", map.get("prepay_id"));
         param.put("package", "Sign=WXPay");
         param.put("noncestr", generator.random(32));
-        param.put("timestamp", converter.toString(System.currentTimeMillis() / 1000, "0"));
+        param.put("timestamp", numeric.toString(System.currentTimeMillis() / 1000, "0"));
 
         JSONObject object = new JSONObject();
         object.putAll(param);
@@ -222,7 +225,8 @@ public class WeixinServiceImpl implements WeixinService, ContextRefreshedListene
         return object;
     }
 
-    private Map<String, String> prepay(String key, String user, String subject, int amount, String billNo, String notice, String type, Map<String, String> map) {
+    private Map<String, String> prepay(String key, String user, String subject, int amount, String billNo, String notice,
+                                       String type, Map<String, String> map) {
         WeixinModel weixin = findByKey(key);
         if (weixin == null)
             return null;
@@ -236,7 +240,7 @@ public class WeixinServiceImpl implements WeixinService, ContextRefreshedListene
         map.put("nonce_str", generator.random(32));
         map.put("body", subject);
         map.put("out_trade_no", orderNo);
-        map.put("total_fee", converter.toString(amount, "0"));
+        map.put("total_fee", numeric.toString(amount, "0"));
         map.put("spbill_create_ip", header.getIp());
         map.put("notify_url", root + "/weixin/notice");
         map.put("trade_type", type);
@@ -263,7 +267,8 @@ public class WeixinServiceImpl implements WeixinService, ContextRefreshedListene
     }
 
     @Override
-    public boolean notice(String appId, String orderNo, String tradeNo, String amount, String returnCode, String resultCode, Map<String, String> map) {
+    public boolean notice(String appId, String orderNo, String tradeNo, String amount, String returnCode, String resultCode,
+                          Map<String, String> map) {
         if (logger.isDebugEnable())
             logger.debug("微信支付结果回调[{}]。", converter.toString(map));
 
@@ -318,7 +323,8 @@ public class WeixinServiceImpl implements WeixinService, ContextRefreshedListene
     }
 
     private void update(WeixinModel weixin) {
-        JSONObject object = json.toObject(http.get("https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=" + weixin.getAppId() + "&secret=" + weixin.getSecret(), null, ""));
+        JSONObject object = json.toObject(http.get("https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid="
+                + weixin.getAppId() + "&secret=" + weixin.getSecret(), null, ""));
         if (object == null || !object.containsKey("access_token")) {
             logger.warn(null, "获取微信公众号Token[{}]失败！", object);
 
@@ -326,7 +332,8 @@ public class WeixinServiceImpl implements WeixinService, ContextRefreshedListene
         }
 
         weixin.setAccessToken(object.getString("access_token"));
-        object = json.toObject(http.get("https://api.weixin.qq.com/cgi-bin/ticket/getticket?type=jsapi&access_token=" + weixin.getAccessToken(), null, ""));
+        object = json.toObject(http.get("https://api.weixin.qq.com/cgi-bin/ticket/getticket?type=jsapi&access_token="
+                + weixin.getAccessToken(), null, ""));
         if (object != null && object.containsKey("ticket"))
             weixin.setJsapiTicket(object.getString("ticket"));
         else
@@ -337,7 +344,8 @@ public class WeixinServiceImpl implements WeixinService, ContextRefreshedListene
         weixinDao.close();
 
         if (logger.isInfoEnable())
-            logger.info("更新微信公众号[{}]Access Token[{}]与Jsapi Ticket[{}]。", weixin.getAppId(), weixin.getAccessToken(), weixin.getJsapiTicket());
+            logger.info("更新微信公众号[{}]Access Token[{}]与Jsapi Ticket[{}]。",
+                    weixin.getAppId(), weixin.getAccessToken(), weixin.getJsapiTicket());
     }
 
     @Override

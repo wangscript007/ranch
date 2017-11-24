@@ -15,10 +15,10 @@ public class QueryTest extends TestSupport {
     public void query() {
         for (int i = 0; i < 20; i++) {
             ClassifyModel classify = new ClassifyModel();
-            classify.setCode("code " + converter.toString(i, "00"));
-            classify.setKey("key " + converter.toString(i, "00"));
-            classify.setValue("value " + converter.toString(i, "00"));
-            classify.setName("name " + converter.toString(i, "00"));
+            classify.setCode("code " + numeric.toString(i, "00"));
+            classify.setKey("key " + numeric.toString(i, "00"));
+            classify.setValue("value " + numeric.toString(i, "00"));
+            classify.setName("name " + numeric.toString(i, "00"));
             classify.setRecycle((i % 2 == 0 ? Recycle.No : Recycle.Yes).getValue());
             liteOrm.save(classify);
         }
@@ -42,8 +42,10 @@ public class QueryTest extends TestSupport {
         pageTester.assertCountSizeNumber(10, 20, 1, data);
         JSONArray array = data.getJSONArray("list");
         for (int i = 0, size = array.size(); i < size; i++)
-            equals(array.getJSONObject(i), "code " + converter.toString(2 * i, "00"),
-                    "key " + converter.toString(2 * i, "00"), "value " + converter.toString(2 * i, "00"), "name " + converter.toString(2 * i, "00"));
+            equals(array.getJSONObject(i), "code " + numeric.toString(2 * i, "00"),
+                    "key " + numeric.toString(2 * i, "00"),
+                    "value " + numeric.toString(2 * i, "00"),
+                    "name " + numeric.toString(2 * i, "00"));
 
         mockHelper.reset();
         mockHelper.getRequest().addParameter("key", "key 1");
@@ -57,8 +59,10 @@ public class QueryTest extends TestSupport {
         pageTester.assertCountSizeNumber(10, 20, 1, data);
         array = data.getJSONArray("list");
         for (int i = 0, size = array.size(); i < size; i++)
-            equals(array.getJSONObject(i), "code " + converter.toString(2 * i, "00"),
-                    "key " + converter.toString(2 * i, "00"), "value " + converter.toString(2 * i, "00"), "name " + converter.toString(2 * i, "00"));
+            equals(array.getJSONObject(i), "code " + numeric.toString(2 * i, "00"),
+                    "key " + numeric.toString(2 * i, "00"),
+                    "value " + numeric.toString(2 * i, "00"),
+                    "name " + numeric.toString(2 * i, "00"));
 
         mockHelper.reset();
         mockHelper.getRequest().addParameter("code", "code 1");
@@ -71,7 +75,8 @@ public class QueryTest extends TestSupport {
         pageTester.assertCountSizeNumber(5, 20, 1, data);
         array = data.getJSONArray("list");
         for (int i = 0; i < 5; i++)
-            equals(array.getJSONObject(i), "code " + (10 + 2 * i), "key " + (10 + 2 * i), "value " + (10 + 2 * i), "name " + (10 + 2 * i));
+            equals(array.getJSONObject(i), "code " + (10 + 2 * i), "key " + (10 + 2 * i),
+                    "value " + (10 + 2 * i), "name " + (10 + 2 * i));
 
         mockHelper.reset();
         mockHelper.getRequest().addParameter("code", "code 1");
@@ -87,7 +92,8 @@ public class QueryTest extends TestSupport {
         pageTester.assertCountSizeNumber(5, 10, 1, data);
         array = data.getJSONArray("list");
         for (int i = 0; i < 5; i++)
-            equals(array.getJSONObject(i), "code " + (10 + 2 * i), "key " + (10 + 2 * i), "value " + (10 + 2 * i), "name " + (10 + 2 * i));
+            equals(array.getJSONObject(i), "code " + (10 + 2 * i), "key " + (10 + 2 * i),
+                    "value " + (10 + 2 * i), "name " + (10 + 2 * i));
 
         mockHelper.reset();
         mockHelper.getRequest().addParameter("code", "code 1");

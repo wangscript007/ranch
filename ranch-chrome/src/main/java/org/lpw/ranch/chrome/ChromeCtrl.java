@@ -6,8 +6,8 @@ import org.lpw.tephra.ctrl.execute.Execute;
 import org.lpw.tephra.ctrl.template.Templates;
 import org.lpw.tephra.ctrl.validate.Validate;
 import org.lpw.tephra.ctrl.validate.Validators;
+import org.lpw.tephra.util.Coder;
 import org.lpw.tephra.util.Context;
-import org.lpw.tephra.util.Converter;
 import org.lpw.tephra.util.Generator;
 import org.lpw.tephra.util.Message;
 import org.lpw.tephra.util.Validator;
@@ -26,7 +26,7 @@ public class ChromeCtrl {
     @Inject
     private Context context;
     @Inject
-    private Converter converter;
+    private Coder coder;
     @Inject
     private Generator generator;
     @Inject
@@ -74,7 +74,8 @@ public class ChromeCtrl {
             @Validate(validator = ChromeService.VALIDATOR_KEY_EXISTS, parameter = "key", failureCode = 7)
     })
     public Object pdf() {
-        byte[] pdf = chromeService.pdf(request.get("key"), request.get("url"), request.getAsInt("width"), request.getAsInt("height"), request.get("pages"), request.getAsInt("wait"));
+        byte[] pdf = chromeService.pdf(request.get("key"), request.get("url"), request.getAsInt("width"),
+                request.getAsInt("height"), request.get("pages"), request.getAsInt("wait"));
         if (pdf == null)
             return templates.get().failure(2911, message.get(ChromeModel.NAME + ".pdf.null"), null, null);
 
@@ -83,7 +84,8 @@ public class ChromeCtrl {
             filename = chromeService.findByKey(request.get("key")).getFilename();
         if (validator.isEmpty(filename))
             filename = generator.random(32);
-        response.setHeader("Content-Disposition", "attachment; filename*=" + context.getCharset(null) + "''" + converter.encodeUrl(filename, null) + ".pdf");
+        response.setHeader("Content-Disposition", "attachment; filename*=" + context.getCharset(null)
+                + "''" + coder.encodeUrl(filename, null) + ".pdf");
         response.setContentType("application/pdf");
 
         return pdf;
@@ -95,7 +97,8 @@ public class ChromeCtrl {
             @Validate(validator = ChromeService.VALIDATOR_KEY_EXISTS, parameter = "key", failureCode = 7)
     })
     public Object png() {
-        byte[] png = chromeService.png(request.get("key"), request.get("url"), request.getAsInt("x"), request.getAsInt("y"), request.getAsInt("width"), request.getAsInt("height"), request.getAsInt("wait"));
+        byte[] png = chromeService.png(request.get("key"), request.get("url"), request.getAsInt("x"), request.getAsInt("y"),
+                request.getAsInt("width"), request.getAsInt("height"), request.getAsInt("wait"));
         if (png == null)
             return templates.get().failure(2912, message.get(ChromeModel.NAME + ".png.null"), null, null);
 
@@ -110,7 +113,8 @@ public class ChromeCtrl {
             @Validate(validator = ChromeService.VALIDATOR_KEY_EXISTS, parameter = "key", failureCode = 7)
     })
     public Object jpg() {
-        byte[] jpg = chromeService.jpg(request.get("key"), request.get("url"), request.getAsInt("x"), request.getAsInt("y"), request.getAsInt("width"), request.getAsInt("height"), request.getAsInt("wait"));
+        byte[] jpg = chromeService.jpg(request.get("key"), request.get("url"), request.getAsInt("x"), request.getAsInt("y"),
+                request.getAsInt("width"), request.getAsInt("height"), request.getAsInt("wait"));
         if (jpg == null)
             return templates.get().failure(2913, message.get(ChromeModel.NAME + ".jpg.null"), null, null);
 

@@ -8,8 +8,8 @@ import org.lpw.tephra.bean.BeanFactory;
 import org.lpw.tephra.bean.ContextRefreshedListener;
 import org.lpw.tephra.ctrl.context.Request;
 import org.lpw.tephra.scheduler.SecondsJob;
-import org.lpw.tephra.util.Converter;
 import org.lpw.tephra.util.DateTime;
+import org.lpw.tephra.util.Numeric;
 import org.lpw.tephra.util.TimeUnit;
 import org.lpw.tephra.util.Validator;
 import org.springframework.beans.factory.annotation.Value;
@@ -29,7 +29,7 @@ public class PaymentHelperImpl implements PaymentHelper, SecondsJob, ContextRefr
     @Inject
     private Validator validator;
     @Inject
-    private Converter converter;
+    private Numeric numeric;
     @Inject
     private DateTime dateTime;
     @Inject
@@ -48,7 +48,7 @@ public class PaymentHelperImpl implements PaymentHelper, SecondsJob, ContextRefr
         parameter.put("type", type);
         parameter.put("appId", appId);
         parameter.put("user", user);
-        parameter.put("amount", converter.toString(amount, "0"));
+        parameter.put("amount", numeric.toString(amount, "0"));
         parameter.put("billNo", billNo);
         parameter.put("notice", notice);
         JSONObject object = carousel.service(key + ".create", null, parameter, false, JSONObject.class);
@@ -60,9 +60,9 @@ public class PaymentHelperImpl implements PaymentHelper, SecondsJob, ContextRefr
     public String complete(String orderNo, int amount, String tradeNo, int state, Map<String, String> map) {
         Map<String, String> parameter = getParameter(map);
         parameter.put("orderNo", orderNo);
-        parameter.put("amount", converter.toString(amount, "0"));
+        parameter.put("amount", numeric.toString(amount, "0"));
         parameter.put("tradeNo", tradeNo);
-        parameter.put("state", converter.toString(state, "0"));
+        parameter.put("state", numeric.toString(state, "0"));
         JSONObject object = carousel.service(key + ".complete", null, parameter, false, JSONObject.class);
 
         return object.getString("orderNo");
@@ -103,7 +103,8 @@ public class PaymentHelperImpl implements PaymentHelper, SecondsJob, ContextRefr
             JSONObject object = array.getJSONObject(i);
             String type = object.getString("type");
             if (listeners.containsKey(type))
-                listeners.get(type).resetState(object, System.currentTimeMillis() - dateTime.toTime(object.getString("start")).getTime() > 5 * TimeUnit.Minute.getTime());
+                listeners.get(type).resetState(object, System.currentTimeMillis() - dateTime.toTime(object.getString("start"))
+                        .getTime() > 5 * TimeUnit.Minute.getTime());
         }
         lockHelper.unlock(lockId);
     }
