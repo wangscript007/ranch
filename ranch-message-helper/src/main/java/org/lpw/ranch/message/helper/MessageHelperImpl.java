@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import org.lpw.ranch.util.Carousel;
 import org.lpw.tephra.crypto.Sign;
 import org.lpw.tephra.util.Generator;
+import org.lpw.tephra.util.Numeric;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +17,8 @@ import java.util.Map;
  */
 @Service("ranch.message.helper")
 public class MessageHelperImpl implements MessageHelper {
+    @Inject
+    private Numeric numeric;
     @Inject
     private Sign sign;
     @Inject
@@ -40,7 +43,7 @@ public class MessageHelperImpl implements MessageHelper {
         if (notifyKey == null)
             notifyKey = key + ".notice";
 
-        Map<String, String> parameter = newParameter(type, receiver, Format.Notify, content, deadline);
+        Map<String, String> parameter = newParameter(type, receiver, null, content, deadline);
         sign.put(parameter, null);
 
         return send(notifyKey, parameter);
@@ -48,11 +51,12 @@ public class MessageHelperImpl implements MessageHelper {
 
     private Map<String, String> newParameter(Type type, String receiver, Format format, String content, int deadline) {
         Map<String, String> parameter = new HashMap<>();
-        parameter.put("type", "" + type.ordinal());
+        parameter.put("type", numeric.toString(type.ordinal(), "0"));
         parameter.put("receiver", receiver);
-        parameter.put("format", "" + format.ordinal());
+        if (format != null)
+            parameter.put("format", numeric.toString(format.ordinal(), "0"));
         parameter.put("content", content);
-        parameter.put("deadline", "" + deadline);
+        parameter.put("deadline", numeric.toString(deadline, "0"));
         parameter.put("code", generator.random(32));
 
         return parameter;

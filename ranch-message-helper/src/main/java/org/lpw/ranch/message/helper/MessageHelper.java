@@ -27,6 +27,10 @@ public interface MessageHelper {
          */
         Text,
         /**
+         * 图片
+         */
+        Image,
+        /**
          * 音频。
          */
         Audio,
@@ -41,7 +45,7 @@ public interface MessageHelper {
         /**
          * 红包。
          */
-        RedBag,
+        Redpacket,
         /**
          * 转账。
          */
