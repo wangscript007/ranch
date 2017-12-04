@@ -1,7 +1,7 @@
 package org.lpw.ranch.user;
 
 import org.lpw.tephra.ctrl.http.upload.UploadListener;
-import org.lpw.tephra.util.Validator;
+import org.lpw.tephra.util.Image;
 import org.springframework.stereotype.Controller;
 
 import javax.inject.Inject;
@@ -12,7 +12,7 @@ import javax.inject.Inject;
 @Controller(UserModel.NAME + ".upload-listener.portrait")
 public class PortraitUploadListenerImpl implements UploadListener {
     @Inject
-    private Validator validator;
+    private Image image;
     @Inject
     private UserService userService;
 
@@ -23,7 +23,7 @@ public class PortraitUploadListenerImpl implements UploadListener {
 
     @Override
     public boolean isUploadEnable(String key, String contentType, String name) {
-        return validator.isImage(contentType, name) && !userService.sign().isEmpty();
+        return image.is(contentType, name) && !userService.sign().isEmpty();
     }
 
     @Override
