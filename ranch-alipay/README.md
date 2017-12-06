@@ -8,7 +8,6 @@
 |---|---|---|
 |key|char(100)|引用key，不可重复。|
 |name|char(100)|名称。|
-|url|char(100)|支付宝接口URL地址。|
 |appId|char(100)|APP ID，不可重复。|
 |privateKey|string|私钥。|
 |publicKey|string|公钥。|

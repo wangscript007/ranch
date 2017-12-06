@@ -15,7 +15,6 @@
     "id": "ID值",
     "key": "引用key",
     "name": "名称",
-    "url": "URL地址",
     "appId": "APP ID",
     "privateKey": "私钥",
     "publicKey": "公钥"
