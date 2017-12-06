@@ -1,0 +1,19 @@
+DROP TABLE IF EXISTS t_form_field;
+CREATE TABLE t_form_field
+(
+  c_id CHAR(36) NOT NULL COMMENT '主键',
+  c_owner CHAR(36) NOT NULL COMMENT '所有者',
+  c_sort INT DEFAULT 0 COMMENT '顺序',
+  c_name VARCHAR(255) DEFAULT NULL COMMENT '名称',
+  c_type VARCHAR(255) DEFAULT NULL COMMENT '类型',
+  c_value VARCHAR(255) DEFAULT NULL COMMENT '数据',
+  c_memo VARCHAR(255) DEFAULT NULL COMMENT '说明',
+  c_style TEXT DEFAULT NULL COMMENT '样式',
+  c_state INT DEFAULT 0 COMMENT '状态：0-未修改；1-已修改',
+  c_modify DATETIME DEFAULT NULL COMMENT '修改时间',
+  c_modifier CHAR(36) DEFAULT NULL COMMENT '修改者',
+  c_version INT DEFAULT 0 COMMENT '版本号',
+
+  PRIMARY KEY pk(c_id) USING HASH,
+  KEY k_owner(c_owner) USING HASH
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;

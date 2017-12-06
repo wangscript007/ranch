@@ -43,6 +43,7 @@
         <module>ranch-web</module>
         <module>ranch-console</module>
         <module>ranch-test</module>
+        <module>ranch-form</module>
     </modules>
 
     <properties>
