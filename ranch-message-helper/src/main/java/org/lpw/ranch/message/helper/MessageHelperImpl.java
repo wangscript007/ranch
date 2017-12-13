@@ -28,7 +28,7 @@ public class MessageHelperImpl implements MessageHelper {
     @Value("${ranch.message.key:ranch.message}")
     private String key;
     private String sendKey;
-    private String notifyKey;
+    private String noticeKey;
 
     @Override
     public String send(Type type, String receiver, Format format, String content, int deadline) {
@@ -40,13 +40,13 @@ public class MessageHelperImpl implements MessageHelper {
 
     @Override
     public String notice(Type type, String receiver, String content, int deadline) {
-        if (notifyKey == null)
-            notifyKey = key + ".notice";
+        if (noticeKey == null)
+            noticeKey = key + ".notice";
 
         Map<String, String> parameter = newParameter(type, receiver, null, content, deadline);
         sign.put(parameter, null);
 
-        return send(notifyKey, parameter);
+        return send(noticeKey, parameter);
     }
 
     private Map<String, String> newParameter(Type type, String receiver, Format format, String content, int deadline) {
