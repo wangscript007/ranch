@@ -9,6 +9,6 @@ CREATE TABLE t_form_user
   c_join DATETIME DEFAULT NULL COMMENT '加入时间',
 
   PRIMARY KEY pk(c_id) USING HASH,
-  KEY k_user(c_user) USING HASH,
-  KEY k_form(c_form) USING HASH
+  KEY k_user_create(c_user,c_create) USING BTREE,
+  UNIQUE KEY uk_form_user(c_form,c_user) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
