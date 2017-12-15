@@ -2,6 +2,7 @@ package org.lpw.ranch.payment.helper;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import org.lpw.ranch.classify.helper.ClassifyHelper;
 import org.lpw.ranch.lock.LockHelper;
 import org.lpw.ranch.util.Carousel;
 import org.lpw.tephra.bean.BeanFactory;
@@ -38,6 +39,8 @@ public class PaymentHelperImpl implements PaymentHelper, SecondsJob, ContextRefr
     private Carousel carousel;
     @Inject
     private LockHelper lockHelper;
+    @Inject
+    private ClassifyHelper classifyHelper;
     @Value("${ranch.payment.key:ranch.payment}")
     private String key;
     private Map<String, PaymentListener> listeners;
@@ -99,12 +102,13 @@ public class PaymentHelperImpl implements PaymentHelper, SecondsJob, ContextRefr
             return;
         }
 
+        long timeout = classifyHelper.valueAsInt("ranch.payment", "timeout", 60) * TimeUnit.Minute.getTime();
         for (int i = 0, size = array.size(); i < size; i++) {
             JSONObject object = array.getJSONObject(i);
             String type = object.getString("type");
             if (listeners.containsKey(type))
-                listeners.get(type).resetState(object, System.currentTimeMillis() - dateTime.toTime(object.getString("start"))
-                        .getTime() > 5 * TimeUnit.Minute.getTime());
+                listeners.get(type).resetState(object,
+                        System.currentTimeMillis() - dateTime.toTime(object.getString("start")).getTime() > timeout);
         }
         lockHelper.unlock(lockId);
     }
