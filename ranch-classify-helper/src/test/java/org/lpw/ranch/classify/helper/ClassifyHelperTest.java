@@ -207,4 +207,28 @@ public class ClassifyHelperTest extends TephraTestSupport {
             Assert.assertEquals("" + i, object.getString("type"));
         }
     }
+
+    @Test
+    public void save() {
+        while (Calendar.getInstance().get(Calendar.SECOND) > 55)
+            thread.sleep(5, TimeUnit.Second);
+
+        mockHelper.reset();
+        mockHelper.mock("/carousel");
+        mockCarousel.reset();
+        Map<String, String> map = new HashMap<>();
+        mockCarousel.register("ranch.classify.save", (key, header, parameter, cacheTime) -> {
+            map.putAll(parameter);
+
+            return "{\"code\":0,\"data\":{\"id\":\"id value\"}}";
+        });
+        JSONObject object = classifyHelper.save("code 1", "key 1", "value 1", "name 1");
+        Assert.assertEquals(1, object.size());
+        Assert.assertEquals("id value", object.getString("id"));
+        Assert.assertEquals(4, map.size());
+        Assert.assertEquals("code 1", map.get("code"));
+        Assert.assertEquals("key 1", map.get("key"));
+        Assert.assertEquals("value 1", map.get("value"));
+        Assert.assertEquals("name 1", map.get("name"));
+    }
 }

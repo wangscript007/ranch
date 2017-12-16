@@ -73,6 +73,17 @@ public class ClassifyHelperImpl extends ServiceHelperSupport implements Classify
     }
 
     @Override
+    public JSONObject save(String code, String key, String value, String name) {
+        Map<String, String> parameter = new HashMap<>();
+        parameter.put("code", code);
+        parameter.put("key", key);
+        parameter.put("value", value);
+        parameter.put("name", name);
+
+        return carousel.service(this.key + ".save", null, parameter, true, JSONObject.class);
+    }
+
+    @Override
     protected String getKey() {
         return key;
     }

@@ -21,7 +21,7 @@ public interface ClassifyHelper {
      * 查找分类信息。
      *
      * @param code 编码。
-     * @param key  值。
+     * @param key  键。
      * @return 分类JSON数据，如果不存在则返回空JSON数据。
      */
     JSONObject find(String code, String key);
@@ -30,7 +30,7 @@ public interface ClassifyHelper {
      * 查找分类value值。
      *
      * @param code 编码。
-     * @param key  值。
+     * @param key  键。
      * @return 分类value值；如果未找到则返回null。
      */
     String value(String code, String key);
@@ -39,7 +39,7 @@ public interface ClassifyHelper {
      * 查找分类value整数值。
      *
      * @param code         编码。
-     * @param key          值。
+     * @param key          键。
      * @param defaultValue 默认值。
      * @return 分类value整数值；如果未找到则返回默认值。
      */
@@ -49,7 +49,7 @@ public interface ClassifyHelper {
      * 查找分类value浮点数值。
      *
      * @param code         编码。
-     * @param key          值。
+     * @param key          键。
      * @param defaultValue 默认值。
      * @return 分类value浮点数值；如果未找到则返回默认值。
      */
@@ -83,4 +83,15 @@ public interface ClassifyHelper {
      * @return 填充后的数据集。
      */
     JSONArray fill(JSONArray array, String code, String[] names);
+
+    /**
+     * 保存分类信息。
+     *
+     * @param code  编码。
+     * @param key   键。
+     * @param value 值。
+     * @param name  名称。
+     * @return 分类信息。
+     */
+    JSONObject save(String code, String key, String value, String name);
 }
