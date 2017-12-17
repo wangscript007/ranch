@@ -33,6 +33,7 @@ public class LoggerModel extends ModelSupport {
     private String p7; // 参数7
     private String p8; // 参数8
     private String p9; // 参数9
+    private int state; // 状态
     private Timestamp time; // 时间
 
     @Jsonable
@@ -143,6 +144,16 @@ public class LoggerModel extends ModelSupport {
 
     public void setP9(String p9) {
         this.p9 = p9;
+    }
+
+    @Jsonable
+    @Column(name = "c_state")
+    public int getState() {
+        return state;
+    }
+
+    public void setState(int state) {
+        this.state = state;
     }
 
     @Jsonable

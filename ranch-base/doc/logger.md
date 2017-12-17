@@ -52,7 +52,8 @@ public interface LoggerService {
 
 |名称|类型|说明|
 |---|---|---|
-|key|char(100)|键，必须。|
+|key|char(100)|键，为空表示全部。|
+|state|int|状态，-1表示全部。|
 |start|string|开始时间，格式：yyyy-MM-dd HH:mm:ss。为空表示全部。|
 |end|string|结束时间，格式：yyyy-MM-dd HH:mm:ss。为空表示全部。|
 |pageSize|int|每页显示记录数，默认20。|
@@ -77,11 +78,32 @@ public interface LoggerService {
             "p6": "参数6",
             "p7": "参数7",
             "p8": "参数8",
-            "p8": "参数9",
+            "p9": "参数9",
+            "state": "状态",
             "time": "时间"
         }
     ]
 }
+```
+
+> 后台管理接口，需验证[请求参数签名](https://github.com/heisedebaise/tephra/blob/master/tephra-ctrl/doc/sign.md)。
+
+## 设置状态
+
+请求
+- Service Key - ranch.logger.state
+- URI - /logger/state
+
+参数
+
+|名称|类型|说明|
+|---|---|---|
+|id|char(36)|ID值。|
+|state|int|状态。|
+
+返回值
+```
+""
 ```
 
 > 后台管理接口，需验证[请求参数签名](https://github.com/heisedebaise/tephra/blob/master/tephra-ctrl/doc/sign.md)。

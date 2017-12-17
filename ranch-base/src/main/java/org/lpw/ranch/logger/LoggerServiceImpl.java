@@ -20,9 +20,9 @@ public class LoggerServiceImpl implements LoggerService {
     private LoggerDao loggerDao;
 
     @Override
-    public JSONObject query(String key, String start, String end) {
-        return loggerDao.query(key, dateTime.toTime(start, "yyyy-MM-dd HH:mm:ss"), dateTime.toTime(end, "yyyy-MM-dd HH:mm:ss"),
-                pagination.getPageSize(20), pagination.getPageNum()).toJson();
+    public JSONObject query(String key, int state, String start, String end) {
+        return loggerDao.query(key, state, dateTime.toTime(start, "yyyy-MM-dd HH:mm:ss"), dateTime.toTime(end,
+                "yyyy-MM-dd HH:mm:ss"), pagination.getPageSize(20), pagination.getPageNum()).toJson();
     }
 
     @Override
@@ -51,5 +51,15 @@ public class LoggerServiceImpl implements LoggerService {
             return ps[index];
 
         return ps[index].substring(0, 100);
+    }
+
+    @Override
+    public void state(String id, int state) {
+        LoggerModel logger = loggerDao.findById(id);
+        if (logger == null)
+            return;
+
+        logger.setState(state);
+        loggerDao.save(logger);
     }
 }

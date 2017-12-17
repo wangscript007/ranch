@@ -8,7 +8,9 @@ import java.sql.Timestamp;
  * @author lpw
  */
 interface LoggerDao {
-    PageList<LoggerModel> query(String key, Timestamp start, Timestamp end, int pageSize, int pageNum);
+    PageList<LoggerModel> query(String key, int state, Timestamp start, Timestamp end, int pageSize, int pageNum);
+
+    LoggerModel findById(String id);
 
     void save(LoggerModel logger);
 }

@@ -23,6 +23,15 @@ public class LoggerCtrl {
             @Validate(validator = Validators.SIGN)
     })
     public Object query() {
-        return loggerService.query(request.get("key"), request.get("start"), request.get("end"));
+        return loggerService.query(request.get("key"), request.getAsInt("state", -1), request.get("start"), request.get("end"));
+    }
+
+    @Execute(name = "state", validates = {
+            @Validate(validator = Validators.SIGN)
+    })
+    public Object state() {
+        loggerService.state(request.get("id"), request.getAsInt("state"));
+
+        return "";
     }
 }
