@@ -17,6 +17,7 @@
 |p7|char(100)|参数7。|
 |p8|char(100)|参数8。|
 |p9|char(100)|参数9。|
+|state|int|状态。|
 |time|timestamp|时间。|
 
 ## 记录日志
