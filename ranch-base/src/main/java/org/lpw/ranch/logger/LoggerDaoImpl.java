@@ -23,7 +23,7 @@ class LoggerDaoImpl implements LoggerDao {
 
     @Override
     public PageList<LoggerModel> query(String key, int state, Timestamp start, Timestamp end, int pageSize, int pageNum) {
-        StringBuilder where = new StringBuilder("c_key=?");
+        StringBuilder where = new StringBuilder();
         List<Object> args = new ArrayList<>();
         append(where, args, "c_key", key, "=");
         if (state > -1)
