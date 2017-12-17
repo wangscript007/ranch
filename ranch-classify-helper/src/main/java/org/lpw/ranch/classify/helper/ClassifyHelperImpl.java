@@ -3,6 +3,7 @@ package org.lpw.ranch.classify.helper;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import org.lpw.ranch.util.ServiceHelperSupport;
+import org.lpw.tephra.crypto.Sign;
 import org.lpw.tephra.util.Numeric;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -18,6 +19,8 @@ import java.util.Map;
 public class ClassifyHelperImpl extends ServiceHelperSupport implements ClassifyHelper {
     @Inject
     private Numeric numeric;
+    @Inject
+    private Sign sign;
     @Value("${ranch.classify.key:ranch.classify}")
     private String key;
 
@@ -79,6 +82,7 @@ public class ClassifyHelperImpl extends ServiceHelperSupport implements Classify
         parameter.put("key", key);
         parameter.put("value", value);
         parameter.put("name", name);
+        sign.put(parameter, null);
 
         return carousel.service(this.key + ".save", null, parameter, true, JSONObject.class);
     }
