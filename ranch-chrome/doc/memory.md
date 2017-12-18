@@ -8,6 +8,7 @@
 }
 ```
 并且将记录一条日志到[日志服务](../../ranch-base/doc/logger.md)中：
+
 |属性|说明|
 |---|---|
 |key|ranch.chrome.memory.not-enough。|
