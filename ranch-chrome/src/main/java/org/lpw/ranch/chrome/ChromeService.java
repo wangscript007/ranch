@@ -7,6 +7,10 @@ import com.alibaba.fastjson.JSONObject;
  */
 public interface ChromeService {
     /**
+     * 内存是否充足验证器Bean名称。
+     */
+    String VALIDATOR_MEMORY = ChromeModel.NAME + ".validator.memory";
+    /**
      * 引用KEY是否存在验证器Bean名称。
      */
     String VALIDATOR_KEY_EXISTS = ChromeModel.NAME + ".validator.key.exists";

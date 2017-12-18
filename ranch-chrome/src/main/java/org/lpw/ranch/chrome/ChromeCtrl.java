@@ -69,6 +69,7 @@ public class ChromeCtrl {
     }
 
     @Execute(name = "pdf", type = Templates.STREAM, validates = {
+            @Validate(validator = ChromeService.VALIDATOR_MEMORY, failureCode = 98),
             @Validate(validator = Validators.NOT_EMPTY, parameter = "key", failureCode = 1),
             @Validate(validator = Validators.NOT_EMPTY, parameter = "url", failureCode = 6),
             @Validate(validator = ChromeService.VALIDATOR_KEY_EXISTS, parameter = "key", failureCode = 7)
@@ -92,6 +93,7 @@ public class ChromeCtrl {
     }
 
     @Execute(name = "png", type = Templates.STREAM, validates = {
+            @Validate(validator = ChromeService.VALIDATOR_MEMORY, failureCode = 98),
             @Validate(validator = Validators.NOT_EMPTY, parameter = "key", failureCode = 1),
             @Validate(validator = Validators.NOT_EMPTY, parameter = "url", failureCode = 6),
             @Validate(validator = ChromeService.VALIDATOR_KEY_EXISTS, parameter = "key", failureCode = 7)
@@ -108,6 +110,7 @@ public class ChromeCtrl {
     }
 
     @Execute(name = "jpg", type = Templates.STREAM, validates = {
+            @Validate(validator = ChromeService.VALIDATOR_MEMORY, failureCode = 98),
             @Validate(validator = Validators.NOT_EMPTY, parameter = "key", failureCode = 1),
             @Validate(validator = Validators.NOT_EMPTY, parameter = "url", failureCode = 6),
             @Validate(validator = ChromeService.VALIDATOR_KEY_EXISTS, parameter = "key", failureCode = 7)
