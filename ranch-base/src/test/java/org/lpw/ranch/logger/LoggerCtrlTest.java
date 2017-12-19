@@ -78,7 +78,7 @@ public class LoggerCtrlTest extends TephraTestSupport {
         JSONArray array = data.getJSONArray("list");
         Assert.assertEquals(2, array.size());
         Assert.assertEquals(list.get(5).getId(), array.getJSONObject(0).getString("id"));
-        Assert.assertEquals(list.get(3).getId(), array.getJSONObject(1).getString("id"));
+        Assert.assertEquals(list.get(7).getId(), array.getJSONObject(1).getString("id"));
 
         mockHelper.reset();
         mockHelper.getRequest().addParameter("key", "key 0");
@@ -92,7 +92,7 @@ public class LoggerCtrlTest extends TephraTestSupport {
         pageTester.assertCountSizeNumber(2, 20, 1, data);
         array = data.getJSONArray("list");
         Assert.assertEquals(2, array.size());
-        Assert.assertEquals(list.get(6).getId(), array.getJSONObject(0).getString("id"));
-        Assert.assertEquals(list.get(4).getId(), array.getJSONObject(1).getString("id"));
+        Assert.assertEquals(list.get(4).getId(), array.getJSONObject(0).getString("id"));
+        Assert.assertEquals(list.get(6).getId(), array.getJSONObject(1).getString("id"));
     }
 }
