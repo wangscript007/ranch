@@ -8,6 +8,8 @@ import org.lpw.tephra.util.TimeUnit;
 import org.springframework.stereotype.Controller;
 
 import javax.inject.Inject;
+import java.lang.management.ManagementFactory;
+import java.lang.management.MemoryUsage;
 
 /**
  * @author lpw
@@ -22,8 +24,9 @@ public class MemoryValidatorImpl extends ValidatorSupport {
 
     @Override
     public boolean validate(ValidateWrapper validate, String parameter) {
-        long max = Runtime.getRuntime().maxMemory();
-        long free = Runtime.getRuntime().freeMemory();
+        MemoryUsage usage = ManagementFactory.getMemoryMXBean().getHeapMemoryUsage();
+        long max = usage.getMax();
+        long free = usage.getMax() - usage.getUsed();
         if (free >= max >> 2)
             return true;
 
