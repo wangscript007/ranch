@@ -34,7 +34,7 @@ public class GetTest extends TestSupport {
 
         mockHelper.reset();
         mockHelper.getRequest().addParameter("ids", "id1,id2");
-        request.putSign(mockHelper.getRequest().getMap());
+        sign.put(mockHelper.getRequest().getMap(), null);
         mockHelper.mock("/snapshot/get");
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(0, object.getIntValue("code"));
@@ -43,7 +43,7 @@ public class GetTest extends TestSupport {
 
         mockHelper.reset();
         mockHelper.getRequest().addParameter("ids", "id1,id2," + snapshot1.getId() + ",id3," + snapshot2.getId() + ",id4," + snapshot2.getId());
-        request.putSign(mockHelper.getRequest().getMap());
+        sign.put(mockHelper.getRequest().getMap(), null);
         mockHelper.mock("/snapshot/get");
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(0, object.getIntValue("code"));
@@ -58,7 +58,7 @@ public class GetTest extends TestSupport {
         snapshot.setData("data " + i);
         snapshot.setContent("content " + i);
         snapshot.setTime(new Timestamp(time - i * TimeUnit.Day.getTime()));
-        snapshot.setMd5("md5 "+i);
+        snapshot.setMd5("md5 " + i);
         liteOrm.save(snapshot);
 
         return snapshot;

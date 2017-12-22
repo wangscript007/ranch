@@ -1,7 +1,7 @@
 package org.lpw.ranch.snapshot;
 
 import org.lpw.tephra.crypto.Digest;
-import org.lpw.tephra.ctrl.context.Request;
+import org.lpw.tephra.crypto.Sign;
 import org.lpw.tephra.dao.orm.lite.LiteOrm;
 import org.lpw.tephra.test.MockHelper;
 import org.lpw.tephra.test.TephraTestSupport;
@@ -24,9 +24,9 @@ public class TestSupport extends TephraTestSupport {
     @Inject
     Thread thread;
     @Inject
-    LiteOrm liteOrm;
+    Sign sign;
     @Inject
-    Request request;
+    LiteOrm liteOrm;
     @Inject
     MockHelper mockHelper;
 }

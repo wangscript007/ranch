@@ -4,7 +4,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import org.junit.Assert;
 import org.junit.Test;
-import org.lpw.tephra.ctrl.context.Request;
+import org.lpw.tephra.crypto.Sign;
 import org.lpw.tephra.ctrl.validate.Validators;
 import org.lpw.tephra.dao.orm.lite.LiteOrm;
 import org.lpw.tephra.test.MockHelper;
@@ -23,9 +23,9 @@ public class QueryTest extends TephraTestSupport {
     @Inject
     private Message message;
     @Inject
-    private LiteOrm liteOrm;
+    private Sign sign;
     @Inject
-    private Request request;
+    private LiteOrm liteOrm;
     @Inject
     private MockHelper mockHelper;
 
@@ -60,7 +60,7 @@ public class QueryTest extends TephraTestSupport {
         for (int i = 0; i < 2; i++) {
             mockHelper.reset();
             mockHelper.getRequest().addParameter("user", "user " + i);
-            request.putSign(mockHelper.getRequest().getMap());
+            sign.put(mockHelper.getRequest().getMap(), null);
             mockHelper.mock("/user/auth/query");
             object = mockHelper.getResponse().asJson();
             Assert.assertEquals(0, object.getIntValue("code"));

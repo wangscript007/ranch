@@ -52,7 +52,7 @@ public class StateTest extends TestSupport {
         mockHelper.reset();
         mockHelper.getRequest().addParameter("id", generator.uuid());
         mockHelper.getRequest().addParameter("state", "1");
-        request.putSign(mockHelper.getRequest().getMap());
+        sign.put(mockHelper.getRequest().getMap(), null);
         mockHelper.mock("/user/state");
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(1525, object.getIntValue("code"));
@@ -66,7 +66,7 @@ public class StateTest extends TestSupport {
         mockHelper.reset();
         mockHelper.getRequest().addParameter("id", user1.getId());
         mockHelper.getRequest().addParameter("state", "1");
-        request.putSign(mockHelper.getRequest().getMap());
+        sign.put(mockHelper.getRequest().getMap(), null);
         mockHelper.mock("/user/state");
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(0, object.getIntValue("code"));

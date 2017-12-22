@@ -5,6 +5,7 @@ import org.junit.Assert;
 import org.lpw.ranch.user.auth.AuthModel;
 import org.lpw.ranch.user.online.OnlineModel;
 import org.lpw.tephra.crypto.Digest;
+import org.lpw.tephra.crypto.Sign;
 import org.lpw.tephra.ctrl.context.Request;
 import org.lpw.tephra.ctrl.context.Session;
 import org.lpw.tephra.dao.orm.lite.LiteOrm;
@@ -16,7 +17,6 @@ import org.lpw.tephra.util.Converter;
 import org.lpw.tephra.util.DateTime;
 import org.lpw.tephra.util.Generator;
 import org.lpw.tephra.util.Message;
-import org.lpw.tephra.util.Thread;
 import org.lpw.tephra.util.TimeUnit;
 
 import javax.inject.Inject;
@@ -36,13 +36,11 @@ public class TestSupport extends TephraTestSupport {
     @Inject
     DateTime dateTime;
     @Inject
-    Thread thread;
-    @Inject
     Digest digest;
     @Inject
-    LiteOrm liteOrm;
+    Sign sign;
     @Inject
-    Request request;
+    LiteOrm liteOrm;
     @Inject
     Session session;
     @Inject

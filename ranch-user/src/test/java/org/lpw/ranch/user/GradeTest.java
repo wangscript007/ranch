@@ -52,7 +52,7 @@ public class GradeTest extends TestSupport {
         mockHelper.reset();
         mockHelper.getRequest().addParameter("id", generator.uuid());
         mockHelper.getRequest().addParameter("grade", "11");
-        request.putSign(mockHelper.getRequest().getMap());
+        sign.put(mockHelper.getRequest().getMap(), null);
         mockHelper.mock("/user/grade");
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(1525, object.getIntValue("code"));
@@ -66,7 +66,7 @@ public class GradeTest extends TestSupport {
         mockHelper.reset();
         mockHelper.getRequest().addParameter("id", user1.getId());
         mockHelper.getRequest().addParameter("grade", "11");
-        request.putSign(mockHelper.getRequest().getMap());
+        sign.put(mockHelper.getRequest().getMap(), null);
         mockHelper.mock("/user/grade");
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(0, object.getIntValue("code"));

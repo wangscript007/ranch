@@ -33,7 +33,7 @@ public class GetTest extends TestSupport {
 
         mockHelper.reset();
         mockHelper.getRequest().addParameter("ids", "id1,id2");
-        request.putSign(mockHelper.getRequest().getMap());
+        sign.put(mockHelper.getRequest().getMap(), null);
         mockHelper.mock("/user/get");
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(0, object.getIntValue("code"));
@@ -42,7 +42,7 @@ public class GetTest extends TestSupport {
 
         mockHelper.reset();
         mockHelper.getRequest().addParameter("ids", "id1,id2," + list.get(0).getId() + "," + list.get(1).getId() + "," + list.get(1).getId());
-        request.putSign(mockHelper.getRequest().getMap());
+        sign.put(mockHelper.getRequest().getMap(), null);
         mockHelper.mock("/user/get");
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(0, object.getIntValue("code"));

@@ -38,7 +38,7 @@ public class FindByCodeTest extends TestSupport {
 
         mockHelper.reset();
         mockHelper.getRequest().addParameter("code", "code");
-        request.putSign(mockHelper.getRequest().getMap());
+        sign.put(mockHelper.getRequest().getMap(), null);
         mockHelper.mock("/user/find-by-code");
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(0, object.getIntValue("code"));
@@ -47,7 +47,7 @@ public class FindByCodeTest extends TestSupport {
         for (int i = 0; i < 2; i++) {
             mockHelper.reset();
             mockHelper.getRequest().addParameter("code", "code 0");
-            request.putSign(mockHelper.getRequest().getMap());
+            sign.put(mockHelper.getRequest().getMap(), null);
             mockHelper.mock("/user/find-by-code");
             object = mockHelper.getResponse().asJson();
             Assert.assertEquals(0, object.getIntValue("code"));
@@ -60,7 +60,7 @@ public class FindByCodeTest extends TestSupport {
         cache.remove(UserModel.NAME + ".service.json:code 0");
         mockHelper.reset();
         mockHelper.getRequest().addParameter("code", "code 0");
-        request.putSign(mockHelper.getRequest().getMap());
+        sign.put(mockHelper.getRequest().getMap(), null);
         mockHelper.mock("/user/find-by-code");
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(0, object.getIntValue("code"));
@@ -68,7 +68,7 @@ public class FindByCodeTest extends TestSupport {
 
         mockHelper.reset();
         mockHelper.getRequest().addParameter("code", "code 5");
-        request.putSign(mockHelper.getRequest().getMap());
+        sign.put(mockHelper.getRequest().getMap(), null);
         mockHelper.mock("/user/find-by-code");
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(0, object.getIntValue("code"));

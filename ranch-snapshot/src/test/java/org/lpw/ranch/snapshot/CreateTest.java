@@ -29,7 +29,7 @@ public class CreateTest extends TestSupport {
         mockHelper.reset();
         mockHelper.getRequest().addParameter("data", "data value");
         mockHelper.getRequest().addParameter("content", "content value");
-        request.putSign(mockHelper.getRequest().getMap());
+        sign.put(mockHelper.getRequest().getMap(), null);
         mockHelper.mock("/snapshot/create");
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(0, object.getIntValue("code"));
@@ -44,7 +44,7 @@ public class CreateTest extends TestSupport {
         mockHelper.reset();
         mockHelper.getRequest().addParameter("data", "data value");
         mockHelper.getRequest().addParameter("content", "content value");
-        request.putSign(mockHelper.getRequest().getMap());
+        sign.put(mockHelper.getRequest().getMap(), null);
         mockHelper.mock("/snapshot/create");
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(0, object.getIntValue("code"));
@@ -59,7 +59,7 @@ public class CreateTest extends TestSupport {
         mockHelper.reset();
         mockHelper.getRequest().addParameter("data", "data value ");
         mockHelper.getRequest().addParameter("content", "content value");
-        request.putSign(mockHelper.getRequest().getMap());
+        sign.put(mockHelper.getRequest().getMap(), null);
         mockHelper.mock("/snapshot/create");
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(0, object.getIntValue("code"));

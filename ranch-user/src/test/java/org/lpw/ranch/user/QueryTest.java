@@ -37,7 +37,7 @@ public class QueryTest extends TestSupport {
         mockHelper.reset();
         mockHelper.getRequest().addParameter("pageSize", "10");
         mockHelper.getRequest().addParameter("pageNum", "1");
-        request.putSign(mockHelper.getRequest().getMap());
+        sign.put(mockHelper.getRequest().getMap(), null);
         mockHelper.mock("/user/query");
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(0, object.getIntValue("code"));
@@ -52,7 +52,7 @@ public class QueryTest extends TestSupport {
         mockHelper.getRequest().addParameter("mobile", "12312345610");
         mockHelper.getRequest().addParameter("pageSize", "10");
         mockHelper.getRequest().addParameter("pageNum", "1");
-        request.putSign(mockHelper.getRequest().getMap());
+        sign.put(mockHelper.getRequest().getMap(), null);
         mockHelper.mock("/user/query");
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(0, object.getIntValue("code"));

@@ -41,7 +41,7 @@ public class FindByUidTest extends TestSupport {
 
         mockHelper.reset();
         mockHelper.getRequest().addParameter("uid", "uid");
-        request.putSign(mockHelper.getRequest().getMap());
+        sign.put(mockHelper.getRequest().getMap(), null);
         mockHelper.mock("/user/find-by-uid");
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(1528, object.getIntValue("code"));
@@ -50,7 +50,7 @@ public class FindByUidTest extends TestSupport {
         for (int i = 0; i < 2; i++) {
             mockHelper.reset();
             mockHelper.getRequest().addParameter("uid", "uid 0");
-            request.putSign(mockHelper.getRequest().getMap());
+            sign.put(mockHelper.getRequest().getMap(), null);
             mockHelper.mock("/user/find-by-uid");
             object = mockHelper.getResponse().asJson();
             Assert.assertEquals(0, object.getIntValue("code"));
@@ -63,7 +63,7 @@ public class FindByUidTest extends TestSupport {
         cache.remove(UserModel.NAME + ".service.json:uid 0");
         mockHelper.reset();
         mockHelper.getRequest().addParameter("uid", "uid 0");
-        request.putSign(mockHelper.getRequest().getMap());
+        sign.put(mockHelper.getRequest().getMap(), null);
         mockHelper.mock("/user/find-by-uid");
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(0, object.getIntValue("code"));
@@ -72,7 +72,7 @@ public class FindByUidTest extends TestSupport {
         createAuth("user 11", "uid 11", 1);
         mockHelper.reset();
         mockHelper.getRequest().addParameter("uid", "uid 11");
-        request.putSign(mockHelper.getRequest().getMap());
+        sign.put(mockHelper.getRequest().getMap(), null);
         mockHelper.mock("/user/find-by-uid");
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(0, object.getIntValue("code"));
