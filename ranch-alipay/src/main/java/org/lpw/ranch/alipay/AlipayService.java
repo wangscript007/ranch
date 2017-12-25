@@ -112,4 +112,22 @@ public interface AlipayService {
      * @return 执行成功则返回true；否则返回false。
      */
     boolean notice(String appId, String orderNo, String tradeNo, String amount, String status, Map<String, String> map);
+
+    /**
+     * 转账到账户。
+     *
+     * @param key      引用key。
+     * @param user     用户。
+     * @param account  支付宝登录号，支持邮箱和手机号格式。
+     * @param amount   金额，单位：分。
+     * @param billNo   单据号。
+     * @param realName 真实姓名，不为空时校验姓名与账号是否匹配，空时不校验。
+     * @param showName 显示名称，为空显示付款方的支付宝认证姓名或单位名称。
+     * @param remark   备注，转账金额大于等于50000必须。
+     * @param notice   异步通知。
+     * @param map      参数集。
+     * @return 提交结果，不代表转账结果。
+     */
+    boolean transfer(String key, String user, String account, int amount, String billNo, String realName, String showName,
+                     String remark, String notice, Map<String, String> map);
 }

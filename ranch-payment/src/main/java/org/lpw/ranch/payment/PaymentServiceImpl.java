@@ -74,8 +74,10 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     @Override
-    public JSONObject query(String type, String appId, String user, String orderNo, String billNo, String tradeNo, int state, String start, String end) {
-        JSONObject object = paymentDao.query(type, appId, userHelper.findIdByUid(user, user), orderNo, billNo, tradeNo, state, dateTime.getStart(start),
+    public JSONObject query(String type, String appId, String user, String orderNo, String billNo, String tradeNo,
+                            int state, String start, String end) {
+        JSONObject object = paymentDao.query(type, appId, userHelper.findIdByUid(user, user), orderNo, billNo, tradeNo,
+                state, dateTime.getStart(start),
                 dateTime.getEnd(end), pagination.getPageSize(20), pagination.getPageNum()).toJson();
         userHelper.fill(object.getJSONArray("list"), new String[]{"user"});
 
@@ -158,7 +160,8 @@ public class PaymentServiceImpl implements PaymentService {
         json.put(name, putToJson(new JSONObject(), map));
         payment.setJson(json.toJSONString());
         if (state == 1)
-            accountHelper.deposit(payment.getUser(), "", 0, payment.getType(), payment.getAmount(), true, merge(json.getJSONObject("create"), map));
+            accountHelper.deposit(payment.getUser(), "", 0, payment.getType(), payment.getAmount(), true,
+                    merge(json.getJSONObject("create"), map));
         paymentDao.save(payment);
         notice(payment);
     }

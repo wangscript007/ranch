@@ -7,13 +7,14 @@
 |属性|类型|说明|
 |---|---|---|
 |type|char(100)|类型。|
+|appId|char(100)|网关APP ID。|
 |user|char(36)|用户ID，为空则使用当前用户ID。|
 |amount|int|金额，单位：分。|
 |orderNo|char(21)|订单号。|
 |billNo|char(100)|单据号。|
 |tradeNo|char(100)|网关订单号。|
 |state|int|状态：0-新建；1-成功；2-失败。|
-|notify|string|通知配置。|
+|notice|string|通知配置。|
 |start|timestamp|开始时间。|
 |end|timestamp|结束时间。|
 |json|string|扩展数据。|

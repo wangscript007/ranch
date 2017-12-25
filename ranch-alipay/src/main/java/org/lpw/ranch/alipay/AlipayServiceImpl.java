@@ -9,10 +9,15 @@ import com.alipay.api.AlipayRequest;
 import com.alipay.api.AlipayResponse;
 import com.alipay.api.DefaultAlipayClient;
 import com.alipay.api.internal.util.AlipaySignature;
+import com.alipay.api.request.AlipayFundTransOrderQueryRequest;
+import com.alipay.api.request.AlipayFundTransToaccountTransferRequest;
 import com.alipay.api.request.AlipayTradeAppPayRequest;
 import com.alipay.api.request.AlipayTradePagePayRequest;
 import com.alipay.api.request.AlipayTradeWapPayRequest;
+import com.alipay.api.response.AlipayFundTransOrderQueryResponse;
 import org.lpw.ranch.payment.helper.PaymentHelper;
+import org.lpw.ranch.transfer.helper.TransferHelper;
+import org.lpw.ranch.transfer.helper.TransferListener;
 import org.lpw.ranch.user.helper.UserHelper;
 import org.lpw.tephra.dao.model.ModelHelper;
 import org.lpw.tephra.util.Coder;
@@ -30,7 +35,7 @@ import java.util.Map;
  * @author lpw
  */
 @Service(AlipayModel.NAME + ".service")
-public class AlipayServiceImpl implements AlipayService {
+public class AlipayServiceImpl implements AlipayService, TransferListener {
     @Inject
     private Validator validator;
     @Inject
@@ -47,6 +52,8 @@ public class AlipayServiceImpl implements AlipayService {
     private UserHelper userHelper;
     @Inject
     private PaymentHelper paymentHelper;
+    @Inject
+    private TransferHelper transferHelper;
     @Inject
     private AlipayDao alipayDao;
     @Value("${tephra.ctrl.service-root:}")
@@ -133,7 +140,7 @@ public class AlipayServiceImpl implements AlipayService {
     private String getBizContent(String appId, String user, String subject, int amount, String billNo, String notice, String code) {
         if (validator.isEmpty(user))
             user = userHelper.id();
-        String orderNo = paymentHelper.create("alipay", appId, user, amount, billNo, notice, null);
+        String orderNo = paymentHelper.create(getType(), appId, user, amount, billNo, notice, null);
         if (validator.isEmpty(orderNo))
             return null;
 
@@ -158,11 +165,6 @@ public class AlipayServiceImpl implements AlipayService {
 
             return null;
         }
-    }
-
-    private AlipayClient newAlipayClient(AlipayModel alipay) {
-        return new DefaultAlipayClient("https://openapi.alipay.com/gateway.do", alipay.getAppId(), alipay.getPrivateKey(),
-                "json", "UTF-8", alipay.getPublicKey(), AlipayConstants.SIGN_TYPE_RSA2);
     }
 
     @Override
@@ -199,5 +201,87 @@ public class AlipayServiceImpl implements AlipayService {
             return numeric.toInt(amount) * 100;
 
         return numeric.toInt(amount.substring(0, indexOf)) * 100 + numeric.toInt(amount.substring(indexOf + 1)) % 100;
+    }
+
+    @Override
+    public boolean transfer(String key, String user, String account, int amount, String billNo, String realName, String showName,
+                            String remark, String notice, Map<String, String> map) {
+        AlipayModel alipay = alipayDao.findByKey(key);
+        String orderNo = transferHelper.create(getType(), alipay.getAppId(), validator.isEmpty(user) ? userHelper.id() : user,
+                account, amount, billNo, notice, map);
+        if (validator.isEmpty(orderNo))
+            return false;
+
+        JSONObject content = new JSONObject();
+        content.put("out_biz_no", orderNo);
+        content.put("payee_type", "ALIPAY_LOGONID");
+        content.put("payee_account", account);
+        content.put("amount", numeric.toString(amount * 0.01D, "0.00"));
+        if (!validator.isEmpty(showName))
+            content.put("payer_show_name", showName);
+        if (!validator.isEmpty(realName))
+            content.put("payee_real_name", realName);
+        if (!validator.isEmpty(remark))
+            content.put("remark", remark);
+        AlipayFundTransToaccountTransferRequest request = new AlipayFundTransToaccountTransferRequest();
+        request.setBizContent(content.toJSONString());
+        try {
+            return newAlipayClient(alipay).execute(request).isSuccess();
+        } catch (AlipayApiException e) {
+            logger.warn(e, "发送支付宝转账请求[{}]时发生异常！", content.toJSONString());
+
+            return false;
+        }
+    }
+
+    @Override
+    public String getType() {
+        return "alipay";
+    }
+
+    @Override
+    public void resetState(JSONObject object) {
+        AlipayModel alipay = findByAppId(object.getString("appId"));
+        if (alipay == null)
+            return;
+
+        JSONObject content = new JSONObject();
+        String orderNo = object.getString("orderNo");
+        content.put("out_biz_no", orderNo);
+        AlipayFundTransOrderQueryRequest request = new AlipayFundTransOrderQueryRequest();
+        request.setBizContent(content.toJSONString());
+        try {
+            AlipayFundTransOrderQueryResponse response = newAlipayClient(alipay).execute(request);
+            if (!response.isSuccess())
+                return;
+
+            String tradeNo = response.getOrderId();
+            if (validator.isEmpty(tradeNo))
+                return;
+
+            int state = getState(response.getStatus());
+            if (state == 0)
+                return;
+
+            transferHelper.complete(orderNo, object.getIntValue("amount"), tradeNo, state, null);
+        } catch (AlipayApiException e) {
+            logger.warn(e, "查询支付宝转账[{}]结果时发生异常！", object.toJSONString());
+        }
+    }
+
+    private int getState(String status) {
+        switch (status) {
+            case "SUCCESS":
+                return 1;
+            case "FAIL":
+                return 2;
+            default:
+                return 0;
+        }
+    }
+
+    private AlipayClient newAlipayClient(AlipayModel alipay) {
+        return new DefaultAlipayClient("https://openapi.alipay.com/gateway.do", alipay.getAppId(), alipay.getPrivateKey(),
+                "json", "UTF-8", alipay.getPublicKey(), AlipayConstants.SIGN_TYPE_RSA2);
     }
 }

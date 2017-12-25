@@ -16,16 +16,17 @@
 > 其TA扩展属性将被保存到json属性的complete中。
 
 返回值
-```text
+```json
 {
   "type": "类型",
+  "appId": "网关APP ID",
   "user": "用户ID",
   "amount": "金额，单位：分",
   "orderNo": "订单号",
   "billNo": "单据号",
   "tradeNo": "网关订单号",
   "state": "状态：0-新建；1-成功；2-失败",
-  "notify": "通知URL地址",
+  "notice": "通知配置",
   "start": "开始时间",
   "end": "结束时间"
 }

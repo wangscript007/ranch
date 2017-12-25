@@ -38,12 +38,14 @@
         <module>ranch-captcha</module>
         <module>ranch-captcha-helper</module>
         <module>ranch-chrome</module>
+        <module>ranch-transfer</module>
+        <module>ranch-transfer-helper</module>
+        <module>ranch-form</module>
         <module>ranch-push</module>
         <module>ranch-archives</module>
         <module>ranch-web</module>
         <module>ranch-console</module>
         <module>ranch-test</module>
-        <module>ranch-form</module>
     </modules>
 
     <properties>

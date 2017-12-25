@@ -108,6 +108,11 @@
         </dependency>
         <dependency>
             <groupId>org.lpw.ranch</groupId>
+            <artifactId>ranch-transfer</artifactId>
+            <version>${version.ranch}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.lpw.ranch</groupId>
             <artifactId>ranch-push</artifactId>
             <version>${version.ranch}</version>
         </dependency>

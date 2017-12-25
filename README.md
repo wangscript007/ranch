@@ -29,6 +29,9 @@ Ranch目前包含以下模块：
 - [payment-helper](ranch-payment-helper/) —— 支付支持。
 - [alipay](ranch-alipay/) —— 支付宝。
 - [link](ranch-link/) —— 关联。
+- [captcha](ranch-captcha/) —— 验证码。
+- [chrome](ranch-chrome/) —— Chrome工具。
+- [transfer](ranch-transfer/) —— 转账。
 - [archives](ranch-archives/) —— 档案。
 - [web](ranch-web/) —— API web。
 - [console](ranch-console/) —— 控制台web。

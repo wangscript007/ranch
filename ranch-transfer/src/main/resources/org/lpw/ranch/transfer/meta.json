@@ -1,0 +1,57 @@
+{
+    "key": "ranch.transfer",
+    "props": [
+        {
+            "name": "type"
+        },
+        {
+            "name": "appId"
+        },
+        {
+            "name": "user.code",
+            "label": "ranch.transfer.user"
+        },
+        {
+            "name": "amount"
+        },
+        {
+            "name": "orderNo"
+        },
+        {
+            "name": "billNo"
+        },
+        {
+            "name": "tradeNo"
+        },
+        {
+            "name": "state"
+        },
+        {
+            "name": "notice"
+        },
+        {
+            "name": "start"
+        },
+        {
+            "name": "end"
+        }
+    ],
+    "query": {
+        "page": "grid",
+        "ops": [
+            {
+                "when": {
+                    "state": 0
+                },
+                "label": "ranch.transfer.success",
+                "service": "success",
+                "success": "query"
+            },
+            {
+                "label": "ranch.transfer.notice",
+                "service": "notice",
+                "success": "query"
+            }
+        ]
+    }
+}

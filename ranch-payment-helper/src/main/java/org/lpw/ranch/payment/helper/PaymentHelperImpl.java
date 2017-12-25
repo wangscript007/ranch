@@ -7,6 +7,7 @@ import org.lpw.ranch.lock.LockHelper;
 import org.lpw.ranch.util.Carousel;
 import org.lpw.tephra.bean.BeanFactory;
 import org.lpw.tephra.bean.ContextRefreshedListener;
+import org.lpw.tephra.crypto.Sign;
 import org.lpw.tephra.ctrl.context.Request;
 import org.lpw.tephra.scheduler.SecondsJob;
 import org.lpw.tephra.util.DateTime;
@@ -33,6 +34,8 @@ public class PaymentHelperImpl implements PaymentHelper, SecondsJob, ContextRefr
     private Numeric numeric;
     @Inject
     private DateTime dateTime;
+    @Inject
+    private Sign sign;
     @Inject
     private Request request;
     @Inject
@@ -66,6 +69,7 @@ public class PaymentHelperImpl implements PaymentHelper, SecondsJob, ContextRefr
         parameter.put("amount", numeric.toString(amount, "0"));
         parameter.put("tradeNo", tradeNo);
         parameter.put("state", numeric.toString(state, "0"));
+        sign.put(parameter, null);
         JSONObject object = carousel.service(key + ".complete", null, parameter, false, JSONObject.class);
 
         return object.getString("orderNo");

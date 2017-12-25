@@ -38,7 +38,7 @@ public class WeixinCtrl {
     private WeixinService weixinService;
 
     @Execute(name = "query", validates = {
-            @Validate(validator = Validators.SIGN)
+            @Validate(validator = Validators.SIGN, string = {"ranch-weixin"})
     })
     public Object query() {
         return weixinService.query();
@@ -55,7 +55,7 @@ public class WeixinCtrl {
             @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "token", failureCode = 9),
             @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "mchId", failureCode = 10),
             @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "mchKey", failureCode = 11),
-            @Validate(validator = Validators.SIGN),
+            @Validate(validator = Validators.SIGN, string = {"ranch-weixin"}),
             @Validate(validator = WeixinService.VALIDATOR_NOT_EXISTS, parameters = {"key", "appId"}, failureCode = 12)
 
     })
@@ -65,7 +65,7 @@ public class WeixinCtrl {
 
     @Execute(name = "delete", validates = {
             @Validate(validator = Validators.ID, parameter = "id", failureCode = 1),
-            @Validate(validator = Validators.SIGN)
+            @Validate(validator = Validators.SIGN, string = {"ranch-weixin"})
     })
     public Object delete() {
         weixinService.delete(request.get("id"));
@@ -96,7 +96,6 @@ public class WeixinCtrl {
     @Execute(name = "auth", validates = {
             @Validate(validator = Validators.NOT_EMPTY, parameter = "key", failureCode = 2),
             @Validate(validator = Validators.NOT_EMPTY, parameter = "code", failureCode = 51),
-            @Validate(validator = Validators.SIGN),
             @Validate(validator = WeixinService.VALIDATOR_EXISTS, parameter = "key", failureCode = 52)
     })
     public Object auth() {
