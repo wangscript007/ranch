@@ -23,3 +23,5 @@
 [发起PC WEB端支付](doc/fast-instant-trade-pay.md)
 
 [发起APP端支付](doc/quick-msecurity-pay.md)
+
+[转账](doc/transfer.md)
