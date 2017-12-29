@@ -135,6 +135,14 @@ public class UserCtrl {
         return templates.get().success(userService.findByUid(request.get("uid")), null);
     }
 
+    @Execute(name = "find-sign", validates = {
+            @Validate(validator = Validators.NOT_EMPTY, parameter = "idUidCode", failureCode = 31),
+            @Validate(validator = Validators.SIGN)
+    })
+    public Object findOrSign() {
+        return userService.findOrSign(request.get("idUidCode"));
+    }
+
     @Execute(name = "query", validates = {
             @Validate(validator = Validators.MOBILE, emptyable = true, parameter = "mobile", failureCode = 9),
             @Validate(validator = Validators.SIGN)

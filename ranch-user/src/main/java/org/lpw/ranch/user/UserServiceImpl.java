@@ -246,6 +246,10 @@ public class UserServiceImpl implements UserService {
         return true;
     }
 
+    private String password(String password) {
+        return digest.md5(UserModel.NAME + digest.sha1(password + UserModel.NAME));
+    }
+
     @Override
     public void portrait(String uri) {
         UserModel user = session.get(SESSION);
@@ -269,6 +273,16 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public UserModel findById(String id) {
+        String cacheKey = CACHE_MODEL + id;
+        UserModel user = cache.get(cacheKey);
+        if (user == null)
+            cache.put(cacheKey, user = userDao.findById(id), false);
+
+        return user;
+    }
+
+    @Override
     public JSONObject findByCode(String code) {
         String cacheKey = CACHE_JSON + code;
         JSONObject object = cache.get(cacheKey);
@@ -278,6 +292,32 @@ public class UserServiceImpl implements UserService {
         }
 
         return object;
+    }
+
+    @Override
+    public JSONObject findByUid(String uid) {
+        String cacheKey = CACHE_JSON + uid;
+        JSONObject object = cache.get(cacheKey);
+        if (object == null) {
+            UserModel user = findById(authService.findByUid(uid).getUser());
+            cache.put(cacheKey, object = user == null ? new JSONObject() : getJson(user.getId(), user), false);
+        }
+
+        return object;
+    }
+
+    @Override
+    public JSONObject findOrSign(String idUidCode) {
+        UserModel user = findById(idUidCode);
+        if (user == null) {
+            AuthModel auth = authService.findByUid(idUidCode);
+            if (auth != null)
+                user = findById(auth.getUser());
+        }
+        if (user == null)
+            user = userDao.findByCode(idUidCode);
+
+        return user == null ? sign() : modelHelper.toJson(user);
     }
 
     private JSONObject getJson(String id, UserModel user) {
@@ -296,32 +336,6 @@ public class UserServiceImpl implements UserService {
         }
 
         return object;
-    }
-
-    @Override
-    public UserModel findById(String id) {
-        String cacheKey = CACHE_MODEL + id;
-        UserModel user = cache.get(cacheKey);
-        if (user == null)
-            cache.put(cacheKey, user = userDao.findById(id), false);
-
-        return user;
-    }
-
-    @Override
-    public JSONObject findByUid(String uid) {
-        String cacheKey = CACHE_JSON + uid;
-        JSONObject object = cache.get(cacheKey);
-        if (object == null) {
-            UserModel user = findById(authService.findByUid(uid).getUser());
-            cache.put(cacheKey, object = user == null ? new JSONObject() : getJson(user.getId(), user), false);
-        }
-
-        return object;
-    }
-
-    private String password(String password) {
-        return digest.md5(UserModel.NAME + digest.sha1(password + UserModel.NAME));
     }
 
     @Override

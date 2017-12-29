@@ -72,8 +72,12 @@ public class CarouselImpl implements Carousel {
         put(map, this.header.getMap());
         put(map, header);
         String service = carouselHelper.service(key, map, parameter, cacheTime);
+        if(validator.isEmpty(service))
+            return new JSONObject();
 
-        return validator.isEmpty(service) ? new JSONObject() : json.toObject(service);
+        JSONObject object=json.toObject(service);
+
+        return object==null ? new JSONObject() : json.toObject(service);
     }
 
     private void put(Map<String, String> map, Map<String, String> header) {

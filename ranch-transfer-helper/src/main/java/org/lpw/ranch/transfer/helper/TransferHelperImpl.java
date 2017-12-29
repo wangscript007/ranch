@@ -97,6 +97,7 @@ public class TransferHelperImpl implements TransferHelper, SecondsJob, ContextRe
         parameter.put("state", "0");
         parameter.put("pageSize", "1024");
         parameter.put("pageNum", "1");
+        sign.put(parameter, null);
         JSONArray array = carousel.service(key + ".query", null, parameter, false, JSONObject.class).getJSONArray("list");
         if (array.isEmpty()) {
             lockHelper.unlock(lockId);

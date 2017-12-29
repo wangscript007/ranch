@@ -55,6 +55,20 @@ public class UserHelperImpl extends ServiceHelperSupport implements UserHelper {
     }
 
     @Override
+    public JSONObject findOrSign(String idUidCode) {
+        if (validator.isEmpty(idUidCode))
+            return new JSONObject();
+
+        if (uidKey == null)
+            uidKey = key + ".find-sign";
+
+        Map<String, String> parameter = new HashMap<>();
+        parameter.put("idUidCode", idUidCode);
+
+        return carousel.service(uidKey, null, parameter, true, JSONObject.class);
+    }
+
+    @Override
     public boolean exists(String id) {
         return get(id).size() > 1;
     }

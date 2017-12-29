@@ -121,6 +121,14 @@ public interface UserService {
     void portrait(String uri);
 
     /**
+     * 获取用户数据。
+     *
+     * @param id ID值。
+     * @return 用户数据；不存在则返回null。
+     */
+    UserModel findById(String id);
+
+    /**
      * 获取用户数据集。
      *
      * @param ids ID集。
@@ -139,18 +147,18 @@ public interface UserService {
     /**
      * 获取用户数据。
      *
-     * @param id ID值。
-     * @return 用户数据；不存在则返回null。
-     */
-    UserModel findById(String id);
-
-    /**
-     * 获取用户数据。
-     *
      * @param uid UID值。
      * @return 用户数据；不存在则返回空JSON。
      */
     JSONObject findByUid(String uid);
+
+    /**
+     * 查找用户或当前用户。
+     *
+     * @param idUidCode 用户ID或UID或code值。
+     * @return 用户信息，不存在且未登入则返回空JSON{}。
+     */
+    JSONObject findOrSign(String idUidCode);
 
     /**
      * 检索用户信息集。

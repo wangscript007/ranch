@@ -52,6 +52,14 @@ public interface UserHelper {
     JSONObject findByUid(String uid);
 
     /**
+     * 查找用户或当前用户。
+     *
+     * @param idUidCode 用户ID或UID或code值。
+     * @return 用户信息，不存在且未登入则返回空JSON{}。
+     */
+    JSONObject findOrSign(String idUidCode);
+
+    /**
      * 根据UID获取用户ID值。
      *
      * @param uid          UID值。
