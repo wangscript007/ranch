@@ -10,7 +10,7 @@ import javax.inject.Inject;
  * @author lpw
  */
 @Controller(FormModel.NAME + ".ctrl")
-@Execute(name = "/form/", key = FormModel.NAME, code = "0")
+@Execute(name = "/form/", key = FormModel.NAME, code = "32")
 public class FormCtrl {
     @Inject
     private Request request;
