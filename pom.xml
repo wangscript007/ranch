@@ -44,6 +44,7 @@
         <module>ranch-push-helper</module>
         <module>ranch-form</module>
         <module>ranch-archives</module>
+        <module>ranch-console</module>
         <module>ranch-web</module>
         <module>ranch-test</module>
     </modules>
