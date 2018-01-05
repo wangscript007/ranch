@@ -36,7 +36,7 @@
         }
     ],
     "query": {
-        "page": "grid",
+        "type": "grid",
         "ops": [
             {
                 "type": "modify"
@@ -54,7 +54,7 @@
         ]
     },
     "create": {
-        "page": "form",
+        "type": "form",
         "toolbar": [
             {
                 "type": "save",
@@ -65,7 +65,7 @@
         ]
     },
     "modify": {
-        "page": "form",
+        "type": "form",
         "toolbar": [
             {
                 "type": "save",

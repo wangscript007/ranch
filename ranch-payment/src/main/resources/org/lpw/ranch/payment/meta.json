@@ -37,7 +37,7 @@
         }
     ],
     "query": {
-        "page": "grid",
+        "type": "grid",
         "ops": [
             {
                 "when": {

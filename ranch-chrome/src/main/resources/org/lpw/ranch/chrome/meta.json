@@ -35,7 +35,7 @@
         }
     ],
     "query": {
-        "page": "grid",
+        "type": "grid",
         "search": [
             {
                 "name": "key"
@@ -61,7 +61,7 @@
         ]
     },
     "create": {
-        "page": "form",
+        "type": "form",
         "toolbar": [
             {
                 "type": "save",
@@ -72,7 +72,7 @@
         ]
     },
     "modify": {
-        "page": "form",
+        "type": "form",
         "toolbar": [
             {
                 "type": "save",

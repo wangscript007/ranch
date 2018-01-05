@@ -1,20 +1,38 @@
 {
-    "key": "ranch.alipay",
+    "key": "ranch.user",
     "props": [
         {
-            "name": "key"
+            "name": "idcard"
         },
         {
             "name": "name"
         },
         {
-            "name": "appId"
+            "name": "nick"
         },
         {
-            "name": "privateKey"
+            "name": "mobile"
         },
         {
-            "name": "publicKey"
+            "name": "email"
+        },
+        {
+            "name": "gender"
+        },
+        {
+            "name": "birthday"
+        },
+        {
+            "name": "code"
+        },
+        {
+            "name": "register"
+        },
+        {
+            "name": "grade"
+        },
+        {
+            "name": "state"
         }
     ],
     "query": {
@@ -22,11 +40,6 @@
         "ops": [
             {
                 "type": "modify"
-            },
-            {
-                "type": "delete",
-                "service": "delete",
-                "success": "query"
             }
         ],
         "toolbar": [

@@ -54,7 +54,7 @@
         }
     ],
     "query": {
-        "page": "grid",
+        "type": "grid",
         "search": [
             {
                 "name": "uid"
