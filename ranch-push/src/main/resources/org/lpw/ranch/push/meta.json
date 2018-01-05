@@ -1,0 +1,63 @@
+{
+    "key": "ranch.push",
+    "props": [
+        {
+            "name": "key"
+        },
+        {
+            "name": "sender"
+        },
+        {
+            "name": "subject"
+        },
+        {
+            "name": "content"
+        },
+        {
+            "name": "state"
+        },
+        {
+            "name": "time"
+        }
+    ],
+    "query": {
+        "type": "grid",
+        "ops": [
+            {
+                "type": "modify"
+            },
+            {
+                "type": "delete",
+                "service": "delete",
+                "success": "query"
+            }
+        ],
+        "toolbar": [
+            {
+                "type": "create"
+            }
+        ]
+    },
+    "create": {
+        "type": "form",
+        "toolbar": [
+            {
+                "type": "save",
+                "service": "save",
+                "success": "query",
+                "data": "true"
+            }
+        ]
+    },
+    "modify": {
+        "type": "form",
+        "toolbar": [
+            {
+                "type": "save",
+                "service": "save",
+                "success": "query",
+                "data": "true"
+            }
+        ]
+    }
+}

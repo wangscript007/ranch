@@ -1,5 +1,14 @@
 [
     {
+        "name": "配置",
+        "items": [
+            {
+                "name": "推送",
+                "service": "ranch.push.query"
+            }
+        ]
+    },
+    {
         "name": "系统",
         "items": [
             {
