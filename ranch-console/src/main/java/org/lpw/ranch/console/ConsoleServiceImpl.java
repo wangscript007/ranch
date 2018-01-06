@@ -2,7 +2,6 @@ package org.lpw.ranch.console;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import org.lpw.ranch.classify.helper.ClassifyHelper;
 import org.lpw.ranch.user.helper.UserHelper;
 import org.lpw.ranch.util.Carousel;
 import org.lpw.ranch.util.MetaHelper;
@@ -17,6 +16,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
+import java.util.Arrays;
 import java.util.Map;
 
 /**
@@ -39,8 +39,6 @@ public class ConsoleServiceImpl implements ConsoleService, StorageListener {
     @Inject
     private MetaHelper metaHelper;
     @Inject
-    private ClassifyHelper classifyHelper;
-    @Inject
     private UserHelper userHelper;
     @Value("${" + ConsoleModel.NAME + ".menu:/WEB-INF/menu.json}")
     private String menu;
@@ -53,59 +51,59 @@ public class ConsoleServiceImpl implements ConsoleService, StorageListener {
 
     @Override
     public JSONArray menus() {
-        if (!permit())
-            return new JSONArray();
-
-        String menu = classifyHelper.value(ConsoleModel.NAME, "menu");
-        if (validator.isEmpty(menu))
-            return menus;
-
-        return json.toArray(menu);
+        return permit() ? menus : new JSONArray();
     }
 
     @Override
     public JSONObject meta(String key) {
-        JSONObject meta = json.toObject(classifyHelper.value(ConsoleModel.NAME + ".meta", key));
-        if (meta == null)
-            meta = metaHelper.get(key);
+        JSONObject meta = metaHelper.get(key);
         if (meta == null)
             return new JSONObject();
 
-        String prefix = meta.getString("key") + ".";
-        setLabel(prefix, meta, "props", "name", "select");
+        meta = json.toObject(meta.toJSONString());
+        String prefix = meta.getString("key");
+        setLabel(prefix, meta, "props", "name");
         for (String k : meta.keySet()) {
             if (k.equals("key") || k.equals("props"))
                 continue;
 
             JSONObject object = meta.getJSONObject(k);
             if (object.containsKey("search"))
-                setLabel(prefix, object, "search", "name", null);
+                setLabel(prefix, object, "search", "name");
             if (object.containsKey("ops"))
-                setLabel(prefix, object, "ops", null, null);
+                setLabel("ranch.console.op", object, "ops", "type");
             if (object.containsKey("toolbar"))
-                setLabel(prefix, object, "toolbar", null, null);
+                setLabel("ranch.console.op", object, "toolbar", "type");
         }
 
         return meta;
     }
 
-    private void setLabel(String prefix, JSONObject object, String key, String k, String child) {
+    private void setLabel(String prefix, JSONObject object, String key, String k) {
         JSONArray array = object.getJSONArray(key);
         for (int i = 0, size = array.size(); i < size; i++)
-            setLabel(prefix, array.getJSONObject(i), k, child);
+            setLabel(prefix, array.getJSONObject(i), k);
     }
 
-    private void setLabel(String prefix, JSONObject object, String key, String child) {
+    private void setLabel(String prefix, JSONObject object, String key) {
         String label = null;
-        if (object.containsKey("label"))
+        if (object.containsKey("label")) {
             label = object.getString("label");
-        else if (key != null && object.containsKey(key))
-            label = prefix + object.getString(key);
+            if (label.charAt(0) == '.')
+                label = prefix + label;
+        } else if (key != null && object.containsKey(key))
+            label = prefix + "." + object.getString(key);
         if (label != null)
             object.put("label", message.get(label));
 
-        if (child != null && object.containsKey(child))
-            setLabel(prefix, object.getJSONObject(child), key, child);
+        if (object.containsKey("labels")) {
+            String labels = object.getString("labels");
+            if (labels.charAt(0) == '.')
+                labels = prefix + labels;
+            JSONArray array = new JSONArray();
+            array.addAll(Arrays.asList(message.getAsArray(labels)));
+            object.put("labels", array);
+        }
     }
 
     @Override
