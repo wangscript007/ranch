@@ -24,6 +24,8 @@ import java.util.Map;
  */
 @Service(ConsoleModel.NAME + ".service")
 public class ConsoleServiceImpl implements ConsoleService, StorageListener {
+    private static final String[] SERVICES = {"service", "success"};
+
     @Inject
     private Validator validator;
     @Inject
@@ -104,6 +106,10 @@ public class ConsoleServiceImpl implements ConsoleService, StorageListener {
             array.addAll(Arrays.asList(message.getAsArray(labels)));
             object.put("labels", array);
         }
+    }
+
+    private void setService(String prefix, JSONObject object) {
+
     }
 
     @Override

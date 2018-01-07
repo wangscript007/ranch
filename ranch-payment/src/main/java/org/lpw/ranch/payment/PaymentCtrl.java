@@ -24,6 +24,8 @@ public class PaymentCtrl {
     @Inject
     private Request request;
     @Inject
+    private UserHelper userHelper;
+    @Inject
     private PaymentService paymentService;
 
     @Execute(name = "query", validates = {
@@ -35,6 +37,18 @@ public class PaymentCtrl {
             state = "-1";
 
         return paymentService.query(request.get("type"), request.get("appId"), request.get("user"), request.get("orderNo"),
+                request.get("billNo"), request.get("tradeNo"), numeric.toInt(state), request.get("start"), request.get("end"));
+    }
+
+    @Execute(name = "uquery", validates = {
+            @Validate(validator = UserHelper.VALIDATOR_SIGN_IN)
+    })
+    public Object uquery() {
+        String state = request.get("state");
+        if (validator.isEmpty(state))
+            state = "-1";
+
+        return paymentService.query(request.get("type"), request.get("appId"), userHelper.id(), request.get("orderNo"),
                 request.get("billNo"), request.get("tradeNo"), numeric.toInt(state), request.get("start"), request.get("end"));
     }
 
