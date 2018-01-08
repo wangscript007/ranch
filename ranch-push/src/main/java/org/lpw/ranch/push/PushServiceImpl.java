@@ -5,6 +5,7 @@ import org.lpw.ranch.util.Pagination;
 import org.lpw.tephra.bean.BeanFactory;
 import org.lpw.tephra.bean.ContextRefreshedListener;
 import org.lpw.tephra.dao.model.ModelHelper;
+import org.lpw.tephra.freemarker.Freemarker;
 import org.lpw.tephra.util.Validator;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +20,8 @@ import java.util.Map;
 public class PushServiceImpl implements PushService, ContextRefreshedListener {
     @Inject
     private Validator validator;
+    @Inject
+    private Freemarker freemarker;
     @Inject
     private ModelHelper modelHelper;
     @Inject
@@ -66,8 +69,11 @@ public class PushServiceImpl implements PushService, ContextRefreshedListener {
 
     private void setState(PushModel push, int state) {
         push.setState(state);
-        if (state == 1)
+        if (state == 1) {
             pushDao.state(push.getKey(), 1, 0);
+            freemarker.putStringTemplate(push.getKey() + ":subject", push.getSubject());
+            freemarker.putStringTemplate(push.getKey() + ":content", push.getContent());
+        }
         pushDao.save(push);
     }
 

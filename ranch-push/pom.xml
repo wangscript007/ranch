@@ -13,7 +13,19 @@
     <name>ranch-push</name>
     <url>http://maven.apache.org</url>
 
+    <repositories>
+        <repository>
+            <id>ranch-push-aliyun-repository</id>
+            <url>file:///${project.basedir}/lib</url>
+        </repository>
+    </repositories>
+
     <dependencies>
+        <dependency>
+            <groupId>com.aliyun</groupId>
+            <artifactId>taobao-sdk-java-auto_1455552377940</artifactId>
+            <version>20160607</version>
+        </dependency>
         <dependency>
             <groupId>org.lpw.ranch</groupId>
             <artifactId>ranch-base</artifactId>

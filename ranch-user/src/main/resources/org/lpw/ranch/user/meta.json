@@ -55,9 +55,8 @@
         "toolbar": [
             {
                 "type": "save",
-                "service": "save",
-                "success": "query",
-                "data": "true"
+                "service": ".save",
+                "success": ".query"
             }
         ]
     },
@@ -66,9 +65,8 @@
         "toolbar": [
             {
                 "type": "save",
-                "service": "save",
-                "success": "query",
-                "data": "true"
+                "service": ".save",
+                "success": ".query"
             }
         ]
     }
