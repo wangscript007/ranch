@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+
 import java.sql.Timestamp;
 
 /**
@@ -25,6 +26,8 @@ public class PushModel extends ModelSupport {
     private String sender; // 推送器
     private String subject; // 标题
     private String content; // 内容
+    private String template; // 模板
+    private String name; // 发送者名称
     private int state; // 状态：0-待审核；1-使用中
     private Timestamp time; // 时间
 
@@ -66,6 +69,26 @@ public class PushModel extends ModelSupport {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    @Jsonable
+    @Column(name = "c_template")
+    public String getTemplate() {
+        return template;
+    }
+
+    public void setTemplate(String template) {
+        this.template = template;
+    }
+
+    @Jsonable
+    @Column(name = "c_name")
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     @Jsonable

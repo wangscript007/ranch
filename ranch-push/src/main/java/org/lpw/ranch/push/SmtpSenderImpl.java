@@ -3,6 +3,8 @@ package org.lpw.ranch.push;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import org.lpw.tephra.bean.ContextRefreshedListener;
+import org.lpw.tephra.dao.model.ModelHelper;
+import org.lpw.tephra.freemarker.Freemarker;
 import org.lpw.tephra.util.Context;
 import org.lpw.tephra.util.Generator;
 import org.lpw.tephra.util.Json;
@@ -37,7 +39,13 @@ public class SmtpSenderImpl implements PushSender, ContextRefreshedListener {
     @Inject
     private Context context;
     @Inject
+    private Freemarker freemarker;
+    @Inject
     private Logger logger;
+    @Inject
+    private ModelHelper modelHelper;
+    @Inject
+    private PushService pushService;
     @Value("${" + PushModel.NAME + ".sender.smtp:}")
     private String smtp;
     private List<Sender> senders;
@@ -48,7 +56,7 @@ public class SmtpSenderImpl implements PushSender, ContextRefreshedListener {
     }
 
     @Override
-    public boolean send(String receiver, String subject, String content) {
+    public boolean send(PushModel push, String receiver, JSONObject args) {
         if (senders.isEmpty())
             return false;
 
@@ -57,15 +65,15 @@ public class SmtpSenderImpl implements PushSender, ContextRefreshedListener {
             MimeMessage message = new MimeMessage(sender.session);
             message.setFrom(new InternetAddress(sender.fromEmail, sender.fromName, context.getCharset(null)));
             message.setRecipient(Message.RecipientType.TO, new InternetAddress(receiver));
-            message.setSubject(subject, context.getCharset(null));
-            message.setText(content, context.getCharset(null));
+            message.setSubject(pushService.parse(PushService.Type.Subject, push.getKey(), push.getSubject(), args), context.getCharset(null));
+            message.setText(pushService.parse(PushService.Type.Content, push.getKey(), push.getContent(), args), context.getCharset(null));
             Transport transport = sender.session.getTransport();
             transport.sendMessage(message, message.getAllRecipients());
             transport.close();
 
             return true;
         } catch (Exception e) {
-            logger.warn(e, "发送SMTP邮件[{}:{}:{}]时发生异常！", receiver, subject, content);
+            logger.warn(e, "发送SMTP邮件[{}:{}:{}]时发生异常！", receiver, modelHelper.toJson(push), args);
 
             return false;
         }
@@ -93,7 +101,6 @@ public class SmtpSenderImpl implements PushSender, ContextRefreshedListener {
             properties.put("mail.smtp.host", object.getString("host"));
             properties.put("mail.smtp.port", object.getString("port"));
             properties.put("mail.smtp.auth", "true");
-            properties.put("mail.user", object.getString("from"));
             senders.add(new Sender(Session.getDefaultInstance(properties, new Authenticator() {
                 @Override
                 protected PasswordAuthentication getPasswordAuthentication() {

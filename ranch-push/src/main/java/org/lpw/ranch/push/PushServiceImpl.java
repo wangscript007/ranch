@@ -46,7 +46,7 @@ public class PushServiceImpl implements PushService, ContextRefreshedListener {
     }
 
     @Override
-    public JSONObject save(String id, String key, String sender, String subject, String content, int state) {
+    public JSONObject save(String id, String key, String sender, String subject, String content, String template, String name, int state) {
         PushModel push = validator.isEmpty(id) ? new PushModel() : pushDao.findById(id);
         if (push == null)
             push = new PushModel();
@@ -54,6 +54,8 @@ public class PushServiceImpl implements PushService, ContextRefreshedListener {
         push.setSender(sender);
         push.setSubject(subject);
         push.setContent(content);
+        push.setTemplate(template);
+        push.setName(name);
         setState(push, state);
 
         return modelHelper.toJson(push);
@@ -88,18 +90,19 @@ public class PushServiceImpl implements PushService, ContextRefreshedListener {
     }
 
     @Override
-    public boolean send(String key, String receiver, Map<String, String> map) {
+    public boolean send(String key, String receiver, JSONObject args) {
         PushModel push = findByKey(key);
 
-        return senders.get(push.getSender()).send(receiver, replace(push.getSubject(), map), replace(push.getContent(), map));
+        return senders.get(push.getSender()).send(push, receiver, args);
     }
 
-    private String replace(String string, Map<String, String> map) {
-        for (String key : map.keySet())
-            if (string.contains(key))
-                string = string.replaceAll(key, map.get(key));
+    @Override
+    public String parse(Type type, String key, String template, JSONObject args) {
+        String templateKey = key + (type == Type.Subject ? ":subject" : ":content");
+        if (!freemarker.containsStringTemplate(templateKey))
+            freemarker.putStringTemplate(templateKey, template);
 
-        return string;
+        return freemarker.process(templateKey, args);
     }
 
     @Override
