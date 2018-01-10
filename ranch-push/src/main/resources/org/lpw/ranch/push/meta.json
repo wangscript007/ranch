@@ -11,7 +11,8 @@
             "name": "subject"
         },
         {
-            "name": "content"
+            "name": "content",
+            "type": "text-area"
         },
         {
             "name": "template"
@@ -20,10 +21,12 @@
             "name": "name"
         },
         {
-            "name": "state"
+            "name": "state",
+            "labels": ".states"
         },
         {
-            "name": "time"
+            "name": "time",
+            "type": "read-only"
         }
     ],
     "query": {
@@ -34,8 +37,8 @@
             },
             {
                 "type": "delete",
-                "service": "delete",
-                "success": "query"
+                "service": ".delete",
+                "success": ".query"
             }
         ],
         "toolbar": [
@@ -49,9 +52,8 @@
         "toolbar": [
             {
                 "type": "save",
-                "service": "save",
-                "success": "query",
-                "data": "true"
+                "service": ".save",
+                "success": ".query"
             }
         ]
     },
@@ -60,9 +62,8 @@
         "toolbar": [
             {
                 "type": "save",
-                "service": "save",
-                "success": "query",
-                "data": "true"
+                "service": ".save",
+                "success": ".query"
             }
         ]
     }

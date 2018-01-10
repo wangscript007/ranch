@@ -22,6 +22,11 @@
 
     <dependencies>
         <dependency>
+            <groupId>javax.mail</groupId>
+            <artifactId>javax.mail-api</artifactId>
+            <version>LATEST</version>
+        </dependency>
+        <dependency>
             <groupId>com.aliyun</groupId>
             <artifactId>taobao-sdk-java-auto_1455552377940</artifactId>
             <version>20160607</version>
