@@ -1,20 +1,14 @@
-# 保存配置
+# 修改状态
 
 请求
-- Service Key - ranch.push.save
-- URI - /push/save
+- Service Key - ranch.push.state
+- URI - /push/state
 
 参数
 
 |名称|类型|说明|
 |---|---|---|
 |id|char(36)|ID值。|
-|key|char(100)|引用键。|
-|sender|char(100)|推送器，可选值见下表。|
-|subject|char(100)|标题。|
-|content|char(100)|内容。|
-|template|char(100)|模板ID。|
-|name|char(100)|发送者名称。|
 |state|int|状态：0-待审核；1-使用中。|
 
 返回值

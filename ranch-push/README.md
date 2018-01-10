@@ -23,3 +23,11 @@ sender可选值
 |sms.aliyun|阿里云（大于）短信。|
 
 [检索推送配置集](doc/query.md)
+
+[保存配置](doc/save.md)
+
+[修改状态](doc/state.md)
+
+[删除配置](doc/delete.md)
+
+[推送](doc/send.md)

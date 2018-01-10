@@ -69,6 +69,14 @@ public interface UserHelper {
     String findIdByUid(String uid, String defaultValue);
 
     /**
+     * 获取用户的UID集。
+     *
+     * @param id 用户ID。
+     * @return UID集。
+     */
+    String[] uids(String id);
+
+    /**
      * 判断ID是否存在。
      *
      * @param id ID值。

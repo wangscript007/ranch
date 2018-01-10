@@ -1,5 +1,6 @@
 package org.lpw.ranch.user.helper;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import org.lpw.ranch.util.ServiceHelperSupport;
 import org.springframework.beans.factory.annotation.Value;
@@ -66,6 +67,23 @@ public class UserHelperImpl extends ServiceHelperSupport implements UserHelper {
         parameter.put("idUidCode", idUidCode);
 
         return carousel.service(uidKey, null, parameter, true, JSONObject.class);
+    }
+
+    @Override
+    public String[] uids(String id) {
+        JSONObject object = get(id);
+        if (object == null || !object.containsKey(id))
+            return new String[0];
+
+        JSONArray auth = object.getJSONObject(id).getJSONArray("auth");
+        if (validator.isEmpty(auth))
+            return new String[0];
+
+        String[] uids = new String[auth.size()];
+        for (int i = 0; i < uids.length; i++)
+            uids[i] = auth.getJSONObject(i).getString("uid");
+
+        return uids;
     }
 
     @Override
