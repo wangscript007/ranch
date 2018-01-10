@@ -9,7 +9,7 @@ CREATE TABLE t_push
   c_template VARCHAR(255) DEFAULT NULL COMMENT '模板',
   c_name VARCHAR(255) DEFAULT NULL COMMENT '发送者名称',
   c_state INT DEFAULT 0 COMMENT '状态：0-待审核；1-使用中',
-  c_time DATETIME DEFAULT NULL COMMENT '时间',
+  c_time DATETIME DEFAULT NULL COMMENT '最后更新时间',
 
   PRIMARY KEY pk(c_id) USING HASH,
   KEY k_key_state(c_key,c_state) USING BTREE

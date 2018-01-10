@@ -29,7 +29,7 @@ public class PushModel extends ModelSupport {
     private String template; // 模板
     private String name; // 发送者名称
     private int state; // 状态：0-待审核；1-使用中
-    private Timestamp time; // 时间
+    private Timestamp time; // 最后更新时间
 
     @Jsonable
     @Column(name = "c_key")

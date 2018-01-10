@@ -7,10 +7,20 @@
 |属性|类型|说明|
 |---|---|---|
 |key|char(100)|引用键。|
+|sender|char(100)|推送器，可选值见下表。|
 |subject|char(100)|标题。|
 |content|char(100)|内容。|
+|template|char(100)|模板ID。|
+|name|char(100)|发送者名称。|
 |state|int|状态：0-待审核；1-使用中。|
-|time|timestamp始时间。|
+|time|timestamp|最后更新时间。|
+
+sender可选值
+
+|属性|说明|
+|---|---|
+|smtp|SMTP推送。|
+|sms.aliyun|阿里云（大于）短信。|
 
 [检索推送配置集](doc/query.md)
 

@@ -14,6 +14,12 @@
             "name": "content"
         },
         {
+            "name": "template"
+        },
+        {
+            "name": "name"
+        },
+        {
             "name": "state"
         },
         {

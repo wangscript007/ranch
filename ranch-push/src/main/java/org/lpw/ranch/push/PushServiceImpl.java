@@ -6,6 +6,7 @@ import org.lpw.tephra.bean.BeanFactory;
 import org.lpw.tephra.bean.ContextRefreshedListener;
 import org.lpw.tephra.dao.model.ModelHelper;
 import org.lpw.tephra.freemarker.Freemarker;
+import org.lpw.tephra.util.DateTime;
 import org.lpw.tephra.util.Validator;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +21,8 @@ import java.util.Map;
 public class PushServiceImpl implements PushService, ContextRefreshedListener {
     @Inject
     private Validator validator;
+    @Inject
+    private DateTime dateTime;
     @Inject
     private Freemarker freemarker;
     @Inject
@@ -76,6 +79,7 @@ public class PushServiceImpl implements PushService, ContextRefreshedListener {
             freemarker.putStringTemplate(push.getKey() + ":subject", push.getSubject());
             freemarker.putStringTemplate(push.getKey() + ":content", push.getContent());
         }
+        push.setTime(dateTime.now());
         pushDao.save(push);
     }
 
