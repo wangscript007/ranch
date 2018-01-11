@@ -28,8 +28,13 @@
         </dependency>
         <dependency>
             <groupId>com.aliyun</groupId>
-            <artifactId>taobao-sdk-java-auto_1455552377940</artifactId>
-            <version>20160607</version>
+            <artifactId>aliyun-java-sdk-core</artifactId>
+            <version>LATEST</version>
+        </dependency>
+        <dependency>
+            <groupId>com.aliyun</groupId>
+            <artifactId>aliyun-java-sdk-dysmsapi</artifactId>
+            <version>LATEST</version>
         </dependency>
         <dependency>
             <groupId>org.lpw.ranch</groupId>

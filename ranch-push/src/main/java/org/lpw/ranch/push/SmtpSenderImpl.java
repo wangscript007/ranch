@@ -63,7 +63,7 @@ public class SmtpSenderImpl implements PushSender, ContextRefreshedListener {
         try {
             Sender sender = senders.get(generator.random(0, senders.size() - 1));
             MimeMessage message = new MimeMessage(sender.session);
-            message.setFrom(new InternetAddress(sender.fromEmail, sender.fromName, context.getCharset(null)));
+            message.setFrom(new InternetAddress(sender.from, push.getName(), context.getCharset(null)));
             message.setRecipient(Message.RecipientType.TO, new InternetAddress(receiver));
             message.setSubject(pushService.parse(PushService.Type.Subject, push.getKey(), push.getSubject(), args), context.getCharset(null));
             message.setText(pushService.parse(PushService.Type.Content, push.getKey(), push.getContent(), args), context.getCharset(null));
@@ -106,19 +106,20 @@ public class SmtpSenderImpl implements PushSender, ContextRefreshedListener {
                 protected PasswordAuthentication getPasswordAuthentication() {
                     return new PasswordAuthentication(object.getString("user"), object.getString("password"));
                 }
-            }), object.getJSONObject("from")));
+            }), object.getString("from")));
+
+            if (logger.isInfoEnable())
+                logger.info("初始化SMTP接口[{}]完成。", object.toJSONString());
         }
     }
 
     private class Sender {
         private Session session;
-        private String fromEmail;
-        private String fromName;
+        private String from;
 
-        private Sender(Session session, JSONObject from) {
+        private Sender(Session session, String from) {
             this.session = session;
-            fromEmail = from.getString("email");
-            fromName = from.getString("name");
+            this.from = from;
         }
     }
 }
