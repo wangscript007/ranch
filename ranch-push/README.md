@@ -31,3 +31,20 @@ sender可选值
 [删除配置](doc/delete.md)
 
 [推送](doc/send.md)
+
+## 参数设置与获取
+
+调用[推送](doc/send.md)接口时，可以传递JSON格式的参数给模板，如：
+```json
+{
+    "name": "ranch"
+}
+```
+则在设置标题和内容时，可以使用`${data.name}`获得该参数值。如：
+```text
+Hello ${data.name}
+```
+发送时将输出为：
+```text
+Hello ranch
+```

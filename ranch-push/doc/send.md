@@ -10,7 +10,7 @@
 |---|---|---|
 |key|string|引用键。|
 |receiver|string|接收账号：SMTP为Email，短信为手机号。|
-|json|string|配置参数集。|
+|args|string|配置参数集。|
 
 返回值
 ```
