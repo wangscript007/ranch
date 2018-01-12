@@ -1,0 +1,65 @@
+@import '../index';
+@import '../color';
+* {
+    font-size: 12px;
+    line-height: 20px;
+}
+
+#ranch-ui-console .layout-top {
+    width: 100%;
+    height: 32px;
+    position: fixed;
+    left: 0;
+    top: 0;
+    background-color: @color-main-dark;
+}
+
+#ranch-ui-console .layout-top .container {
+    padding: 0 8px;
+}
+
+#ranch-ui-console .layout-top .container a {
+    display: block;
+    float: right;
+    padding: 0 8px;
+    line-height: 32px;
+    font-size: 16px;
+    text-decoration: none;
+    color: @color-white;
+}
+
+#ranch-ui-console .layout-top .container a:hover {
+    background-color: @color-main-light;
+}
+
+#ranch-ui-console .layout-left {
+    width: 200px;
+    position: fixed;
+    left: 0;
+    top: 32px;
+    background-color: @color-gray-white;
+}
+
+#ranch-ui-console .layout-bottom {
+    height: 20px;
+    width: 200px;
+    position: fixed;
+    left: 0;
+    background-color: @color-main-light;
+    text-align: center;
+    color: @color-main-dark;
+}
+
+#ranch-ui-console .layout-bottom a {
+    color: @color-main-dark;
+    text-decoration: none;
+}
+
+#ranch-ui-console .layout-bottom a:hover {
+    text-decoration: underline;
+}
+
+#ranch-ui-console .layout-content {
+    margin-left: 200px;
+    padding: 36px 8px 8px 8px;
+}

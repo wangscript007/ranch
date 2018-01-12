@@ -1,0 +1,45 @@
+@import '../../../color';
+.form table {
+    width: 100%;
+}
+
+.form .line {
+    padding: 3px 0;
+}
+
+.form .line:nth-child(even) {
+    background-color: @color-gray-light;
+}
+
+.form .label {
+    width: 20%;
+    padding-right: 5px;
+    text-align: right;
+}
+
+.form .data {
+    width: 40%;
+    padding: 3px 0;
+}
+
+.form .data input,
+.form .data textarea,
+.form .data select {
+    width: 100%;
+}
+
+.form .data .read-only {
+    color: @color-gray;
+}
+
+.form .data .text-area {
+    line-height: 0;
+}
+
+.form .toolbar {
+    padding: 5px 0 5px 20%;
+}
+
+.form .toolbar button {
+    margin: 0 5px 0 0;
+}

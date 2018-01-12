@@ -24,10 +24,12 @@
             "name": "birthday"
         },
         {
-            "name": "code"
+            "name": "code",
+            "type": "read-only"
         },
         {
-            "name": "register"
+            "name": "register",
+            "type": "read-only"
         },
         {
             "name": "grade"
