@@ -8,7 +8,6 @@ import com.alibaba.fastjson.JSONObject;
  * @author lpw
  */
 public interface RecycleService {
-
     /**
      * 删除分类信息。
      *
