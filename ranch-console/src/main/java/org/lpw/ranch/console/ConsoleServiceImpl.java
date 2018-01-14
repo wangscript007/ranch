@@ -10,6 +10,7 @@ import org.lpw.tephra.storage.Storages;
 import org.lpw.tephra.util.Context;
 import org.lpw.tephra.util.Io;
 import org.lpw.tephra.util.Json;
+import org.lpw.tephra.util.Logger;
 import org.lpw.tephra.util.Message;
 import org.lpw.tephra.util.Validator;
 import org.springframework.beans.factory.annotation.Value;
@@ -34,6 +35,8 @@ public class ConsoleServiceImpl implements ConsoleService, StorageListener {
     private Json json;
     @Inject
     private Message message;
+    @Inject
+    private Logger logger;
     @Inject
     private Carousel carousel;
     @Inject
@@ -124,5 +127,7 @@ public class ConsoleServiceImpl implements ConsoleService, StorageListener {
     @Override
     public void onStorageChanged(String path, String absolutePath) {
         menus = json.toArray(io.readAsString(absolutePath));
+        if (logger.isInfoEnable())
+            logger.info("载入菜单配置[{}:{}]。", absolutePath, menus.toJSONString());
     }
 }
