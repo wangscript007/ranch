@@ -13,12 +13,12 @@ const pages = {
 };
 
 interface Props {
-
 }
 
 interface State {
     page: string;
     service?: string;
+    parameter?: string;
     meta?: Meta;
 }
 

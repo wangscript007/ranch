@@ -82,6 +82,7 @@ export default class Grid extends PageComponent<PageProps, PageState> {
         let key: string = op.service || '';
         if (key.charAt(0) == '.')
             key = this.props.meta.key + key;
+        console.log(key);
         service.to(key, this.parameter(data, op.parameter));
     }
 
@@ -92,6 +93,7 @@ export default class Grid extends PageComponent<PageProps, PageState> {
         let parameter = {};
         for (const key in param)
             parameter[key] = data[param[key]] || '';
+        console.log(JSON.stringify(parameter));
 
         return parameter;
     }

@@ -30,11 +30,12 @@ class Service {
         this.content = content;
     }
 
-    public to(service: string, data?: object): void {
+    public to(service: string, parameter?: object, data?: object): void {
         let indexOf = service.lastIndexOf('.');
         this.meta(service.substring(0, indexOf)).then(meta => this.content.setState({
             page: meta[service.substring(indexOf + 1)].type,
             service: service,
+            parameter: parameter,
             meta: meta,
             data: data
         }));

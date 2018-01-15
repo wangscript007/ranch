@@ -6,6 +6,7 @@ import { service } from '../service';
 export interface PageProps {
     meta: Meta;
     service: string;
+    parameter: object;
     data: object;
     random: string;
 }
@@ -22,7 +23,7 @@ export class PageComponent<T extends PageProps, E extends PageState> extends Rea
             return;
 
         this.random = this.props.random;
-        service.execute(this.props.service).then(data => this.setState({ data: data }));
+        service.execute(this.props.service, {}, this.props.parameter).then(data => this.setState({ data: data }));
     }
 }
 
