@@ -74,9 +74,25 @@ export default class Grid extends PageComponent<PageProps, PageState> {
         }
 
         if (op.type === 'delete') {
-            service.execute(this.props.meta.key + '.delete', {}, data, getSuccess(this.props.meta, op, ".query"));
+            service.execute(this.props.meta.key + '.delete', {}, { id: data['id'] }, getSuccess(this.props.meta, op, ".query"));
 
             return;
         }
+
+        let key: string = op.service || '';
+        if (key.charAt(0) == '.')
+            key = this.props.meta.key + key;
+        service.to(key, this.parameter(data, op.parameter));
+    }
+
+    private parameter(data: object, param?: object): object {
+        if (!param)
+            return data;
+
+        let parameter = {};
+        for (const key in param)
+            parameter[key] = data[param[key]] || '';
+
+        return parameter;
     }
 }

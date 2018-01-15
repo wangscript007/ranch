@@ -21,4 +21,5 @@ export interface Operate {
     label: string;
     service?: string;
     success?: string;
+    parameter?: object;
 }
