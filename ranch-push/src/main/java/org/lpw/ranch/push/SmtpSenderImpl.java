@@ -69,7 +69,7 @@ public class SmtpSenderImpl implements PushSender, ContextRefreshedListener {
             message.setFrom(new InternetAddress(sender.from, push.getName(), context.getCharset(null)));
             message.setRecipient(Message.RecipientType.TO, new InternetAddress(receiver));
             message.setSubject(pushService.parse(PushService.Type.Subject, push.getKey(), push.getSubject(), args), context.getCharset(null));
-            message.setContent(pushService.parse(PushService.Type.Content, push.getKey(), push.getContent(), args), "text/html");
+            message.setContent(pushService.parse(PushService.Type.Content, push.getKey(), push.getContent(), args), "text/html;charset=utf-8");
             message.setSentDate(dateTime.today());
             Transport transport = sender.session.getTransport();
             transport.connect();

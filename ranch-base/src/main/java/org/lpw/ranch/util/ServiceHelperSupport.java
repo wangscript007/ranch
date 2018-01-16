@@ -42,8 +42,14 @@ public abstract class ServiceHelperSupport {
 
         for (int i = 0, size = array.size(); i < size; i++) {
             JSONObject object = array.getJSONObject(i);
-            for (String name : names)
-                object.put(name, get(object.getString(name)));
+            for (String name : names) {
+                if (!object.containsKey(name))
+                    continue;
+
+                String id = object.getString(name);
+                if (!validator.isEmpty(id))
+                    object.put(name, get(id));
+            }
         }
 
         return array;
