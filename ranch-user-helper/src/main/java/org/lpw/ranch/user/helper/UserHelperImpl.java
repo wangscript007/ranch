@@ -72,10 +72,10 @@ public class UserHelperImpl extends ServiceHelperSupport implements UserHelper {
     @Override
     public String[] uids(String id) {
         JSONObject object = get(id);
-        if (object == null || !object.containsKey(id))
+        if (validator.isEmpty(object))
             return new String[0];
 
-        JSONArray auth = object.getJSONObject(id).getJSONArray("auth");
+        JSONArray auth = object.getJSONArray("auth");
         if (validator.isEmpty(auth))
             return new String[0];
 
