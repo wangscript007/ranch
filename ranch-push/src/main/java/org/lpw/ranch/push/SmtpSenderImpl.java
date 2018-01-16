@@ -6,6 +6,7 @@ import org.lpw.tephra.bean.ContextRefreshedListener;
 import org.lpw.tephra.dao.model.ModelHelper;
 import org.lpw.tephra.freemarker.Freemarker;
 import org.lpw.tephra.util.Context;
+import org.lpw.tephra.util.DateTime;
 import org.lpw.tephra.util.Generator;
 import org.lpw.tephra.util.Json;
 import org.lpw.tephra.util.Logger;
@@ -39,6 +40,8 @@ public class SmtpSenderImpl implements PushSender, ContextRefreshedListener {
     @Inject
     private Context context;
     @Inject
+    private DateTime dateTime;
+    @Inject
     private Freemarker freemarker;
     @Inject
     private Logger logger;
@@ -66,7 +69,8 @@ public class SmtpSenderImpl implements PushSender, ContextRefreshedListener {
             message.setFrom(new InternetAddress(sender.from, push.getName(), context.getCharset(null)));
             message.setRecipient(Message.RecipientType.TO, new InternetAddress(receiver));
             message.setSubject(pushService.parse(PushService.Type.Subject, push.getKey(), push.getSubject(), args), context.getCharset(null));
-            message.setText(pushService.parse(PushService.Type.Content, push.getKey(), push.getContent(), args), context.getCharset(null));
+            message.setContent(pushService.parse(PushService.Type.Content, push.getKey(), push.getContent(), args), "text/html");
+            message.setSentDate(dateTime.today());
             Transport transport = sender.session.getTransport();
             transport.sendMessage(message, message.getAllRecipients());
             transport.close();
