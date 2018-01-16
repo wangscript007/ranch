@@ -102,6 +102,9 @@ public class PushServiceImpl implements PushService, ContextRefreshedListener {
 
     @Override
     public String parse(Type type, String key, String template, JSONObject args) {
+        if (validator.isEmpty(args))
+            return template;
+
         String templateKey = key + (type == Type.Subject ? ":subject" : ":content");
         if (!freemarker.containsStringTemplate(templateKey))
             freemarker.putStringTemplate(templateKey, template);
