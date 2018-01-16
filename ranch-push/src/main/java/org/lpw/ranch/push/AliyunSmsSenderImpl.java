@@ -44,7 +44,6 @@ public class AliyunSmsSenderImpl implements PushSender, ContextRefreshedListener
             return false;
 
         try {
-
             SendSmsRequest request = new SendSmsRequest();
             request.setMethod(MethodType.POST);
             request.setPhoneNumbers(receiver);
