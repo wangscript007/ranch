@@ -1,6 +1,6 @@
 package org.lpw.ranch.user;
 
-import org.lpw.tephra.ctrl.http.upload.UploadListener;
+import org.lpw.tephra.ctrl.upload.UploadListener;
 import org.lpw.tephra.util.Image;
 import org.springframework.stereotype.Controller;
 
