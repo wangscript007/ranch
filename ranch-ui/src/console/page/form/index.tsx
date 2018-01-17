@@ -14,19 +14,23 @@ export default class Form extends PageComponent<PageProps, PageState> {
     render(): JSX.Element {
         this.refresh();
         let page: Page = this.props.meta[this.props.service.substring(this.props.service.lastIndexOf('.') + 1)];
+        let data = this.props.data || {};
+        let hiddens: JSX.Element[] = [];
+        hiddens.push(<input type="hidden" name="id" value={data['id'] || ''} key="id" />);
+        let props: Prop[] = [];
+        this.props.meta.props.map((prop, index) => {
+            if (prop.type === 'hidden')
+                hiddens.push(<input type="hidden" name={prop.name} value={data[prop.name] || ''} key={index} />);
+            else
+                props.push(prop);
+        });
 
         return (
             <form className="form" action="javascript:void(0);">
-                <input type="hidden" name="id" value={this.props.data['id'] || ''} />
+                {hiddens}
                 <table cellSpacing="0">
                     <tbody>
-                        {this.props.meta.props.map((prop, index) => (
-                            <tr className="line" key={index}>
-                                <td className="label">{prop.label}</td>
-                                <td className="data"><div className={prop.type || 'text'}>{this.input(prop)}</div></td>
-                                <td></td>
-                            </tr>
-                        ))}
+                        {props.map((prop, index) => this.tr(index, prop, data))}
                     </tbody>
                 </table>
                 <Toolbar meta={this.props.meta} ops={page.toolbar} />
@@ -34,8 +38,18 @@ export default class Form extends PageComponent<PageProps, PageState> {
         );
     }
 
-    input(prop: Prop): JSX.Element {
-        let value = this.props.data[prop.name] || "";
+    private tr(index: number, prop: Prop, data: object): JSX.Element {
+        return (
+            <tr className="line" key={index}>
+                <td className="label">{prop.label}</td>
+                <td className="data"><div className={prop.type || 'text'}>{this.input(prop, data)}</div></td>
+                <td></td>
+            </tr>
+        )
+    }
+
+    private input(prop: Prop, data: object): JSX.Element {
+        let value = data[prop.name] || "";
         if (prop.type === 'read-only')
             return value;
 

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import selector from '../../util/selector';
 import { Meta, Operate } from '../meta';
-import { service } from '../service';
+import { service, Success } from '../service';
 
 export interface PageProps {
     meta: Meta;
@@ -46,7 +46,8 @@ export class Toolbar extends React.Component<ToolbarProps, object> {
 
     private click(operate: Operate): void {
         if (operate.type === 'create') {
-            service.to(this.props.meta.key + ".create", {});
+            let parameter = service.getParameter(operate.parameter);
+            service.to(this.props.meta.key + ".create", parameter, parameter);
 
             return;
         }
@@ -69,10 +70,13 @@ export class Toolbar extends React.Component<ToolbarProps, object> {
     }
 }
 
-export function getSuccess(meta: Meta, operate: Operate, defaultValue: string): string {
+export function getSuccess(meta: Meta, operate: Operate, defaultValue: string): Success {
     let success = operate.success || defaultValue;
     if (success.charAt(0) === '.')
         success = meta.key + success;
 
-    return success;
+    return {
+        service: success,
+        parameter: service.getParameter(operate.parameter)
+    };
 }

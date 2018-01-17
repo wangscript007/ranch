@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Page, Operate } from '../../meta';
+import { Prop, Page, Operate } from '../../meta';
 import { service } from '../../service';
 import { PageComponent, PageProps, PageState, Toolbar, getSuccess } from '../index';
 import './index.less';
@@ -17,6 +17,11 @@ export default class Grid extends PageComponent<PageProps, PageState> {
         let pagination = this.state.data.hasOwnProperty('list');
         let list: object[] = pagination ? this.state.data['list'] : this.state.data;
         let page: Page = this.props.meta[this.props.service.substring(this.props.service.lastIndexOf('.') + 1)];
+        let props: Prop[] = [];
+        this.props.meta.props.map(prop => {
+            if (prop.type !== 'hidden')
+                props.push(prop);
+        });
 
         return (
             <div className="grid">
@@ -24,7 +29,7 @@ export default class Grid extends PageComponent<PageProps, PageState> {
                     <thead>
                         <tr>
                             <th></th>
-                            {this.props.meta.props.map((prop, index) => <th key={index}>{prop.label}</th>)}
+                            {props.map((prop, index) => <th key={index}>{prop.label}</th>)}
                             {page.ops ? <th></th> : ''}
                         </tr>
                     </thead>
@@ -32,7 +37,7 @@ export default class Grid extends PageComponent<PageProps, PageState> {
                         {list.map((row, index) =>
                             <tr key={index}>
                                 <th>{index + 1}</th>
-                                {this.props.meta.props.map((prop, index) => <td key={index} className="data">{this.td(row, prop)}</td>)}
+                                {props.map((prop, index) => <td key={index} className="data">{this.td(row, prop)}</td>)}
                                 {this.ops(page.ops, row)}
                             </tr>
                         )}
@@ -43,14 +48,13 @@ export default class Grid extends PageComponent<PageProps, PageState> {
         );
     }
 
-    private td(row: object, prop: object): any {
-        let name = prop['name']
-        if (!row.hasOwnProperty(name))
+    private td(row: object, prop: Prop): any {
+        if (!row.hasOwnProperty(prop.name))
             return '';
 
-        let value = row[name];
-        if (prop.hasOwnProperty('labels'))
-            return prop['labels'][value] || value;
+        let value = row[prop.name];
+        if (prop.labels)
+            return prop.labels[value] || value;
 
         return value;
     }
@@ -68,7 +72,7 @@ export default class Grid extends PageComponent<PageProps, PageState> {
 
     private op(op: Operate, data: object): void {
         if (op.type === 'modify') {
-            service.to(this.props.meta.key + '.modify', data);
+            service.to(this.props.meta.key + '.modify', {}, data);
 
             return;
         }
@@ -82,7 +86,6 @@ export default class Grid extends PageComponent<PageProps, PageState> {
         let key: string = op.service || '';
         if (key.charAt(0) == '.')
             key = this.props.meta.key + key;
-        console.log(key);
         service.to(key, this.parameter(data, op.parameter));
     }
 
@@ -93,7 +96,7 @@ export default class Grid extends PageComponent<PageProps, PageState> {
         let parameter = {};
         for (const key in param)
             parameter[key] = data[param[key]] || '';
-        console.log(JSON.stringify(parameter));
+        service.setParameter(parameter);
 
         return parameter;
     }

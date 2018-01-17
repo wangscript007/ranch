@@ -14,9 +14,15 @@ export interface Menu {
     }[];
 }
 
+export interface Success {
+    service: string;
+    parameter?: object;
+}
+
 class Service {
     private metas: Meta[] = [];
     private content: React.Component;
+    private parameter: object | null;
 
     public sign(): Promise<User> {
         return service.post('/user/sign');
@@ -28,6 +34,22 @@ class Service {
 
     public bind(content: React.Component): void {
         this.content = content;
+    }
+
+    public setParameter(parameter: object | null): void {
+        this.parameter = parameter;
+    }
+
+    public getParameter(parameter?: object): object {
+        if (!parameter || !this.parameter)
+            return {};
+
+        let param: object = {};
+        for (const key in this.parameter)
+            if (parameter.hasOwnProperty(key))
+                param[key] = this.parameter[key];
+
+        return param;
     }
 
     public to(service: string, parameter?: object, data?: object): void {
@@ -51,16 +73,16 @@ class Service {
         return this.post('/console/meta', { key: key }).then(data => this.metas[key] = data);
     }
 
-    public execute(key: string, header: object = {}, parameter: object = {}, success?: string): Promise<any> {
+    public execute(key: string, header: object = {}, parameter: object = {}, success?: Success): Promise<any> {
         header['key'] = key;
 
         let promise = this.post('/console/service', header, parameter);
-        if (!success)
+        if (!success || !success.service)
             return promise;
 
         return promise.then(json => {
             if (json != null)
-                this.to(success);
+                this.to(success.service, success.parameter);
 
             return null;
         });
