@@ -140,7 +140,7 @@ public class UserCtrl {
             @Validate(validator = Validators.SIGN)
     })
     public Object findOrSign() {
-        return userService.findOrSign(request.get("idUidCode"));
+        return templates.get().success(userService.findOrSign(request.get("idUidCode")), null);
     }
 
     @Execute(name = "query", validates = {

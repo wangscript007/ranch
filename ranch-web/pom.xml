@@ -118,6 +118,11 @@
         </dependency>
         <dependency>
             <groupId>org.lpw.ranch</groupId>
+            <artifactId>ranch-device</artifactId>
+            <version>${version.ranch}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.lpw.ranch</groupId>
             <artifactId>ranch-console</artifactId>
             <version>${version.ranch}</version>
         </dependency>
