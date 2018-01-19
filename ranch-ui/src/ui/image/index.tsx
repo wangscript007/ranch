@@ -54,6 +54,12 @@ export default class Image extends Component<Props, State> {
                 contentType: reader.result.substring(reader.result.indexOf(':') + 1, reader.result.indexOf(';')),
                 base64: reader.result.substring(reader.result.indexOf(',') + 1)
             }).then(json => {
+                if (!json.data.success) {
+                    alert(json.data.message);
+
+                    return;
+                }
+
                 this.setState({
                     path: json.data.path
                 });
