@@ -1,6 +1,7 @@
 import * as React from 'react';
 import selector from '../../util/selector';
 import http from '../../util/http';
+import note from '../../util/note';
 import { ComponentProps, Component } from '../basic/component';
 import Icon from '../icon';
 import './index.less';
@@ -55,7 +56,7 @@ export default class Image extends Component<Props, State> {
                 base64: reader.result.substring(reader.result.indexOf(',') + 1)
             }).then(json => {
                 if (!json.data.success) {
-                    alert(json.data.message);
+                    note.show(0, json.data.message, 10 * 1000);
 
                     return;
                 }

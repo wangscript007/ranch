@@ -59,11 +59,12 @@ class Console extends React.Component<object, State> {
                     <div className="container">
                         <a href="javascript:void(0);" onClick={() => this.signOut()}>{message.get('sign-out')}</a>
                         <a href="javascript:void(0);">{this.state.user.nick || ''}</a>
+                        <div id="note"></div>
                     </div>
                 </div>
                 {this.left(height)}
                 <div className="layout-bottom" style={{ top: height - 20 + 'px' }}>
-                    Power by <a href="https://github.com/heisedebaise/ranch" target="_blank">ranch-ui</a>
+                    Power by <a href="https://github.com/heisedebaise/ranch/tree/master/ranch-ui" target="_blank">ranch-ui</a>
                     &nbsp;&copy; {new Date().getFullYear()}
                 </div>
                 <Content />

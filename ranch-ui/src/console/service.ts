@@ -1,4 +1,5 @@
 import http from '../util/http';
+import note from '../util/note';
 import { Meta } from './meta';
 
 export interface User {
@@ -93,7 +94,7 @@ class Service {
             if (json.code == 0)
                 return json.data;
 
-            alert('[' + json.code + ']' + json.message);
+            note.show(json.code, json.message || '', 10 * 1000);
 
             return null;
         });
