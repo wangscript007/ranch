@@ -1,5 +1,7 @@
 import * as React from 'react';
+import message from '../util/message';
 import Icon from '../ui/icon';
+import './i18n';
 import './bottom.less';
 
 interface Props {
@@ -13,9 +15,9 @@ export class Bottom extends React.Component<Props, object> {
                 <table cellSpacing="0">
                     <tbody>
                         <tr>
-                            <BottomItem href="index.html" icon="&#xe602;" active={this.props.active == 0}>首页</BottomItem>
-                            <BottomItem href="order.html" icon="&#xe604;" active={this.props.active == 1}>订单</BottomItem>
-                            <BottomItem href="mine.html" icon="&#xe603;" active={this.props.active == 2}>我的</BottomItem>
+                            <BottomItem href="index.html" icon="&#xe602;" active={this.props.active == 0}>{message.get('bottom.home')}</BottomItem>
+                            <BottomItem href="order.html" icon="&#xe604;" active={this.props.active == 1}>{message.get('bottom.order')}</BottomItem>
+                            <BottomItem href="mine.html" icon="&#xe603;" active={this.props.active == 2}>{message.get('bottom.mine')}</BottomItem>
                         </tr>
                     </tbody>
                 </table>

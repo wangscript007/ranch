@@ -2,6 +2,7 @@ import * as React from 'react';
 import selector from '../../util/selector';
 import http from '../../util/http';
 import { ComponentProps, Component } from '../basic/component';
+import Icon from '../icon';
 import './index.less';
 
 interface Props extends ComponentProps {
@@ -33,7 +34,7 @@ export default class Image extends Component<Props, State> {
             <div id={this.imageId} className={this.getClassName('ranch-ui-image')} ui-type="image" onClick={() => this.click()}>
                 <input type="hidden" name={this.props.name} value={this.state.path} />
                 <input type="file" onChange={() => this.change()} />
-                {this.state.path ? <img src={this.state.path} /> : ''}
+                {this.state.path ? <img src={this.state.path} /> : <Icon code="&#xe605;" />}
             </div>
         );
     }
