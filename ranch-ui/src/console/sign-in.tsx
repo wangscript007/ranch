@@ -2,8 +2,10 @@ import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import registerServiceWorker from '../registerServiceWorker';
 import selector from '../util/selector';
+import message from '../util/message';
 import { service } from './service';
 import Icon from '../ui/icon';
+import './i18n';
 import './sign-in.less';
 
 class SignIn extends React.Component {
@@ -18,11 +20,11 @@ class SignIn extends React.Component {
     render(): JSX.Element {
         return (
             <div id="ranch-ui-sign-in">
-                <div className="label"><Icon code="&#xe603;" /> 用户名</div>
-                <div><input type="text" id="uid" placeholder="请输入您的用户名" autoFocus={true} /></div>
-                <div className="label"><Icon code="&#xe601;" /> 密码</div>
-                <div><input type="password" id="password" placeholder="请输入您的密码" onKeyDown={(event) => this.keyDown(event)} /></div>
-                <div className="button"><button onClick={() => this.signIn()}>登入</button></div>
+                <div className="label"><Icon code="&#xe603;" /> {message.get('sign-in.username')}</div>
+                <div><input type="text" id="uid" placeholder={message.get('sign-in.username.placeholder')} autoFocus={true} /></div>
+                <div className="label"><Icon code="&#xe601;" /> {message.get('sign-in.password')}</div>
+                <div><input type="password" id="password" placeholder={message.get('sign-in.password.placeholder')} onKeyDown={(event) => this.keyDown(event)} /></div>
+                <div className="button"><button onClick={() => this.signIn()}>{message.get('sign-in')}</button></div>
             </div>
         );
     }

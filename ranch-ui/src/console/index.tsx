@@ -6,6 +6,7 @@ import registerServiceWorker from '../registerServiceWorker';
 import { Meta } from './meta';
 import { service, User, Menu } from './service';
 import { Content } from './content';
+import './i18n';
 import './index.less';
 
 interface State {
@@ -56,8 +57,8 @@ class Console extends React.Component<object, State> {
             <div id="ranch-ui-console">
                 <div className="layout-top">
                     <div className="container">
-                        <a href="javascript:void(0);" onClick={() => this.signOut()}>{message.get('ranch.console.sign-out')}</a>
-                        <a href="javascript:void(0);">{this.state.user.id || ''}</a>
+                        <a href="javascript:void(0);" onClick={() => this.signOut()}>{message.get('sign-out')}</a>
+                        <a href="javascript:void(0);">{this.state.user.nick || ''}</a>
                     </div>
                 </div>
                 {this.left(height)}
