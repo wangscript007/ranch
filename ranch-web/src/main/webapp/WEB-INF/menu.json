@@ -1,6 +1,6 @@
 [
     {
-        "name": "配置",
+        "label": "配置",
         "items": [
             {
                 "name": "推送",
@@ -9,10 +9,10 @@
         ]
     },
     {
-        "name": "系统",
+        "label": "系统",
         "items": [
             {
-                "name": "用户",
+                "label": "用户",
                 "service": "ranch.user.query"
             }
         ]

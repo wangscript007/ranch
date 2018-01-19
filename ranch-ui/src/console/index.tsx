@@ -4,7 +4,7 @@ import message from '../util/message';
 import Accordion from '../ui/accordion';
 import registerServiceWorker from '../registerServiceWorker';
 import { Meta } from './meta';
-import { service, User, Menu } from './service';
+import { service, User, Menu, MenuItem } from './service';
 import { Content } from './content';
 import './i18n';
 import './index.less';
@@ -50,7 +50,7 @@ class Console extends React.Component<object, State> {
     }
 
     render(): JSX.Element {
-        document.title = message.get('ranch.console.title');
+        document.title = message.get('console.title');
         let height = document.body.clientHeight;
 
         return (
@@ -76,14 +76,18 @@ class Console extends React.Component<object, State> {
         return (
             <div className="layout-left" style={{ height: height - 52 + 'px' }}>
                 {this.state.menus.map((menu, index) =>
-                    <Accordion key={index} subject={menu.name}>
+                    <Accordion key={index} subject={menu.label}>
                         {menu.items.map((item, index) =>
-                            <a key={index} href="javascript:void(0);" onClick={() => service.to(item.service)}>{item.name}</a>
+                            <a key={index} href="javascript:void(0);" onClick={() => this.item(item)}>{item.label}</a>
                         )}
                     </Accordion>
                 )}
             </div>
         );
+    }
+
+    private item(item: MenuItem): void {
+        service.to(item.service, item.parameter);
     }
 
     private signOut(): void {

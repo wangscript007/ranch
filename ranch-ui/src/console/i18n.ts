@@ -18,5 +18,7 @@ message.put({
     },
     'sign-out': {
         'zh-cn': '退出'
+    }, 'console.title': {
+        'zh-cn': 'Ranch控制台'
     }
 });

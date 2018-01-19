@@ -8,11 +8,14 @@ export interface User {
 }
 
 export interface Menu {
-    name: string;
-    items: {
-        name: string;
-        service: string;
-    }[];
+    label: string;
+    items: MenuItem[];
+}
+
+export interface MenuItem {
+    label: string;
+    service: string;
+    parameter?: object;
 }
 
 export interface Success {
