@@ -2,6 +2,10 @@
     "key": "ranch.user",
     "props": [
         {
+            "name": "portrait",
+            "type": "image"
+        },
+        {
             "name": "idcard"
         },
         {

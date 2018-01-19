@@ -37,7 +37,7 @@ export default class Grid extends PageComponent<PageProps, PageState> {
                         {list.map((row, index) =>
                             <tr key={index}>
                                 <th>{index + 1}</th>
-                                {props.map((prop, index) => <td key={index} className="data">{this.td(row, prop)}</td>)}
+                                {props.map((prop, index) => <td key={index} className={'data ' + (prop.type || '')}>{this.td(row, prop)}</td>)}
                                 {this.ops(page.ops, row)}
                             </tr>
                         )}
@@ -53,6 +53,9 @@ export default class Grid extends PageComponent<PageProps, PageState> {
             return '';
 
         let value = row[prop.name];
+        if (prop.type === 'image')
+            return <img src={value} />;
+
         if (prop.labels)
             return prop.labels[value] || value;
 

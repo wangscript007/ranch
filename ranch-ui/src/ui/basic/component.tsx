@@ -8,9 +8,8 @@ export class Component<T extends ComponentProps, E> extends React.Component<T, E
     private id: string;
 
     protected getId(prefix: string): string {
-        if (!this.id) {
+        if (!this.id)
             this.id = generator.random(32);
-        }
 
         return prefix + '-' + this.id;
     }

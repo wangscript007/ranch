@@ -28,7 +28,7 @@ export default class Slider extends Component<Props, State> {
         }, 5000);
 
         return (
-            <div id={this.getId('slider')} className={this.getClassName('slider')} ui-type="slider">
+            <div id={this.getId('slider')} className={this.getClassName('ranch-ui-slider')} ui-type="slider">
                 <a href={this.props.links[index]}><img src={this.props.images[index]} /></a>
             </div>
         );

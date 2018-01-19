@@ -23,7 +23,7 @@ export default class Accordion extends Component<Props, State> {
 
     render(): JSX.Element {
         return (
-            <div id={this.getId('accordion')} className={this.getClassName('accordion')} ui-type="accordion">
+            <div id={this.getId('accordion')} className={this.getClassName('ranch-ui-accordion')} ui-type="accordion">
                 <div className="accordion-subject" onClick={() => this.click()}>{this.state.subject}</div>
                 <div className="accordion-content" style={{ display: this.state.show ? '' : 'none' }}>
                     {this.props.children}

@@ -32,18 +32,9 @@ interface ItemProps {
 
 export class BottomItem extends React.Component<ItemProps, object> {
     render(): JSX.Element {
-        if (this.props.active) {
-            return (
-                <td className="active">
-                    <Icon code={this.props.icon} />
-                    <div className="label">{this.props.children}</div>
-                </td>
-            );
-        }
-
         return (
             <td>
-                <a href={this.props.href} className="inactive">
+                <a href={this.props.href} className={this.props.active ? 'active' : 'inactive'}>
                     <Icon code={this.props.icon} />
                     <div className="label">{this.props.children}</div>
                 </a>

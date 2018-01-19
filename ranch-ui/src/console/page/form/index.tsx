@@ -1,4 +1,5 @@
 import * as React from 'react';
+import Image from '../../../ui/image';
 import { Prop, Page } from '../../meta';
 import { PageComponent, PageProps, PageState, Toolbar } from '../index';
 import './index.less';
@@ -59,6 +60,9 @@ export default class Form extends PageComponent<PageProps, PageState> {
         };
         if (prop.type === 'text-area')
             return <textarea {...props} />
+
+        if (prop.type === 'image')
+            return <Image {...props} fieldName={prop['fieldName'] || this.props.meta.key + '.' + prop.name} />
 
         if (prop.labels && prop.labels.length > 0) {
             return (
