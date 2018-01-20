@@ -3,7 +3,7 @@
         "label": "配置",
         "items": [
             {
-                "name": "推送",
+                "label": "推送",
                 "service": "ranch.push.query"
             }
         ]

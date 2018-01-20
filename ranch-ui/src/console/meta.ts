@@ -7,6 +7,7 @@ export interface Prop {
     name: string;
     label: string;
     labels?: string[];
+    values?: object;
     type?: string;
 }
 

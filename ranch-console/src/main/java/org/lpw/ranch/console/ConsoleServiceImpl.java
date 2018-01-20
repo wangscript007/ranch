@@ -106,6 +106,14 @@ public class ConsoleServiceImpl implements ConsoleService, StorageListener {
             JSONArray array = new JSONArray();
             array.addAll(Arrays.asList(message.getAsArray(labels)));
             object.put("labels", array);
+        } else if (object.containsKey("values")) {
+            JSONObject values = object.getJSONObject("values");
+            for (String k : values.keySet()) {
+                String v = values.getString(k);
+                if (v.charAt(0) == '.')
+                    v = label + v;
+                values.put(k, message.get(v));
+            }
         }
     }
 

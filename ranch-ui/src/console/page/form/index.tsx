@@ -72,6 +72,14 @@ export default class Form extends PageComponent<PageProps, PageState> {
             );
         }
 
+        if (prop.values) {
+            let options: JSX.Element[] = [];
+            for (let value in prop.values)
+                options.push(<option value={value}>{prop.values[value]}</option>);
+
+            return <select {...props}>{options}</select>;
+        }
+
         return <input type={prop.type || 'text'} {...props} />;
     }
 }

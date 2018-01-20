@@ -59,6 +59,9 @@ export default class Grid extends PageComponent<PageProps, PageState> {
         if (prop.labels)
             return prop.labels[value] || value;
 
+        if (prop.values)
+            return prop.values[value] || value;
+
         return value;
     }
 
