@@ -17,7 +17,14 @@
 
 #ranch-ui-console .grid td {
     padding: 0 3px;
-    background-color: @color-white;
+}
+
+#ranch-ui-console .grid tr:nth-child(odd) td {
+    background-color: @color-gray-white;
+}
+
+#ranch-ui-console .grid tr:nth-child(even) td {
+    background-color: @color-gray-lighter;
 }
 
 #ranch-ui-console .grid .image {
@@ -47,4 +54,23 @@
 
 #ranch-ui-console .grid .toolbar button {
     margin: 3px 3px 3px 0px;
+}
+
+#ranch-ui-console .grid .pagination {
+    float: right;
+    padding-top: 3px;
+}
+
+#ranch-ui-console .grid .pagination a {
+    display: inline-block;
+    padding: 0 5px;
+    background-color: @color-gray-light;
+    color: @color-gray;
+    text-decoration: none;
+}
+
+#ranch-ui-console .grid .pagination a.active,
+#ranch-ui-console .grid .pagination a:hover {
+    background-color: @color-gray;
+    color: @color-white;
 }

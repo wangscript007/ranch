@@ -1,4 +1,5 @@
 import * as React from 'react';
+import Icon from '../../../ui/icon';
 import { Prop, Page, Operate } from '../../meta';
 import { service } from '../../service';
 import { PageComponent, PageProps, PageState, Toolbar, getSuccess } from '../index';
@@ -43,6 +44,7 @@ export default class Grid extends PageComponent<PageProps, PageState> {
                         )}
                     </tbody>
                 </table>
+                {this.pagination(pagination)}
                 <Toolbar meta={this.props.meta} ops={page.toolbar} />
             </div>
         );
@@ -105,5 +107,31 @@ export default class Grid extends PageComponent<PageProps, PageState> {
         service.setParameter(parameter);
 
         return parameter;
+    }
+
+    private pagination(enable: boolean): JSX.Element | null {
+        if (!enable || this.state.data.pageEnd <= 1)
+            return null;
+
+        let prev: JSX.Element[] = [];
+        for (let i = this.state.data.pageStart; i < this.state.data.page; i++)
+            prev.push(this.page(i));
+        let next: JSX.Element[] = [];
+        for (let i = this.state.data.page + 1; i <= this.state.data.pageEnd; i++)
+            next.push(this.page(i));
+
+        return (
+            <div className="pagination">
+                <a href="javascript:void(0);"><Icon code="&#xe608;" /></a>
+                {prev}
+                <a href="javascript:void(0);" className="active">{this.state.data.page}</a>
+                {next}
+                <a href="javascript:void(0);"><Icon code="&#xe609;" /></a>
+            </div>
+        );
+    }
+
+    private page(num: number): JSX.Element {
+        return <a href="javascript:void(0);" key={num}>{num}</a>;
     }
 }
