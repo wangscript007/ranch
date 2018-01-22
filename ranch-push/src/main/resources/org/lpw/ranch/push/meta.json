@@ -8,7 +8,9 @@
             "name": "sender",
             "values": {
                 "smtp": ".smtp",
-                "sms.aliyun": ".sms.aliyun"
+                "sms.aliyun": ".sms.aliyun",
+                "app.ios": ".app.ios",
+                "app.android": ".app.android"
             }
         },
         {

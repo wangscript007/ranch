@@ -35,6 +35,11 @@
             <version>LATEST</version>
         </dependency>
         <dependency>
+            <groupId>com.notnoop.apns</groupId>
+            <artifactId>apns</artifactId>
+            <version>LATEST</version>
+        </dependency>
+        <dependency>
             <groupId>org.lpw.ranch</groupId>
             <artifactId>ranch-base</artifactId>
             <version>${version.ranch}</version>
