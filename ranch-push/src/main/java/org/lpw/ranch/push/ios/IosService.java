@@ -25,13 +25,14 @@ public interface IosService {
     /**
      * 保存配置。
      *
-     * @param appCode  APP编码。
-     * @param p12      证书，BASE64编码。
-     * @param password 证书密码。
-     * @param topic    Bundle ID。
+     * @param appCode     APP编码。
+     * @param p12         证书，BASE64编码。
+     * @param password    证书密码。
+     * @param topic       Bundle ID。
+     * @param destination 目的地：0-开发；1-正式。
      * @return 配置信息。
      */
-    JSONObject save(String appCode, String p12, String password, String topic);
+    JSONObject save(String appCode, String p12, String password, String topic, int destination);
 
     /**
      * 删除配置。

@@ -6,6 +6,7 @@ CREATE TABLE t_push_ios
   c_p12 TEXT DEFAULT NULL COMMENT '证书，BASE64编码',
   c_password VARCHAR(255) DEFAULT NULL COMMENT '证书密码',
   c_topic VARCHAR(255) DEFAULT NULL COMMENT 'Bundle ID',
+  c_destination INT DEFAULT 0 COMMENT '目的地：0-开发；1-正式',
   c_time DATETIME DEFAULT NULL COMMENT '时间',
 
   PRIMARY KEY pk(c_id) USING HASH,

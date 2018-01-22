@@ -3,6 +3,7 @@ package org.lpw.ranch.push.ios;
 import com.alibaba.fastjson.JSONObject;
 import com.notnoop.apns.APNS;
 import com.notnoop.apns.ApnsService;
+import com.notnoop.apns.ApnsServiceBuilder;
 import org.lpw.ranch.util.Pagination;
 import org.lpw.tephra.dao.model.ModelHelper;
 import org.lpw.tephra.util.Coder;
@@ -50,7 +51,7 @@ public class IosServiceImpl implements IosService {
     }
 
     @Override
-    public JSONObject save(String appCode, String p12, String password, String topic) {
+    public JSONObject save(String appCode, String p12, String password, String topic, int destination) {
         IosModel ios = iosDao.find(appCode);
         if (ios == null) {
             ios = new IosModel();
@@ -59,6 +60,7 @@ public class IosServiceImpl implements IosService {
         ios.setP12(p12);
         ios.setPassword(password);
         ios.setTopic(topic);
+        ios.setDestination(destination);
         ios.setTime(dateTime.now());
         iosDao.save(ios);
         map.remove(appCode);
@@ -90,7 +92,12 @@ public class IosServiceImpl implements IosService {
 
         try {
             InputStream inputStream = new ByteArrayInputStream(coder.decodeBase64(ios.getP12()));
-            ApnsService service = APNS.newService().withCert(inputStream, ios.getPassword()).withSandboxDestination().build();
+            ApnsServiceBuilder builder = APNS.newService().withCert(inputStream, ios.getPassword());
+            if (ios.getDestination() == 0)
+                builder.withSandboxDestination();
+            else if (ios.getDestination() == 1)
+                builder.withProductionDestination();
+            ApnsService service = builder.build();
             inputStream.close();
             map.put(appCode, service);
 

@@ -26,6 +26,7 @@ public class IosModel extends ModelSupport {
     private String p12; // 证书，BASE64编码
     private String password; // 证书密码
     private String topic; // Bundle ID
+    private int destination; // 目的地：0-开发；1-正式
     private Timestamp time; // 时间
 
     @Jsonable
@@ -66,6 +67,16 @@ public class IosModel extends ModelSupport {
 
     public void setTopic(String topic) {
         this.topic = topic;
+    }
+
+    @Jsonable
+    @Column(name = "c_destination")
+    public int getDestination() {
+        return destination;
+    }
+
+    public void setDestination(int destination) {
+        this.destination = destination;
     }
 
     @Jsonable
