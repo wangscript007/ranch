@@ -13,6 +13,7 @@ export interface Prop {
 
 export interface Page {
     type: string;
+    search: Prop[];
     ops: Operate[];
     toolbar: Operate[];
 }

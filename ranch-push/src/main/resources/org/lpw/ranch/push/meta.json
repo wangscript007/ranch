@@ -37,6 +37,17 @@
     ],
     "query": {
         "type": "grid",
+        "search": [
+            {
+                "name": "key"
+            },
+            {
+                "name": "subject"
+            },
+            {
+                "name": "state"
+            }
+        ],
         "ops": [
             {
                 "type": "modify"

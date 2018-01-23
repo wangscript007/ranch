@@ -28,28 +28,46 @@ export default class Grid extends PageComponent<PageProps, PageState> {
 
         return (
             <div className="grid">
-                <table cellSpacing="1">
-                    <thead>
-                        <tr>
-                            <th></th>
-                            {props.map((prop, index) => <th key={index}>{prop.label}</th>)}
-                            {page.ops ? <th></th> : ''}
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {list.map((row, index) =>
-                            <tr key={index}>
-                                <th>{index + 1}</th>
-                                {props.map((prop, index) => <td key={index} className={'data ' + (prop.type || '')}>{this.td(row, prop)}</td>)}
-                                {this.ops(page.ops, row)}
-                            </tr>
-                        )}
-                        {this.empty(list, props, page.ops)}
-                    </tbody>
-                </table>
+                {this.search(props, page)}
+                {this.table(props, page, list)}
                 {this.pagination(pagination)}
                 <Toolbar meta={this.props.meta} ops={page.toolbar} />
             </div>
+        );
+    }
+
+    private search(props: Prop[], page: Page): JSX.Element | null {
+        if (!page.search || page.search.length === 0)
+            return null;
+
+        return (
+            <div className="search">
+                search
+            </div>
+        );
+    }
+
+    private table(props: Prop[], page: Page, list: object[]): JSX.Element {
+        return (
+            <table cellSpacing="1">
+                <thead>
+                    <tr>
+                        <th></th>
+                        {props.map((prop, index) => <th key={index}>{prop.label}</th>)}
+                        {page.ops ? <th></th> : ''}
+                    </tr>
+                </thead>
+                <tbody>
+                    {list.map((row, index) =>
+                        <tr key={index}>
+                            <th>{index + 1}</th>
+                            {props.map((prop, index) => <td key={index} className={'data ' + (prop.type || '')}>{this.td(row, prop)}</td>)}
+                            {this.ops(page.ops, row)}
+                        </tr>
+                    )}
+                    {this.empty(list, props, page.ops)}
+                </tbody>
+            </table>
         );
     }
 
