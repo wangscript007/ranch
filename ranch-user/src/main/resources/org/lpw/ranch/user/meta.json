@@ -40,36 +40,6 @@
         }
     ],
     "query": {
-        "type": "grid",
-        "ops": [
-            {
-                "type": "modify"
-            }
-        ],
-        "toolbar": [
-            {
-                "type": "create"
-            }
-        ]
-    },
-    "create": {
-        "type": "form",
-        "toolbar": [
-            {
-                "type": "save",
-                "service": ".save",
-                "success": ".query"
-            }
-        ]
-    },
-    "modify": {
-        "type": "form",
-        "toolbar": [
-            {
-                "type": "save",
-                "service": ".save",
-                "success": ".query"
-            }
-        ]
+        "type": "grid"
     }
 }

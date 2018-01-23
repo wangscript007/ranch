@@ -37,6 +37,13 @@
     width: 100%;
 }
 
+#ranch-ui-console .grid .base64 {
+    max-width: 64px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
 #ranch-ui-console .grid .ops a {
     padding: 0 3px;
     text-decoration: none;
@@ -46,6 +53,13 @@
 
 #ranch-ui-console .grid .ops a:hover {
     color: @color-main-light;
+}
+
+#ranch-ui-console .grid .empty {
+    text-align: center;
+    color: @color-gray-light;
+    font-size: 16px;
+    line-height: 32px;
 }
 
 #ranch-ui-console .grid .toolbar {

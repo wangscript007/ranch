@@ -5,6 +5,14 @@
             {
                 "label": "推送",
                 "service": "ranch.push.query"
+            },
+            {
+                "label": "iOS推送",
+                "service": "ranch.push.ios.query"
+            },
+            {
+                "label": "阿里云推送",
+                "service": "ranch.push.aliyun.query"
             }
         ]
     },

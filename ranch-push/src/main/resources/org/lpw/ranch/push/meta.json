@@ -10,7 +10,7 @@
                 "smtp": ".smtp",
                 "sms.aliyun": ".sms.aliyun",
                 "app.ios": ".app.ios",
-                "app.android": ".app.android"
+                "app.aliyun": ".app.aliyun"
             }
         },
         {

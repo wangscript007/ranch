@@ -15,7 +15,7 @@
         },
         {
             "name": "time",
-            "type":"read-only"
+            "type": "read-only"
         }
     ],
     "query": {

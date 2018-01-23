@@ -1,8 +1,10 @@
 import * as React from 'react';
+import message from '../../../util/message';
 import Icon from '../../../ui/icon';
 import { Prop, Page, Operate } from '../../meta';
 import { service } from '../../service';
 import { PageComponent, PageProps, PageState, Toolbar, getSuccess } from '../index';
+import './i18n';
 import './index.less';
 
 export default class Grid extends PageComponent<PageProps, PageState> {
@@ -42,6 +44,7 @@ export default class Grid extends PageComponent<PageProps, PageState> {
                                 {this.ops(page.ops, row)}
                             </tr>
                         )}
+                        {this.empty(list, props, page.ops)}
                     </tbody>
                 </table>
                 {this.pagination(pagination)}
@@ -109,29 +112,47 @@ export default class Grid extends PageComponent<PageProps, PageState> {
         return parameter;
     }
 
+    private empty(list: object[], props: Prop[], ops: Operate[]): JSX.Element | null {
+        if (list && list.length > 0)
+            return null;
+
+        return (
+            <tr>
+                <th>0</th>
+                <td colSpan={props.length + (ops && ops.length > 0 ? 1 : 0)} className="empty">{message.get('grid.empty')}</td>
+            </tr>
+        );
+    }
+
     private pagination(enable: boolean): JSX.Element | null {
         if (!enable || this.state.data.pageEnd <= 1)
             return null;
 
         let prev: JSX.Element[] = [];
-        for (let i = this.state.data.pageStart; i < this.state.data.page; i++)
+        for (let i = this.state.data.pageStart; i < this.state.data.number; i++)
             prev.push(this.page(i));
         let next: JSX.Element[] = [];
-        for (let i = this.state.data.page + 1; i <= this.state.data.pageEnd; i++)
+        for (let i = this.state.data.number + 1; i <= this.state.data.pageEnd; i++)
             next.push(this.page(i));
 
         return (
             <div className="pagination">
-                <a href="javascript:void(0);"><Icon code="&#xe608;" /></a>
+                <a href="javascript:void(0);" onClick={() => this.pageTo(this.state.data.number - 1)}><Icon code="&#xe608;" /></a>
                 {prev}
-                <a href="javascript:void(0);" className="active">{this.state.data.page}</a>
+                <a href="javascript:void(0);" onClick={() => this.pageTo(this.state.data.number)} className="active">{this.state.data.number}</a>
                 {next}
-                <a href="javascript:void(0);"><Icon code="&#xe609;" /></a>
+                <a href="javascript:void(0);" onClick={() => this.pageTo(this.state.data.number + 1)}><Icon code="&#xe609;" /></a>
             </div>
         );
     }
 
     private page(num: number): JSX.Element {
-        return <a href="javascript:void(0);" key={num}>{num}</a>;
+        return <a href="javascript:void(0);" onClick={() => this.pageTo(num)} key={num}>{num}</a>;
+    }
+
+    private pageTo(num: number): void {
+        let parameter: object = this.props.parameter || {};
+        parameter['pageNum'] = num;
+        service.execute(this.props.service, {}, parameter).then(data => this.setState({ data: data }));
     }
 }

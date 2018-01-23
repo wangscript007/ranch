@@ -1,5 +1,6 @@
 import * as React from 'react';
 import Image from '../../../ui/image';
+import Base64 from '../../../ui/base64';
 import { Prop, Page } from '../../meta';
 import { PageComponent, PageProps, PageState, Toolbar } from '../index';
 import './index.less';
@@ -63,6 +64,9 @@ export default class Form extends PageComponent<PageProps, PageState> {
 
         if (prop.type === 'image')
             return <Image {...props} fieldName={prop['fieldName'] || this.props.meta.key + '.' + prop.name} />
+
+        if (prop.type === 'base64')
+            return <Base64 {...props} />
 
         if (prop.labels && prop.labels.length > 0) {
             return (

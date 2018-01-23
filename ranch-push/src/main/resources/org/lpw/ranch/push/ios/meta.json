@@ -5,18 +5,19 @@
             "name": "appCode"
         },
         {
-            "name": "p12"
+            "name": "p12",
+            "type": "base64"
         },
         {
             "name": "password"
         },
         {
             "name": "destination",
-            "labels":".destinations"
+            "labels": ".destinations"
         },
         {
             "name": "time",
-            "type":"read-only"
+            "type": "read-only"
         }
     ],
     "query": {
