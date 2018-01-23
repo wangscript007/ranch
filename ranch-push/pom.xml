@@ -35,6 +35,11 @@
             <version>LATEST</version>
         </dependency>
         <dependency>
+            <groupId>com.aliyun</groupId>
+            <artifactId>aliyun-java-sdk-push</artifactId>
+            <version>LATEST</version>
+        </dependency>
+        <dependency>
             <groupId>com.notnoop.apns</groupId>
             <artifactId>apns</artifactId>
             <version>LATEST</version>

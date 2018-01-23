@@ -1,0 +1,59 @@
+{
+    "key": "ranch.push.aliyun",
+    "props": [
+        {
+            "name": "appCode"
+        },
+        {
+            "name": "keyId"
+        },
+        {
+            "name": "keySecret"
+        },
+        {
+            "name": "appKey"
+        },
+        {
+            "name": "time",
+            "type":"read-only"
+        }
+    ],
+    "query": {
+        "type": "grid",
+        "ops": [
+            {
+                "type": "modify"
+            },
+            {
+                "type": "delete",
+                "service": ".delete",
+                "success": ".query"
+            }
+        ],
+        "toolbar": [
+            {
+                "type": "create"
+            }
+        ]
+    },
+    "create": {
+        "type": "form",
+        "toolbar": [
+            {
+                "type": "save",
+                "service": ".save",
+                "success": ".query"
+            }
+        ]
+    },
+    "modify": {
+        "type": "form",
+        "toolbar": [
+            {
+                "type": "save",
+                "service": ".save",
+                "success": ".query"
+            }
+        ]
+    }
+}

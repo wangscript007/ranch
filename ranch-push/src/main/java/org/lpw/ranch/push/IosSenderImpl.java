@@ -5,10 +5,6 @@ import com.notnoop.apns.APNS;
 import com.notnoop.apns.ApnsService;
 import org.lpw.ranch.push.ios.IosModel;
 import org.lpw.ranch.push.ios.IosService;
-import org.lpw.tephra.dao.model.ModelHelper;
-import org.lpw.tephra.util.Context;
-import org.lpw.tephra.util.Logger;
-import org.lpw.tephra.util.Validator;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
@@ -18,14 +14,6 @@ import javax.inject.Inject;
  */
 @Service(PushModel.NAME + ".sender.app.ios")
 public class IosSenderImpl implements PushSender {
-    @Inject
-    private Validator validator;
-    @Inject
-    private Context context;
-    @Inject
-    private Logger logger;
-    @Inject
-    private ModelHelper modelHelper;
     @Inject
     private PushService pushService;
     @Inject
@@ -38,11 +26,14 @@ public class IosSenderImpl implements PushSender {
 
     @Override
     public boolean send(PushModel push, String receiver, JSONObject args) {
-        IosModel ios = iosService.find(push.getTemplate());
+        if (args == null || !args.containsKey("appCode"))
+            return false;
+
+        IosModel ios = iosService.find(args.getString("appCode"));
         if (ios == null)
             return false;
 
-        ApnsService service = iosService.getApnsService(push.getTemplate());
+        ApnsService service = iosService.getApnsService(ios.getAppCode());
         if (service == null)
             return false;
 

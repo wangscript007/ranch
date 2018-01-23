@@ -51,7 +51,7 @@ public class IosServiceImpl implements IosService {
     }
 
     @Override
-    public JSONObject save(String appCode, String p12, String password, String topic, int destination) {
+    public JSONObject save(String appCode, String p12, String password, int destination) {
         IosModel ios = iosDao.find(appCode);
         if (ios == null) {
             ios = new IosModel();
@@ -59,7 +59,6 @@ public class IosServiceImpl implements IosService {
         }
         ios.setP12(p12);
         ios.setPassword(password);
-        ios.setTopic(topic);
         ios.setDestination(destination);
         ios.setTime(dateTime.now());
         iosDao.save(ios);

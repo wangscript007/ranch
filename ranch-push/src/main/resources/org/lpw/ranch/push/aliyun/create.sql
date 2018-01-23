@@ -1,11 +1,11 @@
-DROP TABLE IF EXISTS t_push_ios;
-CREATE TABLE t_push_ios
+DROP TABLE IF EXISTS t_push_aliyun;
+CREATE TABLE t_push_aliyun
 (
   c_id CHAR(36) NOT NULL COMMENT '主键',
   c_app_code VARCHAR(255) NOT NULL COMMENT 'APP编码',
-  c_p12 TEXT DEFAULT NULL COMMENT '证书，BASE64编码',
-  c_password VARCHAR(255) DEFAULT NULL COMMENT '证书密码',
-  c_destination INT DEFAULT 0 COMMENT '目的地：0-开发；1-正式',
+  c_key_id VARCHAR(255) DEFAULT NULL COMMENT 'KEY ID',
+  c_key_secret TEXT DEFAULT NULL COMMENT 'KEY密钥',
+  c_app_key VARCHAR(255) DEFAULT NULL COMMENT 'APP KEY',
   c_time DATETIME DEFAULT NULL COMMENT '时间',
 
   PRIMARY KEY pk(c_id) USING HASH,

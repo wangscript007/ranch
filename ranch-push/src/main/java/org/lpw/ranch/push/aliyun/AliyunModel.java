@@ -1,4 +1,4 @@
-package org.lpw.ranch.push.ios;
+package org.lpw.ranch.push.aliyun;
 
 import org.lpw.tephra.dao.model.Jsonable;
 import org.lpw.tephra.dao.model.ModelSupport;
@@ -15,17 +15,17 @@ import java.sql.Timestamp;
 /**
  * @author lpw
  */
-@Component(IosModel.NAME + ".model")
+@Component(AliyunModel.NAME + ".model")
 @Scope(BeanDefinition.SCOPE_PROTOTYPE)
-@Entity(name = IosModel.NAME)
-@Table(name = "t_push_ios")
-public class IosModel extends ModelSupport {
-    static final String NAME = "ranch.push.ios";
+@Entity(name = AliyunModel.NAME)
+@Table(name = "t_push_aliyun")
+public class AliyunModel extends ModelSupport {
+    static final String NAME = "ranch.push.aliyun";
 
     private String appCode; // APP编码
-    private String p12; // 证书，BASE64编码
-    private String password; // 证书密码
-    private int destination; // 目的地：0-开发；1-正式
+    private String keyId; // KEY ID
+    private String keySecret; // KEY密钥
+    private String appKey; // APP KEY
     private Timestamp time; // 时间
 
     @Jsonable
@@ -39,33 +39,33 @@ public class IosModel extends ModelSupport {
     }
 
     @Jsonable
-    @Column(name = "c_p12")
-    public String getP12() {
-        return p12;
+    @Column(name = "c_key_id")
+    public String getKeyId() {
+        return keyId;
     }
 
-    public void setP12(String p12) {
-        this.p12 = p12;
-    }
-
-    @Jsonable
-    @Column(name = "c_password")
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
+    public void setKeyId(String keyId) {
+        this.keyId = keyId;
     }
 
     @Jsonable
-    @Column(name = "c_destination")
-    public int getDestination() {
-        return destination;
+    @Column(name = "c_key_secret")
+    public String getKeySecret() {
+        return keySecret;
     }
 
-    public void setDestination(int destination) {
-        this.destination = destination;
+    public void setKeySecret(String keySecret) {
+        this.keySecret = keySecret;
+    }
+
+    @Jsonable
+    @Column(name = "c_app_key")
+    public String getAppKey() {
+        return appKey;
+    }
+
+    public void setAppKey(String appKey) {
+        this.appKey = appKey;
     }
 
     @Jsonable
