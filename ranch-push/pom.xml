@@ -46,7 +46,7 @@
         </dependency>
         <dependency>
             <groupId>org.lpw.ranch</groupId>
-            <artifactId>ranch-base</artifactId>
+            <artifactId>ranch-device-helper</artifactId>
             <version>${version.ranch}</version>
         </dependency>
         <dependency>

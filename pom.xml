@@ -43,6 +43,7 @@
         <module>ranch-push</module>
         <module>ranch-push-helper</module>
         <module>ranch-device</module>
+        <module>ranch-device-helper</module>
         <module>ranch-form</module>
         <module>ranch-archives</module>
         <module>ranch-console</module>

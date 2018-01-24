@@ -38,25 +38,25 @@ public class AliyunAppSenderImpl implements PushSender {
 
     @Override
     public boolean send(PushModel push, String receiver, JSONObject args) {
-        if (args == null || !args.containsKey("appCode"))
-            return false;
-
-        AliyunModel aliyun = aliyunService.find(args.getString("appCode"));
+        AliyunModel aliyun = aliyunService.find(push.getAppCode());
         PushRequest pushRequest = new PushRequest();
         pushRequest.setAppKey(numeric.toLong(aliyun.getAppKey()));
         pushRequest.setTarget("DEVICE");
         pushRequest.setTargetValue(receiver);
         pushRequest.setPushType("NOTICE");
         pushRequest.setDeviceType("ALL");
-        pushRequest.setIOSApnsEnv(json.hasTrue(args, "product") ? "PRODUCT" : "DEV");
         pushRequest.setTitle(pushService.parse(PushService.Type.Subject, push.getKey(), push.getSubject(), args));
         pushRequest.setBody(pushService.parse(PushService.Type.Content, push.getKey(), push.getContent(), args));
-        if (args.containsKey("openUrl")) {
+        pushRequest.setIOSApnsEnv(json.hasTrue(args, "product") ? "PRODUCT" : "DEV");
+        pushRequest.setIOSBadge((json.containsKey(args, "badge") ? args.getIntValue("badge") : 1) + 1);
+        pushRequest.setIOSMusic(json.containsKey(args, "ios-music") ? args.getString("ios-music") : "default");
+        pushRequest.setAndroidMusic(json.containsKey(args, "android-music") ? args.getString("android-music") : "default");
+        if (json.containsKey(args, "url")) {
             pushRequest.setAndroidOpenType("URL");
-            pushRequest.setAndroidOpenUrl(args.getString("openUrl"));
-        } else if (args.containsKey("activity")) {
+            pushRequest.setAndroidOpenUrl(args.getString("url"));
+        } else if (json.containsKey(args, "activity")) {
             pushRequest.setAndroidOpenType("ACTIVITY");
-            pushRequest.setAndroidOpenUrl(args.getString("activity"));
+            pushRequest.setAndroidActivity(args.getString("activity"));
         } else
             pushRequest.setAndroidOpenType("APPLICATION");
         try {

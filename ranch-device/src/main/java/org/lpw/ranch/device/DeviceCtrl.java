@@ -20,6 +20,15 @@ public class DeviceCtrl {
     @Inject
     private DeviceService deviceService;
 
+    @Execute(name = "find", validates = {
+            @Validate(validator = Validators.NOT_EMPTY, parameter = "appCode", failureCode = 1),
+            @Validate(validator = Validators.NOT_EMPTY, parameter = "macId", failureCode = 5),
+            @Validate(validator = Validators.SIGN)
+    })
+    public Object find() {
+        return deviceService.find(request.get("appCode"), request.get("macId"));
+    }
+
     @Execute(name = "save", validates = {
             @Validate(validator = Validators.NOT_EMPTY, parameter = "appCode", failureCode = 1),
             @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "appCode", failureCode = 2),
@@ -31,6 +40,7 @@ public class DeviceCtrl {
             @Validate(validator = UserHelper.VALIDATOR_EXISTS_OR_SIGN_IN, parameter = "user", failureCode = 8)
     })
     public Object save() {
-        return deviceService.save(request.get("user"), request.get("appCode"), request.get("type"), request.get("macId"), request.get("version"));
+        return deviceService.save(request.get("user"), request.get("appCode"), request.get("type"), request.get("macId"),
+                request.get("version"));
     }
 }

@@ -26,6 +26,13 @@ public class DeviceServiceImpl implements DeviceService {
     private DeviceDao deviceDao;
 
     @Override
+    public JSONObject find(String appCode, String macId) {
+        DeviceModel device = deviceDao.find(appCode, macId);
+
+        return device == null ? new JSONObject() : modelHelper.toJson(device);
+    }
+
+    @Override
     public JSONObject save(String user, String appCode, String type, String macId, String version) {
         DeviceModel device = deviceDao.find(appCode, macId);
         if (device == null) {

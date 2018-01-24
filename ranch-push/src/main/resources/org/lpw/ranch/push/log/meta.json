@@ -1,0 +1,32 @@
+{
+    "key": "ranch.push.log",
+    "props": [
+        {
+            "name": "user"
+        },
+        {
+            "name": "receiver"
+        },
+        {
+            "name": "appCode"
+        },
+        {
+            "name": "sender"
+        },
+        {
+            "name": "push"
+        },
+        {
+            "name": "args"
+        },
+        {
+            "name": "time"
+        },
+        {
+            "name": "state"
+        }
+    ],
+    "query": {
+        "type": "grid"
+    }
+}

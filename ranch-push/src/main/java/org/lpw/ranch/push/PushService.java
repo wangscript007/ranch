@@ -65,6 +65,7 @@ public interface PushService {
      * @param id       ID值，不存在则新建。
      * @param key      引用键。
      * @param sender   推送器。
+     * @param appCode  APP编码。
      * @param subject  标题。
      * @param content  内容。
      * @param template 模板。
@@ -72,7 +73,8 @@ public interface PushService {
      * @param state    状态：0-待审核；1-使用中。
      * @return 推送配置。
      */
-    JSONObject save(String id, String key, String sender, String subject, String content, String template, String name, int state);
+    JSONObject save(String id, String key, String sender, String appCode, String subject, String content,
+                    String template, String name, int state);
 
     /**
      * 设置状态。

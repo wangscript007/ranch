@@ -1,6 +1,8 @@
 package org.lpw.ranch.push;
 
 import com.alibaba.fastjson.JSONObject;
+import org.lpw.ranch.push.log.LogModel;
+import org.lpw.ranch.push.log.LogService;
 import org.lpw.ranch.util.Pagination;
 import org.lpw.tephra.bean.BeanFactory;
 import org.lpw.tephra.bean.ContextRefreshedListener;
@@ -30,6 +32,8 @@ public class PushServiceImpl implements PushService, ContextRefreshedListener {
     @Inject
     private Pagination pagination;
     @Inject
+    private LogService logService;
+    @Inject
     private PushDao pushDao;
     private Map<String, PushSender> senders;
 
@@ -49,12 +53,14 @@ public class PushServiceImpl implements PushService, ContextRefreshedListener {
     }
 
     @Override
-    public JSONObject save(String id, String key, String sender, String subject, String content, String template, String name, int state) {
+    public JSONObject save(String id, String key, String sender, String appCode, String subject, String content,
+                           String template, String name, int state) {
         PushModel push = validator.isEmpty(id) ? new PushModel() : pushDao.findById(id);
         if (push == null)
             push = new PushModel();
         push.setKey(key);
         push.setSender(sender);
+        push.setAppCode(appCode);
         push.setSubject(subject);
         push.setContent(content);
         push.setTemplate(template);
@@ -96,8 +102,14 @@ public class PushServiceImpl implements PushService, ContextRefreshedListener {
     @Override
     public boolean send(String key, String receiver, JSONObject args) {
         PushModel push = findByKey(key);
+        if (args == null)
+            args = new JSONObject();
+        args.put("badge", logService.unread(receiver));
+        LogModel log = logService.create(receiver, push, args);
+        boolean success = senders.get(push.getSender()).send(push, receiver, args);
+        logService.send(log, success);
 
-        return senders.get(push.getSender()).send(push, receiver, args);
+        return success;
     }
 
     @Override
