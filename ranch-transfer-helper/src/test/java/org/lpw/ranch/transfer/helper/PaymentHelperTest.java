@@ -35,8 +35,8 @@ public class PaymentHelperTest extends TephraTestSupport {
         Assert.assertEquals("helper", map.get("transfer"));
         Assert.assertEquals("type", map.get("type"));
         Assert.assertEquals("app id", map.get("appId"));
-        Assert.assertEquals("account", map.get("user"));
-        Assert.assertEquals("user", map.get("account"));
+        Assert.assertEquals("account", map.get("account"));
+        Assert.assertEquals("user", map.get("user"));
         Assert.assertEquals("1", map.get("amount"));
         Assert.assertEquals("bill no", map.get("billNo"));
         Assert.assertEquals("notice", map.get("notice"));

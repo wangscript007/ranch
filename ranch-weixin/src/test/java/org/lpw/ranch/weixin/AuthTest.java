@@ -40,14 +40,6 @@ public class AuthTest extends TestSupport {
         mockHelper.reset();
         mockHelper.getRequest().addParameter("key", "key");
         mockHelper.getRequest().addParameter("code", "code");
-        mockHelper.mock("/weixin/auth");
-        object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(9995, object.getIntValue("code"));
-        Assert.assertEquals(message.get(Validators.PREFIX + "illegal-sign"), object.getString("message"));
-
-        mockHelper.reset();
-        mockHelper.getRequest().addParameter("key", "key");
-        mockHelper.getRequest().addParameter("code", "code");
         sign.put(mockHelper.getRequest().getMap(), null);
         mockHelper.mock("/weixin/auth");
         object = mockHelper.getResponse().asJson();
