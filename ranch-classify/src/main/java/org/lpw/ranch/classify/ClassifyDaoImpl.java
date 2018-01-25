@@ -26,7 +26,8 @@ class ClassifyDaoImpl implements ClassifyDao {
 
     @Override
     public PageList<ClassifyModel> query(int pageSize, int pageNum) {
-        return liteOrm.query(new LiteQuery(ClassifyModel.class).where(Recycle.No.getSql()).order("c_code").size(pageSize).page(pageNum), null);
+        return liteOrm.query(new LiteQuery(ClassifyModel.class).where(Recycle.No.getSql()).order("c_code,c_key")
+                .size(pageSize).page(pageNum), null);
     }
 
     @Override
@@ -47,7 +48,8 @@ class ClassifyDaoImpl implements ClassifyDao {
             args.add(dataSource.getDialect(null).getLike(name, true, true));
         }
 
-        return liteOrm.query(new LiteQuery(ClassifyModel.class).where(sql.toString()).order("c_code").size(pageSize).page(pageNum), args.toArray());
+        return liteOrm.query(new LiteQuery(ClassifyModel.class).where(sql.toString()).order("c_code,c_key")
+                .size(pageSize).page(pageNum), args.toArray());
     }
 
     @Override
@@ -57,7 +59,8 @@ class ClassifyDaoImpl implements ClassifyDao {
 
     @Override
     public ClassifyModel findByCodeKey(String code, String key) {
-        return liteOrm.findOne(new LiteQuery(ClassifyModel.class).where(Recycle.No.getSql() + " and c_code=? and c_key=?"), new Object[]{code, key});
+        return liteOrm.findOne(new LiteQuery(ClassifyModel.class).where(Recycle.No.getSql() + " and c_code=? and c_key=?"),
+                new Object[]{code, key});
     }
 
     @Override

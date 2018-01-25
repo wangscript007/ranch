@@ -3,7 +3,7 @@ package org.lpw.ranch.user;
 import org.junit.Assert;
 import org.junit.Test;
 import org.lpw.tephra.ctrl.context.Session;
-import org.lpw.tephra.ctrl.http.upload.UploadListener;
+import org.lpw.tephra.ctrl.upload.UploadListener;
 
 import javax.annotation.Resource;
 import javax.inject.Inject;

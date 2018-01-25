@@ -15,8 +15,8 @@ public class SmtpSenderTest extends TephraTestSupport {
 
     //    @Test
     public void send() {
-        pushService.save(null, "test.smtp", "smtp", "Hello ${data.name}", "Nice to meet you ${data.name}",
-                null, "ranch-push", 1);
+        pushService.save(null, "test.smtp", "smtp", "app-code", "Hello ${data.name}",
+                "Nice to meet you ${data.name}", null, "ranch-push", 1);
         JSONObject args = new JSONObject();
         args.put("name", "smtp");
         Assert.assertTrue(pushService.send("test.smtp", "e@mail", args));
