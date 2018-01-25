@@ -27,7 +27,7 @@ class Console extends React.Component<object, State> {
             page: 'dashboard'
         };
 
-        service.post('/user/sign').then(user => {
+        service.sign().then(user => {
             if (!user || !user.id) {
                 location.href = 'console-sign-in.html';
 

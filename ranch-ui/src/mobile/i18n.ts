@@ -16,6 +16,9 @@ message.put({
     'sign-in': {
         'zh-cn': '登入'
     },
+    'sign-out': {
+        'zh-cn': '退出'
+    },
     'bottom.home': {
         'zh-cn': '首页'
     },
@@ -24,5 +27,8 @@ message.put({
     },
     'bottom.mine': {
         'zh-cn': '我的'
+    },
+    'nick.non-sign-in': {
+        'zh-cn': '游客'
     }
 });

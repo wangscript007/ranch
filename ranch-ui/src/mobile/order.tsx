@@ -2,11 +2,18 @@ import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import registerServiceWorker from '../registerServiceWorker';
 import storage from '../util/storage';
+import { service } from './service';
 import { Top } from './top';
 import { Bottom } from './bottom';
 import './order.less';
 
 class Mine extends React.Component<object, object> {
+    constructor(props: object) {
+        super(props);
+
+        service.signIn('order');
+    }
+
     render(): JSX.Element {
         document.title = storage.title();
 

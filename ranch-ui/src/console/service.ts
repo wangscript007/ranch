@@ -85,7 +85,7 @@ class Service {
             return promise;
 
         return promise.then(json => {
-            if (json != null)
+            if (json !== null)
                 this.to(success.service, success.parameter);
 
             return null;
@@ -94,7 +94,7 @@ class Service {
 
     public post(uri: string, header: object = {}, parameter: object = {}): Promise<any> {
         return http.post(uri, header, parameter).then(json => {
-            if (json.code == 0)
+            if (json.code === 0)
                 return json.data;
 
             note.show(json.code, json.message || '', 10 * 1000);
