@@ -1,36 +1,26 @@
 import http from '../util/http';
 import note from '../util/note';
-import message from '../util/message';
 
 export interface User {
     id?: string;
     nick?: string;
     mobile?: string;
+    portrait?: string;
 }
 
 class Service {
-    private user: User;
-
-    public getUser(): User {
-        return this.user || {
-            nick: message.get('nick.non-sign-in'),
-            mobile: '12312345678'
-        };
-    }
-
-    public signIn(from: string): void {
-        this.sign().then(user => {
-            if (!user || !user.id)
+    public signIn(from: string): Promise<User | null> {
+        return this.sign().then(user => {
+            if (user === null)
                 location.href = 'mobile-sign-in.html?' + from;
+
+            return user;
         });
     }
 
-    public sign(): Promise<User> {
+    public sign(): Promise<User | null> {
         return service.post('/user/sign').then(user => {
-            if (user && user.id)
-                this.user = user;
-
-            return user;
+            return user && user.id ? user : null;
         });
     }
 

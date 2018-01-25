@@ -28,7 +28,7 @@ message.put({
     'bottom.mine': {
         'zh-cn': '我的'
     },
-    'nick.non-sign-in': {
-        'zh-cn': '游客'
+    'empty': {
+        'zh-cn': '未设置'
     }
 });
