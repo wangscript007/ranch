@@ -104,7 +104,7 @@ public class PushServiceImpl implements PushService, ContextRefreshedListener {
         PushModel push = findByKey(key);
         if (args == null)
             args = new JSONObject();
-        args.put("badge", logService.unread(receiver));
+        args.put("badge", logService.unread(receiver, push.getAppCode()));
         LogModel log = logService.create(receiver, push, args);
         boolean success = senders.get(push.getSender()).send(push, receiver, args);
         logService.send(log, success);
