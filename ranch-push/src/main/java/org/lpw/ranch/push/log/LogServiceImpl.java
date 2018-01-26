@@ -7,6 +7,7 @@ import org.lpw.ranch.user.helper.UserHelper;
 import org.lpw.ranch.util.Pagination;
 import org.lpw.tephra.dao.model.ModelHelper;
 import org.lpw.tephra.util.DateTime;
+import org.lpw.tephra.util.Validator;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
@@ -18,6 +19,8 @@ import javax.inject.Inject;
 public class LogServiceImpl implements LogService {
     @Inject
     private DateTime dateTime;
+    @Inject
+    private Validator validator;
     @Inject
     private ModelHelper modelHelper;
     @Inject
@@ -49,7 +52,7 @@ public class LogServiceImpl implements LogService {
         LogModel log = new LogModel();
         log.setUser(deviceHelper.find(push.getAppCode(), receiver).getString("user"));
         log.setReceiver(receiver);
-        log.setAppCode(push.getAppCode());
+        log.setAppCode(validator.isEmpty(push.getAppCode()) ? "" : push.getAppCode());
         log.setSender(push.getSender());
         log.setPush(modelHelper.toJson(push).toJSONString());
         if (args != null)
