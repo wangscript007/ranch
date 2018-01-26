@@ -8,11 +8,16 @@ import java.sql.Timestamp;
  * @author lpw
  */
 interface LogDao {
-//    PageList<LogModel> query(String user, String receiver, String appCode, String sender, int state, Timestamp start, Timestamp end);
+    PageList<LogModel> query(String user, String receiver, String appCode, String sender, int state,
+                             Timestamp start, Timestamp end, int pageSize, int pageNum);
 
-    int count(String receiver, int state);
+    PageList<LogModel> query(String receiver, String appCode, int stateStart, int stateEnd, int pageSize, int pageNum);
+
+    int count(String receiver, String appCode, int state);
 
     void save(LogModel log);
 
-    void setState(String id, int state);
+    void setState(String id, int state, int newState);
+
+    void setState(String receiver, String appCode, int state, int newState);
 }

@@ -99,7 +99,7 @@ Hello ranch
 |属性|类型|说明|
 |---|---|---|
 |user|char(36)|用户。|
-|receiver|char(36)|接收地址。|
+|receiver|char(100)|接收地址。|
 |appCode|char(100)|APP编码。|
 |sender|char(100)|推送器。|
 |push|string|推送配置，JSON格式。|
@@ -110,6 +110,8 @@ Hello ranch
 [检索](doc/log/query.md)
 
 [检索个人](doc/log/uquery.md)
+
+[未读数](doc/log/unread.md)
 
 [阅读](doc/log/read.md)
 

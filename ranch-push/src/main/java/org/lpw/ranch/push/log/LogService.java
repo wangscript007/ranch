@@ -8,6 +8,29 @@ import org.lpw.ranch.push.PushModel;
  */
 public interface LogService {
     /**
+     * 检索数据集。
+     *
+     * @param user     用户ID，为空则表示不限制。
+     * @param receiver 接收地址，为空则表示不限制。
+     * @param appCode  APP编码，为空则表示不限制。
+     * @param sender   推送器，为空则表示不限制。
+     * @param state    状态：-1-全部；0-新建；1-已推送；2-已阅读；3-推送失败。
+     * @param start    开始日期，格式：yyyy-MM-dd；为空则表示不限制。
+     * @param end      结束日期，格式：yyyy-MM-dd；为空则表示不限制。
+     * @return 数据集。
+     */
+    JSONObject query(String user, String receiver, String appCode, String sender, int state, String start, String end);
+
+    /**
+     * 检索用户数据集。
+     *
+     * @param receiver 接收地址。
+     * @param appCode  APP编码。
+     * @return 数据集。
+     */
+    JSONObject query(String receiver, String appCode);
+
+    /**
      * 创建日志。
      *
      * @param receiver 接收者。
@@ -29,7 +52,23 @@ public interface LogService {
      * 获取未读数。
      *
      * @param receiver 接收者。
+     * @param appCode  APP编码。
      * @return 未读数。
      */
-    int unread(String receiver);
+    int unread(String receiver, String appCode);
+
+    /**
+     * 阅读。
+     *
+     * @param id ID值。
+     */
+    void read(String id);
+
+    /**
+     * 阅读全部。
+     *
+     * @param receiver 接收地址。
+     * @param appCode  APP编码。
+     */
+    void reads(String receiver, String appCode);
 }
