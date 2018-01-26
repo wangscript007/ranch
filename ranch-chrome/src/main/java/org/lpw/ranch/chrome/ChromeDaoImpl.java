@@ -1,6 +1,6 @@
 package org.lpw.ranch.chrome;
 
-import org.lpw.tephra.dao.jdbc.DataSource;
+import org.lpw.ranch.util.DaoHelper;
 import org.lpw.tephra.dao.orm.PageList;
 import org.lpw.tephra.dao.orm.lite.LiteOrm;
 import org.lpw.tephra.dao.orm.lite.LiteQuery;
@@ -19,28 +19,18 @@ class ChromeDaoImpl implements ChromeDao {
     @Inject
     private Validator validator;
     @Inject
-    private DataSource dataSource;
-    @Inject
     private LiteOrm liteOrm;
+    @Inject
+    private DaoHelper daoHelper;
 
     @Override
     public PageList<ChromeModel> query(String key, String name, int pageSize, int pageNum) {
         StringBuilder where = new StringBuilder();
         List<Object> args = new ArrayList<>();
-        append(where, args, "c_key", key);
-        append(where, args, "c_name", name);
+        daoHelper.like(null, where, args, "c_key", key);
+        daoHelper.like(null, where, args, "c_name", name);
 
         return liteOrm.query(new LiteQuery(ChromeModel.class).where(where.toString()).size(pageSize).page(pageNum), args.toArray());
-    }
-
-    private void append(StringBuilder where, List<Object> args, String name, String value) {
-        if (validator.isEmpty(value))
-            return;
-
-        if (!args.isEmpty())
-            where.append(" and ");
-        where.append(name).append(" like ?");
-        args.add(dataSource.getDialect(null).getLike(value, true, true));
     }
 
     @Override

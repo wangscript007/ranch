@@ -11,8 +11,9 @@
 |id|char(36)|ID值。|
 |key|char(100)|引用键。|
 |sender|char(100)|推送器，可选值见下表。|
+|appCode|char(100)|APP编码。|
 |subject|char(100)|标题。|
-|content|char(100)|内容。|
+|content|strng|内容。|
 |template|char(100)|模板ID。|
 |name|char(100)|发送者名称。|
 |state|int|状态：0-待审核；1-使用中。|
@@ -23,6 +24,7 @@
   "id": "ID值",
   "key": "引用键",
   "sender": "推送器",
+  "appCode": "APP编码",
   "subject": "标题",
   "content": "内容",
   "template": "模板",

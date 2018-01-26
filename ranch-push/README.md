@@ -8,8 +8,9 @@
 |---|---|---|
 |key|char(100)|引用键。|
 |sender|char(100)|推送器，可选值见下表。|
+|appCode|char(100)|APP编码。|
 |subject|char(100)|标题。|
-|content|char(100)|内容。|
+|content|string|内容。|
 |template|char(100)|模板ID。|
 |name|char(100)|发送者名称。|
 |state|int|状态：0-待审核；1-使用中。|
@@ -48,3 +49,68 @@ Hello ${data.name}
 ```text
 Hello ranch
 ```
+
+# iOS推送配置
+
+配置iOS推送的证书、密钥等信息。
+
+属性
+
+|属性|类型|说明|
+|---|---|---|
+|appCode|char(100)|APP编码。|
+|p12|string|证书，BASE64编码。|
+|password|char(100)|证书密码。|
+|destination|int|目的地：0-开发；1-正式。|
+|time|datetime|更新时间。|
+
+[检索](doc/ios/query.md)
+
+[保存](doc/ios/save.md)
+
+[删除](doc/ios/delete.md)
+
+# 阿里云推送配置
+
+配置阿里云APP推送密钥等信息。
+
+属性
+
+|属性|类型|说明|
+|---|---|---|
+|appCode|char(100)|APP编码。|
+|keyId|char(100)|KEY ID。|
+|keySecret|char(100)|KEY密钥。|
+|appKey|char(100)|APP KEY。|
+|time|datetime|更新时间。|
+
+[检索](doc/aliyun/query.md)
+
+[保存](doc/aliyun/save.md)
+
+[删除](doc/aliyun/delete.md)
+
+# 推送日志
+
+保存推送数据、状态等信息。
+
+属性
+
+|属性|类型|说明|
+|---|---|---|
+|user|char(36)|用户。|
+|receiver|char(36)|接收地址。|
+|appCode|char(100)|APP编码。|
+|sender|char(100)|推送器。|
+|push|string|推送配置，JSON格式。|
+|args|stirng|参数集，JSON格式。|
+|time|datetime|时间。|
+|state|int|状态：0-新建；1-已推送；2-已阅读；3-推送失败。|
+
+[检索](doc/log/query.md)
+
+[检索个人](doc/log/uquery.md)
+
+[阅读](doc/log/read.md)
+
+[阅读全部](doc/log/reads.md)

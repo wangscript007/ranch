@@ -17,6 +17,7 @@
   "id": "ID值",
   "key": "引用键",
   "sender": "推送器",
+  "appCode": "APP编码",
   "subject": "标题",
   "content": "内容",
   "template": "模板",

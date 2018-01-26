@@ -1,5 +1,7 @@
 package org.lpw.ranch.account.log;
 
+import org.lpw.ranch.util.DaoHelper;
+import org.lpw.ranch.util.DaoOperation;
 import org.lpw.tephra.dao.orm.PageList;
 import org.lpw.tephra.dao.orm.lite.LiteOrm;
 import org.lpw.tephra.dao.orm.lite.LiteQuery;
@@ -20,31 +22,24 @@ class LogDaoImpl implements LogDao {
     private Validator validator;
     @Inject
     private LiteOrm liteOrm;
+    @Inject
+    private DaoHelper daoHelper;
 
     @Override
-    public PageList<LogModel> query(String user, String owner, String type, String channel, int state, Timestamp start, Timestamp end, int pageSize, int pageNum) {
+    public PageList<LogModel> query(String user, String owner, String type, String channel, int state, Timestamp start,
+                                    Timestamp end, int pageSize, int pageNum) {
         StringBuilder where = new StringBuilder();
         List<Object> args = new ArrayList<>();
-        append(where, args, "c_user", user, "=");
-        append(where, args, "c_owner", owner, "=");
-        append(where, args, "c_type", type, "=");
-        append(where, args, "c_channel", channel, "=");
-        if (state > -1)
-            append(where, args, "c_state", state, "=");
-        append(where, args, "c_start", start, ">=");
-        append(where, args, "c_start", end, "<=");
+        daoHelper.where(where, args, "c_user", DaoOperation.Equals, user);
+        daoHelper.where(where, args, "c_owner", DaoOperation.Equals, owner);
+        daoHelper.where(where, args, "c_type", DaoOperation.Equals, type);
+        daoHelper.where(where, args, "c_channel", DaoOperation.Equals, channel);
+        daoHelper.where(where, args, "c_state", DaoOperation.Equals, state);
+        daoHelper.where(where, args, "c_start", DaoOperation.GreaterEquals, start);
+        daoHelper.where(where, args, "c_start", DaoOperation.LessEquals, end);
 
-        return liteOrm.query(new LiteQuery(LogModel.class).where(where.toString()).order("c_start desc,c_index desc").size(pageSize).page(pageNum), args.toArray());
-    }
-
-    private void append(StringBuilder where, List<Object> args, String name, Object value, String operation) {
-        if (validator.isEmpty(value))
-            return;
-
-        if (!args.isEmpty())
-            where.append(" and ");
-        where.append(name).append(operation).append('?');
-        args.add(value);
+        return liteOrm.query(new LiteQuery(LogModel.class).where(where.toString()).order("c_start desc,c_index desc")
+                .size(pageSize).page(pageNum), args.toArray());
     }
 
     @Override

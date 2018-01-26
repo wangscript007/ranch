@@ -1,5 +1,7 @@
 package org.lpw.ranch.user.online;
 
+import org.lpw.ranch.util.DaoHelper;
+import org.lpw.ranch.util.DaoOperation;
 import org.lpw.tephra.dao.orm.PageList;
 import org.lpw.tephra.dao.orm.lite.LiteOrm;
 import org.lpw.tephra.dao.orm.lite.LiteQuery;
@@ -20,25 +22,18 @@ class OnlineDaoImpl implements OnlineDao {
     private Validator validator;
     @Inject
     private LiteOrm liteOrm;
+    @Inject
+    private DaoHelper daoHelper;
 
     @Override
     public PageList<OnlineModel> query(String user, String ip, int pageSize, int pageNum) {
         StringBuilder where = new StringBuilder();
         List<Object> args = new ArrayList<>();
-        append(where, args, "c_user", user);
-        append(where, args, "c_ip", ip);
+        daoHelper.where(where, args, "c_user", DaoOperation.Equals, user);
+        daoHelper.where(where, args, "c_ip", DaoOperation.Equals, ip);
 
-        return liteOrm.query(new LiteQuery(OnlineModel.class).where(where.toString()).order("c_last_visit desc").size(pageSize).page(pageNum), args.toArray());
-    }
-
-    private void append(StringBuilder where, List<Object> args, String name, Object value) {
-        if (validator.isEmpty(value))
-            return;
-
-        if (args.size() > 0)
-            where.append(" and ");
-        where.append(name).append("=?");
-        args.add(value);
+        return liteOrm.query(new LiteQuery(OnlineModel.class).where(where.toString()).order("c_last_visit desc")
+                .size(pageSize).page(pageNum), args.toArray());
     }
 
     @Override
