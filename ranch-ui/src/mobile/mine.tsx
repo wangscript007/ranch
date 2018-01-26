@@ -14,6 +14,8 @@ interface State {
 }
 
 class Mine extends React.Component<object, State> {
+    private portrait: Image | null;
+
     constructor(props: object) {
         super(props);
 
@@ -28,23 +30,26 @@ class Mine extends React.Component<object, State> {
             this.setState({
                 user: user
             });
+            if (this.portrait) {
+                this.portrait.setState({
+                    path: user.portrait || 'img/logo.png'
+                });
+            }
         });
     }
 
     render(): JSX.Element {
         document.title = storage.title();
-        let image: Image = new Image({
-            name: 'portrait',
-            fieldName: 'ranch.user.portrait',
-            defaultValue: this.state.user.portrait || 'img/logo.png'
-        });
 
         return (
             <div id="ranch-ui-mobile">
                 <Top>{storage.title()}</Top>
                 <div className="layout-content">
                     <div className="mine-area">
-                        <div className="portrait">{image.render()}</div>
+                        <div className="portrait">
+                            <Image name="portrait" ref={image => this.portrait = image} fieldName="ranch.user.portrait"
+                                defaultValue={this.state.user.portrait || 'img/logo.png'} />
+                        </div>
                         <div className="nick-mobile">
                             <div className="nick">{this.state.user.nick || message.get('empty')}</div>
                             <div className="mobile">{this.state.user.mobile || message.get('empty')}</div>
