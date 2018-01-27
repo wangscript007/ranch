@@ -1,5 +1,4 @@
-@import '../index';
-@import '../color';
+@import './global';
 #ranch-ui-sign-in {
     position: absolute;
     width: 80%;
@@ -19,7 +18,40 @@
     color: @color-main-light;
 }
 
-#ranch-ui-sign-in .button {
+#ranch-ui-sign-in .toolbar {
     padding: 8px;
     text-align: center;
+}
+
+#ranch-ui-sign-in .toolbar span {
+    margin-left: 16px;
+}
+
+#ranch-ui-sign-in .sign-in-third {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    border-top: 1px solid @color-gray-light;
+    text-align: center;
+}
+
+#ranch-ui-sign-in .sign-in-third .title {
+    margin-top: -10px;
+}
+
+#ranch-ui-sign-in .sign-in-third .title span {
+    padding: 0 5px;
+    background-color: @color-white;
+    color: @color-gray;
+}
+
+#ranch-ui-sign-in .sign-in-third .icons {
+    padding-bottom: 10px;
+}
+
+#ranch-ui-sign-in .sign-in-third .icons i {
+    font-size: 32px;
+    line-height: 48px;
+    color: @color-gray;
 }

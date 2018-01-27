@@ -8,7 +8,18 @@ import { service } from './service';
 import './i18n';
 import './sign-in.less';
 
-class SignIn extends React.Component {
+interface State {
+    up?: boolean;
+}
+
+class SignIn extends React.Component<object, State> {
+    constructor(props: object) {
+        super(props);
+
+        this.state = {
+            up: false
+        };
+    }
     render(): JSX.Element {
         return (
             <div id="ranch-ui-sign-in">
@@ -16,13 +27,33 @@ class SignIn extends React.Component {
                 <div><input type="text" id="uid" name="uid" placeholder={message.get('sign-in.mobile.placeholder')} /></div>
                 <div className="label"><Icon code="&#xe601;" /> {message.get('sign-in.password')}</div>
                 <div><input type="password" id="password" name="password" placeholder={message.get('sign-in.password.placeholder')} /></div>
-                <div className="button"><button onClick={() => this.signIn()}>{message.get('sign-in')}</button></div>
+                <div className="toolbar">{this.toolbar()}</div>
+                <div className="sign-in-third">
+                    <div className="title"><span>{message.get('sign-in-third')}</span></div>
+                    <div className="icons">
+                        <Icon code="&#xe600;" />
+                    </div>
+                </div>
             </div>
         );
     }
 
-    private signIn(): void {
-        service.post('/user/sign-in', {}, {
+    private toolbar(): JSX.Element[] {
+        if (this.state.up) {
+            return [
+                <button onClick={() => this.sign('up')}>{message.get('sign-up')}</button>,
+                <span onClick={() => this.setState({ up: false })}>{message.get('sign-in')}</span>
+            ];
+        }
+
+        return [
+            <button onClick={() => this.sign('in')}>{message.get('sign-in')}</button>,
+            <span onClick={() => this.setState({ up: true })}>{message.get('sign-up')}</span>
+        ];
+    }
+
+    private sign(type: string): void {
+        service.post('/user/sign-' + type, {}, {
             uid: selector.value('#uid'),
             password: selector.value('#password'),
             type: 1

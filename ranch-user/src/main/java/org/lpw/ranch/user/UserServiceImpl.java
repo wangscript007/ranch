@@ -78,6 +78,10 @@ public class UserServiceImpl implements UserService {
             if (userDao.findByCode(code) == null)
                 user.setCode(code);
         }
+        if (validator.isMobile(uid))
+            user.setMobile(uid);
+        else if (validator.isEmail(uid))
+            user.setEmail(uid);
         userDao.save(user);
         authService.create(user.getId(), uid, type.ordinal());
         clearCache(user);

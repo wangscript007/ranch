@@ -2,6 +2,7 @@ import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import registerServiceWorker from '../registerServiceWorker';
 import storage from '../util/storage';
+import Icon from '../ui/icon';
 import { service } from './service';
 import { Top } from './top';
 import { Bottom } from './bottom';
@@ -21,7 +22,9 @@ class Mine extends React.Component<object, object> {
             <div id="ranch-ui-mobile">
                 <Top>{storage.title()}</Top>
                 <div className="layout-content">
-                    content
+                    <div className="order-empty">
+                        <Icon code="&#xe604;" />
+                    </div>
                 </div>
                 <Bottom active={1} />
             </div>

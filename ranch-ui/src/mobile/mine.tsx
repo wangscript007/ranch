@@ -3,6 +3,7 @@ import * as ReactDOM from 'react-dom';
 import registerServiceWorker from '../registerServiceWorker';
 import storage from '../util/storage';
 import message from '../util/message';
+import selector from '../util/selector';
 import Image from '../ui/image';
 import { service, User } from './service';
 import { Top } from './top';
@@ -11,6 +12,8 @@ import './mine.less';
 
 interface State {
     user: User;
+    modify?: boolean;
+    password?: boolean;
 }
 
 class Mine extends React.Component<object, State> {
@@ -52,8 +55,17 @@ class Mine extends React.Component<object, State> {
                         </div>
                         <div className="nick-mobile">
                             <div className="nick">{this.state.user.nick || message.get('empty')}</div>
-                            <div className="mobile">{this.state.user.mobile || message.get('empty')}</div>
+                            <div className="mobile">
+                                {this.state.user.mobile ? this.state.user.mobile.replace(/(\d{3})\d{4}(\d{4})/, '$1****$2') : message.get('empty')}
+                            </div>
                         </div>
+                    </div>
+                    <div className="mine-area">
+                        <div onClick={() => this.setState(prevState => ({ modify: !prevState.modify }))}>{message.get('sign.modify')}</div>
+                        {this.modify()}
+                        <div className="line" />
+                        <div onClick={() => this.setState(prevState => ({ password: !prevState.password }))}>{message.get('sign.modify.password')}</div>
+                        {this.password()}
                     </div>
                     <div className="mine-area">
                         <div onClick={() => this.signOut()}>{message.get('sign-out')}</div>
@@ -62,6 +74,69 @@ class Mine extends React.Component<object, State> {
                 <Bottom active={2} />
             </div>
         );
+    }
+
+    private modify(): JSX.Element | null {
+        if (!this.state.modify)
+            return null;
+
+        return (
+            <div className="sign-modify">
+                <label htmlFor="sign-name">{message.get('sign.name')}</label>
+                <input type="text" id="sign-name" name="name" defaultValue={this.state.user.name || ''} />
+                <label htmlFor="sign-nick">{message.get('sign.nick')}</label>
+                <input type="text" id="sign-nick" name="nick" defaultValue={this.state.user.nick || ''} />
+                <div className="submit"><button onClick={() => this.modifySubmit()}>{message.get('sign.modify')}</button></div>
+            </div>
+        );
+    }
+
+    private modifySubmit(): void {
+        service.post('/user/modify', {}, {
+            name: selector.value('#sign-name'),
+            nick: selector.value('#sign-nick')
+        }).then(data => {
+            if (data === null)
+                return;
+
+            this.setState({
+                user: data,
+                modify: false
+            });
+        });
+    }
+
+    private password(): JSX.Element | null {
+        if (!this.state.password)
+            return null;
+
+        return (
+            <div className="sign-modify">
+                <label htmlFor="sign-password-old">{message.get('sign.password.old')}</label>
+                <input type="password" id="sign-password-old" />
+                <label htmlFor="sign-password-new">{message.get('sign.password.new')}</label>
+                <input type="password" id="sign-password-new" />
+                <label htmlFor="sign-password-repeat">{message.get('sign.password.repeat')}</label>
+                <input type="password" id="sign-password-repeat" />
+                <div className="submit"><button onClick={() => this.passwordSubmit()}>{message.get('sign.modify.password')}</button></div>
+            </div>
+        );
+    }
+
+    private passwordSubmit(): void {
+        service.post('/user/password', {}, {
+            old: selector.value('#sign-password-old'),
+            'new': selector.value('#sign-password-new'),
+            repeat: selector.value('#sign-password-repeat')
+        }).then(data => {
+            if (data === null)
+                return;
+
+            this.setState({
+                password: false
+            });
+        });
+
     }
 
     private signOut(): void {

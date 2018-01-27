@@ -3,6 +3,7 @@ import note from '../util/note';
 
 export interface User {
     id?: string;
+    name?: string;
     nick?: string;
     mobile?: string;
     portrait?: string;
