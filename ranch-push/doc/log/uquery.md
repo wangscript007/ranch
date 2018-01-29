@@ -8,7 +8,7 @@
 
 |名称|类型|说明|
 |---|---|---|
-|receiver|char(100)|接收地址。|
+|user|char(36)|用户ID。|
 |appCode|char(100)|APP编码。|
 |pageSize|int|每页显示记录数，小于等于0则默认20。|
 |pageNum|int|当前显示页数。|

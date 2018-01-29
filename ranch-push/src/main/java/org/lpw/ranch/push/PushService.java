@@ -104,11 +104,12 @@ public interface PushService {
      * 推送。
      *
      * @param key      引用键。
+     * @param user     用户。
      * @param receiver 接收者。
      * @param args     参数集。
      * @return 推送结果：true-成功；false-失败。
      */
-    boolean send(String key, String receiver, JSONObject args);
+    boolean send(String key, String user, String receiver, JSONObject args);
 
     /**
      * 解析模板数据。

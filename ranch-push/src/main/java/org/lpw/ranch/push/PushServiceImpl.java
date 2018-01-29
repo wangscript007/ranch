@@ -3,6 +3,7 @@ package org.lpw.ranch.push;
 import com.alibaba.fastjson.JSONObject;
 import org.lpw.ranch.push.log.LogModel;
 import org.lpw.ranch.push.log.LogService;
+import org.lpw.ranch.user.helper.UserHelper;
 import org.lpw.ranch.util.Pagination;
 import org.lpw.tephra.bean.BeanFactory;
 import org.lpw.tephra.bean.ContextRefreshedListener;
@@ -31,6 +32,8 @@ public class PushServiceImpl implements PushService, ContextRefreshedListener {
     private ModelHelper modelHelper;
     @Inject
     private Pagination pagination;
+    @Inject
+    private UserHelper userHelper;
     @Inject
     private LogService logService;
     @Inject
@@ -100,12 +103,12 @@ public class PushServiceImpl implements PushService, ContextRefreshedListener {
     }
 
     @Override
-    public boolean send(String key, String receiver, JSONObject args) {
+    public boolean send(String key, String user, String receiver, JSONObject args) {
         PushModel push = findByKey(key);
         if (args == null)
             args = new JSONObject();
         args.put("badge", logService.unread(receiver, push.getAppCode()));
-        LogModel log = logService.create(receiver, push, args);
+        LogModel log = logService.create(validator.isEmpty(user) ? userHelper.id() : user, receiver, push, args);
         boolean success = senders.get(push.getSender()).send(push, receiver, args);
         logService.send(log, success);
 

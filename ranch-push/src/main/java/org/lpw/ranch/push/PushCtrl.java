@@ -1,5 +1,6 @@
 package org.lpw.ranch.push;
 
+import org.lpw.ranch.user.helper.UserHelper;
 import org.lpw.tephra.ctrl.context.Request;
 import org.lpw.tephra.ctrl.execute.Execute;
 import org.lpw.tephra.ctrl.validate.Validate;
@@ -68,9 +69,10 @@ public class PushCtrl {
             @Validate(validator = Validators.NOT_EMPTY, parameter = "key", failureCode = 2),
             @Validate(validator = Validators.NOT_EMPTY, parameter = "receiver", failureCode = 10),
             @Validate(validator = Validators.SIGN),
-            @Validate(validator = PushService.VALIDATOR_EXISTS_KEY, parameter = "key", failureCode = 11)
+            @Validate(validator = UserHelper.VALIDATOR_EXISTS_OR_SIGN_IN, parameter = "user", failureCode = 11),
+            @Validate(validator = PushService.VALIDATOR_EXISTS_KEY, parameter = "key", failureCode = 12)
     })
     public Object send() {
-        return pushService.send(request.get("key"), request.get("receiver"), request.getAsJsonObject("args"));
+        return pushService.send(request.get("key"), request.get("user"), request.get("receiver"), request.getAsJsonObject("args"));
     }
 }

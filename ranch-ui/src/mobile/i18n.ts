@@ -1,6 +1,16 @@
 import message from '../util/message';
 
 message.put({
+    'title': 'Ranch UI',
+    'title.order': {
+        'zh-cn': '我的订单'
+    },
+    'title.mine': {
+        'zh-cn': '我的信息'
+    },
+    'title.sign-in': {
+        'zh-cn': '请登录'
+    },
     'sign-in.mobile': {
         'zh-cn': '手机号'
     },

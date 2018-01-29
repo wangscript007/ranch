@@ -42,15 +42,18 @@ public class LogServiceImpl implements LogService {
     }
 
     @Override
-    public JSONObject query(String receiver, String appCode) {
-        return logDao.query(receiver, appCode, 1, 2, pagination.getPageSize(20),
-                pagination.getPageNum()).toJson();
+    public JSONObject query(String user, String appCode) {
+        return logDao.query(validator.isEmpty(user) ? userHelper.id() : user, appCode, 1, 2,
+                pagination.getPageSize(20), pagination.getPageNum()).toJson();
     }
 
     @Override
-    public LogModel create(String receiver, PushModel push, JSONObject args) {
+    public LogModel create(String user, String receiver, PushModel push, JSONObject args) {
+        if (validator.isEmpty(user) || validator.isEmpty(receiver))
+            return null;
+
         LogModel log = new LogModel();
-        log.setUser(deviceHelper.find(push.getAppCode(), receiver).getString("user"));
+        log.setUser(user);
         log.setReceiver(receiver);
         log.setAppCode(validator.isEmpty(push.getAppCode()) ? "" : push.getAppCode());
         log.setSender(push.getSender());
@@ -64,12 +67,13 @@ public class LogServiceImpl implements LogService {
 
     @Override
     public void send(LogModel log, boolean success) {
-        logDao.setState(log.getId(), 0, success ? 1 : 3);
+        if (log != null)
+            logDao.setState(log.getId(), 0, success ? 1 : 3);
     }
 
     @Override
-    public int unread(String receiver, String appCode) {
-        return logDao.count(receiver, appCode, 1);
+    public int unread(String user, String appCode) {
+        return logDao.count(user, appCode, 1);
     }
 
     @Override
@@ -78,7 +82,7 @@ public class LogServiceImpl implements LogService {
     }
 
     @Override
-    public void reads(String receiver, String appCode) {
-        logDao.setState(receiver, appCode, 1, 2);
+    public void reads(String user, String appCode) {
+        logDao.setState(user, appCode, 1, 2);
     }
 }

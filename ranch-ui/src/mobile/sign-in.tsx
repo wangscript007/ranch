@@ -20,7 +20,10 @@ class SignIn extends React.Component<object, State> {
             up: false
         };
     }
+
     render(): JSX.Element {
+        document.title = message.get('title.sign-in') + ' - ' + message.get('title');
+
         return (
             <div id="ranch-ui-sign-in">
                 <div className="label"><Icon code="&#xe603;" /> {message.get('sign-in.mobile')}</div>

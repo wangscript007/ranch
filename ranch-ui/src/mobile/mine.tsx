@@ -1,13 +1,13 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import registerServiceWorker from '../registerServiceWorker';
-import storage from '../util/storage';
 import message from '../util/message';
 import selector from '../util/selector';
 import Image from '../ui/image';
 import { service, User } from './service';
 import { Top } from './top';
 import { Bottom } from './bottom';
+import './i18n';
 import './mine.less';
 
 interface State {
@@ -42,11 +42,12 @@ class Mine extends React.Component<object, State> {
     }
 
     render(): JSX.Element {
-        document.title = storage.title();
+        let title = message.get('title.mine') + ' - ' + message.get('title');
+        document.title = title;
 
         return (
             <div id="ranch-ui-mobile">
-                <Top>{storage.title()}</Top>
+                <Top>{title}</Top>
                 <div className="layout-content">
                     <div className="mine-area">
                         <div className="portrait">

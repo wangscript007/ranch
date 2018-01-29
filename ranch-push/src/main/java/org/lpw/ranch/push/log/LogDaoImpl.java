@@ -40,15 +40,15 @@ class LogDaoImpl implements LogDao {
     }
 
     @Override
-    public PageList<LogModel> query(String receiver, String appCode, int stateStart, int stateEnd, int pageSize, int pageNum) {
-        return liteOrm.query(new LiteQuery(LogModel.class).where("c_reciever=? and c_app_code=? and c_state between ? and ?")
-                .order("c_time desc").size(pageSize).page(pageNum), new Object[]{receiver, appCode, stateStart, stateEnd});
+    public PageList<LogModel> query(String user, String appCode, int stateStart, int stateEnd, int pageSize, int pageNum) {
+        return liteOrm.query(new LiteQuery(LogModel.class).where("c_user=? and c_app_code=? and c_state between ? and ?")
+                .order("c_time desc").size(pageSize).page(pageNum), new Object[]{user, appCode, stateStart, stateEnd});
     }
 
     @Override
-    public int count(String receiver, String appCode, int state) {
-        return liteOrm.count(new LiteQuery(LogModel.class).where("c_receiver=? and c_app_code=? and c_state=?"),
-                new Object[]{receiver, appCode, state});
+    public int count(String user, String appCode, int state) {
+        return liteOrm.count(new LiteQuery(LogModel.class).where("c_user=? and c_app_code=? and c_state=?"),
+                new Object[]{user, appCode, state});
     }
 
     @Override
@@ -62,8 +62,8 @@ class LogDaoImpl implements LogDao {
     }
 
     @Override
-    public void setState(String receiver, String appCode, int state, int newState) {
-        liteOrm.update(new LiteQuery(LogModel.class).set("c_state=?").where("c_receiver=? and c_app_code=? and c_state=?"),
-                new Object[]{newState, receiver, appCode, state});
+    public void setState(String user, String appCode, int state, int newState) {
+        liteOrm.update(new LiteQuery(LogModel.class).set("c_state=?").where("c_user=? and c_app_code=? and c_state=?"),
+                new Object[]{newState, user, appCode, state});
     }
 }

@@ -8,7 +8,7 @@
 
 |名称|类型|说明|
 |---|---|---|
-|receiver|char(100)|接收地址。|
+|user|char(36)|用户ID。|
 |appCode|char(100)|APP编码。|
 
 返回值

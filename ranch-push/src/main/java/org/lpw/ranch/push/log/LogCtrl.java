@@ -1,5 +1,6 @@
 package org.lpw.ranch.push.log;
 
+import org.lpw.ranch.user.helper.UserHelper;
 import org.lpw.tephra.ctrl.context.Request;
 import org.lpw.tephra.ctrl.execute.Execute;
 import org.lpw.tephra.ctrl.validate.Validate;
@@ -27,9 +28,11 @@ public class LogCtrl {
                 request.getAsInt("state"), request.get("start"), request.get("end"));
     }
 
-    @Execute(name = "uquery")
+    @Execute(name = "uquery", validates = {
+            @Validate(validator = UserHelper.VALIDATOR_EXISTS_OR_SIGN_IN, parameter = "user", failureCode = 61)
+    })
     public Object uquery() {
-        return logService.query(request.get("receiver"), request.get("appCode"));
+        return logService.query(request.get("user"), request.get("appCode"));
     }
 
     @Execute(name = "unread")

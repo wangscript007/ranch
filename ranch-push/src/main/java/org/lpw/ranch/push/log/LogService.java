@@ -24,21 +24,22 @@ public interface LogService {
     /**
      * 检索用户数据集。
      *
-     * @param receiver 接收地址。
-     * @param appCode  APP编码。
+     * @param user    用户。
+     * @param appCode APP编码。
      * @return 数据集。
      */
-    JSONObject query(String receiver, String appCode);
+    JSONObject query(String user, String appCode);
 
     /**
      * 创建日志。
      *
+     * @param user     用户。
      * @param receiver 接收者。
      * @param push     推送配置。
      * @param args     参数集。
      * @return 推送日志。
      */
-    LogModel create(String receiver, PushModel push, JSONObject args);
+    LogModel create(String user, String receiver, PushModel push, JSONObject args);
 
     /**
      * 推送。
@@ -51,11 +52,11 @@ public interface LogService {
     /**
      * 获取未读数。
      *
-     * @param receiver 接收者。
-     * @param appCode  APP编码。
+     * @param user    用户。
+     * @param appCode APP编码。
      * @return 未读数。
      */
-    int unread(String receiver, String appCode);
+    int unread(String user, String appCode);
 
     /**
      * 阅读。
@@ -67,8 +68,8 @@ public interface LogService {
     /**
      * 阅读全部。
      *
-     * @param receiver 接收地址。
-     * @param appCode  APP编码。
+     * @param user    用户。
+     * @param appCode APP编码。
      */
-    void reads(String receiver, String appCode);
+    void reads(String user, String appCode);
 }
