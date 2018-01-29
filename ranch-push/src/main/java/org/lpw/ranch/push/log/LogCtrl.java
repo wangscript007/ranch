@@ -37,7 +37,7 @@ public class LogCtrl {
 
     @Execute(name = "unread")
     public Object unread() {
-        return logService.unread(request.get("receiver"), request.get("appCode"));
+        return logService.unread(request.get("user"), request.get("appCode"));
     }
 
     @Execute(name = "read")
@@ -49,7 +49,7 @@ public class LogCtrl {
 
     @Execute(name = "reads")
     public Object reads() {
-        logService.reads(request.get("receiver"), request.get("appCode"));
+        logService.reads(request.get("user"), request.get("appCode"));
 
         return "";
     }
