@@ -26,9 +26,10 @@ public class PushHelprImpl implements PushHelper {
     private String key;
 
     @Override
-    public boolean send(String key, String receiver, JSONObject args) {
+    public boolean send(String key, String user, String receiver, JSONObject args) {
         Map<String, String> parameter = new HashMap<>();
         parameter.put("key", key);
+        parameter.put("user", user);
         parameter.put("receiver", receiver);
         if (!validator.isEmpty(args))
             parameter.put("args", args.toJSONString());
