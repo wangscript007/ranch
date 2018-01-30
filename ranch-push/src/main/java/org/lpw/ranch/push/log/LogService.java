@@ -59,6 +59,16 @@ public interface LogService {
     int unread(String user, String appCode);
 
     /**
+     * 获取最新一条未读日志。
+     * 如果无未读日志则返回最新一条已读日志。
+     *
+     * @param user    用户。
+     * @param appCode APP编码。
+     * @return 未读日志，如果不存在则返回空JSON。
+     */
+    JSONObject unreadNewest(String user, String appCode);
+
+    /**
      * 阅读。
      *
      * @param id ID值。

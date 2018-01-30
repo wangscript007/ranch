@@ -35,9 +35,18 @@ public class LogCtrl {
         return logService.query(request.get("user"), request.get("appCode"));
     }
 
-    @Execute(name = "unread")
+    @Execute(name = "unread", validates = {
+            @Validate(validator = UserHelper.VALIDATOR_EXISTS_OR_SIGN_IN, parameter = "user", failureCode = 61)
+    })
     public Object unread() {
         return logService.unread(request.get("user"), request.get("appCode"));
+    }
+
+    @Execute(name = "unread-newest", validates = {
+            @Validate(validator = UserHelper.VALIDATOR_EXISTS_OR_SIGN_IN, parameter = "user", failureCode = 61)
+    })
+    public Object unreadNewest() {
+        return logService.unreadNewest(request.get("user"), request.get("appCode"));
     }
 
     @Execute(name = "read")
@@ -47,7 +56,9 @@ public class LogCtrl {
         return "";
     }
 
-    @Execute(name = "reads")
+    @Execute(name = "reads", validates = {
+            @Validate(validator = UserHelper.VALIDATOR_EXISTS_OR_SIGN_IN, parameter = "user", failureCode = 61)
+    })
     public Object reads() {
         logService.reads(request.get("user"), request.get("appCode"));
 

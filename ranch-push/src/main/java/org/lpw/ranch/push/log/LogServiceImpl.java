@@ -77,6 +77,15 @@ public class LogServiceImpl implements LogService {
     }
 
     @Override
+    public JSONObject unreadNewest(String user, String appCode) {
+        LogModel log = logDao.findNewest(user, appCode, 1);
+        if (log == null)
+            log = logDao.findNewest(user, appCode, 2);
+
+        return log == null ? new JSONObject() : modelHelper.toJson(log);
+    }
+
+    @Override
     public void read(String id) {
         logDao.setState(id, 1, 2);
     }

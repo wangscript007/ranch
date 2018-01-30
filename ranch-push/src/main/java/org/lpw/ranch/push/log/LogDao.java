@@ -13,6 +13,8 @@ interface LogDao {
 
     PageList<LogModel> query(String user, String appCode, int stateStart, int stateEnd, int pageSize, int pageNum);
 
+    LogModel findNewest(String user, String appCode, int state);
+
     int count(String user, String appCode, int state);
 
     void save(LogModel log);

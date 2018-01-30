@@ -113,6 +113,8 @@ Hello ranch
 
 [未读数](doc/log/unread.md)
 
+[最新未读](doc/log/unread-newest.md)
+
 [阅读](doc/log/read.md)
 
 [阅读全部](doc/log/reads.md)

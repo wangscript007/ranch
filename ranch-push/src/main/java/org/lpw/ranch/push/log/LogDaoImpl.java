@@ -46,6 +46,12 @@ class LogDaoImpl implements LogDao {
     }
 
     @Override
+    public LogModel findNewest(String user, String appCode, int state) {
+        return liteOrm.findOne(new LiteQuery(LogModel.class).where("c_user=? and c_app_code=? and c_state=?").order("c_time desc"),
+                new Object[]{user, appCode, state});
+    }
+
+    @Override
     public int count(String user, String appCode, int state) {
         return liteOrm.count(new LiteQuery(LogModel.class).where("c_user=? and c_app_code=? and c_state=?"),
                 new Object[]{user, appCode, state});
