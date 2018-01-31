@@ -34,7 +34,7 @@ export default class Form extends PageComponent<PageProps, PageState> {
                         {props.map((prop, index) => this.tr(index, prop, data))}
                     </tbody>
                 </table>
-                <Toolbar meta={this.props.meta} ops={page.toolbar} />
+                <Toolbar meta={this.props.meta} ops={page.toolbar} form=".form" />
             </form>
         );
     }

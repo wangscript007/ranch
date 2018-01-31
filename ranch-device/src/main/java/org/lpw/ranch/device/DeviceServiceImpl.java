@@ -2,6 +2,7 @@ package org.lpw.ranch.device;
 
 import com.alibaba.fastjson.JSONObject;
 import org.lpw.ranch.user.helper.UserHelper;
+import org.lpw.ranch.util.Pagination;
 import org.lpw.tephra.dao.model.ModelHelper;
 import org.lpw.tephra.util.DateTime;
 import org.lpw.tephra.util.Validator;
@@ -21,9 +22,20 @@ public class DeviceServiceImpl implements DeviceService {
     @Inject
     private ModelHelper modelHelper;
     @Inject
+    private Pagination pagination;
+    @Inject
     private UserHelper userHelper;
     @Inject
     private DeviceDao deviceDao;
+
+    @Override
+    public JSONObject query(String user, String appCode, String type, String macId, String version) {
+        JSONObject object = deviceDao.query(userHelper.findIdByUid(user, user), appCode, type, macId, version,
+                pagination.getPageSize(20), pagination.getPageNum()).toJson();
+        userHelper.fill(object.getJSONArray("list"), new String[]{"user"});
+
+        return object;
+    }
 
     @Override
     public JSONObject find(String appCode, String macId) {

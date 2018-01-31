@@ -104,7 +104,25 @@ public class PushServiceImpl implements PushService, ContextRefreshedListener {
 
     @Override
     public boolean send(String key, String user, String receiver, JSONObject args) {
-        PushModel push = findByKey(key);
+        return send(findByKey(key), user, receiver, args);
+    }
+
+    @Override
+    public boolean send(String sender, String appCode, String subject, String content, String template, String name,
+                        String user, String receiver, JSONObject args) {
+        PushModel push = new PushModel();
+        push.setKey("");
+        push.setSender(sender);
+        push.setAppCode(appCode);
+        push.setSubject(subject);
+        push.setContent(content);
+        push.setTemplate(template);
+        push.setName(name);
+
+        return send(push, user, receiver, args);
+    }
+
+    private boolean send(PushModel push, String user, String receiver, JSONObject args) {
         if (args == null)
             args = new JSONObject();
         args.put("badge", logService.unread(receiver, push.getAppCode()));

@@ -40,6 +40,46 @@
         }
     ],
     "query": {
-        "type": "grid"
+        "type": "grid",
+        "search": [
+            {
+                "name": "idcard"
+            },
+            {
+                "name": "name"
+            },
+            {
+                "name": "nick"
+            },
+            {
+                "name": "mobile"
+            },
+            {
+                "name": "email"
+            },
+            {
+                "name": "code",
+                "type": ""
+            },
+            {
+                "name": "minGrade",
+                "label": ".grade"
+            },
+            {
+                "name": "maxGrade",
+                "label": "-"
+            },
+            {
+                "name": "registerStart",
+                "label": ".register"
+            },
+            {
+                "name": "registerEnd",
+                "label": "-"
+            },
+            {
+                "name": "state"
+            }
+        ]
     }
 }

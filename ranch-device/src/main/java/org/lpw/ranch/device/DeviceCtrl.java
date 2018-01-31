@@ -20,6 +20,14 @@ public class DeviceCtrl {
     @Inject
     private DeviceService deviceService;
 
+    @Execute(name = "query", validates = {
+            @Validate(validator = Validators.SIGN)
+    })
+    public Object query() {
+        return deviceService.query(request.get("user"), request.get("appCode"), request.get("type"), request.get("macId"),
+                request.get("version"));
+    }
+
     @Execute(name = "find", validates = {
             @Validate(validator = Validators.NOT_EMPTY, parameter = "appCode", failureCode = 1),
             @Validate(validator = Validators.NOT_EMPTY, parameter = "macId", failureCode = 5),

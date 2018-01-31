@@ -31,9 +31,9 @@ class UserDaoImpl implements UserDao {
         daoHelper.where(where, args, "c_code", DaoOperation.Equals, code);
         daoHelper.where(where, args, "c_mobile", DaoOperation.Equals, mobile);
         daoHelper.where(where, args, "c_idcard", DaoOperation.Equals, idcard);
-        daoHelper.where(where, args, "c_name", DaoOperation.Equals, name);
-        daoHelper.where(where, args, "c_nick", DaoOperation.Equals, nick);
-        daoHelper.where(where, args, "c_email", DaoOperation.Equals, email);
+        daoHelper.like(null, where, args, "c_name", name);
+        daoHelper.like(null, where, args, "c_nick", nick);
+        daoHelper.like(null, where, args, "c_email", email);
         daoHelper.where(where, args, "c_grade", DaoOperation.GreaterEquals, minGrade);
         daoHelper.where(where, args, "c_grade", DaoOperation.LessEquals, maxGrade);
         daoHelper.where(where, args, "c_state", DaoOperation.Equals, state);

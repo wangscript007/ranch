@@ -1,4 +1,5 @@
 import http from '../util/http';
+import merger from '../util/merger';
 import note from '../util/note';
 import { Meta } from './meta';
 
@@ -48,10 +49,7 @@ class Service {
         if (!parameter || !this.parameter)
             return parameter || this.parameter || {};
 
-        for (const key in this.parameter)
-            parameter[key] = this.parameter[key];
-
-        return parameter;
+        return merger.merge<object>({}, parameter, this.parameter);
     }
 
     public to(service: string, parameter?: object, data?: object): void {

@@ -1,5 +1,6 @@
 import * as React from 'react';
 import selector from '../../util/selector';
+import message from '../../util/message';
 import Image from '../../ui/image';
 import Base64 from '../../ui/base64';
 import { Meta, Prop, Operate } from '../meta';
@@ -20,15 +21,17 @@ export interface PageState {
 export class PageComponent<T extends PageProps, E extends PageState> extends React.Component<T, E> {
     private random: string = "";
 
-    protected refresh(): void {
+    protected refresh(): boolean {
         if (this.props.random === this.random)
-            return;
+            return false;
 
         this.random = this.props.random;
         service.execute(this.props.service, {}, this.props.parameter).then(data => this.setState({ data: data }));
+
+        return true;
     }
 
-    protected input(prop: Prop, data: object): JSX.Element {
+    protected input(prop: Prop, data: object, selectAll?: string): JSX.Element {
         let value = data[prop.name] || "";
         if (prop.type === 'read-only')
             return value;
@@ -49,6 +52,7 @@ export class PageComponent<T extends PageProps, E extends PageState> extends Rea
         if (prop.labels && prop.labels.length > 0) {
             return (
                 <select {...props} >
+                    {selectAll ? <option value="">{message.get(selectAll)}</option> : null}
                     {prop.labels.map((label, index) => <option key={index} value={index}>{label}</option>)}
                 </select>
             );
@@ -56,6 +60,8 @@ export class PageComponent<T extends PageProps, E extends PageState> extends Rea
 
         if (prop.values) {
             let options: JSX.Element[] = [];
+            if (selectAll)
+                options.push(<option value="">{message.get(selectAll)}</option>);
             for (let value in prop.values)
                 options.push(<option value={value} key={value}>{prop.values[value]}</option>);
 
@@ -69,6 +75,7 @@ export class PageComponent<T extends PageProps, E extends PageState> extends Rea
 interface ToolbarProps {
     meta: Meta;
     ops: Operate[];
+    form?: string;
 }
 
 export class Toolbar extends React.Component<ToolbarProps, object> {
@@ -92,7 +99,10 @@ export class Toolbar extends React.Component<ToolbarProps, object> {
         }
 
         if (operate.type === 'save') {
-            let form: HTMLFormElement = selector.find('form.form');
+            if (!this.props.form)
+                return;
+
+            let form: HTMLFormElement = selector.find(this.props.form);
             if (!form)
                 return;
 

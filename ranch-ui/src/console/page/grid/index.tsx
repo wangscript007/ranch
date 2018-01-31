@@ -1,22 +1,27 @@
 import * as React from 'react';
 import message from '../../../util/message';
+import merger from '../../../util/merger';
 import Icon from '../../../ui/icon';
 import { Prop, Page, Operate } from '../../meta';
 import { service } from '../../service';
 import { PageComponent, PageProps, PageState, Toolbar, getSuccess } from '../index';
 import './i18n';
 import './index.less';
+import { FormEvent } from 'react';
 
 export default class Grid extends PageComponent<PageProps, PageState> {
+    private searchParameter: object;
     constructor(props: PageProps) {
         super(props);
         this.state = {
             data: []
         };
+        this.searchParameter = {};
     }
 
     render(): JSX.Element {
-        this.refresh();
+        if (this.refresh())
+            this.searchParameter = {};
         let pagination = this.state.data.hasOwnProperty('list');
         let list: object[] = pagination ? this.state.data['list'] : this.state.data;
         let page: Page = this.props.meta[this.props.service.substring(this.props.service.lastIndexOf('.') + 1)];
@@ -41,11 +46,11 @@ export default class Grid extends PageComponent<PageProps, PageState> {
             return null;
 
         return (
-            <form>
+            <form action="javascript:void(0);" onSubmit={(event) => this.submitSearch(event)}>
                 {page.search.map((prop, index) =>
                     <div key={index} className="search">
                         <label>{prop.label}</label>
-                        {this.input(this.findProp(props, prop), {})}
+                        {this.input(this.findProp(props, prop), {}, 'select.all')}
                     </div>
                 )}
                 <button>{message.get('grid.search')}</button>
@@ -56,9 +61,22 @@ export default class Grid extends PageComponent<PageProps, PageState> {
     private findProp(props: Prop[], prop: Prop): Prop {
         for (let i = 0; i < props.length; i++)
             if (props[i].name === prop.name)
-                return props[i];
+                return merger.merge<Prop>({ name: '', label: '' }, props[i], prop);
 
         return prop;
+    }
+
+    private submitSearch(event: FormEvent<HTMLFormElement>): void {
+        let form: HTMLFormElement = event.currentTarget;
+        let parameter = {};
+        for (let i = 0; i < form.elements.length; i++) {
+            if (!form.elements[i]['name'])
+                continue;
+
+            parameter[form.elements[i]['name']] = form.elements[i]['value'];
+        }
+        this.searchParameter = parameter;
+        service.to(this.props.service, parameter);
     }
 
     private table(props: Prop[], page: Page, list: object[]): JSX.Element {
@@ -183,8 +201,7 @@ export default class Grid extends PageComponent<PageProps, PageState> {
     }
 
     private pageTo(num: number): void {
-        let parameter: object = this.props.parameter || {};
-        parameter['pageNum'] = num;
-        service.execute(this.props.service, {}, parameter).then(data => this.setState({ data: data }));
+        service.execute(this.props.service, {}, merger.merge({}, this.props.parameter, this.searchParameter, { pageNum: num }))
+            .then(data => this.setState({ data: data }));
     }
 }
