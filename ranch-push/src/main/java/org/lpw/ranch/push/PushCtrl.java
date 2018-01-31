@@ -69,7 +69,7 @@ public class PushCtrl {
             @Validate(validator = Validators.NOT_EMPTY, parameter = "key", failureCode = 2),
             @Validate(validator = Validators.NOT_EMPTY, parameter = "receiver", failureCode = 10),
             @Validate(validator = Validators.SIGN),
-            @Validate(validator = UserHelper.VALIDATOR_EXISTS_OR_SIGN_IN, parameter = "user", failureCode = 11),
+            @Validate(validator = UserHelper.VALIDATOR_EXISTS, parameter = "user", failureCode = 11),
             @Validate(validator = PushService.VALIDATOR_EXISTS_KEY, parameter = "key", failureCode = 12)
     })
     public Object send() {
