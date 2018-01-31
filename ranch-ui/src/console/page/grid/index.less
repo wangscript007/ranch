@@ -4,78 +4,88 @@
     word-wrap: none;
 }
 
-#ranch-ui-console .grid table {
+.grid .search {
+    display: inline-block;
+    margin: 0 8px 5px 0;
+    .nowrap;
+}
+
+.grid .search label {
+    margin-right: 5px;
+}
+
+.grid table {
     width: 100%;
     background-color: @color-gray;
 }
 
-#ranch-ui-console .grid th {
+.grid th {
     padding: 0 3px;
     background-color: @color-gray-light;
-    white-space: nowrap;
+    .nowrap;
 }
 
-#ranch-ui-console .grid td {
+.grid td {
     padding: 0 3px;
 }
 
-#ranch-ui-console .grid tr:nth-child(odd) td {
+.grid tr:nth-child(odd) td {
     background-color: @color-gray-white;
 }
 
-#ranch-ui-console .grid tr:nth-child(even) td {
+.grid tr:nth-child(even) td {
     background-color: @color-gray-lighter;
 }
 
-#ranch-ui-console .grid .image {
+.grid .image {
     width: 10%;
     padding: 0;
 }
 
-#ranch-ui-console .grid .image img {
+.grid .image img {
     display: block;
     width: 100%;
 }
 
-#ranch-ui-console .grid .base64 {
+.grid .base64 {
     max-width: 64px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
 }
 
-#ranch-ui-console .grid .ops a {
+.grid .ops a {
     padding: 0 3px;
     text-decoration: none;
     color: @color-main-dark;
     white-space: nowrap;
 }
 
-#ranch-ui-console .grid .ops a:hover {
+.grid .ops a:hover {
     color: @color-main-light;
 }
 
-#ranch-ui-console .grid .empty {
+.grid .empty {
     text-align: center;
     color: @color-gray-light;
     font-size: 16px;
     line-height: 32px;
 }
 
-#ranch-ui-console .grid .toolbar {
+.grid .toolbar {
     float: left;
 }
 
-#ranch-ui-console .grid .toolbar button {
+.grid .toolbar button {
     margin: 3px 3px 3px 0px;
 }
 
-#ranch-ui-console .grid .pagination {
+.grid .pagination {
     float: right;
     padding-top: 3px;
 }
 
-#ranch-ui-console .grid .pagination a {
+.grid .pagination a {
     display: inline-block;
     padding: 0 5px;
     background-color: @color-gray-light;
@@ -83,8 +93,8 @@
     text-decoration: none;
 }
 
-#ranch-ui-console .grid .pagination a.active,
-#ranch-ui-console .grid .pagination a:hover {
+.grid .pagination a.active,
+.grid .pagination a:hover {
     background-color: @color-gray;
     color: @color-white;
 }

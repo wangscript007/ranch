@@ -1,6 +1,8 @@
 import * as React from 'react';
 import selector from '../../util/selector';
-import { Meta, Operate } from '../meta';
+import Image from '../../ui/image';
+import Base64 from '../../ui/base64';
+import { Meta, Prop, Operate } from '../meta';
 import { service, Success } from '../service';
 
 export interface PageProps {
@@ -24,6 +26,43 @@ export class PageComponent<T extends PageProps, E extends PageState> extends Rea
 
         this.random = this.props.random;
         service.execute(this.props.service, {}, this.props.parameter).then(data => this.setState({ data: data }));
+    }
+
+    protected input(prop: Prop, data: object): JSX.Element {
+        let value = data[prop.name] || "";
+        if (prop.type === 'read-only')
+            return value;
+
+        let props = {
+            name: prop.name,
+            defaultValue: value
+        };
+        if (prop.type === 'text-area')
+            return <textarea {...props} />
+
+        if (prop.type === 'image')
+            return <Image {...props} fieldName={prop['fieldName'] || this.props.meta.key + '.' + prop.name} />
+
+        if (prop.type === 'base64')
+            return <Base64 {...props} />
+
+        if (prop.labels && prop.labels.length > 0) {
+            return (
+                <select {...props} >
+                    {prop.labels.map((label, index) => <option key={index} value={index}>{label}</option>)}
+                </select>
+            );
+        }
+
+        if (prop.values) {
+            let options: JSX.Element[] = [];
+            for (let value in prop.values)
+                options.push(<option value={value} key={value}>{prop.values[value]}</option>);
+
+            return <select {...props}>{options}</select>;
+        }
+
+        return <input type={prop.type || 'text'} {...props} />;
     }
 }
 

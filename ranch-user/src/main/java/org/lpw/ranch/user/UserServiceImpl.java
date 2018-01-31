@@ -343,11 +343,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public JSONObject query(String mobile) {
-        if (validator.isEmpty(mobile))
-            return userDao.query(pagination.getPageSize(), pagination.getPageNum()).toJson();
-
-        return userDao.query(mobile).toJson();
+    public JSONObject query(String idcard, String name, String nick, String mobile, String email, String code,
+                            int minGrade, int maxGrade, int state, String registerStart, String registerEnd) {
+        return userDao.query(idcard, name, nick, mobile, email, code, minGrade, maxGrade, state, dateTime.getStart(registerStart),
+                dateTime.getEnd(registerEnd), pagination.getPageSize(), pagination.getPageNum()).toJson();
     }
 
     @Override

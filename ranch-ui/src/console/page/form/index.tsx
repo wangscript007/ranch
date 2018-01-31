@@ -1,9 +1,8 @@
 import * as React from 'react';
-import Image from '../../../ui/image';
-import Base64 from '../../../ui/base64';
 import { Prop, Page } from '../../meta';
 import { PageComponent, PageProps, PageState, Toolbar } from '../index';
 import './index.less';
+import './index.css';
 
 export default class Form extends PageComponent<PageProps, PageState> {
     constructor(props: PageProps) {
@@ -45,45 +44,8 @@ export default class Form extends PageComponent<PageProps, PageState> {
             <tr className="line" key={index}>
                 <td className="label">{prop.label}</td>
                 <td className="data"><div className={prop.type || 'text'}>{this.input(prop, data)}</div></td>
-                <td></td>
+                <td />
             </tr>
         )
-    }
-
-    private input(prop: Prop, data: object): JSX.Element {
-        let value = data[prop.name] || "";
-        if (prop.type === 'read-only')
-            return value;
-
-        let props = {
-            name: prop.name,
-            defaultValue: value
-        };
-        if (prop.type === 'text-area')
-            return <textarea {...props} />
-
-        if (prop.type === 'image')
-            return <Image {...props} fieldName={prop['fieldName'] || this.props.meta.key + '.' + prop.name} />
-
-        if (prop.type === 'base64')
-            return <Base64 {...props} />
-
-        if (prop.labels && prop.labels.length > 0) {
-            return (
-                <select {...props} >
-                    {prop.labels.map((label, index) => <option key={index} value={index}>{label}</option>)}
-                </select>
-            );
-        }
-
-        if (prop.values) {
-            let options: JSX.Element[] = [];
-            for (let value in prop.values)
-                options.push(<option value={value}>{prop.values[value]}</option>);
-
-            return <select {...props}>{options}</select>;
-        }
-
-        return <input type={prop.type || 'text'} {...props} />;
     }
 }

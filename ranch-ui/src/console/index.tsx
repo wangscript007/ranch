@@ -87,7 +87,8 @@ class Console extends React.Component<object, State> {
     }
 
     private item(item: MenuItem): void {
-        service.to(item.service, item.parameter);
+        service.setParameter(item.parameter);
+        service.to(item.service);
     }
 
     private signOut(): void {

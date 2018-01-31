@@ -1,6 +1,31 @@
 @import '../index';
 @import '../color';
-#ranch-ui-console .layout-top {
+input,
+select,
+textarea,
+button {
+    border: 1px solid @color-gray;
+}
+
+input,
+textarea {
+    padding: 0;
+}
+
+input {
+    height: 24px;
+}
+
+select,
+button {
+    height: 26px;
+}
+
+button {
+    border: 1px solid @color-gray;
+}
+
+.layout-top {
     width: 100%;
     height: 32px;
     position: fixed;
@@ -9,11 +34,11 @@
     background-color: @color-main-dark;
 }
 
-#ranch-ui-console .layout-top .container {
+.layout-top .container {
     padding: 0 8px;
 }
 
-#ranch-ui-console .layout-top .container a {
+.layout-top .container a {
     display: block;
     float: right;
     padding: 0 8px;
@@ -23,7 +48,7 @@
     color: @color-white;
 }
 
-#ranch-ui-console .layout-top .container a:hover {
+.layout-top .container a:hover {
     background-color: @color-main-light;
 }
 
@@ -39,7 +64,7 @@
     padding-right: 3px;
 }
 
-#ranch-ui-console .layout-left {
+.layout-left {
     width: 200px;
     position: fixed;
     left: 0;
@@ -47,19 +72,19 @@
     background-color: @color-gray-white;
 }
 
-#ranch-ui-console .layout-left .accordion-content a {
+.layout-left .accordion-content a {
     display: block;
     padding: 3px 8px;
     color: @color-gray-dark;
     text-decoration: none;
 }
 
-#ranch-ui-console .layout-left .accordion-content a:hover {
+.layout-left .accordion-content a:hover {
     background-color: @color-gray;
     color: @color-white;
 }
 
-#ranch-ui-console .layout-bottom {
+.layout-bottom {
     height: 20px;
     width: 200px;
     position: fixed;
@@ -69,16 +94,16 @@
     color: @color-main-dark;
 }
 
-#ranch-ui-console .layout-bottom a {
+.layout-bottom a {
     color: @color-main-dark;
     text-decoration: none;
 }
 
-#ranch-ui-console .layout-bottom a:hover {
+.layout-bottom a:hover {
     text-decoration: underline;
 }
 
-#ranch-ui-console .layout-content {
+.layout-content {
     margin-left: 200px;
     padding: 40px 8px 8px 8px;
 }

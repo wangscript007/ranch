@@ -45,7 +45,16 @@
                 "name": "key"
             },
             {
+                "name": "sender"
+            },
+            {
+                "name": "appCode"
+            },
+            {
                 "name": "subject"
+            },
+            {
+                "name": "template"
             },
             {
                 "name": "state"

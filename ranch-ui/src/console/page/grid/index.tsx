@@ -41,10 +41,24 @@ export default class Grid extends PageComponent<PageProps, PageState> {
             return null;
 
         return (
-            <div className="search">
-                search
-            </div>
+            <form>
+                {page.search.map((prop, index) =>
+                    <div key={index} className="search">
+                        <label>{prop.label}</label>
+                        {this.input(this.findProp(props, prop), {})}
+                    </div>
+                )}
+                <button>{message.get('grid.search')}</button>
+            </form>
         );
+    }
+
+    private findProp(props: Prop[], prop: Prop): Prop {
+        for (let i = 0; i < props.length; i++)
+            if (props[i].name === prop.name)
+                return props[i];
+
+        return prop;
     }
 
     private table(props: Prop[], page: Page, list: object[]): JSX.Element {
@@ -52,16 +66,16 @@ export default class Grid extends PageComponent<PageProps, PageState> {
             <table cellSpacing="1">
                 <thead>
                     <tr>
-                        <th></th>
+                        <th />
                         {props.map((prop, index) => <th key={index}>{prop.label}</th>)}
-                        {page.ops ? <th></th> : ''}
+                        {page.ops ? <th /> : null}
                     </tr>
                 </thead>
                 <tbody>
-                    {list.map((row, index) =>
-                        <tr key={index}>
-                            <th>{index + 1}</th>
-                            {props.map((prop, index) => <td key={index} className={'data ' + (prop.type || '')}>{this.td(row, prop)}</td>)}
+                    {list.map((row, i) =>
+                        <tr key={i * 100}>
+                            <th>{i + 1}</th>
+                            {props.map((prop, j) => <td key={i * 100 + j + 1} className={'data ' + (prop.type || '')}>{this.td(row, prop)}</td>)}
                             {this.ops(page.ops, row)}
                         </tr>
                     )}
@@ -88,9 +102,9 @@ export default class Grid extends PageComponent<PageProps, PageState> {
         return value;
     }
 
-    private ops(ops: Operate[], data: object): JSX.Element | string {
+    private ops(ops: Operate[], data: object): JSX.Element | null {
         if (!ops || ops.length == 0)
-            return '';
+            return null;
 
         return (
             <td className="ops">

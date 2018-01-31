@@ -109,7 +109,7 @@ module.exports = {
                 }
             },
             {
-                test: /\.(css)|(less)$/,
+                test: /\.(less)$/,
                 use: ExtractTextWebpackPlugin.extract({
                     fallback: 'style-loader',
                     use: [{
@@ -118,6 +118,18 @@ module.exports = {
                             minimize: true
                         }
                     }, 'less-loader']
+                })
+            },
+            {
+                test: /\.(css)$/,
+                use: ExtractTextWebpackPlugin.extract({
+                    fallback: 'style-loader',
+                    use: {
+                        loader: 'css-loader',
+                        options: {
+                            minimize: true
+                        }
+                    }
                 })
             },
             {

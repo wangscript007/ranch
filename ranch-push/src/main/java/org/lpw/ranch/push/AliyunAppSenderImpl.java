@@ -39,6 +39,9 @@ public class AliyunAppSenderImpl implements PushSender {
     @Override
     public boolean send(PushModel push, String receiver, JSONObject args) {
         AliyunModel aliyun = aliyunService.find(push.getAppCode());
+        if (aliyun == null)
+            return false;
+
         PushRequest pushRequest = new PushRequest();
         pushRequest.setAppKey(numeric.toLong(aliyun.getAppKey()));
         pushRequest.setTarget("DEVICE");

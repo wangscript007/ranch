@@ -26,7 +26,7 @@ export interface Success {
 class Service {
     private metas: Meta[] = [];
     private content: React.Component;
-    private parameter: object | null;
+    private parameter?: object;
 
     public sign(): Promise<User> {
         return service.post('/user/sign');
@@ -40,20 +40,18 @@ class Service {
         this.content = content;
     }
 
-    public setParameter(parameter: object | null): void {
+    public setParameter(parameter?: object): void {
         this.parameter = parameter;
     }
 
     public getParameter(parameter?: object): object {
         if (!parameter || !this.parameter)
-            return {};
+            return parameter || this.parameter || {};
 
-        let param: object = {};
         for (const key in this.parameter)
-            if (parameter.hasOwnProperty(key))
-                param[key] = this.parameter[key];
+            parameter[key] = this.parameter[key];
 
-        return param;
+        return parameter;
     }
 
     public to(service: string, parameter?: object, data?: object): void {
@@ -61,7 +59,7 @@ class Service {
         this.meta(service.substring(0, indexOf)).then(meta => this.content.setState({
             page: meta[service.substring(indexOf + 1)].type,
             service: service,
-            parameter: parameter,
+            parameter: this.getParameter(parameter),
             meta: meta,
             data: data
         }));

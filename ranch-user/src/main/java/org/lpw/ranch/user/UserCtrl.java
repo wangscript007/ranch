@@ -145,11 +145,15 @@ public class UserCtrl {
     }
 
     @Execute(name = "query", validates = {
-            @Validate(validator = Validators.MOBILE, emptyable = true, parameter = "mobile", failureCode = 9),
+            @Validate(validator = Validators.MOBILE, emptyable = true, parameter = "mobile", failureCode = 10),
+            @Validate(validator = Validators.EMAIL, emptyable = true, parameter = "email", failureCode = 11),
             @Validate(validator = Validators.SIGN)
     })
     public Object query() {
-        return userService.query(request.get("mobile"));
+        return userService.query(request.get("idcard"), request.get("name"), request.get("nick"), request.get("mobile"),
+                request.get("email"), request.get("code"), request.getAsInt("minGrade", -1),
+                request.getAsInt("maxGrade", -1), request.getAsInt("state", -1),
+                request.get("registerStart"), request.get("registerEnd"));
     }
 
     @Execute(name = "grade", validates = {
