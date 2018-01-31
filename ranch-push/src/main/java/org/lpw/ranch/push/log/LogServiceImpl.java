@@ -60,6 +60,7 @@ public class LogServiceImpl implements LogService {
         log.setPush(modelHelper.toJson(push).toJSONString());
         if (args != null)
             log.setArgs(args.toJSONString());
+        log.setTime(dateTime.now());
         logDao.save(log);
 
         return log;
