@@ -1,0 +1,107 @@
+{
+    "key": "ranch.doc",
+    "props": [
+        {
+            "name": "key"
+        },
+        {
+            "name": "owner",
+            "type": "read-only",
+            "valueKey": "id"
+        },
+        {
+            "name": "author",
+            "type": "read-only",
+            "valueKey": "name"
+        },
+        {
+            "name": "scoreMin"
+        },
+        {
+            "name": "scoreMax"
+        },
+        {
+            "name": "sort"
+        },
+        {
+            "name": "subject"
+        },
+        {
+            "name": "image",
+            "type": "image"
+        },
+        {
+            "name": "summary",
+            "type": "text-area"
+        },
+        {
+            "name": "label"
+        },
+        {
+            "name": "source",
+            "type": "editor"
+        },
+        {
+            "name": "read",
+            "type": "read-only"
+        },
+        {
+            "name": "favorite",
+            "type": "read-only"
+        },
+        {
+            "name": "comment",
+            "type": "read-only"
+        },
+        {
+            "name": "praise",
+            "type": "read-only"
+        },
+        {
+            "name": "score",
+            "type": "read-only"
+        },
+        {
+            "name": "time",
+            "type": "read-only"
+        }
+    ],
+    "query": {
+        "type": "grid",
+        "ops": [
+            {
+                "type": "modify"
+            },
+            {
+                "type": "delete",
+                "service": ".delete",
+                "success": ".query"
+            }
+        ],
+        "toolbar": [
+            {
+                "type": "create"
+            }
+        ]
+    },
+    "create": {
+        "type": "form",
+        "toolbar": [
+            {
+                "type": "save",
+                "service": ".save",
+                "success": ".query"
+            }
+        ]
+    },
+    "modify": {
+        "type": "form",
+        "toolbar": [
+            {
+                "type": "save",
+                "service": ".save",
+                "success": ".query"
+            }
+        ]
+    }
+}

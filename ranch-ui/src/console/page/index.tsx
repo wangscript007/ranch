@@ -32,8 +32,8 @@ export class PageComponent<T extends PageProps, E extends PageState> extends Rea
         return true;
     }
 
-    protected input(prop: Prop, data: object, selectAll?: string): JSX.Element {
-        let value = data[prop.name] || "";
+    protected input(prop: Prop, data: object, selectAll?: string): JSX.Element | string {
+        let value: string = this.findValue(prop, data);
         if (prop.type === 'read-only')
             return value;
 
@@ -73,6 +73,20 @@ export class PageComponent<T extends PageProps, E extends PageState> extends Rea
         }
 
         return <input type={prop.type || 'text'} {...props} />;
+    }
+
+    protected findValue(prop: Prop, data: object): string {
+        if (!data || !data.hasOwnProperty(prop.name))
+            return '';
+
+        let value = data[prop.name];
+        if (typeof (value) !== 'object')
+            return value;
+
+        if (prop.valueKey && value.hasOwnProperty(prop.valueKey))
+            return value[prop.valueKey];
+
+        return JSON.stringify(value);
     }
 }
 

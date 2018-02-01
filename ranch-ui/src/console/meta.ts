@@ -9,6 +9,7 @@ export interface Prop {
     labels?: string[];
     values?: object;
     type?: string;
+    valueKey?: string;
 }
 
 export interface Page {

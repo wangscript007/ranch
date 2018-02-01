@@ -104,10 +104,7 @@ export default class Grid extends PageComponent<PageProps, PageState> {
     }
 
     private td(row: object, prop: Prop): any {
-        if (!row.hasOwnProperty(prop.name))
-            return '';
-
-        let value = row[prop.name];
+        let value = this.findValue(prop, row);
         if (prop.type === 'image')
             return <img src={value} />;
 

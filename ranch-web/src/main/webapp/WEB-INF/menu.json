@@ -17,14 +17,24 @@
         ]
     },
     {
+        "label": "文档",
+        "items": [
+            {
+                "label": "关于我们",
+                "service": "ranch.classify.find",
+                "parameter": {
+                    "code":"setting.doc",
+                    "key": "about-us"
+                }
+            }
+        ]
+    },
+    {
         "label": "系统",
         "items": [
             {
                 "label": "用户",
-                "service": "ranch.user.query",
-                "parameter": {
-                    "maxGrade": 9
-                }
+                "service": "ranch.user.query"
             }
         ]
     }

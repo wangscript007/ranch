@@ -25,7 +25,7 @@ public class LogCtrl {
     })
     public Object query() {
         return logService.query(request.get("user"), request.get("reciever"), request.get("appCode"), request.get("sender"),
-                request.getAsInt("state"), request.get("start"), request.get("end"));
+                request.getAsInt("state", -1), request.get("start"), request.get("end"));
     }
 
     @Execute(name = "uquery", validates = {

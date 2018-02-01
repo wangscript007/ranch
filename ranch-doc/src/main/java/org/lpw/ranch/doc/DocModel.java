@@ -152,6 +152,7 @@ public class DocModel extends AuditModelSupport {
         this.label = label;
     }
 
+    @Jsonable
     @Column(name = "c_source")
     public String getSource() {
         return source;
