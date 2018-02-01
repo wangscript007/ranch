@@ -11,4 +11,6 @@ interface DeviceDao {
     DeviceModel find(String appCode, String macId);
 
     void save(DeviceModel device);
+
+    void delete(DeviceModel device);
 }

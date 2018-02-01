@@ -59,7 +59,7 @@ module.exports = {
         }),
         new HtmlWebpackPlugin({
             filename: 'console.html',
-            template: './src/template/index.html',
+            template: './src/template/console.html',
             chunks: ['console'],
             minify: {
                 collapseWhitespace: true
@@ -92,6 +92,18 @@ module.exports = {
         }, {
             from: './src/template/img/*',
             to: 'img',
+            flatten: true
+        }, {
+            context: './src/template/js/',
+            from: '**',
+            to: 'js'
+        }, {
+            from: './node_modules/react/umd/react.production.min.js',
+            to: 'js/react/min.js',
+            flatten: true
+        }, {
+            from: './node_modules/react-dom/umd/react-dom.production.min.js',
+            to: 'js/react/dom.min.js',
             flatten: true
         }])
     ],
@@ -142,5 +154,10 @@ module.exports = {
                 }
             }
         ]
+    },
+
+    externals: {
+        "react": "React",
+        "react-dom": "ReactDOM"
     }
 };

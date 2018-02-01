@@ -38,4 +38,13 @@ public interface DeviceService {
      * @return 设备绑定信息。
      */
     JSONObject save(String user, String appCode, String type, String macId, String version);
+
+    /**
+     * 解绑。
+     *
+     * @param user    用户，为空则为当前用户。
+     * @param appCode APP编码。
+     * @param macId   Mac ID。
+     */
+    void unbind(String user, String appCode, String macId);
 }

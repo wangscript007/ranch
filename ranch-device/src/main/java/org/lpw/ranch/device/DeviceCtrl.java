@@ -51,4 +51,17 @@ public class DeviceCtrl {
         return deviceService.save(request.get("user"), request.get("appCode"), request.get("type"), request.get("macId"),
                 request.get("version"));
     }
+
+    @Execute(name = "unbind", validates = {
+            @Validate(validator = Validators.NOT_EMPTY, parameter = "appCode", failureCode = 1),
+            @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "appCode", failureCode = 2),
+            @Validate(validator = Validators.NOT_EMPTY, parameter = "macId", failureCode = 5),
+            @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "macId", failureCode = 6),
+            @Validate(validator = UserHelper.VALIDATOR_EXISTS_OR_SIGN_IN, parameter = "user", failureCode = 8)
+    })
+    public Object unbind() {
+        deviceService.unbind(request.get("user"), request.get("appCode"), request.get("macId"));
+
+        return "";
+    }
 }

@@ -60,4 +60,11 @@ public class DeviceServiceImpl implements DeviceService {
 
         return modelHelper.toJson(device);
     }
+
+    @Override
+    public void unbind(String user, String appCode, String macId) {
+        DeviceModel device = deviceDao.find(appCode, macId);
+        if (device != null && device.getUser().equals(user))
+            deviceDao.delete(device);
+    }
 }

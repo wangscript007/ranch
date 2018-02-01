@@ -27,7 +27,7 @@ export default class Grid extends PageComponent<PageProps, PageState> {
         let page: Page = this.props.meta[this.props.service.substring(this.props.service.lastIndexOf('.') + 1)];
         let props: Prop[] = [];
         this.props.meta.props.map(prop => {
-            if (prop.type !== 'hidden')
+            if (prop.type !== 'hidden' && prop.type !== 'editor')
                 props.push(prop);
         });
 

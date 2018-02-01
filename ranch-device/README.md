@@ -13,4 +13,10 @@
 |version|char(100)|版本号。|
 |time|datetime|时间。|
 
+[检索绑定信息集](doc/query.md)
+
+[查找绑定信息](doc/find.md)
+
 [保存](doc/save.md)
+
+[解绑](doc/unbind.md)

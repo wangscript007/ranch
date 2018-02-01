@@ -44,4 +44,9 @@ class DeviceDaoImpl implements DeviceDao {
     public void save(DeviceModel device) {
         liteOrm.save(device);
     }
+
+    @Override
+    public void delete(DeviceModel device) {
+        liteOrm.delete(device);
+    }
 }
