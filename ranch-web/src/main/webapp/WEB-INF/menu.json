@@ -20,6 +20,13 @@
         "label": "文档",
         "items": [
             {
+                "label": "文章资讯",
+                "service": "ranch.doc.lite-query",
+                "parameter": {
+                    "key": "setting.doc"
+                }
+            },
+            {
                 "label": "关于我们",
                 "service": "ranch.classify.find-editor",
                 "parameter": {

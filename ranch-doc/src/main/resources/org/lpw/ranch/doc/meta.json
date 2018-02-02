@@ -2,23 +2,48 @@
     "key": "ranch.doc",
     "props": [
         {
-            "name": "key"
+            "name": "key",
+            "ignore": [
+                "lite-query",
+                "lite-create",
+                "lite-modify"
+            ]
         },
         {
             "name": "owner",
             "type": "read-only",
-            "valueKey": "id"
+            "valueKey": "id",
+            "ignore": [
+                "lite-query",
+                "lite-create",
+                "lite-modify"
+            ]
         },
         {
             "name": "author",
             "type": "read-only",
-            "valueKey": "name"
+            "valueKey": "name",
+            "ignore": [
+                "lite-query",
+                "lite-create",
+                "lite-modify"
+            ]
         },
         {
-            "name": "scoreMin"
+            "name": "scoreMin",
+            "ignore": [
+                "lite-query",
+                "lite-create",
+                "lite-modify"
+            ]
         },
         {
-            "name": "scoreMax"
+            "name": "scoreMax",
+            "ignore": [
+                "lite-query",
+                "lite-create",
+                "lite-modify"
+            ]
         },
         {
             "name": "sort"
@@ -32,10 +57,20 @@
         },
         {
             "name": "summary",
-            "type": "text-area"
+            "type": "text-area",
+            "ignore": [
+                "lite-query",
+                "lite-create",
+                "lite-modify"
+            ]
         },
         {
-            "name": "label"
+            "name": "label",
+            "ignore": [
+                "lite-query",
+                "lite-create",
+                "lite-modify"
+            ]
         },
         {
             "name": "source",
@@ -101,6 +136,45 @@
                 "type": "save",
                 "service": ".save",
                 "success": ".query"
+            }
+        ]
+    },
+    "lite-query": {
+        "service": "query",
+        "type": "grid",
+        "ops": [
+            {
+                "type": "lite-modify"
+            },
+            {
+                "type": "delete",
+                "service": ".delete",
+                "success": ".lite-query"
+            }
+        ],
+        "toolbar": [
+            {
+                "type": "lite-create"
+            }
+        ]
+    },
+    "lite-create": {
+        "type": "form",
+        "toolbar": [
+            {
+                "type": "save",
+                "service": ".save",
+                "success": ".lite-query"
+            }
+        ]
+    },
+    "lite-modify": {
+        "type": "form",
+        "toolbar": [
+            {
+                "type": "save",
+                "service": ".save",
+                "success": ".lite-query"
             }
         ]
     }

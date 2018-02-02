@@ -23,7 +23,7 @@ export default class Grid extends PageComponent<PageProps, PageState> {
         let page: Page = this.props.meta[this.props.service.substring(this.props.service.lastIndexOf('.') + 1)];
         let props: Prop[] = [];
         this.props.meta.props.map(prop => {
-            if (prop.type !== 'hidden' && prop.type !== 'editor')
+            if (prop.type !== 'hidden' && prop.type !== 'editor' && !this.ignore(prop))
                 props.push(prop);
         });
 
@@ -113,8 +113,8 @@ export default class Grid extends PageComponent<PageProps, PageState> {
     }
 
     private op(op: Operate, data: object): void {
-        if (op.type === 'modify') {
-            service.to(this.props.meta.key + '.modify', {}, data);
+        if (op.type === 'modify' || op.type === 'lite-modify') {
+            service.to(this.props.meta.key + '.' + op.type, {}, data);
 
             return;
         }

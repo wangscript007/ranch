@@ -116,9 +116,9 @@ export class Toolbar extends React.Component<ToolbarProps, object> {
     }
 
     private click(operate: Operate): void {
-        if (operate.type === 'create') {
+        if (operate.type === 'create' || operate.type === 'lite-create') {
             let parameter = service.getParameter(operate.parameter);
-            service.to(this.props.meta.key + ".create", parameter, parameter);
+            service.to(this.props.meta.key + '.' + operate.type, parameter, parameter);
 
             return;
         }
