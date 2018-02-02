@@ -142,6 +142,11 @@
     "lite-query": {
         "service": "query",
         "type": "grid",
+        "search": [
+            {
+                "name": "subject"
+            }
+        ],
         "ops": [
             {
                 "type": "lite-modify"
