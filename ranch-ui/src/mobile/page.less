@@ -1,4 +1,28 @@
-@import '../color';
+@import './global';
+#ranch-ui-mobile .layout-top {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 32px;
+    background-color: @color-main-dark;
+    text-align: center;
+}
+
+#ranch-ui-mobile .layout-top .title {
+    display: inline-block;
+    width: 50%;
+    background-image: radial-gradient(circle, @color-main-light, @color-main-dark);
+    line-height: 32px;
+    font-size: 16px;
+    color: @color-white;
+}
+
+#ranch-ui-mobile .layout-content {
+    padding: 32px 0 40px 0;
+    color: @color-gray-dark;
+}
+
 #ranch-ui-mobile .layout-bottom {
     position: fixed;
     left: 0;

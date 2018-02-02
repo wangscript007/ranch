@@ -7,8 +7,8 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 module.exports = {
     entry: {
         index: './src/mobile/index.tsx',
-        order: './src/mobile/order.tsx',
-        mine: './src/mobile/mine.tsx',
+        order: './src/mobile/order/index.tsx',
+        mine: './src/mobile/mine/index.tsx',
         mobileSignIn: './src/mobile/sign-in.tsx',
         console: './src/console/index.tsx',
         consoleSignIn: './src/console/sign-in.tsx'

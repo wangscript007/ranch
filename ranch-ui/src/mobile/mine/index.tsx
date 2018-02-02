@@ -1,14 +1,13 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import registerServiceWorker from '../registerServiceWorker';
-import message from '../util/message';
-import selector from '../util/selector';
-import Image from '../ui/image';
-import { service, User, Classify } from './service';
-import { Top } from './top';
-import { Bottom } from './bottom';
+import registerServiceWorker from '../../registerServiceWorker';
+import message from '../../util/message';
+import selector from '../../util/selector';
+import Image from '../../ui/image';
+import { service, User, Classify } from '../service';
+import Page from '../page';
 import './i18n';
-import './mine.less';
+import './index.less';
 
 interface State {
     user: User;
@@ -18,7 +17,7 @@ interface State {
     password?: boolean;
 }
 
-class Mine extends React.Component<object, State> {
+class Mine extends Page<object, State> {
     private portrait: Image | null;
 
     constructor(props: object) {
@@ -47,45 +46,44 @@ class Mine extends React.Component<object, State> {
         });
     }
 
-    render(): JSX.Element {
-        let title = message.get('title.mine') + ' - ' + message.get('title');
-        document.title = title;
+    protected getTitle(): string {
+        return 'mine';
+    }
 
-        return (
-            <div id="ranch-ui-mobile">
-                <Top>{title}</Top>
-                <div className="layout-content">
-                    <div className="mine-area">
-                        <div className="portrait">
-                            <Image name="portrait" ref={image => this.portrait = image} fieldName="ranch.user.portrait"
-                                defaultValue={this.state.user.portrait || 'img/logo.png'} />
-                        </div>
-                        <div className="nick-mobile">
-                            <div className="nick">{this.state.user.nick || message.get('empty')}</div>
-                            <div className="mobile">
-                                {this.state.user.mobile ? this.state.user.mobile.replace(/(\d{3})\d{4}(\d{4})/, '$1****$2') : message.get('empty')}
-                            </div>
-                        </div>
-                    </div>
-                    <div className="mine-area">
-                        <div onClick={() => this.setState(prevState => ({ modify: !prevState.modify }))}>{message.get('sign.modify')}</div>
-                        {this.modify()}
-                        <div className="line" />
-                        <div onClick={() => this.setState(prevState => ({ password: !prevState.password }))}>{message.get('sign.modify.password')}</div>
-                        {this.password()}
-                    </div>
-                    <div className="mine-area">
-                        <div>{this.state.aboutUs.name || message.get('about-us')}</div>
-                        <div className="line" />
-                        <div>{this.state.contactUs.name || message.get('contact-us')}</div>
-                    </div>
-                    <div className="mine-area">
-                        <div onClick={() => this.signOut()}>{message.get('sign-out')}</div>
+    protected getContent(): JSX.Element | JSX.Element[] | null {
+        return [
+            <div className="mine-area">
+                <div className="portrait">
+                    <Image name="portrait" ref={image => this.portrait = image} fieldName="ranch.user.portrait"
+                        defaultValue={this.state.user.portrait || 'img/logo.png'} />
+                </div>
+                <div className="nick-mobile">
+                    <div className="nick">{this.state.user.nick || message.get('empty')}</div>
+                    <div className="mobile">
+                        {this.state.user.mobile ? this.state.user.mobile.replace(/(\d{3})\d{4}(\d{4})/, '$1****$2') : message.get('empty')}
                     </div>
                 </div>
-                <Bottom active={2} />
+            </div>,
+            <div className="mine-area">
+                <div onClick={() => this.setState(prevState => ({ modify: !prevState.modify }))}>{message.get('sign.modify')}</div>
+                {this.modify()}
+                <div className="line" />
+                <div onClick={() => this.setState(prevState => ({ password: !prevState.password }))}>{message.get('sign.modify.password')}</div>
+                {this.password()}
+            </div>,
+            <div className="mine-area">
+                <div>{this.state.aboutUs.name || message.get('about-us')}</div>
+                <div className="line" />
+                <div>{this.state.contactUs.name || message.get('contact-us')}</div>
+            </div>,
+            <div className="mine-area">
+                <div onClick={() => this.signOut()}>{message.get('sign-out')}</div>
             </div>
-        );
+        ];
+    }
+
+    protected getBottom(): number {
+        return 2;
     }
 
     private modify(): JSX.Element | null {
