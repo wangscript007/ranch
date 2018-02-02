@@ -4,7 +4,7 @@ import registerServiceWorker from '../registerServiceWorker';
 import message from '../util/message';
 import selector from '../util/selector';
 import Image from '../ui/image';
-import { service, User } from './service';
+import { service, User, Classify } from './service';
 import { Top } from './top';
 import { Bottom } from './bottom';
 import './i18n';
@@ -12,6 +12,8 @@ import './mine.less';
 
 interface State {
     user: User;
+    aboutUs: Classify;
+    contactUs: Classify;
     modify?: boolean;
     password?: boolean;
 }
@@ -23,7 +25,9 @@ class Mine extends React.Component<object, State> {
         super(props);
 
         this.state = {
-            user: {}
+            user: {},
+            aboutUs: {},
+            contactUs: {}
         };
 
         service.signIn('mine').then(user => {
@@ -38,6 +42,8 @@ class Mine extends React.Component<object, State> {
                     path: user.portrait || 'img/logo.png'
                 });
             }
+            service.classify('setting.doc', 'about-us').then(classify => this.setState({ aboutUs: classify }));
+            service.classify('setting.doc', 'contact-us').then(classify => this.setState({ contactUs: classify }));
         });
     }
 
@@ -67,6 +73,11 @@ class Mine extends React.Component<object, State> {
                         <div className="line" />
                         <div onClick={() => this.setState(prevState => ({ password: !prevState.password }))}>{message.get('sign.modify.password')}</div>
                         {this.password()}
+                    </div>
+                    <div className="mine-area">
+                        <div>{this.state.aboutUs.name || message.get('about-us')}</div>
+                        <div className="line" />
+                        <div>{this.state.contactUs.name || message.get('contact-us')}</div>
                     </div>
                     <div className="mine-area">
                         <div onClick={() => this.signOut()}>{message.get('sign-out')}</div>

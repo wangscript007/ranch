@@ -3,7 +3,8 @@ class Merger {
         for (let i = 0; i < sources.length; i++)
             if (sources[i])
                 for (let key in sources[i])
-                    target[key] = sources[i][key];
+                    if (sources[i][key])
+                        target[key] = sources[i][key];
 
         return target;
     }

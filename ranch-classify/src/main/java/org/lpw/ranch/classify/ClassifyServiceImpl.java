@@ -216,6 +216,7 @@ public class ClassifyServiceImpl implements ClassifyService, DateJob {
         });
         classify.setJson(json.toJSONString());
         classifyDao.save(classify);
+        resetRandom();
 
         return getJson(classify.getId(), classify, Recycle.No);
     }
@@ -249,6 +250,7 @@ public class ClassifyServiceImpl implements ClassifyService, DateJob {
     @Override
     public void delete(String id) {
         recycleHelper.delete(ClassifyModel.class, id);
+        resetRandom();
     }
 
     @Override
@@ -268,6 +270,7 @@ public class ClassifyServiceImpl implements ClassifyService, DateJob {
     @Override
     public void restore(String id) {
         recycleHelper.restore(ClassifyModel.class, id);
+        resetRandom();
     }
 
     @Override

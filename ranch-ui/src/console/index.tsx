@@ -59,7 +59,8 @@ class Console extends React.Component<object, State> {
                     <div className="container">
                         <a href="javascript:void(0);" onClick={() => this.signOut()}>{message.get('sign-out')}</a>
                         <a href="javascript:void(0);">{this.state.user.nick || ''}</a>
-                        <div id="note"></div>
+                        <div id="loading" >loading</div>
+                        <div id="note" />
                     </div>
                 </div>
                 {this.left(height)}

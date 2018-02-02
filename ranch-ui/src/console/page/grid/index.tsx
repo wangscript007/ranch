@@ -10,18 +10,14 @@ import './index.less';
 import { FormEvent } from 'react';
 
 export default class Grid extends PageComponent<PageProps, PageState> {
-    private searchParameter: object;
     constructor(props: PageProps) {
         super(props);
         this.state = {
-            data: []
+            data: props.data || []
         };
-        this.searchParameter = {};
     }
 
     render(): JSX.Element {
-        if (this.refresh())
-            this.searchParameter = {};
         let pagination = this.state.data.hasOwnProperty('list');
         let list: object[] = pagination ? this.state.data['list'] : this.state.data;
         let page: Page = this.props.meta[this.props.service.substring(this.props.service.lastIndexOf('.') + 1)];
@@ -50,7 +46,7 @@ export default class Grid extends PageComponent<PageProps, PageState> {
                 {page.search.map((prop, index) =>
                     <div key={index} className="search">
                         <label>{prop.label}</label>
-                        {this.input(this.findProp(props, prop), {}, 'select.all')}
+                        {this.input(this.findProp(props, prop), this.props.parameter, 'select.all')}
                     </div>
                 )}
                 <button>{message.get('grid.search')}</button>
@@ -58,24 +54,12 @@ export default class Grid extends PageComponent<PageProps, PageState> {
         );
     }
 
-    private findProp(props: Prop[], prop: Prop): Prop {
-        for (let i = 0; i < props.length; i++)
-            if (props[i].name === prop.name)
-                return merger.merge<Prop>({ name: '', label: '' }, props[i], prop);
-
-        return prop;
-    }
-
     private submitSearch(event: FormEvent<HTMLFormElement>): void {
         let form: HTMLFormElement = event.currentTarget;
         let parameter = {};
-        for (let i = 0; i < form.elements.length; i++) {
-            if (!form.elements[i]['name'])
-                continue;
-
-            parameter[form.elements[i]['name']] = form.elements[i]['value'];
-        }
-        this.searchParameter = parameter;
+        for (let i = 0; i < form.elements.length; i++)
+            if (form.elements[i]['name'])
+                parameter[form.elements[i]['name']] = form.elements[i]['value'];
         service.to(this.props.service, parameter);
     }
 
@@ -117,7 +101,7 @@ export default class Grid extends PageComponent<PageProps, PageState> {
         return value;
     }
 
-    private ops(ops: Operate[], data: object): JSX.Element | null {
+    private ops(ops: Operate[] | undefined, data: object): JSX.Element | null {
         if (!ops || ops.length == 0)
             return null;
 
@@ -159,7 +143,7 @@ export default class Grid extends PageComponent<PageProps, PageState> {
         return parameter;
     }
 
-    private empty(list: object[], props: Prop[], ops: Operate[]): JSX.Element | null {
+    private empty(list: object[], props: Prop[], ops?: Operate[]): JSX.Element | null {
         if (list && list.length > 0)
             return null;
 
@@ -175,30 +159,28 @@ export default class Grid extends PageComponent<PageProps, PageState> {
         if (!enable || this.state.data.pageEnd <= 1)
             return null;
 
-        let prev: JSX.Element[] = [];
-        for (let i = this.state.data.pageStart; i < this.state.data.number; i++)
-            prev.push(this.page(i));
-        let next: JSX.Element[] = [];
-        for (let i = this.state.data.number + 1; i <= this.state.data.pageEnd; i++)
-            next.push(this.page(i));
+        let numbers: JSX.Element[] = [];
+        for (let i = this.state.data.pageStart; i <= this.state.data.pageEnd; i++) {
+            let props: any = {
+                key: i,
+                href: 'javascript:void(0);'
+            };
+            if (i === this.state.data.number)
+                props.className = 'active';
+            numbers.push(<a {...props} onClick={() => this.pageTo(i)}>{i}</a>);
+        }
 
         return (
             <div className="pagination">
                 <a href="javascript:void(0);" onClick={() => this.pageTo(this.state.data.number - 1)}><Icon code="&#xe608;" /></a>
-                {prev}
-                <a href="javascript:void(0);" onClick={() => this.pageTo(this.state.data.number)} className="active">{this.state.data.number}</a>
-                {next}
+                {numbers}
                 <a href="javascript:void(0);" onClick={() => this.pageTo(this.state.data.number + 1)}><Icon code="&#xe609;" /></a>
             </div>
         );
     }
 
-    private page(num: number): JSX.Element {
-        return <a href="javascript:void(0);" onClick={() => this.pageTo(num)} key={num}>{num}</a>;
-    }
-
     private pageTo(num: number): void {
-        service.execute(this.props.service, {}, merger.merge({}, this.props.parameter, this.searchParameter, { pageNum: num }))
+        service.execute(this.props.service, {}, merger.merge({}, this.props.parameter, { pageNum: num }))
             .then(data => this.setState({ data: data }));
     }
 }

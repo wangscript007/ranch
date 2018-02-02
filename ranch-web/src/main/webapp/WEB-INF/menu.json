@@ -21,10 +21,18 @@
         "items": [
             {
                 "label": "关于我们",
-                "service": "ranch.classify.find",
+                "service": "ranch.classify.find-editor",
                 "parameter": {
-                    "code":"setting.doc",
+                    "code": "setting.doc",
                     "key": "about-us"
+                }
+            },
+            {
+                "label": "联系我们",
+                "service": "ranch.classify.find-editor",
+                "parameter": {
+                    "code": "setting.doc",
+                    "key": "contact-us"
                 }
             }
         ]

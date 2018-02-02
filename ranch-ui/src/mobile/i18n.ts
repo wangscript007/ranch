@@ -67,5 +67,11 @@ message.put({
     },
     'empty': {
         'zh-cn': '未设置'
+    },
+    'about-us': {
+        'zh-cn': '关于我们'
+    },
+    'contact-us': {
+        'zh-cn': '联系我们'
     }
 });

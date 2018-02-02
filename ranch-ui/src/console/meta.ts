@@ -6,6 +6,7 @@ export interface Meta {
 export interface Prop {
     name: string;
     label: string;
+    ignore?: string[];
     labels?: string[];
     values?: object;
     type?: string;
@@ -13,10 +14,11 @@ export interface Prop {
 }
 
 export interface Page {
+    service?: string;
     type: string;
-    search: Prop[];
-    ops: Operate[];
-    toolbar: Operate[];
+    search?: Prop[];
+    ops?: Operate[];
+    toolbar?: Operate[];
 }
 
 export interface Operate {

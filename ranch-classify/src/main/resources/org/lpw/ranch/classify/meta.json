@@ -2,16 +2,37 @@
     "key": "ranch.classify",
     "props": [
         {
-            "name": "code"
+            "name": "code",
+            "ignore": [
+                "find",
+                "find-editor"
+            ]
         },
         {
-            "name": "key"
+            "name": "key",
+            "ignore": [
+                "find",
+                "find-editor"
+            ]
         },
         {
             "name": "name"
         },
         {
-            "name": "value"
+            "name": "value",
+            "type": "text-area",
+            "ignore": [
+                "find-editor"
+            ]
+        },
+        {
+            "name": "value",
+            "type": "editor",
+            "ignore": [
+                "create",
+                "modify",
+                "find"
+            ]
         }
     ],
     "query": {
@@ -57,7 +78,19 @@
         "toolbar": [
             {
                 "type": "save",
-                "service": ".save"
+                "service": ".save",
+                "success": ".find"
+            }
+        ]
+    },
+    "find-editor": {
+        "service": "find",
+        "type": "form",
+        "toolbar": [
+            {
+                "type": "save",
+                "service": ".save",
+                "success": ".find-editor"
             }
         ]
     }

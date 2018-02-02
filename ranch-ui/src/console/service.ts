@@ -1,7 +1,8 @@
 import http from '../util/http';
+import selector from '../util/selector';
 import merger from '../util/merger';
 import note from '../util/note';
-import { Meta } from './meta';
+import { Meta, Page } from './meta';
 
 export interface User {
     id?: string;
@@ -53,14 +54,19 @@ class Service {
     }
 
     public to(service: string, parameter?: object, data?: object): void {
+        let param = this.getParameter(parameter);
         let indexOf = service.lastIndexOf('.');
-        this.meta(service.substring(0, indexOf)).then(meta => this.content.setState({
-            page: meta[service.substring(indexOf + 1)].type,
-            service: service,
-            parameter: this.getParameter(parameter),
-            meta: meta,
-            data: data
-        }));
+        this.meta(service.substring(0, indexOf)).then(meta => {
+            let page: Page = meta[service.substring(indexOf + 1)];
+            if (data)
+                this.setContent(service, meta, page.type, param, data);
+            else {
+                let serv: string = service;
+                if (page.service)
+                    serv = service.substring(0, indexOf + 1) + page.service;
+                this.execute(serv, {}, param).then(dt => this.setContent(service, meta, page.type, param, dt));
+            }
+        });
     }
 
     private meta(key: string): Promise<Meta> {
@@ -71,6 +77,18 @@ class Service {
         }
 
         return this.post('/console/meta', { key: key }).then(data => this.metas[key] = data);
+    }
+
+    private setContent(service: string, meta: Meta, page: string, parameter: object, data?: object): void {
+        this.content.setState({ page: 'blank' }, () => {
+            this.content.setState({
+                page: page,
+                service: service,
+                parameter: parameter,
+                meta: meta,
+                data: data
+            });
+        });
     }
 
     public execute(key: string, header: object = {}, parameter: object = {}, success?: Success): Promise<any> {
@@ -89,7 +107,13 @@ class Service {
     }
 
     public post(uri: string, header: object = {}, parameter: object = {}): Promise<any> {
+        let loading = selector.find('#loading');
+        if (loading)
+            loading.style.display = '';
+
         return http.post(uri, header, parameter).then(json => {
+            if (loading)
+                loading.style.display = 'none';
             if (json.code === 0)
                 return json.data;
 
@@ -98,6 +122,8 @@ class Service {
             return null;
         });
     }
+
+
 }
 
 export const service = new Service();

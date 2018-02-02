@@ -9,6 +9,13 @@ export interface User {
     portrait?: string;
 }
 
+export interface Classify {
+    code?: string;
+    key?: string;
+    name?: string;
+    value?: string;
+}
+
 class Service {
     public signIn(from: string): Promise<User | null> {
         return this.sign().then(user => {
@@ -23,6 +30,10 @@ class Service {
         return service.post('/user/sign').then(user => {
             return user && user.id ? user : null;
         });
+    }
+
+    public classify(code: string, key: string): Promise<Classify> {
+        return service.post('/classify/find', {}, { code: code, key: key });
     }
 
     public post(uri: string, header: object = {}, parameter: object = {}): Promise<any> {

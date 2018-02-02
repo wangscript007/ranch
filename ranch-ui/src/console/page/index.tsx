@@ -1,5 +1,6 @@
 import * as React from 'react';
 import selector from '../../util/selector';
+import merger from '../../util/merger';
 import message from '../../util/message';
 import Image from '../../ui/image';
 import Base64 from '../../ui/base64';
@@ -12,7 +13,6 @@ export interface PageProps {
     service: string;
     parameter: object;
     data: object;
-    random: string;
 }
 
 export interface PageState {
@@ -20,16 +20,12 @@ export interface PageState {
 }
 
 export class PageComponent<T extends PageProps, E extends PageState> extends React.Component<T, E> {
-    private random: string = "";
+    protected findProp(props: Prop[], prop: Prop): Prop {
+        for (let i = 0; i < props.length; i++)
+            if (props[i].name === prop.name)
+                return merger.merge<Prop>({ name: '', label: '' }, props[i], prop);
 
-    protected refresh(): boolean {
-        if (this.props.random === this.random)
-            return false;
-
-        this.random = this.props.random;
-        service.execute(this.props.service, {}, this.props.parameter).then(data => this.setState({ data: data }));
-
-        return true;
+        return prop;
     }
 
     protected input(prop: Prop, data: object, selectAll?: string): JSX.Element | string {
@@ -75,6 +71,17 @@ export class PageComponent<T extends PageProps, E extends PageState> extends Rea
         return <input type={prop.type || 'text'} {...props} />;
     }
 
+    protected ignore(prop: Prop): boolean {
+        if (!prop.ignore)
+            return false;
+
+        for (let i = 0; i < prop.ignore.length; i++)
+            if (this.props.service === this.props.meta.key + '.' + prop.ignore[i])
+                return true;
+
+        return false;
+    }
+
     protected findValue(prop: Prop, data: object): string {
         if (!data || !data.hasOwnProperty(prop.name))
             return '';
@@ -92,7 +99,7 @@ export class PageComponent<T extends PageProps, E extends PageState> extends Rea
 
 interface ToolbarProps {
     meta: Meta;
-    ops: Operate[];
+    ops?: Operate[];
     form?: string;
 }
 
@@ -130,7 +137,7 @@ export class Toolbar extends React.Component<ToolbarProps, object> {
                 if (name)
                     parameter[name] = form.elements[i]['value'];
             }
-            service.execute(this.props.meta.key + '.save', {}, parameter, getSuccess(this.props.meta, operate, ".query"));
+            service.execute(this.props.meta.key + '.save', {}, service.getParameter(parameter), getSuccess(this.props.meta, operate, ".query"));
 
             return;
         }

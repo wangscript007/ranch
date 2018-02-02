@@ -1,10 +1,10 @@
 import * as React from 'react';
 import generator from '../../util/generator';
 
-export interface ComponentProps extends React.HTMLAttributes<any> {
+export interface ComponentProps extends React.HTMLAttributes<HTMLElement> {
 }
 
-export class Component<T extends ComponentProps, E> extends React.Component<T, E> {
+export class Component<T extends React.HTMLAttributes<HTMLElement>, E> extends React.Component<T, E> {
     private id: string;
 
     protected getId(prefix: string): string {

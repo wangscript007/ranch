@@ -1,5 +1,4 @@
 import * as React from 'react';
-import generator from '../util/generator';
 import { Meta } from './meta';
 import { service } from './service';
 import Dashboard from './page/dashboard';
@@ -32,6 +31,9 @@ export class Content extends React.Component<Props, State> {
     }
 
     render(): JSX.Element {
+        if (this.state.page === 'blank')
+            return <div className="layout-content" />;
+
         let page = {
             tag: pages[this.state.page] || Dashboard,
             props: this.state
@@ -39,7 +41,7 @@ export class Content extends React.Component<Props, State> {
 
         return (
             <div className="layout-content">
-                <page.tag {...page.props} random={generator.random(8)} />
+                <page.tag {...page.props} />
             </div>
         );
     }

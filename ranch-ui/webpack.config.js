@@ -82,29 +82,27 @@ module.exports = {
             }
         }),
         new CopyWebpackPlugin([{
-            from: './src/template/css/*',
-            to: 'css',
-            flatten: true
+            context: './src/template/css/',
+            from: '**',
+            to: 'css'
         }, {
-            from: './src/template/icon/*',
-            to: 'icon',
-            flatten: true
+            context: './src/template/icon/',
+            from: '**',
+            to: 'icon'
         }, {
-            from: './src/template/img/*',
-            to: 'img',
-            flatten: true
+            context: './src/template/img/',
+            from: '**',
+            to: 'img'
         }, {
             context: './src/template/js/',
             from: '**',
             to: 'js'
         }, {
             from: './node_modules/react/umd/react.production.min.js',
-            to: 'js/react/min.js',
-            flatten: true
+            to: 'js/react/min.js'
         }, {
             from: './node_modules/react-dom/umd/react-dom.production.min.js',
-            to: 'js/react/dom.min.js',
-            flatten: true
+            to: 'js/react/dom.min.js'
         }])
     ],
 
