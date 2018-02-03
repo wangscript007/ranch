@@ -9,7 +9,7 @@ module.exports = {
         index: './src/mobile/index.tsx',
         order: './src/mobile/order/index.tsx',
         mine: './src/mobile/mine/index.tsx',
-        mobileSignIn: './src/mobile/sign-in.tsx',
+        mobileSignIn: './src/mobile/sign-in/index.tsx',
         console: './src/console/index.tsx',
         consoleSignIn: './src/console/sign-in.tsx'
     },

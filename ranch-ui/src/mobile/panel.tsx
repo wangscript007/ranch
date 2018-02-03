@@ -1,5 +1,6 @@
 import * as React from 'react';
 import message from '../util/message';
+import Icon from '../ui/icon';
 import './i18n';
 import './panel.less';
 
@@ -11,11 +12,21 @@ export default class Page<T extends Object={}, E extends object={}> extends Reac
         return (
             <div id="ranch-ui-mobile">
                 <div className="layout-top">
+                    <div className="back" onClick={this.back}><Icon code="\ue60c" />{message.get('back')}</div>
                     <div className="title">{title}</div>
                 </div>
                 <div className="layout-content">{this.getContent()}</div>
             </div>
         );
+    }
+
+    private back(): void {
+        let href: string = location.href;
+        let indexOf: number = href.indexOf('?');
+        if (indexOf === -1)
+            return;
+
+        location.href = href.substring(indexOf + 1) + '.html';
     }
 
     protected getTitle(): string {

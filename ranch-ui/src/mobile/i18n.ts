@@ -11,6 +11,9 @@ message.put({
     'mine': {
         'zh-cn': '我的'
     },
+    'back': {
+        'zh-cn': '返回'
+    },
 
 
 
@@ -20,27 +23,6 @@ message.put({
     },
     'title.sign-in': {
         'zh-cn': '请登录'
-    },
-    'sign-in.mobile': {
-        'zh-cn': '手机号'
-    },
-    'sign-in.mobile.placeholder': {
-        'zh-cn': '请输入您的手机号'
-    },
-    'sign-in.password': {
-        'zh-cn': '密码'
-    },
-    'sign-in.password.placeholder': {
-        'zh-cn': '请输入您的密码'
-    },
-    'sign-in': {
-        'zh-cn': '登入'
-    },
-    'sign-up': {
-        'zh-cn': '注册'
-    },
-    'sign-in-third': {
-        'zh-cn': '第三方账号登录'
     },
     'sign-out': {
         'zh-cn': '退出'
