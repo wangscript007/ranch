@@ -20,6 +20,10 @@ class SignIn extends Panel<object, State> {
         this.state = {};
     }
 
+    protected back(): void {
+        location.href = 'index.html';
+    }
+
     protected getTitle(): string {
         return 'sign-in-up';
     }
@@ -65,9 +69,7 @@ class SignIn extends Panel<object, State> {
             if (!user || !user.hasOwnProperty('id'))
                 return;
 
-            let href = location.href;
-            let indexOf = href.lastIndexOf('?');
-            location.href = (indexOf > -1 ? href.substring(indexOf + 1) : 'index') + '.html';
+            service.back();
         });
     }
 }

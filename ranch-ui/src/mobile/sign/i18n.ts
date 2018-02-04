@@ -24,5 +24,26 @@ message.put({
     },
     'sign-in-third': {
         'zh-cn': '第三方账号登录'
-    }
+    },
+    'sign.modify': {
+        'zh-cn': '修改资料'
+    },
+    'sign.name': {
+        'zh-cn': '姓名'
+    },
+    'sign.nick': {
+        'zh-cn': '昵称'
+    },
+    'sign.password': {
+        'zh-cn': '修改密码'
+    },
+    'sign.password.old': {
+        'zh-cn': '旧密码'
+    },
+    'sign.password.new': {
+        'zh-cn': '新密码'
+    },
+    'sign.password.repeat': {
+        'zh-cn': '重复新密码'
+    },
 });

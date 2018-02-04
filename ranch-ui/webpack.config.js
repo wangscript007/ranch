@@ -7,9 +7,12 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 module.exports = {
     entry: {
         index: './src/mobile/index.tsx',
+        classify: './src/mobile/classify/index.tsx',
         order: './src/mobile/order/index.tsx',
         mine: './src/mobile/mine/index.tsx',
-        mobileSignIn: './src/mobile/sign-in/index.tsx',
+        signModify: './src/mobile/sign/modify.tsx',
+        signPassword: './src/mobile/sign/password.tsx',
+        mobileSignIn: './src/mobile/sign/index.tsx',
         console: './src/console/index.tsx',
         consoleSignIn: './src/console/sign-in.tsx'
     },
@@ -31,6 +34,15 @@ module.exports = {
             title: 'Ranch UI'
         }),
         new HtmlWebpackPlugin({
+            filename: 'classify.html',
+            template: './src/template/index.html',
+            chunks: ['classify'],
+            minify: {
+                collapseWhitespace: true
+            },
+            title: 'Ranch UI'
+        }),
+        new HtmlWebpackPlugin({
             filename: 'order.html',
             template: './src/template/index.html',
             chunks: ['order'],
@@ -43,6 +55,24 @@ module.exports = {
             filename: 'mine.html',
             template: './src/template/index.html',
             chunks: ['mine'],
+            minify: {
+                collapseWhitespace: true
+            },
+            title: 'Ranch UI'
+        }),
+        new HtmlWebpackPlugin({
+            filename: 'sign-modify.html',
+            template: './src/template/index.html',
+            chunks: ['signModify'],
+            minify: {
+                collapseWhitespace: true
+            },
+            title: 'Ranch UI'
+        }),
+        new HtmlWebpackPlugin({
+            filename: 'sign-password.html',
+            template: './src/template/index.html',
+            chunks: ['signPassword'],
             minify: {
                 collapseWhitespace: true
             },

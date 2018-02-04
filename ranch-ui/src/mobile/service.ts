@@ -36,6 +36,31 @@ class Service {
         return service.post('/classify/find', {}, { code: code, key: key });
     }
 
+    public forwardToClassify(from?: string, code?: string, key?: string): void {
+        if (!from || !code || !key)
+            return;
+
+        location.href = 'classify.html?' + from + ',' + code + ',' + key;
+    }
+
+    public back(): void {
+        let args = this.getArgsFromLocation();
+        location.href = (args.length === 0 ? 'index' : args[0]) + '.html';
+    }
+
+    public getArgsFromLocation(): string[] {
+        let href = location.href;
+        let indexOf = href.indexOf('?');
+        if (indexOf === -1)
+            return [];
+
+        let parameter = href.substring(indexOf + 1);
+        if (parameter.indexOf(',') === -1)
+            return [parameter];
+
+        return parameter.split(',');
+    }
+
     public post(uri: string, header: object = {}, parameter: object = {}): Promise<any> {
         return http.post(uri, header, parameter).then(json => {
             if (json.code === 0)

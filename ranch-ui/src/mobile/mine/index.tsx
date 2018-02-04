@@ -2,8 +2,8 @@ import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import registerServiceWorker from '../../registerServiceWorker';
 import message from '../../util/message';
-import selector from '../../util/selector';
 import Image from '../../ui/image';
+import Icon from '../../ui/icon';
 import { service, User, Classify } from '../service';
 import Page from '../page';
 import './i18n';
@@ -13,7 +13,6 @@ interface State {
     user: User;
     aboutUs: Classify;
     contactUs: Classify;
-    modify?: boolean;
     password?: boolean;
 }
 
@@ -65,16 +64,22 @@ class Mine extends Page<object, State> {
                 </div>
             </div>,
             <div className="mine-area">
-                <div onClick={() => this.setState(prevState => ({ modify: !prevState.modify }))}>{message.get('sign.modify')}</div>
-                {this.modify()}
+                <div className="forward-to" onClick={() => location.href = 'sign-modify.html'}>
+                    <Icon code="&#xe60f;" />{message.get('sign.modify')}
+                </div>
                 <div className="line" />
-                <div onClick={() => this.setState(prevState => ({ password: !prevState.password }))}>{message.get('sign.modify.password')}</div>
-                {this.password()}
+                <div className="forward-to" onClick={() => location.href = 'sign-password.html'}>
+                    <Icon code="&#xe60f;" />{message.get('sign.password')}
+                </div>
             </div>,
             <div className="mine-area">
-                <div>{this.state.aboutUs.name || message.get('about-us')}</div>
+                <div className="forward-to" onClick={() => service.forwardToClassify('mine', this.state.aboutUs.code, this.state.aboutUs.key)}>
+                    <Icon code="&#xe60f;" />{this.state.aboutUs.name || message.get('about-us')}
+                </div>
                 <div className="line" />
-                <div>{this.state.contactUs.name || message.get('contact-us')}</div>
+                <div className="forward-to" onClick={() => service.forwardToClassify('mine', this.state.contactUs.code, this.state.contactUs.key)}>
+                    <Icon code="&#xe60f;" />{this.state.contactUs.name || message.get('contact-us')}
+                </div>
             </div>,
             <div className="mine-area">
                 <div onClick={() => this.signOut()}>{message.get('sign-out')}</div>
@@ -84,69 +89,6 @@ class Mine extends Page<object, State> {
 
     protected getBottom(): number {
         return 2;
-    }
-
-    private modify(): JSX.Element | null {
-        if (!this.state.modify)
-            return null;
-
-        return (
-            <div className="sign-modify">
-                <label htmlFor="sign-name">{message.get('sign.name')}</label>
-                <input type="text" id="sign-name" name="name" defaultValue={this.state.user.name || ''} />
-                <label htmlFor="sign-nick">{message.get('sign.nick')}</label>
-                <input type="text" id="sign-nick" name="nick" defaultValue={this.state.user.nick || ''} />
-                <div className="submit"><button onClick={() => this.modifySubmit()}>{message.get('sign.modify')}</button></div>
-            </div>
-        );
-    }
-
-    private modifySubmit(): void {
-        service.post('/user/modify', {}, {
-            name: selector.value('#sign-name'),
-            nick: selector.value('#sign-nick')
-        }).then(data => {
-            if (data === null)
-                return;
-
-            this.setState({
-                user: data,
-                modify: false
-            });
-        });
-    }
-
-    private password(): JSX.Element | null {
-        if (!this.state.password)
-            return null;
-
-        return (
-            <div className="sign-modify">
-                <label htmlFor="sign-password-old">{message.get('sign.password.old')}</label>
-                <input type="password" id="sign-password-old" />
-                <label htmlFor="sign-password-new">{message.get('sign.password.new')}</label>
-                <input type="password" id="sign-password-new" />
-                <label htmlFor="sign-password-repeat">{message.get('sign.password.repeat')}</label>
-                <input type="password" id="sign-password-repeat" />
-                <div className="submit"><button onClick={() => this.passwordSubmit()}>{message.get('sign.modify.password')}</button></div>
-            </div>
-        );
-    }
-
-    private passwordSubmit(): void {
-        service.post('/user/password', {}, {
-            old: selector.value('#sign-password-old'),
-            'new': selector.value('#sign-password-new'),
-            repeat: selector.value('#sign-password-repeat')
-        }).then(data => {
-            if (data === null)
-                return;
-
-            this.setState({
-                password: false
-            });
-        });
-
     }
 
     private signOut(): void {
