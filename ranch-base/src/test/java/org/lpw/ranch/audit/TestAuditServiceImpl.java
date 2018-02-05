@@ -34,7 +34,7 @@ public class TestAuditServiceImpl extends TestRecycleServiceSupport implements T
     }
 
     @Override
-    public void refuse(String[] ids, String auditRemark) {
+    public void reject(String[] ids, String auditRemark) {
         refuseIds = ids;
         this.auditRemark = auditRemark;
     }

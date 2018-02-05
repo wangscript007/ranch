@@ -121,6 +121,9 @@ export default class Grid extends PageComponent<PageProps, PageState> {
 
         if (op.type === 'pass') {
             let remark = prompt(message.get('grid.audit.remark'), '');
+            if (remark === null)
+                return;
+
             service.execute(this.props.meta.key + '.pass', {}, {
                 ids: data['id'],
                 auditRemark: remark
@@ -131,6 +134,9 @@ export default class Grid extends PageComponent<PageProps, PageState> {
 
         if (op.type === 'reject') {
             let remark = prompt(message.get('grid.audit.remark'), '');
+            if (remark === null)
+                return;
+
             service.execute(this.props.meta.key + '.reject', {}, {
                 ids: data['id'],
                 auditRemark: remark

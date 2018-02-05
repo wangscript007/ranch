@@ -22,5 +22,5 @@ public interface AuditService extends RecycleService {
      * @param ids         ID集。
      * @param auditRemark 审核备注。
      */
-    void refuse(String[] ids, String auditRemark);
+    void reject(String[] ids, String auditRemark);
 }

@@ -17,6 +17,11 @@ public class AuditHelperImpl implements AuditHelper {
     private AuditDao auditDao;
 
     @Override
+    public Audit get(int value) {
+        return value < 0 || value >= Audit.values().length ? null : Audit.values()[value];
+    }
+
+    @Override
     public void addProperty(Set<String> set) {
         if (set == null)
             return;
@@ -31,7 +36,7 @@ public class AuditHelperImpl implements AuditHelper {
     }
 
     @Override
-    public <T extends AuditModel> void refuse(Class<T> modelClass, String[] ids, String auditRemark) {
+    public <T extends AuditModel> void reject(Class<T> modelClass, String[] ids, String auditRemark) {
         audit(modelClass, ids, Audit.Reject, auditRemark);
     }
 

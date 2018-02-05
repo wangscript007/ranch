@@ -1,6 +1,5 @@
 package org.lpw.ranch.doc;
 
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import org.lpw.ranch.audit.Audit;
 import org.lpw.ranch.audit.AuditService;
@@ -47,7 +46,7 @@ public interface DocService extends AuditService {
      * @param key 类型key。
      * @return 文档信息集。
      */
-    JSONArray queryByKey(String key);
+    JSONObject queryByKey(String key);
 
     /**
      * 获取指定ID的文档信息集。
@@ -80,6 +79,14 @@ public interface DocService extends AuditService {
      * @return 内容。
      */
     String read(String id);
+
+    /**
+     * 阅读，并返回JSON格式的文档数据。
+     *
+     * @param id ID值。
+     * @return 文档数据。
+     */
+    JSONObject readJson(String id);
 
     /**
      * 增减收藏数。

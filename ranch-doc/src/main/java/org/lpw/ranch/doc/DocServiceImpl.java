@@ -74,7 +74,8 @@ public class DocServiceImpl implements DocService, MinuteJob {
 
     @Override
     public JSONObject query(String key, String owner, String author, String subject, Audit audit) {
-        return query(docDao.query(key, owner, author, subject, audit, Recycle.No, pagination.getPageSize(), pagination.getPageNum()));
+        return query(docDao.query(key, owner, author, subject, audit, Recycle.No, pagination.getPageSize(20),
+                pagination.getPageNum()));
     }
 
     @Override
@@ -83,9 +84,9 @@ public class DocServiceImpl implements DocService, MinuteJob {
     }
 
     @Override
-    public JSONArray queryByKey(String key) {
-        return query(docDao.query(key, null, null, null, Audit.Pass, Recycle.No, 0, 0))
-                .getJSONArray("list");
+    public JSONObject queryByKey(String key) {
+        return query(docDao.query(key, null, null, null, Audit.Pass, Recycle.No,
+                pagination.getPageSize(), pagination.getPageNum()));
     }
 
     private JSONObject query(PageList<DocModel> pl) {
@@ -164,9 +165,22 @@ public class DocServiceImpl implements DocService, MinuteJob {
 
     @Override
     public String read(String id) {
+        return putRead(id).getContent();
+    }
+
+    @Override
+    public JSONObject readJson(String id) {
+        DocModel doc = putRead(id);
+        JSONObject object = toJson(doc);
+        object.put("content", doc.getContent());
+
+        return object;
+    }
+
+    private DocModel putRead(String id) {
         read.computeIfAbsent(id, i -> new AtomicInteger()).incrementAndGet();
 
-        return findById(id).getContent();
+        return findById(id);
     }
 
     @Override
@@ -203,8 +217,8 @@ public class DocServiceImpl implements DocService, MinuteJob {
     }
 
     @Override
-    public void refuse(String[] ids, String auditRemark) {
-        auditHelper.refuse(DocModel.class, ids, auditRemark);
+    public void reject(String[] ids, String auditRemark) {
+        auditHelper.reject(DocModel.class, ids, auditRemark);
         clearCache(ids);
     }
 

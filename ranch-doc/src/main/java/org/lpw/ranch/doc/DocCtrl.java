@@ -1,6 +1,5 @@
 package org.lpw.ranch.doc;
 
-import org.lpw.ranch.audit.Audit;
 import org.lpw.ranch.audit.AuditCtrlSupport;
 import org.lpw.ranch.audit.AuditHelper;
 import org.lpw.ranch.audit.AuditService;
@@ -25,6 +24,8 @@ public class DocCtrl extends AuditCtrlSupport {
     @Inject
     private Request request;
     @Inject
+    private AuditHelper auditHelper;
+    @Inject
     private DocService docService;
 
     @Execute(name = "query", validates = {
@@ -32,7 +33,8 @@ public class DocCtrl extends AuditCtrlSupport {
             @Validate(validator = Validators.SIGN)
     })
     public Object query() {
-        return docService.query(request.get("key"), request.get("owner"), request.get("author"), request.get("subject"), Audit.values()[request.getAsInt("audit")]);
+        return docService.query(request.get("key"), request.get("owner"), request.get("author"), request.get("subject"),
+                auditHelper.get(request.getAsInt("audit", -1)));
     }
 
     @Execute(name = "query-by-author", validates = {
@@ -94,6 +96,14 @@ public class DocCtrl extends AuditCtrlSupport {
         map.put("content", docService.read(request.get("id")));
 
         return map;
+    }
+
+    @Execute(name = "read-json", validates = {
+            @Validate(validator = Validators.ID, parameter = "id", failureCode = 11),
+            @Validate(validator = DocService.VALIDATOR_EXISTS, parameter = "id", failureCode = 12)
+    })
+    public Object readJson() {
+        return docService.readJson(request.get("id"));
     }
 
     @Execute(name = "favorite", validates = {

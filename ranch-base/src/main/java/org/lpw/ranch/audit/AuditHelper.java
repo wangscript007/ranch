@@ -15,6 +15,14 @@ public interface AuditHelper {
     String VALIDATOR = "ranch.audit.validator";
 
     /**
+     * 获取审核状态。
+     *
+     * @param value 状态值。
+     * @return 审核状态，不存在则返回null。
+     */
+    Audit get(int value);
+
+    /**
      * 添加审核属性名称到集合。
      *
      * @param set 目标集合。
@@ -39,5 +47,5 @@ public interface AuditHelper {
      * @param auditRemark 审核备注。
      * @param <T>         Model类。
      */
-    <T extends AuditModel> void refuse(Class<T> modelClass, String[] ids, String auditRemark);
+    <T extends AuditModel> void reject(Class<T> modelClass, String[] ids, String auditRemark);
 }

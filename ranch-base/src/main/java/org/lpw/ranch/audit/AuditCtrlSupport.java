@@ -43,14 +43,14 @@ public abstract class AuditCtrlSupport extends RecycleCtrlSupport {
      *
      * @return ""。
      */
-    @Execute(name = "refuse", validates = {
+    @Execute(name = "reject", validates = {
             @Validate(validator = Validators.NOT_EMPTY, parameter = "ids", failureCode = 81),
             @Validate(validator = Validators.NOT_EMPTY, parameter = "auditRemark", failureCode = 82),
             @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "auditRemark", failureCode = 83),
             @Validate(validator = Validators.SIGN)
     })
-    public Object refuse() {
-        getAuditService().refuse(request.getAsArray("ids"), request.get("auditRemark"));
+    public Object reject() {
+        getAuditService().reject(request.getAsArray("ids"), request.get("auditRemark"));
 
         return "";
     }

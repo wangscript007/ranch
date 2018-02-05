@@ -149,8 +149,8 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public void refuse(String[] ids, String auditRemark) {
-        auditHelper.refuse(CommentModel.class, ids, auditRemark);
+    public void reject(String[] ids, String auditRemark) {
+        auditHelper.reject(CommentModel.class, ids, auditRemark);
     }
 
     @Override

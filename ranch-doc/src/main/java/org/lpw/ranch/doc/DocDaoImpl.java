@@ -37,7 +37,9 @@ class DocDaoImpl implements DocDao {
     @Override
     public PageList<DocModel> query(String key, String owner, String author, String subject, Audit audit, Recycle recycle,
                                     int pageSize, int pageNum) {
-        StringBuilder where = new StringBuilder().append(recycle.getSql()).append(" and ").append(audit.getSql());
+        StringBuilder where = new StringBuilder().append(recycle.getSql());
+        if (audit != null)
+            where.append(" and ").append(audit.getSql());
         List<Object> args = new ArrayList<>();
         daoHelper.where(where, args, "c_key", DaoOperation.Equals, key, true);
         daoHelper.where(where, args, "c_owner", DaoOperation.Equals, owner, true);

@@ -62,7 +62,7 @@ public class AuditHelperTest extends TephraTestSupport {
     }
 
     @Test
-    public void refuse() {
+    public void reject() {
         List<TestAuditModel> list = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
             TestAuditModel model = new TestAuditModel();
@@ -72,16 +72,16 @@ public class AuditHelperTest extends TephraTestSupport {
             list.add(model);
         }
 
-        auditHelper.refuse(null, new String[]{list.get(0).getId(), list.get(1).getId()}, "remark");
+        auditHelper.reject(null, new String[]{list.get(0).getId(), list.get(1).getId()}, "remark");
         equals(list, 0);
 
-        auditHelper.refuse(TestAuditModel.class, null, "remark");
+        auditHelper.reject(TestAuditModel.class, null, "remark");
         equals(list, 0);
 
-        auditHelper.refuse(TestAuditModel.class, new String[0], "remark");
+        auditHelper.reject(TestAuditModel.class, new String[0], "remark");
         equals(list, 0);
 
-        auditHelper.refuse(TestAuditModel.class, new String[]{list.get(0).getId(), list.get(1).getId()}, "remark");
+        auditHelper.reject(TestAuditModel.class, new String[]{list.get(0).getId(), list.get(1).getId()}, "remark");
         for (int i = 0; i < 2; i++) {
             TestAuditModel model = liteOrm.findById(TestAuditModel.class, list.get(i).getId());
             Assert.assertEquals(Audit.Reject.getValue(), model.getAudit());

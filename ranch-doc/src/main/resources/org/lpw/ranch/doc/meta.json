@@ -165,6 +165,9 @@
         "search": [
             {
                 "name": "subject"
+            },
+            {
+                "name": "audit"
             }
         ],
         "ops": [
@@ -174,12 +177,12 @@
             {
                 "type": "pass",
                 "service": ".pass",
-                "success": ".query"
+                "success": ".lite-query"
             },
             {
                 "type": "reject",
                 "service": ".reject",
-                "success": ".query"
+                "success": ".lite-query"
             },
             {
                 "type": "delete",
