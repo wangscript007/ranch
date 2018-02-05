@@ -4,137 +4,76 @@ const UglifyJsWebpackPlugin = require('uglifyjs-webpack-plugin');
 const ExtractTextWebpackPlugin = require('extract-text-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 
+var htmls = [{
+    name: 'index',
+    path: 'mobile/index'
+}, {
+    name: 'classify',
+    path: 'mobile/classify/index'
+}, {
+    name: 'order',
+    path: 'mobile/order/index'
+}, {
+    name: 'mine',
+    path: 'mobile/mine/index'
+}, {
+    name: 'sign-modify',
+    path: 'mobile/sign/modify'
+}, {
+    name: 'sign-password',
+    path: 'mobile/sign/password'
+}, {
+    name: 'mobile-sign-in',
+    path: 'mobile/sign/index'
+}, {
+    name: 'console',
+    path: 'console/index',
+    template: 'console'
+}, {
+    name: 'console-sign-in',
+    path: 'console/sign-in'
+}];
+
+var entry = {};
+var plugins = [new CleanWebpackPlugin(['dist'])];
+for (var i = 0; i < htmls.length; i++) {
+    entry[htmls[i].name] = './src/' + htmls[i].path + '.tsx';
+    plugins.push(new HtmlWebpackPlugin({
+        filename: htmls[i].name + '.html',
+        template: './src/template/' + (htmls[i].template || 'index') + '.html',
+        chunks: [htmls[i].name],
+        minify: {
+            collapseWhitespace: true
+        },
+        title: 'Ranch UI'
+    }));
+}
+plugins.push(new UglifyJsWebpackPlugin());
+plugins.push(new ExtractTextWebpackPlugin({
+    filename: (getPath) => {
+        return getPath('css/[contenthash:8].css');
+    }
+}));
+plugins.push(new CopyWebpackPlugin([{
+    context: './src/template/',
+    from: '**'
+}, {
+    from: './node_modules/react/umd/react.production.min.js',
+    to: 'js/react/min.js'
+}, {
+    from: './node_modules/react-dom/umd/react-dom.production.min.js',
+    to: 'js/react/dom.min.js'
+}]));
+
 module.exports = {
-    entry: {
-        index: './src/mobile/index.tsx',
-        classify: './src/mobile/classify/index.tsx',
-        order: './src/mobile/order/index.tsx',
-        mine: './src/mobile/mine/index.tsx',
-        signModify: './src/mobile/sign/modify.tsx',
-        signPassword: './src/mobile/sign/password.tsx',
-        mobileSignIn: './src/mobile/sign/index.tsx',
-        console: './src/console/index.tsx',
-        consoleSignIn: './src/console/sign-in.tsx'
-    },
+    entry: entry,
 
     output: {
         filename: 'js/[chunkhash:8].js',
         path: __dirname + '/dist'
     },
 
-    plugins: [
-        new CleanWebpackPlugin(['dist']),
-        new HtmlWebpackPlugin({
-            filename: 'index.html',
-            template: './src/template/index.html',
-            chunks: ['index'],
-            minify: {
-                collapseWhitespace: true
-            },
-            title: 'Ranch UI'
-        }),
-        new HtmlWebpackPlugin({
-            filename: 'classify.html',
-            template: './src/template/index.html',
-            chunks: ['classify'],
-            minify: {
-                collapseWhitespace: true
-            },
-            title: 'Ranch UI'
-        }),
-        new HtmlWebpackPlugin({
-            filename: 'order.html',
-            template: './src/template/index.html',
-            chunks: ['order'],
-            minify: {
-                collapseWhitespace: true
-            },
-            title: 'Ranch UI'
-        }),
-        new HtmlWebpackPlugin({
-            filename: 'mine.html',
-            template: './src/template/index.html',
-            chunks: ['mine'],
-            minify: {
-                collapseWhitespace: true
-            },
-            title: 'Ranch UI'
-        }),
-        new HtmlWebpackPlugin({
-            filename: 'sign-modify.html',
-            template: './src/template/index.html',
-            chunks: ['signModify'],
-            minify: {
-                collapseWhitespace: true
-            },
-            title: 'Ranch UI'
-        }),
-        new HtmlWebpackPlugin({
-            filename: 'sign-password.html',
-            template: './src/template/index.html',
-            chunks: ['signPassword'],
-            minify: {
-                collapseWhitespace: true
-            },
-            title: 'Ranch UI'
-        }),
-        new HtmlWebpackPlugin({
-            filename: 'mobile-sign-in.html',
-            template: './src/template/index.html',
-            chunks: ['mobileSignIn'],
-            minify: {
-                collapseWhitespace: true
-            },
-            title: '请登陆'
-        }),
-        new HtmlWebpackPlugin({
-            filename: 'console.html',
-            template: './src/template/console.html',
-            chunks: ['console'],
-            minify: {
-                collapseWhitespace: true
-            },
-            title: 'Ranch UI'
-        }),
-        new HtmlWebpackPlugin({
-            filename: 'console-sign-in.html',
-            template: './src/template/index.html',
-            chunks: ['consoleSignIn'],
-            minify: {
-                collapseWhitespace: true
-            },
-            title: '请登陆'
-        }),
-        new UglifyJsWebpackPlugin(),
-        new ExtractTextWebpackPlugin({
-            filename: (getPath) => {
-                return getPath('css/[contenthash:8].css');
-            }
-        }),
-        new CopyWebpackPlugin([{
-            context: './src/template/css/',
-            from: '**',
-            to: 'css'
-        }, {
-            context: './src/template/icon/',
-            from: '**',
-            to: 'icon'
-        }, {
-            context: './src/template/img/',
-            from: '**',
-            to: 'img'
-        }, {
-            context: './src/template/js/',
-            from: '**',
-            to: 'js'
-        }, {
-            from: './node_modules/react/umd/react.production.min.js',
-            to: 'js/react/min.js'
-        }, {
-            from: './node_modules/react-dom/umd/react-dom.production.min.js',
-            to: 'js/react/dom.min.js'
-        }])
-    ],
+    plugins: plugins,
 
     resolve: {
         extensions: ['.ts', '.tsx', '.js', '.json']
