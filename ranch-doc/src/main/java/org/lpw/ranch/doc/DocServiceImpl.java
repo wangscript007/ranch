@@ -82,6 +82,12 @@ public class DocServiceImpl implements DocService, MinuteJob {
         return query(docDao.queryByAuthor(userHelper.id(), pagination.getPageSize(), pagination.getPageNum()));
     }
 
+    @Override
+    public JSONArray queryByKey(String key) {
+        return query(docDao.query(key, null, null, null, Audit.Pass, Recycle.No, 0, 0))
+                .getJSONArray("list");
+    }
+
     private JSONObject query(PageList<DocModel> pl) {
         JSONObject object = pl.toJson(false);
         JSONArray list = new JSONArray();
@@ -123,7 +129,8 @@ public class DocServiceImpl implements DocService, MinuteJob {
         model.setSummary(doc.getSummary());
         model.setLabel(doc.getLabel());
         model.setSource(doc.getSource());
-        model.setContent(markdown ? HtmlRenderer.builder().build().render(Parser.builder().build().parse(doc.getSource())).trim() : doc.getSource());
+        model.setContent(markdown ? HtmlRenderer.builder().build().render(Parser.builder().build().parse(doc.getSource())).trim()
+                : doc.getSource());
         model.setTime(dateTime.now());
         model.setAudit(defaultAudit);
         docDao.save(model);

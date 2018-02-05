@@ -12,7 +12,7 @@
 
 [审核通过](../ranch-base/doc/audit-pass.md)
 
-[审核不通过](../ranch-base/doc/audit-refuse.md)
+[审核不通过](../ranch-base/doc/audit-reject.md)
 
 [检索回收站数据](../ranch-base/doc/recycle.md)
 

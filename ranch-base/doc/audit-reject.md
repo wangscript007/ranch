@@ -1,8 +1,8 @@
 # 审核不通过
 
 请求
-- Service Key - ${module-name}.refuse
-- URI - /${module-path}/refuse
+- Service Key - ${module-name}.reject
+- URI - /${module-path}/reject
 > ${module-name}为模块名称。
 
 > ${module-path}为模块路径。

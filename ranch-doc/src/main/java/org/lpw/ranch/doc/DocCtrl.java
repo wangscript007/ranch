@@ -42,6 +42,11 @@ public class DocCtrl extends AuditCtrlSupport {
         return docService.queryByAuthor();
     }
 
+    @Execute(name = "query-by-key")
+    public Object queryByKey() {
+        return docService.queryByKey(request.get("key"));
+    }
+
     @Execute(name = "get", validates = {
             @Validate(validator = Validators.NOT_EMPTY, parameter = "ids", failureCode = 13)
     })

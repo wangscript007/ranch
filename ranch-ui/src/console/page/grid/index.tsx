@@ -119,6 +119,26 @@ export default class Grid extends PageComponent<PageProps, PageState> {
             return;
         }
 
+        if (op.type === 'pass') {
+            let remark = prompt(message.get('grid.audit.remark'), '');
+            service.execute(this.props.meta.key + '.pass', {}, {
+                ids: data['id'],
+                auditRemark: remark
+            }, getSuccess(this.props.meta, op, ".query"));
+
+            return;
+        }
+
+        if (op.type === 'reject') {
+            let remark = prompt(message.get('grid.audit.remark'), '');
+            service.execute(this.props.meta.key + '.reject', {}, {
+                ids: data['id'],
+                auditRemark: remark
+            }, getSuccess(this.props.meta, op, ".query"));
+
+            return;
+        }
+
         if (op.type === 'delete') {
             service.execute(this.props.meta.key + '.delete', {}, { id: data['id'] }, getSuccess(this.props.meta, op, ".query"));
 

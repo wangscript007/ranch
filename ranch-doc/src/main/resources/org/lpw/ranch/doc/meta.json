@@ -99,6 +99,16 @@
         {
             "name": "time",
             "type": "read-only"
+        },
+        {
+            "name": "audit",
+            "labels": ".audits",
+            "ignore": [
+                "create",
+                "modify",
+                "lite-create",
+                "lite-modify"
+            ]
         }
     ],
     "query": {
@@ -106,6 +116,16 @@
         "ops": [
             {
                 "type": "modify"
+            },
+            {
+                "type": "pass",
+                "service": ".pass",
+                "success": ".query"
+            },
+            {
+                "type": "reject",
+                "service": ".reject",
+                "success": ".query"
             },
             {
                 "type": "delete",
@@ -150,6 +170,16 @@
         "ops": [
             {
                 "type": "lite-modify"
+            },
+            {
+                "type": "pass",
+                "service": ".pass",
+                "success": ".query"
+            },
+            {
+                "type": "reject",
+                "service": ".reject",
+                "success": ".query"
             },
             {
                 "type": "delete",
