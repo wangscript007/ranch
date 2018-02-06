@@ -27,7 +27,7 @@ class Order extends Page {
     }
 
     protected getBottom(): number {
-        return 1;
+        return 2;
     }
 }
 

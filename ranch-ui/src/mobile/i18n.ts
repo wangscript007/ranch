@@ -5,6 +5,9 @@ message.put({
     'index': {
         'zh-cn': '首页'
     },
+    'doc': {
+        'zh-cn': '文章'
+    },
     'order': {
         'zh-cn': '订单'
     },

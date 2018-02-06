@@ -88,7 +88,7 @@ class Mine extends Page<object, State> {
     }
 
     protected getBottom(): number {
-        return 2;
+        return 3;
     }
 
     private signOut(): void {

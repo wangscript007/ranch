@@ -11,6 +11,12 @@ var htmls = [{
     name: 'classify',
     path: 'mobile/classify/index'
 }, {
+    name: 'doc',
+    path: 'mobile/doc/index'
+}, {
+    name: 'doc-read',
+    path: 'mobile/doc/read'
+}, {
     name: 'order',
     path: 'mobile/order/index'
 }, {
