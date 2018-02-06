@@ -35,5 +35,5 @@ public interface AuditTester {
      * @param codePrefix 错误编码前缀。
      * @param <T>        Model类。
      */
-    <T extends AuditModel> void refuse(AuditTesterDao<T> testerDao, String name, String uriPrefix, int codePrefix);
+    <T extends AuditModel> void reject(AuditTesterDao<T> testerDao, String name, String uriPrefix, int codePrefix);
 }

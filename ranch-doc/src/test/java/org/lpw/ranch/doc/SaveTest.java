@@ -143,7 +143,7 @@ public class SaveTest extends TestSupport {
         Assert.assertEquals("image", data.getString("image"));
         Assert.assertEquals("thumbnail", data.getString("thumbnail"));
         Assert.assertEquals("label", data.getString("label"));
-        Assert.assertFalse(data.containsKey("source"));
+        Assert.assertEquals("# source", data.getString("source"));
         Assert.assertFalse(data.containsKey("content"));
         Assert.assertEquals(0, data.getIntValue("read"));
         Assert.assertEquals(0, data.getIntValue("favorite"));
@@ -211,7 +211,7 @@ public class SaveTest extends TestSupport {
         Assert.assertEquals("image 2", data.getString("image"));
         Assert.assertEquals("thumbnail 2", data.getString("thumbnail"));
         Assert.assertEquals("label 2", data.getString("label"));
-        Assert.assertFalse(data.containsKey("source"));
+        Assert.assertEquals("# source 2", data.getString("source"));
         Assert.assertFalse(data.containsKey("content"));
         Assert.assertEquals(0, data.getIntValue("read"));
         Assert.assertEquals(0, data.getIntValue("favorite"));

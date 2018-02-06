@@ -112,7 +112,7 @@ public class TestSupport extends TephraTestSupport implements AuditTesterDao<Doc
     }
 
     void equals(JSONObject object, int i, String author, Audit audit) {
-        Assert.assertEquals(20, object.size());
+        Assert.assertEquals(21, object.size());
         Assert.assertEquals(36, object.getString("id").length());
         Assert.assertEquals("key " + i, object.getString("key"));
         JSONObject owner = object.getJSONObject("owner");
@@ -129,6 +129,7 @@ public class TestSupport extends TephraTestSupport implements AuditTesterDao<Doc
         Assert.assertEquals("thumbnail " + i, object.getString("thumbnail"));
         Assert.assertEquals("summary " + i, object.getString("summary"));
         Assert.assertEquals("label " + i, object.getString("label"));
+        Assert.assertEquals("source " + i, object.getString("source"));
         Assert.assertEquals(400 + i, object.getIntValue("read"));
         Assert.assertEquals(500 + i, object.getIntValue("favorite"));
         Assert.assertEquals(600 + i, object.getIntValue("comment"));

@@ -56,9 +56,9 @@ public class AuditCtrlSupportTest extends RecycleCtrlSupportTest {
     }
 
     @Test
-    public void refuse() {
+    public void reject() {
         mockHelper.reset();
-        mockHelper.mock("/audit/refuse");
+        mockHelper.mock("/audit/reject");
         JSONObject object = mockHelper.getResponse().asJson();
         Assert.assertEquals(9981, object.getIntValue("code"));
         Assert.assertEquals(message.get(Validators.PREFIX + "empty", message.get(TestAuditModel.NAME + ".ids")), object.getString("message"));
@@ -66,7 +66,7 @@ public class AuditCtrlSupportTest extends RecycleCtrlSupportTest {
 
         mockHelper.reset();
         mockHelper.getRequest().addParameter("ids", "id1,id2");
-        mockHelper.mock("/audit/refuse");
+        mockHelper.mock("/audit/reject");
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(9982, object.getIntValue("code"));
         Assert.assertEquals(message.get(Validators.PREFIX + "empty", message.get(TestAuditModel.NAME + ".auditRemark")), object.getString("message"));
@@ -75,7 +75,7 @@ public class AuditCtrlSupportTest extends RecycleCtrlSupportTest {
         mockHelper.reset();
         mockHelper.getRequest().addParameter("ids", "id1,id2");
         mockHelper.getRequest().addParameter("auditRemark", generator.random(101));
-        mockHelper.mock("/audit/refuse");
+        mockHelper.mock("/audit/reject");
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(9983, object.getIntValue("code"));
         Assert.assertEquals(message.get(Validators.PREFIX + "over-max-length", message.get(TestAuditModel.NAME + ".auditRemark"), 100), object.getString("message"));
@@ -84,7 +84,7 @@ public class AuditCtrlSupportTest extends RecycleCtrlSupportTest {
         mockHelper.reset();
         mockHelper.getRequest().addParameter("ids", "id1,id2");
         mockHelper.getRequest().addParameter("auditRemark", "audit-remark");
-        mockHelper.mock("/audit/refuse");
+        mockHelper.mock("/audit/reject");
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(9995, object.getIntValue("code"));
         Assert.assertEquals(message.get(Validators.PREFIX + "illegal-sign"), object.getString("message"));
@@ -94,7 +94,7 @@ public class AuditCtrlSupportTest extends RecycleCtrlSupportTest {
         mockHelper.getRequest().addParameter("ids", "id1,id2");
         mockHelper.getRequest().addParameter("auditRemark", "audit-remark");
         sign.put(mockHelper.getRequest().getMap(), null);
-        mockHelper.mock("/audit/refuse");
+        mockHelper.mock("/audit/reject");
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(0, object.getIntValue("code"));
         Assert.assertEquals("", object.getString("data"));

@@ -33,7 +33,7 @@ public class AuditTesterImpl implements AuditTester {
     @Override
     public <T extends AuditModel> void all(AuditTesterDao<T> testerDao, String name, String uriPrefix, int codePrefix) {
         pass(testerDao, name, uriPrefix, codePrefix);
-        refuse(testerDao, name, uriPrefix, codePrefix);
+        reject(testerDao, name, uriPrefix, codePrefix);
         recycleTester.all(testerDao, name, uriPrefix, codePrefix);
     }
 
@@ -88,13 +88,13 @@ public class AuditTesterImpl implements AuditTester {
     }
 
     @Override
-    public <T extends AuditModel> void refuse(AuditTesterDao<T> testerDao, String name, String uriPrefix, int codePrefix) {
+    public <T extends AuditModel> void reject(AuditTesterDao<T> testerDao, String name, String uriPrefix, int codePrefix) {
         List<T> list = new ArrayList<>();
         for (int i = 0; i < 10; i++)
             list.add(testerDao.create(i, Audit.values()[i % 3]));
 
         mockHelper.reset();
-        mockHelper.mock("/" + uriPrefix + "/refuse");
+        mockHelper.mock("/" + uriPrefix + "/reject");
         JSONObject object = mockHelper.getResponse().asJson();
         Assert.assertEquals(codePrefix * 100 + 81, object.getIntValue("code"));
         Assert.assertEquals(message.get(Validators.PREFIX + "empty", message.get(name + ".ids")), object.getString("message"));
@@ -102,7 +102,7 @@ public class AuditTesterImpl implements AuditTester {
 
         mockHelper.reset();
         mockHelper.getRequest().addParameter("ids", list.get(0).getId());
-        mockHelper.mock("/" + uriPrefix + "/refuse");
+        mockHelper.mock("/" + uriPrefix + "/reject");
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(codePrefix * 100 + 82, object.getIntValue("code"));
         Assert.assertEquals(message.get(Validators.PREFIX + "empty", message.get(name + ".auditRemark")), object.getString("message"));
@@ -111,7 +111,7 @@ public class AuditTesterImpl implements AuditTester {
         mockHelper.reset();
         mockHelper.getRequest().addParameter("ids", list.get(0).getId());
         mockHelper.getRequest().addParameter("auditRemark", generator.random(101));
-        mockHelper.mock("/" + uriPrefix + "/refuse");
+        mockHelper.mock("/" + uriPrefix + "/reject");
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(codePrefix * 100 + 83, object.getIntValue("code"));
         Assert.assertEquals(message.get(Validators.PREFIX + "over-max-length", message.get(name + ".auditRemark"), 100), object.getString("message"));
@@ -120,7 +120,7 @@ public class AuditTesterImpl implements AuditTester {
         mockHelper.reset();
         mockHelper.getRequest().addParameter("ids", list.get(0).getId());
         mockHelper.getRequest().addParameter("auditRemark", "audit remark");
-        mockHelper.mock("/" + uriPrefix + "/refuse");
+        mockHelper.mock("/" + uriPrefix + "/reject");
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(9995, object.getIntValue("code"));
         Assert.assertEquals(message.get(Validators.PREFIX + "illegal-sign"), object.getString("message"));
@@ -130,7 +130,7 @@ public class AuditTesterImpl implements AuditTester {
         mockHelper.getRequest().addParameter("ids", list.get(0).getId() + "," + list.get(1).getId());
         mockHelper.getRequest().addParameter("auditRemark", "audit remark");
         sign.put(mockHelper.getRequest().getMap(), null);
-        mockHelper.mock("/" + uriPrefix + "/refuse");
+        mockHelper.mock("/" + uriPrefix + "/reject");
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(0, object.getIntValue("code"));
         Assert.assertEquals("", object.getString("data"));
