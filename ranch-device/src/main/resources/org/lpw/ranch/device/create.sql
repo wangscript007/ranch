@@ -10,6 +10,5 @@ CREATE TABLE t_device
   c_time DATETIME DEFAULT NULL COMMENT '时间',
 
   PRIMARY KEY pk(c_id) USING HASH,
-  KEY k_user(c_user) USING HASH,
-  UNIQUE KEY uk_app_code_mac_id(c_app_code,c_mac_id) USING HASH
+  UNIQUE KEY uk_app_code_type_user(c_app_code,c_type,c_user) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

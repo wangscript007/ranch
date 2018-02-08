@@ -8,8 +8,9 @@
 
 |名称|类型|说明|
 |---|---|---|
+|user|char(36)|用户ID，空使用当前用户。|
 |appCode|char(100)|APP编码。|
-|macId|char(100)|Mac ID。|
+|type|char(100)|类型：android、ios。|
 
 返回值
 ```json

@@ -25,9 +25,9 @@ class DeviceDaoImpl implements DeviceDao {
     public PageList<DeviceModel> query(String user, String appCode, String type, String macId, String version, int pageSize, int pageNum) {
         StringBuilder where = new StringBuilder();
         List<Object> args = new ArrayList<>();
-        daoHelper.where(where, args, "c_user", DaoOperation.Equals, user);
         daoHelper.where(where, args, "c_app_code", DaoOperation.Equals, appCode);
         daoHelper.where(where, args, "c_type", DaoOperation.Equals, type);
+        daoHelper.where(where, args, "c_user", DaoOperation.Equals, user);
         daoHelper.where(where, args, "c_mac_id", DaoOperation.Equals, macId);
         daoHelper.where(where, args, "c_version", DaoOperation.Equals, version);
 
@@ -36,8 +36,9 @@ class DeviceDaoImpl implements DeviceDao {
     }
 
     @Override
-    public DeviceModel find(String appCode, String macId) {
-        return liteOrm.findOne(new LiteQuery(DeviceModel.class).where("c_app_code=? and c_mac_id=?"), new Object[]{appCode, macId});
+    public DeviceModel find(String user, String appCode, String type) {
+        return liteOrm.findOne(new LiteQuery(DeviceModel.class).where("c_app_code=? and c_type=? and c_user=?"),
+                new Object[]{appCode, type, user});
     }
 
     @Override
@@ -46,7 +47,8 @@ class DeviceDaoImpl implements DeviceDao {
     }
 
     @Override
-    public void delete(DeviceModel device) {
-        liteOrm.delete(device);
+    public void delete(String user, String appCode, String macId) {
+        liteOrm.delete(new LiteQuery(DeviceModel.class).where("c_app_code=? and c_mac_id=? and c_user=?"),
+                new Object[]{appCode, macId, user});
     }
 }

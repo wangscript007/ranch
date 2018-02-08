@@ -21,11 +21,12 @@ public interface DeviceService {
     /**
      * 获取设备绑定信息。
      *
+     * @param user    用户。
      * @param appCode APP编码。
-     * @param macId   Mac ID。
+     * @param type    类型：android、ios。
      * @return 设备绑定信息。
      */
-    JSONObject find(String appCode, String macId);
+    JSONObject find(String user, String appCode, String type);
 
     /**
      * 保存设备绑定信息。

@@ -38,22 +38,24 @@ public class DeviceServiceImpl implements DeviceService {
     }
 
     @Override
-    public JSONObject find(String appCode, String macId) {
-        DeviceModel device = deviceDao.find(appCode, macId);
+    public JSONObject find(String user, String appCode, String type) {
+        DeviceModel device = deviceDao.find(user, appCode, type);
 
         return device == null ? new JSONObject() : modelHelper.toJson(device);
     }
 
     @Override
     public JSONObject save(String user, String appCode, String type, String macId, String version) {
-        DeviceModel device = deviceDao.find(appCode, macId);
+        if (validator.isEmpty(user))
+            user = userHelper.id();
+        DeviceModel device = deviceDao.find(user, appCode, type);
         if (device == null) {
             device = new DeviceModel();
+            device.setUser(user);
             device.setAppCode(appCode);
-            device.setMacId(macId);
+            device.setType(type);
         }
-        device.setUser(validator.isEmpty(user) ? userHelper.id() : user);
-        device.setType(type);
+        device.setMacId(macId);
         device.setVersion(version);
         device.setTime(dateTime.now());
         deviceDao.save(device);
@@ -63,8 +65,6 @@ public class DeviceServiceImpl implements DeviceService {
 
     @Override
     public void unbind(String user, String appCode, String macId) {
-        DeviceModel device = deviceDao.find(appCode, macId);
-        if (device != null && device.getUser().equals(user))
-            deviceDao.delete(device);
+        deviceDao.delete(user, appCode, macId);
     }
 }

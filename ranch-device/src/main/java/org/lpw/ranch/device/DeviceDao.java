@@ -8,9 +8,9 @@ import org.lpw.tephra.dao.orm.PageList;
 interface DeviceDao {
     PageList<DeviceModel> query(String user, String appCode, String type, String macId, String version, int pageSize, int pageNum);
 
-    DeviceModel find(String appCode, String macId);
+    DeviceModel find(String user, String appCode, String type);
 
     void save(DeviceModel device);
 
-    void delete(DeviceModel device);
+    void delete(String user, String appCode, String macId);
 }
