@@ -30,11 +30,11 @@ public class IosSenderImpl implements PushSender {
 
     @Override
     public boolean send(PushModel push, String receiver, JSONObject args) {
-        IosModel ios = iosService.find(push.getAppCode());
+        IosModel ios = iosService.find(push.getAppCode(), args.getIntValue("destination"));
         if (ios == null)
             return false;
 
-        ApnsService service = iosService.getApnsService(push.getAppCode());
+        ApnsService service = iosService.getApnsService(ios.getAppCode(), ios.getDestination());
         if (service == null)
             return false;
 

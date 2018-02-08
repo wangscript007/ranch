@@ -17,10 +17,11 @@ public interface IosService {
     /**
      * 查找配置。
      *
-     * @param appCode APP编码。
+     * @param appCode     APP编码。
+     * @param destination 目的地：0-开发；1-正式。
      * @return 配置信息，如果不存在则返回null。
      */
-    IosModel find(String appCode);
+    IosModel find(String appCode, int destination);
 
     /**
      * 保存配置。
@@ -43,8 +44,9 @@ public interface IosService {
     /**
      * 获取APNS推送服务。
      *
-     * @param appCode APP编码。
+     * @param appCode     APP编码。
+     * @param destination 目的地：0-开发；1-正式。
      * @return APNS推送服务，如果不存在则返回null。
      */
-    ApnsService getApnsService(String appCode);
+    ApnsService getApnsService(String appCode, int destination);
 }

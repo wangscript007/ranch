@@ -10,7 +10,7 @@ interface IosDao {
 
     IosModel findById(String id);
 
-    IosModel find(String appCode);
+    IosModel find(String appCode, int destination);
 
     void save(IosModel ios);
 

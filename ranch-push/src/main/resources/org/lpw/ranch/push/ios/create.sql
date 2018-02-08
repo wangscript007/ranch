@@ -9,5 +9,5 @@ CREATE TABLE t_push_ios
   c_time DATETIME DEFAULT NULL COMMENT '时间',
 
   PRIMARY KEY pk(c_id) USING HASH,
-  UNIQUE KEY uk_app_code(c_app_code) USING HASH
+  UNIQUE KEY uk_app_code_destination(c_app_code,c_destination) USING HASH
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

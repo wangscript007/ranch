@@ -26,8 +26,8 @@ class IosDaoImpl implements IosDao {
     }
 
     @Override
-    public IosModel find(String appCode) {
-        return liteOrm.findOne(new LiteQuery(IosModel.class).where("c_app_code=?"), new Object[]{appCode});
+    public IosModel find(String appCode, int destination) {
+        return liteOrm.findOne(new LiteQuery(IosModel.class).where("c_app_code=? and c_destination=?"), new Object[]{appCode, destination});
     }
 
     @Override

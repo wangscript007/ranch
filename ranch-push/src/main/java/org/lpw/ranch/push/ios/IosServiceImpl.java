@@ -46,20 +46,20 @@ public class IosServiceImpl implements IosService {
     }
 
     @Override
-    public IosModel find(String appCode) {
-        return iosDao.find(appCode);
+    public IosModel find(String appCode, int destination) {
+        return iosDao.find(appCode, destination);
     }
 
     @Override
     public JSONObject save(String appCode, String p12, String password, int destination) {
-        IosModel ios = iosDao.find(appCode);
+        IosModel ios = iosDao.find(appCode, destination);
         if (ios == null) {
             ios = new IosModel();
             ios.setAppCode(appCode);
+            ios.setDestination(destination);
         }
         ios.setP12(p12);
         ios.setPassword(password);
-        ios.setDestination(destination);
         ios.setTime(dateTime.now());
         iosDao.save(ios);
         map.remove(appCode);
@@ -78,14 +78,15 @@ public class IosServiceImpl implements IosService {
     }
 
     @Override
-    public ApnsService getApnsService(String appCode) {
+    public ApnsService getApnsService(String appCode, int destination) {
         if (validator.isEmpty(appCode))
             return null;
 
-        if (map.containsKey(appCode))
-            return map.get(appCode);
+        String key = appCode + "-" + destination;
+        if (map.containsKey(key))
+            return map.get(key);
 
-        IosModel ios = iosDao.find(appCode);
+        IosModel ios = iosDao.find(appCode, destination);
         if (ios == null)
             return null;
 
@@ -98,7 +99,7 @@ public class IosServiceImpl implements IosService {
                 builder.withProductionDestination();
             ApnsService service = builder.build();
             inputStream.close();
-            map.put(appCode, service);
+            map.put(key, service);
 
             return service;
         } catch (IOException e) {
