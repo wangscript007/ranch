@@ -46,7 +46,7 @@
         <module>ranch-device-helper</module>
         <module>ranch-form</module>
         <module>ranch-archives</module>
-        <module>ranch-console</module>
+        <module>ranch-ui</module>
         <module>ranch-web</module>
         <module>ranch-test</module>
     </modules>
@@ -90,17 +90,6 @@
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
                 <version>0.7.9</version>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.tomcat.maven</groupId>
-                <artifactId>tomcat7-maven-plugin</artifactId>
-                <version>2.2</version>
-                <configuration>
-                    <url>http://localhost:8080/manager/text</url>
-                    <username>admin</username>
-                    <password>admin</password>
-                    <path>/</path>
-                </configuration>
             </plugin>
         </plugins>
     </build>

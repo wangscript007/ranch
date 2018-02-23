@@ -120,12 +120,14 @@
             {
                 "type": "pass",
                 "service": ".pass",
-                "success": ".query"
+                "success": ".query",
+                "when": "row.audit!==1"
             },
             {
                 "type": "reject",
                 "service": ".reject",
-                "success": ".query"
+                "success": ".query",
+                "when": "row.audit!==2"
             },
             {
                 "type": "delete",
@@ -177,12 +179,14 @@
             {
                 "type": "pass",
                 "service": ".pass",
-                "success": ".lite-query"
+                "success": ".lite-query",
+                "when": "row.audit!==1"
             },
             {
                 "type": "reject",
                 "service": ".reject",
-                "success": ".lite-query"
+                "success": ".lite-query",
+                "when": "row.audit!==2"
             },
             {
                 "type": "delete",

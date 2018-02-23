@@ -1,0 +1,4 @@
+.form .data input,
+.form .data textarea {
+    width: calc(100% - 2px);
+}

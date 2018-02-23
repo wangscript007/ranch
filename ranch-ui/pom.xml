@@ -1,0 +1,29 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>ranch</artifactId>
+        <groupId>org.lpw.ranch</groupId>
+        <version>0.7.0-RELEASE</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>ranch-ui</artifactId>
+    <packaging>jar</packaging>
+
+    <name>ranch-ui</name>
+    <url>http://maven.apache.org</url>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.lpw.ranch</groupId>
+            <artifactId>ranch-user-helper</artifactId>
+            <version>${version.ranch}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.lpw.ranch</groupId>
+            <artifactId>ranch-test</artifactId>
+            <version>${version.ranch}</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+</project>
