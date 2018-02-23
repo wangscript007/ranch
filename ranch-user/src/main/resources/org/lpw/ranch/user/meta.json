@@ -80,6 +80,48 @@
             {
                 "name": "state"
             }
+        ],
+        "ops": [
+            {
+                "type": "post-id",
+                "label": "ranch.user.state.enable",
+                "service": ".state",
+                "parameter": {
+                    "state": 0
+                },
+                "success": ".query",
+                "when": "row.state===1"
+            },
+            {
+                "type": "post-id",
+                "label": "ranch.user.state.disable",
+                "service": ".state",
+                "parameter": {
+                    "state": 1
+                },
+                "success": ".query",
+                "when": "row.state===0"
+            },
+            {
+                "type": "post-id",
+                "label": "ranch.user.manager",
+                "service": ".grade",
+                "parameter": {
+                    "grade": 90
+                },
+                "success": ".query",
+                "when": "row.grade<90"
+            },
+            {
+                "type": "post-id",
+                "label": "ranch.user.manager.cancel",
+                "service": ".grade",
+                "parameter": {
+                    "grade": 0
+                },
+                "success": ".query",
+                "when": "row.grade>=90"
+            }
         ]
     }
 }

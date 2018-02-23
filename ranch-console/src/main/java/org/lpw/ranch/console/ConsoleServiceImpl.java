@@ -49,7 +49,7 @@ public class ConsoleServiceImpl implements ConsoleService, StorageListener {
 
     @Override
     public boolean permit() {
-        return userHelper.sign().getIntValue("grade") == 99;
+        return userHelper.sign().getIntValue("grade") >= 90;
     }
 
     @Override

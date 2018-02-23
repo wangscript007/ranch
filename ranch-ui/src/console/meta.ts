@@ -27,4 +27,5 @@ export interface Operate {
     service?: string;
     success?: string;
     parameter?: object;
+    when?: string;
 }

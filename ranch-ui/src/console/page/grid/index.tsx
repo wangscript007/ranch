@@ -101,20 +101,26 @@ export default class Grid extends PageComponent<PageProps, PageState> {
         return value;
     }
 
-    private ops(ops: Operate[] | undefined, data: object): JSX.Element | null {
+    private ops(ops: Operate[] | undefined, row: object): JSX.Element | null {
         if (!ops || ops.length == 0)
             return null;
 
+        let operates: Operate[] = [];
+        ops.map((op, index) => {
+            if (!op.when || eval(op.when))
+                operates.push(op);
+        });
+
         return (
             <td className="ops">
-                {ops.map((op, index) => <a key={index} href="javascript:void(0);" onClick={() => this.op(op, data)}>{op.label}</a>)}
+                {operates.map((op, index) => <a key={index} href="javascript:void(0);" onClick={() => this.op(op, row)}>{op.label}</a>)}
             </td>
         );
     }
 
-    private op(op: Operate, data: object): void {
+    private op(op: Operate, row: object): void {
         if (op.type === 'modify' || op.type === 'lite-modify') {
-            service.to(this.props.meta.key + '.' + op.type, {}, data);
+            service.to(this.props.meta.key + '.' + op.type, {}, row);
 
             return;
         }
@@ -125,7 +131,7 @@ export default class Grid extends PageComponent<PageProps, PageState> {
                 return;
 
             service.execute(this.props.meta.key + '.pass', {}, {
-                ids: data['id'],
+                ids: row['id'],
                 auditRemark: remark
             }, getSuccess(this.props.meta, op, ".query"));
 
@@ -138,15 +144,9 @@ export default class Grid extends PageComponent<PageProps, PageState> {
                 return;
 
             service.execute(this.props.meta.key + '.reject', {}, {
-                ids: data['id'],
+                ids: row['id'],
                 auditRemark: remark
             }, getSuccess(this.props.meta, op, ".query"));
-
-            return;
-        }
-
-        if (op.type === 'delete') {
-            service.execute(this.props.meta.key + '.delete', {}, { id: data['id'] }, getSuccess(this.props.meta, op, ".query"));
 
             return;
         }
@@ -154,16 +154,28 @@ export default class Grid extends PageComponent<PageProps, PageState> {
         let key: string = op.service || '';
         if (key.charAt(0) == '.')
             key = this.props.meta.key + key;
-        service.to(key, this.parameter(data, op.parameter));
+        if (op.type === 'post-id') {
+            service.execute(key, {}, merger.merge({ id: row['id'] }, op.parameter || {}), getSuccess(this.props.meta, op, ".query"));
+
+            return;
+        }
+
+        if (op.type === 'delete') {
+            service.execute(this.props.meta.key + '.delete', {}, { id: row['id'] }, getSuccess(this.props.meta, op, ".query"));
+
+            return;
+        }
+
+        service.to(key, this.parameter(row, op.parameter));
     }
 
-    private parameter(data: object, param?: object): object {
+    private parameter(row: object, param?: object): object {
         if (!param)
-            return data;
+            return row;
 
         let parameter = {};
         for (const key in param)
-            parameter[key] = data[param[key]] || '';
+            parameter[key] = row[param[key]] || '';
         service.setParameter(parameter);
 
         return parameter;
