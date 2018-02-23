@@ -151,17 +151,17 @@ export default class Grid extends PageComponent<PageProps, PageState> {
             return;
         }
 
+        if (op.type === 'delete') {
+            service.execute(this.props.meta.key + '.delete', {}, { id: row['id'] }, getSuccess(this.props.meta, op, ".query"));
+
+            return;
+        }
+
         let key: string = op.service || '';
         if (key.charAt(0) == '.')
             key = this.props.meta.key + key;
         if (op.type === 'post-id') {
             service.execute(key, {}, merger.merge({ id: row['id'] }, op.parameter || {}), getSuccess(this.props.meta, op, ".query"));
-
-            return;
-        }
-
-        if (op.type === 'delete') {
-            service.execute(this.props.meta.key + '.delete', {}, { id: row['id'] }, getSuccess(this.props.meta, op, ".query"));
 
             return;
         }
@@ -174,8 +174,8 @@ export default class Grid extends PageComponent<PageProps, PageState> {
             return row;
 
         let parameter = {};
-        for (const key in param)
-            parameter[key] = row[param[key]] || '';
+        for (let key in param)
+            parameter[key] = row[param[key]] || param[key];
         service.setParameter(parameter);
 
         return parameter;

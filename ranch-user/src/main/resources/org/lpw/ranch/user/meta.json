@@ -24,12 +24,10 @@
             "name": "birthday"
         },
         {
-            "name": "code",
-            "type": "read-only"
+            "name": "code"
         },
         {
-            "name": "register",
-            "type": "read-only"
+            "name": "register"
         },
         {
             "name": "grade"
@@ -58,16 +56,7 @@
                 "name": "email"
             },
             {
-                "name": "code",
-                "type": ""
-            },
-            {
-                "name": "minGrade",
-                "label": ".grade"
-            },
-            {
-                "name": "maxGrade",
-                "label": "-"
+                "name": "code"
             },
             {
                 "name": "registerStart",
