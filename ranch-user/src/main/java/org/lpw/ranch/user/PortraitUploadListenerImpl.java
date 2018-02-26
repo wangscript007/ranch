@@ -1,5 +1,6 @@
 package org.lpw.ranch.user;
 
+import com.alibaba.fastjson.JSONObject;
 import org.lpw.tephra.ctrl.upload.UploadListener;
 import org.lpw.tephra.util.Image;
 import org.springframework.stereotype.Controller;
@@ -27,9 +28,7 @@ public class PortraitUploadListenerImpl implements UploadListener {
     }
 
     @Override
-    public String upload(String key, String name, String size, String uri) {
-        userService.portrait(uri);
-
-        return uri;
+    public void complete(JSONObject object) {
+        userService.portrait(object.getString("path"));
     }
 }
