@@ -30,12 +30,11 @@ public class DeviceCtrl {
 
     @Execute(name = "find", validates = {
             @Validate(validator = Validators.NOT_EMPTY, parameter = "appCode", failureCode = 1),
-            @Validate(validator = Validators.NOT_EMPTY, parameter = "type", failureCode = 3),
-            @Validate(validator = Validators.SIGN),
-            @Validate(validator = UserHelper.VALIDATOR_EXISTS, parameter = "user", failureCode = 9)
+            @Validate(validator = Validators.NOT_EMPTY, parameter = "macId", failureCode = 5),
+            @Validate(validator = Validators.SIGN)
     })
     public Object find() {
-        return deviceService.find(request.get("user"), request.get("appCode"), request.get("type"));
+        return deviceService.find(request.get("appCode"), request.get("macId"));
     }
 
     @Execute(name = "save", validates = {

@@ -36,9 +36,8 @@ class DeviceDaoImpl implements DeviceDao {
     }
 
     @Override
-    public DeviceModel find(String user, String appCode, String type) {
-        return liteOrm.findOne(new LiteQuery(DeviceModel.class).where("c_app_code=? and c_type=? and c_user=?"),
-                new Object[]{appCode, type, user});
+    public DeviceModel find(String appCode, String macId) {
+        return liteOrm.findOne(new LiteQuery(DeviceModel.class).where("c_app_code=? and c_mac_id=?"), new Object[]{appCode, macId});
     }
 
     @Override
