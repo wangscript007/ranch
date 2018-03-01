@@ -26,6 +26,11 @@ public interface UserHelper {
      * 默认错误信息key=ranch.user.helper.not-exists-and-not-sign-in。
      */
     String VALIDATOR_EXISTS_OR_SIGN_IN = "ranch.user.helper.validator.exists-or-sign-in";
+    /**
+     * 用户等级是否介于目标区间验证器Bean名称。
+     * 默认错误信息key=ranch.user.helper.grade.illegal。
+     */
+    String VALIDATOR_GRADE="ranch.user.helper.validator.grade";
 
     /**
      * 获取用户信息。
