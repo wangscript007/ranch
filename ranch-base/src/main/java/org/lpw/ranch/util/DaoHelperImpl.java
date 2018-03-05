@@ -72,6 +72,33 @@ public class DaoHelperImpl implements DaoHelper {
     }
 
     @Override
+    public void in(StringBuilder where, List<Object> args, String column, Object[] values) {
+        in(where, args, column, values, false);
+    }
+
+    @Override
+    public void in(StringBuilder where, List<Object> args, String column, Object[] values, boolean and) {
+        if (validator.isEmpty(values))
+            return;
+
+        if (values.length == 1) {
+            appendWhere(where, args, column, DaoOperation.Equals, values[0], and);
+
+            return;
+        }
+
+        appendColumn(where, args, column, and);
+        where.append(" IN(");
+        for (int i = 0; i < values.length; i++) {
+            if (i > 0)
+                where.append(',');
+            where.append('?');
+            args.add(values[i]);
+        }
+        where.append(')');
+    }
+
+    @Override
     public void like(String dataSource, StringBuilder where, List<Object> args, String column, String value) {
         like(dataSource, where, args, column, value, true, true, false);
     }
@@ -98,16 +125,20 @@ public class DaoHelperImpl implements DaoHelper {
             return;
         }
 
-        if (and || !args.isEmpty())
-            where.append(" AND ");
-        where.append(column).append(" LIKE ?");
+        appendColumn(where, args, column, and);
+        where.append(" LIKE ?");
         args.add(this.dataSource.getDialect(dataSource).getLike(value, prefix, suffix));
     }
 
     private void appendWhere(StringBuilder where, List<Object> args, String column, DaoOperation operation, Object value, boolean and) {
+        appendColumn(where, args, column, and);
+        where.append(operation.get());
+        args.add(value);
+    }
+
+    private void appendColumn(StringBuilder where, List<Object> args, String column, boolean and) {
         if (and || !args.isEmpty())
             where.append(" AND ");
-        where.append(column).append(operation.get());
-        args.add(value);
+        where.append(column);
     }
 }

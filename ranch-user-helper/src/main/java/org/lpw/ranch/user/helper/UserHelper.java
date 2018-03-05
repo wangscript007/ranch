@@ -10,6 +10,11 @@ import com.alibaba.fastjson.JSONObject;
  */
 public interface UserHelper {
     /**
+     * 系统用户ID值。
+     */
+    String SYSTEM_USER_ID = "ranch-user-system-000000000000000000";
+
+    /**
      * 用户是否已登入验证器Bean名称。
      * 默认错误信息key=ranch.user.helper.need-sign-in。
      */
@@ -30,7 +35,7 @@ public interface UserHelper {
      * 用户等级是否介于目标区间验证器Bean名称。
      * 默认错误信息key=ranch.user.helper.grade.illegal。
      */
-    String VALIDATOR_GRADE="ranch.user.helper.validator.grade";
+    String VALIDATOR_GRADE = "ranch.user.helper.validator.grade";
 
     /**
      * 获取用户信息。

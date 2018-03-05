@@ -22,3 +22,6 @@ CREATE TABLE t_user
   UNIQUE KEY uk_code(c_code) USING HASH,
   KEY k_register(c_register) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+INSERT INTO t_user(c_id,c_code,c_register,c_grade) VALUES('ranch-user-system-000000000000000000','00000000',NOW(),99);
+INSERT INTO t_user(c_id,c_code,c_register,c_grade) VALUES('ranch-user-root-99999999999999999999','99999999',NOW(),99);

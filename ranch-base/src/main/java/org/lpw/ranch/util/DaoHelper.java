@@ -103,6 +103,27 @@ public interface DaoHelper {
     void where(StringBuilder where, List<Object> args, String column, DaoOperation operation, Timestamp value, boolean and);
 
     /**
+     * 添加WHERE IN语句。
+     *
+     * @param where  目标WHERE片段。
+     * @param args   目标参数集。
+     * @param column 字段名。
+     * @param values 值集，为null或空数组则不添加。
+     */
+    void in(StringBuilder where, List<Object> args, String column, Object[] values);
+
+    /**
+     * 添加WHERE IN语句。
+     *
+     * @param where  目标WHERE片段。
+     * @param args   目标参数集。
+     * @param column 字段名。
+     * @param values 值集，为null或空数组则不添加。
+     * @param and    是否必须添加AND。
+     */
+    void in(StringBuilder where, List<Object> args, String column, Object[] values, boolean and);
+
+    /**
      * 添加WHERE LIKE语句。
      *
      * @param dataSource 数据源KEY。
