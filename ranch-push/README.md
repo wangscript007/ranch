@@ -13,6 +13,7 @@
 |content|string|内容。|
 |template|char(100)|模板ID。|
 |name|char(100)|发送者名称。|
+|args|string|默认参数集，JSON格式。|
 |state|int|状态：0-待审核；1-使用中。|
 |time|timestamp|最后更新时间。|
 

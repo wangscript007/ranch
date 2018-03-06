@@ -16,6 +16,7 @@
 |content|strng|内容。|
 |template|char(100)|模板ID。|
 |name|char(100)|发送者名称。|
+|args|string|默认参数集，JSON格式。|
 |state|int|状态：0-待审核；1-使用中。|
 
 返回值
@@ -29,6 +30,7 @@
   "content": "内容",
   "template": "模板",
   "name": "发送者名称",
+  "args": "默认参数集",
   "state": "状态：0-待审核；1-使用中",
   "time": "最后更新时间"
 }
