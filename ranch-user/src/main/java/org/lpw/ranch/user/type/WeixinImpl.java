@@ -36,10 +36,10 @@ public class WeixinImpl implements Type {
     }
 
     private JSONObject getAuth(String uid, String password) {
-        String key = "ranch.user.type.weixin.uid-password:" + uid + "-" + password;
-        JSONObject object = cache.get(key);
+        String cacheKey = "ranch.user.type.weixin.uid-password:" + uid + "-" + password;
+        JSONObject object = cache.get(cacheKey);
         if (object == null)
-            cache.put(key, object = weixinHelper.auth(password, uid), false);
+            cache.put(cacheKey, object = weixinHelper.auth(password, uid), false);
 
         return object;
     }
