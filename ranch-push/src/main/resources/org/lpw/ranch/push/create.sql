@@ -9,6 +9,7 @@ CREATE TABLE t_push
   c_content TEXT DEFAULT NULL COMMENT '内容',
   c_template VARCHAR(255) DEFAULT NULL COMMENT '模板',
   c_name VARCHAR(255) DEFAULT NULL COMMENT '发送者名称',
+  c_args TEXT DEFAULT NULL COMMENT '默认参数集',
   c_state INT DEFAULT 0 COMMENT '状态：0-待审核；1-使用中',
   c_time DATETIME DEFAULT NULL COMMENT '最后更新时间',
 

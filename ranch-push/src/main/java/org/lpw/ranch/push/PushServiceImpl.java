@@ -10,6 +10,7 @@ import org.lpw.tephra.bean.ContextRefreshedListener;
 import org.lpw.tephra.dao.model.ModelHelper;
 import org.lpw.tephra.freemarker.Freemarker;
 import org.lpw.tephra.util.DateTime;
+import org.lpw.tephra.util.Json;
 import org.lpw.tephra.util.Validator;
 import org.springframework.stereotype.Service;
 
@@ -26,6 +27,8 @@ public class PushServiceImpl implements PushService, ContextRefreshedListener {
     private Validator validator;
     @Inject
     private DateTime dateTime;
+    @Inject
+    private Json json;
     @Inject
     private Freemarker freemarker;
     @Inject
@@ -57,7 +60,7 @@ public class PushServiceImpl implements PushService, ContextRefreshedListener {
 
     @Override
     public JSONObject save(String id, String key, String sender, String appCode, String subject, String content,
-                           String template, String name, int state) {
+                           String template, String name, String args, int state) {
         PushModel push = validator.isEmpty(id) ? new PushModel() : pushDao.findById(id);
         if (push == null)
             push = new PushModel();
@@ -68,6 +71,7 @@ public class PushServiceImpl implements PushService, ContextRefreshedListener {
         push.setContent(content);
         push.setTemplate(template);
         push.setName(name);
+        push.setArgs(args);
         setState(push, state);
 
         return modelHelper.toJson(push);
@@ -123,14 +127,28 @@ public class PushServiceImpl implements PushService, ContextRefreshedListener {
     }
 
     private boolean send(PushModel push, String user, String receiver, JSONObject args) {
-        if (args == null)
-            args = new JSONObject();
+        args = getArgs(push, args);
         args.put("badge", logService.unread(receiver, push.getAppCode()));
         LogModel log = logService.create(validator.isEmpty(user) ? userHelper.id() : user, receiver, push, args);
         boolean success = senders.get(push.getSender()).send(push, receiver, args);
         logService.send(log, success);
 
         return success;
+    }
+
+    private JSONObject getArgs(PushModel push, JSONObject args) {
+        if (args == null)
+            args = new JSONObject();
+        if (validator.isEmpty(push.getArgs()))
+            return args;
+
+        JSONObject object = json.toObject(push.getArgs());
+        if (object == null)
+            return args;
+
+        object.putAll(args);
+
+        return object;
     }
 
     @Override

@@ -41,7 +41,7 @@ public class PushCtrl {
     })
     public Object save() {
         return pushService.save(request.get("id"), request.get("key"), request.get("sender"), request.get("appCode"), request.get("subject"),
-                request.get("content"), request.get("template"), request.get("name"), request.getAsInt("state"));
+                request.get("content"), request.get("template"), request.get("name"), request.get("args"), request.getAsInt("state"));
     }
 
     @Execute(name = "state", validates = {

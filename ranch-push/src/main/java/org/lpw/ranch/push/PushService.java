@@ -70,11 +70,12 @@ public interface PushService {
      * @param content  内容。
      * @param template 模板。
      * @param name     发送者名称。
+     * @param args     默认参数集，JSON格式。
      * @param state    状态：0-待审核；1-使用中。
      * @return 推送配置。
      */
     JSONObject save(String id, String key, String sender, String appCode, String subject, String content,
-                    String template, String name, int state);
+                    String template, String name, String args, int state);
 
     /**
      * 设置状态。
