@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import org.junit.Assert;
 import org.junit.Test;
 import org.lpw.ranch.user.auth.AuthModel;
+import org.lpw.tephra.cache.Cache;
 import org.lpw.tephra.ctrl.validate.Validators;
 import org.lpw.tephra.dao.orm.lite.LiteQuery;
 import org.lpw.tephra.test.MockCarousel;
@@ -18,6 +19,8 @@ import java.util.Map;
  * @author lpw
  */
 public class SignInTest extends TestSupport {
+    @Inject
+    private Cache cache;
     @Inject
     private Thread thread;
     @Inject
@@ -176,6 +179,7 @@ public class SignInTest extends TestSupport {
         long time = 0L;
         String code = null;
         for (int i = 0; i < 2; i++) {
+            cache.remove("ranch.user.type.weixin.uid-password:uid 5-password 5");
             map.clear();
             JSONObject json = new JSONObject();
             json.put("code", 0);

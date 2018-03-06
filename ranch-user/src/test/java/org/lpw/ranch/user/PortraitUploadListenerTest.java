@@ -1,5 +1,6 @@
 package org.lpw.ranch.user;
 
+import com.alibaba.fastjson.JSONObject;
 import org.junit.Assert;
 import org.junit.Test;
 import org.lpw.tephra.ctrl.context.Session;
@@ -56,7 +57,9 @@ public class PortraitUploadListenerTest extends TestSupport {
         mockHelper.mock("/user/modify");
         UserModel user1 = create(0);
         session.set(UserModel.NAME + ".service.session", user1);
-        Assert.assertEquals("uri", uploadListener.upload("key", "name", "size", "uri"));
+        JSONObject object = new JSONObject();
+        object.put("path", "uri");
+        uploadListener.complete(object);
         UserModel user2 = session.get(UserModel.NAME + ".service.session");
         Assert.assertEquals(user1.getId(), user2.getId());
         Assert.assertEquals("uri", user2.getPortrait());

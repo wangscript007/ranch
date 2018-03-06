@@ -5,7 +5,10 @@ import com.alibaba.fastjson.JSONObject;
 import org.junit.Assert;
 import org.junit.Test;
 import org.lpw.tephra.ctrl.validate.Validators;
+import org.lpw.tephra.dao.orm.lite.LiteOrm;
+import org.lpw.tephra.dao.orm.lite.LiteQuery;
 
+import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,6 +18,7 @@ import java.util.List;
 public class QueryTest extends TestSupport {
     @Test
     public void query() {
+        liteOrm.delete(new LiteQuery(UserModel.class), null);
         List<UserModel> list = new ArrayList<>();
         for (int i = 0; i < 20; i++)
             list.add(create(i));
@@ -29,7 +33,7 @@ public class QueryTest extends TestSupport {
         mockHelper.reset();
         mockHelper.getRequest().addParameter("email", "email");
         mockHelper.mock("/user/query");
-         object = mockHelper.getResponse().asJson();
+        object = mockHelper.getResponse().asJson();
         Assert.assertEquals(1511, object.getIntValue("code"));
         Assert.assertEquals(message.get(Validators.PREFIX + "illegal-email", message.get(UserModel.NAME + ".email")), object.getString("message"));
 

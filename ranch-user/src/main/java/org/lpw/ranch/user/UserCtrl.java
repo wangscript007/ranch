@@ -1,6 +1,7 @@
 package org.lpw.ranch.user;
 
 import org.lpw.ranch.user.auth.AuthService;
+import org.lpw.ranch.user.type.Types;
 import org.lpw.ranch.weixin.helper.WeixinHelper;
 import org.lpw.tephra.ctrl.Forward;
 import org.lpw.tephra.ctrl.context.Request;
@@ -33,22 +34,21 @@ public class UserCtrl {
     @Execute(name = "sign-up", validates = {
             @Validate(validator = Validators.NOT_EMPTY, parameter = "uid", failureCode = 1),
             @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "uid", failureCode = 2),
-            @Validate(validator = UserService.VALIDATOR_PASSWORD, parameter = "password", failureCode = 3),
-            @Validate(validator = Validators.BETWEEN, number = {0, 1}, parameter = "type", failureCode = 27),
-            @Validate(validator = AuthService.VALIDATOR_UID_NOT_EXISTS, parameter = "uid", failureCode = 4)
+            @Validate(validator = UserService.VALIDATOR_PASSWORD, parameters = {"password", "type"}, failureCode = 3),
+            @Validate(validator = Validators.BETWEEN, number = {0, Types.MAX}, parameter = "type", failureCode = 27),
+            @Validate(validator = AuthService.VALIDATOR_UID_NOT_EXISTS, parameters = {"uid", "password", "type"}, failureCode = 4)
     })
     public Object signUp() {
-        userService.signUp(request.get("uid"), request.get("password"),
-                UserService.Type.values()[request.getAsInt("type") % UserService.Type.values().length]);
+        userService.signUp(request.get("uid"), request.get("password"), request.getAsInt("type"));
 
         return sign();
     }
 
     @Execute(name = "sign-in", validates = {
             @Validate(validator = Validators.NOT_EMPTY, parameter = "uid", failureCode = 1),
-            @Validate(validator = UserService.VALIDATOR_PASSWORD, parameter = "password", failureCode = 3),
+            @Validate(validator = UserService.VALIDATOR_PASSWORD, parameters = {"password", "type"}, failureCode = 3),
             @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "macId", failureCode = 5),
-            @Validate(validator = Validators.BETWEEN, number = {0, 2}, parameter = "type", failureCode = 27),
+            @Validate(validator = Validators.BETWEEN, number = {0, Types.MAX}, parameter = "type", failureCode = 27),
             @Validate(validator = UserService.VALIDATOR_SIGN_IN, parameters = {"uid", "password", "macId", "type"}, failureCode = 6)
     })
     public Object signIn() {

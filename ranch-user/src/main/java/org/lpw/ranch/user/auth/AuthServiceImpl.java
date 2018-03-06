@@ -1,7 +1,7 @@
 package org.lpw.ranch.user.auth;
 
 import com.alibaba.fastjson.JSONArray;
-import org.lpw.ranch.user.UserService;
+import org.lpw.ranch.user.type.Types;
 import org.lpw.tephra.cache.Cache;
 import org.lpw.tephra.dao.model.ModelHelper;
 import org.lpw.tephra.util.DateTime;
@@ -53,7 +53,8 @@ public class AuthServiceImpl implements AuthService {
         AuthModel auth = cache.get(cacheKey);
         if (auth == null) {
             auth = authDao.findByUid(uid);
-            if (auth == null || (auth.getType() == UserService.Type.Bind.ordinal() && auth.getTime() != null && System.currentTimeMillis() - auth.getTime().getTime() > effective * 1000))
+            if (auth == null || (auth.getType() == Types.BIND && auth.getTime() != null
+                    && System.currentTimeMillis() - auth.getTime().getTime() > effective * 1000))
                 return null;
 
             cache.put(cacheKey, auth, false);
@@ -76,14 +77,14 @@ public class AuthServiceImpl implements AuthService {
 
         auth.setUser(user);
         auth.setTime(dateTime.now());
-        auth.setType(UserService.Type.Bind.ordinal());
+        auth.setType(Types.BIND);
         authDao.save(auth);
     }
 
     @Override
     public void unbind(String id) {
         AuthModel auth = findByUid(id);
-        if (auth == null || auth.getType() != UserService.Type.Bind.ordinal())
+        if (auth == null || auth.getType() != Types.BIND)
             return;
 
         authDao.delete(auth);

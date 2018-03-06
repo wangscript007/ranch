@@ -5,6 +5,7 @@ import org.lpw.ranch.classify.helper.ClassifyHelper;
 import org.lpw.ranch.user.auth.AuthModel;
 import org.lpw.ranch.user.auth.AuthService;
 import org.lpw.ranch.user.online.OnlineService;
+import org.lpw.ranch.user.type.Types;
 import org.lpw.ranch.util.Carousel;
 import org.lpw.ranch.util.Pagination;
 import org.lpw.ranch.weixin.helper.WeixinHelper;
@@ -56,6 +57,8 @@ public class UserServiceImpl implements UserService {
     @Inject
     private WeixinHelper weixinHelper;
     @Inject
+    private Types types;
+    @Inject
     private AuthService authService;
     @Inject
     private OnlineService onlineService;
@@ -65,12 +68,11 @@ public class UserServiceImpl implements UserService {
     private String root;
 
     @Override
-    public void signUp(String uid, String password, Type type) {
+    public void signUp(String uid, String password, int type) {
         UserModel user = session.get(SESSION);
         if (user == null)
             user = new UserModel();
-        if (type == Type.Self)
-            user.setPassword(password(password));
+        types.signUp(user, uid, password, type);
         if (user.getRegister() == null)
             user.setRegister(dateTime.now());
         while (user.getCode() == null) {
@@ -78,26 +80,28 @@ public class UserServiceImpl implements UserService {
             if (userDao.findByCode(code) == null)
                 user.setCode(code);
         }
-        if (validator.isMobile(uid))
-            user.setMobile(uid);
-        else if (validator.isEmail(uid))
-            user.setEmail(uid);
+        if (type == 1) {
+            if (validator.isMobile(uid))
+                user.setMobile(uid);
+            else if (validator.isEmail(uid))
+                user.setEmail(uid);
+        }
         userDao.save(user);
-        authService.create(user.getId(), uid, type.ordinal());
+        authService.create(user.getId(), types.getUid(uid, password, type), type);
         clearCache(user);
         onlineService.signIn(user.getId());
         session.set(SESSION, user);
     }
 
     @Override
-    public boolean signIn(String uid, String password, String macId, Type type) {
-        if (type == Type.WeiXin)
-            uid = getWeixinId(password, uid);
+    public boolean signIn(String uid, String password, String macId, int type) {
+        if (type == Types.WEIXIN)
+            uid = getWeixinId(uid, password);
         if (uid == null)
             return false;
 
-        AuthModel auth = type == Type.Bind ? findByBind(uid) : authService.findByUid(uid);
-        if (auth == null || auth.getType() != type.ordinal())
+        AuthModel auth = type == Types.BIND ? findByBind(uid) : authService.findByUid(uid);
+        if (auth == null || auth.getType() != type)
             return false;
 
         UserModel user = findById(auth.getUser());
@@ -122,26 +126,20 @@ public class UserServiceImpl implements UserService {
         if (auth != null)
             return auth;
 
-        signUp(uid, null, Type.Bind);
+        signUp(uid, null, Types.BIND);
 
         return authService.findByUid(uid);
     }
 
-    private String getWeixinId(String key, String code) {
-        JSONObject object = weixinHelper.auth(key, code);
-        String uid = weixinHelper.getId(object);
-        if (uid == null)
+    private String getWeixinId(String uid, String password) {
+        String wxid = types.getUid(uid, password, Types.WEIXIN);
+        if (wxid == null)
             return null;
 
-        if (authService.findByUid(uid) == null) {
-            signUp(uid, null, Type.WeiXin);
-            UserModel user = new UserModel();
-            user.setNick(object.getString("nickname"));
-            modify(user);
-            portrait(object.getString("headimgurl"));
-        }
+        if (authService.findByUid(wxid) == null)
+            signUp(uid, password, Types.WEIXIN);
 
-        return uid;
+        return wxid;
     }
 
     private boolean pass(UserModel user, String password) {
@@ -176,7 +174,7 @@ public class UserServiceImpl implements UserService {
     public String signInWxPcRedirect(String code) {
         String key = session.get("sign-in-wx-pc-key");
         String redirectUrl = session.get("sign-in-wx-pc-redirect-url");
-        boolean success = !validator.isEmpty(key) && !validator.isEmpty(code) && signIn(code, key, null, Type.WeiXin);
+        boolean success = !validator.isEmpty(key) && !validator.isEmpty(code) && signIn(code, key, null, Types.WEIXIN);
 
         return redirectUrl + (redirectUrl.indexOf('?') == -1 ? "?" : "&") + "state=" + (success ? "success" : "failure");
     }
@@ -189,7 +187,7 @@ public class UserServiceImpl implements UserService {
         UserModel user = session.get(SESSION);
         if (user == null) {
             AuthModel auth = authService.findByUid(session.getId());
-            if (auth != null && auth.getType() == Type.Bind.ordinal()) {
+            if (auth != null && auth.getType() == Types.BIND) {
                 user = findById(auth.getUser());
                 if (user != null) {
                     authService.bind(user.getId(), session.getId());
@@ -250,7 +248,8 @@ public class UserServiceImpl implements UserService {
         return true;
     }
 
-    private String password(String password) {
+    @Override
+    public String password(String password) {
         return digest.md5(UserModel.NAME + digest.sha1(password + UserModel.NAME));
     }
 

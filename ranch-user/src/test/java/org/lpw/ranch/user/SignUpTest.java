@@ -48,15 +48,15 @@ public class SignUpTest extends TestSupport {
         mockHelper.mock("/user/sign-up");
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(1527, object.getIntValue("code"));
-        Assert.assertEquals(message.get(Validators.PREFIX + "not-between", message.get(UserModel.NAME + ".type"), 0, 1), object.getString("message"));
+        Assert.assertEquals(message.get(Validators.PREFIX + "not-between", message.get(UserModel.NAME + ".type"), 0, 2), object.getString("message"));
 
         mockHelper.reset();
         mockHelper.getRequest().addParameter("uid", "sign up uid 1");
-        mockHelper.getRequest().addParameter("type", "2");
+        mockHelper.getRequest().addParameter("type", "3");
         mockHelper.mock("/user/sign-up");
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(1527, object.getIntValue("code"));
-        Assert.assertEquals(message.get(Validators.PREFIX + "not-between", message.get(UserModel.NAME + ".type"), 0, 1), object.getString("message"));
+        Assert.assertEquals(message.get(Validators.PREFIX + "not-between", message.get(UserModel.NAME + ".type"), 0, 2), object.getString("message"));
 
         List<String> list = new ArrayList<>();
         list.add("mock session id 1");
@@ -83,7 +83,7 @@ public class SignUpTest extends TestSupport {
         mockHelper.mock("/user/sign-up");
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(1504, object.getIntValue("code"));
-        Assert.assertEquals(message.get("ranch.user.auth.uid.exists", "UID"), object.getString("message"));
+        Assert.assertEquals(message.get("ranch.user.auth.uid.exists"), object.getString("message"));
 
         mockHelper.reset();
         mockHelper.getRequest().addParameter("uid", "sign up uid 2");

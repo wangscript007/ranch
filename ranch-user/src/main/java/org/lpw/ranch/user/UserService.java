@@ -7,24 +7,6 @@ import com.alibaba.fastjson.JSONObject;
  */
 public interface UserService {
     /**
-     * 认证类型。
-     */
-    enum Type {
-        /**
-         * 绑定ID。
-         */
-        Bind,
-        /**
-         * 自有账号。
-         */
-        Self,
-        /**
-         * 微信。
-         */
-        WeiXin
-    }
-
-    /**
      * 登入验证器Bean名称。
      */
     String VALIDATOR_SIGN_IN = UserModel.NAME + ".validator.sign-in";
@@ -48,7 +30,7 @@ public interface UserService {
      * @param password 密码。
      * @param type     认证类型。
      */
-    void signUp(String uid, String password, Type type);
+    void signUp(String uid, String password, int type);
 
     /**
      * 登入验证。
@@ -59,7 +41,7 @@ public interface UserService {
      * @param type     认证类型。
      * @return 认证成功则返回true；否则返回false。
      */
-    boolean signIn(String uid, String password, String macId, Type type);
+    boolean signIn(String uid, String password, String macId, int type);
 
     /**
      * 获取微信PC端登入跳转URL地址。
@@ -112,6 +94,14 @@ public interface UserService {
      * @return 如果修改成功则返回true；否则返回false。
      */
     boolean password(String oldPassword, String newPassword);
+
+    /**
+     * 加密密码。
+     *
+     * @param password 密码明文。
+     * @return 加密后的密码。
+     */
+    String password(String password);
 
     /**
      * 设置当前用户头像。
