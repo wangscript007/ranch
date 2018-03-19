@@ -1,0 +1,88 @@
+{
+    "key": "ranch.editor.log",
+    "props": [
+        {
+            "name": "editor"
+        },
+        {
+            "name": "parent"
+        },
+        {
+            "name": "element"
+        },
+        {
+            "name": "sort"
+        },
+        {
+            "name": "type"
+        },
+        {
+            "name": "keyword"
+        },
+        {
+            "name": "x"
+        },
+        {
+            "name": "y"
+        },
+        {
+            "name": "width"
+        },
+        {
+            "name": "height"
+        },
+        {
+            "name": "json"
+        },
+        {
+            "name": "create"
+        },
+        {
+            "name": "modify"
+        },
+        {
+            "name": "operation"
+        },
+        {
+            "name": "time"
+        }
+    ],
+    "query": {
+        "type": "grid",
+        "ops": [
+            {
+                "type": "modify"
+            },
+            {
+                "type": "delete",
+                "service": ".delete",
+                "success": ".query"
+            }
+        ],
+        "toolbar": [
+            {
+                "type": "create"
+            }
+        ]
+    },
+    "create": {
+        "type": "form",
+        "toolbar": [
+            {
+                "type": "save",
+                "service": ".save",
+                "success": ".query"
+            }
+        ]
+    },
+    "modify": {
+        "type": "form",
+        "toolbar": [
+            {
+                "type": "save",
+                "service": ".save",
+                "success": ".query"
+            }
+        ]
+    }
+}

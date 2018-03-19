@@ -1,0 +1,70 @@
+{
+    "key": "ranch.editor",
+    "props": [
+        {
+            "name": "type"
+        },
+        {
+            "name": "sort"
+        },
+        {
+            "name": "name"
+        },
+        {
+            "name": "width"
+        },
+        {
+            "name": "height"
+        },
+        {
+            "name": "image"
+        },
+        {
+            "name": "json"
+        },
+        {
+            "name": "create"
+        },
+        {
+            "name": "modify"
+        }
+    ],
+    "query": {
+        "type": "grid",
+        "ops": [
+            {
+                "type": "modify"
+            },
+            {
+                "type": "delete",
+                "service": ".delete",
+                "success": ".query"
+            }
+        ],
+        "toolbar": [
+            {
+                "type": "create"
+            }
+        ]
+    },
+    "create": {
+        "type": "form",
+        "toolbar": [
+            {
+                "type": "save",
+                "service": ".save",
+                "success": ".query"
+            }
+        ]
+    },
+    "modify": {
+        "type": "form",
+        "toolbar": [
+            {
+                "type": "save",
+                "service": ".save",
+                "success": ".query"
+            }
+        ]
+    }
+}

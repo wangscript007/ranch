@@ -1,0 +1,66 @@
+package org.lpw.ranch.editor.element;
+
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+
+/**
+ * @author lpw
+ */
+public interface ElementService {
+    /**
+     * 元素信息是否存在验证器Bean名称。
+     */
+    String VALIDATOR_EXISTS = ElementModel.NAME + ".validator.exists";
+    /**
+     * 编辑器是否匹配验证器Bean名称。
+     */
+    String VALIDATOR_EDITOR = ElementModel.NAME + ".validator.editor";
+
+    /**
+     * 检索元素集。
+     *
+     * @param editor    编辑器ID值。
+     * @param parent    父元素ID值。
+     * @param recursive 是否递归获取子元素集。
+     * @return 元素集。
+     */
+    JSONArray query(String editor, String parent, boolean recursive);
+
+    /**
+     * 查找元素信息。
+     *
+     * @param id ID值。
+     * @return 元素信息，不存在则返回null。
+     */
+    ElementModel findById(String id);
+
+    /**
+     * 保存元素信息。
+     *
+     * @param element 元素信息。
+     * @return 元素信息。
+     */
+    JSONObject save(ElementModel element);
+
+    /**
+     * 重新排序。
+     *
+     * @param ids 元素ID集。
+     */
+    void sort(String[] ids);
+
+    /**
+     * 删除元素。
+     *
+     * @param id ID值。
+     */
+    void delete(String id);
+
+    /**
+     * 复制。
+     *
+     * @param source 源编辑器ID值。
+     * @param target 目标编辑器ID值。
+     */
+    void copy(String source, String target);
+}
