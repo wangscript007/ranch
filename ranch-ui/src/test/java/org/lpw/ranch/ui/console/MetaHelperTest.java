@@ -2,7 +2,6 @@ package org.lpw.ranch.ui.console;
 
 import com.alibaba.fastjson.JSONObject;
 import org.junit.Assert;
-import org.junit.Test;
 import org.lpw.tephra.test.TephraTestSupport;
 
 import javax.inject.Inject;
@@ -14,7 +13,7 @@ public class MetaHelperTest extends TephraTestSupport {
     @Inject
     private MetaHelper metaHelper;
 
-    @Test
+    //    @Test
     public void get() {
         Assert.assertNull(metaHelper.get("ranch.util.meta1"));
         Assert.assertNull(metaHelper.get("ranch.util.meta2"));

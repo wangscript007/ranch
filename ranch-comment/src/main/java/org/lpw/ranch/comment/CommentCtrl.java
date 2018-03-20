@@ -65,7 +65,7 @@ public class CommentCtrl extends AuditCtrlSupport {
             @Validate(validator = UserHelper.VALIDATOR_EXISTS_OR_SIGN_IN, parameter = "author", failureCode = 4)
     })
     public Object create() {
-        return commentService.create(request.setToModel(new CommentModel()));
+        return commentService.create(request.setToModel(CommentModel.class));
     }
 
     @Override

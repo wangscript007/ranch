@@ -125,7 +125,7 @@ public class ElementModel extends ModelSupport {
         this.height = height;
     }
 
-    @Jsonable
+    @Jsonable(extend = true)
     @Column(name = "c_json")
     public String getJson() {
         return json;

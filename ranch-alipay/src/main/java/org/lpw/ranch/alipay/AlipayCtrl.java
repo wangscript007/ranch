@@ -48,7 +48,7 @@ public class AlipayCtrl {
 
     })
     public Object save() {
-        return alipayService.save(request.setToModel(new AlipayModel()));
+        return alipayService.save(request.setToModel(AlipayModel.class));
     }
 
     @Execute(name = "delete", validates = {

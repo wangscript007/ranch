@@ -95,7 +95,7 @@ public class UserCtrl {
             @Validate(validator = UserService.VALIDATOR_SIGN)
     })
     public Object modify() {
-        userService.modify(request.setToModel(new UserModel()));
+        userService.modify(request.setToModel(UserModel.class));
 
         return sign();
     }

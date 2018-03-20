@@ -44,7 +44,7 @@ public class EditorCtrl {
             @Validate(validator = RoleService.VALIDATOR_OWNER, emptyable = true, parameter = "id", failureCode = 10)
     })
     public Object save() {
-        return editorService.save(request.setToModel(new EditorModel()));
+        return editorService.save(request.setToModel(EditorModel.class));
     }
 
     @Execute(name = "copy", validates = {

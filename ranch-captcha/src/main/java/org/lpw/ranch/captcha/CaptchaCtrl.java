@@ -44,7 +44,7 @@ public class CaptchaCtrl {
             @Validate(validator = Validators.SIGN)
     })
     public Object save() {
-        return captchaService.save(request.setToModel(new CaptchaModel()));
+        return captchaService.save(request.setToModel(CaptchaModel.class));
     }
 
     @Execute(name = "delete", validates = {

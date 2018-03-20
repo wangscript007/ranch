@@ -24,15 +24,15 @@
         },
         {
             "name": "accessToken",
-            "type": "readonly"
+            "type": "read-only"
         },
         {
             "name": "jsapiTicket",
-            "type": "readonly"
+            "type": "read-only"
         },
         {
             "name": "time",
-            "type": "readonly"
+            "type": "read-only"
         }
     ],
     "query": {
@@ -42,9 +42,7 @@
                 "type": "modify"
             },
             {
-                "type": "delete",
-                "service": "delete",
-                "success": "query"
+                "type": "delete"
             }
         ],
         "toolbar": [
@@ -57,10 +55,7 @@
         "type": "form",
         "toolbar": [
             {
-                "type": "save",
-                "service": "save",
-                "success": "query",
-                "data": "true"
+                "type": "save"
             }
         ]
     },
@@ -68,10 +63,7 @@
         "type": "form",
         "toolbar": [
             {
-                "type": "save",
-                "service": "save",
-                "success": "query",
-                "data": "true"
+                "type": "save"
             }
         ]
     }

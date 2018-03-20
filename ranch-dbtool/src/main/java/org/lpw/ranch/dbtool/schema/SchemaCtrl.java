@@ -45,7 +45,7 @@ public class SchemaCtrl {
             @Validate(validator = SchemaService.VALIDATOR_KEY_NOT_EXISTS, parameters = {"id", "key"}, failureCode = 13)
     })
     public Object save() {
-        return schemaService.save(request.setToModel(new SchemaModel()));
+        return schemaService.save(request.setToModel(SchemaModel.class));
     }
 
     @Execute(name = "delete", validates = {

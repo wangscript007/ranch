@@ -44,7 +44,7 @@ public class AddressCtrl {
             @Validate(validator = AddressService.VALIDATOR_UPDATABLE, emptyable = true, parameter = "id", failureCode = 1)
     })
     public Object save() {
-        return addressService.save(request.setToModel(new AddressModel()));
+        return addressService.save(request.setToModel(AddressModel.class));
     }
 
     @Execute(name = "use", validates = {

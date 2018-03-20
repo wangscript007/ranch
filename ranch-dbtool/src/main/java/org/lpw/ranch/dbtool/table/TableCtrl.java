@@ -41,7 +41,7 @@ public class TableCtrl {
             @Validate(validator = SchemaService.VALIDATOR_EXISTS, parameter = "schema", failureCode = 29)
     })
     public Object save() {
-        return tableService.save(request.setToModel(new TableModel()));
+        return tableService.save(request.setToModel(TableModel.class));
     }
 
     @Execute(name = "delete", validates = {

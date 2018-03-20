@@ -56,7 +56,7 @@ public class ChromeCtrl {
             @Validate(validator = Validators.SIGN)
     })
     public Object save() {
-        return chromeService.save(request.setToModel(new ChromeModel()));
+        return chromeService.save(request.setToModel(ChromeModel.class));
     }
 
     @Execute(name = "delete", validates = {

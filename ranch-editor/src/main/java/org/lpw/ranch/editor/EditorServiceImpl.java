@@ -62,7 +62,6 @@ public class EditorServiceImpl implements EditorService {
             model.setCreate(dateTime.now());
         }
         model.setType(editor.getType());
-        model.setSort(editor.getSort());
         model.setName(editor.getName());
         model.setWidth(editor.getWidth());
         model.setHeight(editor.getHeight());

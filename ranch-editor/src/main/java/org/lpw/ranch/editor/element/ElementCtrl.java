@@ -47,7 +47,7 @@ public class ElementCtrl {
             @Validate(validator = ElementService.VALIDATOR_EDITOR, parameters = {"id", "editor"}, failureCode = 30)
     })
     public Object save() {
-        return elementService.save(request.setToModel(new ElementModel()));
+        return elementService.save(request.setToModel(ElementModel.class));
     }
 
     @Execute(name = "delete", validates = {

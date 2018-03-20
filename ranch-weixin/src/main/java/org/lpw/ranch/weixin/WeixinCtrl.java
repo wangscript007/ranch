@@ -60,7 +60,7 @@ public class WeixinCtrl {
 
     })
     public Object save() {
-        return weixinService.save(request.setToModel(new WeixinModel()));
+        return weixinService.save(request.setToModel(WeixinModel.class));
     }
 
     @Execute(name = "delete", validates = {
