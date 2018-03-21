@@ -72,35 +72,35 @@ public class ElementServiceImpl implements ElementService, MinuteJob {
         model.setParent(validator.isEmpty(element.getParent()) ? element.getEditor() : element.getParent());
         model.setSort(element.getSort());
         model.setType(element.getType());
-        model.setKeyword(element.getKeyword());
         model.setX(element.getX());
         model.setY(element.getY());
         model.setWidth(element.getWidth());
         model.setHeight(element.getHeight());
         model.setJson(element.getJson());
-        model.setModify(dateTime.now());
-        elementDao.save(model);
-        cache.remove(CACHE_MODEL + model.getId());
+        save(model, element.getSort());
         logService.save(model, isNew ? LogService.Operation.Create : LogService.Operation.Modify);
 
         return modelHelper.toJson(model);
     }
 
     @Override
-    public void sort(String[] ids) {
-        if (validator.isEmpty(ids))
-            return;
-
+    public void sort(String editor, String parent, String[] ids) {
+        if (validator.isEmpty(parent))
+            parent = editor;
         for (int i = 0; i < ids.length; i++) {
             ElementModel element = findById(ids[i]);
-            if (element == null || element.getSort() == i)
+            if (element == null || !element.getEditor().equals(editor) || !element.getParent().equals(parent) || element.getSort() == i)
                 continue;
 
-            element.setSort(i);
-            element.setModify(dateTime.now());
-            elementDao.save(element);
-            cache.remove(CACHE_MODEL + element.getId());
+            save(element, i);
         }
+    }
+
+    private void save(ElementModel element, int sort) {
+        element.setSort(sort);
+        element.setModify(System.currentTimeMillis());
+        elementDao.save(element);
+        cache.remove(CACHE_MODEL + element.getId());
     }
 
     @Override
@@ -113,20 +113,20 @@ public class ElementServiceImpl implements ElementService, MinuteJob {
 
     @Override
     public void copy(String source, String target) {
-        copy(source, target, source, target, dateTime.now());
+        copy(source, target, source, target, dateTime.now(), System.currentTimeMillis());
     }
 
-    private void copy(String sourceEditor, String targetEditor, String sourceParent, String targetParent, Timestamp now) {
+    private void copy(String sourceEditor, String targetEditor, String sourceParent, String targetParent, Timestamp create, long modify) {
         elementDao.query(sourceEditor, sourceParent).getList().forEach(element -> {
             String id = element.getId();
             element.setId(null);
             element.setEditor(targetEditor);
             element.setParent(targetParent);
-            element.setCreate(now);
-            element.setModify(now);
+            element.setCreate(create);
+            element.setModify(modify);
             elementDao.save(element);
             logService.save(element, LogService.Operation.Create);
-            copy(sourceEditor, targetEditor, id, element.getId(), now);
+            copy(sourceEditor, targetEditor, id, element.getId(), create, modify);
         });
     }
 

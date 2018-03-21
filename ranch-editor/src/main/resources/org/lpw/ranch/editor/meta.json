@@ -11,6 +11,9 @@
             "name": "name"
         },
         {
+            "name": "keyword"
+        },
+        {
             "name": "width"
         },
         {

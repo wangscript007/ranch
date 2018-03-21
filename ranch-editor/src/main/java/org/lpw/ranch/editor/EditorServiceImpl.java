@@ -63,6 +63,7 @@ public class EditorServiceImpl implements EditorService {
         }
         model.setType(editor.getType());
         model.setName(editor.getName());
+        model.setKeyword(editor.getKeyword());
         model.setWidth(editor.getWidth());
         model.setHeight(editor.getHeight());
         model.setImage(editor.getImage());

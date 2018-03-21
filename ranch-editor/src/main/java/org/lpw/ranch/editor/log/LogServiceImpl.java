@@ -24,7 +24,6 @@ public class LogServiceImpl implements LogService {
         log.setElement(element.getId());
         log.setSort(element.getSort());
         log.setType(element.getType());
-        log.setKeyword(element.getKeyword());
         log.setX(element.getX());
         log.setY(element.getY());
         log.setWidth(element.getWidth());

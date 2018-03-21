@@ -21,15 +21,27 @@ import java.sql.Timestamp;
 public class EditorModel extends ModelSupport {
     static final String NAME = "ranch.editor";
 
+    private String copy; // 复制源
     private String type; // 类型
     private int sort; // 顺序
     private String name; // 名称
+    private String keyword; // 关键词
     private int width; // 宽度
     private int height; // 高度
     private String image; // 预览图
     private String json; // 扩展属性集
     private Timestamp create; // 创建时间
     private Timestamp modify; // 修改时间
+
+    @Jsonable
+    @Column(name = "c_copy")
+    public String getCopy() {
+        return copy;
+    }
+
+    public void setCopy(String copy) {
+        this.copy = copy;
+    }
 
     @Jsonable
     @Column(name = "c_type")
@@ -59,6 +71,16 @@ public class EditorModel extends ModelSupport {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    @Jsonable
+    @Column(name = "c_keyword")
+    public String getKeyword() {
+        return keyword;
+    }
+
+    public void setKeyword(String keyword) {
+        this.keyword = keyword;
     }
 
     @Jsonable

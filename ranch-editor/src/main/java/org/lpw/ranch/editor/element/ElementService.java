@@ -15,6 +15,10 @@ public interface ElementService {
      * 编辑器是否匹配验证器Bean名称。
      */
     String VALIDATOR_EDITOR = ElementModel.NAME + ".validator.editor";
+    /**
+     * 修改时间是否匹配验证器Bean名称。
+     */
+    String VALIDATOR_MODIFY = ElementModel.NAME + ".validator.modify";
 
     /**
      * 检索元素集。
@@ -43,11 +47,13 @@ public interface ElementService {
     JSONObject save(ElementModel element);
 
     /**
-     * 重新排序。
+     * 排序。
      *
-     * @param ids 元素ID集。
+     * @param editor 编辑器ID值。
+     * @param parent 父元素ID值。
+     * @param ids    元素ID集。
      */
-    void sort(String[] ids);
+    void sort(String editor, String parent, String[] ids);
 
     /**
      * 删除元素。

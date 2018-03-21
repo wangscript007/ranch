@@ -27,14 +27,13 @@ public class LogModel extends ModelSupport {
     private String element; // 元素
     private int sort; // 顺序
     private String type; // 类型
-    private String keyword; // 关键词
     private int x; // X位置
     private int y; // Y位置
     private int width; // 宽度
     private int height; // 高度
     private String json; // 扩展属性集
     private Timestamp create; // 创建时间
-    private Timestamp modify; // 修改时间
+    private long modify; // 修改时间
     private int operation; // 操作：0-新增；1-修改；2-删除
     private Timestamp time; // 时间
 
@@ -86,16 +85,6 @@ public class LogModel extends ModelSupport {
 
     public void setType(String type) {
         this.type = type;
-    }
-
-    @Jsonable
-    @Column(name = "c_keyword")
-    public String getKeyword() {
-        return keyword;
-    }
-
-    public void setKeyword(String keyword) {
-        this.keyword = keyword;
     }
 
     @Jsonable
@@ -160,11 +149,11 @@ public class LogModel extends ModelSupport {
 
     @Jsonable
     @Column(name = "c_modify")
-    public Timestamp getModify() {
+    public long getModify() {
         return modify;
     }
 
-    public void setModify(Timestamp modify) {
+    public void setModify(long modify) {
         this.modify = modify;
     }
 

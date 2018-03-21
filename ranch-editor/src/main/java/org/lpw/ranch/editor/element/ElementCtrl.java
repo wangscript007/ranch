@@ -26,7 +26,7 @@ public class ElementCtrl {
             @Validate(validator = Validators.ID, parameter = "editor", failureCode = 21),
             @Validate(validator = Validators.ID, emptyable = true, parameter = "parent", failureCode = 22),
             @Validate(validator = EditorService.VALIDATOR_EXISTS, parameter = "editor", failureCode = 23),
-            @Validate(validator = RoleService.VALIDATOR_VIEWABLE, parameters = {"user", "editor"}, failureCode = 11),
+            @Validate(validator = RoleService.VALIDATOR_VIEWABLE, parameters = {"user", "editor"}, failureCode = 12),
             @Validate(validator = ElementService.VALIDATOR_EXISTS, emptyable = true, parameter = "parent", failureCode = 24)
     })
     public Object query() {
@@ -38,26 +38,41 @@ public class ElementCtrl {
             @Validate(validator = Validators.ID, emptyable = true, parameter = "parent", failureCode = 22),
             @Validate(validator = Validators.NOT_EMPTY, parameter = "type", failureCode = 25),
             @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "type", failureCode = 26),
-            @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "keyword", failureCode = 27),
             @Validate(validator = UserHelper.VALIDATOR_SIGN_IN),
             @Validate(validator = EditorService.VALIDATOR_EXISTS, parameter = "editor", failureCode = 23),
             @Validate(validator = RoleService.VALIDATOR_EDITABLE, parameter = "editor", failureCode = 10),
             @Validate(validator = ElementService.VALIDATOR_EXISTS, emptyable = true, parameter = "parent", failureCode = 24),
-            @Validate(validator = ElementService.VALIDATOR_EXISTS, emptyable = true, parameter = "id", failureCode = 29),
-            @Validate(validator = ElementService.VALIDATOR_EDITOR, parameters = {"id", "editor"}, failureCode = 30)
+            @Validate(validator = ElementService.VALIDATOR_EXISTS, emptyable = true, parameter = "id", failureCode = 28),
+            @Validate(validator = ElementService.VALIDATOR_EDITOR, parameters = {"id", "editor"}, failureCode = 29),
+            @Validate(validator = ElementService.VALIDATOR_MODIFY, parameters = {"id", "modify"}, failureCode = 30)
     })
     public Object save() {
         return elementService.save(request.setToModel(ElementModel.class));
     }
 
-    @Execute(name = "delete", validates = {
+    @Execute(name = "sort", validates = {
             @Validate(validator = Validators.ID, parameter = "editor", failureCode = 21),
-            @Validate(validator = Validators.ID, parameter = "id", failureCode = 28),
+            @Validate(validator = Validators.ID, emptyable = true, parameter = "parent", failureCode = 22),
+            @Validate(validator = Validators.NOT_EMPTY, parameter = "ids", failureCode = 31),
             @Validate(validator = UserHelper.VALIDATOR_SIGN_IN),
             @Validate(validator = EditorService.VALIDATOR_EXISTS, parameter = "editor", failureCode = 23),
             @Validate(validator = RoleService.VALIDATOR_EDITABLE, parameter = "editor", failureCode = 10),
-            @Validate(validator = ElementService.VALIDATOR_EXISTS, parameter = "id", failureCode = 29),
-            @Validate(validator = ElementService.VALIDATOR_EDITOR, parameters = {"id", "editor"}, failureCode = 30)
+            @Validate(validator = ElementService.VALIDATOR_EXISTS, emptyable = true, parameter = "parent", failureCode = 24),
+    })
+    public Object sort() {
+        elementService.sort(request.get("editor"), request.get("parent"), request.getAsArray("ids"));
+
+        return "";
+    }
+
+    @Execute(name = "delete", validates = {
+            @Validate(validator = Validators.ID, parameter = "editor", failureCode = 21),
+            @Validate(validator = Validators.ID, parameter = "id", failureCode = 27),
+            @Validate(validator = UserHelper.VALIDATOR_SIGN_IN),
+            @Validate(validator = EditorService.VALIDATOR_EXISTS, parameter = "editor", failureCode = 23),
+            @Validate(validator = RoleService.VALIDATOR_EDITABLE, parameter = "editor", failureCode = 10),
+            @Validate(validator = ElementService.VALIDATOR_EXISTS, parameter = "id", failureCode = 28),
+            @Validate(validator = ElementService.VALIDATOR_EDITOR, parameters = {"id", "editor"}, failureCode = 29)
     })
     public Object delete() {
         elementService.delete(request.get("id"));
