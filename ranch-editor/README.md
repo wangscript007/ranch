@@ -68,6 +68,7 @@
 |---|---|---|
 |editor|char(36)|编辑器。|
 |parent|char(36)|父元素。|
+|element|char(36)|元素。|
 |sort|int|顺序。|
 |type|char(100)|类型。|
 |x|int|X位置。|
