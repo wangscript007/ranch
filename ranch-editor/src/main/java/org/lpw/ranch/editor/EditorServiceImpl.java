@@ -1,11 +1,14 @@
 package org.lpw.ranch.editor;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import org.lpw.ranch.editor.element.ElementService;
+import org.lpw.ranch.editor.role.RoleModel;
 import org.lpw.ranch.editor.role.RoleService;
 import org.lpw.ranch.user.helper.UserHelper;
 import org.lpw.tephra.cache.Cache;
 import org.lpw.tephra.dao.model.ModelHelper;
+import org.lpw.tephra.dao.orm.PageList;
 import org.lpw.tephra.util.DateTime;
 import org.lpw.tephra.util.TimeUnit;
 import org.lpw.tephra.util.Validator;
@@ -50,8 +53,19 @@ public class EditorServiceImpl implements EditorService {
     }
 
     @Override
+    public JSONObject queryUser() {
+        PageList<RoleModel> roles = roleService.query(userHelper.id());
+        JSONArray list = new JSONArray();
+        roles.getList().forEach(role -> list.add(find(role.getEditor())));
+        JSONObject object = roles.toJson(false);
+        object.put("list",list);
+
+        return object;
+    }
+
+    @Override
     public JSONObject find(String id) {
-        return modelHelper.toJson(findById(id));
+        return toJson(findById(id));
     }
 
     @Override
@@ -71,9 +85,10 @@ public class EditorServiceImpl implements EditorService {
         model.setModify(dateTime.now());
         editorDao.save(model);
         roleService.save(userHelper.id(), model.getId(), RoleService.Type.Owner);
+        roleService.modify(model.getId(), model.getModify());
         cache.remove(CACHE_MODEL + model.getId());
 
-        return modelHelper.toJson(model);
+        return toJson(model);
     }
 
     @Override
@@ -87,7 +102,18 @@ public class EditorServiceImpl implements EditorService {
         editorDao.save(editor);
         elementService.copy(id, editor.getId());
 
-        return modelHelper.toJson(editor);
+        return toJson(editor);
+    }
+
+    private JSONObject toJson(EditorModel editor) {
+        JSONObject object = modelHelper.toJson(editor);
+        RoleModel role = roleService.find(userHelper.id(), editor.getId());
+        if (role == null)
+            return object;
+
+        object.put("role", role.getType());
+
+        return object;
     }
 
     @Override
@@ -103,6 +129,7 @@ public class EditorServiceImpl implements EditorService {
             editor.setModify(modify);
             editorDao.save(editor);
             cache.remove(CACHE_MODEL + id);
+            roleService.modify(editor.getId(), modify);
         });
     }
 }

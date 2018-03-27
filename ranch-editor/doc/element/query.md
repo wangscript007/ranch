@@ -19,11 +19,6 @@
   "editor": "编辑器",
   "parent": "父元素",
   "sort": "顺序",
-  "type": "类型",
-  "x": "X位置",
-  "y": "Y位置",
-  "width": "宽度",
-  "height": "高度",
   "create": "创建时间",
   "modify": "修改时间",
   "children": []

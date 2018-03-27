@@ -1,5 +1,9 @@
 package org.lpw.ranch.editor.role;
 
+import org.lpw.tephra.dao.orm.PageList;
+
+import java.sql.Timestamp;
+
 /**
  * @author lpw
  */
@@ -33,6 +37,14 @@ public interface RoleService {
     String VALIDATOR_VIEWABLE = RoleModel.NAME + ".validator.viewable";
 
     /**
+     * 检索用户角色信息集。
+     *
+     * @param user 用户。
+     * @return 角色信息集。
+     */
+    PageList<RoleModel> query(String user);
+
+    /**
      * 查找。
      *
      * @param user   用户。
@@ -59,4 +71,12 @@ public interface RoleService {
      * @param type   类型。
      */
     void save(String user, String editor, Type type);
+
+    /**
+     * 设置修改时间。
+     *
+     * @param editor 编辑器。
+     * @param time   时间。
+     */
+    void modify(String editor, Timestamp time);
 }

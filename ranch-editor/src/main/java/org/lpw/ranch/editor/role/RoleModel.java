@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import java.sql.Timestamp;
 
 /**
  * @author lpw
@@ -23,6 +24,7 @@ public class RoleModel extends ModelSupport {
     private String user; // 用户
     private String editor; // 编辑器
     private int type; // 类型：0-所有者；1-可编辑；2-仅浏览
+    private Timestamp modify; // 修改时间
 
     @Jsonable
     @Column(name = "c_user")
@@ -52,5 +54,15 @@ public class RoleModel extends ModelSupport {
 
     public void setType(int type) {
         this.type = type;
+    }
+
+    @Jsonable
+    @Column(name = "c_modify")
+    public Timestamp getModify() {
+        return modify;
+    }
+
+    public void setModify(Timestamp modify) {
+        this.modify = modify;
     }
 }

@@ -21,6 +21,13 @@ public class EditorCtrl {
     @Inject
     private EditorService editorService;
 
+    @Execute(name = "query-user", validates = {
+            @Validate(validator = UserHelper.VALIDATOR_SIGN_IN)
+    })
+    public Object queryUser() {
+        return editorService.queryUser();
+    }
+
     @Execute(name = "find", validates = {
             @Validate(validator = Validators.ID, parameter = "id", failureCode = 1),
             @Validate(validator = EditorService.VALIDATOR_EXISTS, parameter = "id", failureCode = 2),

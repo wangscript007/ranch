@@ -23,6 +23,13 @@ public interface EditorService {
     EditorModel findById(String id);
 
     /**
+     * 检索当前用户编辑器信息集。
+     *
+     * @return 编辑器信息集。
+     */
+    JSONObject queryUser();
+
+    /**
      * 查找编辑器信息。
      *
      * @param id ID值。

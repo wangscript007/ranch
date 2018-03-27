@@ -17,6 +17,8 @@
 
 > 支持扩展自定义属性。
 
+[检索当前用户编辑器信息集](doc/query-user.md)
+
 [查找](doc/find.md)
 
 [保存](doc/save.md)
@@ -42,11 +44,6 @@
 |editor|char(36)|编辑器。|
 |parent|char(36)|父元素。|
 |sort|int|顺序。|
-|type|char(100)|类型。|
-|x|int|X位置。|
-|y|int|Y位置。|
-|width|int|宽度。|
-|height|int|高度。|
 |create|datetime|创建时间。|
 |modify|long|修改时间。|
 

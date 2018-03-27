@@ -1,11 +1,14 @@
 package org.lpw.ranch.editor.role;
 
 import org.lpw.ranch.user.helper.UserHelper;
+import org.lpw.ranch.util.Pagination;
 import org.lpw.tephra.cache.Cache;
+import org.lpw.tephra.dao.orm.PageList;
 import org.lpw.tephra.util.Validator;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
+import java.sql.Timestamp;
 
 /**
  * @author lpw
@@ -19,9 +22,16 @@ public class RoleServiceImpl implements RoleService {
     @Inject
     private Validator validator;
     @Inject
+    private Pagination pagination;
+    @Inject
     private UserHelper userHelper;
     @Inject
     private RoleDao roleDao;
+
+    @Override
+    public PageList<RoleModel> query(String user) {
+        return roleDao.query(user, pagination.getPageSize(20), pagination.getPageNum());
+    }
 
     @Override
     public RoleModel find(String user, String editor) {
@@ -56,6 +66,15 @@ public class RoleServiceImpl implements RoleService {
         role.setType(type.ordinal());
         roleDao.save(role);
         cache.remove(getCacheKey(user, editor));
+    }
+
+    @Override
+    public void modify(String editor, Timestamp time) {
+        roleDao.query(editor).getList().forEach(role -> {
+            role.setModify(time);
+            roleDao.save(role);
+            cache.remove(getCacheKey(role.getUser(), editor));
+        });
     }
 
     private String getCacheKey(String user, String editor) {
