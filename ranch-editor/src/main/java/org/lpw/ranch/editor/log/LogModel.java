@@ -26,11 +26,6 @@ public class LogModel extends ModelSupport {
     private String parent; // 父元素
     private String element; // 元素
     private int sort; // 顺序
-    private String type; // 类型
-    private int x; // X位置
-    private int y; // Y位置
-    private int width; // 宽度
-    private int height; // 高度
     private String json; // 扩展属性集
     private Timestamp create; // 创建时间
     private long modify; // 修改时间
@@ -75,56 +70,6 @@ public class LogModel extends ModelSupport {
 
     public void setSort(int sort) {
         this.sort = sort;
-    }
-
-    @Jsonable
-    @Column(name = "c_type")
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    @Jsonable
-    @Column(name = "c_x")
-    public int getX() {
-        return x;
-    }
-
-    public void setX(int x) {
-        this.x = x;
-    }
-
-    @Jsonable
-    @Column(name = "c_y")
-    public int getY() {
-        return y;
-    }
-
-    public void setY(int y) {
-        this.y = y;
-    }
-
-    @Jsonable
-    @Column(name = "c_width")
-    public int getWidth() {
-        return width;
-    }
-
-    public void setWidth(int width) {
-        this.width = width;
-    }
-
-    @Jsonable
-    @Column(name = "c_height")
-    public int getHeight() {
-        return height;
-    }
-
-    public void setHeight(int height) {
-        this.height = height;
     }
 
     @Jsonable(extend = true)

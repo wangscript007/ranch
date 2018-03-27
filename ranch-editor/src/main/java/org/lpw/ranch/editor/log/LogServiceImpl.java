@@ -23,11 +23,6 @@ public class LogServiceImpl implements LogService {
         log.setParent(element.getParent());
         log.setElement(element.getId());
         log.setSort(element.getSort());
-        log.setType(element.getType());
-        log.setX(element.getX());
-        log.setY(element.getY());
-        log.setWidth(element.getWidth());
-        log.setHeight(element.getHeight());
         log.setJson(element.getJson());
         log.setCreate(element.getCreate());
         log.setModify(element.getModify());

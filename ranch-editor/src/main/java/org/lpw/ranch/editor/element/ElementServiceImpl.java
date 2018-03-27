@@ -71,11 +71,6 @@ public class ElementServiceImpl implements ElementService, MinuteJob {
         model.setEditor(element.getEditor());
         model.setParent(validator.isEmpty(element.getParent()) ? element.getEditor() : element.getParent());
         model.setSort(element.getSort());
-        model.setType(element.getType());
-        model.setX(element.getX());
-        model.setY(element.getY());
-        model.setWidth(element.getWidth());
-        model.setHeight(element.getHeight());
         model.setJson(element.getJson());
         save(model, element.getSort());
         logService.save(model, isNew ? LogService.Operation.Create : LogService.Operation.Modify);
