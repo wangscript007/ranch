@@ -16,7 +16,7 @@ public class ModifyValidatorImpl extends ValidatorSupport {
 
     @Override
     public boolean validate(ValidateWrapper validate, String[] parameters) {
-        return elementService.findById(parameters[0]).getModify() == numeric.toLong(parameters[1]);
+        return validator.isEmpty(parameters[0]) || elementService.findById(parameters[0]).getModify() == numeric.toLong(parameters[1]);
     }
 
     @Override
