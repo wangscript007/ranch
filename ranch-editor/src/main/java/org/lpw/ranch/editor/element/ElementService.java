@@ -63,6 +63,14 @@ public interface ElementService {
     void delete(String id);
 
     /**
+     * 删除元素集。
+     *
+     * @param editor 编辑器。
+     * @param ids    ID值集。
+     */
+    void deletes(String editor, String[] ids);
+
+    /**
      * 复制。
      *
      * @param source 源编辑器ID值。

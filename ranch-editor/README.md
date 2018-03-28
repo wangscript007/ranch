@@ -57,6 +57,8 @@
 
 [删除](doc/element/delete.md)
 
+[批量删除](doc/element/deletes.md)
+
 ## 日志
 
 属性

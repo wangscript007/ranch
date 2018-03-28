@@ -100,11 +100,23 @@ public class ElementServiceImpl implements ElementService, MinuteJob {
 
     @Override
     public void delete(String id) {
-        ElementModel element = findById(id);
+        delete(findById(id));
+    }
+
+    @Override
+    public void deletes(String editor, String[] ids) {
+        for (String id : ids) {
+            ElementModel element = findById(id);
+            if (element.getEditor().equals(editor))
+                delete(element);
+        }
+    }
+
+    private void delete(ElementModel element) {
         logService.save(element, LogService.Operation.Delete);
         elementDao.delete(element);
         cache.remove(CACHE_MODEL + element.getId());
-        elementDao.query(element.getEditor(), id).getList().forEach(child -> delete(child.getId()));
+        elementDao.query(element.getEditor(), element.getId()).getList().forEach(this::delete);
     }
 
     @Override

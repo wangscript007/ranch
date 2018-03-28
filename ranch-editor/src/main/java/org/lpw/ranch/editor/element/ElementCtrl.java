@@ -55,7 +55,7 @@ public class ElementCtrl {
             @Validate(validator = UserHelper.VALIDATOR_SIGN_IN),
             @Validate(validator = EditorService.VALIDATOR_EXISTS, parameter = "editor", failureCode = 23),
             @Validate(validator = RoleService.VALIDATOR_EDITABLE, parameter = "editor", failureCode = 10),
-            @Validate(validator = ElementService.VALIDATOR_EXISTS, emptyable = true, parameter = "parent", failureCode = 24),
+            @Validate(validator = ElementService.VALIDATOR_EXISTS, emptyable = true, parameter = "parent", failureCode = 24)
     })
     public Object sort() {
         elementService.sort(request.get("editor"), request.get("parent"), request.getAsArray("ids"));
@@ -74,6 +74,19 @@ public class ElementCtrl {
     })
     public Object delete() {
         elementService.delete(request.get("id"));
+
+        return "";
+    }
+
+    @Execute(name = "deletes", validates = {
+            @Validate(validator = Validators.ID, parameter = "editor", failureCode = 21),
+            @Validate(validator = Validators.NOT_EMPTY, parameter = "ids", failureCode = 29),
+            @Validate(validator = UserHelper.VALIDATOR_SIGN_IN),
+            @Validate(validator = EditorService.VALIDATOR_EXISTS, parameter = "editor", failureCode = 23),
+            @Validate(validator = RoleService.VALIDATOR_EDITABLE, parameter = "editor", failureCode = 10)
+    })
+    public Object deletes() {
+        elementService.deletes(request.get("editor"), request.getAsArray("ids"));
 
         return "";
     }
