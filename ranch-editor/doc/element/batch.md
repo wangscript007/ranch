@@ -5,7 +5,7 @@
 - URI - /editor/element/batch
 
 参数
-```json
+```
 [
     {
         "operation":"save/sort/delete",
@@ -16,7 +16,7 @@
 > `parameters`为相应接口需要的参数。
 
 返回值
-```json
+```
 [
     result
 ]
