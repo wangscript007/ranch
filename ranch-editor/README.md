@@ -57,7 +57,7 @@
 
 [删除](doc/element/delete.md)
 
-[批量删除](doc/element/deletes.md)
+[批量操作](doc/element/batch.md)
 
 ## 日志
 

@@ -58,9 +58,8 @@ public class ElementCtrl {
             @Validate(validator = ElementService.VALIDATOR_EXISTS, emptyable = true, parameter = "parent", failureCode = 24)
     })
     public Object sort() {
-        elementService.sort(request.get("editor"), request.get("parent"), request.getAsArray("ids"));
-
-        return "";
+        return elementService.sort(request.get("editor"), request.get("parent"), request.getAsArray("ids"),
+                request.getAsArray("modifies"));
     }
 
     @Execute(name = "delete", validates = {
@@ -70,7 +69,8 @@ public class ElementCtrl {
             @Validate(validator = EditorService.VALIDATOR_EXISTS, parameter = "editor", failureCode = 23),
             @Validate(validator = RoleService.VALIDATOR_EDITABLE, parameter = "editor", failureCode = 10),
             @Validate(validator = ElementService.VALIDATOR_EXISTS, parameter = "id", failureCode = 26),
-            @Validate(validator = ElementService.VALIDATOR_EDITOR, parameters = {"id", "editor"}, failureCode = 27)
+            @Validate(validator = ElementService.VALIDATOR_EDITOR, parameters = {"id", "editor"}, failureCode = 27),
+            @Validate(validator = ElementService.VALIDATOR_MODIFY, parameters = {"id", "modify"}, failureCode = 28)
     })
     public Object delete() {
         elementService.delete(request.get("id"));
@@ -78,16 +78,10 @@ public class ElementCtrl {
         return "";
     }
 
-    @Execute(name = "deletes", validates = {
-            @Validate(validator = Validators.ID, parameter = "editor", failureCode = 21),
-            @Validate(validator = Validators.NOT_EMPTY, parameter = "ids", failureCode = 29),
-            @Validate(validator = UserHelper.VALIDATOR_SIGN_IN),
-            @Validate(validator = EditorService.VALIDATOR_EXISTS, parameter = "editor", failureCode = 23),
-            @Validate(validator = RoleService.VALIDATOR_EDITABLE, parameter = "editor", failureCode = 10)
+    @Execute(name = "batch", validates = {
+            @Validate(validator = UserHelper.VALIDATOR_SIGN_IN)
     })
-    public Object deletes() {
-        elementService.deletes(request.get("editor"), request.getAsArray("ids"));
-
-        return "";
+    public Object batch() {
+        return elementService.batch(request.getFromInputStream());
     }
 }

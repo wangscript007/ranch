@@ -49,11 +49,13 @@ public interface ElementService {
     /**
      * 排序。
      *
-     * @param editor 编辑器ID值。
-     * @param parent 父元素ID值。
-     * @param ids    元素ID集。
+     * @param editor   编辑器ID值。
+     * @param parent   父元素ID值。
+     * @param ids      元素ID集。
+     * @param modifies 修改时间集。
+     * @return 修改数据集。
      */
-    void sort(String editor, String parent, String[] ids);
+    JSONArray sort(String editor, String parent, String[] ids, String[] modifies);
 
     /**
      * 删除元素。
@@ -63,12 +65,12 @@ public interface ElementService {
     void delete(String id);
 
     /**
-     * 删除元素集。
+     * 批量操作。
      *
-     * @param editor 编辑器。
-     * @param ids    ID值集。
+     * @param parameters 参数集。
+     * @return 操作结果集。
      */
-    void deletes(String editor, String[] ids);
+    JSONArray batch(String parameters);
 
     /**
      * 复制。
