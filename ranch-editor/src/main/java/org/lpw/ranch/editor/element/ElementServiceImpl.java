@@ -104,13 +104,13 @@ public class ElementServiceImpl implements ElementService, MinuteJob {
 
         if (validator.isEmpty(parent))
             parent = editor;
-        for (int i = 1; i <= ids.length; i++) {
+        for (int i = 0; i < ids.length; i++) {
             ElementModel element = findById(ids[i]);
             if (element == null || !element.getEditor().equals(editor) || !element.getParent().equals(parent)
-                    || element.getSort() == i || element.getModify() != numeric.toLong(modifies[i]))
+                    || element.getSort() == i + 1 || element.getModify() != numeric.toLong(modifies[i]))
                 continue;
 
-            save(element, i);
+            save(element, i + 1);
             JSONObject object = new JSONObject();
             object.put("id", element.getId());
             object.put("modify", element.getModify());
@@ -124,7 +124,7 @@ public class ElementServiceImpl implements ElementService, MinuteJob {
         element.setSort(sort);
         element.setModify(System.currentTimeMillis());
         elementDao.save(element);
-        cache.remove(CACHE_MODEL + element.getId());
+        cache.put(CACHE_MODEL + element.getId(), element, false);
     }
 
     @Override
