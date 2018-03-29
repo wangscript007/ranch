@@ -13,9 +13,11 @@ import org.lpw.tephra.cache.Cache;
 import org.lpw.tephra.crypto.Digest;
 import org.lpw.tephra.ctrl.context.Session;
 import org.lpw.tephra.dao.model.ModelHelper;
+import org.lpw.tephra.util.Converter;
 import org.lpw.tephra.util.DateTime;
 import org.lpw.tephra.util.Generator;
 import org.lpw.tephra.util.Numeric;
+import org.lpw.tephra.util.TimeUnit;
 import org.lpw.tephra.util.Validator;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -36,6 +38,8 @@ public class UserServiceImpl implements UserService {
     private Cache cache;
     @Inject
     private Digest digest;
+    @Inject
+    private Converter converter;
     @Inject
     private Numeric numeric;
     @Inject
@@ -146,18 +150,22 @@ public class UserServiceImpl implements UserService {
         if (validator.isEmpty(password))
             return false;
 
-        String key = CACHE_PASS + user.getId();
-        int failure = numeric.toInt(cache.get(key));
-        int max = failure > 0 ? numeric.toInt(classifyHelper.value(UserModel.NAME + ".pass", "max-failure")) : 0;
-        if (max <= 0)
-            max = 5;
+        String cacheKey = CACHE_PASS + user.getId();
+        String[] failures = converter.toArray(cache.get(cacheKey), ",");
+        int failure = failures.length < 2 ? 0 : numeric.toInt(failures[0]);
+        if (failure > 0 && System.currentTimeMillis() - numeric.toLong(failures[1]) >
+                classifyHelper.valueAsInt(UserModel.NAME + ".pass", "lock", 5) * TimeUnit.Minute.getTime()) {
+            failure = 0;
+            cache.remove(cacheKey);
+        }
+        int max = failure > 0 ? classifyHelper.valueAsInt(UserModel.NAME + ".pass", "max-failure", 5) : 0;
         if (failure <= max && user.getPassword().equals(password(password))) {
-            cache.remove(key);
+            cache.remove(cacheKey);
 
             return true;
         }
 
-        cache.put(key, failure + 1, false);
+        cache.put(cacheKey, failure + 1 + "," + System.currentTimeMillis(), false);
 
         return false;
     }
