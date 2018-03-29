@@ -124,7 +124,7 @@ public class ElementServiceImpl implements ElementService, MinuteJob {
         element.setSort(sort);
         element.setModify(System.currentTimeMillis());
         elementDao.save(element);
-        cache.put(CACHE_MODEL + element.getId(), element, false);
+        cache.remove(CACHE_MODEL + element.getId());
     }
 
     @Override
