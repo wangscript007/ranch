@@ -59,5 +59,5 @@ public interface EditorService {
      *
      * @param map 数据集，id-modify对。
      */
-    void modify(Map<String, Timestamp> map);
+    void modify(Map<String, Long> map);
 }

@@ -6,10 +6,10 @@ import org.lpw.tephra.dao.model.ModelTables;
 import org.lpw.tephra.dao.orm.PageList;
 import org.lpw.tephra.dao.orm.lite.LiteOrm;
 import org.lpw.tephra.dao.orm.lite.LiteQuery;
+import org.lpw.tephra.util.Numeric;
 import org.springframework.stereotype.Repository;
 
 import javax.inject.Inject;
-import java.sql.Timestamp;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -18,6 +18,8 @@ import java.util.Map;
  */
 @Repository(ElementModel.NAME + ".dao")
 class ElementDaoImpl implements ElementDao {
+    @Inject
+    private Numeric numeric;
     @Inject
     private ModelTables modelTables;
     @Inject
@@ -37,12 +39,12 @@ class ElementDaoImpl implements ElementDao {
     }
 
     @Override
-    public Map<String, Timestamp> modify(Timestamp timestamp) {
-        Map<String, Timestamp> map = new HashMap<>();
+    public Map<String, Long> modify(long modify) {
+        Map<String, Long> map = new HashMap<>();
         SqlTable sqlTable = sql.query("SELECT c_editor,MAX(c_modify) FROM " + modelTables.get(ElementModel.class).getTableName()
-                + " WHERE c_modify>=? GROUP BY c_editor", new Object[]{timestamp});
+                + " WHERE c_modify>=? GROUP BY c_editor", new Object[]{modify});
         for (int i = 0; i < sqlTable.getRowCount(); i++)
-            map.put(sqlTable.get(i, 0), sqlTable.get(i, 1));
+            map.put(sqlTable.get(i, 0), numeric.toLong(sqlTable.get(i, 1)));
 
         return map;
     }

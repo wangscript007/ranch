@@ -13,7 +13,7 @@ interface ElementDao {
 
     ElementModel findById(String id);
 
-    Map<String, Timestamp> modify(Timestamp timestamp);
+    Map<String, Long> modify(long modify);
 
     void save(ElementModel element);
 

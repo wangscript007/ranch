@@ -239,6 +239,6 @@ public class ElementServiceImpl implements ElementService, MinuteJob {
 
     @Override
     public void executeMinuteJob() {
-        editorService.modify(elementDao.modify(new Timestamp(System.currentTimeMillis() - 3 * TimeUnit.Minute.getTime())));
+        editorService.modify(elementDao.modify(System.currentTimeMillis() - 3 * TimeUnit.Minute.getTime()));
     }
 }

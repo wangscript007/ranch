@@ -58,7 +58,7 @@ public class EditorServiceImpl implements EditorService {
         JSONArray list = new JSONArray();
         roles.getList().forEach(role -> list.add(find(role.getEditor())));
         JSONObject object = roles.toJson(false);
-        object.put("list",list);
+        object.put("list", list);
 
         return object;
     }
@@ -117,19 +117,20 @@ public class EditorServiceImpl implements EditorService {
     }
 
     @Override
-    public void modify(Map<String, Timestamp> map) {
+    public void modify(Map<String, Long> map) {
         if (validator.isEmpty(map))
             return;
 
         map.forEach((id, modify) -> {
             EditorModel editor = findById(id);
-            if (Math.abs(editor.getModify().getTime() - modify.getTime()) < TimeUnit.Second.getTime())
+            if (Math.abs(editor.getModify().getTime() - modify) < TimeUnit.Second.getTime())
                 return;
 
-            editor.setModify(modify);
+            Timestamp timestamp = new Timestamp(modify);
+            editor.setModify(timestamp);
             editorDao.save(editor);
             cache.remove(CACHE_MODEL + id);
-            roleService.modify(editor.getId(), modify);
+            roleService.modify(editor.getId(), timestamp);
         });
     }
 }
