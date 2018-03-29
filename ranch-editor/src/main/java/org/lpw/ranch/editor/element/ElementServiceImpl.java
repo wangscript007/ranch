@@ -87,7 +87,8 @@ public class ElementServiceImpl implements ElementService, MinuteJob {
         }
         model.setEditor(element.getEditor());
         model.setParent(validator.isEmpty(element.getParent()) ? element.getEditor() : element.getParent());
-        model.setSort(element.getSort());
+        if (element.getSort() > 0)
+            model.setSort(element.getSort());
         model.setJson(element.getJson());
         save(model, element.getSort());
         logService.save(model, isNew ? LogService.Operation.Create : LogService.Operation.Modify);
@@ -103,7 +104,7 @@ public class ElementServiceImpl implements ElementService, MinuteJob {
 
         if (validator.isEmpty(parent))
             parent = editor;
-        for (int i = 0; i < ids.length; i++) {
+        for (int i = 1; i <= ids.length; i++) {
             ElementModel element = findById(ids[i]);
             if (element == null || !element.getEditor().equals(editor) || !element.getParent().equals(parent)
                     || element.getSort() == i || element.getModify() != numeric.toLong(modifies[i]))

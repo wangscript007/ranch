@@ -11,7 +11,7 @@
 |id|char(36)|ID值：为空或不存在则新建；否则修改。|
 |editor|char(36)|编辑器。|
 |parent|char(36)|父元素，为空表示根节点。|
-|sort|int|顺序。|
+|sort|int|顺序，小于等于0表示不修改。|
 |modify|long|修改时间，新元素可为空。|
 
 返回值
