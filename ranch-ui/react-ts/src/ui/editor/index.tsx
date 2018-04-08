@@ -1,9 +1,7 @@
 import * as React from 'react';
 import { ComponentProps, Component } from '../basic/component';
 
-declare global {
-    interface Window { UM: any; }
-}
+declare const UM: any;
 
 interface Props extends ComponentProps {
     name: string;
@@ -19,7 +17,7 @@ export default class Editor extends Component<Props, object> {
     }
 
     componentDidMount(): void {
-        window.UM.getEditor(this.editorId, {
+        UM.getEditor(this.editorId, {
             imageUrl: '/tephra/ctrl-http/upload-path',
             imagePath: '',
             toolbar: [
@@ -31,7 +29,7 @@ export default class Editor extends Component<Props, object> {
     }
 
     componentWillUnmount(): void {
-        window.UM.delEditor(this.editorId);
+        UM.delEditor(this.editorId);
     }
 
     render(): JSX.Element {
@@ -44,7 +42,7 @@ export default class Editor extends Component<Props, object> {
         }
 
         return (
-            <script { ...props }>{this.props.defaultValue}</script>
+            <script {...props}>{this.props.defaultValue}</script>
         );
     }
 }

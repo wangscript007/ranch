@@ -2,34 +2,47 @@ import * as React from 'react';
 import { ComponentProps, Component } from '../basic/component';
 import './index.less';
 
+declare const Swiper: any;
+
 interface Props extends ComponentProps {
-    images: string[];
-    links: string[];
+    slides: JSX.Element[];
+    auto?: number;
+    number?: boolean;
 }
 
-interface State {
-    index: number;
-}
-
-export default class Slider extends Component<Props, State> {
+export default class Slider extends Component<Props, object> {
+    private sliderId: string;
     constructor(props: Props) {
         super(props);
-        this.state = {
-            index: 0
+
+        this.sliderId = this.getId('slider');
+    }
+
+    componentDidMount(): void {
+        let options: any = {
+            autoHeight: true,
+            pagination: {
+                el: '#' + this.sliderId + ' .swiper-pagination',
+                clickable: true,
+                renderBullet: (index: number, className: string) => {
+                    return '<span class="' + className + '">' + (this.props.number ? (index + 1) : '') + '</span>';
+                }
+            }
         };
+        if (this.props.auto) {
+            options.autoplay = {
+                delay: this.props.auto,
+                disableOnInteraction: false,
+            }
+        }
+        new Swiper('#' + this.sliderId, options);
     }
 
     render(): JSX.Element {
-        let index = this.state.index || 0;
-        setTimeout(() => {
-            this.setState({
-                index: (index + 1) % this.props.images.length
-            });
-        }, 5000);
-
         return (
-            <div id={this.getId('slider')} className={this.getClassName('ranch-ui-slider')} ui-type="slider">
-                <a href={this.props.links[index]}><img src={this.props.images[index]} /></a>
+            <div id={this.sliderId} className={this.getClassName('ranch-ui-slider')} ui-type="slider">
+                <div className="swiper-wrapper">{this.props.slides.map((slide, index) => <div className="swiper-slide">{slide}</div>)}</div>
+                <div className="swiper-pagination" />
             </div>
         );
     }

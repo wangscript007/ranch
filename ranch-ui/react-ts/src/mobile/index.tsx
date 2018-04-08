@@ -6,7 +6,11 @@ import Page from './page';
 
 class Mobile extends Page {
     protected getContent(): JSX.Element | JSX.Element[] | null {
-        return <Slider images={['img/1.jpg', 'img/2.jpg', 'img/3.jpg']} links={['index.html', 'order.html', 'mine.html']} />;
+        return <Slider slides={[
+            <div>hello 111</div>,
+            <div>hello 222</div>,
+            <div>hello 333</div>
+        ]} auto={2000} />;
     }
 }
 

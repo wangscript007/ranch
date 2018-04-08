@@ -1,10 +1,17 @@
-.ranch-ui-slider {
-    line-height: 0;
+@import '../../color';
+[ui-type="slider"] {
+    width: 100%;
+    overflow: hidden;
 }
 
-.ranch-ui-slider a,
-.ranch-ui-slider img {
-    display: inline-block;
-    width: 100%;
-    line-height: 0;
+[ui-type="slider"] .swiper-pagination {
+    bottom: auto;
+}
+
+[ui-type="slider"] .swiper-pagination-bullet {
+    background-color: @color-gray;
+}
+
+[ui-type="slider"] .swiper-pagination-bullet-active {
+    background-color: @color-main-light;
 }
