@@ -2,6 +2,7 @@ import * as React from 'react';
 import selector from '../../util/selector';
 import merger from '../../util/merger';
 import message from '../../util/message';
+import Date from '../../ui/date';
 import Image from '../../ui/image';
 import Base64 from '../../ui/base64';
 import Editor from '../../ui/editor';
@@ -40,6 +41,9 @@ export class PageComponent<T extends PageProps, E extends PageState> extends Rea
         };
         if (prop.type === 'text-area')
             return <textarea {...props} />
+
+        if (prop.type === 'date')
+            return <Date {...props} />
 
         if (prop.type === 'image')
             return <Image {...props} fieldName={prop['fieldName'] || this.props.meta.key + '.' + prop.name} />
