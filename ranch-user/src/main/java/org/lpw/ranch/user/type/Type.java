@@ -32,4 +32,13 @@ public interface Type {
      * @param password 密码。
      */
     void signUp(UserModel user, String uid, String password);
+
+    /**
+     * 获取第三方认证昵称。
+     *
+     * @param uid      UID。
+     * @param password 密码。
+     * @return 昵称，不存在则返回null。
+     */
+    String getNick(String uid, String password);
 }

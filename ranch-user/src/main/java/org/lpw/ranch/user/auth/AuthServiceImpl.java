@@ -37,12 +37,13 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public AuthModel create(String userId, String uid, int type) {
+    public AuthModel create(String userId, String uid, int type, String nick) {
         AuthModel auth = new AuthModel();
         auth.setUser(userId);
         auth.setUid(uid);
         auth.setTime(dateTime.now());
         auth.setType(type);
+        auth.setNick(nick);
         authDao.save(auth);
 
         return auth;
@@ -89,6 +90,6 @@ public class AuthServiceImpl implements AuthService {
             return;
 
         authDao.delete(auth);
-        cache.remove(CACHE_UID + id);
+        cache.remove(CACHE_UID + auth.getUid());
     }
 }

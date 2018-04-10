@@ -21,4 +21,9 @@ public class BindImpl implements Type {
     @Override
     public void signUp(UserModel user, String uid, String password) {
     }
+
+    @Override
+    public String getNick(String uid, String password) {
+        return null;
+    }
 }

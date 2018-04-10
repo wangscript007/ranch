@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import org.lpw.ranch.user.UserModel;
 import org.lpw.ranch.weixin.helper.WeixinHelper;
 import org.lpw.tephra.cache.Cache;
+import org.lpw.tephra.util.Validator;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
@@ -13,6 +14,8 @@ import javax.inject.Inject;
  */
 @Service("ranch.user.type.weixin")
 public class WeixinImpl implements Type {
+    @Inject
+    private Validator validator;
     @Inject
     private Cache cache;
     @Inject
@@ -31,8 +34,15 @@ public class WeixinImpl implements Type {
     @Override
     public void signUp(UserModel user, String uid, String password) {
         JSONObject object = getAuth(uid, password);
-        user.setNick(object.getString("nickname"));
-        user.setPortrait(object.getString("headimgurl"));
+        if (validator.isEmpty(user.getNick()))
+            user.setNick(object.getString("nickname"));
+        if (validator.isEmpty(user.getPortrait()))
+            user.setPortrait(object.getString("headimgurl"));
+    }
+
+    @Override
+    public String getNick(String uid, String password) {
+        return getAuth(uid, password).getString("nickname");
     }
 
     private JSONObject getAuth(String uid, String password) {

@@ -31,9 +31,10 @@ public interface AuthService {
      * @param userId 用户ID。
      * @param uid    UID值。
      * @param type   认证类型。
+     * @param nick   第三方账号昵称。
      * @return 认证信息。
      */
-    AuthModel create(String userId, String uid, int type);
+    AuthModel create(String userId, String uid, int type, String nick);
 
     /**
      * 根据uid检索认证信息。

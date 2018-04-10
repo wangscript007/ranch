@@ -9,7 +9,6 @@ import org.springframework.stereotype.Component;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
-
 import java.sql.Timestamp;
 
 /**
@@ -26,6 +25,7 @@ public class AuthModel extends ModelSupport {
     private String uid; // 认证ID
     private Timestamp time; // 绑定时间
     private int type; // 类型：0-绑定ID；1-自有账号；其他为第三方账号
+    private String nick; // 第三方账号昵称
 
     @Jsonable
     @Column(name = "c_user")
@@ -65,5 +65,15 @@ public class AuthModel extends ModelSupport {
 
     public void setType(int type) {
         this.type = type;
+    }
+
+    @Jsonable
+    @Column(name = "c_nick")
+    public String getNick() {
+        return nick;
+    }
+
+    public void setNick(String nick) {
+        this.nick = nick;
     }
 }

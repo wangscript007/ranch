@@ -91,7 +91,7 @@ public class UserServiceImpl implements UserService {
                 user.setEmail(uid);
         }
         userDao.save(user);
-        authService.create(user.getId(), types.getUid(uid, password, type), type);
+        authService.create(user.getId(), types.getUid(uid, password, type), type, types.getNick(uid, password, type));
         clearCache(user);
         onlineService.signIn(user.getId());
         session.set(SESSION, user);

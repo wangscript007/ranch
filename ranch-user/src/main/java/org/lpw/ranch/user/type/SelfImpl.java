@@ -28,4 +28,9 @@ public class SelfImpl implements Type {
     public void signUp(UserModel user, String uid, String password) {
         user.setPassword(userService.password(password));
     }
+
+    @Override
+    public String getNick(String uid, String password) {
+        return null;
+    }
 }

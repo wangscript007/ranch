@@ -26,6 +26,11 @@ public class TypesImpl implements Types, ContextRefreshedListener {
     }
 
     @Override
+    public String getNick(String uid, String password, int type) {
+        return map.get(type).getNick(uid, password);
+    }
+
+    @Override
     public int getContextRefreshedSort() {
         return 15;
     }
