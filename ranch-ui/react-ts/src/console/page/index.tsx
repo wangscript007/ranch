@@ -5,6 +5,7 @@ import message from '../../util/message';
 import Image from '../../ui/image';
 import Base64 from '../../ui/base64';
 import Editor from '../../ui/editor';
+import Map from '../../ui/map';
 import { Meta, Prop, Operate } from '../meta';
 import { service, Success } from '../service';
 
@@ -48,6 +49,9 @@ export class PageComponent<T extends PageProps, E extends PageState> extends Rea
 
         if (prop.type === 'editor')
             return <Editor {...props} />
+
+        if (prop.type === 'map')
+            return <Map {...props} address={true} change={true} />
 
         if (prop.labels && prop.labels.length > 0) {
             return (

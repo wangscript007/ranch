@@ -41,6 +41,7 @@ public class AuthServiceImpl implements AuthService {
         AuthModel auth = new AuthModel();
         auth.setUser(userId);
         auth.setUid(uid);
+        auth.setTime(dateTime.now());
         auth.setType(type);
         authDao.save(auth);
 

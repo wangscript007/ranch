@@ -17,4 +17,14 @@ export class Component<T extends React.HTMLAttributes<HTMLElement>, E> extends R
     protected getClassName(className: string): string {
         return '' + (this.props.className || className);
     }
+
+    protected getDefaultValue(): string {
+        if (!this.props.defaultValue)
+            return '';
+
+        if (typeof (this.props.defaultValue) === 'string')
+            return this.props.defaultValue;
+
+        return this.props.defaultValue.join(',');
+    }
 }

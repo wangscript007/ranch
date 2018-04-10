@@ -34,7 +34,7 @@ var htmls = [{
 }, {
     name: 'console',
     path: 'console/index',
-    template: 'editor'
+    template: 'full'
 }, {
     name: 'console-sign-in',
     path: 'console/sign-in'
