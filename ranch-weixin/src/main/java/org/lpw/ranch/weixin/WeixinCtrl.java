@@ -2,6 +2,7 @@ package org.lpw.ranch.weixin;
 
 import com.alibaba.fastjson.JSONObject;
 import org.lpw.ranch.user.helper.UserHelper;
+import org.lpw.tephra.ctrl.Forward;
 import org.lpw.tephra.ctrl.context.Request;
 import org.lpw.tephra.ctrl.context.Response;
 import org.lpw.tephra.ctrl.execute.Execute;
@@ -34,6 +35,8 @@ public class WeixinCtrl {
     private Response response;
     @Inject
     private Templates templates;
+    @Inject
+    private Forward forward;
     @Inject
     private WeixinService weixinService;
 
@@ -100,6 +103,14 @@ public class WeixinCtrl {
     })
     public Object auth() {
         return weixinService.auth(request.get("key"), request.get("code"));
+    }
+
+    @Execute(name = "redirect")
+    public Object redirect() {
+        weixinService.auth(request.get("key"), request.get("code"));
+        forward.redirectTo(request.get("redirect"));
+
+        return "";
     }
 
     @Execute(name = "prepay-qr-code", validates = {
