@@ -95,6 +95,16 @@ public interface UserHelper {
     boolean exists(String id);
 
     /**
+     * 登入。
+     *
+     * @param uid      UID。
+     * @param password 密码。
+     * @param type     类型。
+     * @return 用户信息；如果登入失败则返回空JSON。
+     */
+    JSONObject signIn(String uid, String password, int type);
+
+    /**
      * 判断用户是否已登入。
      *
      * @return 如果已登入则返回true；否则返回false。

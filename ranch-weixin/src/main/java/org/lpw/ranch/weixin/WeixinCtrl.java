@@ -38,6 +38,8 @@ public class WeixinCtrl {
     @Inject
     private Forward forward;
     @Inject
+    private UserHelper userHelper;
+    @Inject
     private WeixinService weixinService;
 
     @Execute(name = "query", validates = {
@@ -107,8 +109,8 @@ public class WeixinCtrl {
 
     @Execute(name = "redirect")
     public Object redirect() {
-        weixinService.auth(request.get("key"), request.get("code"));
-        forward.redirectTo(request.get("redirect"));
+        userHelper.signIn(request.get("code"), request.get("key"), 2);
+        forward.redirectTo(request.get("to"));
 
         return "";
     }

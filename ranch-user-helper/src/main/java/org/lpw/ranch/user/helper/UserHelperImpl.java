@@ -18,6 +18,7 @@ public class UserHelperImpl extends ServiceHelperSupport implements UserHelper {
     private String key;
     private String codeKey;
     private String uidKey;
+    private String signInKey;
     private String signKey;
 
     @Override
@@ -89,6 +90,19 @@ public class UserHelperImpl extends ServiceHelperSupport implements UserHelper {
     @Override
     public boolean exists(String id) {
         return get(id).size() > 1;
+    }
+
+    @Override
+    public JSONObject signIn(String uid, String password, int type) {
+        if (signInKey == null)
+            signInKey = key + ".sign-in";
+
+        Map<String, String> parameter = new HashMap<>();
+        parameter.put("uid", uid);
+        parameter.put("password", password);
+        parameter.put("type", "" + type);
+
+        return carousel.service(signInKey, null, parameter, true, JSONObject.class);
     }
 
     @Override
