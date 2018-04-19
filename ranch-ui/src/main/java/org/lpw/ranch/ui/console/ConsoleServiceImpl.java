@@ -82,6 +82,9 @@ public class ConsoleServiceImpl implements ConsoleService, StorageListener {
     }
 
     private void setLabel(String prefix, JSONObject object, String key, String k) {
+        if (!object.containsKey(key))
+            return;
+
         JSONArray array = object.getJSONArray(key);
         for (int i = 0, size = array.size(); i < size; i++)
             setLabel(prefix, array.getJSONObject(i), k);

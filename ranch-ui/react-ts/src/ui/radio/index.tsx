@@ -27,12 +27,12 @@ export default class Radio extends Component<Props, State> {
         let elements: JSX.Element[] = [];
         elements.push(<input type="hidden" name={this.props.name} value={this.state.value} />);
         this.props.list.map((kv, index) => {
-            let value: string = kv[this.props.valueName || 'value'];
+            let value: string = typeof kv === 'string' ? kv : kv[this.props.valueName || 'value'];
             let checked: boolean = value === this.state.value;
-
+            let label: string = typeof kv === 'string' ? kv : kv[this.props.labelName || 'label'];
             elements.push(
                 <div className={this.getClassName('radio')} onClick={() => { this.setState({ value: checked ? '' : value }) }}>
-                    <Icon code="&#xe634;" className={checked ? 'checked' : 'uncheck'} />{kv[this.props.labelName || 'label']}
+                    <Icon code="&#xe634;" className={checked ? 'checked' : 'uncheck'} />{label}
                 </div>
             );
         });

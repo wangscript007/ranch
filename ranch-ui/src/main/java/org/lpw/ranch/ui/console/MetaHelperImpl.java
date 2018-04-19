@@ -77,7 +77,11 @@ public class MetaHelperImpl implements MetaHelper, ContextRefreshedListener, Sto
 
     @Override
     public void onStorageChanged(String path, String absolutePath) {
-        for (File file : new File(absolutePath).getParentFile().listFiles())
+        File[] files = new File(absolutePath).getParentFile().listFiles();
+        if (files == null)
+            return;
+
+        for (File file : files)
             if (file.getName().endsWith(".json"))
                 put(json.toObject(io.readAsString(file.getAbsolutePath())));
     }
