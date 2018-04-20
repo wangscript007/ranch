@@ -32,7 +32,9 @@ export default class Radio extends Component<Props, State> {
             let label: string = typeof kv === 'string' ? kv : kv[this.props.labelName || 'label'];
             elements.push(
                 <div className={this.getClassName('radio')} onClick={() => { this.setState({ value: checked ? '' : value }) }}>
-                    <Icon code="&#xe634;" className={checked ? 'checked' : 'uncheck'} />{label}
+                    <Icon code="&#xe633;" className="uncheck" style={{ display: checked ? 'none' : '' }} />
+                    <Icon code="&#xe634;" className="checked" style={{ display: checked ? '' : 'none' }} />
+                    {label}
                 </div>
             );
         });

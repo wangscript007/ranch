@@ -8,6 +8,6 @@ interface Props extends ComponentProps {
 export default class Icon extends Component<Props, object> {
     render(): JSX.Element {
         return <i id={this.getId('icon')} className={this.getClassName('ranch-ui-icon')}
-            title={this.props.title || ''} ui-type="icon">{this.props.code}</i>;
+            title={this.props.title || ''} ui-type="icon" {...this.props}>{this.props.code}</i>;
     }
 }

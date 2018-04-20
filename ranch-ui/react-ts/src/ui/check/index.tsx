@@ -41,7 +41,9 @@ export default class Check extends Component<Props, State> {
             let label: string = typeof kv === 'string' ? kv : kv[this.props.labelName || 'label'];
             elements.push(
                 <div className={this.getClassName('check')} onClick={() => { this.click(value, checked) }}>
-                    <Icon code="&#xe634;" className={checked ? 'checked' : 'uncheck'} />{label}
+                    <Icon code="&#xe633;" className="uncheck" style={{ display: checked ? 'none' : '' }} />
+                    <Icon code="&#xe634;" className="checked" style={{ display: checked ? '' : 'none' }} />
+                    {label}
                 </div>
             );
         });
@@ -57,7 +59,7 @@ export default class Check extends Component<Props, State> {
         if (!checked)
             checkeds.push(value);
         this.setState({
-            value: checkeds.join(','),
+            value: checkeds.length === 0 ? '' : checkeds.join(',').substring(1),
             checkeds: checkeds
         });
     }
