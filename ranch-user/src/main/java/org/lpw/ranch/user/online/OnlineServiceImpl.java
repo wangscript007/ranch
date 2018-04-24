@@ -62,6 +62,11 @@ public class OnlineServiceImpl implements OnlineService, MinuteJob {
     }
 
     @Override
+    public OnlineModel findBySid(String sid) {
+        return onlineDao.findBySid(sid);
+    }
+
+    @Override
     public void signIn(String user) {
         String sid = session.getId();
         OnlineModel online = onlineDao.findBySid(sid);

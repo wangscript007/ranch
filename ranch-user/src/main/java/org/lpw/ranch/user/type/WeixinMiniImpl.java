@@ -12,8 +12,8 @@ import javax.inject.Inject;
 /**
  * @author lpw
  */
-@Service("ranch.user.type.weixin")
-public class WeixinImpl implements Type {
+@Service("ranch.user.type.weixin.mini")
+public class WeixinMiniImpl implements Type {
     @Inject
     private Validator validator;
     @Inject
@@ -23,7 +23,7 @@ public class WeixinImpl implements Type {
 
     @Override
     public int getKey() {
-        return Types.WEIXIN;
+        return Types.WEIXIN_MINI;
     }
 
     @Override
@@ -33,24 +33,19 @@ public class WeixinImpl implements Type {
 
     @Override
     public void signUp(UserModel user, String uid, String password) {
-        JSONObject object = getAuth(uid, password);
-        if (validator.isEmpty(user.getNick()))
-            user.setNick(object.getString("nickname"));
-        if (validator.isEmpty(user.getPortrait()))
-            user.setPortrait(object.getString("headimgurl"));
     }
 
     @Override
     public String getNick(String uid, String password) {
-        return getAuth(uid, password).getString("nickname");
+        return null;
     }
 
     @Override
     public JSONObject getAuth(String uid, String password) {
-        String cacheKey = "ranch.user.type.weixin.uid-password:" + uid + "-" + password;
+        String cacheKey = "ranch.user.type.weixin-mini.uid-password:" + uid + "-" + password;
         JSONObject object = cache.get(cacheKey);
         if (object == null)
-            cache.put(cacheKey, object = weixinHelper.auth(password, uid, 0), false);
+            cache.put(cacheKey, object = weixinHelper.auth(password, uid, 1), false);
 
         return object;
     }

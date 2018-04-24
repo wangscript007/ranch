@@ -1,5 +1,6 @@
 package org.lpw.ranch.user.type;
 
+import com.alibaba.fastjson.JSONObject;
 import org.lpw.ranch.user.UserModel;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +25,11 @@ public class BindImpl implements Type {
 
     @Override
     public String getNick(String uid, String password) {
+        return null;
+    }
+
+    @Override
+    public JSONObject getAuth(String uid, String password) {
         return null;
     }
 }

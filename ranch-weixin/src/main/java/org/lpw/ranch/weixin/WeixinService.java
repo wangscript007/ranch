@@ -77,9 +77,10 @@ public interface WeixinService {
      *
      * @param key  配置key。
      * @param code 微信认证code。
+     * @param type 类型：0-公众号；1-小程序。
      * @return 如果认证通过则返回用户授权信息，否则返回空JSON。
      */
-    JSONObject auth(String key, String code);
+    JSONObject auth(String key, String code, int type);
 
     /**
      * 生成支付二维码。
@@ -137,4 +138,14 @@ public interface WeixinService {
      * @return 执行成功则返回true；否则返回false。
      */
     boolean notice(String appId, String orderNo, String tradeNo, String amount, String returnCode, String resultCode, Map<String, String> map);
+
+    /**
+     * 解密AES-128-CBC/PKCS#7数据。
+     *
+     * @param sessionKey Session key。
+     * @param iv         初始化参数。
+     * @param message    加密数据。
+     * @return 解密后的数据，如果解密失败则返回空JSON{}。
+     */
+    JSONObject decryptAesCbcPkcs7(String sessionKey, String iv, String message);
 }

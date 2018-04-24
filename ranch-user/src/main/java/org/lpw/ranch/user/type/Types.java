@@ -1,5 +1,6 @@
 package org.lpw.ranch.user.type;
 
+import com.alibaba.fastjson.JSONObject;
 import org.lpw.ranch.user.UserModel;
 
 /**
@@ -17,13 +18,17 @@ public interface Types {
      */
     int SELF = 1;
     /**
-     * 微信。
+     * 微信公众号。
      */
     int WEIXIN = 2;
     /**
+     * 微信小程序。
+     */
+    int WEIXIN_MINI = 3;
+    /**
      * 类型最大值。
      */
-    int MAX = 2;
+    int MAX = 3;
 
     /**
      * 获取UID。
@@ -54,4 +59,14 @@ public interface Types {
      * @return 昵称，不存在则返回null。
      */
     String getNick(String uid, String password, int type);
+
+    /**
+     * 获取第三方认证信息。
+     *
+     * @param uid      UID。
+     * @param password 密码。
+     * @param type     类型。
+     * @return 认证信息，不存在则返回null。
+     */
+    JSONObject getAuth(String uid, String password, int type);
 }

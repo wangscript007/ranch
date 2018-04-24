@@ -11,6 +11,7 @@ import org.lpw.tephra.dao.model.ModelHelper;
 import org.lpw.tephra.scheduler.HourJob;
 import org.lpw.tephra.scheduler.MinuteJob;
 import org.lpw.tephra.storage.Storages;
+import org.lpw.tephra.util.Coder;
 import org.lpw.tephra.util.Converter;
 import org.lpw.tephra.util.DateTime;
 import org.lpw.tephra.util.Generator;
@@ -24,6 +25,9 @@ import org.lpw.tephra.util.Xml;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import javax.crypto.Cipher;
+import javax.crypto.spec.IvParameterSpec;
+import javax.crypto.spec.SecretKeySpec;
 import javax.inject.Inject;
 import java.io.OutputStream;
 import java.util.ArrayList;
@@ -60,6 +64,8 @@ public class WeixinServiceImpl implements WeixinService, ContextRefreshedListene
     private Sign sign;
     @Inject
     private QrCode qrCode;
+    @Inject
+    private Coder coder;
     @Inject
     private Logger logger;
     @Inject
@@ -150,34 +156,61 @@ public class WeixinServiceImpl implements WeixinService, ContextRefreshedListene
     }
 
     @Override
-    public JSONObject auth(String key, String code) {
-        JSONObject object = new JSONObject();
-        Map<String, String> map = new HashMap<>();
-        WeixinModel weixin = weixinDao.findByKey(key);
-        map.put("appid", weixin.getAppId());
-        map.put("secret", weixin.getSecret());
-        map.put("code", code);
-        map.put("grant_type", "authorization_code");
-        JSONObject obj = json.toObject(http.get("https://api.weixin.qq.com/sns/oauth2/access_token", null, map));
-        if (obj == null || !obj.containsKey("openid"))
-            return object;
+    public JSONObject auth(String key, String code, int type) {
+        return type == 1 ? auth1(key, code) : auth0(key, code);
+    }
 
-        object.putAll(obj);
-        String openId = obj.getString("openid");
-        if (obj.containsKey("access_token")) {
+    private JSONObject auth0(String key, String code) {
+        Map<String, String> map = getAuthMap(key);
+        map.put("code", code);
+        JSONObject object = json.toObject(http.get("https://api.weixin.qq.com/sns/oauth2/access_token", null, map));
+        if (object == null || !object.containsKey("openid")) {
+            logger.warn(null, "获取微信公众号用户认证信息[{}:{}:{}]失败！", key, code, object);
+
+            return new JSONObject();
+        }
+
+        String openId = object.getString("openid");
+        if (object.containsKey("access_token")) {
             map.clear();
-            map.put("access_token", obj.getString("access_token"));
+            map.put("access_token", object.getString("access_token"));
             map.put("openid", openId);
             map.put("lang", "zh_CN");
-            obj = json.toObject(http.get("https://api.weixin.qq.com/sns/userinfo", null, map));
+            JSONObject obj = json.toObject(http.get("https://api.weixin.qq.com/sns/userinfo", null, map));
             if (obj != null)
                 object.putAll(obj);
         }
 
         if (logger.isDebugEnable())
-            logger.debug("获得微信用户认证信息[{}:{}]。", code, object);
+            logger.debug("获得微信公众号用户认证信息[{}:{}:{}]。", key, code, object);
 
         return object;
+    }
+
+    private JSONObject auth1(String key, String code) {
+        Map<String, String> map = getAuthMap(key);
+        map.put("js_code", code);
+        JSONObject object = json.toObject(http.get("https://api.weixin.qq.com/sns/jscode2session", null, map));
+        if (object == null || !object.containsKey("openid")) {
+            logger.warn(null, "获取微信小程序用户认证信息[{}:{}:{}]失败！", key, code, object);
+
+            return new JSONObject();
+        }
+
+        if (logger.isDebugEnable())
+            logger.debug("获得微信小程序用户认证信息[{}:{}:{}]。", key, code, object);
+
+        return object;
+    }
+
+    private Map<String, String> getAuthMap(String key) {
+        Map<String, String> map = new HashMap<>();
+        WeixinModel weixin = weixinDao.findByKey(key);
+        map.put("appid", weixin.getAppId());
+        map.put("secret", weixin.getSecret());
+        map.put("grant_type", "authorization_code");
+
+        return map;
     }
 
     @Override
@@ -300,6 +333,21 @@ public class WeixinServiceImpl implements WeixinService, ContextRefreshedListene
         sb.append("key=").append(mchKey);
 
         return digest.md5(sb.toString()).toUpperCase();
+    }
+
+    @Override
+    public JSONObject decryptAesCbcPkcs7(String sessionKey, String iv, String message) {
+        try {
+            Cipher cipher = Cipher.getInstance("AES/CBC/PKCS7PADDING");
+            cipher.init(Cipher.DECRYPT_MODE, new SecretKeySpec(coder.decodeBase64(sessionKey), "AES"),
+                    new IvParameterSpec(coder.decodeBase64(iv)));
+
+            return json.toObject(new String(cipher.doFinal(coder.decodeBase64(message))), false);
+        } catch (Exception e) {
+            logger.warn(e, "解密微信数据[{}:{}:{}]时发生异常！", sessionKey, iv, message);
+
+            return null;
+        }
     }
 
     @Override

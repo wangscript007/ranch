@@ -3,6 +3,7 @@ package org.lpw.ranch.weixin.helper;
 import com.alibaba.fastjson.JSONObject;
 import org.lpw.ranch.util.Carousel;
 import org.lpw.tephra.util.Coder;
+import org.lpw.tephra.util.Numeric;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +18,8 @@ import java.util.Map;
 public class WeixinHelperImpl implements WeixinHelper {
     @Inject
     private Coder coder;
+    @Inject
+    private Numeric numeric;
     @Inject
     private Carousel carousel;
     @Value("${ranch.weixin.key:ranch.weixin}")
@@ -38,10 +41,11 @@ public class WeixinHelperImpl implements WeixinHelper {
     }
 
     @Override
-    public JSONObject auth(String key, String code) {
+    public JSONObject auth(String key, String code, int type) {
         Map<String, String> parameter = new HashMap<>();
         parameter.put("key", key);
         parameter.put("code", code);
+        parameter.put("type", numeric.toString(type, "0"));
 
         return carousel.service(this.key + ".auth", null, parameter, false, JSONObject.class);
     }

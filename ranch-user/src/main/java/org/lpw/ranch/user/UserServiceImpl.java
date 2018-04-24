@@ -33,6 +33,7 @@ public class UserServiceImpl implements UserService {
     private static final String CACHE_JSON = UserModel.NAME + ".service.json:";
     private static final String CACHE_PASS = UserModel.NAME + ".service.pass:";
     private static final String SESSION = UserModel.NAME + ".service.session";
+    private static final String SESSION_AUTH3 = UserModel.NAME + ".service.session.auth3";
 
     @Inject
     private Cache cache;
@@ -99,8 +100,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean signIn(String uid, String password, String macId, int type) {
-        if (type == Types.WEIXIN)
-            uid = getWeixinId(uid, password);
+        if (type == Types.WEIXIN || type == Types.WEIXIN_MINI)
+            uid = getWeixinId(uid, password, type);
         if (uid == null)
             return false;
 
@@ -112,13 +113,8 @@ public class UserServiceImpl implements UserService {
         if (user == null || user.getState() != 0)
             return false;
 
-        if (auth.getType() == 1) {
-            if (!pass(user, password))
-                return false;
-
-            authService.bind(user.getId(), macId);
-            authService.bind(user.getId(), session.getId());
-        }
+        if (type > Types.SELF)
+            session.set(SESSION_AUTH3, types.getAuth(uid, password, type));
         onlineService.signIn(user.getId());
         session.set(SESSION, user);
 
@@ -135,13 +131,13 @@ public class UserServiceImpl implements UserService {
         return authService.findByUid(uid);
     }
 
-    private String getWeixinId(String uid, String password) {
-        String wxid = types.getUid(uid, password, Types.WEIXIN);
+    private String getWeixinId(String uid, String password, int type) {
+        String wxid = types.getUid(uid, password, type);
         if (wxid == null)
             return null;
 
         if (authService.findByUid(wxid) == null)
-            signUp(uid, password, Types.WEIXIN);
+            signUp(uid, password, type);
 
         return wxid;
     }
@@ -193,18 +189,14 @@ public class UserServiceImpl implements UserService {
             return new JSONObject();
 
         UserModel user = session.get(SESSION);
-        if (user == null) {
-            AuthModel auth = authService.findByUid(session.getId());
-            if (auth != null && auth.getType() == Types.BIND) {
-                user = findById(auth.getUser());
-                if (user != null) {
-                    authService.bind(user.getId(), session.getId());
-                    session.set(SESSION, user = findById(auth.getUser()));
-                }
-            }
-        }
+        if (user == null)
+            session.set(SESSION, user = findById(onlineService.findBySid(session.getId()).getUser()));
+        JSONObject object = getJson(user.getId(), user);
+        JSONObject auth3 = session.get(SESSION_AUTH3);
+        if (auth3 != null)
+            object.put("auth3", auth3);
 
-        return user == null ? new JSONObject() : getJson(user.getId(), user);
+        return object;
     }
 
     @Override

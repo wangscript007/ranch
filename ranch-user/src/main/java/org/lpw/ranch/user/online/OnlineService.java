@@ -17,6 +17,14 @@ public interface OnlineService {
     JSONObject query(String user, String uid, String ip);
 
     /**
+     * 根据SID获取在线信息。
+     *
+     * @param sid SID。
+     * @return 在线信息。
+     */
+    OnlineModel findBySid(String sid);
+
+    /**
      * 登入。
      *
      * @param user 用户ID。

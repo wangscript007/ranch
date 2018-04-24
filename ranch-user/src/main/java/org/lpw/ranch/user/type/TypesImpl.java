@@ -1,5 +1,6 @@
 package org.lpw.ranch.user.type;
 
+import com.alibaba.fastjson.JSONObject;
 import org.lpw.ranch.user.UserModel;
 import org.lpw.tephra.bean.BeanFactory;
 import org.lpw.tephra.bean.ContextRefreshedListener;
@@ -28,6 +29,11 @@ public class TypesImpl implements Types, ContextRefreshedListener {
     @Override
     public String getNick(String uid, String password, int type) {
         return map.get(type).getNick(uid, password);
+    }
+
+    @Override
+    public JSONObject getAuth(String uid, String password, int type) {
+        return map.get(type).getAuth(uid, password);
     }
 
     @Override

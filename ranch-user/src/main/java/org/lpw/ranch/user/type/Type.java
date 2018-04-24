@@ -1,5 +1,6 @@
 package org.lpw.ranch.user.type;
 
+import com.alibaba.fastjson.JSONObject;
 import org.lpw.ranch.user.UserModel;
 
 /**
@@ -41,4 +42,13 @@ public interface Type {
      * @return 昵称，不存在则返回null。
      */
     String getNick(String uid, String password);
+
+    /**
+     * 获取第三方认证信息。
+     *
+     * @param uid      UID。
+     * @param password 密码。
+     * @return 认证信息，不存在则返回null。
+     */
+    JSONObject getAuth(String uid, String password);
 }

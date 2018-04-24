@@ -104,7 +104,7 @@ public class WeixinCtrl {
             @Validate(validator = WeixinService.VALIDATOR_EXISTS, parameter = "key", failureCode = 52)
     })
     public Object auth() {
-        return weixinService.auth(request.get("key"), request.get("code"));
+        return weixinService.auth(request.get("key"), request.get("code"), request.getAsInt("type"));
     }
 
     @Execute(name = "redirect")
@@ -162,5 +162,10 @@ public class WeixinCtrl {
                 map.get("total_fee"), map.get("return_code"), map.get("result_code"), map) ? "SUCCESS" : "FAIL";
 
         return "<xml><return_code><![CDATA[" + code + "]]></return_code></xml>";
+    }
+
+    @Execute(name = "decrypt-aes-cbc-pkcs7")
+    public Object decryptAesCbcPkcs7() {
+        return weixinService.decryptAesCbcPkcs7(request.get("sessionKey"), request.get("iv"), request.get("message"));
     }
 }

@@ -30,6 +30,6 @@ export default class Date extends Component<Props, object> {
     }
 
     render(): JSX.Element {
-        return <input id={this.dateId} name={this.props.name} defaultValue={this.props.defaultValue} />;
+        return <input id={this.dateId} {...this.props} />;
     }
 }
