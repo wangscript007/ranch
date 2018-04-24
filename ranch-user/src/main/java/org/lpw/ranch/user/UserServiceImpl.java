@@ -113,7 +113,12 @@ public class UserServiceImpl implements UserService {
         if (user == null || user.getState() != 0)
             return false;
 
-        if (type > Types.SELF)
+        if (type == Types.SELF) {
+            if (!pass(user, password))
+                return false;
+
+            authService.bind(user.getId(), macId);
+        } else if (type > Types.SELF)
             session.set(SESSION_AUTH3, types.getAuth(uid, password, type));
         onlineService.signIn(user.getId());
         session.set(SESSION, user);
