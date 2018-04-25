@@ -338,7 +338,7 @@ public class WeixinServiceImpl implements WeixinService, ContextRefreshedListene
     @Override
     public JSONObject decryptAesCbcPkcs7(String sessionKey, String iv, String message) {
         try {
-            Cipher cipher = Cipher.getInstance("AES/CBC/PKCS7PADDING");
+            Cipher cipher = Cipher.getInstance("AES/CBC/PKCS7Padding","BC");
             cipher.init(Cipher.DECRYPT_MODE, new SecretKeySpec(coder.decodeBase64(sessionKey), "AES"),
                     new IvParameterSpec(coder.decodeBase64(iv)));
 

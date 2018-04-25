@@ -47,10 +47,10 @@ public class WeixinImpl implements Type {
 
     @Override
     public JSONObject getAuth(String uid, String password) {
-        String cacheKey = "ranch.user.type.weixin.uid-password:" + uid + "-" + password;
-        JSONObject object = context.getThreadLocal(cacheKey);
+        String key = "ranch.user.type.weixin.uid-password:" + uid + "-" + password;
+        JSONObject object = context.getThreadLocal(key);
         if (object == null)
-            context.putThreadLocal(cacheKey, object = weixinHelper.auth(password, uid, 0));
+            context.putThreadLocal(key, object = weixinHelper.auth(password, uid, 0));
 
         return object;
     }
