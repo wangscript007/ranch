@@ -24,6 +24,8 @@ Chrome模块使用Chrome浏览器的DevTools的远程调试接口，实现将页
 
 [导出PDF](doc/pdf.md)
 
+[导出PDF（异步）](doc/pdf-async.md)
+
 [导出PNG图片](doc/png.md)
 
 [导出JPEG图片](doc/jpg.md)

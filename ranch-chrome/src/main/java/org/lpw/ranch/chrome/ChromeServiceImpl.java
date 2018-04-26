@@ -1,14 +1,17 @@
 package org.lpw.ranch.chrome;
 
 import com.alibaba.fastjson.JSONObject;
+import org.lpw.ranch.async.AsyncService;
 import org.lpw.ranch.util.Pagination;
 import org.lpw.tephra.chrome.Chrome;
 import org.lpw.tephra.dao.model.ModelHelper;
+import org.lpw.tephra.util.Converter;
 import org.lpw.tephra.util.Logger;
 import org.lpw.tephra.util.Validator;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
+import java.util.Map;
 
 /**
  * @author lpw
@@ -19,6 +22,8 @@ public class ChromeServiceImpl implements ChromeService {
     @Inject
     private Validator validator;
     @Inject
+    private Converter converter;
+    @Inject
     private Logger logger;
     @Inject
     private ModelHelper modelHelper;
@@ -26,6 +31,8 @@ public class ChromeServiceImpl implements ChromeService {
     private Pagination pagination;
     @Inject
     private Chrome chrome;
+    @Inject
+    private AsyncService asyncService;
     @Inject
     private ChromeDao chromeDao;
 
@@ -66,23 +73,32 @@ public class ChromeServiceImpl implements ChromeService {
 
     @Override
     public byte[] pdf(String key, String url, int width, int height, String pages, int wait) {
-        ChromeModel chrome = findByKey(key, 0, 0, width, height, pages, wait);
+        ChromeModel model = findByKey(key, 0, 0, width, height, pages, wait);
 
-        return this.chrome.pdf(url, chrome.getWait(), chrome.getWidth(), chrome.getHeight(), chrome.getPages());
+        return chrome.pdf(url, model.getWait(), model.getWidth(), model.getHeight(), model.getPages());
+    }
+
+    @Override
+    public String pdf(String key, String url, int width, int height, String pages, int wait, Map<String, String> map) {
+        ChromeModel model = findByKey(key, 0, 0, width, height, pages, wait);
+
+        return asyncService.submit(ChromeModel.NAME + ".pdf", converter.toString(map), model.getWait() * 3, () ->
+                asyncService.save(this.chrome.pdf(url, model.getWait(), model.getWidth(), model.getHeight(), model.getPages()),
+                        ".pdf"));
     }
 
     @Override
     public byte[] png(String key, String url, int x, int y, int width, int height, int wait) {
-        ChromeModel chrome = findByKey(key, x, y, width, height, null, wait);
+        ChromeModel model = findByKey(key, x, y, width, height, null, wait);
 
-        return this.chrome.png(url, chrome.getWait(), chrome.getX(), chrome.getY(), chrome.getWidth(), chrome.getHeight());
+        return chrome.png(url, model.getWait(), model.getX(), model.getY(), model.getWidth(), model.getHeight());
     }
 
     @Override
     public byte[] jpg(String key, String url, int x, int y, int width, int height, int wait) {
-        ChromeModel chrome = findByKey(key, x, y, width, height, null, wait);
+        ChromeModel model = findByKey(key, x, y, width, height, null, wait);
 
-        return this.chrome.jpeg(url, chrome.getWait(), chrome.getX(), chrome.getY(), chrome.getWidth(), chrome.getHeight());
+        return chrome.jpeg(url, model.getWait(), model.getX(), model.getY(), model.getWidth(), model.getHeight());
     }
 
     private ChromeModel findByKey(String key, int x, int y, int width, int height, String pages, int wait) {

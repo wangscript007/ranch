@@ -68,6 +68,16 @@ public class ChromeCtrl {
         return "";
     }
 
+    @Execute(name = "pdf-async", validates = {
+            @Validate(validator = Validators.NOT_EMPTY, parameter = "key", failureCode = 1),
+            @Validate(validator = Validators.NOT_EMPTY, parameter = "url", failureCode = 6),
+            @Validate(validator = ChromeService.VALIDATOR_KEY_EXISTS, parameter = "key", failureCode = 7)
+    })
+    public Object pdfAsync() {
+        return chromeService.pdf(request.get("key"), request.get("url"), request.getAsInt("width"),
+                request.getAsInt("height"), request.get("pages"), request.getAsInt("wait"), request.getMap());
+    }
+
     @Execute(name = "pdf", type = Templates.STREAM, validates = {
             @Validate(validator = Validators.NOT_EMPTY, parameter = "key", failureCode = 1),
             @Validate(validator = Validators.NOT_EMPTY, parameter = "url", failureCode = 6),

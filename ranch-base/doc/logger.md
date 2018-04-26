@@ -60,7 +60,8 @@ public interface LoggerService {
 |pageSize|int|每页显示记录数，默认20。|
 |pageNum|int|当前显示页数。|
 
-返回值
+返回
+
 ```json
 {
     "count": "总记录数",

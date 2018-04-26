@@ -2,6 +2,8 @@ package org.lpw.ranch.chrome;
 
 import com.alibaba.fastjson.JSONObject;
 
+import java.util.Map;
+
 /**
  * @author lpw
  */
@@ -18,6 +20,8 @@ public interface ChromeService {
     JSONObject save(ChromeModel chrome);
 
     void delete(String id);
+
+    String pdf(String key, String url, int width, int height, String pages, int wait, Map<String, String> map);
 
     byte[] pdf(String key, String url, int width, int height, String pages, int wait);
 

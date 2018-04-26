@@ -6,4 +6,6 @@
 
 [日志服务](doc/logger.md)
 
+[异步服务](doc/async.md)
+
 [配置参数](src/main/resources/base.ranch.config)
