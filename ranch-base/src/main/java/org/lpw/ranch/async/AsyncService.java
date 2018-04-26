@@ -20,13 +20,21 @@ public interface AsyncService {
     String submit(String key, String parameter, int timeout, Callable<String> callable);
 
     /**
-     * 保存。
+     * 保存数据。
      *
      * @param bytes  数据。
      * @param suffix 文件后缀。
      * @return 文件路径。
      */
     String save(byte[] bytes, String suffix);
+
+    /**
+     * 获取保存路径。
+     *
+     * @param suffix 文件后缀。
+     * @return 文件路径。
+     */
+    String newSavePath(String suffix);
 
     /**
      * 查询。
