@@ -3,6 +3,7 @@ package org.lpw.ranch.user.type;
 import com.alibaba.fastjson.JSONObject;
 import org.lpw.ranch.user.UserModel;
 import org.lpw.ranch.weixin.helper.WeixinHelper;
+import org.lpw.tephra.ctrl.context.Request;
 import org.lpw.tephra.util.Context;
 import org.lpw.tephra.util.Validator;
 import org.springframework.stereotype.Service;
@@ -18,6 +19,8 @@ public class WeixinMiniImpl implements Type {
     private Validator validator;
     @Inject
     private Context context;
+    @Inject
+    private Request request;
     @Inject
     private WeixinHelper weixinHelper;
 
@@ -45,7 +48,7 @@ public class WeixinMiniImpl implements Type {
         String key = "ranch.user.type.weixin-mini.uid-password:" + uid + "-" + password;
         JSONObject object = context.getThreadLocal(key);
         if (object == null)
-            context.putThreadLocal(key, object = weixinHelper.auth(password, uid, 1));
+            context.putThreadLocal(key, object = weixinHelper.auth(password, uid, request.get("iv"), request.get("message")));
 
         return object;
     }

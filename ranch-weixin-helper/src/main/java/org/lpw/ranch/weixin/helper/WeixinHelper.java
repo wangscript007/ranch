@@ -35,10 +35,20 @@ public interface WeixinHelper {
      *
      * @param key  配置KEY。
      * @param code 微信认证code。
-     * @param type 类型：0-公众号；1-小程序。
      * @return 如果认证通过则返回用户授权信息，否则返回空JSON。
      */
-    JSONObject auth(String key, String code, int type);
+    JSONObject auth(String key, String code);
+
+    /**
+     * 认证小程序用户信息。
+     *
+     * @param key     配置key。
+     * @param code    微信认证code。
+     * @param iv      加密算法的初始向量。
+     * @param message 加密数据。
+     * @return 如果认证通过则返回用户授权信息，否则返回空JSON。
+     */
+    JSONObject auth(String key, String code, String iv, String message);
 
     /**
      * 获取微信用户ID。优先使用unionid，如果不存在则返回openid。
@@ -47,6 +57,7 @@ public interface WeixinHelper {
      * @return 如果存在则返回ID，否则返回null。
      */
     String getId(JSONObject object);
+
     /**
      * 解密AES-128-CBC/PKCS#7数据。
      *

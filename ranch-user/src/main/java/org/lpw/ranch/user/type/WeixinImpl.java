@@ -50,7 +50,7 @@ public class WeixinImpl implements Type {
         String key = "ranch.user.type.weixin.uid-password:" + uid + "-" + password;
         JSONObject object = context.getThreadLocal(key);
         if (object == null)
-            context.putThreadLocal(key, object = weixinHelper.auth(password, uid, 0));
+            context.putThreadLocal(key, object = weixinHelper.auth(password, uid));
 
         return object;
     }

@@ -160,11 +160,7 @@ public class WeixinServiceImpl implements WeixinService, ContextRefreshedListene
     }
 
     @Override
-    public JSONObject auth(String key, String code, int type) {
-        return type == 1 ? auth1(key, code) : auth0(key, code);
-    }
-
-    private JSONObject auth0(String key, String code) {
+    public JSONObject auth(String key, String code) {
         Map<String, String> map = getAuthMap(key);
         map.put("code", code);
         JSONObject object = json.toObject(http.get("https://api.weixin.qq.com/sns/oauth2/access_token", null, map));
@@ -191,7 +187,8 @@ public class WeixinServiceImpl implements WeixinService, ContextRefreshedListene
         return object;
     }
 
-    private JSONObject auth1(String key, String code) {
+    @Override
+    public JSONObject auth(String key, String code, String iv, String message) {
         Map<String, String> map = getAuthMap(key);
         map.put("js_code", code);
         JSONObject object = json.toObject(http.get("https://api.weixin.qq.com/sns/jscode2session", null, map));
@@ -204,8 +201,15 @@ public class WeixinServiceImpl implements WeixinService, ContextRefreshedListene
         if (logger.isDebugEnable())
             logger.debug("获得微信小程序用户认证信息[{}:{}:{}]。", key, code, object);
 
-        session.set(SESSION_MINI_SESSION_KEY, object.getString("session_key"));
+        String sessionKey = object.getString("session_key");
+        session.set(SESSION_MINI_SESSION_KEY, sessionKey);
         object.remove("session_key");
+        if (validator.isEmpty(iv) || validator.isEmpty(message))
+            return object;
+
+        object.putAll(decryptAesCbcPkcs7(iv, message));
+        object.put("unionid", object.getString("unionId"));
+        object.put("openid", object.getString("openId"));
 
         return object;
     }

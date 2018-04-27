@@ -104,7 +104,16 @@ public class WeixinCtrl {
             @Validate(validator = WeixinService.VALIDATOR_EXISTS, parameter = "key", failureCode = 52)
     })
     public Object auth() {
-        return weixinService.auth(request.get("key"), request.get("code"), request.getAsInt("type"));
+        return weixinService.auth(request.get("key"), request.get("code"));
+    }
+
+    @Execute(name = "auth-mini", validates = {
+            @Validate(validator = Validators.NOT_EMPTY, parameter = "key", failureCode = 2),
+            @Validate(validator = Validators.NOT_EMPTY, parameter = "code", failureCode = 51),
+            @Validate(validator = WeixinService.VALIDATOR_EXISTS, parameter = "key", failureCode = 52)
+    })
+    public Object authMini() {
+        return weixinService.auth(request.get("key"), request.get("code"), request.get("iv"), request.get("message"));
     }
 
     @Execute(name = "redirect")
