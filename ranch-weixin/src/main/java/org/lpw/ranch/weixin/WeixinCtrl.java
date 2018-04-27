@@ -166,6 +166,6 @@ public class WeixinCtrl {
 
     @Execute(name = "decrypt-aes-cbc-pkcs7")
     public Object decryptAesCbcPkcs7() {
-        return weixinService.decryptAesCbcPkcs7(request.get("sessionKey"), request.get("iv"), request.get("message"));
+        return weixinService.decryptAesCbcPkcs7(request.get("iv"), request.get("message"));
     }
 }

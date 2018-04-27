@@ -47,4 +47,12 @@ public interface WeixinHelper {
      * @return 如果存在则返回ID，否则返回null。
      */
     String getId(JSONObject object);
+    /**
+     * 解密AES-128-CBC/PKCS#7数据。
+     *
+     * @param iv      初始化参数。
+     * @param message 加密数据。
+     * @return 解密后的数据，如果解密失败则返回空JSON{}。
+     */
+    JSONObject decryptAesCbcPkcs7(String iv, String message);
 }

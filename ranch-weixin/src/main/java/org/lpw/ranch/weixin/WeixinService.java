@@ -142,10 +142,9 @@ public interface WeixinService {
     /**
      * 解密AES-128-CBC/PKCS#7数据。
      *
-     * @param sessionKey Session key。
-     * @param iv         初始化参数。
-     * @param message    加密数据。
+     * @param iv      初始化参数。
+     * @param message 加密数据。
      * @return 解密后的数据，如果解密失败则返回空JSON{}。
      */
-    JSONObject decryptAesCbcPkcs7(String sessionKey, String iv, String message);
+    JSONObject decryptAesCbcPkcs7(String iv, String message);
 }

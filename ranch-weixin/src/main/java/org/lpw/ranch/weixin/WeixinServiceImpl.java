@@ -7,6 +7,7 @@ import org.lpw.tephra.bean.ContextRefreshedListener;
 import org.lpw.tephra.crypto.Digest;
 import org.lpw.tephra.crypto.Sign;
 import org.lpw.tephra.ctrl.context.Header;
+import org.lpw.tephra.ctrl.context.Session;
 import org.lpw.tephra.dao.model.ModelHelper;
 import org.lpw.tephra.scheduler.HourJob;
 import org.lpw.tephra.scheduler.MinuteJob;
@@ -42,6 +43,7 @@ import java.util.Map;
  */
 @Service(WeixinModel.NAME + ".service")
 public class WeixinServiceImpl implements WeixinService, ContextRefreshedListener, HourJob, MinuteJob {
+    private static final String SESSION_MINI_SESSION_KEY = WeixinModel.NAME + ".service.mini.session-key";
     @Inject
     private Digest digest;
     @Inject
@@ -74,6 +76,8 @@ public class WeixinServiceImpl implements WeixinService, ContextRefreshedListene
     private ModelHelper modelHelper;
     @Inject
     private Header header;
+    @Inject
+    private Session session;
     @Inject
     private PaymentHelper paymentHelper;
     @Inject
@@ -199,6 +203,9 @@ public class WeixinServiceImpl implements WeixinService, ContextRefreshedListene
 
         if (logger.isDebugEnable())
             logger.debug("获得微信小程序用户认证信息[{}:{}:{}]。", key, code, object);
+
+        session.set(SESSION_MINI_SESSION_KEY, object.getString("session_key"));
+        object.remove("session_key");
 
         return object;
     }
@@ -336,9 +343,13 @@ public class WeixinServiceImpl implements WeixinService, ContextRefreshedListene
     }
 
     @Override
-    public JSONObject decryptAesCbcPkcs7(String sessionKey, String iv, String message) {
+    public JSONObject decryptAesCbcPkcs7(String iv, String message) {
+        String sessionKey = session.get(SESSION_MINI_SESSION_KEY);
+        if (validator.isEmpty(sessionKey))
+            return new JSONObject();
+
         try {
-            Cipher cipher = Cipher.getInstance("AES/CBC/PKCS7Padding","BC");
+            Cipher cipher = Cipher.getInstance("AES/CBC/PKCS7Padding", "BC");
             cipher.init(Cipher.DECRYPT_MODE, new SecretKeySpec(coder.decodeBase64(sessionKey), "AES"),
                     new IvParameterSpec(coder.decodeBase64(iv)));
 
@@ -346,7 +357,7 @@ public class WeixinServiceImpl implements WeixinService, ContextRefreshedListene
         } catch (Exception e) {
             logger.warn(e, "解密微信数据[{}:{}:{}]时发生异常！", sessionKey, iv, message);
 
-            return null;
+            return new JSONObject();
         }
     }
 

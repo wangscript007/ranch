@@ -54,4 +54,13 @@ public class WeixinHelperImpl implements WeixinHelper {
     public String getId(JSONObject object) {
         return object == null ? null : object.getString(object.containsKey("unionid") ? "unionid" : "openid");
     }
+
+    @Override
+    public JSONObject decryptAesCbcPkcs7(String iv, String message) {
+        Map<String, String> parameter = new HashMap<>();
+        parameter.put("iv", iv);
+        parameter.put("message", message);
+
+        return carousel.service(this.key + ".decrypt-aes-cbc-pkcs7", null, parameter, false, JSONObject.class);
+    }
 }
