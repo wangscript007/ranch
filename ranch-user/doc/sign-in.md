@@ -12,6 +12,10 @@
 |password|string|密码，如果为第三方认证类型则password为第三方配置key。|
 |macId|char(100)|客户端机器码。|
 |type|int|认证类型：0-机器码；1-自有账号；2-微信公众号；3-微信小程序。|
+|iv|string|微信小程序用户授权信息加密算法的初始向量。|
+|message|string|微信小程序用户授权信息。|
+
+> 如果`iv` & `message`均不为空，则解密用户授权信息，并返回。
 
 返回值
 ```json

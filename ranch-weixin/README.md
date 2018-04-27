@@ -27,8 +27,10 @@
 
 [获取APP ID](doc/app-id.md)
 
-[微信登入认证](doc/auth.md)
+[登入认证](doc/auth.md)
+
+[小程序登入认证](doc/auth-mini.md)
 
 [生成支付二维码](doc/prepay-qr-code.md)
 
-[微信小程序数据解密](doc/decrypt-aes-cbc-pkcs7.md)
+[小程序数据解密](doc/decrypt-aes-cbc-pkcs7.md)

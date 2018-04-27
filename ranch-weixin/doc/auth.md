@@ -1,4 +1,4 @@
-# 微信登入认证
+# 登入认证
 
 请求
 - Service Key - ranch.weixin.auth
@@ -10,7 +10,6 @@
 |---|---|---|
 |key|char(100)|引用key。|
 |code|char(100)|微信认证code。|
-|type|int|类型：0-公众号；1-小程序。|
 
 返回值
 ```json
