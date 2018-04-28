@@ -348,6 +348,9 @@ public class WeixinServiceImpl implements WeixinService, ContextRefreshedListene
 
     @Override
     public JSONObject decryptAesCbcPkcs7(String iv, String message) {
+        if (validator.isEmpty(iv) || validator.isEmpty(message))
+            return new JSONObject();
+
         String sessionKey = session.get(SESSION_MINI_SESSION_KEY);
         if (validator.isEmpty(sessionKey))
             return new JSONObject();
