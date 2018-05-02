@@ -2,6 +2,7 @@ package org.lpw.ranch.weixin;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.lpw.ranch.payment.helper.PaymentHelper;
 import org.lpw.tephra.bean.ContextRefreshedListener;
 import org.lpw.tephra.crypto.Digest;
@@ -31,6 +32,7 @@ import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 import javax.inject.Inject;
 import java.io.OutputStream;
+import java.security.Security;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -356,6 +358,8 @@ public class WeixinServiceImpl implements WeixinService, ContextRefreshedListene
             return new JSONObject();
 
         try {
+            if (Security.getProvider("BC") == null)
+                Security.addProvider(new BouncyCastleProvider());
             Cipher cipher = Cipher.getInstance("AES/CBC/PKCS7Padding", "BC");
             cipher.init(Cipher.DECRYPT_MODE, new SecretKeySpec(coder.decodeBase64(sessionKey), "AES"),
                     new IvParameterSpec(coder.decodeBase64(iv)));
