@@ -106,7 +106,7 @@ public class UserServiceImpl implements UserService {
             return false;
 
         AuthModel auth = type == Types.BIND ? findByBind(uid) : authService.findByUid(uid);
-        if (auth == null || auth.getType() != type)
+        if (auth == null || !sameType(auth, type))
             return false;
 
         UserModel user = findById(auth.getUser());
@@ -126,6 +126,17 @@ public class UserServiceImpl implements UserService {
         return true;
     }
 
+    private String getWeixinId(String uid, String password, int type) {
+        String wxid = types.getUid(uid, password, type);
+        if (wxid == null)
+            return null;
+
+        if (authService.findByUid(wxid) == null)
+            signUp(uid, password, type);
+
+        return wxid;
+    }
+
     private AuthModel findByBind(String uid) {
         AuthModel auth = authService.findByUid(uid);
         if (auth != null)
@@ -136,15 +147,12 @@ public class UserServiceImpl implements UserService {
         return authService.findByUid(uid);
     }
 
-    private String getWeixinId(String uid, String password, int type) {
-        String wxid = types.getUid(uid, password, type);
-        if (wxid == null)
-            return null;
+    private boolean sameType(AuthModel auth, int type) {
+        return auth.getType() == type || (isWeixinType(auth.getType()) && isWeixinType(type));
+    }
 
-        if (authService.findByUid(wxid) == null)
-            signUp(uid, password, type);
-
-        return wxid;
+    private boolean isWeixinType(int type) {
+        return type == Types.WEIXIN || type == Types.WEIXIN_MINI;
     }
 
     private boolean pass(UserModel user, String password) {
