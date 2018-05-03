@@ -26,6 +26,9 @@ export default class Radio extends Component<Props, State> {
     render(): JSX.Element[] {
         let elements: JSX.Element[] = [];
         elements.push(<input type="hidden" name={this.props.name} value={this.state.value} />);
+        if (!this.props.list)
+            return elements;
+
         this.props.list.map((kv, index) => {
             let value: string = typeof kv === 'string' ? kv : kv[this.props.valueName || 'value'];
             let checked: boolean = value === this.state.value;
