@@ -83,8 +83,7 @@ public class ChromeServiceImpl implements ChromeService {
         ChromeModel model = findByKey(key, 0, 0, width, height, pages, wait);
 
         return asyncService.submit(ChromeModel.NAME + ".pdf", converter.toString(map), model.getWait() * 3, () ->
-                asyncService.save(this.chrome.pdf(url, model.getWait(), model.getWidth(), model.getHeight(), model.getPages()),
-                        ".pdf"));
+                asyncService.save(chrome.pdf(url, model.getWait(), model.getWidth(), model.getHeight(), model.getPages()), ".pdf"));
     }
 
     @Override

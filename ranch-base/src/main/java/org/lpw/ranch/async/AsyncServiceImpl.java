@@ -1,6 +1,7 @@
 package org.lpw.ranch.async;
 
 import com.alibaba.fastjson.JSONObject;
+import org.lpw.tephra.bean.BeanFactory;
 import org.lpw.tephra.bean.ContextRefreshedListener;
 import org.lpw.tephra.cache.Cache;
 import org.lpw.tephra.ctrl.upload.UploadService;
@@ -66,7 +67,7 @@ public class AsyncServiceImpl implements AsyncService, SecondsJob, MinuteJob, Ho
         async.setTimeout(new Timestamp(System.currentTimeMillis() + timeout * TimeUnit.Second.getTime()));
         asyncDao.save(async);
         putCache(async);
-        map.put(async.getId(), executorService.submit(callable));
+        map.put(async.getId(), executorService.submit(BeanFactory.getBean(Callabler.class).set(callable)));
 
         return async.getId();
     }
@@ -167,7 +168,7 @@ public class AsyncServiceImpl implements AsyncService, SecondsJob, MinuteJob, Ho
 
         for (File file : files)
             if (System.currentTimeMillis() - file.lastModified() > TimeUnit.Day.getTime())
-                file.delete();
+                io.delete(file);
     }
 
     private String root() {
