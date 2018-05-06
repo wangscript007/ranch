@@ -111,7 +111,8 @@ public class ChromeServiceImpl implements ChromeService {
     }
 
     private ChromeModel findByKey(String key, int x, int y, int width, int height, String pages, int wait) {
-        ChromeModel chrome = findByKey(key);
+        ChromeModel chrome = new ChromeModel();
+        modelHelper.copy(findByKey(key), chrome, false);
         if (x > 0)
             chrome.setX(x);
         if (y > 0)
