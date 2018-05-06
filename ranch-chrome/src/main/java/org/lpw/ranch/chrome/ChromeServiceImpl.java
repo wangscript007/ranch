@@ -3,6 +3,7 @@ package org.lpw.ranch.chrome;
 import com.alibaba.fastjson.JSONObject;
 import org.lpw.ranch.async.AsyncService;
 import org.lpw.ranch.util.Pagination;
+import org.lpw.tephra.cache.Cache;
 import org.lpw.tephra.chrome.Chrome;
 import org.lpw.tephra.dao.model.ModelHelper;
 import org.lpw.tephra.util.Converter;
@@ -18,7 +19,10 @@ import java.util.Map;
  */
 @Service(ChromeModel.NAME + ".service")
 public class ChromeServiceImpl implements ChromeService {
+    private static final String CACHE = ChromeModel.NAME + ".service.key:";
 
+    @Inject
+    private Cache cache;
     @Inject
     private Validator validator;
     @Inject
@@ -43,7 +47,12 @@ public class ChromeServiceImpl implements ChromeService {
 
     @Override
     public ChromeModel findByKey(String key) {
-        return chromeDao.findByKey(key);
+        String cacheKey = CACHE + key;
+        ChromeModel chrome = cache.get(cacheKey);
+        if (chrome == null)
+            cache.put(cacheKey, chrome = chromeDao.findByKey(key), false);
+
+        return chrome;
     }
 
     @Override
@@ -62,6 +71,7 @@ public class ChromeServiceImpl implements ChromeService {
         model.setWait(chrome.getWait());
         model.setFilename(chrome.getFilename());
         chromeDao.save(chrome);
+        cache.remove(CACHE + model.getKey());
 
         return modelHelper.toJson(model);
     }
