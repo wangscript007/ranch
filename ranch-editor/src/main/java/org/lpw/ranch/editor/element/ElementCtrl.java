@@ -38,7 +38,7 @@ public class ElementCtrl {
             @Validate(validator = Validators.ID, emptyable = true, parameter = "parent", failureCode = 22),
             @Validate(validator = UserHelper.VALIDATOR_SIGN_IN),
             @Validate(validator = EditorService.VALIDATOR_EXISTS, parameter = "editor", failureCode = 23),
-            @Validate(validator = RoleService.VALIDATOR_EDITABLE, parameter = "editor", failureCode = 10),
+            @Validate(validator = RoleService.VALIDATOR_EDITABLE, parameter = "editor", failureCode = 42),
             @Validate(validator = ElementService.VALIDATOR_EXISTS, emptyable = true, parameter = "parent", failureCode = 24),
             @Validate(validator = ElementService.VALIDATOR_EXISTS, emptyable = true, parameter = "id", failureCode = 26),
             @Validate(validator = ElementService.VALIDATOR_EDITOR, parameters = {"id", "editor"}, failureCode = 27),
@@ -54,7 +54,7 @@ public class ElementCtrl {
             @Validate(validator = Validators.NOT_EMPTY, parameter = "ids", failureCode = 29),
             @Validate(validator = UserHelper.VALIDATOR_SIGN_IN),
             @Validate(validator = EditorService.VALIDATOR_EXISTS, parameter = "editor", failureCode = 23),
-            @Validate(validator = RoleService.VALIDATOR_EDITABLE, parameter = "editor", failureCode = 10),
+            @Validate(validator = RoleService.VALIDATOR_EDITABLE, parameter = "editor", failureCode = 42),
             @Validate(validator = ElementService.VALIDATOR_EXISTS, emptyable = true, parameter = "parent", failureCode = 24)
     })
     public Object sort() {
@@ -67,7 +67,7 @@ public class ElementCtrl {
             @Validate(validator = Validators.ID, parameter = "id", failureCode = 25),
             @Validate(validator = UserHelper.VALIDATOR_SIGN_IN),
             @Validate(validator = EditorService.VALIDATOR_EXISTS, parameter = "editor", failureCode = 23),
-            @Validate(validator = RoleService.VALIDATOR_EDITABLE, parameter = "editor", failureCode = 10),
+            @Validate(validator = RoleService.VALIDATOR_EDITABLE, parameter = "editor", failureCode = 42),
             @Validate(validator = ElementService.VALIDATOR_EXISTS, parameter = "id", failureCode = 26),
             @Validate(validator = ElementService.VALIDATOR_EDITOR, parameters = {"id", "editor"}, failureCode = 27),
             @Validate(validator = ElementService.VALIDATOR_MODIFY, parameters = {"id", "modify"}, failureCode = 28)

@@ -35,4 +35,9 @@ class RoleDaoImpl implements RoleDao {
     public void save(RoleModel role) {
         liteOrm.save(role);
     }
+
+    @Override
+    public void delete(RoleModel role) {
+        liteOrm.delete(role);
+    }
 }

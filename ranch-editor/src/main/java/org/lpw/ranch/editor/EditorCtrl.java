@@ -31,7 +31,7 @@ public class EditorCtrl {
     @Execute(name = "find", validates = {
             @Validate(validator = Validators.ID, parameter = "id", failureCode = 1),
             @Validate(validator = EditorService.VALIDATOR_EXISTS, parameter = "id", failureCode = 2),
-            @Validate(validator = RoleService.VALIDATOR_VIEWABLE, parameters = {"user", "id"}, failureCode = 12)
+            @Validate(validator = RoleService.VALIDATOR_VIEWABLE, parameters = {"user", "id"}, failureCode = 11)
     })
     public Object find() {
         return editorService.find(request.get("id"));
@@ -49,7 +49,7 @@ public class EditorCtrl {
             @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "image", failureCode = 10),
             @Validate(validator = UserHelper.VALIDATOR_SIGN_IN),
             @Validate(validator = EditorService.VALIDATOR_EXISTS, emptyable = true, parameter = "id", failureCode = 2),
-            @Validate(validator = RoleService.VALIDATOR_OWNER, emptyable = true, parameter = "id", failureCode = 11)
+            @Validate(validator = RoleService.VALIDATOR_OWNER, emptyable = true, parameter = "id", failureCode = 41)
     })
     public Object save() {
         return editorService.save(request.setToModel(EditorModel.class));

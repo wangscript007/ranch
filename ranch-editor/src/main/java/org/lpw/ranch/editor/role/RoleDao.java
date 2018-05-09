@@ -2,8 +2,6 @@ package org.lpw.ranch.editor.role;
 
 import org.lpw.tephra.dao.orm.PageList;
 
-import java.sql.Timestamp;
-
 /**
  * @author lpw
  */
@@ -15,4 +13,6 @@ interface RoleDao {
     RoleModel find(String user, String editor);
 
     void save(RoleModel role);
+
+    void delete(RoleModel role);
 }

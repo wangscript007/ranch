@@ -32,6 +32,10 @@ public interface RoleService {
      */
     String VALIDATOR_EDITABLE = RoleModel.NAME + ".validator.editable";
     /**
+     * 是否可删除验证器Bean名称。
+     */
+    String VALIDATOR_DELETABLE = RoleModel.NAME + ".validator.deletable";
+    /**
      * 是否可浏览验证器Bean名称。
      */
     String VALIDATOR_VIEWABLE = RoleModel.NAME + ".validator.viewable";
@@ -79,4 +83,12 @@ public interface RoleService {
      * @param time   时间。
      */
     void modify(String editor, Timestamp time);
+
+    /**
+     * 删除角色。
+     *
+     * @param user   用户。
+     * @param editor 编辑器。
+     */
+    void delete(String user, String editor);
 }

@@ -35,6 +35,8 @@
 |editor|char(36)|编辑器。|
 |type|int|类型：0-所有者；1-可编辑；2-仅浏览。|
 
+[删除](doc/role/delete.md)
+
 ## 元素
 
 属性

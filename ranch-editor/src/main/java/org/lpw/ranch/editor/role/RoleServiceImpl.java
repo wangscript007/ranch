@@ -64,17 +64,36 @@ public class RoleServiceImpl implements RoleService {
             role.setEditor(editor);
         }
         role.setType(type.ordinal());
-        roleDao.save(role);
-        cache.remove(getCacheKey(user, editor));
+        save(role);
     }
 
     @Override
     public void modify(String editor, Timestamp time) {
         roleDao.query(editor).getList().forEach(role -> {
             role.setModify(time);
-            roleDao.save(role);
-            cache.remove(getCacheKey(role.getUser(), editor));
+            save(role);
         });
+    }
+
+    private void save(RoleModel role) {
+        roleDao.save(role);
+        cache.remove(getCacheKey(role.getUser(), role.getEditor()));
+    }
+
+    @Override
+    public void delete(String user, String editor) {
+        if (validator.isEmpty(user))
+            user = userHelper.id();
+        RoleModel role = find(user, editor);
+        if (role.getType() >= Type.Editor.ordinal())
+            delete(role);
+        else
+            roleDao.query(editor).getList().forEach(this::delete);
+    }
+
+    private void delete(RoleModel role) {
+        roleDao.delete(role);
+        cache.remove(getCacheKey(role.getUser(), role.getEditor()));
     }
 
     private String getCacheKey(String user, String editor) {
