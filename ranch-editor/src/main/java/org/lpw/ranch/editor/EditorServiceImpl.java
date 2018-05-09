@@ -100,6 +100,8 @@ public class EditorServiceImpl implements EditorService {
         editor.setCreate(dateTime.now());
         editor.setModify(dateTime.now());
         editorDao.save(editor);
+        roleService.save(userHelper.id(), editor.getId(), RoleService.Type.Owner);
+        roleService.modify(editor.getId(), editor.getModify());
         elementService.copy(id, editor.getId());
 
         return toJson(editor);
