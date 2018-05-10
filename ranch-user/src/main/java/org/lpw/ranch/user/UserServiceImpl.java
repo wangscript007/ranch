@@ -271,6 +271,7 @@ public class UserServiceImpl implements UserService {
         UserModel user = session.get(SESSION);
         user.setPortrait(uri);
         userDao.save(user);
+        session.set(SESSION, user);
         clearCache(user);
     }
 
