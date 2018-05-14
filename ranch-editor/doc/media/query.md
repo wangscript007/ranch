@@ -13,6 +13,8 @@
 |pageSize|int|每页显示记录数，默认20。|
 |pageNum|int|当前显示页数。|
 
+> 如果`editor`为空则检索当前用户的资源。
+
 返回值
 ```json
 {
