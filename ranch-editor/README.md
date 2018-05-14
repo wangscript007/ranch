@@ -37,6 +37,27 @@
 
 [删除](doc/role/delete.md)
 
+## 用户媒体
+
+属性
+
+|属性|类型|说明|
+|---|---|---|
+|user|char(36)|用户。|
+|editor|char(36)|编辑器。|
+|type|int|类型：0-背景；1-图片；2-音频；3-视频。|
+|url|char(100)|URL地址。|
+|name|char(100)|文件名。|
+|time|datetime|时间。|
+
+[检索](doc/media/query.md)
+
+[上传](doc/media/save.md)
+
+[修改文件名](doc/media/name.md)
+
+[删除](doc/media/delete.md)
+
 ## 元素
 
 属性
