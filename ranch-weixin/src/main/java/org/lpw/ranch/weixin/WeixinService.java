@@ -105,7 +105,8 @@ public interface WeixinService {
      * @param logo         LOGO图片名。
      * @param outputStream 输出流。
      */
-    void prepayQrCode(String key, String user, String subject, int amount, String billNo, String notice, int size, String logo, OutputStream outputStream);
+    void prepayQrCode(String key, String user, String subject, int amount, String billNo, String notice, int size,
+                      String logo, OutputStream outputStream);
 
     /**
      * 生成支付二维码；并输出Base64数据。
@@ -136,6 +137,19 @@ public interface WeixinService {
     JSONObject prepayApp(String key, String user, String subject, int amount, String billNo, String notice);
 
     /**
+     * 生成小程序支付参数。
+     *
+     * @param key     引用key。
+     * @param user    用户ID。
+     * @param subject 订单名称。
+     * @param amount  支付金额，单位：分。
+     * @param billNo  单据号。
+     * @param notice  异步通知。
+     * @return 支付参数。
+     */
+    JSONObject prepayMini(String key, String user, String subject, int amount, String billNo, String notice);
+
+    /**
      * 异步通知。
      *
      * @param appId      APP ID。
@@ -147,7 +161,8 @@ public interface WeixinService {
      * @param map        参数集。
      * @return 执行成功则返回true；否则返回false。
      */
-    boolean notice(String appId, String orderNo, String tradeNo, String amount, String returnCode, String resultCode, Map<String, String> map);
+    boolean notice(String appId, String orderNo, String tradeNo, String amount, String returnCode, String resultCode,
+                   Map<String, String> map);
 
     /**
      * 解密AES-128-CBC/PKCS#7数据。

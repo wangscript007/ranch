@@ -271,6 +271,26 @@ public class WeixinServiceImpl implements WeixinService, ContextRefreshedListene
         return object;
     }
 
+    @Override
+    public JSONObject prepayMini(String key, String user, String subject, int amount, String billNo, String notice) {
+        Map<String, String> map = prepay(key, user, subject, amount, billNo, notice, "APP", new HashMap<>());
+        if (map == null)
+            return null;
+
+        Map<String, String> param = new HashMap<>();
+        param.put("appId", map.get("appid"));
+        param.put("timeStamp", numeric.toString(System.currentTimeMillis() / 1000, "0"));
+        param.put("nonceStr", generator.random(32));
+        param.put("package", "prepay_id="+ map.get("prepay_id"));
+        param.put("signType", "MD5");
+
+        JSONObject object = new JSONObject();
+        object.putAll(param);
+        object.put("sign", sign(param, findByKey(key).getMchKey()));
+
+        return object;
+    }
+
     private Map<String, String> prepay(String key, String user, String subject, int amount, String billNo, String notice,
                                        String type, Map<String, String> map) {
         WeixinModel weixin = findByKey(key);

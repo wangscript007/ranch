@@ -146,8 +146,9 @@ public class WeixinCtrl {
             @Validate(validator = WeixinService.VALIDATOR_EXISTS, parameter = "key", failureCode = 24)
     })
     public Object prepayQrCodeBase64() {
-        return weixinService.prepayQrCodeBase64(request.get("key"), request.get("user"), request.get("subject"), request.getAsInt("amount"),
-                request.get("billNo"), request.get("notice"), request.getAsInt("size"), request.get("logo"));
+        return weixinService.prepayQrCodeBase64(request.get("key"), request.get("user"), request.get("subject"),
+                request.getAsInt("amount"), request.get("billNo"), request.get("notice"), request.getAsInt("size"),
+                request.get("logo"));
     }
 
     @Execute(name = "prepay-app", validates = {
@@ -158,10 +159,25 @@ public class WeixinCtrl {
             @Validate(validator = WeixinService.VALIDATOR_EXISTS, parameter = "key", failureCode = 24)
     })
     public Object prepayApp() {
-        JSONObject object = weixinService.prepayApp(request.get("key"), request.get("user"), request.get("subject"), request.getAsInt("amount"),
-                request.get("billNo"), request.get("notice"));
+        return prepay(weixinService.prepayApp(request.get("key"), request.get("user"), request.get("subject"),
+                request.getAsInt("amount"), request.get("billNo"), request.get("notice")));
+    }
 
-        return object == null ? templates.get().failure(2427, message.get(WeixinModel.NAME + ".prepay.failure"), null, null) : object;
+    @Execute(name = "prepay-mini", validates = {
+            @Validate(validator = Validators.NOT_EMPTY, parameter = "key", failureCode = 2),
+            @Validate(validator = Validators.NOT_EMPTY, parameter = "subject", failureCode = 21),
+            @Validate(validator = Validators.GREATER_THAN, number = {0}, parameter = "amount", failureCode = 22),
+            @Validate(validator = UserHelper.VALIDATOR_EXISTS_OR_SIGN_IN, parameter = "user", failureCode = 23),
+            @Validate(validator = WeixinService.VALIDATOR_EXISTS, parameter = "key", failureCode = 24)
+    })
+    public Object prepayMini() {
+        return prepay(weixinService.prepayMini(request.get("key"), request.get("user"), request.get("subject"),
+                request.getAsInt("amount"), request.get("billNo"), request.get("notice")));
+    }
+
+    private Object prepay(JSONObject object) {
+        return object == null ? templates.get().failure(2427, message.get(WeixinModel.NAME + ".prepay.failure"),
+                null, null) : object;
     }
 
     @Execute(name = "notice", type = Templates.STRING)
