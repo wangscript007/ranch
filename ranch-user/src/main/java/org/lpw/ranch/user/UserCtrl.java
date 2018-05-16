@@ -85,13 +85,13 @@ public class UserCtrl {
     }
 
     @Execute(name = "modify", validates = {
-            @Validate(validator = Validators.MAX_LENGTH, number = {100}, emptyable = true, parameter = "idcard", failureCode = 7),
-            @Validate(validator = Validators.MAX_LENGTH, number = {100}, emptyable = true, parameter = "name", failureCode = 8),
-            @Validate(validator = Validators.MAX_LENGTH, number = {100}, emptyable = true, parameter = "nick", failureCode = 9),
+            @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "idcard", failureCode = 7),
+            @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "name", failureCode = 8),
+            @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "nick", failureCode = 9),
             @Validate(validator = Validators.MOBILE, emptyable = true, parameter = "mobile", failureCode = 10),
             @Validate(validator = Validators.EMAIL, emptyable = true, parameter = "email", failureCode = 11),
-            @Validate(validator = Validators.MAX_LENGTH, number = {100}, emptyable = true, parameter = "email", failureCode = 12),
-            @Validate(validator = Validators.BETWEEN, number = {0, 2}, emptyable = true, parameter = "gender", failureCode = 13),
+            @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "email", failureCode = 12),
+            @Validate(validator = Validators.BETWEEN, number = {0, 2}, parameter = "gender", failureCode = 13),
             @Validate(validator = UserService.VALIDATOR_SIGN)
     })
     public Object modify() {
