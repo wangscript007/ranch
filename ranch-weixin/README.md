@@ -33,4 +33,8 @@
 
 [生成支付二维码](doc/prepay-qr-code.md)
 
+[APP预支付](doc/prepay-app.md)
+
+[小程序预支付](doc/prepay-mini.md)
+
 [小程序数据解密](doc/decrypt-aes-cbc-pkcs7.md)
