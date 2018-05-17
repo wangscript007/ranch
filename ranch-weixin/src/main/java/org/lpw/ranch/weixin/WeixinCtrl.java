@@ -171,7 +171,7 @@ public class WeixinCtrl {
             @Validate(validator = WeixinService.VALIDATOR_EXISTS, parameter = "key", failureCode = 24)
     })
     public Object prepayMini() {
-        return prepay(weixinService.prepayMini(request.get("key"), request.get("user"), request.get("subject"),
+        return prepay(weixinService.prepayMini(request.get("key"), request.get("user"), request.get("openId"), request.get("subject"),
                 request.getAsInt("amount"), request.get("billNo"), request.get("notice")));
     }
 

@@ -141,13 +141,14 @@ public interface WeixinService {
      *
      * @param key     引用key。
      * @param user    用户ID。
+     * @param openId  微信OpenID。
      * @param subject 订单名称。
      * @param amount  支付金额，单位：分。
      * @param billNo  单据号。
      * @param notice  异步通知。
      * @return 支付参数。
      */
-    JSONObject prepayMini(String key, String user, String subject, int amount, String billNo, String notice);
+    JSONObject prepayMini(String key, String user, String openId, String subject, int amount, String billNo, String notice);
 
     /**
      * 异步通知。
