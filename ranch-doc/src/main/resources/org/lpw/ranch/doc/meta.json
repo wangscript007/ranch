@@ -57,12 +57,7 @@
         },
         {
             "name": "summary",
-            "type": "text-area",
-            "ignore": [
-                "lite-query",
-                "lite-create",
-                "lite-modify"
-            ]
+            "type": "text-area"
         },
         {
             "name": "label",

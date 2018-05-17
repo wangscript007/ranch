@@ -1,5 +1,6 @@
 package org.lpw.ranch.doc;
 
+import org.lpw.ranch.audit.Audit;
 import org.lpw.ranch.audit.AuditCtrlSupport;
 import org.lpw.ranch.audit.AuditHelper;
 import org.lpw.ranch.audit.AuditService;
@@ -79,6 +80,13 @@ public class DocCtrl extends AuditCtrlSupport {
     })
     public Object source() {
         return docService.source(request.get("id"));
+    }
+
+    @Execute(name = "index", validates = {
+            @Validate(validator = Validators.NOT_EMPTY, parameter = "key", failureCode = 1)
+    })
+    public Object index() {
+        return docService.query(request.get("key"), null, null, null, Audit.Pass);
     }
 
     @Execute(name = "read", type = Templates.FREEMARKER, template = "read", validates = {

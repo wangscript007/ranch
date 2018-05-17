@@ -50,7 +50,7 @@ export default class Image extends Component<Props, State> {
         reader.onload = () => {
             let fileName: string = file.value.replace(/\\+/g, '/');
             http.post('/tephra/ctrl/upload', {}, {
-                fieldName: this.props.fieldName,
+                name: this.props.fieldName,
                 fileName: fileName.substring(fileName.lastIndexOf('/') + 1),
                 contentType: reader.result.substring(reader.result.indexOf(':') + 1, reader.result.indexOf(';')),
                 base64: reader.result.substring(reader.result.indexOf(',') + 1)
