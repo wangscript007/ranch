@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.lpw.ranch.payment.helper.PaymentHelper;
+import org.lpw.ranch.weixin.info.InfoService;
 import org.lpw.tephra.bean.ContextRefreshedListener;
 import org.lpw.tephra.crypto.Digest;
 import org.lpw.tephra.crypto.Sign;
@@ -82,6 +83,8 @@ public class WeixinServiceImpl implements WeixinService, ContextRefreshedListene
     private Session session;
     @Inject
     private PaymentHelper paymentHelper;
+    @Inject
+    private InfoService infoService;
     @Inject
     private WeixinDao weixinDao;
     @Value("${tephra.ctrl.service-root:}")
@@ -163,7 +166,8 @@ public class WeixinServiceImpl implements WeixinService, ContextRefreshedListene
 
     @Override
     public JSONObject auth(String key, String code) {
-        Map<String, String> map = getAuthMap(key);
+        WeixinModel weixin = weixinDao.findByKey(key);
+        Map<String, String> map = getAuthMap(weixin);
         map.put("code", code);
         JSONObject object = json.toObject(http.get("https://api.weixin.qq.com/sns/oauth2/access_token", null, map));
         if (object == null || !object.containsKey("openid")) {
@@ -182,6 +186,7 @@ public class WeixinServiceImpl implements WeixinService, ContextRefreshedListene
             if (obj != null)
                 object.putAll(obj);
         }
+        infoService.save(key, weixin.getAppId(), object.getString("unionid"), openId);
 
         if (logger.isDebugEnable())
             logger.debug("获得微信公众号用户认证信息[{}:{}:{}]。", key, code, object);
@@ -191,7 +196,8 @@ public class WeixinServiceImpl implements WeixinService, ContextRefreshedListene
 
     @Override
     public JSONObject auth(String key, String code, String iv, String message) {
-        Map<String, String> map = getAuthMap(key);
+        WeixinModel weixin = weixinDao.findByKey(key);
+        Map<String, String> map = getAuthMap(weixin);
         map.put("js_code", code);
         JSONObject object = json.toObject(http.get("https://api.weixin.qq.com/sns/jscode2session", null, map));
         if (object == null || !object.containsKey("openid")) {
@@ -206,19 +212,21 @@ public class WeixinServiceImpl implements WeixinService, ContextRefreshedListene
         String sessionKey = object.getString("session_key");
         session.set(SESSION_MINI_SESSION_KEY, sessionKey);
         object.remove("session_key");
-        if (validator.isEmpty(iv) || validator.isEmpty(message))
+        if (validator.isEmpty(iv) || validator.isEmpty(message)) {
+            infoService.save(key, weixin.getAppId(), object.getString("unionid"), object.getString("openid"));
+
             return object;
+        }
 
         object.putAll(decryptAesCbcPkcs7(iv, message));
         object.put("unionid", object.getString("unionId"));
-        object.put("openid", object.getString("openId"));
+        infoService.save(key, weixin.getAppId(), object.getString("unionid"), object.getString("openid"));
 
         return object;
     }
 
-    private Map<String, String> getAuthMap(String key) {
+    private Map<String, String> getAuthMap(WeixinModel weixin) {
         Map<String, String> map = new HashMap<>();
-        WeixinModel weixin = weixinDao.findByKey(key);
         map.put("appid", weixin.getAppId());
         map.put("secret", weixin.getSecret());
         map.put("grant_type", "authorization_code");
