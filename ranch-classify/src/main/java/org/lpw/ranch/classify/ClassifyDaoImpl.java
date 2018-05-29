@@ -1,6 +1,7 @@
 package org.lpw.ranch.classify;
 
 import org.lpw.ranch.recycle.Recycle;
+import org.lpw.ranch.util.DaoHelper;
 import org.lpw.tephra.dao.jdbc.DataSource;
 import org.lpw.tephra.dao.orm.PageList;
 import org.lpw.tephra.dao.orm.lite.LiteOrm;
@@ -23,6 +24,8 @@ class ClassifyDaoImpl implements ClassifyDao {
     private DataSource dataSource;
     @Inject
     private LiteOrm liteOrm;
+    @Inject
+    private DaoHelper daoHelper;
 
     @Override
     public PageList<ClassifyModel> query(int pageSize, int pageNum) {
@@ -32,23 +35,14 @@ class ClassifyDaoImpl implements ClassifyDao {
 
     @Override
     public PageList<ClassifyModel> query(String code, String key, String value, String name, int pageSize, int pageNum) {
-        StringBuilder sql = new StringBuilder().append(Recycle.No.getSql()).append(" and c_code like ?");
+        StringBuilder where = new StringBuilder().append(Recycle.No.getSql());
         List<Object> args = new ArrayList<>();
-        args.add(dataSource.getDialect(null).getLike(code, false, true));
-        if (!validator.isEmpty(key)) {
-            sql.append(" and c_key like ?");
-            args.add(dataSource.getDialect(null).getLike(key, true, true));
-        }
-        if (!validator.isEmpty(value)) {
-            sql.append(" and c_value like ?");
-            args.add(dataSource.getDialect(null).getLike(value, true, true));
-        }
-        if (!validator.isEmpty(name)) {
-            sql.append(" and c_name like ?");
-            args.add(dataSource.getDialect(null).getLike(name, true, true));
-        }
+        daoHelper.like(null, where, args, "c_code", code, false, true, true);
+        daoHelper.like(null, where, args, "c_key", key);
+        daoHelper.like(null, where, args, "c_value", value);
+        daoHelper.like(null, where, args, "c_name", name);
 
-        return liteOrm.query(new LiteQuery(ClassifyModel.class).where(sql.toString()).order("c_code,c_key")
+        return liteOrm.query(new LiteQuery(ClassifyModel.class).where(where.toString()).order("c_code,c_key")
                 .size(pageSize).page(pageNum), args.toArray());
     }
 
