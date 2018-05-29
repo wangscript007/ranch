@@ -101,3 +101,21 @@
 |modify|long|修改时间。|
 |operation|int|操作：0-新增；1-修改；2-删除。|
 |time|datetime|时间。|
+
+## 图形
+
+属性
+
+|属性|类型|说明|
+|---|---|---|
+|type|char(100)|分类。|
+|sort|int|顺序。|
+|name|char(100)|名称。|
+|label|char(100)|说明。|
+|svg|string|SVG图。|
+
+[检索](doc/graphic/query.md)
+
+[保存](doc/graphic/save.md)
+
+[删除](doc/graphic/delete.md)
