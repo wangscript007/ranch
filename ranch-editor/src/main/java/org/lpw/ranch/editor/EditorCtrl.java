@@ -55,6 +55,18 @@ public class EditorCtrl {
         return editorService.save(request.setToModel(EditorModel.class));
     }
 
+    @Execute(name = "image", validates = {
+            @Validate(validator = Validators.ID, parameter = "id", failureCode = 1),
+            @Validate(validator = UserHelper.VALIDATOR_SIGN_IN),
+            @Validate(validator = EditorService.VALIDATOR_EXISTS, parameter = "id", failureCode = 2),
+            @Validate(validator = RoleService.VALIDATOR_EDITABLE, parameter = "id", failureCode = 41)
+    })
+    public Object image() {
+        editorService.image(request.get("id"));
+
+        return "";
+    }
+
     @Execute(name = "copy", validates = {
             @Validate(validator = Validators.ID, parameter = "id", failureCode = 1),
             @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "type", failureCode = 4),

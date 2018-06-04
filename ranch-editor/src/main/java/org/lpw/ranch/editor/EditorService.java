@@ -2,7 +2,6 @@ package org.lpw.ranch.editor;
 
 import com.alibaba.fastjson.JSONObject;
 
-import java.sql.Timestamp;
 import java.util.Map;
 
 /**
@@ -44,6 +43,13 @@ public interface EditorService {
      * @return 保存后的JSON信息。
      */
     JSONObject save(EditorModel editor);
+
+    /**
+     * 生成预览图。
+     *
+     * @param id 编辑器ID。
+     */
+    void image(String id);
 
     /**
      * 复制。

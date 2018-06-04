@@ -7,14 +7,20 @@ import org.lpw.ranch.editor.role.RoleModel;
 import org.lpw.ranch.editor.role.RoleService;
 import org.lpw.ranch.user.helper.UserHelper;
 import org.lpw.tephra.cache.Cache;
+import org.lpw.tephra.chrome.Chrome;
+import org.lpw.tephra.ctrl.context.Session;
 import org.lpw.tephra.dao.model.ModelHelper;
 import org.lpw.tephra.dao.orm.PageList;
 import org.lpw.tephra.util.DateTime;
+import org.lpw.tephra.util.Io;
 import org.lpw.tephra.util.TimeUnit;
 import org.lpw.tephra.util.Validator;
+import org.lpw.tephra.wormhole.WormholeHelper;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
+import java.io.ByteArrayInputStream;
 import java.sql.Timestamp;
 import java.util.Map;
 
@@ -32,7 +38,15 @@ public class EditorServiceImpl implements EditorService {
     @Inject
     private DateTime dateTime;
     @Inject
+    private Io io;
+    @Inject
+    private Chrome chrome;
+    @Inject
     private ModelHelper modelHelper;
+    @Inject
+    private Session session;
+    @Inject
+    private WormholeHelper wormholeHelper;
     @Inject
     private UserHelper userHelper;
     @Inject
@@ -41,6 +55,8 @@ public class EditorServiceImpl implements EditorService {
     private ElementService elementService;
     @Inject
     private EditorDao editorDao;
+    @Value("${" + EditorModel.NAME + ".image.url:}")
+    private String imageUrl;
 
     @Override
     public EditorModel findById(String id) {
@@ -82,13 +98,22 @@ public class EditorServiceImpl implements EditorService {
         model.setHeight(editor.getHeight());
         model.setImage(editor.getImage());
         model.setJson(editor.getJson());
-        model.setModify(dateTime.now());
-        editorDao.save(model);
-        roleService.save(userHelper.id(), model.getId(), RoleService.Type.Owner);
-        roleService.modify(model.getId(), model.getModify());
-        cache.remove(CACHE_MODEL + model.getId());
+        save(editor, null, true);
 
         return toJson(model);
+    }
+
+    @Override
+    public void image(String id) {
+        if (validator.isEmpty(imageUrl))
+            return;
+
+        EditorModel editor = findById(id);
+        ByteArrayInputStream inputStream = new ByteArrayInputStream(chrome.jpeg(imageUrl
+                + "?sid=" + session.getId() + "&id=" + id, 10, 0, 0, editor.getWidth(), editor.getHeight()));
+        editor.setImage(wormholeHelper.image(null, null, ".jpg", null, inputStream));
+        save(editor, null, false);
+        io.close(inputStream);
     }
 
     @Override
@@ -98,11 +123,7 @@ public class EditorServiceImpl implements EditorService {
         if (!validator.isEmpty(type))
             editor.setType(type);
         editor.setCreate(dateTime.now());
-        editor.setModify(dateTime.now());
-        editorDao.save(editor);
-        roleService.save(userHelper.id(), editor.getId(), RoleService.Type.Owner);
-        roleService.modify(editor.getId(), editor.getModify());
-        elementService.copy(id, editor.getId());
+        save(editor, null, true);
 
         return toJson(editor);
     }
@@ -125,14 +146,17 @@ public class EditorServiceImpl implements EditorService {
 
         map.forEach((id, modify) -> {
             EditorModel editor = findById(id);
-            if (Math.abs(editor.getModify().getTime() - modify) < TimeUnit.Second.getTime())
-                return;
-
-            Timestamp timestamp = new Timestamp(modify);
-            editor.setModify(timestamp);
-            editorDao.save(editor);
-            cache.remove(CACHE_MODEL + id);
-            roleService.modify(editor.getId(), timestamp);
+            if (Math.abs(editor.getModify().getTime() - modify) > TimeUnit.Second.getTime())
+                save(editor, new Timestamp(modify), false);
         });
+    }
+
+    private void save(EditorModel editor, Timestamp modify, boolean owner) {
+        editor.setModify(modify == null ? dateTime.now() : modify);
+        editorDao.save(editor);
+        if (owner)
+            roleService.save(userHelper.id(), editor.getId(), RoleService.Type.Owner);
+        roleService.modify(editor.getId(), editor.getModify());
+        cache.remove(CACHE_MODEL + editor.getId());
     }
 }
