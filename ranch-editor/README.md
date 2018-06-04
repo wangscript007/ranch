@@ -23,6 +23,8 @@
 
 [保存](doc/save.md)
 
+[生成预览图](doc/image.md)
+
 [复制](doc/copy.md)
 
 ## 角色
