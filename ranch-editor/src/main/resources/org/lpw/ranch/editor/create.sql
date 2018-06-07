@@ -15,5 +15,7 @@ CREATE TABLE t_editor
   c_modify DATETIME DEFAULT NULL COMMENT '修改时间',
 
   PRIMARY KEY pk(c_id) USING HASH,
-  KEY k_type_sort_create(c_type,c_sort,c_create) USING BTREE
+  KEY k_type_sort_modify(c_type,c_sort,c_modify) USING BTREE,
+  KEY k_type_create(c_type,c_create) USING BTREE,
+  KEY k_type_modify(c_type,c_modify) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

@@ -15,6 +15,11 @@ public class ViewableValidatorImpl extends ValidatorSupport {
     private RoleService roleService;
 
     @Override
+    public boolean validate(ValidateWrapper validate, String parameter) {
+        return roleService.hasType(null, parameter, RoleService.Type.Viewer);
+    }
+
+    @Override
     public boolean validate(ValidateWrapper validate, String[] parameters) {
         return roleService.hasType(parameters[0], parameters[1], RoleService.Type.Viewer);
     }

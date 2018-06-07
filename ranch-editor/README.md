@@ -25,6 +25,8 @@
 
 [生成预览图](doc/image.md)
 
+[导出PDF](doc/pdf.md)
+
 [复制](doc/copy.md)
 
 ## 角色

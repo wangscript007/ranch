@@ -14,19 +14,19 @@ public interface EditorService {
     String VALIDATOR_EXISTS = EditorModel.NAME + ".validator.exists";
 
     /**
+     * 检索当前用户编辑器信息集。
+     *
+     * @return 编辑器信息集。
+     */
+    JSONObject queryUser();
+
+    /**
      * 查找编辑器信息。
      *
      * @param id ID值。
      * @return 编辑器信息，不存在则返回null。
      */
     EditorModel findById(String id);
-
-    /**
-     * 检索当前用户编辑器信息集。
-     *
-     * @return 编辑器信息集。
-     */
-    JSONObject queryUser();
 
     /**
      * 查找编辑器信息。
@@ -48,8 +48,17 @@ public interface EditorService {
      * 生成预览图。
      *
      * @param id 编辑器ID。
+     * @return 异步ID。
      */
-    void image(String id);
+    String image(String id);
+
+    /**
+     * 异步导出PDF。
+     *
+     * @param id 编辑器ID。
+     * @return 异步ID。
+     */
+    String pdf(String id);
 
     /**
      * 复制。

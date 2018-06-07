@@ -1,8 +1,8 @@
-# 生成预览图
+# 导出PDF
 
 请求
-- Service Key - ranch.editor.image
-- URI - /editor/image
+- Service Key - ranch.editor.pdf
+- URI - /editor/pdf
 
 参数
 
@@ -17,4 +17,4 @@
 
 > 异步ID参考[异步服务](../../ranch-base/doc/async.md)。
 
-> 需要配置`ranch.editor.image`参数。
+> 需要配置`ranch.editor.pdf`参数。

@@ -58,18 +58,10 @@ public class EditorServiceImpl implements EditorService {
     private ElementService elementService;
     @Inject
     private EditorDao editorDao;
-    @Value("${" + EditorModel.NAME + ".image.url:}")
-    private String imageUrl;
-
-    @Override
-    public EditorModel findById(String id) {
-        String cacheKey = CACHE_MODEL + id;
-        EditorModel editor = cache.get(cacheKey);
-        if (editor == null)
-            cache.put(cacheKey, editor = editorDao.findById(id), false);
-
-        return editor;
-    }
+    @Value("${" + EditorModel.NAME + ".image:}")
+    private String image;
+    @Value("${" + EditorModel.NAME + ".pdf:}")
+    private String pdf;
 
     @Override
     public JSONObject queryUser() {
@@ -80,6 +72,16 @@ public class EditorServiceImpl implements EditorService {
         object.put("list", list);
 
         return object;
+    }
+
+    @Override
+    public EditorModel findById(String id) {
+        String cacheKey = CACHE_MODEL + id;
+        EditorModel editor = cache.get(cacheKey);
+        if (editor == null)
+            cache.put(cacheKey, editor = editorDao.findById(id), false);
+
+        return editor;
     }
 
     @Override
@@ -107,14 +109,15 @@ public class EditorServiceImpl implements EditorService {
     }
 
     @Override
-    public void image(String id) {
-        if (validator.isEmpty(imageUrl))
-            return;
+    public String image(String id) {
+        if (validator.isEmpty(image))
+            return "";
 
         EditorModel editor = findById(id);
         String sid = session.getId();
-        asyncService.submit(EditorModel.NAME + "." + id, "", 20, () -> {
-            String file = chromeHelper.jpeg(imageUrl + "?sid=" + sid + "&id=" + id, 10,
+
+        return asyncService.submit(EditorModel.NAME + ".image." + id, "", 20, () -> {
+            String file = chromeHelper.jpeg(image + "?sid=" + sid + "&id=" + id, 10,
                     0, 0, editor.getWidth(), editor.getHeight(), asyncService.root());
             if (validator.isEmpty(file))
                 return "";
@@ -125,6 +128,20 @@ public class EditorServiceImpl implements EditorService {
 
             return file;
         });
+    }
+
+    @Override
+    public String pdf(String id) {
+        if (validator.isEmpty(pdf))
+            return "";
+
+        EditorModel editor = findById(id);
+        String sid = session.getId();
+
+        return asyncService.submit(EditorModel.NAME + ".pdf." + id, "", 60, () ->
+                chromeHelper.pdf(pdf + "?sid=" + sid + "&id=" + id, 30,
+                        editor.getWidth(), editor.getHeight(), "", asyncService.root())
+        );
     }
 
     @Override

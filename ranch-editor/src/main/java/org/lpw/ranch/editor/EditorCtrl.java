@@ -31,7 +31,7 @@ public class EditorCtrl {
     @Execute(name = "find", validates = {
             @Validate(validator = Validators.ID, parameter = "id", failureCode = 1),
             @Validate(validator = EditorService.VALIDATOR_EXISTS, parameter = "id", failureCode = 2),
-            @Validate(validator = RoleService.VALIDATOR_VIEWABLE, parameters = {"user", "id"}, failureCode = 11)
+            @Validate(validator = RoleService.VALIDATOR_VIEWABLE, parameters = {"user", "id"}, failureCode = 41)
     })
     public Object find() {
         return editorService.find(request.get("id"));
@@ -62,9 +62,17 @@ public class EditorCtrl {
             @Validate(validator = RoleService.VALIDATOR_EDITABLE, parameter = "id", failureCode = 41)
     })
     public Object image() {
-        editorService.image(request.get("id"));
+        return editorService.image(request.get("id"));
+    }
 
-        return "";
+    @Execute(name = "pdf", validates = {
+            @Validate(validator = Validators.ID, parameter = "id", failureCode = 1),
+            @Validate(validator = UserHelper.VALIDATOR_SIGN_IN),
+            @Validate(validator = EditorService.VALIDATOR_EXISTS, parameter = "id", failureCode = 2),
+            @Validate(validator = RoleService.VALIDATOR_VIEWABLE, parameter = "id", failureCode = 41)
+    })
+    public Object pdf() {
+        return editorService.pdf(request.get("id"));
     }
 
     @Execute(name = "copy", validates = {
