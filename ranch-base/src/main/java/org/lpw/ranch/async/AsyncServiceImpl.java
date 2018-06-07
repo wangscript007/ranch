@@ -171,7 +171,8 @@ public class AsyncServiceImpl implements AsyncService, SecondsJob, MinuteJob, Ho
                 io.delete(file);
     }
 
-    private String root() {
+    @Override
+    public String root() {
         return UploadService.ROOT + "async/";
     }
 

@@ -15,6 +15,11 @@
 
     <dependencies>
         <dependency>
+            <groupId>org.lpw.tephra</groupId>
+            <artifactId>tephra-chrome</artifactId>
+            <version>LATEST</version>
+        </dependency>
+        <dependency>
             <groupId>org.lpw.ranch</groupId>
             <artifactId>ranch-base</artifactId>
             <version>${version.ranch}</version>

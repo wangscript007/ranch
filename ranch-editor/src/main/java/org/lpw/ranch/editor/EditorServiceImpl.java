@@ -2,12 +2,13 @@ package org.lpw.ranch.editor;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import org.lpw.ranch.async.AsyncService;
 import org.lpw.ranch.editor.element.ElementService;
 import org.lpw.ranch.editor.role.RoleModel;
 import org.lpw.ranch.editor.role.RoleService;
 import org.lpw.ranch.user.helper.UserHelper;
 import org.lpw.tephra.cache.Cache;
-import org.lpw.tephra.chrome.Chrome;
+import org.lpw.tephra.chrome.ChromeHelper;
 import org.lpw.tephra.ctrl.context.Session;
 import org.lpw.tephra.dao.model.ModelHelper;
 import org.lpw.tephra.dao.orm.PageList;
@@ -20,7 +21,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
-import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.sql.Timestamp;
 import java.util.Map;
 
@@ -40,13 +41,15 @@ public class EditorServiceImpl implements EditorService {
     @Inject
     private Io io;
     @Inject
-    private Chrome chrome;
+    private ChromeHelper chromeHelper;
     @Inject
     private ModelHelper modelHelper;
     @Inject
     private Session session;
     @Inject
     private WormholeHelper wormholeHelper;
+    @Inject
+    private AsyncService asyncService;
     @Inject
     private UserHelper userHelper;
     @Inject
@@ -109,11 +112,18 @@ public class EditorServiceImpl implements EditorService {
             return;
 
         EditorModel editor = findById(id);
-        ByteArrayInputStream inputStream = new ByteArrayInputStream(chrome.jpeg(imageUrl
-                + "?sid=" + session.getId() + "&id=" + id, 10, 0, 0, editor.getWidth(), editor.getHeight()));
-        editor.setImage(wormholeHelper.image(null, null, ".jpg", null, inputStream));
-        save(editor, null, false);
-        io.close(inputStream);
+        asyncService.submit(EditorModel.NAME + "." + id, "", 20, () -> {
+            String file = chromeHelper.jpeg(imageUrl + "?sid=" + session.getId() + "&id=" + id, 10,
+                    0, 0, editor.getWidth(), editor.getHeight(), asyncService.root());
+            if (validator.isEmpty(file))
+                return "";
+
+            EditorModel model = findById(id);
+            model.setImage(wormholeHelper.image(null, null, null, new File(file)));
+            save(model, null, false);
+
+            return file;
+        });
     }
 
     @Override

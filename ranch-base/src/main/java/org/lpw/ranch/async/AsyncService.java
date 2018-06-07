@@ -37,6 +37,13 @@ public interface AsyncService {
     String newSavePath(String suffix);
 
     /**
+     * 获取根目录。
+     *
+     * @return 根目录。
+     */
+    String root();
+
+    /**
      * 查询。
      *
      * @param id ID值。

@@ -4,9 +4,10 @@ import com.alibaba.fastjson.JSONObject;
 import org.lpw.ranch.async.AsyncService;
 import org.lpw.ranch.util.Pagination;
 import org.lpw.tephra.cache.Cache;
-import org.lpw.tephra.chrome.Chrome;
+import org.lpw.tephra.chrome.ChromeHelper;
 import org.lpw.tephra.dao.model.ModelHelper;
 import org.lpw.tephra.util.Converter;
+import org.lpw.tephra.util.Io;
 import org.lpw.tephra.util.Logger;
 import org.lpw.tephra.util.Validator;
 import org.springframework.stereotype.Service;
@@ -28,13 +29,15 @@ public class ChromeServiceImpl implements ChromeService {
     @Inject
     private Converter converter;
     @Inject
+    private Io io;
+    @Inject
     private Logger logger;
     @Inject
     private ModelHelper modelHelper;
     @Inject
     private Pagination pagination;
     @Inject
-    private Chrome chrome;
+    private ChromeHelper chromeHelper;
     @Inject
     private AsyncService asyncService;
     @Inject
@@ -85,7 +88,8 @@ public class ChromeServiceImpl implements ChromeService {
     public byte[] pdf(String key, String url, int width, int height, String pages, int wait) {
         ChromeModel model = findByKey(key, 0, 0, width, height, pages, wait);
 
-        return chrome.pdf(url, model.getWait(), model.getWidth(), model.getHeight(), model.getPages());
+        return io.read(chromeHelper.pdf(url, model.getWait(), model.getWidth(), model.getHeight(),
+                model.getPages(), asyncService.root()));
     }
 
     @Override
@@ -93,21 +97,23 @@ public class ChromeServiceImpl implements ChromeService {
         ChromeModel model = findByKey(key, 0, 0, width, height, pages, wait);
 
         return asyncService.submit(ChromeModel.NAME + ".pdf", converter.toString(map), model.getWait() * 3, () ->
-                asyncService.save(chrome.pdf(url, model.getWait(), model.getWidth(), model.getHeight(), model.getPages()), ".pdf"));
+                chromeHelper.pdf(url, model.getWait(), model.getWidth(), model.getHeight(), model.getPages(), asyncService.root()));
     }
 
     @Override
     public byte[] png(String key, String url, int x, int y, int width, int height, int wait) {
         ChromeModel model = findByKey(key, x, y, width, height, null, wait);
 
-        return chrome.png(url, model.getWait(), model.getX(), model.getY(), model.getWidth(), model.getHeight());
+        return io.read(chromeHelper.png(url, model.getWait(), model.getX(), model.getY(), model.getWidth(), model.getHeight(),
+                asyncService.root()));
     }
 
     @Override
     public byte[] jpg(String key, String url, int x, int y, int width, int height, int wait) {
         ChromeModel model = findByKey(key, x, y, width, height, null, wait);
 
-        return chrome.jpeg(url, model.getWait(), model.getX(), model.getY(), model.getWidth(), model.getHeight());
+        return io.read(chromeHelper.jpeg(url, model.getWait(), model.getX(), model.getY(), model.getWidth(), model.getHeight(),
+                asyncService.root()));
     }
 
     private ChromeModel findByKey(String key, int x, int y, int width, int height, String pages, int wait) {
