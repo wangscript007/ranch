@@ -112,8 +112,9 @@ public class EditorServiceImpl implements EditorService {
             return;
 
         EditorModel editor = findById(id);
+        String sid = session.getId();
         asyncService.submit(EditorModel.NAME + "." + id, "", 20, () -> {
-            String file = chromeHelper.jpeg(imageUrl + "?sid=" + session.getId() + "&id=" + id, 10,
+            String file = chromeHelper.jpeg(imageUrl + "?sid=" + sid + "&id=" + id, 10,
                     0, 0, editor.getWidth(), editor.getHeight(), asyncService.root());
             if (validator.isEmpty(file))
                 return "";

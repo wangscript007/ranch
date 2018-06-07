@@ -14,7 +14,7 @@
             "name": "label"
         },
         {
-            "name": "svg"
+            "name": "data"
         }
     ],
     "query": {

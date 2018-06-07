@@ -114,7 +114,7 @@
 |sort|int|顺序。|
 |name|char(100)|名称。|
 |label|char(100)|说明。|
-|svg|string|SVG图。|
+|data|string|数据。|
 
 [检索](doc/graphic/query.md)
 

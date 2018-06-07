@@ -24,7 +24,7 @@ public class GraphicModel extends ModelSupport {
     private int sort; // 顺序
     private String name; // 名称
     private String label; // 说明
-    private String svg; // SVG图
+    private String data; // 数据
 
     @Jsonable
     @Column(name = "c_type")
@@ -67,12 +67,12 @@ public class GraphicModel extends ModelSupport {
     }
 
     @Jsonable
-    @Column(name = "c_svg")
-    public String getSvg() {
-        return svg;
+    @Column(name = "c_data")
+    public String getData() {
+        return data;
     }
 
-    public void setSvg(String svg) {
-        this.svg = svg;
+    public void setData(String data) {
+        this.data = data;
     }
 }

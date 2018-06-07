@@ -6,7 +6,7 @@ CREATE TABLE t_editor_graphic
   c_sort INT DEFAULT 0 COMMENT '顺序',
   c_name VARCHAR(255) NOT NULL COMMENT '名称',
   c_label VARCHAR(255) DEFAULT NULL COMMENT '说明',
-  c_svg TEXT DEFAULT NULL COMMENT 'SVG图',
+  c_data TEXT DEFAULT NULL COMMENT '数据',
 
   PRIMARY KEY pk(c_id) USING HASH,
   KEY k_type(c_type) USING HASH,

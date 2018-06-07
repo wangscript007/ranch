@@ -15,7 +15,7 @@ import javax.inject.Inject;
  */
 @Controller(MediaModel.NAME + ".upload-listener")
 public class UploadListenerImpl implements UploadListener {
-    private static final String KEY = "^(" + MediaModel.NAME.replaceAll("\\.", "\\\\.") + "\\.)";
+    private static final String KEY = "^(" + MediaModel.NAME.replaceAll("\\.", "\\\\.") + "\\.).+";
 
     @Inject
     private Json json;
