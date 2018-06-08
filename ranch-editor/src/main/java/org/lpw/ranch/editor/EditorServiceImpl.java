@@ -138,10 +138,12 @@ public class EditorServiceImpl implements EditorService {
         EditorModel editor = findById(id);
         String sid = session.getId();
 
-        return asyncService.submit(EditorModel.NAME + ".pdf." + id, "", 60, () ->
-                chromeHelper.pdf(pdf + "?sid=" + sid + "&id=" + id, 30,
-                        editor.getWidth(), editor.getHeight(), "", asyncService.root())
-        );
+        return asyncService.submit(EditorModel.NAME + ".pdf." + id, "", 60, () -> {
+            String path = chromeHelper.pdf(pdf + "?sid=" + sid + "&id=" + id, 30,
+                    editor.getWidth(), editor.getHeight(), "", asyncService.root());
+
+            return path.substring(path.lastIndexOf(asyncService.root()));
+        });
     }
 
     @Override
