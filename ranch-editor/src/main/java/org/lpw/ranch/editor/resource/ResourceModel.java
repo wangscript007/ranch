@@ -27,6 +27,9 @@ public class ResourceModel extends ModelSupport {
     private String name; // 名称
     private String label; // 说明
     private String uri; // 资源URI地址
+    private int width; // 图片宽
+    private int height; // 图片高
+    private String thumbnail; // 缩略图URI地址
     private int state; // 状态：0-待审核；1-审核通过；2-审核拒绝；3-已上架；4-已下架
     private String user; // 用户
     private Timestamp time; // 时间
@@ -79,6 +82,36 @@ public class ResourceModel extends ModelSupport {
 
     public void setUri(String uri) {
         this.uri = uri;
+    }
+
+    @Jsonable
+    @Column(name = "c_width")
+    public int getWidth() {
+        return width;
+    }
+
+    public void setWidth(int width) {
+        this.width = width;
+    }
+
+    @Jsonable
+    @Column(name = "c_height")
+    public int getHeight() {
+        return height;
+    }
+
+    public void setHeight(int height) {
+        this.height = height;
+    }
+
+    @Jsonable
+    @Column(name = "c_thumbnail")
+    public String getThumbnail() {
+        return thumbnail;
+    }
+
+    public void setThumbnail(String thumbnail) {
+        this.thumbnail = thumbnail;
     }
 
     @Jsonable

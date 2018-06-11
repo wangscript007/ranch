@@ -6,7 +6,7 @@ import org.lpw.tephra.dao.orm.PageList;
  * @author lpw
  */
 interface ResourceDao {
-    PageList<ResourceModel> query(String type, String name, int state, String user, int pageSize, int pageNum);
+    PageList<ResourceModel> query(String type, String name, String label, int state, String user, int pageSize, int pageNum);
 
     ResourceModel findById(String id);
 

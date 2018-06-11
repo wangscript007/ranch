@@ -38,26 +38,32 @@ public class ResourceServiceImpl implements ResourceService {
     private ResourceDao resourceDao;
     @Value("${" + ResourceModel.NAME + ".auto.pass:false}")
     private boolean autoPass;
-    @Value("${" + ResourceModel.NAME + ".auto.onsale:false}")
-    private boolean autoOnsale;
+    @Value("${" + ResourceModel.NAME + ".auto.sale:false}")
+    private boolean autoSale;
     private String random;
 
     @Override
-    public JSONObject query(String type, String name, int state, String uid) {
-        return resourceDao.query(type, name, state, userHelper.findIdByUid(uid, uid),
+    public JSONObject query(String type, String name, String label, int state, String uid) {
+        return resourceDao.query(type, name, label, state, userHelper.findIdByUid(uid, uid),
                 pagination.getPageSize(20), pagination.getPageNum()).toJson();
     }
 
     @Override
-    public JSONObject onsale(String type) {
+    public JSONObject onsale(String type, String label) {
         int pageSize = pagination.getPageSize(20);
-        String cacheKey = getCacheKey("onsale:" + type + ":" + pagination.getPageSize(20) + ":" + pagination.getPageNum());
+        String cacheKey = getCacheKey("onsale:" + type + ":" + label + ":"
+                + pagination.getPageSize(20) + ":" + pagination.getPageNum());
         JSONObject object = cache.get(cacheKey);
         if (object == null)
-            cache.put(cacheKey, resourceDao.query(type, null, 3, null, pageSize, pagination.getPageNum()).toJson(),
-                    false);
+            cache.put(cacheKey, resourceDao.query(type, null, label, 3, null,
+                    pageSize, pagination.getPageNum()).toJson(), false);
 
         return object;
+    }
+
+    @Override
+    public ResourceModel findById(String id) {
+        return resourceDao.findById(id);
     }
 
     @Override
@@ -72,19 +78,33 @@ public class ResourceServiceImpl implements ResourceService {
         model.setName(resource.getName());
         model.setLabel(resource.getLabel());
         model.setUri(resource.getUri());
+        model.setWidth(resource.getWidth());
+        model.setHeight(resource.getHeight());
+        model.setThumbnail(resource.getThumbnail());
         model.setState(0);
         model.setTime(dateTime.now());
-        setState(model);
+        autoState(model);
         resourceDao.save(model);
         resetRandom();
 
         return modelHelper.toJson(model);
     }
 
-    private void setState(ResourceModel resource) {
+    @Override
+    public JSONObject state(String id, int state) {
+        ResourceModel resource = resourceDao.findById(id);
+        resource.setState(state);
+        autoState(resource);
+        resourceDao.save(resource);
+        resetRandom();
+
+        return modelHelper.toJson(resource);
+    }
+
+    private void autoState(ResourceModel resource) {
         if (autoPass && resource.getState() == 0)
             resource.setState(1);
-        if (autoOnsale && resource.getState() == 1)
+        if (autoSale && resource.getState() == 1)
             resource.setState(3);
     }
 

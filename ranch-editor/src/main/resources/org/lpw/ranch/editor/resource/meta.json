@@ -17,6 +17,15 @@
             "name": "uri"
         },
         {
+            "name": "width"
+        },
+        {
+            "name": "height"
+        },
+        {
+            "name": "thumbnail"
+        },
+        {
             "name": "state"
         },
         {

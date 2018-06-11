@@ -22,13 +22,14 @@ class ResourceDaoImpl implements ResourceDao {
     private DaoHelper daoHelper;
 
     @Override
-    public PageList<ResourceModel> query(String type, String name, int state, String user, int pageSize, int pageNum) {
+    public PageList<ResourceModel> query(String type, String name, String label, int state, String user, int pageSize, int pageNum) {
         StringBuilder where = new StringBuilder();
         List<Object> args = new ArrayList<>();
         daoHelper.where(where, args, "c_type", DaoOperation.Equals, type);
         daoHelper.where(where, args, "c_name", DaoOperation.Equals, name);
         daoHelper.where(where, args, "c_state", DaoOperation.Equals, state);
         daoHelper.where(where, args, "c_user", DaoOperation.Equals, user);
+        daoHelper.like(null, where, args, "c_label", label);
 
         return liteOrm.query(new LiteQuery(ResourceModel.class).where(where.toString()).order("c_sort")
                 .size(pageSize).page(pageNum), args.toArray());

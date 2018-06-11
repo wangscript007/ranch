@@ -117,6 +117,9 @@
 |name|char(100)|名称。|
 |label|char(100)|说明。|
 |uri|char(100)|资源URI地址。|
+|width|int|图片宽。|
+|height|int|图片高。|
+|thumbnail|char(100)|缩略图URI地址。|
 |state|int|状态：0-待审核；1-审核通过；2-审核拒绝；3-已上架；4-已下架。|
 |user|char(36)|用户。|
 |time|datetime|时间。|
@@ -126,6 +129,14 @@
 [已上架资源集](doc/resource/onsale.md)
 
 [保存](doc/resource/save.md)
+
+[审核通过](doc/resource/pass.md)
+
+[审核不通过](doc/resource/reject.md)
+
+[上架](doc/resource/sale.md)
+
+[下架](doc/resource/nonsale.md)
 
 [上传](doc/resource/upload.md)
 

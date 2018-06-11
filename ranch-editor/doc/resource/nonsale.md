@@ -1,19 +1,14 @@
-# 保存
+# 下架
 
 请求
-- Service Key - ranch.editor.element.save
-- URI - /editor/element/save
+- Service Key - ranch.editor.element.nonsale
+- URI - /editor/element/nonsale
 
 参数
 
 |名称|类型|说明|
 |---|---|---|
-|id|char(36)|ID值：为空或不存在则新建；否则修改。|
-|type|char(100)|分类。|
-|sort|int|顺序。|
-|name|char(100)|名称。|
-|label|char(100)|说明。|
-|uri|char(100)|资源URI地址。|
+|id|char(36)|ID值。|
 
 返回值
 ```json
