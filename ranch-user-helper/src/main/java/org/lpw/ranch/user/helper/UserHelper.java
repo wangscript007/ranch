@@ -3,6 +3,8 @@ package org.lpw.ranch.user.helper;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
+import java.util.Set;
+
 /**
  * 用户服务支持。
  *
@@ -133,4 +135,23 @@ public interface UserHelper {
      * @return 当前登入用户ID值；如果未登入则返回null。
      */
     String id();
+
+    /**
+     * 检索用户ID集。
+     *
+     * @param idcard        身份证号；为空则表示所有。
+     * @param name          姓名；为空则表示所有。
+     * @param nick          昵称；为空则表示所有。
+     * @param mobile        用户手机号；为空则表示所有。
+     * @param email         Email地址；为空则表示所有。
+     * @param code          唯一编码；为空则表示所有。
+     * @param minGrade      最小等级，-1表示不限制。
+     * @param maxGrade      最大等级，-1表示不限制。
+     * @param state         状态：-1-所有；0-正常；1-禁用。
+     * @param registerStart 开始注册日期，格式：yyyy-MM-dd；为空表示不限制。
+     * @param registerEnd   结束注册日期，格式：yyyy-MM-dd；为空表示不限制。
+     * @return 用户ID集。
+     */
+    Set<String> ids(String idcard, String name, String nick, String mobile, String email, String code,
+                    int minGrade, int maxGrade, int state, String registerStart, String registerEnd);
 }

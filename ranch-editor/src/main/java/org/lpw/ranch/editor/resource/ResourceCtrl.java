@@ -37,6 +37,8 @@ public class ResourceCtrl {
             @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "type", failureCode = 84),
             @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "name", failureCode = 85),
             @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "label", failureCode = 86),
+            @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "uri", failureCode = 87),
+            @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "thumbnail", failureCode = 88),
             @Validate(validator = Validators.SIGN)
     })
     public Object save() {

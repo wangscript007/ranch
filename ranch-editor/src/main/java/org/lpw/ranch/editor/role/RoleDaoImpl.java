@@ -1,11 +1,15 @@
 package org.lpw.ranch.editor.role;
 
+import org.lpw.ranch.util.DaoHelper;
 import org.lpw.tephra.dao.orm.PageList;
 import org.lpw.tephra.dao.orm.lite.LiteOrm;
 import org.lpw.tephra.dao.orm.lite.LiteQuery;
 import org.springframework.stereotype.Repository;
 
 import javax.inject.Inject;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 /**
  * @author lpw
@@ -14,6 +18,8 @@ import javax.inject.Inject;
 class RoleDaoImpl implements RoleDao {
     @Inject
     private LiteOrm liteOrm;
+    @Inject
+    private DaoHelper daoHelper;
 
     @Override
     public PageList<RoleModel> query(String user, int pageSize, int pageNum) {
@@ -24,6 +30,15 @@ class RoleDaoImpl implements RoleDao {
     @Override
     public PageList<RoleModel> query(String editor) {
         return liteOrm.query(new LiteQuery(RoleModel.class).where("c_editor=?"), new Object[]{editor});
+    }
+
+    @Override
+    public PageList<RoleModel> query(Set<String> users) {
+        StringBuilder where = new StringBuilder();
+        List<Object> args = new ArrayList<>();
+        daoHelper.in(where, args, "c_user", users.toArray());
+
+        return liteOrm.query(new LiteQuery(RoleModel.class).where(where.toString()), args.toArray());
     }
 
     @Override

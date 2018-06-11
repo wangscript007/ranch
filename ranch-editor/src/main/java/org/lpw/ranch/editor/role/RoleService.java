@@ -3,6 +3,7 @@ package org.lpw.ranch.editor.role;
 import org.lpw.tephra.dao.orm.PageList;
 
 import java.sql.Timestamp;
+import java.util.Set;
 
 /**
  * @author lpw
@@ -56,6 +57,14 @@ public interface RoleService {
      * @return 角色信息；不存在则返回null。
      */
     RoleModel find(String user, String editor);
+
+    /**
+     * 检索用户的编辑器ID集。
+     *
+     * @param users 用户ID集。
+     * @return 编辑器ID集。
+     */
+    Set<String> editors(Set<String> users);
 
     /**
      * 验证用户是否拥有操作权限。

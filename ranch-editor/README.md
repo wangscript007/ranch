@@ -17,6 +17,8 @@
 
 > 支持扩展自定义属性。
 
+[检索编辑器信息集](doc/query.md)
+
 [检索当前用户编辑器信息集](doc/query-user.md)
 
 [查找](doc/find.md)

@@ -21,6 +21,15 @@ public class EditorCtrl {
     @Inject
     private EditorService editorService;
 
+    @Execute(name = "query", validates = {
+            @Validate(validator = Validators.SIGN)
+    })
+    public Object query() {
+        return editorService.query(request.get("mobile"), request.get("email"), request.get("nick"),
+                request.get("type"), request.get("name"), request.get("keyword"),
+                request.get("createStart"), request.get("createEnd"), request.get("modifyStart"), request.get("modifyEnd"));
+    }
+
     @Execute(name = "query-user", validates = {
             @Validate(validator = UserHelper.VALIDATOR_SIGN_IN)
     })

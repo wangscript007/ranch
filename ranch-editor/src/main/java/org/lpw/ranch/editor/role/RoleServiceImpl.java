@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
 import java.sql.Timestamp;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * @author lpw
@@ -41,6 +43,14 @@ public class RoleServiceImpl implements RoleService {
             cache.put(cacheKey, role = roleDao.find(user, editor), false);
 
         return role;
+    }
+
+    @Override
+    public Set<String> editors(Set<String> users) {
+        Set<String> set = new HashSet<>();
+        roleDao.query(users).getList().forEach(role -> set.add(role.getEditor()));
+
+        return set;
     }
 
     @Override

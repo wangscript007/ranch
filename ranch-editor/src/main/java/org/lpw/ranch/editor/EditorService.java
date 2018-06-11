@@ -14,6 +14,24 @@ public interface EditorService {
     String VALIDATOR_EXISTS = EditorModel.NAME + ".validator.exists";
 
     /**
+     * 检索编辑器信息集。
+     *
+     * @param mobile      用户手机号。
+     * @param email       用户Email。
+     * @param nick        用户昵称。
+     * @param type        类型。
+     * @param name        名称。
+     * @param keyword     关键词。
+     * @param createStart 创建开始日期，格式：yyyy-MM-dd。
+     * @param createEnd   创建结束日期，格式：yyyy-MM-dd。
+     * @param modifyStart 编辑开始日期，格式：yyyy-MM-dd。
+     * @param modifyEnd   编辑结束日期，格式：yyyy-MM-dd。
+     * @return 编辑器信息集。
+     */
+    JSONObject query(String mobile, String email, String nick, String type, String name, String keyword,
+                     String createStart, String createEnd, String modifyStart, String modifyEnd);
+
+    /**
      * 检索当前用户编辑器信息集。
      *
      * @return 编辑器信息集。

@@ -7,6 +7,7 @@ import org.lpw.ranch.editor.element.ElementService;
 import org.lpw.ranch.editor.role.RoleModel;
 import org.lpw.ranch.editor.role.RoleService;
 import org.lpw.ranch.user.helper.UserHelper;
+import org.lpw.ranch.util.Pagination;
 import org.lpw.tephra.cache.Cache;
 import org.lpw.tephra.chrome.ChromeHelper;
 import org.lpw.tephra.ctrl.context.Session;
@@ -49,6 +50,8 @@ public class EditorServiceImpl implements EditorService {
     @Inject
     private WormholeHelper wormholeHelper;
     @Inject
+    private Pagination pagination;
+    @Inject
     private AsyncService asyncService;
     @Inject
     private UserHelper userHelper;
@@ -62,6 +65,15 @@ public class EditorServiceImpl implements EditorService {
     private String image;
     @Value("${" + EditorModel.NAME + ".pdf:}")
     private String pdf;
+
+    @Override
+    public JSONObject query(String mobile, String email, String nick, String type, String name, String keyword,
+                            String createStart, String createEnd, String modifyStart, String modifyEnd) {
+        return editorDao.query(roleService.editors(userHelper.ids(null, null, nick, mobile, email,
+                null, -1, -1, -1, null, null)),
+                type, name, keyword, dateTime.getStart(createStart), dateTime.getEnd(createEnd), dateTime.getStart(modifyStart),
+                dateTime.getEnd(modifyEnd), pagination.getPageSize(20), pagination.getPageNum()).toJson();
+    }
 
     @Override
     public JSONObject queryUser() {

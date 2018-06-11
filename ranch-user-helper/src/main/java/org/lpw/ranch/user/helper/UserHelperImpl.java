@@ -3,23 +3,30 @@ package org.lpw.ranch.user.helper;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import org.lpw.ranch.util.ServiceHelperSupport;
+import org.lpw.tephra.util.Numeric;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import javax.inject.Inject;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * @author lpw
  */
 @Service("ranch.user.helper")
 public class UserHelperImpl extends ServiceHelperSupport implements UserHelper {
+    @Inject
+    private Numeric numeric;
     @Value("${ranch.user.key:ranch.user}")
     private String key;
     private String codeKey;
     private String uidKey;
     private String signInKey;
     private String signKey;
+    private String queryKey;
 
     @Override
     public JSONObject findByCode(String code) {
@@ -121,6 +128,38 @@ public class UserHelperImpl extends ServiceHelperSupport implements UserHelper {
     @Override
     public String id() {
         return sign().getString("id");
+    }
+
+    @Override
+    public Set<String> ids(String idcard, String name, String nick, String mobile, String email, String code,
+                           int minGrade, int maxGrade, int state, String registerStart, String registerEnd) {
+        if (queryKey == null)
+            queryKey = key + ".query";
+
+        Map<String, String> parameter = new HashMap<>();
+        parameter.put("idcard", idcard);
+        parameter.put("name", name);
+        parameter.put("nick", nick);
+        parameter.put("mobile", mobile);
+        parameter.put("email", email);
+        parameter.put("code", code);
+        if (minGrade > -1)
+            parameter.put("minGrade", numeric.toString(minGrade, ""));
+        if (maxGrade > -1)
+            parameter.put("maxGrade", numeric.toString(maxGrade, ""));
+        if (state > -1)
+            parameter.put("state", numeric.toString(state, ""));
+        parameter.put("registerStart", registerStart);
+        parameter.put("registerEnd", registerEnd);
+        parameter.put("pageSize", "1024");
+        parameter.put("pageNum", "1");
+
+        Set<String> set = new HashSet<>();
+        JSONArray list = carousel.service(queryKey, null, parameter, false, JSONObject.class).getJSONArray("list");
+        for (int i = 0, size = list.size(); i < size; i++)
+            set.add(list.getJSONObject(i).getString("id"));
+
+        return set;
     }
 
     @Override

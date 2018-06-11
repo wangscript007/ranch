@@ -14,6 +14,9 @@
 |name|char(100)|名称。|
 |label|char(100)|说明。|
 |uri|char(100)|资源URI地址。|
+|width|int|图片宽。|
+|height|int|图片高。|
+|thumbnail|char(100)|缩略图URI地址。|
 
 返回值
 ```json
