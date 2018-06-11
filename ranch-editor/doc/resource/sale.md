@@ -1,8 +1,8 @@
 # 上架
 
 请求
-- Service Key - ranch.editor.element.sale
-- URI - /editor/element/sale
+- Service Key - ranch.editor.resource.sale
+- URI - /editor/resource/sale
 
 参数
 

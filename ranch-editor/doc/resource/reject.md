@@ -1,8 +1,8 @@
 # 审核不通过
 
 请求
-- Service Key - ranch.editor.element.reject
-- URI - /editor/element/reject
+- Service Key - ranch.editor.resource.reject
+- URI - /editor/resource/reject
 
 参数
 

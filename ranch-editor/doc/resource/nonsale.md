@@ -1,8 +1,8 @@
 # 下架
 
 请求
-- Service Key - ranch.editor.element.nonsale
-- URI - /editor/element/nonsale
+- Service Key - ranch.editor.resource.nonsale
+- URI - /editor/resource/nonsale
 
 参数
 

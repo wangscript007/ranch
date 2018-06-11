@@ -1,8 +1,8 @@
 # 审核通过
 
 请求
-- Service Key - ranch.editor.element.pass
-- URI - /editor/element/pass
+- Service Key - ranch.editor.resource.pass
+- URI - /editor/resource/pass
 
 参数
 

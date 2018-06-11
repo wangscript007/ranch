@@ -1,8 +1,8 @@
 # 保存
 
 请求
-- Service Key - ranch.editor.element.save
-- URI - /editor/element/save
+- Service Key - ranch.editor.resource.save
+- URI - /editor/resource/save
 
 参数
 
