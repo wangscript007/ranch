@@ -73,9 +73,9 @@ public class ResourceServiceImpl implements ResourceService {
             model = new ResourceModel();
             model.setUser(userHelper.id());
         }
-        model.setType(resource.getType());
+        model.setType(validator.isEmpty(resource.getType()) ? "" : resource.getType());
         model.setSort(resource.getSort());
-        model.setName(resource.getName());
+        model.setName(validator.isEmpty(resource.getName()) ? "" : resource.getName());
         model.setLabel(resource.getLabel());
         model.setUri(resource.getUri());
         model.setWidth(resource.getWidth());
