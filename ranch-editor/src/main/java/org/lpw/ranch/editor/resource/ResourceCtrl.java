@@ -1,5 +1,6 @@
 package org.lpw.ranch.editor.resource;
 
+import org.lpw.ranch.user.helper.UserHelper;
 import org.lpw.tephra.ctrl.context.Request;
 import org.lpw.tephra.ctrl.execute.Execute;
 import org.lpw.tephra.ctrl.validate.Validate;
@@ -39,7 +40,8 @@ public class ResourceCtrl {
             @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "label", failureCode = 86),
             @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "uri", failureCode = 87),
             @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "thumbnail", failureCode = 88),
-            @Validate(validator = Validators.SIGN)
+            @Validate(validator = Validators.SIGN),
+            @Validate(validator = UserHelper.VALIDATOR_SIGN_IN)
     })
     public Object save() {
         return resourceService.save(request.setToModel(ResourceModel.class));
