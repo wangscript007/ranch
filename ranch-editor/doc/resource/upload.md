@@ -16,4 +16,4 @@
 |audio/mpeg|.mp3|
 |application/json|.json|
 
-> 用户需要处于已等入状态。
+> 用户需要处于已登入状态。
