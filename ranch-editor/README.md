@@ -106,7 +106,7 @@
 |operation|int|操作：0-新增；1-修改；2-删除。|
 |time|datetime|时间。|
 
-## 图形
+## 资源
 
 属性
 
@@ -116,10 +116,17 @@
 |sort|int|顺序。|
 |name|char(100)|名称。|
 |label|char(100)|说明。|
-|data|string|数据。|
+|uri|char(100)|资源URI地址。|
+|state|int|状态：0-待审核；1-审核通过；2-审核拒绝；3-已上架；4-已下架。|
+|user|char(36)|用户。|
+|time|datetime|时间。|
 
-[检索](doc/graphic/query.md)
+[检索](doc/resource/query.md)
 
-[保存](doc/graphic/save.md)
+[已上架资源集](doc/resource/onsale.md)
 
-[删除](doc/graphic/delete.md)
+[保存](doc/resource/save.md)
+
+[上传](doc/resource/upload.md)
+
+[删除](doc/resource/delete.md)

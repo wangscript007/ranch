@@ -13,7 +13,7 @@
 |sort|int|顺序。|
 |name|char(100)|名称。|
 |label|char(100)|说明。|
-|svg|string|SVG图。|
+|uri|char(100)|资源URI地址。|
 
 返回值
 ```json
@@ -22,7 +22,10 @@
     "sort": "顺序",
     "name": "名称",
     "label": "说明",
-    "data": "数据"
+    "uri": "资源URI地址",
+    "state": "状态：0-待审核；1-审核通过；2-审核拒绝；3-已上架；4-已下架",
+    "user": "用户",
+    "time": "时间"
 }
 ```
 

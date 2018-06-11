@@ -10,6 +10,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
+import java.sql.Timestamp;
+
 /**
  * @author lpw
  */
@@ -27,7 +29,7 @@ public class ResourceModel extends ModelSupport {
     private String uri; // 资源URI地址
     private int state; // 状态：0-待审核；1-审核通过；2-审核拒绝；3-已上架；4-已下架
     private String user; // 用户
-    private String source; // 来源ID
+    private Timestamp time; // 时间
 
     @Jsonable
     @Column(name = "c_type")
@@ -100,12 +102,12 @@ public class ResourceModel extends ModelSupport {
     }
 
     @Jsonable
-    @Column(name = "c_source")
-    public String getSource() {
-        return source;
+    @Column(name = "c_time")
+    public Timestamp getTime() {
+        return time;
     }
 
-    public void setSource(String source) {
-        this.source = source;
+    public void setTime(Timestamp time) {
+        this.time = time;
     }
 }

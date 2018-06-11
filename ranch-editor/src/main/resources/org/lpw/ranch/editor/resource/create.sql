@@ -9,7 +9,7 @@ CREATE TABLE t_editor_resource
   c_uri VARCHAR(255) DEFAULT NULL COMMENT '资源URI地址',
   c_state INT DEFAULT 0 COMMENT '状态：0-待审核；1-审核通过；2-审核拒绝；3-已上架；4-已下架',
   c_user CHAR(36) NOT NULL COMMENT '用户',
-  c_source VARCHAR(255) DEFAULT NULL COMMENT '来源ID',
+  c_time DATETIME DEFAULT NULL COMMENT '时间',
 
   PRIMARY KEY pk(c_id) USING HASH,
   KEY k_type(c_type) USING HASH,
