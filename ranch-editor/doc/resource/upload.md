@@ -11,7 +11,7 @@
 |---|---|
 |image/jpeg|.jpg or .jpeg|
 |image/png|.png|
-|image/git|.git|
+|image/gif|.gif|
 |image/svg+xml|.svg|
 |audio/mpeg|.mp3|
 |application/json|.json|
