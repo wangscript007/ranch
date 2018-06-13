@@ -132,7 +132,7 @@ public class EditorServiceImpl implements EditorService {
         model.setHeight(editor.getHeight());
         model.setImage(editor.getImage());
         model.setJson(editor.getJson());
-        save(editor, null, true, true);
+        save(model, null, true, true);
 
         return toJson(model);
     }
