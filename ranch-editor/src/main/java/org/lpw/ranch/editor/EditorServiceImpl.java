@@ -46,11 +46,11 @@ public class EditorServiceImpl implements EditorService {
     @Inject
     private Generator generator;
     @Inject
-    private ChromeHelper chromeHelper;
-    @Inject
     private ModelHelper modelHelper;
     @Inject
     private Session session;
+    @Inject
+    private ChromeHelper chromeHelper;
     @Inject
     private WormholeHelper wormholeHelper;
     @Inject
