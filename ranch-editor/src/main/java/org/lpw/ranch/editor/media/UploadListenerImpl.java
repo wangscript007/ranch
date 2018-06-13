@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import org.lpw.ranch.editor.role.RoleService;
 import org.lpw.ranch.user.helper.UserHelper;
 import org.lpw.tephra.ctrl.upload.UploadListener;
+import org.lpw.tephra.ctrl.upload.UploadReader;
 import org.lpw.tephra.util.Json;
 import org.lpw.tephra.util.Numeric;
 import org.springframework.stereotype.Controller;
@@ -15,8 +16,6 @@ import javax.inject.Inject;
  */
 @Controller(MediaModel.NAME + ".upload-listener")
 public class UploadListenerImpl implements UploadListener {
-    private static final String KEY = "^(" + MediaModel.NAME.replaceAll("\\.", "\\\\.") + "\\.).+";
-
     @Inject
     private Json json;
     @Inject
@@ -30,23 +29,22 @@ public class UploadListenerImpl implements UploadListener {
 
     @Override
     public String getKey() {
-        return KEY;
+        return MediaModel.NAME;
     }
 
     @Override
-    public boolean isUploadEnable(String key, String contentType, String name) {
-        String[] array = key.split("\\.");
-
-        return array.length == 5 && userHelper.signIn() && roleService.hasType(null, array[3], RoleService.Type.Editor);
+    public boolean isUploadEnable(String key, UploadReader uploadReader) {
+        return userHelper.signIn() && roleService.hasType(null, uploadReader.getParameter("editor"), RoleService.Type.Editor);
     }
 
     @Override
-    public void complete(JSONObject object) {
+    public void complete(UploadReader uploadReader, JSONObject object) {
         if (!json.hasTrue(object, "success"))
             return;
 
-        String[] array = object.getString("name").split("\\.");
-        mediaService.save(array[3], numeric.toInt(array[4]), object.getString("path"), getName(object.getString("fileName")));
+        object.putAll(mediaService.save(uploadReader.getParameter("editor"), numeric.toInt(uploadReader.getParameter("type")),
+                object.getString("path"), getName(object.getString("fileName")),
+                numeric.toInt(uploadReader.getParameter("width")), numeric.toInt(uploadReader.getParameter("height"))));
     }
 
     private String getName(String fileName) {

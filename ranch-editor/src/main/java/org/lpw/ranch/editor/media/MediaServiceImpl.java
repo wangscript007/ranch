@@ -40,15 +40,19 @@ public class MediaServiceImpl implements MediaService {
     }
 
     @Override
-    public void save(String editor, int type, String url, String name) {
+    public JSONObject save(String editor, int type, String url, String name, int width, int height) {
         MediaModel media = new MediaModel();
         media.setUser(userHelper.id());
         media.setEditor(editor);
         media.setType(type);
         media.setUrl(url);
         media.setName(name);
+        media.setWidth(width);
+        media.setHeight(height);
         media.setTime(dateTime.now());
         mediaDao.save(media);
+
+        return modelHelper.toJson(media);
     }
 
     @Override

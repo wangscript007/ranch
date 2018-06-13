@@ -32,6 +32,16 @@ public interface EditorService {
                      String createStart, String createEnd, String modifyStart, String modifyEnd);
 
     /**
+     * 检索编辑器信息集。
+     *
+     * @param type    类型。
+     * @param name    名称。
+     * @param keyword 关键词。
+     * @return 编辑器信息集。
+     */
+    JSONObject query(String type, String name, String keyword);
+
+    /**
      * 检索当前用户编辑器信息集。
      *
      * @return 编辑器信息集。

@@ -1,6 +1,7 @@
 package org.lpw.ranch.group;
 
 import org.lpw.tephra.ctrl.upload.UploadListener;
+import org.lpw.tephra.ctrl.upload.UploadReader;
 import org.lpw.tephra.util.Image;
 import org.springframework.stereotype.Controller;
 
@@ -21,8 +22,8 @@ public class PortraitUploadListenerImpl implements UploadListener {
     }
 
     @Override
-    public boolean isUploadEnable(String key, String contentType, String name) {
-        return image.is(contentType, name);
+    public boolean isUploadEnable(String key, UploadReader uploadReader) {
+        return image.is(uploadReader.getContentType(), uploadReader.getName());
     }
 
     @Override

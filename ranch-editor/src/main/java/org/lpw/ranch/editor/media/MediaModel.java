@@ -27,6 +27,8 @@ public class MediaModel extends ModelSupport {
     private int type; // 类型：0-背景；1-图片；2-音频；3-视频
     private String url; // URL地址
     private String name; // 文件名
+    private int width; // 图片宽
+    private int height; // 图片高
     private Timestamp time; // 时间
 
     @Jsonable
@@ -77,6 +79,26 @@ public class MediaModel extends ModelSupport {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    @Jsonable
+    @Column(name = "c_width")
+    public int getWidth() {
+        return width;
+    }
+
+    public void setWidth(int width) {
+        this.width = width;
+    }
+
+    @Jsonable
+    @Column(name = "c_height")
+    public int getHeight() {
+        return height;
+    }
+
+    public void setHeight(int height) {
+        this.height = height;
     }
 
     @Jsonable

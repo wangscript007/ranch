@@ -55,7 +55,7 @@ public class ResourceServiceImpl implements ResourceService {
                 + pagination.getPageSize(20) + ":" + pagination.getPageNum());
         JSONObject object = cache.get(cacheKey);
         if (object == null)
-            cache.put(cacheKey, resourceDao.query(type, null, label, 3, null,
+            cache.put(cacheKey, object = resourceDao.query(type, null, label, 3, null,
                     pageSize, pagination.getPageNum()).toJson(), false);
 
         return object;

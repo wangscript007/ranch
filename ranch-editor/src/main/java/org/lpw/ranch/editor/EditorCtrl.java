@@ -37,6 +37,15 @@ public class EditorCtrl {
         return editorService.queryUser();
     }
 
+    @Execute(name = "search", validates = {
+            @Validate(validator = Validators.SIGN)
+    })
+    public Object search() {
+        return editorService.query(null, null, null,
+                request.get("type"), request.get("name"), request.get("keyword"),
+                request.get("createStart"), request.get("createEnd"), request.get("modifyStart"), request.get("modifyEnd"));
+    }
+
     @Execute(name = "find", validates = {
             @Validate(validator = Validators.ID, parameter = "id", failureCode = 1),
             @Validate(validator = EditorService.VALIDATOR_EXISTS, parameter = "id", failureCode = 2),

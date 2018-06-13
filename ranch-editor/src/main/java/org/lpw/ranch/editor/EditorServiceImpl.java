@@ -14,6 +14,7 @@ import org.lpw.tephra.ctrl.context.Session;
 import org.lpw.tephra.dao.model.ModelHelper;
 import org.lpw.tephra.dao.orm.PageList;
 import org.lpw.tephra.util.DateTime;
+import org.lpw.tephra.util.Generator;
 import org.lpw.tephra.util.Io;
 import org.lpw.tephra.util.TimeUnit;
 import org.lpw.tephra.util.Validator;
@@ -32,6 +33,7 @@ import java.util.Map;
 @Service(EditorModel.NAME + ".service")
 public class EditorServiceImpl implements EditorService {
     private static final String CACHE_MODEL = EditorModel.NAME + ".service.cache.model:";
+    private static final String CACHE_QUERY = EditorModel.NAME + ".service.cache.query:";
 
     @Inject
     private Cache cache;
@@ -41,6 +43,8 @@ public class EditorServiceImpl implements EditorService {
     private DateTime dateTime;
     @Inject
     private Io io;
+    @Inject
+    private Generator generator;
     @Inject
     private ChromeHelper chromeHelper;
     @Inject
@@ -65,6 +69,7 @@ public class EditorServiceImpl implements EditorService {
     private String image;
     @Value("${" + EditorModel.NAME + ".pdf:}")
     private String pdf;
+    private String random;
 
     @Override
     public JSONObject query(String mobile, String email, String nick, String type, String name, String keyword,
@@ -73,6 +78,18 @@ public class EditorServiceImpl implements EditorService {
                 null, -1, -1, -1, null, null)),
                 type, name, keyword, dateTime.getStart(createStart), dateTime.getEnd(createEnd), dateTime.getStart(modifyStart),
                 dateTime.getEnd(modifyEnd), pagination.getPageSize(20), pagination.getPageNum()).toJson();
+    }
+
+    @Override
+    public JSONObject query(String type, String name, String keyword) {
+        int pageSize = pagination.getPageSize(20);
+        String cacheKey = getCacheKey(type + ":" + name + ":" + keyword + ":" + pageSize + ":" + pagination.getPageNum());
+        JSONObject object = cache.get(cacheKey);
+        if (object == null)
+            cache.put(cacheKey, object = editorDao.query(null, type, name, keyword, null, null,
+                    null, null, pageSize, pagination.getPageNum()).toJson(), false);
+
+        return object;
     }
 
     @Override
@@ -115,7 +132,7 @@ public class EditorServiceImpl implements EditorService {
         model.setHeight(editor.getHeight());
         model.setImage(editor.getImage());
         model.setJson(editor.getJson());
-        save(editor, null, true);
+        save(editor, null, true, true);
 
         return toJson(model);
     }
@@ -136,7 +153,7 @@ public class EditorServiceImpl implements EditorService {
 
             EditorModel model = findById(id);
             model.setImage(wormholeHelper.image(null, null, null, new File(file)));
-            save(model, null, false);
+            save(model, null, false, true);
 
             return file;
         });
@@ -165,7 +182,7 @@ public class EditorServiceImpl implements EditorService {
         if (!validator.isEmpty(type))
             editor.setType(type);
         editor.setCreate(dateTime.now());
-        save(editor, null, true);
+        save(editor, null, true, false);
 
         return toJson(editor);
     }
@@ -189,16 +206,30 @@ public class EditorServiceImpl implements EditorService {
         map.forEach((id, modify) -> {
             EditorModel editor = findById(id);
             if (Math.abs(editor.getModify().getTime() - modify) > TimeUnit.Second.getTime())
-                save(editor, new Timestamp(modify), false);
+                save(editor, new Timestamp(modify), false, false);
         });
+        resetRandom();
     }
 
-    private void save(EditorModel editor, Timestamp modify, boolean owner) {
+    private void save(EditorModel editor, Timestamp modify, boolean owner, boolean resetRandom) {
         editor.setModify(modify == null ? dateTime.now() : modify);
         editorDao.save(editor);
         if (owner)
             roleService.save(userHelper.id(), editor.getId(), RoleService.Type.Owner);
         roleService.modify(editor.getId(), editor.getModify());
         cache.remove(CACHE_MODEL + editor.getId());
+        if (resetRandom)
+            resetRandom();
+    }
+
+    private String getCacheKey(String key) {
+        if (validator.isEmpty(random))
+            resetRandom();
+
+        return CACHE_QUERY + random + key;
+    }
+
+    private void resetRandom() {
+        random = generator.random(32) + ":";
     }
 }

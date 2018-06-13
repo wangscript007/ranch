@@ -54,6 +54,8 @@
 |type|int|类型：0-背景；1-图片；2-音频；3-视频。|
 |url|char(100)|URL地址。|
 |name|char(100)|文件名。|
+|width|int|图片宽。|
+|height|int|图片高。|
 |time|datetime|时间。|
 
 [检索](doc/media/query.md)

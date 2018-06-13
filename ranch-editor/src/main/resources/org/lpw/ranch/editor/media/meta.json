@@ -17,6 +17,12 @@
             "name": "name"
         },
         {
+            "name": "width"
+        },
+        {
+            "name": "height"
+        },
+        {
             "name": "time"
         }
     ],
