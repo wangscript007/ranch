@@ -26,7 +26,7 @@ public class UploadListenerImpl implements UploadListener {
     @Override
     public boolean isUploadEnable(String key, UploadReader uploadReader) {
         String contentType = uploadReader.getContentType();
-        String name = uploadReader.getName();
+        String name = uploadReader.getFileName();
 
         return (image.is(contentType, name) || (contentType.equals("audio/mpeg") && name.endsWith(".mp3"))
                 || (contentType.equals("application/json") && name.endsWith(".json"))) && userHelper.signIn();

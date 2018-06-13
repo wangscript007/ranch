@@ -23,7 +23,7 @@ public class PortraitUploadListenerImpl implements UploadListener {
 
     @Override
     public boolean isUploadEnable(String key, UploadReader uploadReader) {
-        return image.is(uploadReader.getContentType(), uploadReader.getName());
+        return image.is(uploadReader.getContentType(), uploadReader.getFileName());
     }
 
     @Override
