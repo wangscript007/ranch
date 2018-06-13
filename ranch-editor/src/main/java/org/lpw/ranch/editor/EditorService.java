@@ -12,6 +12,10 @@ public interface EditorService {
      * 编辑器信息是否存在验证器Bean名称。
      */
     String VALIDATOR_EXISTS = EditorModel.NAME + ".validator.exists";
+    /**
+     * 编辑器状态是否可编辑验证器Bean名称。
+     */
+    String VALIDATOR_EDITABLE = EditorModel.NAME + ".validator.editable";
 
     /**
      * 检索编辑器信息集。
@@ -22,13 +26,14 @@ public interface EditorService {
      * @param type        类型。
      * @param name        名称。
      * @param keyword     关键词。
+     * @param state       状态。
      * @param createStart 创建开始日期，格式：yyyy-MM-dd。
      * @param createEnd   创建结束日期，格式：yyyy-MM-dd。
      * @param modifyStart 编辑开始日期，格式：yyyy-MM-dd。
      * @param modifyEnd   编辑结束日期，格式：yyyy-MM-dd。
      * @return 编辑器信息集。
      */
-    JSONObject query(String mobile, String email, String nick, String type, String name, String keyword,
+    JSONObject query(String mobile, String email, String nick, String type, String name, String keyword, int state,
                      String createStart, String createEnd, String modifyStart, String modifyEnd);
 
     /**
@@ -79,6 +84,15 @@ public interface EditorService {
      * @return 异步ID。
      */
     String image(String id);
+
+    /**
+     * 设置状态。
+     *
+     * @param id    ID值。
+     * @param state 状态。
+     * @return 编辑器信息。
+     */
+    JSONObject state(String id, int state);
 
     /**
      * 异步导出PDF。

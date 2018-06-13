@@ -14,6 +14,7 @@
 |type|string|类型，为空表示不限制。|
 |name|string|名称，模糊匹配，为空表示不限制。|
 |keyword|string|关键词，模糊匹配，为空表示不限制。|
+|state|int|状态：-1-全部；0-待审核；1-审核通过；2-审核拒绝；3-已上架；4-已下架。|
 |createStart|string|创建开始日期，格式：yyyy-MM-dd，为空表示不限制。|
 |createEnd|string|创建结束日期，格式：yyyy-MM-dd，为空表示不限制。|
 |modifyStart|string|编辑开始日期，格式：yyyy-MM-dd，为空表示不限制。|
@@ -36,6 +37,7 @@
             "width": "宽度",
             "height": "高度",
             "image": "预览图",
+            "state": "状态：0-待审核；1-审核通过；2-审核拒绝；3-已上架；4-已下架",
             "create": "创建时间",
             "modify": "修改时间"
         }

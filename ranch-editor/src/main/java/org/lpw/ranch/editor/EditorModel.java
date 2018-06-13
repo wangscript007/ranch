@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+
 import java.sql.Timestamp;
 
 /**
@@ -21,7 +22,6 @@ import java.sql.Timestamp;
 public class EditorModel extends ModelSupport {
     static final String NAME = "ranch.editor";
 
-    private String copy; // 复制源
     private String type; // 类型
     private int sort; // 顺序
     private String name; // 名称
@@ -29,19 +29,10 @@ public class EditorModel extends ModelSupport {
     private int width; // 宽度
     private int height; // 高度
     private String image; // 预览图
+    private int state; // 状态：0-待审核；1-审核通过；2-审核拒绝；3-已上架；4-已下架
     private String json; // 扩展属性集
     private Timestamp create; // 创建时间
     private Timestamp modify; // 修改时间
-
-    @Jsonable
-    @Column(name = "c_copy")
-    public String getCopy() {
-        return copy;
-    }
-
-    public void setCopy(String copy) {
-        this.copy = copy;
-    }
 
     @Jsonable
     @Column(name = "c_type")
@@ -113,7 +104,17 @@ public class EditorModel extends ModelSupport {
         this.image = image;
     }
 
-    @Jsonable(extend = true)
+    @Jsonable
+    @Column(name = "c_state")
+    public int getState() {
+        return state;
+    }
+
+    public void setState(int state) {
+        this.state = state;
+    }
+
+    @Jsonable
     @Column(name = "c_json")
     public String getJson() {
         return json;

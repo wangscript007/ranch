@@ -12,6 +12,7 @@
 |width|int|宽度。|
 |height|int|高度。|
 |image|char(100)|预览图。|
+|state|int|状态：0-待审核；1-审核通过；2-审核拒绝；3-已上架；4-已下架。|
 |create|datetime|创建时间。|
 |modify|long|修改时间。|
 
@@ -26,6 +27,14 @@
 [保存](doc/save.md)
 
 [生成预览图](doc/image.md)
+
+[审核通过](doc/pass.md)
+
+[审核不通过](doc/reject.md)
+
+[上架](doc/sale.md)
+
+[下架](doc/nonsale.md)
 
 [导出PDF](doc/pdf.md)
 

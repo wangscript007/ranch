@@ -1,15 +1,14 @@
-# 查找
+# 审核不通过
 
 请求
-- Service Key - ranch.editor.find
-- URI - /editor/find
+- Service Key - ranch.editor.reject
+- URI - /editor/reject
 
 参数
 
 |名称|类型|说明|
 |---|---|---|
 |id|char(36)|ID值。|
-|user|char(36)|用户ID，为空则使用当前用户。|
 
 返回值
 ```json
@@ -23,7 +22,8 @@
   "image": "预览图",
   "state": "状态：0-待审核；1-审核通过；2-审核拒绝；3-已上架；4-已下架",
   "create": "创建时间",
-  "modify": "修改时间",
-  "role": "类型：0-所有者；1-可编辑；2-仅浏览"
+  "modify": "修改时间"
 }
 ```
+
+> 后台管理接口，需验证[请求参数签名](https://github.com/heisedebaise/tephra/blob/master/tephra-ctrl/doc/sign.md)。

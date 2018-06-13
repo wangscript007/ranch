@@ -10,6 +10,10 @@ public interface ResourceService {
      * 资源是否存在验证器Bean名称。
      */
     String VALIDATOR_EXISTS = ResourceModel.NAME + ".exists";
+    /**
+     * 资源状态是否可编辑验证器Bean名称。
+     */
+    String VALIDATOR_EDITABLE = ResourceModel.NAME + ".validator.editable";
 
     /**
      * 检索资源集。

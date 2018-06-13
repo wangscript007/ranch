@@ -23,6 +23,9 @@
             "name": "image"
         },
         {
+            "name": "state"
+        },
+        {
             "name": "json"
         },
         {

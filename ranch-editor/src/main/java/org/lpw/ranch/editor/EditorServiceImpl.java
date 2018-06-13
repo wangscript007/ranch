@@ -65,6 +65,10 @@ public class EditorServiceImpl implements EditorService {
     private ElementService elementService;
     @Inject
     private EditorDao editorDao;
+    @Value("${" + EditorModel.NAME + ".auto.pass:false}")
+    private boolean autoPass;
+    @Value("${" + EditorModel.NAME + ".auto.sale:false}")
+    private boolean autoSale;
     @Value("${" + EditorModel.NAME + ".image:}")
     private String image;
     @Value("${" + EditorModel.NAME + ".pdf:}")
@@ -72,11 +76,11 @@ public class EditorServiceImpl implements EditorService {
     private String random;
 
     @Override
-    public JSONObject query(String mobile, String email, String nick, String type, String name, String keyword,
+    public JSONObject query(String mobile, String email, String nick, String type, String name, String keyword, int state,
                             String createStart, String createEnd, String modifyStart, String modifyEnd) {
         return editorDao.query(roleService.editors(userHelper.ids(null, null, nick, mobile, email,
                 null, -1, -1, -1, null, null)),
-                type, name, keyword, dateTime.getStart(createStart), dateTime.getEnd(createEnd), dateTime.getStart(modifyStart),
+                type, name, keyword, state, dateTime.getStart(createStart), dateTime.getEnd(createEnd), dateTime.getStart(modifyStart),
                 dateTime.getEnd(modifyEnd), pagination.getPageSize(20), pagination.getPageNum()).toJson();
     }
 
@@ -86,7 +90,7 @@ public class EditorServiceImpl implements EditorService {
         String cacheKey = getCacheKey(type + ":" + name + ":" + keyword + ":" + pageSize + ":" + pagination.getPageNum());
         JSONObject object = cache.get(cacheKey);
         if (object == null)
-            cache.put(cacheKey, object = editorDao.query(null, type, name, keyword, null, null,
+            cache.put(cacheKey, object = editorDao.query(null, type, name, keyword, -1, null, null,
                     null, null, pageSize, pagination.getPageNum()).toJson(), false);
 
         return object;
@@ -132,7 +136,7 @@ public class EditorServiceImpl implements EditorService {
         model.setHeight(editor.getHeight());
         model.setImage(editor.getImage());
         model.setJson(editor.getJson());
-        save(model, null, true, true);
+        save(model, 0, null, true, true);
 
         return toJson(model);
     }
@@ -153,10 +157,19 @@ public class EditorServiceImpl implements EditorService {
 
             EditorModel model = findById(id);
             model.setImage(wormholeHelper.image(null, null, null, new File(file)));
-            save(model, null, false, true);
+            save(model, 0, null, false, true);
 
             return file;
         });
+    }
+
+    @Override
+    public JSONObject state(String id, int state) {
+        EditorModel editor = editorDao.findById(id);
+        editor.setState(state);
+        save(editor);
+
+        return modelHelper.toJson(editor);
     }
 
     @Override
@@ -182,7 +195,7 @@ public class EditorServiceImpl implements EditorService {
         if (!validator.isEmpty(type))
             editor.setType(type);
         editor.setCreate(dateTime.now());
-        save(editor, null, true, false);
+        save(editor, 0, null, true, false);
 
         return toJson(editor);
     }
@@ -206,12 +219,14 @@ public class EditorServiceImpl implements EditorService {
         map.forEach((id, modify) -> {
             EditorModel editor = findById(id);
             if (Math.abs(editor.getModify().getTime() - modify) > TimeUnit.Second.getTime())
-                save(editor, new Timestamp(modify), false, false);
+                save(editor, 0, new Timestamp(modify), false, false);
         });
         resetRandom();
     }
 
-    private void save(EditorModel editor, Timestamp modify, boolean owner, boolean resetRandom) {
+    private void save(EditorModel editor, int state, Timestamp modify, boolean owner, boolean resetRandom) {
+        editor.setState(state);
+        autoState(editor);
         editor.setModify(modify == null ? dateTime.now() : modify);
         editorDao.save(editor);
         if (owner)
@@ -220,6 +235,13 @@ public class EditorServiceImpl implements EditorService {
         cache.remove(CACHE_MODEL + editor.getId());
         if (resetRandom)
             resetRandom();
+    }
+
+    private void autoState(EditorModel editor) {
+        if (autoPass && editor.getState() == 0)
+            editor.setState(1);
+        if (autoSale && editor.getState() == 1)
+            editor.setState(3);
     }
 
     private String getCacheKey(String key) {
