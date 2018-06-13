@@ -1,8 +1,8 @@
-# 审核通过
+# 审核不通过
 
 请求
-- Service Key - ranch.editor.resource.pass
-- URI - /editor/resource/pass
+- Service Key - ranch.resource.reject
+- URI - /resource/reject
 
 参数
 

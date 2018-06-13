@@ -1,5 +1,5 @@
 {
-    "key": "ranch.editor.resource",
+    "key": "ranch.resource",
     "props": [
         {
             "name": "type"

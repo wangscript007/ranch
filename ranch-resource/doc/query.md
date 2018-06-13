@@ -1,8 +1,8 @@
 # 检索
 
 请求
-- Service Key - ranch.editor.resource.query
-- URI - /editor/resource/query
+- Service Key - ranch.resource.query
+- URI - /resource/query
 
 参数
 

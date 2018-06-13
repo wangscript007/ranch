@@ -1,4 +1,4 @@
-package org.lpw.ranch.editor.resource;
+package org.lpw.ranch.resource;
 
 import org.lpw.ranch.user.helper.UserHelper;
 import org.lpw.tephra.ctrl.upload.UploadListener;

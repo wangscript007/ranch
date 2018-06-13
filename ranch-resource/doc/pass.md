@@ -1,8 +1,8 @@
-# 上架
+# 审核通过
 
 请求
-- Service Key - ranch.editor.resource.sale
-- URI - /editor/resource/sale
+- Service Key - ranch.resource.pass
+- URI - /resource/pass
 
 参数
 

@@ -1,8 +1,8 @@
 # 删除
 
 请求
-- Service Key - ranch.editor.resource.delete
-- URI - /editor/resource/delete
+- Service Key - ranch.resource.delete
+- URI - /resource/delete
 
 参数
 

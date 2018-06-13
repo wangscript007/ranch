@@ -1,4 +1,4 @@
-package org.lpw.ranch.editor.resource;
+package org.lpw.ranch.resource;
 
 import org.lpw.tephra.ctrl.validate.ValidateWrapper;
 import org.lpw.tephra.ctrl.validate.ValidatorSupport;

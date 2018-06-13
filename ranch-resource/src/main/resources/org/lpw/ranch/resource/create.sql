@@ -1,5 +1,5 @@
-DROP TABLE IF EXISTS t_editor_resource;
-CREATE TABLE t_editor_resource
+DROP TABLE IF EXISTS t_resource;
+CREATE TABLE t_resource
 (
   c_id CHAR(36) NOT NULL COMMENT '主键',
   c_type VARCHAR(255) NOT NULL COMMENT '分类',

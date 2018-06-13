@@ -1,8 +1,8 @@
 # 已上架资源集
 
 请求
-- Service Key - ranch.editor.resource.onsale
-- URI - /editor/resource/onsale
+- Service Key - ranch.resource.onsale
+- URI - /resource/onsale
 
 参数
 

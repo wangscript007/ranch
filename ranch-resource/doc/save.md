@@ -1,14 +1,22 @@
-# 审核不通过
+# 保存
 
 请求
-- Service Key - ranch.editor.resource.reject
-- URI - /editor/resource/reject
+- Service Key - ranch.resource.save
+- URI - /resource/save
 
 参数
 
 |名称|类型|说明|
 |---|---|---|
-|id|char(36)|ID值。|
+|id|char(36)|ID值：为空或不存在则新建；否则修改。|
+|type|char(100)|分类。|
+|sort|int|顺序。|
+|name|char(100)|名称。|
+|label|char(100)|说明。|
+|uri|char(100)|资源URI地址。|
+|width|int|图片宽。|
+|height|int|图片高。|
+|thumbnail|char(100)|缩略图URI地址。|
 
 返回值
 ```json
