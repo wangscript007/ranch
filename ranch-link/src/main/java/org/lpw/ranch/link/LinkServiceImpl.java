@@ -3,6 +3,7 @@ package org.lpw.ranch.link;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import org.lpw.ranch.util.Pagination;
+import org.lpw.tephra.dao.model.ModelHelper;
 import org.lpw.tephra.dao.orm.PageList;
 import org.lpw.tephra.util.DateTime;
 import org.lpw.tephra.util.Json;
@@ -10,9 +11,6 @@ import org.lpw.tephra.util.Validator;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
 
 /**
  * @author lpw
@@ -26,17 +24,11 @@ public class LinkServiceImpl implements LinkService {
     @Inject
     private Json json;
     @Inject
+    private ModelHelper modelHelper;
+    @Inject
     private Pagination pagination;
     @Inject
     private LinkDao linkDao;
-    private Set<String> ignores;
-
-    public LinkServiceImpl() {
-        ignores = new HashSet<>();
-        ignores.add("type");
-        ignores.add("id1");
-        ignores.add("id2");
-    }
 
     @Override
     public JSONObject query(String type, String id1, String id2) {
@@ -45,7 +37,7 @@ public class LinkServiceImpl implements LinkService {
 
         JSONObject object = pl.toJson(false);
         JSONArray array = new JSONArray();
-        pl.getList().forEach(link -> array.add(toJson(link)));
+        pl.getList().forEach(link -> array.add(modelHelper.toJson(link)));
         object.put("list", array);
 
         return object;
@@ -60,42 +52,23 @@ public class LinkServiceImpl implements LinkService {
     public JSONObject find(String type, String id1, String id2) {
         LinkModel link = linkDao.find(type, id1, id2);
 
-        return link == null ? new JSONObject() : toJson(link);
+        return link == null ? new JSONObject() : modelHelper.toJson(link);
     }
 
     @Override
-    public JSONObject save(String type, String id1, String id2, Map<String, String> map) {
-        LinkModel link = linkDao.find(type, id1, id2);
-        if (link == null) {
-            link = new LinkModel();
-            link.setType(type);
-            link.setId1(id1);
-            link.setId2(id2);
+    public JSONObject save(LinkModel link) {
+        LinkModel model = linkDao.find(link.getType(), link.getId1(), link.getId2());
+        if (model == null) {
+            model = new LinkModel();
+            model.setType(link.getType());
+            model.setId1(link.getId1());
+            model.setId2(link.getId2());
         }
-        JSONObject object = json.toObject(link.getJson());
-        if (object == null)
-            object = new JSONObject();
-        for (String key : map.keySet())
-            if (!ignores.contains(key))
-                object.put(key, map.get(key));
-        if (!object.isEmpty())
-            link.setJson(object.toJSONString());
-        link.setTime(dateTime.now());
-        linkDao.save(link);
+        model.setJson(link.getJson());
+        model.setTime(dateTime.now());
+        linkDao.save(model);
 
-        return toJson(link);
-    }
-
-    private JSONObject toJson(LinkModel link) {
-        JSONObject object = new JSONObject();
-        object.put("type", link.getType());
-        object.put("id1", link.getId1());
-        object.put("id2", link.getId2());
-        if (!validator.isEmpty(link.getJson()))
-            object.putAll(json.toObject(link.getJson()));
-        object.put("time", dateTime.toString(link.getTime()));
-
-        return object;
+        return modelHelper.toJson(model);
     }
 
     @Override

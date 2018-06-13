@@ -2,8 +2,6 @@ package org.lpw.ranch.link;
 
 import com.alibaba.fastjson.JSONObject;
 
-import java.util.Map;
-
 /**
  * @author lpw
  */
@@ -41,13 +39,10 @@ public interface LinkService {
     /**
      * 保存关联数据。
      *
-     * @param type 类型。
-     * @param id1  ID1。
-     * @param id2  ID2。
-     * @param map  参数集。
+     * @param link 关联数据。
      * @return 关联数据。
      */
-    JSONObject save(String type, String id1, String id2, Map<String, String> map);
+    JSONObject save(LinkModel link);
 
     /**
      * 删除关联数据。

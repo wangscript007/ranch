@@ -47,7 +47,7 @@ public class LinkCtrl {
             @Validate(validator = Validators.MAX_LENGTH, number = {36}, parameter = "id2", failureCode = 6)
     })
     public Object save() {
-        return linkService.save(request.get("type"), request.get("id1"), request.get("id2"), request.getMap());
+        return linkService.save(request.setToModel(LinkModel.class));
     }
 
     @Execute(name = "delete", validates = {

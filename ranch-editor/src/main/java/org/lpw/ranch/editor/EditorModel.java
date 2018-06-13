@@ -9,7 +9,6 @@ import org.springframework.stereotype.Component;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
-
 import java.sql.Timestamp;
 
 /**
@@ -114,7 +113,7 @@ public class EditorModel extends ModelSupport {
         this.state = state;
     }
 
-    @Jsonable
+    @Jsonable(extend = true)
     @Column(name = "c_json")
     public String getJson() {
         return json;
