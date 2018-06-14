@@ -3,6 +3,7 @@ package org.lpw.ranch.editor.screenshot;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import org.lpw.ranch.async.AsyncService;
+import org.lpw.ranch.editor.element.ElementModel;
 import org.lpw.ranch.editor.element.ElementService;
 import org.lpw.tephra.chrome.ChromeHelper;
 import org.lpw.tephra.ctrl.context.Session;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
 import java.io.File;
+import java.util.List;
 
 /**
  * @author lpw
@@ -50,14 +52,14 @@ public class ScreenshotServiceImpl implements ScreenshotService {
     }
 
     @Override
-    public String capture(String editor, String[] pages, int mainWidth, int mainHeight, int pageWidth, int pageHeight) {
+    public String capture(String editor, int mainWidth, int mainHeight, int pageWidth, int pageHeight) {
         String sid = session.getId();
+        List<ElementModel> list = elementService.list(editor);
 
-
-        return asyncService.submit(ScreenshotModel.NAME + ".capture", "", 2 * pages.length * 10, () -> {
+        return asyncService.submit(ScreenshotModel.NAME + ".capture", "", 2 * (list.size() + 1) * 10, () -> {
             screenshotDao.delete(editor);
             capture(sid, editor, "", mainWidth, mainHeight);
-            elementService.list(editor).forEach(element -> capture(sid, editor, element.getId(), pageWidth, pageHeight));
+            list.forEach(element -> capture(sid, editor, element.getId(), pageWidth, pageHeight));
 
             return "";
         });

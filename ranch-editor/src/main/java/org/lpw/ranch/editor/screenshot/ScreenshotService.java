@@ -28,12 +28,11 @@ public interface ScreenshotService {
      * 截图。
      *
      * @param editor     编辑器ID值。
-     * @param pages      页面集。
      * @param mainHeight 主页面宽。
      * @param mainWidth  主页面高。
      * @param pageHeight 页面宽。
      * @param pageWidth  页面高。
      * @return 异步ID。
      */
-    String capture(String editor, String[] pages, int mainWidth, int mainHeight, int pageWidth, int pageHeight);
+    String capture(String editor, int mainWidth, int mainHeight, int pageWidth, int pageHeight);
 }
