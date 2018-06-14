@@ -49,7 +49,7 @@ public class ScreenshotCtrl {
             @Validate(validator = EditorService.VALIDATOR_EXISTS, parameter = "editor", failureCode = 2)
     })
     public Object capture() {
-        return screenshotService.capture(request.get("editor"), request.getAsArray("pages"), request.getAsInt("mainWidth"),
+        return screenshotService.capture(request.get("editor"), request.getAsInt("mainWidth"),
                 request.getAsInt("mainHeight"), request.getAsInt("pageWidth"), request.getAsInt("pageHeight"));
     }
 }
