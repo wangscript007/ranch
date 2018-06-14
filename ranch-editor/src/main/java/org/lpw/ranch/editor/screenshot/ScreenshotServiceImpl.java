@@ -15,7 +15,9 @@ import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
 import java.io.File;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author lpw
@@ -57,24 +59,31 @@ public class ScreenshotServiceImpl implements ScreenshotService {
         List<ElementModel> list = elementService.list(editor);
 
         return asyncService.submit(ScreenshotModel.NAME + ".capture", "", 2 * (list.size() + 1) * 10, () -> {
+            Map<String, String> map = new HashMap<>();
+            capture(sid, editor, "", mainWidth, mainHeight, map);
+            list.forEach(element -> capture(sid, editor, element.getId(), pageWidth, pageHeight, map));
+
+            screenshotDao.close();
             screenshotDao.delete(editor);
-            capture(sid, editor, "", mainWidth, mainHeight);
-            list.forEach(element -> capture(sid, editor, element.getId(), pageWidth, pageHeight));
+            map.forEach((page, uri) -> {
+                ScreenshotModel screenshot = new ScreenshotModel();
+                screenshot.setEditor(editor);
+                screenshot.setPage(page);
+                screenshot.setUri(uri);
+                screenshotDao.save(screenshot);
+            });
+            screenshotDao.close();
 
             return "";
         });
     }
 
-    private void capture(String sid, String editor, String page, int width, int height) {
+    private void capture(String sid, String editor, String page, int width, int height, Map<String, String> map) {
         String file = chromeHelper.jpeg(capture + "?sid=" + sid + "&editor=" + editor + "&page=" + page,
                 10, 0, 0, width, height, asyncService.root());
         if (validator.isEmpty(file))
             return;
 
-        ScreenshotModel screenshot = new ScreenshotModel();
-        screenshot.setEditor(editor);
-        screenshot.setPage(page);
-        screenshot.setUri(wormholeHelper.image(null, null, null, new File(file)));
-        screenshotDao.save(screenshot);
+        map.put(page, wormholeHelper.image(null, null, null, new File(file)));
     }
 }

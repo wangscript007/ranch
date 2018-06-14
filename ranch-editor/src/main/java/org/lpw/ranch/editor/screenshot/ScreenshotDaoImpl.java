@@ -17,7 +17,7 @@ class ScreenshotDaoImpl implements ScreenshotDao {
 
     @Override
     public PageList<ScreenshotModel> query(String editor) {
-        return liteOrm.query(new LiteQuery(ScreenshotModel.class).where("c_editor=?").order("c_page"), new Object[]{editor});
+        return liteOrm.query(new LiteQuery(ScreenshotModel.class).where("c_editor=?"), new Object[]{editor});
     }
 
     @Override
@@ -33,5 +33,10 @@ class ScreenshotDaoImpl implements ScreenshotDao {
     @Override
     public void delete(String editor) {
         liteOrm.delete(new LiteQuery(ScreenshotModel.class).where("c_editor=?"), new Object[]{editor});
+    }
+
+    @Override
+    public void close() {
+        liteOrm.close();
     }
 }
