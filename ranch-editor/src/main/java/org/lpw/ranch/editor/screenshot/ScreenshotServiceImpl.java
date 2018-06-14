@@ -8,6 +8,7 @@ import org.lpw.ranch.editor.element.ElementService;
 import org.lpw.tephra.chrome.ChromeHelper;
 import org.lpw.tephra.ctrl.context.Session;
 import org.lpw.tephra.dao.model.ModelHelper;
+import org.lpw.tephra.util.Converter;
 import org.lpw.tephra.util.Validator;
 import org.lpw.tephra.wormhole.WormholeHelper;
 import org.springframework.beans.factory.annotation.Value;
@@ -27,6 +28,8 @@ public class ScreenshotServiceImpl implements ScreenshotService {
     @Inject
     private Validator validator;
     @Inject
+    private Converter converter;
+    @Inject
     private ModelHelper modelHelper;
     @Inject
     private Session session;
@@ -42,6 +45,7 @@ public class ScreenshotServiceImpl implements ScreenshotService {
     private ScreenshotDao screenshotDao;
     @Value("${" + ScreenshotModel.NAME + ".capture:}")
     private String capture;
+    private int wait = 5;
 
     @Override
     public JSONArray query(String editor) {
@@ -55,10 +59,13 @@ public class ScreenshotServiceImpl implements ScreenshotService {
 
     @Override
     public String capture(String editor, int mainWidth, int mainHeight, int pageWidth, int pageHeight) {
+        if (validator.isEmpty(capture))
+            return "";
+
         String sid = session.getId();
         List<ElementModel> list = elementService.list(editor);
 
-        return asyncService.submit(ScreenshotModel.NAME + ".capture", "", 2 * (list.size() + 1) * 10, () -> {
+        return asyncService.submit(ScreenshotModel.NAME + ".capture", "", 2 * (list.size() + 1) * wait, () -> {
             Map<String, String> map = new HashMap<>();
             capture(sid, editor, "", mainWidth, mainHeight, map);
             list.forEach(element -> capture(sid, editor, element.getId(), pageWidth, pageHeight, map));
@@ -74,13 +81,13 @@ public class ScreenshotServiceImpl implements ScreenshotService {
             });
             screenshotDao.close();
 
-            return "";
+            return converter.toString(map);
         });
     }
 
     private void capture(String sid, String editor, String page, int width, int height, Map<String, String> map) {
         String file = chromeHelper.jpeg(capture + "?sid=" + sid + "&editor=" + editor + "&page=" + page,
-                10, 0, 0, width, height, asyncService.root());
+                wait, 0, 0, width, height, asyncService.root());
         if (validator.isEmpty(file))
             return;
 
