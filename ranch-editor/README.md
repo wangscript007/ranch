@@ -91,6 +91,8 @@
 
 [检索](doc/element/query.md)
 
+[查找](doc/element/find.md)
+
 [保存](doc/element/save.md)
 
 [排序](doc/element/sort.md)

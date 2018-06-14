@@ -57,14 +57,24 @@ public class ElementServiceImpl implements ElementService, MinuteJob {
     @Override
     public JSONArray query(String editor, String parent, boolean recursive) {
         JSONArray array = new JSONArray();
-        elementDao.query(editor, validator.isEmpty(parent) ? editor : parent).getList().forEach(elemnt -> {
-            JSONObject object = modelHelper.toJson(elemnt);
+        elementDao.query(editor, validator.isEmpty(parent) ? editor : parent).getList().forEach(element -> {
+            JSONObject object = modelHelper.toJson(element);
             if (recursive)
-                object.put("children", query(editor, elemnt.getId(), true));
+                object.put("children", query(editor, element.getId(), true));
             array.add(object);
         });
 
         return array;
+    }
+
+    @Override
+    public JSONObject find(String id, boolean recursive) {
+        ElementModel element = findById(id);
+        JSONObject object = modelHelper.toJson(element);
+        if (recursive)
+            object.put("children", query(element.getEditor(), element.getId(), true));
+
+        return object;
     }
 
     @Override

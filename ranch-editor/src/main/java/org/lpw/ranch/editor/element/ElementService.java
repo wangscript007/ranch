@@ -31,6 +31,15 @@ public interface ElementService {
     JSONArray query(String editor, String parent, boolean recursive);
 
     /**
+     * 查找元素。
+     *
+     * @param id        ID值。
+     * @param recursive 是否递归获取子元素集。
+     * @return 元素。
+     */
+    JSONObject find(String id, boolean recursive);
+
+    /**
      * 查找元素信息。
      *
      * @param id ID值。
