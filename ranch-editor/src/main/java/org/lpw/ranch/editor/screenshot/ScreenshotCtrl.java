@@ -39,7 +39,6 @@ public class ScreenshotCtrl {
 
     @Execute(name = "capture", validates = {
             @Validate(validator = Validators.ID, parameter = "editor", failureCode = 1),
-            @Validate(validator = Validators.NOT_EMPTY, parameter = "pages", failureCode = 81),
             @Validate(validator = Validators.GREATER_THAN, number = {0}, parameter = "mainWidth", failureCode = 82),
             @Validate(validator = Validators.GREATER_THAN, number = {0}, parameter = "mainHeight", failureCode = 83),
             @Validate(validator = Validators.GREATER_THAN, number = {0}, parameter = "pageWidth", failureCode = 84),

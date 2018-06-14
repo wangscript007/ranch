@@ -3,6 +3,8 @@ package org.lpw.ranch.editor.element;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
+import java.util.List;
+
 /**
  * @author lpw
  */
@@ -29,6 +31,14 @@ public interface ElementService {
      * @return 元素集。
      */
     JSONArray query(String editor, String parent, boolean recursive);
+
+    /**
+     * 获取根元素集。
+     *
+     * @param editor 编辑器ID值。
+     * @return 元素集。
+     */
+    List<ElementModel> list(String editor);
 
     /**
      * 查找元素。

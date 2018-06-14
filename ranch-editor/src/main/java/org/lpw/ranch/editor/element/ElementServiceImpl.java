@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 import javax.inject.Inject;
 import java.sql.Timestamp;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -65,6 +66,11 @@ public class ElementServiceImpl implements ElementService, MinuteJob {
         });
 
         return array;
+    }
+
+    @Override
+    public List<ElementModel> list(String editor) {
+        return elementDao.query(editor, editor).getList();
     }
 
     @Override

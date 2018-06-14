@@ -3,6 +3,7 @@ package org.lpw.ranch.editor.screenshot;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import org.lpw.ranch.async.AsyncService;
+import org.lpw.ranch.editor.element.ElementService;
 import org.lpw.tephra.chrome.ChromeHelper;
 import org.lpw.tephra.ctrl.context.Session;
 import org.lpw.tephra.dao.model.ModelHelper;
@@ -32,6 +33,8 @@ public class ScreenshotServiceImpl implements ScreenshotService {
     @Inject
     private AsyncService asyncService;
     @Inject
+    private ElementService elementService;
+    @Inject
     private ScreenshotDao screenshotDao;
     @Value("${" + ScreenshotModel.NAME + ".capture:}")
     private String capture;
@@ -50,12 +53,11 @@ public class ScreenshotServiceImpl implements ScreenshotService {
     public String capture(String editor, String[] pages, int mainWidth, int mainHeight, int pageWidth, int pageHeight) {
         String sid = session.getId();
 
+
         return asyncService.submit(ScreenshotModel.NAME + ".capture", "", 2 * pages.length * 10, () -> {
             screenshotDao.delete(editor);
             capture(sid, editor, "", mainWidth, mainHeight);
-            for (String page : pages)
-                if (!validator.isEmpty(page))
-                    capture(sid, editor, page, pageWidth, pageHeight);
+            elementService.list(editor).forEach(element -> capture(sid, editor, element.getId(), pageWidth, pageHeight));
 
             return "";
         });
