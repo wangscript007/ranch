@@ -33,7 +33,7 @@ public class ScreenshotServiceImpl implements ScreenshotService {
     private AsyncService asyncService;
     @Inject
     private ScreenshotDao screenshotDao;
-    @Value("${" + ScreenshotModel.NAME + ".capture}")
+    @Value("${" + ScreenshotModel.NAME + ".capture:}")
     private String capture;
 
     @Override
@@ -54,7 +54,8 @@ public class ScreenshotServiceImpl implements ScreenshotService {
             screenshotDao.delete(editor);
             capture(sid, editor, "", mainWidth, mainHeight);
             for (String page : pages)
-                capture(sid, editor, page, pageWidth, pageHeight);
+                if (!validator.isEmpty(page))
+                    capture(sid, editor, page, pageWidth, pageHeight);
 
             return "";
         });

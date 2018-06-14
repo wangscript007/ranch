@@ -118,3 +118,19 @@
 |modify|long|修改时间。|
 |operation|int|操作：0-新增；1-修改；2-删除。|
 |time|datetime|时间。|
+
+## 截图
+
+属性
+
+|属性|类型|说明|
+|---|---|---|
+|editor|char(36)|编辑器。|
+|page|char(100)|页面ID，主页面为空`""`。|
+|uri|char(100)|URI地址。|
+
+[检索截图集](doc/screenshot/query.md)
+
+[查找截图](doc/screenshot/find.md)
+
+[截图](doc/screenshot/capture.md)

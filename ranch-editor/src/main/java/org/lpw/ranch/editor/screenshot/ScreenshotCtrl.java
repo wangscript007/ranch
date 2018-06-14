@@ -44,6 +44,7 @@ public class ScreenshotCtrl {
             @Validate(validator = Validators.GREATER_THAN, number = {0}, parameter = "mainHeight", failureCode = 83),
             @Validate(validator = Validators.GREATER_THAN, number = {0}, parameter = "pageWidth", failureCode = 84),
             @Validate(validator = Validators.GREATER_THAN, number = {0}, parameter = "pageHeight", failureCode = 85),
+            @Validate(validator = UserHelper.VALIDATOR_SIGN_IN),
             @Validate(validator = UserHelper.VALIDATOR_GRADE, number = {50, 99}, failureCode = 84),
             @Validate(validator = EditorService.VALIDATOR_EXISTS, parameter = "editor", failureCode = 2)
     })

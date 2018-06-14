@@ -166,8 +166,7 @@ public class EditorServiceImpl implements EditorService {
     @Override
     public JSONObject state(String id, int state) {
         EditorModel editor = editorDao.findById(id);
-        editor.setState(state);
-        save(editor);
+        save(editor, state, null, false, true);
 
         return modelHelper.toJson(editor);
     }
