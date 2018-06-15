@@ -15,16 +15,19 @@ import org.lpw.tephra.scheduler.HourJob;
 import org.lpw.tephra.scheduler.MinuteJob;
 import org.lpw.tephra.storage.Storages;
 import org.lpw.tephra.util.Coder;
+import org.lpw.tephra.util.Context;
 import org.lpw.tephra.util.Converter;
 import org.lpw.tephra.util.DateTime;
 import org.lpw.tephra.util.Generator;
 import org.lpw.tephra.util.Http;
+import org.lpw.tephra.util.Io;
 import org.lpw.tephra.util.Json;
 import org.lpw.tephra.util.Logger;
 import org.lpw.tephra.util.Numeric;
 import org.lpw.tephra.util.QrCode;
 import org.lpw.tephra.util.Validator;
 import org.lpw.tephra.util.Xml;
+import org.lpw.tephra.wormhole.WormholeHelper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -32,6 +35,8 @@ import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 import javax.inject.Inject;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.security.Security;
 import java.util.ArrayList;
@@ -64,6 +69,8 @@ public class WeixinServiceImpl implements WeixinService, ContextRefreshedListene
     @Inject
     private DateTime dateTime;
     @Inject
+    private Io io;
+    @Inject
     private Xml xml;
     @Inject
     private Sign sign;
@@ -72,11 +79,15 @@ public class WeixinServiceImpl implements WeixinService, ContextRefreshedListene
     @Inject
     private Coder coder;
     @Inject
+    private Context context;
+    @Inject
     private Logger logger;
     @Inject
     private Storages storages;
     @Inject
     private ModelHelper modelHelper;
+    @Inject
+    private WormholeHelper wormholeHelper;
     @Inject
     private Header header;
     @Inject
@@ -399,6 +410,43 @@ public class WeixinServiceImpl implements WeixinService, ContextRefreshedListene
             logger.warn(e, "解密微信数据[{}:{}:{}]时发生异常！", sessionKey, iv, message);
 
             return new JSONObject();
+        }
+    }
+
+    @Override
+    public String wxaCodeUnlimit(String key, String scene, String page, int width, boolean autoColor, JSONObject lineColor, boolean hyaline) {
+        Map<String, String> headers = new HashMap<>();
+        headers.put("Content-Type", "application/json");
+        JSONObject object = new JSONObject();
+        object.put("scene", scene);
+        object.put("page", page);
+        object.put("width", width);
+        object.put("auto_color", autoColor);
+        object.put("line_color", lineColor);
+        object.put("is_hyaline", hyaline);
+        Map<String, String> responseHeaders = new HashMap<>();
+        File file = new File(context.getAbsoluteRoot() + "/" + generator.random(32) + ".jpg");
+        try {
+            OutputStream outputStream = new FileOutputStream(file);
+            http.post("https://api.weixin.qq.com/wxa/getwxacodeunlimit?access_token="
+                    + findByKey(key).getAccessToken(), headers, object.toJSONString(), null, responseHeaders, outputStream);
+            outputStream.close();
+            switch (responseHeaders.get("Content-Type")) {
+                case "image/jpeg":
+                    return wormholeHelper.image(null, null, null, file);
+                default:
+                    logger.warn(null, "获取微信二维码[{}:{}:{}]失败！", object,
+                            converter.toString(responseHeaders), io.readAsString(file.getAbsolutePath()));
+
+                    return "";
+            }
+        } catch (Throwable throwable) {
+            logger.warn(throwable, "获取微信二维码[{}:{}:{}]时发生异常！", object,
+                    converter.toString(responseHeaders), io.readAsString(file.getAbsolutePath()));
+
+            return "";
+        } finally {
+            io.delete(file);
         }
     }
 

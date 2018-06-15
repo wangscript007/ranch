@@ -132,8 +132,9 @@ public class WeixinCtrl {
             @Validate(validator = WeixinService.VALIDATOR_EXISTS, parameter = "key", failureCode = 24)
     })
     public Object prepayQrCode() {
-        weixinService.prepayQrCode(request.get("key"), request.get("user"), request.get("subject"), request.getAsInt("amount"),
-                request.get("billNo"), request.get("notice"), request.getAsInt("size"), request.get("logo"), response.getOutputStream());
+        weixinService.prepayQrCode(request.get("key"), request.get("user"), request.get("subject"),
+                request.getAsInt("amount"), request.get("billNo"), request.get("notice"),
+                request.getAsInt("size"), request.get("logo"), response.getOutputStream());
 
         return null;
     }
@@ -192,5 +193,15 @@ public class WeixinCtrl {
     @Execute(name = "decrypt-aes-cbc-pkcs7")
     public Object decryptAesCbcPkcs7() {
         return weixinService.decryptAesCbcPkcs7(request.get("iv"), request.get("message"));
+    }
+
+    @Execute(name = "wxa-code-unlimit", validates = {
+            @Validate(validator = Validators.NOT_EMPTY, parameter = "key", failureCode = 2),
+            @Validate(validator = WeixinService.VALIDATOR_EXISTS, parameter = "key", failureCode = 24)
+    })
+    public Object wxaCodeUnlimit() {
+        return weixinService.wxaCodeUnlimit(request.get("key"), request.get("scene"), request.get("page"),
+                request.getAsInt("width"), request.getAsBoolean("autoColor"),
+                request.getAsJsonObject("lineColor"), request.getAsBoolean("hyaline"));
     }
 }

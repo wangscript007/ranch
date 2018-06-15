@@ -173,4 +173,18 @@ public interface WeixinService {
      * @return 解密后的数据，如果解密失败则返回空JSON{}。
      */
     JSONObject decryptAesCbcPkcs7(String iv, String message);
+
+    /**
+     * 获取无限制二维码。
+     *
+     * @param key       引用key。
+     * @param scene     场景。
+     * @param page      页面。
+     * @param width     宽度。
+     * @param autoColor 自动配置线条颜色。
+     * @param lineColor 线条颜色。
+     * @param hyaline   是否透明底色。
+     * @return 二维码地址。
+     */
+    String wxaCodeUnlimit(String key, String scene, String page, int width, boolean autoColor, JSONObject lineColor, boolean hyaline);
 }
