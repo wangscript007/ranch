@@ -12,5 +12,7 @@ interface MediaDao {
 
     void save(MediaModel media);
 
-    void delete(String id);
+    void deleteById(String id);
+
+    void deleteByEditor(String editor);
 }

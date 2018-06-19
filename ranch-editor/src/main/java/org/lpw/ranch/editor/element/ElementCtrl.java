@@ -92,6 +92,19 @@ public class ElementCtrl {
         return "";
     }
 
+    @Execute(name = "deletes", validates = {
+            @Validate(validator = Validators.ID, parameter = "editor", failureCode = 1),
+            @Validate(validator = UserHelper.VALIDATOR_SIGN_IN),
+            @Validate(validator = EditorService.VALIDATOR_EXISTS, parameter = "editor", failureCode = 2),
+            @Validate(validator = EditorService.VALIDATOR_EDITABLE, parameter = "editor", failureCode = 11),
+            @Validate(validator = RoleService.VALIDATOR_EDITABLE, parameter = "editor", failureCode = 42)
+    })
+    public Object deletes() {
+        elementService.deletes(request.get("editor"));
+
+        return "";
+    }
+
     @Execute(name = "batch", validates = {
             @Validate(validator = UserHelper.VALIDATOR_SIGN_IN)
     })

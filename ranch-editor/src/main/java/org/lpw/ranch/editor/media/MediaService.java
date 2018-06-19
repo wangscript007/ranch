@@ -56,4 +56,11 @@ public interface MediaService {
      * @param id ID值。
      */
     void delete(String id);
+
+    /**
+     * 删除所有媒体。
+     *
+     * @param editor 编辑器ID值。
+     */
+    void deletes(String editor);
 }

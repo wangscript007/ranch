@@ -44,7 +44,12 @@ class MediaDaoImpl implements MediaDao {
     }
 
     @Override
-    public void delete(String id) {
+    public void deleteById(String id) {
         liteOrm.deleteById(MediaModel.class, id);
+    }
+
+    @Override
+    public void deleteByEditor(String editor) {
+        liteOrm.delete(new LiteQuery(MediaModel.class).where("c_editor=?"), new Object[]{editor});
     }
 }

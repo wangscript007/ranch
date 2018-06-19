@@ -150,6 +150,12 @@ public class ElementServiceImpl implements ElementService, MinuteJob {
         editorService.modify(element.getEditor());
     }
 
+    @Override
+    public void deletes(String editor) {
+        elementDao.query(editor, editor).getList().forEach(this::delete);
+        editorService.modify(editor);
+    }
+
     private void delete(ElementModel element) {
         logService.save(element, LogService.Operation.Delete);
         elementDao.delete(element);

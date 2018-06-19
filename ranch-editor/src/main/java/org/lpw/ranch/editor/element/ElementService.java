@@ -84,6 +84,13 @@ public interface ElementService {
     void delete(String id);
 
     /**
+     * 删除所有元素。
+     *
+     * @param editor 编辑器ID。
+     */
+    void deletes(String editor);
+
+    /**
      * 批量操作。
      *
      * @param parameters 参数集。

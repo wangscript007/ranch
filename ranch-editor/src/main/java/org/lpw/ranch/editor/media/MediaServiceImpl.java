@@ -66,6 +66,11 @@ public class MediaServiceImpl implements MediaService {
 
     @Override
     public void delete(String id) {
-        mediaDao.delete(id);
+        mediaDao.deleteById(id);
+    }
+
+    @Override
+    public void deletes(String editor) {
+        mediaDao.deleteByEditor(editor);
     }
 }

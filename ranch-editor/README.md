@@ -79,6 +79,8 @@
 
 [删除](doc/media/delete.md)
 
+[删除全部](doc/media/deletes.md)
+
 ## 元素
 
 属性
@@ -102,6 +104,8 @@
 [排序](doc/element/sort.md)
 
 [删除](doc/element/delete.md)
+
+[删除全部](doc/element/deletes.md)
 
 [批量操作](doc/element/batch.md)
 
