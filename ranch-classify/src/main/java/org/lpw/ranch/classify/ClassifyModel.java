@@ -66,6 +66,7 @@ public class ClassifyModel extends RecycleModelSupport {
         this.name = name;
     }
 
+    @Jsonable(extend = true)
     @Column(name = "c_json")
     public String getJson() {
         return json;

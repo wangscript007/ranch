@@ -6,6 +6,7 @@ import org.lpw.ranch.recycle.Recycle;
 import org.lpw.ranch.recycle.RecycleHelper;
 import org.lpw.ranch.util.Pagination;
 import org.lpw.tephra.cache.Cache;
+import org.lpw.tephra.dao.model.ModelHelper;
 import org.lpw.tephra.dao.orm.PageList;
 import org.lpw.tephra.scheduler.DateJob;
 import org.lpw.tephra.util.Converter;
@@ -15,9 +16,6 @@ import org.lpw.tephra.util.Validator;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
 
 /**
  * @author lpw
@@ -41,28 +39,18 @@ public class ClassifyServiceImpl implements ClassifyService, DateJob {
     @Inject
     private Json json;
     @Inject
+    private ModelHelper modelHelper;
+    @Inject
     private Pagination pagination;
     @Inject
     private RecycleHelper recycleHelper;
     @Inject
     private ClassifyDao classifyDao;
-    private Set<String> ignores;
-
-    public ClassifyServiceImpl() {
-        ignores = new HashSet<>();
-        ignores.add("id");
-        ignores.add("code");
-        ignores.add("key");
-        ignores.add("value");
-        ignores.add("name");
-        ignores.add("sign-time");
-        ignores.add("sign");
-    }
 
     @Override
     public JSONObject query(String code, String key, String value, String name) {
         return toJson(validator.isEmpty(code) ? classifyDao.query(pagination.getPageSize(20), pagination.getPageNum())
-                : classifyDao.query(code, key, value, name, pagination.getPageSize(20), pagination.getPageNum()), Recycle.No);
+                : classifyDao.query(code, key, value, name, pagination.getPageSize(20), pagination.getPageNum()));
     }
 
     @Override
@@ -72,7 +60,7 @@ public class ClassifyServiceImpl implements ClassifyService, DateJob {
         if (array == null) {
             array = new JSONArray();
             for (ClassifyModel classify : classifyDao.query(code, null, null, null, 0, 0).getList()) {
-                JSONObject object = getJson(classify.getId(), classify, Recycle.No);
+                JSONObject object = toJson(classify.getId(), classify, Recycle.No);
                 JSONObject parent = findParent(array, classify.getCode());
                 if (parent == null)
                     array.add(object);
@@ -110,7 +98,7 @@ public class ClassifyServiceImpl implements ClassifyService, DateJob {
         if (object == null) {
             object = new JSONObject();
             for (String id : ids) {
-                JSONObject json = getJson(id, null, Recycle.No);
+                JSONObject json = toJson(id, null, Recycle.No);
                 if (json.isEmpty())
                     continue;
 
@@ -137,7 +125,7 @@ public class ClassifyServiceImpl implements ClassifyService, DateJob {
             if (classify == null)
                 return new JSONObject();
 
-            cache.put(cacheKey, object = getJson(classify.getId(), classify, Recycle.No), false);
+            cache.put(cacheKey, object = toJson(classify.getId(), classify, Recycle.No), false);
         }
 
         return object;
@@ -151,7 +139,7 @@ public class ClassifyServiceImpl implements ClassifyService, DateJob {
             array = new JSONArray();
             for (ClassifyModel classify : classifyDao.query(code, null, null, null, 0, 0).getList())
                 if (contains(classify, key, name))
-                    array.add(getJson(classify.getId(), classify, Recycle.No));
+                    array.add(toJson(classify.getId(), classify, Recycle.No));
             cache.put(cacheKey, array, false);
         }
 
@@ -176,72 +164,33 @@ public class ClassifyServiceImpl implements ClassifyService, DateJob {
     }
 
     @Override
-    public JSONObject create(String code, String key, String value, String name, Map<String, String> map) {
-        return save(new ClassifyModel(), code, key, value, name, new JSONObject(), map);
-    }
-
-    @Override
-    public JSONObject modify(String id, String code, String key, String value, String name, Map<String, String> map) {
-        return modify(findById(id), code, key, value, name, map);
-    }
-
-    @Override
-    public JSONObject save(String code, String key, String value, String name, Map<String, String> map) {
-        ClassifyModel classify = classifyDao.findByCodeKey(code, key);
-
-        return classify == null ? save(new ClassifyModel(), code, key, value, name, new JSONObject(), map) :
-                modify(classify, code, key, value, name, map);
-    }
-
-    private JSONObject modify(ClassifyModel classify, String code, String key, String value, String name, Map<String, String> map) {
-        JSONObject json = validator.isEmpty(classify.getJson()) ? new JSONObject() : this.json.toObject(classify.getJson());
-
-        return save(classify, code, key, value, name, json, map);
-
-    }
-
-    private JSONObject save(ClassifyModel classify, String code, String key, String value, String name, JSONObject json, Map<String, String> map) {
-        classify.setCode(code);
-        classify.setKey(key);
-        classify.setValue(value);
-        classify.setName(name);
-        map.forEach((k, v) -> {
-            if (ignores.contains(k))
-                return;
-
-            if (k.charAt(0) == '-')
-                json.remove(k.substring(1));
-            else
-                json.put(k, v);
-        });
-        classify.setJson(json.toJSONString());
+    public JSONObject save(ClassifyModel classify) {
+        ClassifyModel model = classifyDao.findByCodeKey(classify.getCode(), classify.getKey());
+        if (model == null) {
+            model = new ClassifyModel();
+            model.setCode(classify.getCode());
+            model.setKey(classify.getKey());
+        }
+        model.setValue(classify.getValue());
+        model.setName(classify.getName());
+        model.setJson(classify.getJson());
         classifyDao.save(classify);
         resetRandom();
 
-        return getJson(classify.getId(), classify, Recycle.No);
+        return toJson(classify.getId(), classify, Recycle.No);
     }
 
-    private JSONObject getJson(String id, ClassifyModel classify, Recycle recycle) {
+    private JSONObject toJson(String id, ClassifyModel classify, Recycle recycle) {
         String cacheKey = CACHE_JSON + getRandom() + id;
         JSONObject object = classify == null ? cache.get(cacheKey) : null;
         if (object == null) {
             object = new JSONObject();
             if (classify == null)
                 classify = findById(id);
-            if (classify == null || classify.getRecycle() != recycle.getValue()) {
+            if (classify == null || classify.getRecycle() != recycle.getValue())
                 cache.put(cacheKey, object, false);
-
-                return object;
-            }
-
-            object.put("id", classify.getId());
-            object.put("code", classify.getCode());
-            object.put("key", classify.getKey());
-            object.put("value", classify.getValue());
-            object.put("name", classify.getName());
-            if (!validator.isEmpty(classify.getJson()))
-                object.putAll(json.toObject(classify.getJson()));
-            cache.put(cacheKey, object, false);
+            else
+                cache.put(cacheKey, object = modelHelper.toJson(classify), false);
         }
 
         return object;
@@ -258,10 +207,10 @@ public class ClassifyServiceImpl implements ClassifyService, DateJob {
         return recycleHelper.recycle(ClassifyModel.class);
     }
 
-    private JSONObject toJson(PageList<ClassifyModel> pl, Recycle recycle) {
+    private JSONObject toJson(PageList<ClassifyModel> pl) {
         JSONObject object = pl.toJson(false);
         JSONArray array = new JSONArray();
-        pl.getList().forEach(classify -> array.add(getJson(classify.getId(), classify, recycle)));
+        pl.getList().forEach(classify -> array.add(toJson(classify.getId(), classify, Recycle.No)));
         object.put("list", array);
 
         return object;

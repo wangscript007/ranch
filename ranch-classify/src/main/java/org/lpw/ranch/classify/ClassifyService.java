@@ -66,42 +66,13 @@ public interface ClassifyService extends RecycleService {
     JSONArray list(String code, String key, String name);
 
     /**
-     * 创建新分类。
-     *
-     * @param code  编码。
-     * @param key   键。
-     * @param value 值。
-     * @param name  名称。
-     * @param map   参数集。
-     * @return 分类JSON格式数据。
-     */
-    JSONObject create(String code, String key, String value, String name, Map<String, String> map);
-
-    /**
-     * 修改分类信息。
-     *
-     * @param id    ID值。
-     * @param code  编码。
-     * @param key   键。
-     * @param value 值。
-     * @param name  名称。
-     * @param map   参数集。
-     * @return 分类JSON格式数据。
-     */
-    JSONObject modify(String id, String code, String key, String value, String name, Map<String, String> map);
-
-    /**
      * 保存分类。
      * 如果code+key已存在则修改；否则新增。
      *
-     * @param code  编码。
-     * @param key   键。
-     * @param value 值。
-     * @param name  名称。
-     * @param map   参数集。
+     * @param classify 分类信息。
      * @return 分类JSON格式数据。
      */
-    JSONObject save(String code, String key, String value, String name, Map<String, String> map);
+    JSONObject save(ClassifyModel classify);
 
     /**
      * 刷新缓存。
