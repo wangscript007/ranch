@@ -23,6 +23,7 @@ public interface EditorService {
      * @param mobile      用户手机号。
      * @param email       用户Email。
      * @param nick        用户昵称。
+     * @param template    模板。
      * @param type        类型。
      * @param name        名称。
      * @param keyword     关键词。
@@ -33,18 +34,8 @@ public interface EditorService {
      * @param modifyEnd   编辑结束日期，格式：yyyy-MM-dd。
      * @return 编辑器信息集。
      */
-    JSONObject query(String mobile, String email, String nick, String type, String name, String keyword, int state,
-                     String createStart, String createEnd, String modifyStart, String modifyEnd);
-
-    /**
-     * 检索编辑器信息集。
-     *
-     * @param type    类型。
-     * @param name    名称。
-     * @param keyword 关键词。
-     * @return 编辑器信息集。
-     */
-    JSONObject query(String type, String name, String keyword);
+    JSONObject query(String mobile, String email, String nick, int template, String type, String name, String keyword,
+                     int state, String createStart, String createEnd, String modifyStart, String modifyEnd);
 
     /**
      * 检索当前用户编辑器信息集。
@@ -117,4 +108,35 @@ public interface EditorService {
      * @param map 数据集，id-modify对。
      */
     void modify(Map<String, Long> map);
+
+    /**
+     * 修改编辑器修改时间。
+     *
+     * @param id ID值。
+     */
+    void modify(String id);
+
+    /**
+     * 删除。
+     *
+     * @param id ID值。
+     */
+    void delete(String id);
+
+    /**
+     * 搜索模板信息集。
+     *
+     * @param type  类型。
+     * @param words 关键词集。
+     * @return 编辑器信息集。
+     */
+    JSONObject searchTemplate(String type, String[] words);
+
+    /**
+     * 重建搜索索引。
+     *
+     * @param type 类型。
+     * @return 异步ID。
+     */
+    String resetSearchIndex(String type);
 }

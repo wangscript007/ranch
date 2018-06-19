@@ -26,8 +26,9 @@ public class EditorCtrl {
     })
     public Object query() {
         return editorService.query(request.get("mobile"), request.get("email"), request.get("nick"),
-                request.get("type"), request.get("name"), request.get("keyword"), request.getAsInt("state", -1),
-                request.get("createStart"), request.get("createEnd"), request.get("modifyStart"), request.get("modifyEnd"));
+                request.getAsInt("template", -1), request.get("type"), request.get("name"),
+                request.get("keyword"), request.getAsInt("state", -1), request.get("createStart"),
+                request.get("createEnd"), request.get("modifyStart"), request.get("modifyEnd"));
     }
 
     @Execute(name = "query-user", validates = {
@@ -35,15 +36,6 @@ public class EditorCtrl {
     })
     public Object queryUser() {
         return editorService.queryUser();
-    }
-
-    @Execute(name = "search", validates = {
-            @Validate(validator = Validators.SIGN)
-    })
-    public Object search() {
-        return editorService.query(null, null, null,
-                request.get("type"), request.get("name"), request.get("keyword"), request.getAsInt("state", -1),
-                request.get("createStart"), request.get("createEnd"), request.get("modifyStart"), request.get("modifyEnd"));
     }
 
     @Execute(name = "find", validates = {
@@ -139,5 +131,20 @@ public class EditorCtrl {
     })
     public Object copy() {
         return editorService.copy(request.get("id"), request.get("type"));
+    }
+
+    @Execute(name = "search", validates = {
+            @Validate(validator = Validators.NOT_EMPTY, parameter = "type", failureCode = 3)
+    })
+    public Object search() {
+        return editorService.searchTemplate(request.get("type"), request.getAsArray("words"));
+    }
+
+    @Execute(name = "reset-search-index", validates = {
+            @Validate(validator = Validators.NOT_EMPTY, parameter = "type", failureCode = 3),
+            @Validate(validator = Validators.SIGN)
+    })
+    public Object resetSearchIndex() {
+        return editorService.resetSearchIndex(request.get("type"));
     }
 }

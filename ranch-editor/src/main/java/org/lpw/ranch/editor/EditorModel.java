@@ -21,6 +21,7 @@ import java.sql.Timestamp;
 public class EditorModel extends ModelSupport {
     static final String NAME = "ranch.editor";
 
+    private int template; // 模板：0-否；1-是
     private String type; // 类型
     private int sort; // 顺序
     private String name; // 名称
@@ -28,10 +29,20 @@ public class EditorModel extends ModelSupport {
     private int width; // 宽度
     private int height; // 高度
     private String image; // 预览图
-    private int state; // 状态：0-待审核；1-审核通过；2-审核拒绝；3-已上架；4-已下架
+    private int state; // 状态：0-待审核；1-审核通过；2-审核拒绝；3-已上架；4-已下架；5-已删除
     private String json; // 扩展属性集
     private Timestamp create; // 创建时间
     private Timestamp modify; // 修改时间
+
+    @Jsonable
+    @Column(name = "c_template")
+    public int getTemplate() {
+        return template;
+    }
+
+    public void setTemplate(int template) {
+        this.template = template;
+    }
 
     @Jsonable
     @Column(name = "c_type")

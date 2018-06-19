@@ -145,7 +145,9 @@ public class ElementServiceImpl implements ElementService, MinuteJob {
 
     @Override
     public void delete(String id) {
-        delete(findById(id));
+        ElementModel element = findById(id);
+        delete(element);
+        editorService.modify(element.getEditor());
     }
 
     private void delete(ElementModel element) {
@@ -250,6 +252,18 @@ public class ElementServiceImpl implements ElementService, MinuteJob {
             elementDao.save(element);
             logService.save(element, LogService.Operation.Create);
             copy(sourceEditor, targetEditor, id, element.getId(), create, modify);
+        });
+    }
+
+    @Override
+    public void text(String editor, StringBuilder data) {
+        text(editor, editor, data);
+    }
+
+    private void text(String editor, String parent, StringBuilder data) {
+        elementDao.query(editor, parent).getList().forEach(element -> {
+            data.append(',').append(element.getJson());
+            text(editor, element.getId(), data);
         });
     }
 

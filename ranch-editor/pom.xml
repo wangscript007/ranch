@@ -25,6 +25,11 @@
             <version>LATEST</version>
         </dependency>
         <dependency>
+            <groupId>org.lpw.tephra</groupId>
+            <artifactId>tephra-lucene</artifactId>
+            <version>LATEST</version>
+        </dependency>
+        <dependency>
             <groupId>org.lpw.ranch</groupId>
             <artifactId>ranch-user-helper</artifactId>
             <version>${version.ranch}</version>

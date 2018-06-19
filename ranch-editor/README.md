@@ -5,6 +5,7 @@
 |属性|类型|说明|
 |---|---|---|
 |copy|char(36)|复制源。|
+|template|int|模板：0-否；1-是。|
 |type|char(100)|类型。|
 |sort|int|顺序，默认0，降序。|
 |name|char(100)|名称。|
@@ -39,6 +40,10 @@
 [导出PDF](doc/pdf.md)
 
 [复制](doc/copy.md)
+
+[搜索模板信息集](doc/search.md)
+
+[重建搜索索引](doc/reset-search-index.md)
 
 ## 角色
 

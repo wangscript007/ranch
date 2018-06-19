@@ -1,5 +1,7 @@
 package org.lpw.ranch.editor.role;
 
+import org.lpw.ranch.editor.EditorModel;
+import org.lpw.ranch.editor.EditorService;
 import org.lpw.ranch.user.helper.UserHelper;
 import org.lpw.ranch.util.Pagination;
 import org.lpw.tephra.cache.Cache;
@@ -28,6 +30,8 @@ public class RoleServiceImpl implements RoleService {
     @Inject
     private UserHelper userHelper;
     @Inject
+    private EditorService editorService;
+    @Inject
     private RoleDao roleDao;
 
     @Override
@@ -54,15 +58,24 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    public boolean hasType(String user, String editor, Type type) {
+    public boolean hasType(String user, String editorId, Type type) {
+        EditorModel editor = editorService.findById(editorId);
+        if (editor.getTemplate() == 1 && type == Type.Viewer)
+            return true;
+
         if (validator.isEmpty(user))
             user = userHelper.id();
         if (validator.isEmpty(user))
             return false;
 
-        RoleModel role = find(user, editor);
+        RoleModel role = find(user, editorId);
+        if (role != null && role.getType() <= type.ordinal())
+            return true;
 
-        return role != null && role.getType() <= type.ordinal();
+        if (userHelper.get(user).getIntValue("grade") < 50)
+            return false;
+
+        return editor.getTemplate() == 1 || type == Type.Viewer;
     }
 
     @Override
@@ -97,8 +110,10 @@ public class RoleServiceImpl implements RoleService {
         RoleModel role = find(user, editor);
         if (role.getType() >= Type.Editor.ordinal())
             delete(role);
-        else
+        else {
             roleDao.query(editor).getList().forEach(this::delete);
+            editorService.delete(editor);
+        }
     }
 
     private void delete(RoleModel role) {

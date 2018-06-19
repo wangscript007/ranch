@@ -98,4 +98,12 @@ public interface ElementService {
      * @param target 目标编辑器ID值。
      */
     void copy(String source, String target);
+
+    /**
+     * 附加文本内容。
+     *
+     * @param editor 编辑器ID值。
+     * @param data   目标数据对象。
+     */
+    void text(String editor, StringBuilder data);
 }

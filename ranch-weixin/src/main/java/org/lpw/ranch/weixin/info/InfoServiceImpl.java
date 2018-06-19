@@ -28,7 +28,7 @@ public class InfoServiceImpl implements InfoService {
             info = new InfoModel();
             info.setKey(key);
             info.setAppId(appId);
-            info.setUnionId(unionId);
+            info.setUnionId(validator.isEmpty(unionId) ? "" : unionId);
             info.setOpenId(openId);
             info.setTime(dateTime.now());
             infoDao.save(info);

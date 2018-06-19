@@ -13,6 +13,9 @@ import org.lpw.tephra.chrome.ChromeHelper;
 import org.lpw.tephra.ctrl.context.Session;
 import org.lpw.tephra.dao.model.ModelHelper;
 import org.lpw.tephra.dao.orm.PageList;
+import org.lpw.tephra.lucene.LuceneHelper;
+import org.lpw.tephra.scheduler.DateJob;
+import org.lpw.tephra.util.Converter;
 import org.lpw.tephra.util.DateTime;
 import org.lpw.tephra.util.Generator;
 import org.lpw.tephra.util.Io;
@@ -25,13 +28,17 @@ import org.springframework.stereotype.Service;
 import javax.inject.Inject;
 import java.io.File;
 import java.sql.Timestamp;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author lpw
  */
 @Service(EditorModel.NAME + ".service")
-public class EditorServiceImpl implements EditorService {
+public class EditorServiceImpl implements EditorService, DateJob {
     private static final String CACHE_MODEL = EditorModel.NAME + ".service.cache.model:";
     private static final String CACHE_QUERY = EditorModel.NAME + ".service.cache.query:";
 
@@ -46,6 +53,8 @@ public class EditorServiceImpl implements EditorService {
     @Inject
     private Generator generator;
     @Inject
+    private Converter converter;
+    @Inject
     private ModelHelper modelHelper;
     @Inject
     private Session session;
@@ -53,6 +62,8 @@ public class EditorServiceImpl implements EditorService {
     private ChromeHelper chromeHelper;
     @Inject
     private WormholeHelper wormholeHelper;
+    @Inject
+    private LuceneHelper luceneHelper;
     @Inject
     private Pagination pagination;
     @Inject
@@ -73,27 +84,17 @@ public class EditorServiceImpl implements EditorService {
     private String image;
     @Value("${" + EditorModel.NAME + ".pdf:}")
     private String pdf;
-    private String random;
+    @Value("${" + EditorModel.NAME + ".template-types:}")
+    private String templateTypes;
+    private Map<String, String> random = new ConcurrentHashMap<>();
 
     @Override
-    public JSONObject query(String mobile, String email, String nick, String type, String name, String keyword, int state,
+    public JSONObject query(String mobile, String email, String nick, int template, String type, String name, String keyword, int state,
                             String createStart, String createEnd, String modifyStart, String modifyEnd) {
         return editorDao.query(roleService.editors(userHelper.ids(null, null, nick, mobile, email,
-                null, -1, -1, -1, null, null)),
+                null, -1, -1, -1, null, null)), template,
                 type, name, keyword, state, dateTime.getStart(createStart), dateTime.getEnd(createEnd), dateTime.getStart(modifyStart),
                 dateTime.getEnd(modifyEnd), pagination.getPageSize(20), pagination.getPageNum()).toJson();
-    }
-
-    @Override
-    public JSONObject query(String type, String name, String keyword) {
-        int pageSize = pagination.getPageSize(20);
-        String cacheKey = getCacheKey(type + ":" + name + ":" + keyword + ":" + pageSize + ":" + pagination.getPageNum());
-        JSONObject object = cache.get(cacheKey);
-        if (object == null)
-            cache.put(cacheKey, object = editorDao.query(null, type, name, keyword, -1, null, null,
-                    null, null, pageSize, pagination.getPageNum()).toJson(), false);
-
-        return object;
     }
 
     @Override
@@ -129,6 +130,7 @@ public class EditorServiceImpl implements EditorService {
             model = new EditorModel();
             model.setCreate(dateTime.now());
         }
+        model.setTemplate(editor.getTemplate());
         model.setType(editor.getType());
         model.setName(editor.getName());
         model.setKeyword(editor.getKeyword());
@@ -136,7 +138,7 @@ public class EditorServiceImpl implements EditorService {
         model.setHeight(editor.getHeight());
         model.setImage(editor.getImage());
         model.setJson(editor.getJson());
-        save(model, 0, null, true, true);
+        save(model, 0, null, true);
 
         return toJson(model);
     }
@@ -157,7 +159,7 @@ public class EditorServiceImpl implements EditorService {
 
             EditorModel model = findById(id);
             model.setImage(wormholeHelper.image(null, null, null, new File(file)));
-            save(model, 0, null, false, true);
+            save(model, 0, null, false);
 
             return file;
         });
@@ -166,7 +168,7 @@ public class EditorServiceImpl implements EditorService {
     @Override
     public JSONObject state(String id, int state) {
         EditorModel editor = editorDao.findById(id);
-        save(editor, state, null, false, true);
+        save(editor, state, null, false);
 
         return modelHelper.toJson(editor);
     }
@@ -194,7 +196,7 @@ public class EditorServiceImpl implements EditorService {
         if (!validator.isEmpty(type))
             editor.setType(type);
         editor.setCreate(dateTime.now());
-        save(editor, 0, null, true, false);
+        save(editor, 0, null, true);
 
         return toJson(editor);
     }
@@ -218,12 +220,30 @@ public class EditorServiceImpl implements EditorService {
         map.forEach((id, modify) -> {
             EditorModel editor = findById(id);
             if (Math.abs(editor.getModify().getTime() - modify) > TimeUnit.Second.getTime())
-                save(editor, 0, new Timestamp(modify), false, false);
+                save(editor, 0, new Timestamp(modify), false);
         });
-        resetRandom();
     }
 
-    private void save(EditorModel editor, int state, Timestamp modify, boolean owner, boolean resetRandom) {
+    @Override
+    public void modify(String id) {
+        EditorModel editor = findById(id);
+        if (editor == null)
+            return;
+
+        save(editor, 0, new Timestamp(System.currentTimeMillis()), false);
+    }
+
+    @Override
+    public void delete(String id) {
+        EditorModel editor = findById(id);
+        if (editor == null)
+            return;
+
+        save(editor, 5, new Timestamp(System.currentTimeMillis()), false);
+    }
+
+    private void save(EditorModel editor, int state, Timestamp modify, boolean owner) {
+        boolean resetRandom = editor.getTemplate() == 1 && (editor.getState() == 3 || state == 3);
         editor.setState(state);
         autoState(editor);
         editor.setModify(modify == null ? dateTime.now() : modify);
@@ -233,7 +253,7 @@ public class EditorServiceImpl implements EditorService {
         roleService.modify(editor.getId(), editor.getModify());
         cache.remove(CACHE_MODEL + editor.getId());
         if (resetRandom)
-            resetRandom();
+            resetRandom(editor.getType());
     }
 
     private void autoState(EditorModel editor) {
@@ -243,14 +263,81 @@ public class EditorServiceImpl implements EditorService {
             editor.setState(3);
     }
 
-    private String getCacheKey(String key) {
-        if (validator.isEmpty(random))
-            resetRandom();
+    @Override
+    public JSONObject searchTemplate(String type, String[] words) {
+        int pageSize = pagination.getPageSize(20);
+        if (validator.isEmpty(words))
+            return searchTemplate(type, pageSize);
 
-        return CACHE_QUERY + random + key;
+        Set<String> set = new HashSet<>(Arrays.asList(words));
+        String cacheKey = getSearchCacheKey(type, converter.toString(set) + ":" + pageSize + ":" + pagination.getPageNum());
+        JSONObject object = cache.get(cacheKey);
+        if (object == null) {
+            Set<String> ids = luceneHelper.query(getLuceneKey(type), set, 1024);
+            cache.put(cacheKey, object = ids.isEmpty() ? new JSONObject() : editorDao.query(ids, 1, type, null,
+                    null, 3, null, null, null, null, pageSize,
+                    pagination.getPageNum()).toJson(), false);
+        }
+
+        return object;
     }
 
-    private void resetRandom() {
-        random = generator.random(32) + ":";
+    private JSONObject searchTemplate(String type, int pageSize) {
+        String cacheKey = getSearchCacheKey(type, ":" + pageSize + ":" + pagination.getPageNum());
+        JSONObject object = cache.get(cacheKey);
+        if (object == null)
+            cache.put(cacheKey, object = editorDao.query(null, 1, type, null, null, 3,
+                    null, null, null, null, pageSize,
+                    pagination.getPageNum()).toJson(), false);
+
+        return object;
+    }
+
+    private String getSearchCacheKey(String type, String key) {
+        return random.computeIfAbsent(type, k -> CACHE_QUERY + type + ":" + generator.random(32) + ":") + key;
+    }
+
+    @Override
+    public String resetSearchIndex(String type) {
+        return asyncService.submit(EditorModel.NAME + ".reset-search-index", type, 60 * 60, () -> {
+            setSearchIndex(type);
+
+            return "";
+        });
+    }
+
+    private void resetRandom(String type) {
+        random.remove(type);
+    }
+
+    @Override
+    public void executeDateJob() {
+        if (validator.isEmpty(templateTypes))
+            return;
+
+        for (String type : converter.toArray(templateTypes, ","))
+            setSearchIndex(type);
+    }
+
+    private void setSearchIndex(String type) {
+        String luceneKey = getLuceneKey(type);
+        luceneHelper.clear(luceneKey);
+        for (int i = 1; i < Integer.MAX_VALUE; i++) {
+            PageList<EditorModel> pl = editorDao.query(null, 1, type, null, null, 3,
+                    null, null, null, null, 20, i);
+            pl.getList().forEach(editor -> {
+                StringBuilder data = new StringBuilder().append(editor.getName()).append(',').append(editor.getKeyword());
+                elementService.text(editor.getId(), data);
+                luceneHelper.source(luceneKey, editor.getId(), data.toString());
+            });
+            if (pl.getNumber() == pl.getPage())
+                break;
+        }
+        luceneHelper.index(luceneKey);
+        resetRandom(type);
+    }
+
+    private String getLuceneKey(String type) {
+        return EditorModel.NAME + "." + type;
     }
 }
