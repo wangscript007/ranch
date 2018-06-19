@@ -90,6 +90,7 @@
 |editor|char(36)|编辑器。|
 |parent|char(36)|父元素。|
 |sort|int|顺序。|
+|text|string|文本，用于全文检索。|
 |create|datetime|创建时间。|
 |modify|long|修改时间。|
 

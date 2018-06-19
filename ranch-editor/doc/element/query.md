@@ -19,6 +19,7 @@
   "editor": "编辑器",
   "parent": "父元素",
   "sort": "顺序",
+  "text": "文本",
   "create": "创建时间",
   "modify": "修改时间",
   "children": []

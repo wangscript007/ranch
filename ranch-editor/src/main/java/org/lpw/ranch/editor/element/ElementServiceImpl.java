@@ -106,6 +106,7 @@ public class ElementServiceImpl implements ElementService, MinuteJob {
         if (element.getSort() > 0)
             model.setSort(element.getSort());
         model.setJson(element.getJson());
+        model.setText(element.getText());
         save(model, element.getSort());
         logService.save(model, isNew ? LogService.Operation.Create : LogService.Operation.Modify);
 
@@ -268,7 +269,8 @@ public class ElementServiceImpl implements ElementService, MinuteJob {
 
     private void text(String editor, String parent, StringBuilder data) {
         elementDao.query(editor, parent).getList().forEach(element -> {
-            data.append(',').append(element.getJson());
+            if (!validator.isEmpty(element.getText()))
+                data.append(',').append(element.getText());
             text(editor, element.getId(), data);
         });
     }

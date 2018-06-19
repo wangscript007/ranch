@@ -9,7 +9,6 @@ import org.springframework.stereotype.Component;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
-
 import java.sql.Timestamp;
 
 /**
@@ -26,6 +25,7 @@ public class ElementModel extends ModelSupport {
     private String parent; // 父元素
     private int sort; // 顺序
     private String json; // 扩展属性集
+    private String text; // 文本
     private Timestamp create; // 创建时间
     private long modify; // 修改时间
 
@@ -67,6 +67,16 @@ public class ElementModel extends ModelSupport {
 
     public void setJson(String json) {
         this.json = json;
+    }
+
+    @Jsonable
+    @Column(name = "c_text")
+    public String getText() {
+        return text;
+    }
+
+    public void setText(String text) {
+        this.text = text;
     }
 
     @Jsonable

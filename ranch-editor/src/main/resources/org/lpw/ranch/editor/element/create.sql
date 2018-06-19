@@ -6,6 +6,7 @@ CREATE TABLE t_editor_element
   c_parent CHAR(36) NOT NULL COMMENT '父元素',
   c_sort INT DEFAULT 0 COMMENT '顺序',
   c_json LONGTEXT DEFAULT NULL COMMENT '扩展属性集',
+  c_text TEXT DEFAULT NULL COMMENT '文本',
   c_create DATETIME DEFAULT NULL COMMENT '创建时间',
   c_modify BIGINT DEFAULT 0 COMMENT '修改时间',
 
