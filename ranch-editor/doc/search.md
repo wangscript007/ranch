@@ -35,6 +35,4 @@
 }
 ```
 
-> 后台管理接口，需验证[请求参数签名](https://github.com/heisedebaise/tephra/blob/master/tephra-ctrl/doc/sign.md)。
-
 > 如果未检索到数据,将返回空JSON`{}`。

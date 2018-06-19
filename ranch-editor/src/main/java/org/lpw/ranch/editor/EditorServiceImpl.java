@@ -299,6 +299,9 @@ public class EditorServiceImpl implements EditorService, DateJob {
 
     @Override
     public String resetSearchIndex(String type) {
+        if (!templateTypes.contains(type))
+            return "";
+
         return asyncService.submit(EditorModel.NAME + ".reset-search-index", type, 60 * 60, () -> {
             setSearchIndex(type);
 
