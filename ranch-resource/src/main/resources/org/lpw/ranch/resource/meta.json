@@ -26,6 +26,9 @@
             "name": "thumbnail"
         },
         {
+            "name": "author"
+        },
+        {
             "name": "state"
         },
         {

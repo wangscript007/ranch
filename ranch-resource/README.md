@@ -12,6 +12,7 @@
 |width|int|图片宽。|
 |height|int|图片高。|
 |thumbnail|char(100)|缩略图URI地址。|
+|author|char(100)|作者。|
 |state|int|状态：0-待审核；1-审核通过；2-审核拒绝；3-已上架；4-已下架。|
 |user|char(36)|用户。|
 |time|datetime|时间。|

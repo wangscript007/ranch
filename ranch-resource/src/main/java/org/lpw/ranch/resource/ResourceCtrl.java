@@ -40,9 +40,10 @@ public class ResourceCtrl {
             @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "label", failureCode = 6),
             @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "uri", failureCode = 7),
             @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "thumbnail", failureCode = 8),
+            @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "author", failureCode = 9),
             @Validate(validator = Validators.SIGN),
             @Validate(validator = UserHelper.VALIDATOR_SIGN_IN),
-            @Validate(validator = ResourceService.VALIDATOR_EDITABLE, emptyable = true, parameter = "id", failureCode = 9)
+            @Validate(validator = ResourceService.VALIDATOR_EDITABLE, emptyable = true, parameter = "id", failureCode = 10)
     })
     public Object save() {
         return resourceService.save(request.setToModel(ResourceModel.class));
@@ -87,7 +88,7 @@ public class ResourceCtrl {
     @Execute(name = "delete", validates = {
             @Validate(validator = Validators.ID, parameter = "id", failureCode = 1),
             @Validate(validator = Validators.SIGN),
-            @Validate(validator = ResourceService.VALIDATOR_EDITABLE, emptyable = true, parameter = "id", failureCode = 9)
+            @Validate(validator = ResourceService.VALIDATOR_EDITABLE, emptyable = true, parameter = "id", failureCode = 10)
     })
     public Object delete() {
         resourceService.delete(request.get("id"));

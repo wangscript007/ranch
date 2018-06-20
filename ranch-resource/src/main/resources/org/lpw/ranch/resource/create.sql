@@ -10,6 +10,7 @@ CREATE TABLE t_resource
   c_width INT DEFAULT 0 COMMENT '图片宽',
   c_height INT DEFAULT 0 COMMENT '图片高',
   c_thumbnail VARCHAR(255) DEFAULT NULL COMMENT '缩略图URI地址',
+  c_author VARCHAR(255) DEFAULT NULL COMMENT '作者',
   c_state INT DEFAULT 0 COMMENT '状态：0-待审核；1-审核通过；2-审核拒绝；3-已上架；4-已下架',
   c_user CHAR(36) NOT NULL COMMENT '用户',
   c_time DATETIME DEFAULT NULL COMMENT '时间',

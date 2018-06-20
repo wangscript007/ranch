@@ -29,6 +29,7 @@ public class ResourceModel extends ModelSupport {
     private int width; // 图片宽
     private int height; // 图片高
     private String thumbnail; // 缩略图URI地址
+    private String author; // 作者
     private int state; // 状态：0-待审核；1-审核通过；2-审核拒绝；3-已上架；4-已下架
     private String user; // 用户
     private Timestamp time; // 时间
@@ -111,6 +112,16 @@ public class ResourceModel extends ModelSupport {
 
     public void setThumbnail(String thumbnail) {
         this.thumbnail = thumbnail;
+    }
+
+    @Jsonable
+    @Column(name = "c_author")
+    public String getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(String author) {
+        this.author = author;
     }
 
     @Jsonable

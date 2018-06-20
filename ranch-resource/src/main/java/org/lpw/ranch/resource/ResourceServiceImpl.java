@@ -81,6 +81,7 @@ public class ResourceServiceImpl implements ResourceService {
         model.setWidth(resource.getWidth());
         model.setHeight(resource.getHeight());
         model.setThumbnail(resource.getThumbnail());
+        model.setAuthor(resource.getAuthor());
         model.setState(0);
         model.setTime(dateTime.now());
         autoState(model);
