@@ -77,6 +77,13 @@ public interface EditorService {
     String image(String id);
 
     /**
+     * 设置主截图。
+     * @param id ID值。
+     * @param uri 主截图。
+     */
+    void screenshot(String id, String uri);
+
+    /**
      * 设置状态。
      *
      * @param id    ID值。

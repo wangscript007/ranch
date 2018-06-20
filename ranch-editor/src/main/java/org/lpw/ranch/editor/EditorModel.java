@@ -29,6 +29,7 @@ public class EditorModel extends ModelSupport {
     private int width; // 宽度
     private int height; // 高度
     private String image; // 预览图
+    private String screenshot; // 主截图
     private int state; // 状态：0-待审核；1-审核通过；2-审核拒绝；3-已上架；4-已下架；5-已删除
     private String json; // 扩展属性集
     private Timestamp create; // 创建时间
@@ -112,6 +113,16 @@ public class EditorModel extends ModelSupport {
 
     public void setImage(String image) {
         this.image = image;
+    }
+
+    @Jsonable
+    @Column(name = "c_screenshot")
+    public String getScreenshot() {
+        return screenshot;
+    }
+
+    public void setScreenshot(String screenshot) {
+        this.screenshot = screenshot;
     }
 
     @Jsonable

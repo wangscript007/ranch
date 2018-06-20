@@ -36,7 +36,7 @@ class RoleDaoImpl implements RoleDao {
     public PageList<RoleModel> query(Set<String> users) {
         StringBuilder where = new StringBuilder();
         List<Object> args = new ArrayList<>();
-        daoHelper.in(where, args, "c_user", users.toArray());
+        daoHelper.in(where, args, "c_user", users);
 
         return liteOrm.query(new LiteQuery(RoleModel.class).where(where.toString()), args.toArray());
     }

@@ -6,8 +6,10 @@ import org.lpw.ranch.async.AsyncService;
 import org.lpw.ranch.editor.element.ElementService;
 import org.lpw.ranch.editor.role.RoleModel;
 import org.lpw.ranch.editor.role.RoleService;
+import org.lpw.ranch.editor.screenshot.ScreenshotService;
 import org.lpw.ranch.user.helper.UserHelper;
 import org.lpw.ranch.util.Pagination;
+import org.lpw.tephra.bean.BeanFactory;
 import org.lpw.tephra.cache.Cache;
 import org.lpw.tephra.chrome.ChromeHelper;
 import org.lpw.tephra.ctrl.context.Session;
@@ -166,6 +168,13 @@ public class EditorServiceImpl implements EditorService, DateJob {
     }
 
     @Override
+    public void screenshot(String id, String uri) {
+        EditorModel editor = editorDao.findById(id);
+        editor.setScreenshot(uri);
+        save(editor, 0, null, false);
+    }
+
+    @Override
     public JSONObject state(String id, int state) {
         EditorModel editor = editorDao.findById(id);
         save(editor, state, null, false);
@@ -265,6 +274,7 @@ public class EditorServiceImpl implements EditorService, DateJob {
             editor.setState(3);
     }
 
+    @SuppressWarnings({"unchecked"})
     @Override
     public JSONObject searchTemplate(String type, String[] words) {
         int pageSize = pagination.getPageSize(20);
@@ -276,9 +286,15 @@ public class EditorServiceImpl implements EditorService, DateJob {
         JSONObject object = cache.get(cacheKey);
         if (object == null) {
             Set<String> ids = luceneHelper.query(getLuceneKey(type), set, 1024);
-            cache.put(cacheKey, object = ids.isEmpty() ? new JSONObject() : editorDao.query(ids, 1, type, null,
-                    null, 3, null, null, null, null, pageSize,
-                    pagination.getPageNum()).toJson(), false);
+            if (ids.isEmpty()) {
+                PageList<EditorModel> pl = BeanFactory.getBean(PageList.class);
+                pl.setPage(0, pageSize, 0);
+                object = pl.toJson();
+            } else {
+                object = editorDao.query(ids, 1, type, null, null, 3, null,
+                        null, null, null, pageSize, pagination.getPageNum()).toJson();
+            }
+            cache.put(cacheKey, object, false);
         }
 
         return object;

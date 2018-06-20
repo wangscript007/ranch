@@ -29,7 +29,7 @@ class EditorDaoImpl implements EditorDao {
                                        int pageSize, int pageNum) {
         StringBuilder where = new StringBuilder();
         List<Object> args = new ArrayList<>();
-        daoHelper.in(where, args, "c_id", ids.toArray());
+        daoHelper.in(where, args, "c_id", ids);
         daoHelper.where(where, args, "c_template", DaoOperation.Equals, template);
         daoHelper.where(where, args, "c_type", DaoOperation.Equals, type);
         daoHelper.where(where, args, "c_state", DaoOperation.Equals, state);

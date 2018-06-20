@@ -3,6 +3,7 @@ package org.lpw.ranch.editor.screenshot;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import org.lpw.ranch.async.AsyncService;
+import org.lpw.ranch.editor.EditorService;
 import org.lpw.ranch.editor.element.ElementModel;
 import org.lpw.ranch.editor.element.ElementService;
 import org.lpw.tephra.chrome.ChromeHelper;
@@ -40,6 +41,8 @@ public class ScreenshotServiceImpl implements ScreenshotService {
     @Inject
     private AsyncService asyncService;
     @Inject
+    private EditorService editorService;
+    @Inject
     private ElementService elementService;
     @Inject
     private ScreenshotDao screenshotDao;
@@ -73,6 +76,8 @@ public class ScreenshotServiceImpl implements ScreenshotService {
             screenshotDao.close();
             screenshotDao.delete(editor);
             map.forEach((page, uri) -> {
+                if (page.equals(""))
+                    editorService.screenshot(editor, uri);
                 ScreenshotModel screenshot = new ScreenshotModel();
                 screenshot.setEditor(editor);
                 screenshot.setPage(page);

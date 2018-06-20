@@ -8,12 +8,14 @@
 
 |名称|类型|必须|说明|
 |---|---|---|---|
-|id|char(36)|是|type。|
+|type|char(100)|是|类型。|
 
 返回值
 ```
 "异步ID"
 ```
+
+> 后台管理接口，需验证[请求参数签名](https://github.com/heisedebaise/tephra/blob/master/tephra-ctrl/doc/sign.md)。
 
 > 异步ID参考[异步服务](../../ranch-base/doc/async.md)。
 
