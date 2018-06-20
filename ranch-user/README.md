@@ -50,7 +50,9 @@
 
 [修改用户状态](doc/state.md)
 
-[获取用户认证信息集](doc/auth/query.md)
+[获取认证信息集](doc/auth/query.md)
+
+[删除认证](doc/auth/delte.md)
 
 [获取在线用户信息集](doc/online/query.md)
 
