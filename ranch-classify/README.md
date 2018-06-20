@@ -24,11 +24,9 @@
 
 [检索分类信息集](doc/list.md)
 
-[创建新分类](doc/create.md)
-
-[修改分类信息](doc/modify.md)
-
 [保存分类信息](doc/save.md)
+
+[上传图片](doc/upload.md)
 
 [刷新缓存](doc/refresh.md)
 
