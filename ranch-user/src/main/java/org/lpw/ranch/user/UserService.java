@@ -37,11 +37,10 @@ public interface UserService {
      *
      * @param uid      UID值。
      * @param password 密码。
-     * @param macId    客户端机器码。
      * @param type     认证类型。
      * @return 认证成功则返回true；否则返回false。
      */
-    boolean signIn(String uid, String password, String macId, int type);
+    boolean signIn(String uid, String password, int type);
 
     /**
      * 获取微信PC端登入跳转URL地址。

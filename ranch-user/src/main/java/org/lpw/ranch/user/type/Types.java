@@ -10,25 +10,21 @@ import org.lpw.ranch.user.UserModel;
  */
 public interface Types {
     /**
-     * 绑定。
-     */
-    int BIND = 0;
-    /**
      * 自有。
      */
-    int SELF = 1;
+    int SELF = 0;
     /**
      * 微信公众号。
      */
-    int WEIXIN = 2;
+    int WEIXIN = 1;
     /**
      * 微信小程序。
      */
-    int WEIXIN_MINI = 3;
+    int WEIXIN_MINI = 2;
     /**
      * 类型最大值。
      */
-    int MAX = 3;
+    int MAX = 2;
 
     /**
      * 获取UID。

@@ -6,10 +6,10 @@
 
 参数
 
-|名称|类型|说明|
-|---|---|---|
-|key|char(100)|微信引用KEY。|
-|redirectUrl|string|返回跳转URL地址。|
+|名称|类型|必须|说明|
+|---|---|---|---|
+|key|char(100)|是|微信引用KEY。|
+|redirectUrl|string|是|返回跳转URL地址。|
 
 返回
 

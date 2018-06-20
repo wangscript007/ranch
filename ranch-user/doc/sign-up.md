@@ -6,11 +6,11 @@
 
 参数
 
-|名称|类型|说明|
-|---|---|---|
-|uid|char(100)|UID值，type=0则uid为MacID，type=1则uid为用户名（手机号、Email、账号等）。|
-|password|string|密码。|
-|type|int|认证类型：0-机器码；1-自有账号。|
+|名称|类型|必须|说明|
+|---|---|---|---|
+|uid|char(100)|是|UID值，type=0则uid为用户名（手机号、Email、账号等）。|
+|password|string|是|密码。|
+|type|int|是|认证类型：0-自有账号。|
 
 返回值
 ```json

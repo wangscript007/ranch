@@ -6,7 +6,6 @@ import org.lpw.ranch.user.auth.AuthModel;
 import org.lpw.ranch.user.online.OnlineModel;
 import org.lpw.tephra.crypto.Digest;
 import org.lpw.tephra.crypto.Sign;
-import org.lpw.tephra.ctrl.context.Request;
 import org.lpw.tephra.ctrl.context.Session;
 import org.lpw.tephra.dao.orm.lite.LiteOrm;
 import org.lpw.tephra.dao.orm.lite.LiteQuery;
@@ -111,7 +110,8 @@ public class TestSupport extends TephraTestSupport {
         Assert.assertEquals(user.getGender(), object.getIntValue("gender"));
         Assert.assertEquals(converter.toString(user.getBirthday()), object.getString("birthday"));
         Assert.assertEquals(user.getCode(), object.getString("code"));
-        Assert.assertEquals(converter.toString(user.getRegister()), object.getString("register"));
+        Assert.assertTrue(Math.abs(user.getRegister().getTime()
+                - dateTime.toTime(object.getString("register")).getTime()) < 2000);
         Assert.assertEquals(user.getGrade(), object.getIntValue("grade"));
         Assert.assertEquals(user.getState(), object.getIntValue("state"));
     }

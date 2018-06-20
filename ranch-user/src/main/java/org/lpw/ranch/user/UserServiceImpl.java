@@ -99,13 +99,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean signIn(String uid, String password, String macId, int type) {
+    public boolean signIn(String uid, String password, int type) {
         if (type == Types.WEIXIN || type == Types.WEIXIN_MINI)
             uid = getWeixinId(uid, password, type);
         if (uid == null)
             return false;
 
-        AuthModel auth = type == Types.BIND ? findByBind(uid) : authService.findByUid(uid);
+        AuthModel auth = authService.findByUid(uid);
         if (auth == null || !sameType(auth, type))
             return false;
 
@@ -116,8 +116,6 @@ public class UserServiceImpl implements UserService {
         if (type == Types.SELF) {
             if (!pass(user, password))
                 return false;
-
-            authService.bind(user.getId(), macId);
         } else if (type > Types.SELF)
             session.set(SESSION_AUTH3, types.getAuth(uid, password, type));
         onlineService.signIn(user.getId());
@@ -135,16 +133,6 @@ public class UserServiceImpl implements UserService {
             signUp(uid, password, type);
 
         return wxid;
-    }
-
-    private AuthModel findByBind(String uid) {
-        AuthModel auth = authService.findByUid(uid);
-        if (auth != null)
-            return auth;
-
-        signUp(uid, null, Types.BIND);
-
-        return authService.findByUid(uid);
     }
 
     private boolean sameType(AuthModel auth, int type) {
@@ -191,7 +179,7 @@ public class UserServiceImpl implements UserService {
     public String signInWxPcRedirect(String code) {
         String key = session.get("sign-in-wx-pc-key");
         String redirectUrl = session.get("sign-in-wx-pc-redirect-url");
-        boolean success = !validator.isEmpty(key) && !validator.isEmpty(code) && signIn(code, key, null, Types.WEIXIN);
+        boolean success = !validator.isEmpty(key) && !validator.isEmpty(code) && signIn(code, key, Types.WEIXIN);
 
         return redirectUrl + (redirectUrl.indexOf('?') == -1 ? "?" : "&") + "state=" + (success ? "success" : "failure");
     }
@@ -214,14 +202,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void signOut() {
-        authService.unbind(session.getId());
         onlineService.signOut();
         session.remove(SESSION);
     }
 
     @Override
     public void signOut(String sid) {
-        authService.unbind(sid);
         session.remove(sid, SESSION);
     }
 

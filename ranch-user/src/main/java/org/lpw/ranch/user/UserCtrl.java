@@ -47,9 +47,8 @@ public class UserCtrl {
     @Execute(name = "sign-in", validates = {
             @Validate(validator = Validators.NOT_EMPTY, parameter = "uid", failureCode = 1),
             @Validate(validator = UserService.VALIDATOR_PASSWORD, parameters = {"password", "type"}, failureCode = 3),
-            @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "macId", failureCode = 5),
             @Validate(validator = Validators.BETWEEN, number = {0, Types.MAX}, parameter = "type", failureCode = 27),
-            @Validate(validator = UserService.VALIDATOR_SIGN_IN, parameters = {"uid", "password", "macId", "type"}, failureCode = 6)
+            @Validate(validator = UserService.VALIDATOR_SIGN_IN, parameters = {"uid", "password", "type"}, failureCode = 6)
     })
     public Object signIn() {
         return sign();

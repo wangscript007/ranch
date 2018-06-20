@@ -31,11 +31,9 @@ public class SignInTest extends TestSupport {
         UserModel user1 = create(1, 0);
         UserModel user2 = create(2, 0);
         UserModel user3 = create(3, 1);
-        AuthModel auth0 = createAuth(user1.getId(), "mac id 1", 0);
-        createAuth(user1.getId(), "uid 1", 1);
-        createAuth("user 2", "uid 2", 2);
-        createAuth(user2.getId(), "uid 3", 1);
-        createAuth(user3.getId(), "uid 4", 0);
+        createAuth(user1.getId(), "uid 1", 0);
+        createAuth("user 2", "uid 2", 1);
+        createAuth(user2.getId(), "uid 3", 0);
 
         mockHelper.reset();
         mockHelper.mock("/user/sign-in");
@@ -45,19 +43,11 @@ public class SignInTest extends TestSupport {
 
         mockHelper.reset();
         mockHelper.getRequest().addParameter("uid", "uid");
-        mockHelper.getRequest().addParameter("type", "1");
+        mockHelper.getRequest().addParameter("type", "0");
         mockHelper.mock("/user/sign-in");
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(1503, object.getIntValue("code"));
         Assert.assertEquals(message.get(UserModel.NAME + ".password.empty"), object.getString("message"));
-
-        mockHelper.reset();
-        mockHelper.getRequest().addParameter("uid", "uid");
-        mockHelper.getRequest().addParameter("macId", generator.random(101));
-        mockHelper.mock("/user/sign-in");
-        object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(1505, object.getIntValue("code"));
-        Assert.assertEquals(message.get(Validators.PREFIX + "over-max-length", message.get(UserModel.NAME + ".macId"), 100), object.getString("message"));
 
         mockHelper.reset();
         mockHelper.getRequest().addParameter("uid", "sign up uid 1");
@@ -78,8 +68,7 @@ public class SignInTest extends TestSupport {
         mockHelper.reset();
         mockHelper.getRequest().addParameter("uid", "uid 1");
         mockHelper.getRequest().addParameter("password", "password");
-        mockHelper.getRequest().addParameter("macId", "mac id");
-        mockHelper.getRequest().addParameter("type", "1");
+        mockHelper.getRequest().addParameter("type", "0");
         mockHelper.mock("/user/sign-in");
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(1506, object.getIntValue("code"));
@@ -98,7 +87,7 @@ public class SignInTest extends TestSupport {
         mockHelper.reset();
         mockHelper.getRequest().addParameter("uid", "uid 4");
         mockHelper.getRequest().addParameter("password", "password 4");
-        mockHelper.getRequest().addParameter("type", "2");
+        mockHelper.getRequest().addParameter("type", "1");
         mockHelper.mock("/user/sign-in");
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(1506, object.getIntValue("code"));
@@ -107,37 +96,17 @@ public class SignInTest extends TestSupport {
         Assert.assertEquals("password 4", map.get("key"));
         Assert.assertEquals("uid 4", map.get("code"));
 
-        mockHelper.reset();
-        mockHelper.getSession().setId("session id");
-        session.remove(UserModel.NAME + ".service.session");
-        mockHelper.getRequest().addParameter("uid", "mac id 1");
-        mockHelper.getRequest().addParameter("macId", "mac id");
-        mockHelper.mock("/user/sign-in");
-        object = mockHelper.getResponse().asJson();
-        Assert.assertEquals(0, object.getIntValue("code"));
-        equals(user1, object.getJSONObject("data"));
-        Assert.assertNull(find("mac id"));
-        Assert.assertNull(find("session id"));
-
         for (int i = 0; i < 2; i++) {
             mockHelper.reset();
             mockHelper.getSession().setId("session id");
             session.remove(UserModel.NAME + ".service.session");
             mockHelper.getRequest().addParameter("uid", "uid 1");
             mockHelper.getRequest().addParameter("password", "password 1");
-            mockHelper.getRequest().addParameter("macId", "mac id");
-            mockHelper.getRequest().addParameter("type", "1");
+            mockHelper.getRequest().addParameter("type", "0");
             mockHelper.mock("/user/sign-in");
             object = mockHelper.getResponse().asJson();
             Assert.assertEquals(0, object.getIntValue("code"));
             equals(user1, object.getJSONObject("data"));
-            AuthModel auth = liteOrm.findById(AuthModel.class, auth0.getId());
-            Assert.assertEquals(user1.getId(), auth.getUser());
-            Assert.assertEquals("mac id 1", auth.getUid());
-            auth = liteOrm.findOne(new LiteQuery(AuthModel.class).where("c_uid=?"), new Object[]{"mac id"});
-            Assert.assertEquals(user1.getId(), auth.getUser());
-            auth(user1.getId(), "mac id", 0, new long[]{0, 2000});
-            auth(user1.getId(), "session id", 0, new long[]{0, 2000});
 
             for (int j = 0; j < 2; j++) {
                 mockHelper.reset();
@@ -145,14 +114,11 @@ public class SignInTest extends TestSupport {
                 session.remove(UserModel.NAME + ".service.session");
                 mockHelper.getRequest().addParameter("uid", "uid 3");
                 mockHelper.getRequest().addParameter("password", "password 2");
-                mockHelper.getRequest().addParameter("macId", "mac id");
-                mockHelper.getRequest().addParameter("type", "1");
+                mockHelper.getRequest().addParameter("type", "0");
                 mockHelper.mock("/user/sign-in");
                 object = mockHelper.getResponse().asJson();
                 Assert.assertEquals(0, object.getIntValue("code"));
                 equals(user2, object.getJSONObject("data"));
-                auth(user2.getId(), "mac id", 0, new long[]{0, 2000});
-                auth(user2.getId(), "session id", 0, new long[]{0, 2000});
             }
         }
 
@@ -163,14 +129,12 @@ public class SignInTest extends TestSupport {
         session.remove(UserModel.NAME + ".service.session");
         mockHelper.getRequest().addParameter("uid", "uid 1");
         mockHelper.getRequest().addParameter("password", "password 1");
-        mockHelper.getRequest().addParameter("type", "1");
+        mockHelper.getRequest().addParameter("type", "0");
         mockHelper.mock("/user/sign-in");
         object = mockHelper.getResponse().asJson();
         Assert.assertEquals(0, object.getIntValue("code"));
         equals(user1, object.getJSONObject("data"));
-        auth(user2.getId(), "mac id", 0, new long[]{2000, 5000});
-        auth(user1.getId(), "new session id", 0, new long[]{0, 2000});
-        Assert.assertEquals(count + 1, liteOrm.count(new LiteQuery(AuthModel.class), null));
+        Assert.assertEquals(count, liteOrm.count(new LiteQuery(AuthModel.class), null));
 
         signInByWeixin(map);
     }
@@ -192,13 +156,13 @@ public class SignInTest extends TestSupport {
             mockHelper.reset();
             mockHelper.getRequest().addParameter("uid", "uid 5");
             mockHelper.getRequest().addParameter("password", "password 5");
-            mockHelper.getRequest().addParameter("type", "2");
+            mockHelper.getRequest().addParameter("type", "1");
             mockHelper.mock("/user/sign-in");
             JSONObject object = mockHelper.getResponse().asJson();
             Assert.assertEquals(0, object.getIntValue("code"));
 
             AuthModel auth = liteOrm.findOne(new LiteQuery(AuthModel.class).where("c_uid=?"), new Object[]{"weixin open id"});
-            Assert.assertEquals(2, auth.getType());
+            Assert.assertEquals(1, auth.getType());
             data = object.getJSONObject("data");
             Assert.assertEquals(auth.getUser(), data.getString("id"));
             for (String name : new String[]{"password", "name", "mobile", "email", "address", "birthday"})
@@ -239,10 +203,6 @@ public class SignInTest extends TestSupport {
             }
             time = user.getRegister().getTime();
             code = user.getCode();
-
-            Assert.assertEquals(2, map.size());
-            Assert.assertEquals("password 5", map.get("key"));
-            Assert.assertEquals("uid 5", map.get("code"));
             thread.sleep(3, TimeUnit.Second);
         }
     }

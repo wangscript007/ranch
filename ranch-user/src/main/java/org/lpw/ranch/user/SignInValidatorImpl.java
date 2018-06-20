@@ -19,7 +19,7 @@ public class SignInValidatorImpl extends ValidatorSupport {
 
     @Override
     public boolean validate(ValidateWrapper validate, String[] parameters) {
-        return userService.signIn(parameters[0], parameters[1], parameters[2], numeric.toInt(parameters[3]));
+        return userService.signIn(parameters[0], parameters[1], numeric.toInt(parameters[2]));
     }
 
     @Override

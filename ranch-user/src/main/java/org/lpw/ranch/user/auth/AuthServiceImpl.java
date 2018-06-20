@@ -1,7 +1,6 @@
 package org.lpw.ranch.user.auth;
 
 import com.alibaba.fastjson.JSONArray;
-import org.lpw.ranch.user.type.Types;
 import org.lpw.tephra.cache.Cache;
 import org.lpw.tephra.dao.model.ModelHelper;
 import org.lpw.tephra.util.DateTime;
@@ -55,42 +54,11 @@ public class AuthServiceImpl implements AuthService {
         AuthModel auth = cache.get(cacheKey);
         if (auth == null) {
             auth = authDao.findByUid(uid);
-            if (auth == null || (auth.getType() == Types.BIND && auth.getTime() != null
-                    && System.currentTimeMillis() - auth.getTime().getTime() > effective * 1000))
-                return null;
-
-            cache.put(cacheKey, auth, false);
+            if (auth != null)
+                cache.put(cacheKey, auth, false);
         }
 
         return auth;
-    }
-
-    @Override
-    public void bind(String user, String id) {
-        if (validator.isEmpty(id))
-            return;
-
-        AuthModel auth = findByUid(id);
-        if (auth == null) {
-            auth = new AuthModel();
-            auth.setUid(id);
-        } else if (auth.getUser().equals(user))
-            return;
-
-        auth.setUser(user);
-        auth.setTime(dateTime.now());
-        auth.setType(Types.BIND);
-        authDao.save(auth);
-    }
-
-    @Override
-    public void unbind(String id) {
-        AuthModel auth = findByUid(id);
-        if (auth == null || auth.getType() != Types.BIND)
-            return;
-
-        authDao.delete(auth);
-        cache.remove(CACHE_UID + auth.getUid());
     }
 
     @Override

@@ -45,21 +45,6 @@ public interface AuthService {
     AuthModel findByUid(String uid);
 
     /**
-     * 绑定ID。
-     *
-     * @param user 用户ID。
-     * @param id   绑定ID。
-     */
-    void bind(String user, String id);
-
-    /**
-     * 解除绑定。
-     *
-     * @param id 绑定ID。
-     */
-    void unbind(String id);
-
-    /**
      * 删除认证。
      *
      * @param uid UID。
