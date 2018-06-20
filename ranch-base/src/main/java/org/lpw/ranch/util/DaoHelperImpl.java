@@ -8,6 +8,7 @@ import javax.inject.Inject;
 import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author lpw
@@ -72,28 +73,30 @@ public class DaoHelperImpl implements DaoHelper {
     }
 
     @Override
-    public void in(StringBuilder where, List<Object> args, String column, Object[] values) {
+    public void in(StringBuilder where, List<Object> args, String column, Set<?> values) {
         in(where, args, column, values, false);
     }
 
     @Override
-    public void in(StringBuilder where, List<Object> args, String column, Object[] values, boolean and) {
+    public void in(StringBuilder where, List<Object> args, String column, Set<?> values, boolean and) {
         if (validator.isEmpty(values))
             return;
 
-        if (values.length == 1) {
-            appendWhere(where, args, column, DaoOperation.Equals, values[0], and);
+        if (values.size() == 1) {
+            appendWhere(where, args, column, DaoOperation.Equals, values.iterator().next(), and);
 
             return;
         }
 
         appendColumn(where, args, column, and);
         where.append(" IN(");
-        for (int i = 0; i < values.length; i++) {
-            if (i > 0)
+        boolean has = false;
+        for (Object value : values) {
+            if (has)
                 where.append(',');
             where.append('?');
-            args.add(values[i]);
+            args.add(value);
+            has = true;
         }
         where.append(')');
     }

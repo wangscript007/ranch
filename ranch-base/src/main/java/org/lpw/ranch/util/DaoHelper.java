@@ -3,6 +3,7 @@ package org.lpw.ranch.util;
 import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.List;
+import java.util.Set;
 
 /**
  * DAO操作支持工具。
@@ -108,9 +109,9 @@ public interface DaoHelper {
      * @param where  目标WHERE片段。
      * @param args   目标参数集。
      * @param column 字段名。
-     * @param values 值集，为null或空数组则不添加。
+     * @param values 值集，为null或空则不添加。
      */
-    void in(StringBuilder where, List<Object> args, String column, Object[] values);
+    void in(StringBuilder where, List<Object> args, String column, Set<?> values);
 
     /**
      * 添加WHERE IN语句。
@@ -118,10 +119,10 @@ public interface DaoHelper {
      * @param where  目标WHERE片段。
      * @param args   目标参数集。
      * @param column 字段名。
-     * @param values 值集，为null或空数组则不添加。
+     * @param values 值集，为null或空则不添加。
      * @param and    是否必须添加AND。
      */
-    void in(StringBuilder where, List<Object> args, String column, Object[] values, boolean and);
+    void in(StringBuilder where, List<Object> args, String column, Set<?> values, boolean and);
 
     /**
      * 添加WHERE LIKE语句。
