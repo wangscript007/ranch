@@ -195,8 +195,10 @@ public class EditorServiceImpl implements EditorService, DateJob {
         editor.setId(null);
         if (!validator.isEmpty(type))
             editor.setType(type);
+        editor.setTemplate(0);
         editor.setCreate(dateTime.now());
         save(editor, 0, null, true);
+        elementService.copy(id, editor.getId());
 
         return toJson(editor);
     }
