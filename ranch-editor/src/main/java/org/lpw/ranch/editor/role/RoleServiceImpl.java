@@ -60,7 +60,7 @@ public class RoleServiceImpl implements RoleService {
     @Override
     public boolean hasType(String user, String editorId, Type type) {
         EditorModel editor = editorService.findById(editorId);
-        if (editor.getTemplate() == 1 && type == Type.Viewer)
+        if (editor.getTemplate() == 1 && editor.getState() == 3 && type == Type.Viewer)
             return true;
 
         if (validator.isEmpty(user))
