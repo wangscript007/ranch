@@ -92,4 +92,11 @@ public class AuthServiceImpl implements AuthService {
         authDao.delete(auth);
         cache.remove(CACHE_UID + auth.getUid());
     }
+
+    @Override
+    public void delete(String uid) {
+        AuthModel auth = findByUid(uid);
+        authDao.delete(auth);
+        cache.remove(CACHE_UID + auth.getUid());
+    }
 }

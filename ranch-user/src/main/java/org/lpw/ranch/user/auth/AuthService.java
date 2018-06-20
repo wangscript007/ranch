@@ -58,4 +58,11 @@ public interface AuthService {
      * @param id 绑定ID。
      */
     void unbind(String id);
+
+    /**
+     * 删除认证。
+     *
+     * @param uid UID。
+     */
+    void delete(String uid);
 }
