@@ -14,6 +14,7 @@
 |image|char(100)|预览图。|
 |screenshot|char(100)|主截图。|
 |state|int|状态：0-待审核；1-审核通过；2-审核拒绝；3-已上架；4-已下架；5-已删除。|
+|source|char(100)|来源。|
 |create|datetime|创建时间。|
 |modify|long|修改时间。|
 
