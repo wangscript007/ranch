@@ -73,7 +73,6 @@ public class ScreenshotServiceImpl implements ScreenshotService {
             capture(sid, editor, "", mainWidth, mainHeight, map);
             list.forEach(element -> capture(sid, editor, element.getId(), pageWidth, pageHeight, map));
 
-            screenshotDao.close();
             screenshotDao.delete(editor);
             map.forEach((page, uri) -> {
                 if (page.equals(""))
@@ -84,7 +83,6 @@ public class ScreenshotServiceImpl implements ScreenshotService {
                 screenshot.setUri(uri);
                 screenshotDao.save(screenshot);
             });
-            screenshotDao.close();
 
             return converter.toString(map);
         });

@@ -6,7 +6,6 @@ import org.lpw.ranch.async.AsyncService;
 import org.lpw.ranch.editor.element.ElementService;
 import org.lpw.ranch.editor.role.RoleModel;
 import org.lpw.ranch.editor.role.RoleService;
-import org.lpw.ranch.editor.screenshot.ScreenshotService;
 import org.lpw.ranch.user.helper.UserHelper;
 import org.lpw.ranch.util.Pagination;
 import org.lpw.tephra.bean.BeanFactory;
@@ -254,9 +253,10 @@ public class EditorServiceImpl implements EditorService, DateJob {
     }
 
     private void save(EditorModel editor, int state, Timestamp modify, boolean owner) {
-        boolean resetRandom = editor.getTemplate() == 1 && (editor.getState() == 3 || state == 3);
+        int oldState = editor.getState();
         editor.setState(state);
         autoState(editor);
+        boolean resetRandom = editor.getTemplate() == 1 && (editor.getState() == 3 || oldState == 3);
         editor.setModify(modify == null ? dateTime.now() : modify);
         editorDao.save(editor);
         if (owner)

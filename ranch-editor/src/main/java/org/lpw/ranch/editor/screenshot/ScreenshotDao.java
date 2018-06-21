@@ -13,6 +13,4 @@ interface ScreenshotDao {
     void save(ScreenshotModel screenshot);
 
     void delete(String editor);
-
-    void close();
 }
