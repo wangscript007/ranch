@@ -278,9 +278,11 @@ public class EditorServiceImpl implements EditorService, DateJob {
     @Override
     public JSONObject searchTemplate(String type, String[] words) {
         int pageSize = pagination.getPageSize(20);
+        System.out.println("## search:11:"+type+";"+converter.toString(words));
         if (validator.isEmpty(words))
             return searchTemplate(type, pageSize);
 
+        System.out.println("## search:33:"+type+";"+converter.toString(words));
         Set<String> set = new HashSet<>(Arrays.asList(words));
         String cacheKey = getSearchCacheKey(type, converter.toString(set) + ":" + pageSize + ":" + pagination.getPageNum());
         JSONObject object = cache.get(cacheKey);
@@ -301,8 +303,10 @@ public class EditorServiceImpl implements EditorService, DateJob {
     }
 
     private JSONObject searchTemplate(String type, int pageSize) {
+        System.out.println("## search:22:"+type);
         String cacheKey = getSearchCacheKey(type, ":" + pageSize + ":" + pagination.getPageNum());
         JSONObject object = cache.get(cacheKey);
+        System.out.println("## search:44:"+object);
         if (object == null)
             cache.put(cacheKey, object = editorDao.query(null, 1, type, null, null, 3,
                     null, null, null, null, pageSize,
