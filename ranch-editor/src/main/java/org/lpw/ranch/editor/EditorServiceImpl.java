@@ -29,7 +29,7 @@ import org.springframework.stereotype.Service;
 import javax.inject.Inject;
 import java.io.File;
 import java.sql.Timestamp;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -274,11 +274,12 @@ public class EditorServiceImpl implements EditorService, DateJob {
             editor.setState(3);
     }
 
-    @SuppressWarnings({"unchecked"})
     @Override
     public JSONObject searchTemplate(String type, String[] words) {
         int pageSize = pagination.getPageSize(20);
-        Set<String> set = new HashSet<>(Arrays.asList(words));
+        Set<String> set = new HashSet<>();
+        if (!validator.isEmpty(words))
+            Collections.addAll(set, words);
         set.remove("");
         if (set.isEmpty())
             return searchTemplate(type, pageSize);
@@ -287,14 +288,11 @@ public class EditorServiceImpl implements EditorService, DateJob {
         JSONObject object = cache.get(cacheKey);
         if (object == null) {
             Set<String> ids = luceneHelper.query(getLuceneKey(type), set, 1024);
-            if (ids.isEmpty()) {
-                PageList<EditorModel> pl = BeanFactory.getBean(PageList.class);
-                pl.setPage(0, pageSize, 0);
-                object = pl.toJson();
-            } else {
+            if (ids.isEmpty())
+                object = BeanFactory.getBean(PageList.class).setPage(0, pageSize, 0).toJson();
+            else
                 object = editorDao.query(ids, 1, type, null, null, 3, null,
                         null, null, null, pageSize, pagination.getPageNum()).toJson();
-            }
             cache.put(cacheKey, object, false);
         }
 
