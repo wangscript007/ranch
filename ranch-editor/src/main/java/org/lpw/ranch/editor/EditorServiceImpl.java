@@ -91,7 +91,7 @@ public class EditorServiceImpl implements EditorService, DateJob {
     @Value("${" + EditorModel.NAME + ".template-types:}")
     private String templateTypes;
     private Map<String, String> random = new ConcurrentHashMap<>();
-    private Set<Integer> onsaleState = Collections.singleton(1);
+    private Set<Integer> onsaleState = Collections.singleton(3);
 
     @Override
     public JSONObject query(String mobile, String email, String nick, int template, String type, String name, String keyword,
