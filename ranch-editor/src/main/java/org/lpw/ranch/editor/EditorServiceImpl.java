@@ -96,16 +96,18 @@ public class EditorServiceImpl implements EditorService, DateJob {
     @Override
     public JSONObject query(String mobile, String email, String nick, int template, String type, String name, String keyword,
                             String[] states, String createStart, String createEnd, String modifyStart, String modifyEnd) {
-        return editorDao.query(roleService.editors(userHelper.ids(null, null, nick, mobile, email,
-                null, -1, -1, -1, null, null)), template,
-                type, name, keyword, getStates(states), dateTime.getStart(createStart), dateTime.getEnd(createEnd),
-                dateTime.getStart(modifyStart), dateTime.getEnd(modifyEnd),
+        Set<String> ids = validator.isEmpty(mobile) && validator.isEmpty(email) && validator.isEmpty(nick) ? new HashSet<>()
+                : roleService.editors(userHelper.ids(null, null, nick, mobile, email,
+                null, -1, -1, -1, null, null));
+
+        return editorDao.query(ids, template, type, name, keyword, getStates(states), dateTime.getStart(createStart),
+                dateTime.getEnd(createEnd), dateTime.getStart(modifyStart), dateTime.getEnd(modifyEnd),
                 pagination.getPageSize(20), pagination.getPageNum()).toJson();
     }
 
     @Override
     public JSONObject queryUser(int template, String type, String[] states) {
-        PageList<RoleModel> roles = roleService.query(userHelper.id(),template,type,getStates(states));
+        PageList<RoleModel> roles = roleService.query(userHelper.id(), template, type, getStates(states));
         JSONArray list = new JSONArray();
         roles.getList().forEach(role -> list.add(find(role.getEditor())));
         JSONObject object = roles.toJson(false);
@@ -169,7 +171,7 @@ public class EditorServiceImpl implements EditorService, DateJob {
 
         return asyncService.submit(EditorModel.NAME + ".image." + id, "", 20, () -> {
             String file = chromeHelper.jpeg(image + "?sid=" + sid + "&id=" + id, 10,
-                    0, 0, editor.getWidth(), editor.getHeight(), asyncService.root());
+                    0, 0, editor.getWidth(), editor.getHeight(), 100, asyncService.root());
             if (validator.isEmpty(file))
                 return "";
 
@@ -214,7 +216,7 @@ public class EditorServiceImpl implements EditorService, DateJob {
 
     @Override
     public JSONObject copy(String id, String type) {
-        EditorModel editor = findById(id);
+        EditorModel editor = editorDao.findById(id);
         editor.setId(null);
         if (!validator.isEmpty(type))
             editor.setType(type);

@@ -90,7 +90,7 @@ public class ScreenshotServiceImpl implements ScreenshotService {
 
     private void capture(String sid, String editor, String page, int width, int height, Map<String, String> map) {
         String file = chromeHelper.jpeg(capture + "?sid=" + sid + "&editor=" + editor + "&page=" + page,
-                wait, 0, 0, width, height, asyncService.root());
+                wait, 0, 0, width, height, 100, asyncService.root());
         if (validator.isEmpty(file))
             return;
 
