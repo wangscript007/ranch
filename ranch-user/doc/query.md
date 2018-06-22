@@ -8,7 +8,18 @@
 
 |名称|类型|必须|说明|
 |---|---|---|---|
+|uid|char(100)|否|UID，为空则检索全部。|
+|idcard|char(100)|否|身份证号，为空则检索全部。|
+|name|char(100)|否|姓名，为空则检索全部。|
+|nick|char(100)|否|昵称，为空则检索全部。|
 |mobile|char(100)|否|手机号，为空则检索全部。|
+|email|char(100)|否|Email地址，为空则检索全部。|
+|code|char(36)|否|唯一编码，为空则检索全部。|
+|minGrade|int|否|最小等级，为空则检索全部。|
+|maxGrade|int|否|最大等级，为空则检索全部。|
+|state|int|否|状态：-1：全部；0-正常；1-禁用。|
+|registerStart|char(100)|否|注册开始日期，格式：yyyy-MM-dd，为空则检索全部。|
+|registerEnd|char(100)|否|注册结束日期，格式：yyyy-MM-dd，为空则检索全部。|
 |pageSize|int|否|每页显示记录数，默认20。|
 |pageNum|int|否|当前显示页数。|
 
