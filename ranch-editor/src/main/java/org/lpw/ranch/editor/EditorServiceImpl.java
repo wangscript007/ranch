@@ -151,7 +151,7 @@ public class EditorServiceImpl implements EditorService, DateJob {
         model.setTemplate(editor.getTemplate());
         model.setType(editor.getType());
         model.setName(editor.getName());
-        model.setKeyword(editor.getKeyword());
+        model.setLabel(editor.getLabel());
         model.setWidth(editor.getWidth());
         model.setHeight(editor.getHeight());
         model.setImage(editor.getImage());
@@ -364,7 +364,7 @@ public class EditorServiceImpl implements EditorService, DateJob {
             PageList<EditorModel> pl = editorDao.query(null, 1, type, null, null, onsaleState,
                     null, null, null, null, 20, i);
             pl.getList().forEach(editor -> {
-                StringBuilder data = new StringBuilder().append(editor.getName()).append(',').append(editor.getKeyword());
+                StringBuilder data = new StringBuilder().append(editor.getName()).append(',').append(editor.getLabel());
                 elementService.text(editor.getId(), data);
                 luceneHelper.source(luceneKey, editor.getId(), data.toString());
             });
