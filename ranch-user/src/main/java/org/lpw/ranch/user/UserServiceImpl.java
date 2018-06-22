@@ -9,10 +9,12 @@ import org.lpw.ranch.user.type.Types;
 import org.lpw.ranch.util.Carousel;
 import org.lpw.ranch.util.Pagination;
 import org.lpw.ranch.weixin.helper.WeixinHelper;
+import org.lpw.tephra.bean.BeanFactory;
 import org.lpw.tephra.cache.Cache;
 import org.lpw.tephra.crypto.Digest;
 import org.lpw.tephra.ctrl.context.Session;
 import org.lpw.tephra.dao.model.ModelHelper;
+import org.lpw.tephra.dao.orm.PageList;
 import org.lpw.tephra.util.Converter;
 import org.lpw.tephra.util.DateTime;
 import org.lpw.tephra.util.Generator;
@@ -342,10 +344,20 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public JSONObject query(String idcard, String name, String nick, String mobile, String email, String code,
+    public JSONObject query(String uid, String idcard, String name, String nick, String mobile, String email, String code,
                             int minGrade, int maxGrade, int state, String registerStart, String registerEnd) {
-        return userDao.query(idcard, name, nick, mobile, email, code, minGrade, maxGrade, state, dateTime.getStart(registerStart),
-                dateTime.getEnd(registerEnd), pagination.getPageSize(), pagination.getPageNum()).toJson();
+        if (validator.isEmpty(uid))
+            return userDao.query(idcard, name, nick, mobile, email, code, minGrade, maxGrade, state, dateTime.getStart(registerStart),
+                    dateTime.getEnd(registerEnd), pagination.getPageSize(20), pagination.getPageNum()).toJson();
+
+        AuthModel auth = authService.findByUid(uid);
+        if (auth == null)
+            return BeanFactory.getBean(PageList.class).setPage(0, pagination.getPageSize(20), 0).toJson();
+
+        JSONObject object = BeanFactory.getBean(PageList.class).setPage(1, pagination.getPageSize(20), 1).toJson();
+        object.getJSONArray("list").add(getJson(auth.getUser(), null));
+
+        return object;
     }
 
     @Override

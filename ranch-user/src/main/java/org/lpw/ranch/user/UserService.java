@@ -152,6 +152,7 @@ public interface UserService {
     /**
      * 检索用户信息集。
      *
+     * @param uid           UID。
      * @param idcard        身份证号；为空则表示所有。
      * @param name          姓名；为空则表示所有。
      * @param nick          昵称；为空则表示所有。
@@ -165,7 +166,7 @@ public interface UserService {
      * @param registerEnd   结束注册日期，格式：yyyy-MM-dd；为空表示不限制。
      * @return 用户信息集。
      */
-    JSONObject query(String idcard, String name, String nick, String mobile, String email, String code,
+    JSONObject query(String uid, String idcard, String name, String nick, String mobile, String email, String code,
                      int minGrade, int maxGrade, int state, String registerStart, String registerEnd);
 
     /**
