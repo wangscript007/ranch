@@ -9,7 +9,7 @@ import java.util.Set;
  * @author lpw
  */
 interface EditorDao {
-    PageList<EditorModel> query(Set<String> ids, int template, String type, String name, String keyword, int state,
+    PageList<EditorModel> query(Set<String> ids, int template, String type, String name, String keyword, Set<Integer> states,
                                 Timestamp createStart, Timestamp createEnd, Timestamp modifyStart, Timestamp modifyEnd,
                                 int pageSize, int pageNum);
 

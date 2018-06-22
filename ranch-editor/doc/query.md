@@ -11,10 +11,11 @@
 |mobile|string|否|用户手机号，为空表示不限制。|
 |email|string|否|用户Email，为空表示不限制。|
 |nick|string|否|用户昵称，为空表示不限制。|
+|template|int|否|模板：-1-全部；0-否；1-是。|
 |type|string|否|类型，为空表示不限制。|
 |name|string|否|名称，模糊匹配，为空表示不限制。|
 |keyword|string|否|关键词，模糊匹配，为空表示不限制。|
-|state|int|否|状态：-1-全部；0-待审核；1-审核通过；2-审核拒绝；3-已上架；4-已下架。|
+|states|string|否|状态集，多个状态以逗号分隔，为空表示不限制。|
 |createStart|string|否|创建开始日期，格式：yyyy-MM-dd，为空表示不限制。|
 |createEnd|string|否|创建结束日期，格式：yyyy-MM-dd，为空表示不限制。|
 |modifyStart|string|否|编辑开始日期，格式：yyyy-MM-dd，为空表示不限制。|

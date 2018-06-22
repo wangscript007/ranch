@@ -8,7 +8,7 @@ import java.util.Set;
  * @author lpw
  */
 interface RoleDao {
-    PageList<RoleModel> query(String user, int pageSize, int pageNum);
+    PageList<RoleModel> query(String user, int template, String etype, Set<Integer> states, int pageSize, int pageNum);
 
     PageList<RoleModel> query(String editor);
 

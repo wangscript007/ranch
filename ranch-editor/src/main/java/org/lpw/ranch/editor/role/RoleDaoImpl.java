@@ -1,6 +1,7 @@
 package org.lpw.ranch.editor.role;
 
 import org.lpw.ranch.util.DaoHelper;
+import org.lpw.ranch.util.DaoOperation;
 import org.lpw.tephra.dao.orm.PageList;
 import org.lpw.tephra.dao.orm.lite.LiteOrm;
 import org.lpw.tephra.dao.orm.lite.LiteQuery;
@@ -22,9 +23,16 @@ class RoleDaoImpl implements RoleDao {
     private DaoHelper daoHelper;
 
     @Override
-    public PageList<RoleModel> query(String user, int pageSize, int pageNum) {
-        return liteOrm.query(new LiteQuery(RoleModel.class).where("c_user=?").order("c_modify desc")
-                .size(pageSize).page(pageNum), new Object[]{user});
+    public PageList<RoleModel> query(String user, int template, String etype, Set<Integer> states, int pageSize, int pageNum) {
+        StringBuilder where = new StringBuilder();
+        List<Object> args = new ArrayList<>();
+        daoHelper.where(where, args, "c_user", DaoOperation.Equals, user);
+        daoHelper.where(where, args, "c_template", DaoOperation.Equals, template);
+        daoHelper.where(where, args, "c_etype", DaoOperation.Equals, etype);
+        daoHelper.in(where, args, "c_state", states);
+
+        return liteOrm.query(new LiteQuery(RoleModel.class).where(where.toString()).order("c_modify desc")
+                .size(pageSize).page(pageNum), args.toArray());
     }
 
     @Override

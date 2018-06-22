@@ -10,7 +10,6 @@ import org.lpw.tephra.util.Validator;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
-import java.sql.Timestamp;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -35,8 +34,8 @@ public class RoleServiceImpl implements RoleService {
     private RoleDao roleDao;
 
     @Override
-    public PageList<RoleModel> query(String user) {
-        return roleDao.query(user, pagination.getPageSize(20), pagination.getPageNum());
+    public PageList<RoleModel> query(String user, int template, String etype, Set<Integer> states) {
+        return roleDao.query(user, template, etype, states, pagination.getPageSize(20), pagination.getPageNum());
     }
 
     @Override
@@ -91,9 +90,12 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    public void modify(String editor, Timestamp time) {
-        roleDao.query(editor).getList().forEach(role -> {
-            role.setModify(time);
+    public void modify(EditorModel editor) {
+        roleDao.query(editor.getId()).getList().forEach(role -> {
+            role.setTemplate(editor.getTemplate());
+            role.setEtype(editor.getType());
+            role.setState(editor.getState());
+            role.setModify(editor.getModify());
             save(role);
         });
     }

@@ -20,6 +20,7 @@ import org.lpw.tephra.util.Converter;
 import org.lpw.tephra.util.DateTime;
 import org.lpw.tephra.util.Generator;
 import org.lpw.tephra.util.Io;
+import org.lpw.tephra.util.Numeric;
 import org.lpw.tephra.util.TimeUnit;
 import org.lpw.tephra.util.Validator;
 import org.lpw.tephra.wormhole.WormholeHelper;
@@ -47,6 +48,8 @@ public class EditorServiceImpl implements EditorService, DateJob {
     private Cache cache;
     @Inject
     private Validator validator;
+    @Inject
+    private Numeric numeric;
     @Inject
     private DateTime dateTime;
     @Inject
@@ -88,25 +91,37 @@ public class EditorServiceImpl implements EditorService, DateJob {
     @Value("${" + EditorModel.NAME + ".template-types:}")
     private String templateTypes;
     private Map<String, String> random = new ConcurrentHashMap<>();
+    private Set<Integer> onsaleState = Collections.singleton(1);
 
     @Override
-    public JSONObject query(String mobile, String email, String nick, int template, String type, String name, String keyword, int state,
-                            String createStart, String createEnd, String modifyStart, String modifyEnd) {
+    public JSONObject query(String mobile, String email, String nick, int template, String type, String name, String keyword,
+                            String[] states, String createStart, String createEnd, String modifyStart, String modifyEnd) {
         return editorDao.query(roleService.editors(userHelper.ids(null, null, nick, mobile, email,
                 null, -1, -1, -1, null, null)), template,
-                type, name, keyword, state, dateTime.getStart(createStart), dateTime.getEnd(createEnd), dateTime.getStart(modifyStart),
-                dateTime.getEnd(modifyEnd), pagination.getPageSize(20), pagination.getPageNum()).toJson();
+                type, name, keyword, getStates(states), dateTime.getStart(createStart), dateTime.getEnd(createEnd),
+                dateTime.getStart(modifyStart), dateTime.getEnd(modifyEnd),
+                pagination.getPageSize(20), pagination.getPageNum()).toJson();
     }
 
     @Override
-    public JSONObject queryUser() {
-        PageList<RoleModel> roles = roleService.query(userHelper.id());
+    public JSONObject queryUser(int template, String type, String[] states) {
+        PageList<RoleModel> roles = roleService.query(userHelper.id(),template,type,getStates(states));
         JSONArray list = new JSONArray();
         roles.getList().forEach(role -> list.add(find(role.getEditor())));
         JSONObject object = roles.toJson(false);
         object.put("list", list);
 
         return object;
+    }
+
+    private Set<Integer> getStates(String[] states) {
+        Set<Integer> set = new HashSet<>();
+        if (!validator.isEmpty(states))
+            for (String state : states)
+                if (!validator.isEmpty(state))
+                    set.add(numeric.toInt(state));
+
+        return set;
     }
 
     @Override
@@ -262,7 +277,7 @@ public class EditorServiceImpl implements EditorService, DateJob {
         editorDao.save(editor);
         if (owner)
             roleService.save(userHelper.id(), editor.getId(), RoleService.Type.Owner);
-        roleService.modify(editor.getId(), editor.getModify());
+        roleService.modify(editor);
         cache.remove(CACHE_MODEL + editor.getId());
         if (resetRandom)
             resetRandom(editor.getType());
@@ -292,7 +307,7 @@ public class EditorServiceImpl implements EditorService, DateJob {
             if (ids.isEmpty())
                 object = BeanFactory.getBean(PageList.class).setPage(0, pageSize, 0).toJson();
             else
-                object = editorDao.query(ids, 1, type, null, null, 3, null,
+                object = editorDao.query(ids, 1, type, null, null, onsaleState, null,
                         null, null, null, pageSize, pagination.getPageNum()).toJson();
             cache.put(cacheKey, object, false);
         }
@@ -304,7 +319,7 @@ public class EditorServiceImpl implements EditorService, DateJob {
         String cacheKey = getSearchCacheKey(type, pageSize + ":" + pagination.getPageNum());
         JSONObject object = cache.get(cacheKey);
         if (object == null)
-            cache.put(cacheKey, object = editorDao.query(null, 1, type, null, null, 3,
+            cache.put(cacheKey, object = editorDao.query(null, 1, type, null, null, onsaleState,
                     null, null, null, null, pageSize,
                     pagination.getPageNum()).toJson(), false);
 
@@ -344,7 +359,7 @@ public class EditorServiceImpl implements EditorService, DateJob {
         String luceneKey = getLuceneKey(type);
         luceneHelper.clear(luceneKey);
         for (int i = 1; i < Integer.MAX_VALUE; i++) {
-            PageList<EditorModel> pl = editorDao.query(null, 1, type, null, null, 3,
+            PageList<EditorModel> pl = editorDao.query(null, 1, type, null, null, onsaleState,
                     null, null, null, null, 20, i);
             pl.getList().forEach(editor -> {
                 StringBuilder data = new StringBuilder().append(editor.getName()).append(',').append(editor.getKeyword());

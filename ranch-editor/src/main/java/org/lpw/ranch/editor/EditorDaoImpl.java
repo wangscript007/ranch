@@ -24,7 +24,7 @@ class EditorDaoImpl implements EditorDao {
     private DaoHelper daoHelper;
 
     @Override
-    public PageList<EditorModel> query(Set<String> ids, int template, String type, String name, String keyword, int state,
+    public PageList<EditorModel> query(Set<String> ids, int template, String type, String name, String keyword, Set<Integer> states,
                                        Timestamp createStart, Timestamp createEnd, Timestamp modifyStart, Timestamp modifyEnd,
                                        int pageSize, int pageNum) {
         StringBuilder where = new StringBuilder();
@@ -32,7 +32,7 @@ class EditorDaoImpl implements EditorDao {
         daoHelper.in(where, args, "c_id", ids);
         daoHelper.where(where, args, "c_template", DaoOperation.Equals, template);
         daoHelper.where(where, args, "c_type", DaoOperation.Equals, type);
-        daoHelper.where(where, args, "c_state", DaoOperation.Equals, state);
+        daoHelper.in(where, args, "c_state", states);
         daoHelper.where(where, args, "c_create", DaoOperation.GreaterEquals, createStart);
         daoHelper.where(where, args, "c_create", DaoOperation.LessEquals, createEnd);
         daoHelper.where(where, args, "c_modify", DaoOperation.GreaterEquals, createStart);

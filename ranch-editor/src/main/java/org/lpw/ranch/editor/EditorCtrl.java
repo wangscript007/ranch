@@ -27,7 +27,7 @@ public class EditorCtrl {
     public Object query() {
         return editorService.query(request.get("mobile"), request.get("email"), request.get("nick"),
                 request.getAsInt("template", -1), request.get("type"), request.get("name"),
-                request.get("keyword"), request.getAsInt("state", -1), request.get("createStart"),
+                request.get("keyword"), request.getAsArray("states"), request.get("createStart"),
                 request.get("createEnd"), request.get("modifyStart"), request.get("modifyEnd"));
     }
 
@@ -35,7 +35,8 @@ public class EditorCtrl {
             @Validate(validator = UserHelper.VALIDATOR_SIGN_IN)
     })
     public Object queryUser() {
-        return editorService.queryUser();
+        return editorService.queryUser(request.getAsInt("template", -1), request.get("type"),
+                request.getAsArray("states"));
     }
 
     @Execute(name = "find", validates = {

@@ -27,7 +27,7 @@ public interface EditorService {
      * @param type        类型。
      * @param name        名称。
      * @param keyword     关键词。
-     * @param state       状态。
+     * @param states      状态集。
      * @param createStart 创建开始日期，格式：yyyy-MM-dd。
      * @param createEnd   创建结束日期，格式：yyyy-MM-dd。
      * @param modifyStart 编辑开始日期，格式：yyyy-MM-dd。
@@ -35,14 +35,17 @@ public interface EditorService {
      * @return 编辑器信息集。
      */
     JSONObject query(String mobile, String email, String nick, int template, String type, String name, String keyword,
-                     int state, String createStart, String createEnd, String modifyStart, String modifyEnd);
+                     String[] states, String createStart, String createEnd, String modifyStart, String modifyEnd);
 
     /**
      * 检索当前用户编辑器信息集。
      *
+     * @param template 模板。
+     * @param type     类型。
+     * @param states   状态集。
      * @return 编辑器信息集。
      */
-    JSONObject queryUser();
+    JSONObject queryUser(int template, String type, String[] states);
 
     /**
      * 查找编辑器信息。
@@ -78,7 +81,8 @@ public interface EditorService {
 
     /**
      * 设置主截图。
-     * @param id ID值。
+     *
+     * @param id  ID值。
      * @param uri 主截图。
      */
     void screenshot(String id, String uri);

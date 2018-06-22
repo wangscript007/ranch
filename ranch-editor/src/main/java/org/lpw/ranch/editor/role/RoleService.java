@@ -1,8 +1,8 @@
 package org.lpw.ranch.editor.role;
 
+import org.lpw.ranch.editor.EditorModel;
 import org.lpw.tephra.dao.orm.PageList;
 
-import java.sql.Timestamp;
 import java.util.Set;
 
 /**
@@ -44,10 +44,13 @@ public interface RoleService {
     /**
      * 检索用户角色信息集。
      *
-     * @param user 用户。
+     * @param user     用户。
+     * @param template 编辑器模板。
+     * @param etype    编辑器类型。
+     * @param states   编辑器状态集。
      * @return 角色信息集。
      */
-    PageList<RoleModel> query(String user);
+    PageList<RoleModel> query(String user, int template, String etype, Set<Integer> states);
 
     /**
      * 查找。
@@ -86,12 +89,11 @@ public interface RoleService {
     void save(String user, String editor, Type type);
 
     /**
-     * 设置修改时间。
+     * 更新编辑器信息。
      *
      * @param editor 编辑器。
-     * @param time   时间。
      */
-    void modify(String editor, Timestamp time);
+    void modify(EditorModel editor);
 
     /**
      * 删除角色。
