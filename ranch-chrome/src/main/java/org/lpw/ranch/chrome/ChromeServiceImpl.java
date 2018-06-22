@@ -113,7 +113,7 @@ public class ChromeServiceImpl implements ChromeService {
         ChromeModel model = findByKey(key, x, y, width, height, null, wait);
 
         return io.read(chromeHelper.jpeg(url, model.getWait(), model.getX(), model.getY(), model.getWidth(), model.getHeight(),
-                asyncService.root()));
+                100, asyncService.root()));
     }
 
     private ChromeModel findByKey(String key, int x, int y, int width, int height, String pages, int wait) {
