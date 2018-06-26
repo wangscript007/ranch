@@ -20,6 +20,7 @@
 |createEnd|string|否|创建结束日期，格式：yyyy-MM-dd，为空表示不限制。|
 |modifyStart|string|否|编辑开始日期，格式：yyyy-MM-dd，为空表示不限制。|
 |modifyEnd|string|否|编辑结束日期，格式：yyyy-MM-dd，为空表示不限制。|
+|order|string|否|排序规则：hot-热门；newest-最新（默认）；none-不排序。|
 |pageSize|int|否|每页显示记录数，默认20。|
 |pageNum|int|否|当前显示页数。|
 
@@ -42,6 +43,7 @@
             "screenshot": "主截图",
             "state": "状态：0-待审核；1-审核通过；2-审核拒绝；3-已上架；4-已下架",
             "source": "来源",
+            "used": "被使用次数",
             "create": "创建时间",
             "modify": "修改时间"
         }

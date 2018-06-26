@@ -33,6 +33,7 @@ public class EditorModel extends ModelSupport {
     private int state; // 状态：0-待审核；1-审核通过；2-审核拒绝；3-已上架；4-已下架；5-已删除
     private String json; // 扩展属性集
     private String source; // 来源
+    private int used; // 被使用次数
     private Timestamp create; // 创建时间
     private Timestamp modify; // 修改时间
 
@@ -154,6 +155,16 @@ public class EditorModel extends ModelSupport {
 
     public void setSource(String source) {
         this.source = source;
+    }
+
+    @Jsonable
+    @Column(name = "c_used")
+    public int getUsed() {
+        return used;
+    }
+
+    public void setUsed(int used) {
+        this.used = used;
     }
 
     @Jsonable

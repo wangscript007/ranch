@@ -8,7 +8,7 @@ message.put({
     'doc': {
         'zh-cn': '文章'
     },
-    'order': {
+    'by': {
         'zh-cn': '订单'
     },
     'mine': {

@@ -1,7 +1,7 @@
 import message from '../../util/message';
 
 message.put({
-    'title.order': {
+    'title.by': {
         'zh-cn': '我的订单'
     }
 });

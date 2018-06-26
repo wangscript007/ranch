@@ -10,6 +10,7 @@
 |---|---|---|---|
 |type|string|是|类型。|
 |words|string|否|关键词，多个关键词以逗号分隔，空表示所有。|
+|order|string|否|排序规则：hot-热门（默认）；newest-最新；none-不排序。|
 |pageSize|int|否|每页显示记录数，默认20。|
 |pageNum|int|否|当前显示页数。|
 
@@ -31,6 +32,7 @@
             "screenshot": "主截图",
             "state": "状态：0-待审核；1-审核通过；2-审核拒绝；3-已上架；4-已下架",
             "source": "来源",
+            "used": "被使用次数",
             "create": "创建时间",
             "modify": "修改时间"
         }

@@ -26,7 +26,7 @@ class EditorDaoImpl implements EditorDao {
     @Override
     public PageList<EditorModel> query(Set<String> ids, int template, String type, String name, String keyword, Set<Integer> states,
                                        Timestamp createStart, Timestamp createEnd, Timestamp modifyStart, Timestamp modifyEnd,
-                                       int pageSize, int pageNum) {
+                                       Order order, int pageSize, int pageNum) {
         StringBuilder where = new StringBuilder();
         List<Object> args = new ArrayList<>();
         daoHelper.in(where, args, "c_id", ids);
@@ -40,7 +40,7 @@ class EditorDaoImpl implements EditorDao {
         daoHelper.like(null, where, args, "c_name", name);
         daoHelper.like(null, where, args, "c_keyword", keyword);
 
-        return liteOrm.query(new LiteQuery(EditorModel.class).where(where.toString()).order("c_sort,c_modify desc")
+        return liteOrm.query(new LiteQuery(EditorModel.class).where(where.toString()).order(order.by())
                 .size(pageSize).page(pageNum), args.toArray());
     }
 

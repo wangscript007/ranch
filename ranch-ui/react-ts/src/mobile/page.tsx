@@ -37,7 +37,7 @@ export default class Page<T extends Object={}, E extends object={}> extends Reac
             name: 'doc'
         },{
             icon: '\ue604',
-            name: 'order'
+            name: 'by'
         }, {
             icon: '\ue603',
             name: 'mine'

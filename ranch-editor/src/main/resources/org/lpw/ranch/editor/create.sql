@@ -14,6 +14,7 @@ CREATE TABLE t_editor
   c_state INT DEFAULT 0 COMMENT '状态：0-待审核；1-审核通过；2-审核拒绝；3-已上架；4-已下架；5-已删除',
   c_json TEXT DEFAULT NULL COMMENT '扩展属性集',
   c_source VARCHAR(255) DEFAULT NULL COMMENT '来源',
+  c_used INT DEFAULT 0 COMMENT '被使用次数',
   c_create DATETIME DEFAULT NULL COMMENT '创建时间',
   c_modify DATETIME DEFAULT NULL COMMENT '修改时间',
 

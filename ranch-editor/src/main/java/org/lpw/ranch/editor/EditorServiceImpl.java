@@ -95,13 +95,13 @@ public class EditorServiceImpl implements EditorService, DateJob {
 
     @Override
     public JSONObject query(String mobile, String email, String nick, int template, String type, String name, String keyword,
-                            String[] states, String createStart, String createEnd, String modifyStart, String modifyEnd) {
+                            String[] states, String createStart, String createEnd, String modifyStart, String modifyEnd, Order order) {
         Set<String> ids = validator.isEmpty(mobile) && validator.isEmpty(email) && validator.isEmpty(nick) ? new HashSet<>()
                 : roleService.editors(userHelper.ids(null, null, nick, mobile, email,
                 null, -1, -1, -1, null, null));
 
         return editorDao.query(ids, template, type, name, keyword, getStates(states), dateTime.getStart(createStart),
-                dateTime.getEnd(createEnd), dateTime.getStart(modifyStart), dateTime.getEnd(modifyEnd),
+                dateTime.getEnd(createEnd), dateTime.getStart(modifyStart), dateTime.getEnd(modifyEnd), order,
                 pagination.getPageSize(20), pagination.getPageNum()).toJson();
     }
 
@@ -225,8 +225,21 @@ public class EditorServiceImpl implements EditorService, DateJob {
         editor.setCreate(dateTime.now());
         save(editor, 0, null, true);
         elementService.copy(id, editor.getId());
+        used(editor.getSource());
 
         return toJson(editor);
+    }
+
+    private void used(String id) {
+        if (validator.isEmpty(id))
+            return;
+
+        EditorModel editor = findById(id);
+        if (editor == null)
+            return;
+
+        editor.setUsed(editor.getUsed() + 1);
+        save(editor, editor.getState(), editor.getModify(), false);
     }
 
     private JSONObject toJson(EditorModel editor) {
@@ -293,16 +306,17 @@ public class EditorServiceImpl implements EditorService, DateJob {
     }
 
     @Override
-    public JSONObject searchTemplate(String type, String[] words) {
+    public JSONObject searchTemplate(String type, String[] words, Order order) {
         int pageSize = pagination.getPageSize(20);
         Set<String> set = new HashSet<>();
         if (!validator.isEmpty(words))
             Collections.addAll(set, words);
         set.remove("");
         if (set.isEmpty())
-            return searchTemplate(type, pageSize);
+            return searchTemplate(type, order, pageSize);
 
-        String cacheKey = getSearchCacheKey(type, converter.toString(set) + ":" + pageSize + ":" + pagination.getPageNum());
+        String cacheKey = getSearchCacheKey(type, converter.toString(set) + ":" + order
+                + ":" + pageSize + ":" + pagination.getPageNum());
         JSONObject object = cache.get(cacheKey);
         if (object == null) {
             Set<String> ids = luceneHelper.query(getLuceneKey(type), set, 1024);
@@ -310,19 +324,19 @@ public class EditorServiceImpl implements EditorService, DateJob {
                 object = BeanFactory.getBean(PageList.class).setPage(0, pageSize, 0).toJson();
             else
                 object = editorDao.query(ids, 1, type, null, null, onsaleState, null,
-                        null, null, null, pageSize, pagination.getPageNum()).toJson();
+                        null, null, null, order, pageSize, pagination.getPageNum()).toJson();
             cache.put(cacheKey, object, false);
         }
 
         return object;
     }
 
-    private JSONObject searchTemplate(String type, int pageSize) {
-        String cacheKey = getSearchCacheKey(type, pageSize + ":" + pagination.getPageNum());
+    private JSONObject searchTemplate(String type, Order order, int pageSize) {
+        String cacheKey = getSearchCacheKey(type, order + ":" + pageSize + ":" + pagination.getPageNum());
         JSONObject object = cache.get(cacheKey);
         if (object == null)
             cache.put(cacheKey, object = editorDao.query(null, 1, type, null, null, onsaleState,
-                    null, null, null, null, pageSize,
+                    null, null, null, null, order, pageSize,
                     pagination.getPageNum()).toJson(), false);
 
         return object;
@@ -362,7 +376,7 @@ public class EditorServiceImpl implements EditorService, DateJob {
         luceneHelper.clear(luceneKey);
         for (int i = 1; i < Integer.MAX_VALUE; i++) {
             PageList<EditorModel> pl = editorDao.query(null, 1, type, null, null, onsaleState,
-                    null, null, null, null, 20, i);
+                    null, null, null, null, Order.None, 20, i);
             pl.getList().forEach(editor -> {
                 StringBuilder data = new StringBuilder().append(editor.getName()).append(',').append(editor.getLabel());
                 elementService.text(editor.getId(), data);

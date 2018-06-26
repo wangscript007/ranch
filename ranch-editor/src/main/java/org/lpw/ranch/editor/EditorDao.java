@@ -11,7 +11,7 @@ import java.util.Set;
 interface EditorDao {
     PageList<EditorModel> query(Set<String> ids, int template, String type, String name, String keyword, Set<Integer> states,
                                 Timestamp createStart, Timestamp createEnd, Timestamp modifyStart, Timestamp modifyEnd,
-                                int pageSize, int pageNum);
+                                Order order, int pageSize, int pageNum);
 
     EditorModel findById(String id);
 

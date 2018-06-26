@@ -28,7 +28,8 @@ public class EditorCtrl {
         return editorService.query(request.get("mobile"), request.get("email"), request.get("nick"),
                 request.getAsInt("template", -1), request.get("type"), request.get("name"),
                 request.get("keyword"), request.getAsArray("states"), request.get("createStart"),
-                request.get("createEnd"), request.get("modifyStart"), request.get("modifyEnd"));
+                request.get("createEnd"), request.get("modifyStart"), request.get("modifyEnd"),
+                Order.find(request.get("order"), Order.Newest));
     }
 
     @Execute(name = "query-user", validates = {
@@ -138,7 +139,8 @@ public class EditorCtrl {
             @Validate(validator = Validators.NOT_EMPTY, parameter = "type", failureCode = 3)
     })
     public Object search() {
-        return editorService.searchTemplate(request.get("type"), request.getAsArray("words"));
+        return editorService.searchTemplate(request.get("type"), request.getAsArray("words"),
+                Order.find(request.get("order"), Order.Hot));
     }
 
     @Execute(name = "reset-search-index", validates = {

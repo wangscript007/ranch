@@ -11,16 +11,16 @@ class Order extends Page {
     constructor(props: object) {
         super(props);
 
-        service.signIn('order');
+        service.signIn('by');
     }
 
     protected getTitle(): string {
-        return 'order';
+        return 'by';
     }
 
     protected getContent(): JSX.Element | JSX.Element[] | null {
         return (
-            <div className="order-empty">
+            <div className="by-empty">
                 <Icon code="\ue604" />
             </div>
         );

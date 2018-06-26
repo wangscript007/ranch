@@ -32,10 +32,11 @@ public interface EditorService {
      * @param createEnd   创建结束日期，格式：yyyy-MM-dd。
      * @param modifyStart 编辑开始日期，格式：yyyy-MM-dd。
      * @param modifyEnd   编辑结束日期，格式：yyyy-MM-dd。
+     * @param order       排序规则。
      * @return 编辑器信息集。
      */
     JSONObject query(String mobile, String email, String nick, int template, String type, String name, String keyword,
-                     String[] states, String createStart, String createEnd, String modifyStart, String modifyEnd);
+                     String[] states, String createStart, String createEnd, String modifyStart, String modifyEnd, Order order);
 
     /**
      * 检索当前用户编辑器信息集。
@@ -139,9 +140,10 @@ public interface EditorService {
      *
      * @param type  类型。
      * @param words 关键词集。
+     * @param order 排序规则。
      * @return 编辑器信息集。
      */
-    JSONObject searchTemplate(String type, String[] words);
+    JSONObject searchTemplate(String type, String[] words, Order order);
 
     /**
      * 重建搜索索引。
