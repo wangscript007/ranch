@@ -7,6 +7,7 @@ CREATE TABLE t_resource
   c_name VARCHAR(255) NOT NULL COMMENT '名称',
   c_label VARCHAR(255) DEFAULT NULL COMMENT '说明',
   c_uri VARCHAR(255) DEFAULT NULL COMMENT '资源URI地址',
+  c_size BIGINT DEFAULT 0 COMMENT '文件大小',
   c_width INT DEFAULT 0 COMMENT '图片宽',
   c_height INT DEFAULT 0 COMMENT '图片高',
   c_thumbnail VARCHAR(255) DEFAULT NULL COMMENT '缩略图URI地址',

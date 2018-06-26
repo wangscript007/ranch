@@ -18,6 +18,7 @@
     "name": "名称",
     "label": "说明",
     "uri": "资源URI地址",
+    "size": "文件大小",
     "width": "图片宽",
     "height": "图片高",
     "thumbnail": "缩略图URI地址",

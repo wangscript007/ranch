@@ -48,9 +48,10 @@ public interface ResourceService {
      * 保存资源信息。
      *
      * @param resource 资源信息。
+     * @param download 资源下载URL地址。
      * @return 资源信息。
      */
-    JSONObject save(ResourceModel resource);
+    JSONObject save(ResourceModel resource, String download);
 
     /**
      * 设置状态。

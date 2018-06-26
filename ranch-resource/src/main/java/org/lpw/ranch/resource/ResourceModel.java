@@ -26,6 +26,7 @@ public class ResourceModel extends ModelSupport {
     private String name; // 名称
     private String label; // 说明
     private String uri; // 资源URI地址
+    private long size; // 文件大小
     private int width; // 图片宽
     private int height; // 图片高
     private String thumbnail; // 缩略图URI地址
@@ -82,6 +83,16 @@ public class ResourceModel extends ModelSupport {
 
     public void setUri(String uri) {
         this.uri = uri;
+    }
+
+    @Jsonable
+    @Column(name = "c_size")
+    public long getSize() {
+        return size;
+    }
+
+    public void setSize(long size) {
+        this.size = size;
     }
 
     @Jsonable

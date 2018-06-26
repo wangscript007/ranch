@@ -1,17 +1,28 @@
 package org.lpw.ranch.resource;
 
 import com.alibaba.fastjson.JSONObject;
+import org.lpw.ranch.async.AsyncService;
 import org.lpw.ranch.user.helper.UserHelper;
 import org.lpw.ranch.util.Pagination;
 import org.lpw.tephra.cache.Cache;
 import org.lpw.tephra.dao.model.ModelHelper;
+import org.lpw.tephra.util.Context;
 import org.lpw.tephra.util.DateTime;
 import org.lpw.tephra.util.Generator;
+import org.lpw.tephra.util.Http;
+import org.lpw.tephra.util.Io;
+import org.lpw.tephra.util.Logger;
 import org.lpw.tephra.util.Validator;
+import org.lpw.tephra.wormhole.WormholeHelper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author lpw
@@ -21,6 +32,8 @@ public class ResourceServiceImpl implements ResourceService {
     private static final String CACHE_KEY = ResourceModel.NAME + ".service.cache:";
 
     @Inject
+    private Context context;
+    @Inject
     private Validator validator;
     @Inject
     private DateTime dateTime;
@@ -29,9 +42,19 @@ public class ResourceServiceImpl implements ResourceService {
     @Inject
     private Cache cache;
     @Inject
+    private Http http;
+    @Inject
+    private Io io;
+    @Inject
+    private Logger logger;
+    @Inject
     private ModelHelper modelHelper;
     @Inject
+    private WormholeHelper wormholeHelper;
+    @Inject
     private Pagination pagination;
+    @Inject
+    private AsyncService asyncService;
     @Inject
     private UserHelper userHelper;
     @Inject
@@ -67,7 +90,7 @@ public class ResourceServiceImpl implements ResourceService {
     }
 
     @Override
-    public JSONObject save(ResourceModel resource) {
+    public JSONObject save(ResourceModel resource, String download) {
         ResourceModel model = validator.isEmpty(resource.getId()) ? null : resourceDao.findById(resource.getId());
         if (model == null) {
             model = new ResourceModel();
@@ -77,7 +100,11 @@ public class ResourceServiceImpl implements ResourceService {
         model.setSort(resource.getSort());
         model.setName(validator.isEmpty(resource.getName()) ? "" : resource.getName());
         model.setLabel(resource.getLabel());
-        model.setUri(resource.getUri());
+        if (validator.isEmpty(download)) {
+            model.setUri(resource.getUri());
+            model.setSize(resource.getSize());
+        } else
+            download(model, download);
         model.setWidth(resource.getWidth());
         model.setHeight(resource.getHeight());
         model.setThumbnail(resource.getThumbnail());
@@ -89,6 +116,28 @@ public class ResourceServiceImpl implements ResourceService {
         resetRandom();
 
         return modelHelper.toJson(model);
+    }
+
+    private void download(ResourceModel resource, String url) {
+        File file = new File(context.getAbsoluteRoot() + "/" + generator.random(32));
+        Map<String, String> header = new HashMap<>();
+        try (OutputStream outputStream = new FileOutputStream(file)) {
+            http.post(url, null, null, header, outputStream);
+        } catch (Throwable throwable) {
+            io.delete(file);
+            logger.warn(throwable, "下载资源[{}]时发生异常！", url);
+
+            return;
+        }
+
+        String contentType = header.get("content-type");
+        int indexOf;
+        if (!validator.isEmpty(contentType) && (indexOf = contentType.lastIndexOf('/')) > -1)
+            file = io.move(file, new File(file.getAbsolutePath() + "." + contentType.substring(indexOf + 1)));
+        resource.setUri(contentType.startsWith("image/") ? wormholeHelper.image(null, null, null, file)
+                : wormholeHelper.file(null, null, null, file));
+        resource.setSize(file.length());
+        io.delete(file);
     }
 
     @Override
