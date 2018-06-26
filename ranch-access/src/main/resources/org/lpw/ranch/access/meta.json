@@ -1,0 +1,67 @@
+{
+    "key": "ranch.access",
+    "props": [
+        {
+            "name": "uri"
+        },
+        {
+            "name": "user"
+        },
+        {
+            "name": "ip"
+        },
+        {
+            "name": "userAgent"
+        },
+        {
+            "name": "host"
+        },
+        {
+            "name": "referer"
+        },
+        {
+            "name": "header"
+        },
+        {
+            "name": "time"
+        }
+    ],
+    "query": {
+        "type": "grid",
+        "ops": [
+            {
+                "type": "modify"
+            },
+            {
+                "type": "delete",
+                "service": ".delete",
+                "success": ".query"
+            }
+        ],
+        "toolbar": [
+            {
+                "type": "create"
+            }
+        ]
+    },
+    "create": {
+        "type": "form",
+        "toolbar": [
+            {
+                "type": "save",
+                "service": ".save",
+                "success": ".query"
+            }
+        ]
+    },
+    "modify": {
+        "type": "form",
+        "toolbar": [
+            {
+                "type": "save",
+                "service": ".save",
+                "success": ".query"
+            }
+        ]
+    }
+}

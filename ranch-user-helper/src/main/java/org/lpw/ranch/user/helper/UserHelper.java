@@ -130,6 +130,13 @@ public interface UserHelper {
     JSONObject sign();
 
     /**
+     * 获取sign接口URI地址。
+     *
+     * @return sign接口URI地址。
+     */
+    String signUri();
+
+    /**
      * 获取当前登入用户ID值。
      *
      * @return 当前登入用户ID值；如果未登入则返回null。

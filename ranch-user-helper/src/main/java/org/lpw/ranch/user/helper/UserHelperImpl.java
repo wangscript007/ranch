@@ -126,6 +126,11 @@ public class UserHelperImpl extends ServiceHelperSupport implements UserHelper {
     }
 
     @Override
+    public String signUri() {
+        return "/user/sign";
+    }
+
+    @Override
     public String id() {
         return sign().getString("id");
     }
