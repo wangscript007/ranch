@@ -37,7 +37,7 @@ public class AccessServiceImpl implements AccessService, DateJob {
     @Override
     public void save(String host, String uri, String ip, String userAgent, String referer, Map<String, String> header) {
         AccessModel access = new AccessModel();
-        access.setHost(host);
+        access.setHost(validator.isEmpty(host) ? "" : host);
         access.setUri(uri);
         String user = userHelper.id();
         access.setUser(validator.isEmpty(user) ? "" : user);
