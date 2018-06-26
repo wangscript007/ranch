@@ -21,8 +21,6 @@
 |author|char(100)|否|作者。|
 |download|string|否|资源下载URL地址。|
 
-> 如果`download`不为空，则远程下载该资源，此时`uri`参数无效。
-
 返回值
 ```json
 {

@@ -46,7 +46,7 @@ public class ResourceCtrl {
             @Validate(validator = ResourceService.VALIDATOR_EDITABLE, emptyable = true, parameter = "id", failureCode = 10)
     })
     public Object save() {
-        return resourceService.save(request.setToModel(ResourceModel.class), request.get("download"));
+        return resourceService.save(request.setToModel(ResourceModel.class));
     }
 
     @Execute(name = "pass", validates = {
