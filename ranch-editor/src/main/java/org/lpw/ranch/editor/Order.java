@@ -40,6 +40,9 @@ public enum Order {
      * @return 排序规则。
      */
     static Order find(String name, Order defaultOrder) {
+        if (name == null)
+            return defaultOrder;
+
         switch (name) {
             case "hot":
                 return Hot;
