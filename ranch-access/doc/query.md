@@ -8,12 +8,12 @@
 
 |名称|类型|必须|说明|
 |---|---|---|---|
-|host|char(255)|否|站点。|
-|uri|char(255)|否|请求URI，模糊匹配后段。|
-|user|char(36)|否|用户ID或UID。|
-|userAgent|char(255)|否|User Agent，模糊匹配。|
-|start|datetime|否|开始时间，格式：yyyy-MM-dd。|
-|end|datetime|否|结束时间，格式：yyyy-MM-dd。|
+|host|string|否|站点。|
+|uri|string|否|请求URI，模糊匹配后段。|
+|user|string|否|用户ID或UID。|
+|userAgent|string|否|User Agent，模糊匹配。|
+|start|date|否|开始时间，格式：yyyy-MM-dd。|
+|end|date|否|结束时间，格式：yyyy-MM-dd。|
 |pageSize|int|否|每页显示记录数，小于等于0则默认20。|
 |pageNum|int|否|当前显示页数。|
 

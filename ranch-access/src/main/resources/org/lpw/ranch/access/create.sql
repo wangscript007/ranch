@@ -6,7 +6,7 @@ CREATE TABLE t_access
   c_uri VARCHAR(255) NOT NULL COMMENT '请求URI',
   c_user CHAR(36) NOT NULL COMMENT '用户',
   c_ip VARCHAR(255) DEFAULT NULL COMMENT 'IP',
-  c_user_agent VARCHAR(255) DEFAULT NULL COMMENT 'User Agent',
+  c_user_agent TEXT DEFAULT NULL COMMENT 'User Agent',
   c_referer VARCHAR(255) DEFAULT NULL COMMENT '引用',
   c_header TEXT DEFAULT NULL COMMENT '头信息集',
   c_time DATETIME NOT NULL COMMENT '时间',
