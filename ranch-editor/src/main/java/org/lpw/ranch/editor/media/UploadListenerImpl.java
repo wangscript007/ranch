@@ -33,7 +33,7 @@ public class UploadListenerImpl implements UploadListener {
     }
 
     @Override
-    public boolean isUploadEnable(String key, UploadReader uploadReader) {
+    public boolean isUploadEnable(UploadReader uploadReader) {
         return userHelper.signIn() && roleService.hasType(null, uploadReader.getParameter("editor"), RoleService.Type.Editor);
     }
 

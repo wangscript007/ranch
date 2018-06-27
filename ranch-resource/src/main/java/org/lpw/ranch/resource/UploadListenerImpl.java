@@ -24,7 +24,7 @@ public class UploadListenerImpl implements UploadListener {
     }
 
     @Override
-    public boolean isUploadEnable(String key, UploadReader uploadReader) {
+    public boolean isUploadEnable(UploadReader uploadReader) {
         String contentType = uploadReader.getContentType();
         String fileName = uploadReader.getFileName();
 
