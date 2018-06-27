@@ -107,7 +107,7 @@ public class ElementServiceImpl implements ElementService, MinuteJob {
             model.setSort(element.getSort());
         model.setJson(element.getJson());
         model.setText(element.getText());
-        save(model, element.getSort());
+        save(model, model.getSort());
         logService.save(model, isNew ? LogService.Operation.Create : LogService.Operation.Modify);
 
         return modelHelper.toJson(model);
