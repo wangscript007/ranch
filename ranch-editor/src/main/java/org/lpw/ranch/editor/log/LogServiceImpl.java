@@ -28,5 +28,6 @@ public class LogServiceImpl implements LogService {
         log.setModify(element.getModify());
         log.setOperation(operation.ordinal());
         log.setTime(dateTime.now());
+        logDao.save(log);
     }
 }

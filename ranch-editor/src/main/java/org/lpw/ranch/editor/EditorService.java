@@ -26,7 +26,7 @@ public interface EditorService {
      * @param template    模板。
      * @param type        类型。
      * @param name        名称。
-     * @param keyword     关键词。
+     * @param label     关键词。
      * @param states      状态集。
      * @param createStart 创建开始日期，格式：yyyy-MM-dd。
      * @param createEnd   创建结束日期，格式：yyyy-MM-dd。
@@ -35,7 +35,7 @@ public interface EditorService {
      * @param order       排序规则。
      * @return 编辑器信息集。
      */
-    JSONObject query(String mobile, String email, String nick, int template, String type, String name, String keyword,
+    JSONObject query(String mobile, String email, String nick, int template, String type, String name, String label,
                      String[] states, String createStart, String createEnd, String modifyStart, String modifyEnd, Order order);
 
     /**

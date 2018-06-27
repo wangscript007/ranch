@@ -18,7 +18,7 @@
   "type": "类型",
   "sort": "顺序",
   "name": "名称",
-  "keyword": "关键词",
+  "label": "标签",
   "width": "宽度",
   "height": "高度",
   "image": "预览图",

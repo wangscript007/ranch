@@ -24,7 +24,7 @@ class EditorDaoImpl implements EditorDao {
     private DaoHelper daoHelper;
 
     @Override
-    public PageList<EditorModel> query(Set<String> ids, int template, String type, String name, String keyword, Set<Integer> states,
+    public PageList<EditorModel> query(Set<String> ids, int template, String type, String name, String label, Set<Integer> states,
                                        Timestamp createStart, Timestamp createEnd, Timestamp modifyStart, Timestamp modifyEnd,
                                        Order order, int pageSize, int pageNum) {
         StringBuilder where = new StringBuilder();
@@ -38,7 +38,7 @@ class EditorDaoImpl implements EditorDao {
         daoHelper.where(where, args, "c_modify", DaoOperation.GreaterEquals, createStart);
         daoHelper.where(where, args, "c_modify", DaoOperation.LessEquals, createEnd);
         daoHelper.like(null, where, args, "c_name", name);
-        daoHelper.like(null, where, args, "c_keyword", keyword);
+        daoHelper.like(null, where, args, "c_label", label);
 
         return liteOrm.query(new LiteQuery(EditorModel.class).where(where.toString()).order(order.by())
                 .size(pageSize).page(pageNum), args.toArray());

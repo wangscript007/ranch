@@ -12,4 +12,9 @@ import javax.inject.Inject;
 class LogDaoImpl implements LogDao {
     @Inject
     private LiteOrm liteOrm;
+
+    @Override
+    public void save(LogModel log) {
+        liteOrm.save(log);
+    }
 }

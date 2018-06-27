@@ -94,13 +94,13 @@ public class EditorServiceImpl implements EditorService, DateJob {
     private Set<Integer> onsaleState = Collections.singleton(3);
 
     @Override
-    public JSONObject query(String mobile, String email, String nick, int template, String type, String name, String keyword,
+    public JSONObject query(String mobile, String email, String nick, int template, String type, String name, String label,
                             String[] states, String createStart, String createEnd, String modifyStart, String modifyEnd, Order order) {
         Set<String> ids = validator.isEmpty(mobile) && validator.isEmpty(email) && validator.isEmpty(nick) ? new HashSet<>()
                 : roleService.editors(userHelper.ids(null, null, nick, mobile, email,
                 null, -1, -1, -1, null, null));
 
-        return editorDao.query(ids, template, type, name, keyword, getStates(states), dateTime.getStart(createStart),
+        return editorDao.query(ids, template, type, name, label, getStates(states), dateTime.getStart(createStart),
                 dateTime.getEnd(createEnd), dateTime.getStart(modifyStart), dateTime.getEnd(modifyEnd), order,
                 pagination.getPageSize(20), pagination.getPageNum()).toJson();
     }

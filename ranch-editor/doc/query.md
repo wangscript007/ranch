@@ -14,7 +14,7 @@
 |template|int|否|模板：-1-全部；0-否；1-是。|
 |type|string|否|类型，为空表示不限制。|
 |name|string|否|名称，模糊匹配，为空表示不限制。|
-|keyword|string|否|关键词，模糊匹配，为空表示不限制。|
+|label|string|否|标签，模糊匹配，为空表示不限制。|
 |states|string|否|状态集，多个状态以逗号分隔，为空表示不限制。|
 |createStart|string|否|创建开始日期，格式：yyyy-MM-dd，为空表示不限制。|
 |createEnd|string|否|创建结束日期，格式：yyyy-MM-dd，为空表示不限制。|
@@ -36,7 +36,7 @@
             "type": "类型",
             "sort": "顺序",
             "name": "名称",
-            "keyword": "关键词",
+            "label": "标签",
             "width": "宽度",
             "height": "高度",
             "image": "预览图",

@@ -27,7 +27,7 @@ public class EditorCtrl {
     public Object query() {
         return editorService.query(request.get("mobile"), request.get("email"), request.get("nick"),
                 request.getAsInt("template", -1), request.get("type"), request.get("name"),
-                request.get("keyword"), request.getAsArray("states"), request.get("createStart"),
+                request.get("label"), request.getAsArray("states"), request.get("createStart"),
                 request.get("createEnd"), request.get("modifyStart"), request.get("modifyEnd"),
                 Order.find(request.get("order"), Order.Newest));
     }
