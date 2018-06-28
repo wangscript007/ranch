@@ -435,10 +435,10 @@ public class WeixinServiceImpl implements WeixinService, ContextRefreshedListene
                 case "image/jpeg":
                     return wormholeHelper.image(null, null, null, file);
                 default:
-                    logger.warn(null, "获取微信二维码[{}:{}:{}]失败！", object,
-                            converter.toString(responseHeaders), io.readAsString(file.getAbsolutePath()));
+                    String failure = io.readAsString(file.getAbsolutePath());
+                    logger.warn(null, "获取微信二维码[{}:{}:{}]失败！", object, converter.toString(responseHeaders), failure);
 
-                    return "";
+                    return failure;
             }
         } catch (Throwable throwable) {
             logger.warn(throwable, "获取微信二维码[{}:{}:{}]时发生异常！", object,

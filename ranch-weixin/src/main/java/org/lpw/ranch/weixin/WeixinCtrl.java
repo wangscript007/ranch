@@ -200,8 +200,11 @@ public class WeixinCtrl {
             @Validate(validator = WeixinService.VALIDATOR_EXISTS, parameter = "key", failureCode = 24)
     })
     public Object wxaCodeUnlimit() {
-        return weixinService.wxaCodeUnlimit(request.get("key"), request.get("scene"), request.get("page"),
+        String string = weixinService.wxaCodeUnlimit(request.get("key"), request.get("scene"), request.get("page"),
                 request.getAsInt("width"), request.getAsBoolean("autoColor"),
                 request.getAsJsonObject("lineColor"), request.getAsBoolean("hyaline"));
+
+        return string.charAt(0) == '{' ? templates.get().failure(2428,
+                message.get(WeixinModel.NAME + ".wxa-code-unlimit.failure", string), null, null) : string;
     }
 }
