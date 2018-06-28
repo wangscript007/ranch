@@ -7,6 +7,7 @@ CREATE TABLE t_editor_media
   c_type INT DEFAULT 0 COMMENT '类型：0-背景；1-图片；2-音频；3-视频',
   c_url VARCHAR(255) DEFAULT NULL COMMENT 'URL地址',
   c_name VARCHAR(255) DEFAULT NULL COMMENT '文件名',
+  c_size BIGINT DEFAULT 0 COMMENT '文件大小',
   c_width INT DEFAULT 0 COMMENT '图片宽',
   c_height INT DEFAULT 0 COMMENT '图片高',
   c_time DATETIME DEFAULT NULL COMMENT '时间',

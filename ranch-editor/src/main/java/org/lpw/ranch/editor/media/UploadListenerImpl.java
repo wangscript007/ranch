@@ -43,7 +43,7 @@ public class UploadListenerImpl implements UploadListener {
             return;
 
         object.putAll(mediaService.save(uploadReader.getParameter("editor"), numeric.toInt(uploadReader.getParameter("type")),
-                object.getString("path"), getName(object.getString("fileName")),
+                object.getString("path"), getName(object.getString("fileName")), object.getLongValue("fileSize"),
                 numeric.toInt(uploadReader.getParameter("width")), numeric.toInt(uploadReader.getParameter("height"))));
     }
 

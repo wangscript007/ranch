@@ -35,11 +35,12 @@ public interface MediaService {
      * @param type   类型：0-背景；1-图片；2-音频；3-视频。
      * @param url    URL地址。
      * @param name   文件名。
+     * @param size   文件大小。
      * @param width  图片宽。
      * @param height 图片高。
      * @return 媒体信息。
      */
-    JSONObject save(String editor, int type, String url, String name, int width, int height);
+    JSONObject save(String editor, int type, String url, String name, long size, int width, int height);
 
     /**
      * 修改名称。

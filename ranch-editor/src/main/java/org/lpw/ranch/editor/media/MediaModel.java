@@ -9,7 +9,6 @@ import org.springframework.stereotype.Component;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
-
 import java.sql.Timestamp;
 
 /**
@@ -27,6 +26,7 @@ public class MediaModel extends ModelSupport {
     private int type; // 类型：0-背景；1-图片；2-音频；3-视频
     private String url; // URL地址
     private String name; // 文件名
+    private long size; // 文件大小
     private int width; // 图片宽
     private int height; // 图片高
     private Timestamp time; // 时间
@@ -79,6 +79,16 @@ public class MediaModel extends ModelSupport {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    @Jsonable
+    @Column(name = "c_size")
+    public long getSize() {
+        return size;
+    }
+
+    public void setSize(long size) {
+        this.size = size;
     }
 
     @Jsonable
