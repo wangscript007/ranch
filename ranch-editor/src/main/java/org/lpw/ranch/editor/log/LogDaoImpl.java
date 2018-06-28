@@ -1,9 +1,11 @@
 package org.lpw.ranch.editor.log;
 
 import org.lpw.tephra.dao.orm.lite.LiteOrm;
+import org.lpw.tephra.dao.orm.lite.LiteQuery;
 import org.springframework.stereotype.Repository;
 
 import javax.inject.Inject;
+import java.sql.Timestamp;
 
 /**
  * @author lpw
@@ -16,5 +18,10 @@ class LogDaoImpl implements LogDao {
     @Override
     public void save(LogModel log) {
         liteOrm.save(log);
+    }
+
+    @Override
+    public void delete(Timestamp time) {
+        liteOrm.delete(new LiteQuery(LogModel.class).where("c_time<?"), new Object[]{time});
     }
 }

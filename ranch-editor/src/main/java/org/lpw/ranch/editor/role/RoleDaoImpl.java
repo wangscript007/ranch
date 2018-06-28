@@ -36,8 +36,9 @@ class RoleDaoImpl implements RoleDao {
     }
 
     @Override
-    public PageList<RoleModel> query(String editor) {
-        return liteOrm.query(new LiteQuery(RoleModel.class).where("c_editor=?"), new Object[]{editor});
+    public PageList<RoleModel> query(String editor, boolean sortable) {
+        return liteOrm.query(new LiteQuery(RoleModel.class).where("c_editor=?")
+                .order(sortable ? "c_type,c_create" : ""), new Object[]{editor});
     }
 
     @Override
@@ -47,6 +48,11 @@ class RoleDaoImpl implements RoleDao {
         daoHelper.in(where, args, "c_user", users);
 
         return liteOrm.query(new LiteQuery(RoleModel.class).where(where.toString()), args.toArray());
+    }
+
+    @Override
+    public RoleModel findById(String id) {
+        return liteOrm.findById(RoleModel.class, id);
     }
 
     @Override

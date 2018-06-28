@@ -24,10 +24,12 @@ public class RoleModel extends ModelSupport {
     private String user; // 用户
     private String editor; // 编辑器
     private int type; // 类型：0-所有者；1-可编辑；2-仅浏览
+    private String password; // 访问密码
     private int template; // 编辑器模板
     private String etype; // 编辑器类型
     private int state; // 编辑器状态
     private Timestamp modify; // 编辑器修改时间
+    private Timestamp create; // 创建时间
 
     @Jsonable
     @Column(name = "c_user")
@@ -57,6 +59,16 @@ public class RoleModel extends ModelSupport {
 
     public void setType(int type) {
         this.type = type;
+    }
+
+    @Jsonable
+    @Column(name = "c_password")
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     @Jsonable
@@ -97,5 +109,15 @@ public class RoleModel extends ModelSupport {
 
     public void setModify(Timestamp modify) {
         this.modify = modify;
+    }
+
+    @Jsonable
+    @Column(name = "c_create")
+    public Timestamp getCreate() {
+        return create;
+    }
+
+    public void setCreate(Timestamp create) {
+        this.create = create;
     }
 }

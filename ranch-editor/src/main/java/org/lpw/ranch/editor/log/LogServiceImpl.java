@@ -1,16 +1,18 @@
 package org.lpw.ranch.editor.log;
 
 import org.lpw.ranch.editor.element.ElementModel;
+import org.lpw.tephra.scheduler.DateJob;
 import org.lpw.tephra.util.DateTime;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
+import java.util.Calendar;
 
 /**
  * @author lpw
  */
 @Service(LogModel.NAME + ".service")
-public class LogServiceImpl implements LogService {
+public class LogServiceImpl implements LogService, DateJob {
     @Inject
     private DateTime dateTime;
     @Inject
@@ -29,5 +31,12 @@ public class LogServiceImpl implements LogService {
         log.setOperation(operation.ordinal());
         log.setTime(dateTime.now());
         logDao.save(log);
+    }
+
+    @Override
+    public void executeDateJob() {
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.MONTH, -3);
+        logDao.delete(dateTime.getStart(calendar.getTime()));
     }
 }

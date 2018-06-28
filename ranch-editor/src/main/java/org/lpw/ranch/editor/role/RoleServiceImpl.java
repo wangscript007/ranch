@@ -1,11 +1,16 @@
 package org.lpw.ranch.editor.role;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import org.lpw.ranch.editor.EditorModel;
 import org.lpw.ranch.editor.EditorService;
 import org.lpw.ranch.user.helper.UserHelper;
 import org.lpw.ranch.util.Pagination;
 import org.lpw.tephra.cache.Cache;
+import org.lpw.tephra.dao.model.ModelHelper;
 import org.lpw.tephra.dao.orm.PageList;
+import org.lpw.tephra.util.DateTime;
+import org.lpw.tephra.util.Generator;
 import org.lpw.tephra.util.Validator;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +30,12 @@ public class RoleServiceImpl implements RoleService {
     @Inject
     private Validator validator;
     @Inject
+    private DateTime dateTime;
+    @Inject
+    private Generator generator;
+    @Inject
+    private ModelHelper modelHelper;
+    @Inject
     private Pagination pagination;
     @Inject
     private UserHelper userHelper;
@@ -36,6 +47,16 @@ public class RoleServiceImpl implements RoleService {
     @Override
     public PageList<RoleModel> query(String user, int template, String etype, Set<Integer> states) {
         return roleDao.query(user, template, etype, states, pagination.getPageSize(20), pagination.getPageNum());
+    }
+
+    @Override
+    public JSONArray query(String editor) {
+        return modelHelper.toJson(roleDao.query(editor, true).getList());
+    }
+
+    @Override
+    public RoleModel findById(String id) {
+        return roleDao.findById(id);
     }
 
     @Override
@@ -79,19 +100,40 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public void save(String user, String editor, Type type) {
+        save(user, editor, type, null);
+    }
+
+    @Override
+    public JSONObject share(String editor, String password) {
+        return modelHelper.toJson(save(generator.random(36), editor, Type.Viewer, password));
+    }
+
+    @Override
+    public void password(String id, String password) {
+        RoleModel role = roleDao.findById(id);
+        role.setPassword(password);
+        save(role);
+    }
+
+    private RoleModel save(String user, String editor, Type type, String password) {
         RoleModel role = find(user, editor);
         if (role == null) {
             role = new RoleModel();
             role.setUser(user);
             role.setEditor(editor);
+            role.setCreate(dateTime.now());
         }
         role.setType(type.ordinal());
+        if (!validator.isEmpty(password))
+            role.setPassword(password);
         save(role);
+
+        return role;
     }
 
     @Override
     public void modify(EditorModel editor) {
-        roleDao.query(editor.getId()).getList().forEach(role -> {
+        roleDao.query(editor.getId(), false).getList().forEach(role -> {
             role.setTemplate(editor.getTemplate());
             role.setEtype(editor.getType());
             role.setState(editor.getState());
@@ -113,7 +155,7 @@ public class RoleServiceImpl implements RoleService {
         if (role.getType() >= Type.Editor.ordinal())
             delete(role);
         else {
-            roleDao.query(editor).getList().forEach(this::delete);
+            roleDao.query(editor, false).getList().forEach(this::delete);
             editorService.delete(editor);
         }
     }

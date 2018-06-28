@@ -53,9 +53,21 @@
 
 |属性|类型|说明|
 |---|---|---|
-|user|char(36)|用户。|
+|user|char(36)|用户，分享用户ID不包含`-`字符。|
 |editor|char(36)|编辑器。|
 |type|int|类型：0-所有者；1-可编辑；2-仅浏览。|
+|password|char(100)|访问密码。|
+|template|int|编辑器模板。|
+|etype|char(100)|编辑器类型。|
+|state|int|编辑器状态。|
+|modify|datetime|编辑器修改时间。|
+|create|datetime|创建时间。|
+
+[检索](doc/role/query.md)
+
+[分享](doc/role/share.md)
+
+[设置访问密码](doc/role/password.md)
 
 [删除](doc/role/delete.md)
 

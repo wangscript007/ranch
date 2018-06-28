@@ -6,7 +6,7 @@ CREATE TABLE t_editor_log
   c_parent CHAR(36) DEFAULT NULL COMMENT '父元素',
   c_element CHAR(36) NOT NULL COMMENT '元素',
   c_sort INT DEFAULT 0 COMMENT '顺序',
-  c_json TEXT DEFAULT NULL COMMENT '扩展属性集',
+  c_json LONGTEXT DEFAULT NULL COMMENT '扩展属性集',
   c_create DATETIME DEFAULT NULL COMMENT '创建时间',
   c_modify BIGINT DEFAULT 0 COMMENT '修改时间',
   c_operation INT DEFAULT 0 COMMENT '操作：0-新增；1-修改；2-删除',

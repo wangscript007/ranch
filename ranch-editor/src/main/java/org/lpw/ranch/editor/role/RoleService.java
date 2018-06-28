@@ -1,5 +1,7 @@
 package org.lpw.ranch.editor.role;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import org.lpw.ranch.editor.EditorModel;
 import org.lpw.tephra.dao.orm.PageList;
 
@@ -40,6 +42,10 @@ public interface RoleService {
      * 是否可浏览验证器Bean名称。
      */
     String VALIDATOR_VIEWABLE = RoleModel.NAME + ".validator.viewable";
+    /**
+     * 是否存在验证器Bean名称。
+     */
+    String VALIDATOR_EXISTS = RoleModel.NAME + ".validator.exists";
 
     /**
      * 检索用户角色信息集。
@@ -51,6 +57,21 @@ public interface RoleService {
      * @return 角色信息集。
      */
     PageList<RoleModel> query(String user, int template, String etype, Set<Integer> states);
+
+    /**
+     * 检索角色集。
+     *
+     * @param editor 编辑器。
+     * @return 角色集。
+     */
+    JSONArray query(String editor);
+
+    /**
+     * 查找。
+     * @param id ID值。
+     * @return 角色信息；不存在则返回null。
+     */
+    RoleModel findById(String id);
 
     /**
      * 查找。
@@ -94,6 +115,23 @@ public interface RoleService {
      * @param editor 编辑器。
      */
     void modify(EditorModel editor);
+
+    /**
+     * 创建分享。
+     *
+     * @param editor   编辑器。
+     * @param password 访问密码。
+     * @return 角色信息。
+     */
+    JSONObject share(String editor, String password);
+
+    /**
+     * 设置访问密码。
+     *
+     * @param id       ID值。
+     * @param password 访问密码。
+     */
+    void password(String id, String password);
 
     /**
      * 删除角色。

@@ -21,6 +21,42 @@ public class RoleCtrl {
     @Inject
     private RoleService roleService;
 
+    @Execute(name = "query", validates = {
+            @Validate(validator = Validators.ID, parameter = "editor", failureCode = 41),
+            @Validate(validator = UserHelper.VALIDATOR_SIGN_IN),
+            @Validate(validator = EditorService.VALIDATOR_EXISTS, parameter = "editor", failureCode = 42),
+            @Validate(validator = RoleService.VALIDATOR_EDITABLE, parameter = "editor", failureCode = 43)
+    })
+    public Object query() {
+        return roleService.query(request.get("editor"));
+    }
+
+    @Execute(name = "share", validates = {
+            @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "password", failureCode = 46),
+            @Validate(validator = Validators.ID, parameter = "editor", failureCode = 41),
+            @Validate(validator = UserHelper.VALIDATOR_SIGN_IN),
+            @Validate(validator = EditorService.VALIDATOR_EXISTS, parameter = "editor", failureCode = 42),
+            @Validate(validator = RoleService.VALIDATOR_EDITABLE, parameter = "editor", failureCode = 43)
+    })
+    public Object share() {
+        return roleService.share(request.get("editor"), request.get("password"));
+    }
+
+    @Execute(name = "password", validates = {
+            @Validate(validator = Validators.ID, parameter = "id", failureCode = 45),
+            @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "password", failureCode = 46),
+            @Validate(validator = Validators.ID, parameter = "editor", failureCode = 41),
+            @Validate(validator = UserHelper.VALIDATOR_SIGN_IN),
+            @Validate(validator = EditorService.VALIDATOR_EXISTS, parameter = "editor", failureCode = 42),
+            @Validate(validator = RoleService.VALIDATOR_EDITABLE, parameter = "editor", failureCode = 43),
+            @Validate(validator = RoleService.VALIDATOR_EXISTS, parameters = {"id", "editor"}, failureCode = 47)
+    })
+    public Object password() {
+        roleService.password(request.get("id"), request.get("password"));
+
+        return "";
+    }
+
     @Execute(name = "delete", validates = {
             @Validate(validator = Validators.ID, parameter = "editor", failureCode = 41),
             @Validate(validator = UserHelper.VALIDATOR_SIGN_IN),
