@@ -31,7 +31,7 @@ class ResourceDaoImpl implements ResourceDao {
         daoHelper.where(where, args, "c_user", DaoOperation.Equals, user);
         daoHelper.like(null, where, args, "c_label", label);
 
-        return liteOrm.query(new LiteQuery(ResourceModel.class).where(where.toString()).order("c_sort")
+        return liteOrm.query(new LiteQuery(ResourceModel.class).where(where.toString()).order("c_sort,c_time desc")
                 .size(pageSize).page(pageNum), args.toArray());
     }
 
