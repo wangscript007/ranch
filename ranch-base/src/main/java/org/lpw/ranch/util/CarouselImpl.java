@@ -3,6 +3,7 @@ package org.lpw.ranch.util;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import org.lpw.tephra.carousel.CarouselHelper;
+import org.lpw.tephra.crypto.Sign;
 import org.lpw.tephra.ctrl.context.Header;
 import org.lpw.tephra.util.Json;
 import org.lpw.tephra.util.Logger;
@@ -23,6 +24,8 @@ public class CarouselImpl implements Carousel {
     private Validator validator;
     @Inject
     private Json json;
+    @Inject
+    private Sign sign;
     @Inject
     private Logger logger;
     @Inject
@@ -71,13 +74,14 @@ public class CarouselImpl implements Carousel {
         Map<String, String> map = new HashMap<>();
         put(map, this.header.getMap());
         put(map, header);
+        sign.put(parameter, null);
         String service = carouselHelper.service(key, map, parameter, cacheTime);
-        if(validator.isEmpty(service))
+        if (validator.isEmpty(service))
             return new JSONObject();
 
-        JSONObject object=json.toObject(service);
+        JSONObject object = json.toObject(service);
 
-        return object==null ? new JSONObject() : json.toObject(service);
+        return object == null ? new JSONObject() : json.toObject(service);
     }
 
     private void put(Map<String, String> map, Map<String, String> header) {
