@@ -7,7 +7,7 @@ public enum Order {
     /**
      * 热门。
      */
-    Hot("c_sort desc,c_used desc"),
+    Hot("c_sort,c_used desc"),
     /**
      * 最新。
      */
