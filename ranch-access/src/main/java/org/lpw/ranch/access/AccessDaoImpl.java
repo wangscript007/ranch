@@ -41,6 +41,7 @@ class AccessDaoImpl implements AccessDao {
     @Override
     public void save(AccessModel access) {
         liteOrm.save(access);
+        liteOrm.close();
     }
 
     @Override
