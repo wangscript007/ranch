@@ -150,6 +150,7 @@ public class EditorServiceImpl implements EditorService, DateJob {
         }
         model.setTemplate(editor.getTemplate());
         model.setType(editor.getType());
+        model.setSort(editor.getSort());
         model.setName(editor.getName());
         model.setLabel(editor.getLabel());
         model.setWidth(editor.getWidth());
