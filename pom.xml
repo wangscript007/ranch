@@ -48,6 +48,7 @@
         <module>ranch-editor-helper</module>
         <module>ranch-resource</module>
         <module>ranch-access</module>
+        <module>ranch-shortcut</module>
         <module>ranch-ui</module>
         <module>ranch-web</module>
         <module>ranch-test</module>
