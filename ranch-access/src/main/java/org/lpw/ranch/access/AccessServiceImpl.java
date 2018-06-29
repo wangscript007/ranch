@@ -4,19 +4,23 @@ import com.alibaba.fastjson.JSONObject;
 import org.lpw.ranch.user.helper.UserHelper;
 import org.lpw.ranch.util.Pagination;
 import org.lpw.tephra.scheduler.DateJob;
+import org.lpw.tephra.scheduler.MinuteJob;
 import org.lpw.tephra.util.DateTime;
 import org.lpw.tephra.util.Validator;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
 /**
  * @author lpw
  */
 @Service(AccessModel.NAME + ".service")
-public class AccessServiceImpl implements AccessService, DateJob {
+public class AccessServiceImpl implements AccessService, MinuteJob, DateJob {
     @Inject
     private Validator validator;
     @Inject
@@ -27,6 +31,7 @@ public class AccessServiceImpl implements AccessService, DateJob {
     private UserHelper userHelper;
     @Inject
     private AccessDao accessDao;
+    private List<AccessModel> list = Collections.synchronizedList(new ArrayList<>());
 
     @Override
     public JSONObject query(String host, String uri, String user, String userAgent, String start, String end) {
@@ -46,7 +51,14 @@ public class AccessServiceImpl implements AccessService, DateJob {
         access.setReferer(referer);
         access.setHeader(header.toString());
         access.setTime(dateTime.now());
-        accessDao.save(access);
+        list.add(access);
+    }
+
+    @Override
+    public void executeMinuteJob() {
+        List<AccessModel> list = new ArrayList<>(this.list);
+        this.list.clear();
+        list.forEach(accessDao::save);
     }
 
     @Override
