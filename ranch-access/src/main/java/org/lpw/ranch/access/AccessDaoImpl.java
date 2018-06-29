@@ -35,7 +35,7 @@ class AccessDaoImpl implements AccessDao {
         daoHelper.like(null, where, args, "c_user_agent", userAgent);
 
         return liteOrm.query(new LiteQuery(AccessModel.class).where(where.toString())
-                .order("c_time").size(pageSize).page(pageNum), args.toArray());
+                .order("c_time desc").size(pageSize).page(pageNum), args.toArray());
     }
 
     @Override
