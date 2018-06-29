@@ -1,5 +1,6 @@
 [
     {
+        "icon": "golbal",
         "label": "配置",
         "items": [
             {
@@ -17,6 +18,7 @@
         ]
     },
     {
+        "icon": "file",
         "label": "文档",
         "items": [
             {
@@ -45,6 +47,7 @@
         ]
     },
     {
+        "icon": "setting",
         "label": "系统",
         "items": [
             {
