@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import org.lpw.ranch.classify.helper.ClassifyHelper;
 import org.lpw.ranch.user.auth.AuthModel;
 import org.lpw.ranch.user.auth.AuthService;
+import org.lpw.ranch.user.online.OnlineModel;
 import org.lpw.ranch.user.online.OnlineService;
 import org.lpw.ranch.user.type.Types;
 import org.lpw.ranch.util.Carousel;
@@ -270,8 +271,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserModel fromSession() {
         UserModel user = session.get(SESSION);
-        if (user == null)
-            session.set(SESSION, user = findById(onlineService.findBySid(session.getId()).getUser()));
+        if (user == null) {
+            OnlineModel online = onlineService.findBySid(session.getId());
+            if (online != null)
+                session.set(SESSION, user = findById(online.getUser()));
+        }
 
         return user;
     }
