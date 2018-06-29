@@ -45,9 +45,7 @@ public interface AuthService {
     AuthModel findByUid(String uid);
 
     /**
-     * 删除认证。
-     *
-     * @param uid UID。
+     * 删除当前认证。
      */
-    void delete(String uid);
+    void delete();
 }

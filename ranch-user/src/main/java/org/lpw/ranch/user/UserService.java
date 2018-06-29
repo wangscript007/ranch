@@ -110,6 +110,20 @@ public interface UserService {
     void portrait(String uri);
 
     /**
+     * 获取当前Session中用户对象。
+     *
+     * @return 用户对象；不存在则返回null。
+     */
+    UserModel fromSession();
+
+    /**
+     * 获取当前用户登入UID。
+     *
+     * @return 当前用户登入UID。
+     */
+    String uidFromSession();
+
+    /**
      * 获取用户数据。
      *
      * @param id ID值。
@@ -184,4 +198,9 @@ public interface UserService {
      * @param state 状态值。
      */
     void state(String id, int state);
+
+    /**
+     * 清空当前用户缓存数据。
+     */
+    void clearCache();
 }

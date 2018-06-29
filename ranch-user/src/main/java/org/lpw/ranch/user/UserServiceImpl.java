@@ -36,6 +36,7 @@ public class UserServiceImpl implements UserService {
     private static final String CACHE_PASS = UserModel.NAME + ".service.pass:";
     private static final String SESSION = UserModel.NAME + ".service.session";
     private static final String SESSION_AUTH3 = UserModel.NAME + ".service.session.auth3";
+    private static final String SESSION_UID = UserModel.NAME + ".service.session.uid";
 
     @Inject
     private Cache cache;
@@ -76,7 +77,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void signUp(String uid, String password, int type) {
-        UserModel user = session.get(SESSION);
+        UserModel user = fromSession();
         if (user == null)
             user = new UserModel();
         types.signUp(user, uid, password, type);
@@ -122,6 +123,7 @@ public class UserServiceImpl implements UserService {
             session.set(SESSION_AUTH3, types.getAuth(uid, password, type));
         onlineService.signIn(user.getId());
         session.set(SESSION, user);
+        session.set(SESSION_UID, uid);
 
         return true;
     }
@@ -191,9 +193,7 @@ public class UserServiceImpl implements UserService {
         if (!onlineService.isSign())
             return new JSONObject();
 
-        UserModel user = session.get(SESSION);
-        if (user == null)
-            session.set(SESSION, user = findById(onlineService.findBySid(session.getId()).getUser()));
+        UserModel user = fromSession();
         JSONObject object = getJson(user.getId(), user);
         JSONObject auth3 = session.get(SESSION_AUTH3);
         if (auth3 != null)
@@ -206,16 +206,20 @@ public class UserServiceImpl implements UserService {
     public void signOut() {
         onlineService.signOut();
         session.remove(SESSION);
+        session.remove(SESSION_AUTH3);
+        session.remove(SESSION_UID);
     }
 
     @Override
     public void signOut(String sid) {
         session.remove(sid, SESSION);
+        session.remove(sid, SESSION_AUTH3);
+        session.remove(sid, SESSION_UID);
     }
 
     @Override
     public void modify(UserModel user) {
-        UserModel model = session.get(SESSION);
+        UserModel model = fromSession();
         if (user.getIdcard() != null)
             model.setIdcard(user.getIdcard());
         if (user.getName() != null)
@@ -237,7 +241,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean password(String oldPassword, String newPassword) {
-        UserModel user = session.get(SESSION);
+        UserModel user = fromSession();
         if (!validator.isEmpty(user.getPassword()) && !user.getPassword().equals(password(oldPassword)))
             return false;
 
@@ -256,11 +260,25 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void portrait(String uri) {
-        UserModel user = session.get(SESSION);
+        UserModel user = fromSession();
         user.setPortrait(uri);
         userDao.save(user);
         session.set(SESSION, user);
         clearCache(user);
+    }
+
+    @Override
+    public UserModel fromSession() {
+        UserModel user = session.get(SESSION);
+        if (user == null)
+            session.set(SESSION, user = findById(onlineService.findBySid(session.getId()).getUser()));
+
+        return user;
+    }
+
+    @Override
+    public String uidFromSession() {
+        return session.get(SESSION_UID);
     }
 
     @Override
@@ -374,6 +392,11 @@ public class UserServiceImpl implements UserService {
         user.setState(state);
         userDao.save(user);
         clearCache(user);
+    }
+
+    @Override
+    public void clearCache() {
+        clearCache(fromSession());
     }
 
     private void clearCache(UserModel user) {

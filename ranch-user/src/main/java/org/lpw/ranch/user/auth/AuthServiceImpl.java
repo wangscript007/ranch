@@ -1,6 +1,7 @@
 package org.lpw.ranch.user.auth;
 
 import com.alibaba.fastjson.JSONArray;
+import org.lpw.ranch.user.UserService;
 import org.lpw.tephra.cache.Cache;
 import org.lpw.tephra.dao.model.ModelHelper;
 import org.lpw.tephra.util.DateTime;
@@ -25,6 +26,8 @@ public class AuthServiceImpl implements AuthService {
     private DateTime dateTime;
     @Inject
     private ModelHelper modelHelper;
+    @Inject
+    private UserService userService;
     @Inject
     private AuthDao authDao;
     @Value("${" + AuthModel.NAME + ".bind.effective:604800}")
@@ -62,9 +65,11 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public void delete(String uid) {
-        AuthModel auth = findByUid(uid);
+    public void delete() {
+        AuthModel auth = findByUid(userService.uidFromSession());
         authDao.delete(auth);
         cache.remove(CACHE_UID + auth.getUid());
+        userService.clearCache();
+        userService.signOut();
     }
 }
