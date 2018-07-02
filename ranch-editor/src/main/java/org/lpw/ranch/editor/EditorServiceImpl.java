@@ -188,7 +188,7 @@ public class EditorServiceImpl implements EditorService, DateJob {
     public void screenshot(String id, String uri) {
         EditorModel editor = editorDao.findById(id);
         editor.setScreenshot(uri);
-        save(editor, 0, null, false);
+        save(editor, editor.getState(), null, false);
     }
 
     @Override
