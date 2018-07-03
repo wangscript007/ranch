@@ -48,7 +48,8 @@ public class ScreenshotServiceImpl implements ScreenshotService {
     private ScreenshotDao screenshotDao;
     @Value("${" + ScreenshotModel.NAME + ".capture:}")
     private String capture;
-    private int wait = 5;
+    @Value("${" + ScreenshotModel.NAME + ".wait:5}")
+    private int wait;
 
     @Override
     public JSONArray query(String editor) {
