@@ -58,7 +58,7 @@
                 "label": "用户",
                 "service": "ranch.user.query",
                 "parameter": {
-                    "maxGrade": 89
+                    "maxGrade": 49
                 }
             },
             {
@@ -66,7 +66,7 @@
                 "label": "管理员",
                 "service": "ranch.user.query",
                 "parameter": {
-                    "minGrade": 90,
+                    "minGrade": 50,
                     "maxGrade": 98
                 }
             }
