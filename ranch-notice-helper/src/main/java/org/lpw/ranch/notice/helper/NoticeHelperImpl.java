@@ -40,10 +40,10 @@ public class NoticeHelperImpl implements NoticeHelper {
         if (sendsKey == null)
             sendsKey = key + ".sends";
         Map<String, String> parameter = new HashMap<>();
-        parameter.put("user", converter.toString(users, ","));
+        parameter.put("users", converter.toString(users, ","));
         parameter.put("type", type);
         parameter.put("subject", subject);
         parameter.put("content", content);
-        carousel.service(sendKey, null, parameter, false);
+        carousel.service(sendsKey, null, parameter, false);
     }
 }
