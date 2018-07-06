@@ -114,8 +114,8 @@ public class AsyncServiceImpl implements AsyncService, SecondsJob, MinuteJob, Ho
                 try {
                     result = future.get();
                     success = true;
-                } catch (Exception e) {
-                    logger.warn(e, "获取异步任务[{}]数据时发生异常！", id);
+                } catch (Throwable throwable) {
+                    logger.warn(throwable, "获取异步任务[{}]数据时发生异常！", find(id));
                 }
             }
             if (done || future.isCancelled()) {
