@@ -56,7 +56,7 @@ public class CarouselImpl implements Carousel {
     public <T> T service(String key, Map<String, String> header, Map<String, String> parameter, int cacheTime, Class<T> jsonClass) {
         JSONObject object = service(key, header, parameter, cacheTime);
         if (!object.containsKey("code") || object.getIntValue("code") != 0) {
-            logger.warn(null, "执行服务[{}:{}:{}:{}:{}]失败！", key, header, parameter, cacheTime, object);
+            logger.warn(null, "执行Carousel服务[{}:{}:{}:{}:{}]失败！", key, header, parameter, cacheTime, object);
 
             return (T) (jsonClass == JSONArray.class ? new JSONArray() : new JSONObject());
         }
@@ -76,12 +76,20 @@ public class CarouselImpl implements Carousel {
         put(map, header);
         sign.put(parameter, null);
         String service = carouselHelper.service(key, map, parameter, cacheTime);
-        if (validator.isEmpty(service))
+        if (validator.isEmpty(service)) {
+            logger.warn(null, "解析Carousel服务数据[{}:{}:{}:{}]数据失败！", key, map, parameter, service);
+
             return new JSONObject();
+        }
 
         JSONObject object = json.toObject(service);
+        if (object == null) {
+            logger.warn(null, "解析Carousel服务数据[{}:{}:{}:{}]数据失败！", key, map, parameter, service);
 
-        return object == null ? new JSONObject() : json.toObject(service);
+            return new JSONObject();
+        }
+
+        return object;
     }
 
     private void put(Map<String, String> map, Map<String, String> header) {
