@@ -21,20 +21,29 @@
             "labels": ".genders"
         },
         {
-            "name": "birthday"
+            "name": "birthday",
+            "type": "date"
         },
         {
-            "name": "code"
+            "name": "code",
+            "type": "read-only"
         },
         {
-            "name": "register"
+            "name": "register",
+            "type": "read-only"
         },
         {
-            "name": "grade"
+            "name": "grade",
+            "ignore": [
+                "sign"
+            ]
         },
         {
             "name": "state",
-            "labels": ".states"
+            "labels": ".states",
+            "ignore": [
+                "sign"
+            ]
         }
     ],
     "query": {
@@ -110,6 +119,15 @@
                 },
                 "success": ".query",
                 "when": "row.grade>=90"
+            }
+        ]
+    },
+    "sign": {
+        "type": "form",
+        "toolbar": [
+            {
+                "type": "modify",
+                "icon": "save"
             }
         ]
     }

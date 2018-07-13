@@ -1,26 +1,5 @@
 [
     {
-        "icon": "global",
-        "label": "配置",
-        "items": [
-            {
-                "icon": "notification",
-                "label": "推送",
-                "service": "ranch.push.query"
-            },
-            {
-                "icon": "apple-o",
-                "label": "iOS推送",
-                "service": "ranch.push.ios.query"
-            },
-            {
-                "icon": "aliyun",
-                "label": "阿里云推送",
-                "service": "ranch.push.aliyun.query"
-            }
-        ]
-    },
-    {
         "label": "文档",
         "items": [
             {
@@ -46,6 +25,43 @@
                     "code": "setting.doc",
                     "key": "contact-us"
                 }
+            }
+        ]
+    },
+    {
+        "icon": "global",
+        "label": "配置",
+        "items": [
+            {
+                "icon": "notification",
+                "label": "推送",
+                "service": "ranch.push.query"
+            },
+            {
+                "icon": "apple-o",
+                "label": "iOS推送",
+                "service": "ranch.push.ios.query"
+            },
+            {
+                "icon": "aliyun",
+                "label": "阿里云推送",
+                "service": "ranch.push.aliyun.query"
+            }
+        ]
+    },
+    {
+        "icon": "bank",
+        "label": "交易",
+        "items": [
+            {
+                "icon": "alipay",
+                "label": "支付宝",
+                "service": "ranch.alipay.query"
+            },
+            {
+                "icon": "wechat",
+                "label": "微信",
+                "service": "ranch.weixin.query"
             }
         ]
     },
