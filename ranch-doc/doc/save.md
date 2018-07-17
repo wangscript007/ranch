@@ -19,6 +19,15 @@
 |source|string|是|内容源。|
 |markdown|boolean|否|是否为Markdown文档：true-是；其他-否。|
 
+上传图片
+
+上传文件可使用以下任一接口：
+- [上传文件](https://github.com/heisedebaise/tephra/blob/master/tephra-ctrl/doc/upload.md)
+- [上传多文件](https://github.com/heisedebaise/tephra/blob/master/tephra-ctrl/doc/uploads.md)
+- [HTTP上传文件](https://github.com/heisedebaise/tephra/blob/master/tephra-ctrl-http/doc/upload.md)
+
+上传时需将`name`或`key`设置为`ranch.doc.image`。
+
 返回值
 ```json
 {
