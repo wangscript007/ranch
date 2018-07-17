@@ -25,13 +25,12 @@ public interface DocService extends AuditService {
      * 检索文档信息集。
      *
      * @param key     类型key。
-     * @param owner   所有者ID。
      * @param author  作者ID。
      * @param subject 标题，模糊匹配。
      * @param audit   审核状态。
      * @return 文档信息集。
      */
-    JSONObject query(String key, String owner, String author, String subject, Audit audit);
+    JSONObject query(String key, String author, String subject, Audit audit);
 
     /**
      * 检索当前用户的文档信息集。

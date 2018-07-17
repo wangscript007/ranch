@@ -1,7 +1,7 @@
 package org.lpw.ranch.doc;
 
-import org.lpw.tephra.dao.model.Jsonable;
 import org.lpw.ranch.audit.AuditModelSupport;
+import org.lpw.tephra.dao.model.Jsonable;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -9,7 +9,6 @@ import org.springframework.stereotype.Component;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
-
 import java.sql.Timestamp;
 
 /**
@@ -23,10 +22,7 @@ public class DocModel extends AuditModelSupport {
     static final String NAME = "ranch.doc";
 
     private String key; // 类型KEY
-    private String owner; // 所有者ID
     private String author; // 作者ID
-    private int scoreMin; // 最小分值
-    private int scoreMax; // 最大分值
     private int sort; // 顺序
     private String subject; // 标题
     private String image; // 主图URI地址
@@ -35,6 +31,7 @@ public class DocModel extends AuditModelSupport {
     private String label; // 标签
     private String source; // 内容源
     private String content; // 内容
+    private String json; // 扩展属性集
     private int read; // 阅读次数
     private int favorite; // 收藏次数
     private int comment; // 评论次数
@@ -53,16 +50,6 @@ public class DocModel extends AuditModelSupport {
     }
 
     @Jsonable
-    @Column(name = "c_owner")
-    public String getOwner() {
-        return owner;
-    }
-
-    public void setOwner(String owner) {
-        this.owner = owner;
-    }
-
-    @Jsonable
     @Column(name = "c_author")
     public String getAuthor() {
         return author;
@@ -70,26 +57,6 @@ public class DocModel extends AuditModelSupport {
 
     public void setAuthor(String author) {
         this.author = author;
-    }
-
-    @Jsonable
-    @Column(name = "c_score_min")
-    public int getScoreMin() {
-        return scoreMin;
-    }
-
-    public void setScoreMin(int scoreMin) {
-        this.scoreMin = scoreMin;
-    }
-
-    @Jsonable
-    @Column(name = "c_score_max")
-    public int getScoreMax() {
-        return scoreMax;
-    }
-
-    public void setScoreMax(int scoreMax) {
-        this.scoreMax = scoreMax;
     }
 
     @Jsonable
@@ -169,6 +136,16 @@ public class DocModel extends AuditModelSupport {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    @Jsonable(extend = true)
+    @Column(name = "c_json")
+    public String getJson() {
+        return json;
+    }
+
+    public void setJson(String json) {
+        this.json = json;
     }
 
     @Jsonable

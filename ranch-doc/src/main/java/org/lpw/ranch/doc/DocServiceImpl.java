@@ -73,19 +73,20 @@ public class DocServiceImpl implements DocService, MinuteJob {
     }
 
     @Override
-    public JSONObject query(String key, String owner, String author, String subject, Audit audit) {
-        return query(docDao.query(key, owner, author, subject, audit, Recycle.No, pagination.getPageSize(20),
-                pagination.getPageNum()));
+    public JSONObject query(String key, String author, String subject, Audit audit) {
+        return query(docDao.query(key, userHelper.findIdByUid(author, author), subject, audit, Recycle.No,
+                pagination.getPageSize(20), pagination.getPageNum()));
     }
 
     @Override
     public JSONObject queryByAuthor() {
-        return query(docDao.queryByAuthor(userHelper.id(), pagination.getPageSize(), pagination.getPageNum()));
+        return query(docDao.query(null, userHelper.id(), null, null, Recycle.No,
+                pagination.getPageSize(), pagination.getPageNum()));
     }
 
     @Override
     public JSONObject queryByKey(String key) {
-        return query(docDao.query(key, null, null, null, Audit.Pass, Recycle.No,
+        return query(docDao.query(key, null, null, Audit.Pass, Recycle.No,
                 pagination.getPageSize(), pagination.getPageNum()));
     }
 
@@ -119,10 +120,7 @@ public class DocServiceImpl implements DocService, MinuteJob {
     public JSONObject save(DocModel doc, boolean markdown) {
         DocModel model = validator.isEmpty(doc.getId()) ? new DocModel() : findById(doc.getId());
         model.setKey(doc.getKey());
-        model.setOwner(validator.isEmpty(doc.getOwner()) ? "" : doc.getOwner());
         model.setAuthor(userHelper.id());
-        model.setScoreMin(doc.getScoreMin());
-        model.setScoreMax(doc.getScoreMax());
         model.setSort(doc.getSort());
         model.setSubject(doc.getSubject());
         model.setImage(doc.getImage());
@@ -132,6 +130,7 @@ public class DocServiceImpl implements DocService, MinuteJob {
         model.setSource(doc.getSource());
         model.setContent(markdown ? HtmlRenderer.builder().build().render(Parser.builder().build().parse(doc.getSource())).trim()
                 : doc.getSource());
+        model.setJson(doc.getJson());
         model.setTime(dateTime.now());
         model.setAudit(defaultAudit);
         docDao.save(model);
@@ -145,12 +144,6 @@ public class DocServiceImpl implements DocService, MinuteJob {
         JSONObject object = cache.get(key);
         if (object == null) {
             object = modelHelper.toJson(doc);
-            if (validator.isEmpty(doc.getOwner())) {
-                JSONObject owner = new JSONObject();
-                owner.put("id", "");
-                object.put("owner", owner);
-            } else
-                object.put("owner", carousel.get(doc.getKey() + ".get", doc.getOwner()));
             object.put("author", userHelper.get(doc.getAuthor()));
             cache.put(key, object, false);
         }

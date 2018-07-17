@@ -27,7 +27,6 @@ class DocDaoImpl implements DocDao {
     private LiteOrm liteOrm;
     @Inject
     private DaoHelper daoHelper;
-    private Map<String, String> counter = new ConcurrentHashMap<>();
 
     @Override
     public DocModel findById(String id) {
@@ -35,25 +34,18 @@ class DocDaoImpl implements DocDao {
     }
 
     @Override
-    public PageList<DocModel> query(String key, String owner, String author, String subject, Audit audit, Recycle recycle,
+    public PageList<DocModel> query(String key, String author, String subject, Audit audit, Recycle recycle,
                                     int pageSize, int pageNum) {
         StringBuilder where = new StringBuilder().append(recycle.getSql());
         if (audit != null)
             where.append(" and ").append(audit.getSql());
         List<Object> args = new ArrayList<>();
         daoHelper.where(where, args, "c_key", DaoOperation.Equals, key, true);
-        daoHelper.where(where, args, "c_owner", DaoOperation.Equals, owner, true);
         daoHelper.where(where, args, "c_author", DaoOperation.Equals, author, true);
         daoHelper.like(null, where, args, "c_subject", subject, true);
 
         return liteOrm.query(new LiteQuery(DocModel.class).where(where.toString()).order("c_sort,c_time desc")
                 .size(pageSize).page(pageNum), args.toArray());
-    }
-
-    @Override
-    public PageList<DocModel> queryByAuthor(String author, int pageSize, int pageNum) {
-        return liteOrm.query(new LiteQuery(DocModel.class).where(Recycle.No.getSql() + " and c_author=?").order("c_time desc")
-                .size(pageSize).page(pageNum), new Object[]{author});
     }
 
     @Override

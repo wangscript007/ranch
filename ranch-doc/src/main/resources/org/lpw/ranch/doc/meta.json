@@ -10,35 +10,9 @@
             ]
         },
         {
-            "name": "owner",
-            "type": "read-only",
-            "valueKey": "id",
-            "ignore": [
-                "lite-query",
-                "lite-create",
-                "lite-modify"
-            ]
-        },
-        {
             "name": "author",
             "type": "read-only",
             "valueKey": "name",
-            "ignore": [
-                "lite-query",
-                "lite-create",
-                "lite-modify"
-            ]
-        },
-        {
-            "name": "scoreMin",
-            "ignore": [
-                "lite-query",
-                "lite-create",
-                "lite-modify"
-            ]
-        },
-        {
-            "name": "scoreMax",
             "ignore": [
                 "lite-query",
                 "lite-create",

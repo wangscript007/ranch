@@ -3,10 +3,7 @@ CREATE TABLE t_doc
 (
   c_id CHAR(36) NOT NULL COMMENT '主键',
   c_key VARCHAR(255) NOT NULL COMMENT '类型KEY',
-  c_owner CHAR(36) NOT NULL COMMENT '所有者ID',
   c_author CHAR(36) NOT NULL COMMENT '作者ID',
-  c_score_min INT DEFAULT 0 COMMENT '最小分值',
-  c_score_max INT DEFAULT 0 COMMENT '最大分值',
   c_sort INT DEFAULT 0 COMMENT '顺序',
   c_subject VARCHAR(255) NOT NULL COMMENT '标题',
   c_image VARCHAR(255) DEFAULT NULL COMMENT '主图URI地址',
@@ -15,6 +12,7 @@ CREATE TABLE t_doc
   c_label TEXT DEFAULT NULL COMMENT '标签',
   c_source TEXT NOT NULL COMMENT '内容源',
   c_content TEXT NOT NULL COMMENT '内容',
+  c_json TEXT DEFAULT NULL COMMENT '扩展属性集',
   c_read INT DEFAULT 0 COMMENT '阅读次数',
   c_favorite INT DEFAULT 0 COMMENT '收藏次数',
   c_comment INT DEFAULT 0 COMMENT '评论次数',
@@ -27,6 +25,5 @@ CREATE TABLE t_doc
 
   PRIMARY KEY pk(c_id) USING HASH,
   KEY k_recycle_audit_key(c_recycle,c_audit,c_key) USING BTREE,
-  KEY k_recycle_audit_owner(c_recycle,c_audit,c_owner) USING BTREE,
   KEY k_recycle_author(c_recycle,c_author,c_time) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

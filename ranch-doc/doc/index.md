@@ -1,17 +1,14 @@
-# 检索文档信息集
+# 检索已发布文档信息集
 
 请求
-- Service Key - ranch.doc.query
-- URI - /doc/query
+- Service Key - ranch.doc.index
+- URI - /doc/index
 
 参数
 
 |名称|类型|必须|说明|
 |---|---|---|---|
-|key|char(100)|否|类型KEY。|
-|author|char(36)|否|作者，ID或UID。|
-|subject|char(100)|否|标题，模糊匹配。|
-|audit|int|否|审核状态：-1-全部；0-待审核；1-审核通过；2-审核不通过。|
+|key|char(100)|是|类型KEY。|
 |pageSize|int|否|每页显示记录数，默认20。|
 |pageNum|int|否|当前显示页数。|
 
@@ -42,5 +39,3 @@
     ]
 }
 ```
-
-> 后台管理接口，需验证[请求参数签名](https://github.com/heisedebaise/tephra/blob/master/tephra-ctrl/doc/sign.md)。

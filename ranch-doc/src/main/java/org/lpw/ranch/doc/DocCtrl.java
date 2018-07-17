@@ -30,11 +30,11 @@ public class DocCtrl extends AuditCtrlSupport {
     private DocService docService;
 
     @Execute(name = "query", validates = {
-            @Validate(validator = AuditHelper.VALIDATOR, parameter = "audit", failureCode = 13),
+            @Validate(validator = AuditHelper.VALIDATOR, emptyable = true, parameter = "audit", failureCode = 13),
             @Validate(validator = Validators.SIGN)
     })
     public Object query() {
-        return docService.query(request.get("key"), request.get("owner"), request.get("author"), request.get("subject"),
+        return docService.query(request.get("key"), request.get("author"), request.get("subject"),
                 auditHelper.get(request.getAsInt("audit", -1)));
     }
 
@@ -60,7 +60,6 @@ public class DocCtrl extends AuditCtrlSupport {
     @Execute(name = "save", validates = {
             @Validate(validator = Validators.NOT_EMPTY, parameter = "key", failureCode = 1),
             @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "key", failureCode = 2),
-            @Validate(validator = Validators.ID, emptyable = true, parameter = "owner", failureCode = 3),
             @Validate(validator = Validators.NOT_EMPTY, parameter = "subject", failureCode = 5),
             @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "subject", failureCode = 6),
             @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "image", failureCode = 7),
@@ -86,7 +85,7 @@ public class DocCtrl extends AuditCtrlSupport {
             @Validate(validator = Validators.NOT_EMPTY, parameter = "key", failureCode = 1)
     })
     public Object index() {
-        return docService.query(request.get("key"), null, null, null, Audit.Pass);
+        return docService.query(request.get("key"), null, null, Audit.Pass);
     }
 
     @Execute(name = "read", type = Templates.FREEMARKER, template = "read", validates = {

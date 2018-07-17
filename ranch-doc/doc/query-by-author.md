@@ -5,8 +5,11 @@
 - URI - /doc/query-by-author
 
 参数
-- pageSize 每页显示记录数。
-- pageNum 当前显示页数。
+
+|名称|类型|必须|说明|
+|---|---|---|---|
+|pageSize|int|否|每页显示记录数，默认20。|
+|pageNum|int|否|当前显示页数。|
 
 返回值
 ```json
@@ -38,6 +41,3 @@
     ]
 }
 ```
-
-- owner 所有者信息，未找到则仅包含id属性。
-- author 作者信息，未找到则仅包含id属性。

@@ -5,29 +5,26 @@
 - URI - /doc/save
 
 参数
-- id ID值，如果不存在则新增。
-- key 类型KEY。
-- owner 所有者ID。
-- scoreMin 最小分值。
-- scoreMax 最大分值。
-- sort 顺序。
-- subject 标题。
-- image 主图URI地址。
-- thumbnail 缩略图URI地址。
-- summary 摘要。
-- label 标签。
-- source 内容源。
-- markdown 是否为Markdown文档：true-是；其他-否。
+
+|属性|类型|说明|
+|---|---|---|
+|id|char(36)|ID值，如果不存在则新增。|
+|key|char(100)|是|类型KEY。|
+|sort|int|否|顺序。|
+|subject|char(100)|是|标题。|
+|image|char(100)|否|主图URI地址。|
+|thumbnail|char(100)|否|缩略图URI地址。|
+|summary|string|否|摘要。|
+|label|string|否|标签。|
+|source|string|是|内容源。|
+|markdown|boolean|否|是否为Markdown文档：true-是；其他-否。|
 
 返回值
 ```json
 {
     "id": "ID值",
     "key": "类型KEY",
-    "owner": {},
     "author": {},
-    "scoreMin": "最小分值",
-    "scoreMax": "最大分值",
     "sort": "顺序",
     "subject": "标题",
     "image": "主图URI地址",
@@ -42,8 +39,5 @@
     "time": "更新时间"
 }
 ```
-
-- owner 所有者信息，未找到则仅包含id属性。
-- author 作者信息，未找到则仅包含id属性。
 
 > 后台管理接口，需验证[请求参数签名](https://github.com/heisedebaise/tephra/blob/master/tephra-ctrl/doc/sign.md)。
