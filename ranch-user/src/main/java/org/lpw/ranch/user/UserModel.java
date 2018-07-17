@@ -33,6 +33,7 @@ public class UserModel extends ModelSupport {
     private int gender; // 性别：0-未知；1-男；2-女
     private Date birthday; // 出生日期
     private String introducer; // 介绍人
+    private int introduceCount; // 介绍人数
     private String code; // 唯一编码
     private Timestamp register; // 注册时间
     private int grade; // 等级：<50为用户；>=50为管理员；99为超级管理员
@@ -144,6 +145,16 @@ public class UserModel extends ModelSupport {
 
     public void setIntroducer(String introducer) {
         this.introducer = introducer;
+    }
+
+    @Jsonable
+    @Column(name = "c_introduce_count")
+    public int getIntroduceCount() {
+        return introduceCount;
+    }
+
+    public void setIntroduceCount(int introduceCount) {
+        this.introduceCount = introduceCount;
     }
 
     @Jsonable

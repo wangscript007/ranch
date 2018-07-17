@@ -76,6 +76,7 @@ public class UserServiceImpl implements UserService {
     private UserDao userDao;
     @Value("${tephra.ctrl.service-root:}")
     private String root;
+    private int codeLength = 8;
 
     @Override
     public String introducer(String code) {
@@ -93,7 +94,6 @@ public class UserServiceImpl implements UserService {
         types.signUp(user, uid, password, type);
         if (user.getRegister() == null)
             user.setRegister(dateTime.now());
-        int codeLength = 8;
         for (int i = 0; i < 1024 && user.getCode() == null; i++) {
             String code = generator.random(codeLength);
             if (userDao.findByCode(code) == null)
@@ -105,17 +105,30 @@ public class UserServiceImpl implements UserService {
             else if (validator.isEmail(uid))
                 user.setEmail(uid);
         }
-        String introducer = introducer(null);
-        if (!validator.isEmpty(introducer) && introducer.length() == codeLength) {
-            UserModel um = userDao.findByCode(introducer.toLowerCase());
-            if (um != null)
-                user.setIntroducer(um.getId());
-        }
+        setIntroducer(user);
         userDao.save(user);
         authService.create(user.getId(), types.getUid(uid, password, type), type, types.getNick(uid, password, type));
         clearCache(user);
         onlineService.signIn(user.getId());
         session.set(SESSION, user);
+    }
+
+    private void setIntroducer(UserModel user) {
+        if (!validator.isEmpty(user.getIntroducer()))
+            return;
+
+        String code = introducer(null);
+        if (validator.isEmpty(code) || code.length() != codeLength)
+            return;
+
+        UserModel introducer = userDao.findByCode(code.toLowerCase());
+        if (introducer == null)
+            return;
+
+        user.setIntroducer(introducer.getId());
+        introducer.setIntroduceCount(introducer.getIntroduceCount() + 1);
+        userDao.save(introducer);
+        clearCache(introducer);
     }
 
     @Override

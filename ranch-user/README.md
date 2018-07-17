@@ -16,7 +16,9 @@
 |portrait|char(100)|头像。|
 |gender|int|性别：0-未知；1-男；2-女。|
 |birthday|date|出生日期，格式yyyy-MM-dd。|
-|code|char(36)|唯一编码。|
+|introducer|char(36)|介绍人。|
+|introduceCount|int|介绍人数。|
+|code|char(8)|唯一编码。|
 |register|datetime|注册时间，格式yyyy-MM-dd HH:mm:ss。|
 |grade|int|等级：<50为用户；>=50为管理员；99为超级管理员。|
 |state|int|状态：0-正常；1-禁用。|
