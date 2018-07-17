@@ -76,11 +76,10 @@ public class UserServiceImpl implements UserService {
     private UserDao userDao;
     @Value("${tephra.ctrl.service-root:}")
     private String root;
-    private int codeLength = 8;
 
     @Override
     public String introducer(String code) {
-        if (!validator.isEmpty(code) && code.length() == codeLength)
+        if (!validator.isEmpty(code))
             session.set(SESSION_INSTRODUCER, code);
 
         return session.get(SESSION_INSTRODUCER);
@@ -94,6 +93,7 @@ public class UserServiceImpl implements UserService {
         types.signUp(user, uid, password, type);
         if (user.getRegister() == null)
             user.setRegister(dateTime.now());
+        int codeLength = 8;
         for (int i = 0; i < 1024 && user.getCode() == null; i++) {
             String code = generator.random(codeLength);
             if (userDao.findByCode(code) == null)
