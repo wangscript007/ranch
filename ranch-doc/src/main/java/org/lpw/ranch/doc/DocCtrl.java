@@ -34,7 +34,7 @@ public class DocCtrl extends AuditCtrlSupport {
             @Validate(validator = Validators.SIGN)
     })
     public Object query() {
-        return docService.query(request.get("key"), request.get("author"), request.get("subject"),
+        return docService.query(request.get("key"), request.get("author"), request.get("subject"), request.get("label"),
                 auditHelper.get(request.getAsInt("audit", -1)));
     }
 
@@ -85,7 +85,7 @@ public class DocCtrl extends AuditCtrlSupport {
             @Validate(validator = Validators.NOT_EMPTY, parameter = "key", failureCode = 1)
     })
     public Object index() {
-        return docService.query(request.get("key"), null, null, Audit.Pass);
+        return docService.query(request.get("key"), null, null, null, Audit.Pass);
     }
 
     @Execute(name = "read", type = Templates.FREEMARKER, template = "read", validates = {

@@ -10,7 +10,8 @@ import org.lpw.tephra.dao.orm.PageList;
 interface DocDao {
     DocModel findById(String id);
 
-    PageList<DocModel> query(String key, String author, String subject, Audit audit, Recycle recycle, int pageSize, int pageNum);
+    PageList<DocModel> query(String key, String author, String subject, String label,
+                             Audit audit, Recycle recycle, int pageSize, int pageNum);
 
     void save(DocModel doc);
 }

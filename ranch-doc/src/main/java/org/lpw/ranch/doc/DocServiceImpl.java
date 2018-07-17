@@ -73,20 +73,20 @@ public class DocServiceImpl implements DocService, MinuteJob {
     }
 
     @Override
-    public JSONObject query(String key, String author, String subject, Audit audit) {
-        return query(docDao.query(key, userHelper.findIdByUid(author, author), subject, audit, Recycle.No,
+    public JSONObject query(String key, String author, String subject, String label, Audit audit) {
+        return query(docDao.query(key, userHelper.findIdByUid(author, author), subject, label, audit, Recycle.No,
                 pagination.getPageSize(20), pagination.getPageNum()));
     }
 
     @Override
     public JSONObject queryByAuthor() {
-        return query(docDao.query(null, userHelper.id(), null, null, Recycle.No,
+        return query(docDao.query(null, userHelper.id(), null, null, null, Recycle.No,
                 pagination.getPageSize(), pagination.getPageNum()));
     }
 
     @Override
     public JSONObject queryByKey(String key) {
-        return query(docDao.query(key, null, null, Audit.Pass, Recycle.No,
+        return query(docDao.query(key, null, null, null, Audit.Pass, Recycle.No,
                 pagination.getPageSize(), pagination.getPageNum()));
     }
 

@@ -11,6 +11,7 @@
 |key|char(100)|否|类型KEY。|
 |author|char(36)|否|作者，ID或UID。|
 |subject|char(100)|否|标题，模糊匹配。|
+|label|char(100)|否|标签，模糊匹配。|
 |audit|int|否|审核状态：-1-全部；0-待审核；1-审核通过；2-审核不通过。|
 |pageSize|int|否|每页显示记录数，默认20。|
 |pageNum|int|否|当前显示页数。|
