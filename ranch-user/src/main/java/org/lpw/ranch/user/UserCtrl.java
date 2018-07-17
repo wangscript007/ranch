@@ -31,6 +31,11 @@ public class UserCtrl {
     @Inject
     private UserService userService;
 
+    @Execute(name = "introducer")
+    public Object introducer() {
+        return userService.introducer(request.get("code"));
+    }
+
     @Execute(name = "sign-up", validates = {
             @Validate(validator = Validators.NOT_EMPTY, parameter = "uid", failureCode = 1),
             @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "uid", failureCode = 2),

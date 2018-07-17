@@ -9,9 +9,8 @@ import org.springframework.stereotype.Component;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
-
-import java.sql.Timestamp;
 import java.sql.Date;
+import java.sql.Timestamp;
 
 /**
  * @author lpw
@@ -33,6 +32,7 @@ public class UserModel extends ModelSupport {
     private String portrait; // 头像
     private int gender; // 性别：0-未知；1-男；2-女
     private Date birthday; // 出生日期
+    private String introducer; // 介绍人
     private String code; // 唯一编码
     private Timestamp register; // 注册时间
     private int grade; // 等级：<50为用户；>=50为管理员；99为超级管理员
@@ -134,6 +134,16 @@ public class UserModel extends ModelSupport {
 
     public void setBirthday(Date birthday) {
         this.birthday = birthday;
+    }
+
+    @Jsonable
+    @Column(name = "c_introducer")
+    public String getIntroducer() {
+        return introducer;
+    }
+
+    public void setIntroducer(String introducer) {
+        this.introducer = introducer;
     }
 
     @Jsonable

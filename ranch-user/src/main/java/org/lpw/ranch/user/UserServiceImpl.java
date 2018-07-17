@@ -36,6 +36,7 @@ public class UserServiceImpl implements UserService {
     private static final String CACHE_JSON = UserModel.NAME + ".service.json:";
     private static final String CACHE_PASS = UserModel.NAME + ".service.pass:";
     private static final String SESSION = UserModel.NAME + ".service.session";
+    private static final String SESSION_INSTRODUCER = UserModel.NAME + ".service.session.introducer";
     private static final String SESSION_AUTH3 = UserModel.NAME + ".service.session.auth3";
     private static final String SESSION_UID = UserModel.NAME + ".service.session.uid";
 
@@ -75,6 +76,15 @@ public class UserServiceImpl implements UserService {
     private UserDao userDao;
     @Value("${tephra.ctrl.service-root:}")
     private String root;
+    private int codeLength = 8;
+
+    @Override
+    public String introducer(String code) {
+        if (!validator.isEmpty(code))
+            session.set(SESSION_INSTRODUCER, code);
+
+        return session.get(SESSION_INSTRODUCER);
+    }
 
     @Override
     public void signUp(String uid, String password, int type) {
@@ -84,8 +94,8 @@ public class UserServiceImpl implements UserService {
         types.signUp(user, uid, password, type);
         if (user.getRegister() == null)
             user.setRegister(dateTime.now());
-        while (user.getCode() == null) {
-            String code = generator.random(8);
+        for (int i = 0; i < 1024 && user.getCode() == null; i++) {
+            String code = generator.random(codeLength);
             if (userDao.findByCode(code) == null)
                 user.setCode(code);
         }
@@ -94,6 +104,12 @@ public class UserServiceImpl implements UserService {
                 user.setMobile(uid);
             else if (validator.isEmail(uid))
                 user.setEmail(uid);
+        }
+        String introducer = introducer(null);
+        if (!validator.isEmpty(introducer) && introducer.length() == codeLength) {
+            UserModel um = userDao.findByCode(introducer.toLowerCase());
+            if (um != null)
+                user.setIntroducer(um.getId());
         }
         userDao.save(user);
         authService.create(user.getId(), types.getUid(uid, password, type), type, types.getNick(uid, password, type));

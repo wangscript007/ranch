@@ -22,6 +22,8 @@
 |state|int|状态：0-正常；1-禁用。|
 > 密码/安全密码使用`md5(UserModel.NAME + sha1(password + UserModel.NAME))`。
 
+[介绍人](doc/introducer.md)
+
 [注册](doc/sign-up.md)
 
 [登入](doc/sign-in.md)
