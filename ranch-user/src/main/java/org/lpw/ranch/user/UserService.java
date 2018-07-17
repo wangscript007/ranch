@@ -24,12 +24,12 @@ public interface UserService {
     String VALIDATOR_EXISTS = UserModel.NAME + ".validator.exists";
 
     /**
-     * 介绍人。
+     * 邀请人。
      *
-     * @param code 介绍人code，不为空则设置。
-     * @return 介绍人code。
+     * @param code 邀请人code，不为空则设置。
+     * @return 邀请人code。
      */
-    String introducer(String code);
+    String inviter(String code);
 
     /**
      * 注册。

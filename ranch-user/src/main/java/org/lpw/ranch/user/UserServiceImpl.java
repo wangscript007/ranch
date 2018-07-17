@@ -36,7 +36,7 @@ public class UserServiceImpl implements UserService {
     private static final String CACHE_JSON = UserModel.NAME + ".service.json:";
     private static final String CACHE_PASS = UserModel.NAME + ".service.pass:";
     private static final String SESSION = UserModel.NAME + ".service.session";
-    private static final String SESSION_INSTRODUCER = UserModel.NAME + ".service.session.introducer";
+    private static final String SESSION_INSTRODUCER = UserModel.NAME + ".service.session.inviter";
     private static final String SESSION_AUTH3 = UserModel.NAME + ".service.session.auth3";
     private static final String SESSION_UID = UserModel.NAME + ".service.session.uid";
 
@@ -79,7 +79,7 @@ public class UserServiceImpl implements UserService {
     private int codeLength = 8;
 
     @Override
-    public String introducer(String code) {
+    public String inviter(String code) {
         if (!validator.isEmpty(code))
             session.set(SESSION_INSTRODUCER, code);
 
@@ -105,7 +105,7 @@ public class UserServiceImpl implements UserService {
             else if (validator.isEmail(uid))
                 user.setEmail(uid);
         }
-        setIntroducer(user);
+        setInviter(user);
         userDao.save(user);
         authService.create(user.getId(), types.getUid(uid, password, type), type, types.getNick(uid, password, type));
         clearCache(user);
@@ -113,22 +113,22 @@ public class UserServiceImpl implements UserService {
         session.set(SESSION, user);
     }
 
-    private void setIntroducer(UserModel user) {
-        if (!validator.isEmpty(user.getIntroducer()))
+    private void setInviter(UserModel user) {
+        if (!validator.isEmpty(user.getInviter()))
             return;
 
-        String code = introducer(null);
+        String code = inviter(null);
         if (validator.isEmpty(code) || code.length() != codeLength)
             return;
 
-        UserModel introducer = userDao.findByCode(code.toLowerCase());
-        if (introducer == null)
+        UserModel inviter = userDao.findByCode(code.toLowerCase());
+        if (inviter == null)
             return;
 
-        user.setIntroducer(introducer.getId());
-        introducer.setIntroduceCount(introducer.getIntroduceCount() + 1);
-        userDao.save(introducer);
-        clearCache(introducer);
+        user.setInviter(inviter.getId());
+        inviter.setInviteCount(inviter.getInviteCount() + 1);
+        userDao.save(inviter);
+        clearCache(inviter);
     }
 
     @Override

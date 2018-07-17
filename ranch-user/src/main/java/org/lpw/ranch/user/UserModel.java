@@ -32,8 +32,8 @@ public class UserModel extends ModelSupport {
     private String portrait; // 头像
     private int gender; // 性别：0-未知；1-男；2-女
     private Date birthday; // 出生日期
-    private String introducer; // 介绍人
-    private int introduceCount; // 介绍人数
+    private String inviter; // 邀请人
+    private int inviteCount; // 邀请人数
     private String code; // 唯一编码
     private Timestamp register; // 注册时间
     private int grade; // 等级：<50为用户；>=50为管理员；99为超级管理员
@@ -138,23 +138,23 @@ public class UserModel extends ModelSupport {
     }
 
     @Jsonable
-    @Column(name = "c_introducer")
-    public String getIntroducer() {
-        return introducer;
+    @Column(name = "c_inviter")
+    public String getInviter() {
+        return inviter;
     }
 
-    public void setIntroducer(String introducer) {
-        this.introducer = introducer;
+    public void setInviter(String inviter) {
+        this.inviter = inviter;
     }
 
     @Jsonable
-    @Column(name = "c_introduce_count")
-    public int getIntroduceCount() {
-        return introduceCount;
+    @Column(name = "c_invite_count")
+    public int getInviteCount() {
+        return inviteCount;
     }
 
-    public void setIntroduceCount(int introduceCount) {
-        this.introduceCount = introduceCount;
+    public void setInviteCount(int inviteCount) {
+        this.inviteCount = inviteCount;
     }
 
     @Jsonable

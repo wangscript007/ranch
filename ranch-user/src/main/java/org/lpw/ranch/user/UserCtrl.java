@@ -31,9 +31,9 @@ public class UserCtrl {
     @Inject
     private UserService userService;
 
-    @Execute(name = "introducer")
-    public Object introducer() {
-        return userService.introducer(request.get("code"));
+    @Execute(name = "inviter")
+    public Object inviter() {
+        return userService.inviter(request.get("code"));
     }
 
     @Execute(name = "sign-up", validates = {
