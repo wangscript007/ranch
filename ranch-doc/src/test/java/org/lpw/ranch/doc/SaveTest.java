@@ -153,10 +153,7 @@ public class SaveTest extends TestSupport {
         Assert.assertTrue(time - dateTime.toTime(data.getString("time")).getTime() < 2000L);
         DocModel doc1 = findById(data.getString("id"));
         Assert.assertEquals("key", doc1.getKey());
-        Assert.assertEquals(ownerId, doc1.getOwner());
         Assert.assertEquals("sign in id", doc1.getAuthor());
-        Assert.assertEquals(1, doc1.getScoreMin());
-        Assert.assertEquals(2, doc1.getScoreMax());
         Assert.assertEquals(3, doc1.getSort());
         Assert.assertEquals("subject", doc1.getSubject());
         Assert.assertEquals("image", doc1.getImage());
@@ -221,10 +218,7 @@ public class SaveTest extends TestSupport {
         Assert.assertTrue(time - dateTime.toTime(data.getString("time")).getTime() < 2000L);
         DocModel doc2 = findById(data.getString("id"));
         Assert.assertEquals("key 2", doc2.getKey());
-        Assert.assertEquals("", doc2.getOwner());
         Assert.assertEquals("sign in id", doc2.getAuthor());
-        Assert.assertEquals(11, doc2.getScoreMin());
-        Assert.assertEquals(22, doc2.getScoreMax());
         Assert.assertEquals(33, doc2.getSort());
         Assert.assertEquals("subject 2", doc2.getSubject());
         Assert.assertEquals("image 2", doc2.getImage());
