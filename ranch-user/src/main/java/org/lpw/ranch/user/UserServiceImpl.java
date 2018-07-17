@@ -80,7 +80,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public String introducer(String code) {
-        if (!validator.isEmpty(code))
+        if (!validator.isEmpty(code) && code.length() == codeLength)
             session.set(SESSION_INSTRODUCER, code);
 
         return session.get(SESSION_INSTRODUCER);
