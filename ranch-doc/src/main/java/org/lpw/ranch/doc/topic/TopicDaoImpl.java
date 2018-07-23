@@ -39,7 +39,7 @@ class TopicDaoImpl implements TopicDao {
 
     @Override
     public PageList<TopicModel> query(String doc) {
-        return liteOrm.query(new LiteQuery(TopicModel.class).where("doc=?"), new Object[]{doc});
+        return liteOrm.query(new LiteQuery(TopicModel.class).where("c_doc=?"), new Object[]{doc});
     }
 
     @Override
