@@ -30,8 +30,10 @@ import org.springframework.stereotype.Service;
 import javax.inject.Inject;
 import java.io.File;
 import java.sql.Timestamp;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -309,22 +311,20 @@ public class EditorServiceImpl implements EditorService, DateJob {
     @Override
     public JSONObject searchTemplate(String type, String[] words, Order order) {
         int pageSize = pagination.getPageSize(20);
-        Set<String> set = new HashSet<>();
-        if (!validator.isEmpty(words))
-            Collections.addAll(set, words);
-        set.remove("");
-        if (set.isEmpty())
+        List<String> list = Arrays.asList(words);
+        list.remove("");
+        if (list.isEmpty())
             return searchTemplate(type, order, pageSize);
 
-        String cacheKey = getSearchCacheKey(type, converter.toString(set) + ":" + order
+        String cacheKey = getSearchCacheKey(type, converter.toString(list) + ":" + order
                 + ":" + pageSize + ":" + pagination.getPageNum());
         JSONObject object = cache.get(cacheKey);
         if (object == null) {
-            Set<String> ids = luceneHelper.query(getLuceneKey(type), set, 1024);
+            List<String> ids = luceneHelper.query(getLuceneKey(type), list, true, 1024);
             if (ids.isEmpty())
                 object = BeanFactory.getBean(PageList.class).setPage(0, pageSize, 0).toJson();
             else
-                object = editorDao.query(ids, 1, type, null, null, onsaleState, null,
+                object = editorDao.query(new HashSet<>(ids), 1, type, null, null, onsaleState, null,
                         null, null, null, order, pageSize, pagination.getPageNum()).toJson();
             cache.put(cacheKey, object, false);
         }
