@@ -8,7 +8,7 @@
 
 |名称|类型|必须|说明|
 |---|---|---|---|
-|classify|char(100)|是|分类ID。|
+|classify|char(36)|是|分类ID。|
 |pageSize|int|否|每页显示记录数，默认20。|
 |pageNum|int|否|当前显示页数。|
 
