@@ -13,6 +13,7 @@ import org.springframework.stereotype.Repository;
 import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author lpw
@@ -27,24 +28,31 @@ class DocDaoImpl implements DocDao {
     private DaoHelper daoHelper;
 
     @Override
-    public DocModel findById(String id) {
-        return liteOrm.findById(DocModel.class, id);
-    }
-
-    @Override
-    public PageList<DocModel> query(String key, String author, String subject, String label,
-                                    Audit audit, Recycle recycle, int pageSize, int pageNum) {
+    public PageList<DocModel> query(String author, String subject, String label, Audit audit, Recycle recycle, int pageSize, int pageNum) {
         StringBuilder where = new StringBuilder().append(recycle.getSql());
         if (audit != null)
             where.append(" and ").append(audit.getSql());
         List<Object> args = new ArrayList<>();
-        daoHelper.where(where, args, "c_key", DaoOperation.Equals, key, true);
         daoHelper.where(where, args, "c_author", DaoOperation.Equals, author, true);
         daoHelper.like(null, where, args, "c_subject", subject, true);
         daoHelper.like(null, where, args, "c_label", label, true);
 
         return liteOrm.query(new LiteQuery(DocModel.class).where(where.toString()).order("c_sort,c_time desc")
                 .size(pageSize).page(pageNum), args.toArray());
+    }
+
+    @Override
+    public PageList<DocModel> query(Set<String> ids) {
+        StringBuilder where = new StringBuilder();
+        List<Object> args = new ArrayList<>();
+        daoHelper.in(where, args, "c_id", ids);
+
+        return liteOrm.query(new LiteQuery(DocModel.class).where(where.toString()).order("c_sort,c_time desc"), args.toArray());
+    }
+
+    @Override
+    public DocModel findById(String id) {
+        return liteOrm.findById(DocModel.class, id);
     }
 
     @Override

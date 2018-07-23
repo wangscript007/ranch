@@ -15,7 +15,7 @@
 {
     "id-value": {
         "id": "ID值",
-        "key": "类型KEY",
+        "classifies": ["分类ID集"],
         "owner": {},
         "author": {},
         "scoreMin": "最小分值",
@@ -26,6 +26,8 @@
         "thumbnail": "缩略图URI地址",
         "summary": "摘要",
         "label": "标签",
+        "source": "内容源",
+        "content": "内容",
         "read": "阅读次数",
         "favorite": "收藏次数",
         "comment": "评论次数",
@@ -36,7 +38,4 @@
 }
 ```
 
-- owner 所有者信息，未找到则仅包含id属性。
 - author 作者信息，未找到则仅包含id属性。
-
-> 后台管理接口，需验证[请求参数签名](https://github.com/heisedebaise/tephra/blob/master/tephra-ctrl/doc/sign.md)。

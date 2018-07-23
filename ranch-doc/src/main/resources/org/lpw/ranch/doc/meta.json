@@ -2,14 +2,6 @@
     "key": "ranch.doc",
     "props": [
         {
-            "name": "key",
-            "ignore": [
-                "lite-query",
-                "lite-create",
-                "lite-modify"
-            ]
-        },
-        {
             "name": "author",
             "type": "read-only",
             "valueKey": "name",

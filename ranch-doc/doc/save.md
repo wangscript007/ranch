@@ -9,7 +9,7 @@
 |名称|类型|必须|说明|
 |---|---|---|---|
 |id|char(36)|否|ID值，如果不存在则新增。|
-|key|char(100)|是|类型KEY。|
+|classifies|string|是|分类ID集，多个ID间以逗号分隔。|
 |sort|int|否|顺序。|
 |subject|char(100)|是|标题。|
 |image|char(100)|否|主图URI地址。|
@@ -32,7 +32,7 @@
 ```json
 {
     "id": "ID值",
-    "key": "类型KEY",
+    "classifies": ["分类ID集"],
     "author": {},
     "sort": "顺序",
     "subject": "标题",
@@ -40,6 +40,8 @@
     "thumbnail": "缩略图URI地址",
     "summary": "摘要",
     "label": "标签",
+    "source": "内容源",
+    "content": "内容",
     "read": "阅读次数",
     "favorite": "收藏次数",
     "comment": "评论次数",

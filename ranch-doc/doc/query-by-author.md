@@ -20,7 +20,7 @@
     "list": [
         {
             "id": "ID值",
-            "key": "类型KEY",
+            "classifies": ["分类ID集"],
             "owner": {},
             "author": {},
             "scoreMin": "最小分值",

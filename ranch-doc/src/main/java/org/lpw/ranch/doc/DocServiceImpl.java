@@ -6,6 +6,8 @@ import com.vladsch.flexmark.html.HtmlRenderer;
 import com.vladsch.flexmark.parser.Parser;
 import org.lpw.ranch.audit.Audit;
 import org.lpw.ranch.audit.AuditHelper;
+import org.lpw.ranch.doc.topic.TopicModel;
+import org.lpw.ranch.doc.topic.TopicService;
 import org.lpw.ranch.recycle.Recycle;
 import org.lpw.ranch.recycle.RecycleHelper;
 import org.lpw.ranch.user.helper.UserHelper;
@@ -22,8 +24,12 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -56,11 +62,44 @@ public class DocServiceImpl implements DocService, MinuteJob {
     @Inject
     private Pagination pagination;
     @Inject
+    private TopicService topicService;
+    @Inject
     private DocDao docDao;
     @Value("${" + DocModel.NAME + ".audit.default:0}")
     private int defaultAudit;
     private Map<String, AtomicInteger> read = new ConcurrentHashMap<>();
     private Map<String, AtomicInteger> praise = new ConcurrentHashMap<>();
+
+    @Override
+    public JSONObject query(String classify, String author, String subject, String label, Audit audit) {
+        if (validator.isEmpty(classify))
+            return query(docDao.query(userHelper.findIdByUid(author, author), subject, label, audit, Recycle.No,
+                    pagination.getPageSize(20), pagination.getPageNum()));
+
+        PageList<TopicModel> pl = topicService.query(classify, subject, label, audit);
+        Set<String> ids = new HashSet<>();
+        pl.getList().forEach(topic -> ids.add(topic.getDoc()));
+
+        return query(pl.toJson(false), docDao.query(ids).getList());
+    }
+
+    @Override
+    public JSONObject queryByAuthor() {
+        return query(docDao.query(userHelper.id(), null, null, null, Recycle.No,
+                pagination.getPageSize(), pagination.getPageNum()));
+    }
+
+    private JSONObject query(PageList<DocModel> pl) {
+        return query(pl.toJson(false), pl.getList());
+    }
+
+    private JSONObject query(JSONObject object, List<DocModel> docs) {
+        JSONArray list = new JSONArray();
+        docs.forEach(doc -> list.add(toJson(doc, false)));
+        object.put("list", list);
+
+        return object;
+    }
 
     @Override
     public DocModel findById(String id) {
@@ -73,30 +112,8 @@ public class DocServiceImpl implements DocService, MinuteJob {
     }
 
     @Override
-    public JSONObject query(String key, String author, String subject, String label, Audit audit) {
-        return query(docDao.query(key, userHelper.findIdByUid(author, author), subject, label, audit, Recycle.No,
-                pagination.getPageSize(20), pagination.getPageNum()));
-    }
-
-    @Override
-    public JSONObject queryByAuthor() {
-        return query(docDao.query(null, userHelper.id(), null, null, null, Recycle.No,
-                pagination.getPageSize(), pagination.getPageNum()));
-    }
-
-    @Override
-    public JSONObject queryByKey(String key) {
-        return query(docDao.query(key, null, null, null, Audit.Pass, Recycle.No,
-                pagination.getPageSize(), pagination.getPageNum()));
-    }
-
-    private JSONObject query(PageList<DocModel> pl) {
-        JSONObject object = pl.toJson(false);
-        JSONArray list = new JSONArray();
-        pl.getList().forEach(doc -> list.add(toJson(doc)));
-        object.put("list", list);
-
-        return object;
+    public JSONObject find(String id) {
+        return toJson(findById(id), true);
     }
 
     @Override
@@ -110,16 +127,15 @@ public class DocServiceImpl implements DocService, MinuteJob {
             if (doc == null || doc.getAudit() != Audit.Pass.getValue() || doc.getRecycle() != Recycle.No.getValue())
                 continue;
 
-            object.put(id, toJson(doc));
+            object.put(id, toJson(doc, true));
         }
 
         return object;
     }
 
     @Override
-    public JSONObject save(DocModel doc, boolean markdown) {
+    public JSONObject save(DocModel doc, String[] classifies, boolean markdown) {
         DocModel model = validator.isEmpty(doc.getId()) ? new DocModel() : findById(doc.getId());
-        model.setKey(doc.getKey());
         model.setAuthor(userHelper.id());
         model.setSort(doc.getSort());
         model.setSubject(doc.getSubject());
@@ -128,23 +144,29 @@ public class DocServiceImpl implements DocService, MinuteJob {
         model.setSummary(doc.getSummary());
         model.setLabel(doc.getLabel());
         model.setSource(doc.getSource());
-        model.setContent(markdown ? HtmlRenderer.builder().build().render(Parser.builder().build().parse(doc.getSource())).trim()
-                : doc.getSource());
+        model.setContent(markdown ?
+                HtmlRenderer.builder().build().render(Parser.builder().build().parse(doc.getSource())).trim() : doc.getSource());
         model.setJson(doc.getJson());
         model.setTime(dateTime.now());
         model.setAudit(defaultAudit);
         docDao.save(model);
+        topicService.save(model, new HashSet<>(Arrays.asList(classifies)));
         clearCache(model.getId());
 
-        return toJson(model);
+        return toJson(model, true);
     }
 
-    private JSONObject toJson(DocModel doc) {
-        String key = CACHE_JSON + doc.getId();
+    private JSONObject toJson(DocModel doc, boolean full) {
+        String key = CACHE_JSON + doc.getId() + ":" + full;
         JSONObject object = cache.get(key);
         if (object == null) {
             object = modelHelper.toJson(doc);
+            object.put("classifies", topicService.classifies(doc.getId()));
             object.put("author", userHelper.get(doc.getAuthor()));
+            if (full) {
+                object.put("source", doc.getSource());
+                object.put("content", doc.getContent());
+            }
             cache.put(key, object, false);
         }
 
@@ -164,10 +186,8 @@ public class DocServiceImpl implements DocService, MinuteJob {
     @Override
     public JSONObject readJson(String id) {
         DocModel doc = putRead(id);
-        JSONObject object = toJson(doc);
-        object.put("content", doc.getContent());
 
-        return object;
+        return toJson(doc, true);
     }
 
     private DocModel putRead(String id) {
@@ -206,18 +226,23 @@ public class DocServiceImpl implements DocService, MinuteJob {
     @Override
     public void pass(String[] ids, String auditRemark) {
         auditHelper.pass(DocModel.class, ids, auditRemark);
+        for (String id : ids)
+            topicService.audit(id, Audit.Pass);
         clearCache(ids);
     }
 
     @Override
     public void reject(String[] ids, String auditRemark) {
         auditHelper.reject(DocModel.class, ids, auditRemark);
+        for (String id : ids)
+            topicService.audit(id, Audit.Reject);
         clearCache(ids);
     }
 
     @Override
     public void delete(String id) {
         recycleHelper.delete(DocModel.class, id);
+        topicService.recycle(id, Recycle.Yes);
         clearCache(id);
     }
 
@@ -229,6 +254,7 @@ public class DocServiceImpl implements DocService, MinuteJob {
     @Override
     public void restore(String id) {
         recycleHelper.restore(DocModel.class, id);
+        topicService.recycle(id, Recycle.No);
         clearCache(id);
     }
 
@@ -273,6 +299,7 @@ public class DocServiceImpl implements DocService, MinuteJob {
 
     private void clearCache(String id) {
         cache.remove(CACHE_MODEL + id);
-        cache.remove(CACHE_JSON + id);
+        cache.remove(CACHE_JSON + id + ":true");
+        cache.remove(CACHE_JSON + id + ":false");
     }
 }

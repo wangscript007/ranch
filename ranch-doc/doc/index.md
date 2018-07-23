@@ -8,7 +8,7 @@
 
 |名称|类型|必须|说明|
 |---|---|---|---|
-|key|char(100)|是|类型KEY。|
+|classify|char(100)|是|分类ID。|
 |pageSize|int|否|每页显示记录数，默认20。|
 |pageNum|int|否|当前显示页数。|
 
@@ -21,7 +21,7 @@
     "list": [
         {
             "id": "ID值",
-            "key": "类型KEY",
+            "classifies": ["分类ID集"],
             "author": {},
             "sort": "顺序",
             "subject": "标题",

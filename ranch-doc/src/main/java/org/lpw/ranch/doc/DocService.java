@@ -14,24 +14,16 @@ public interface DocService extends AuditService {
     String VALIDATOR_EXISTS = DocModel.NAME + ".validator.exists";
 
     /**
-     * 根据ID查找文档实例。
-     *
-     * @param id ID值。
-     * @return 文档实例；如果不存在则返回null。
-     */
-    DocModel findById(String id);
-
-    /**
      * 检索文档信息集。
      *
-     * @param key     类型key。
-     * @param author  作者ID。
-     * @param subject 标题，模糊匹配。
-     * @param label   标签，模糊匹配。
-     * @param audit   审核状态。
+     * @param classify 分类ID集。
+     * @param author   作者ID。
+     * @param subject  标题，模糊匹配。
+     * @param label    标签，模糊匹配。
+     * @param audit    审核状态。
      * @return 文档信息集。
      */
-    JSONObject query(String key, String author, String subject, String label, Audit audit);
+    JSONObject query(String classify, String author, String subject, String label, Audit audit);
 
     /**
      * 检索当前用户的文档信息集。
@@ -41,12 +33,20 @@ public interface DocService extends AuditService {
     JSONObject queryByAuthor();
 
     /**
-     * 检索文档信息集。
+     * 根据ID查找文档实例。
      *
-     * @param key 类型key。
-     * @return 文档信息集。
+     * @param id ID值。
+     * @return 文档实例；如果不存在则返回null。
      */
-    JSONObject queryByKey(String key);
+    DocModel findById(String id);
+
+    /**
+     * 获取文档。
+     *
+     * @param id ID值。
+     * @return 文档信息。
+     */
+    JSONObject find(String id);
 
     /**
      * 获取指定ID的文档信息集。
@@ -59,10 +59,11 @@ public interface DocService extends AuditService {
     /**
      * 保存文档信息。
      *
-     * @param doc      文档信息。
-     * @param markdown 是否为Markdown文档。
+     * @param doc        文档信息。
+     * @param classifies 分类ID集。
+     * @param markdown   是否为Markdown文档。
      */
-    JSONObject save(DocModel doc, boolean markdown);
+    JSONObject save(DocModel doc, String[] classifies, boolean markdown);
 
     /**
      * 获取文档源内容。

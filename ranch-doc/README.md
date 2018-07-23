@@ -31,6 +31,8 @@
 
 [检索当前用户文档信息集](doc/query-by-author.md)
 
+[获取文档信息](doc/find.md)
+
 [获取文档信息集](doc/get.md)
 
 [保存文档信息](doc/save.md)
@@ -40,6 +42,8 @@
 [检索已发布文档信息集](doc/index.md)
 
 [阅读文档](doc/read.md)
+
+[阅读JSON](doc/read-json.md)
 
 [增减收藏数](doc/favorite.md)
 

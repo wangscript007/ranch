@@ -80,7 +80,6 @@ public class TestSupport extends TephraTestSupport implements AuditTesterDao<Doc
 
     private DocModel create(int i, String author, String image, String thumbnail, String summary, String label, Audit audit, Recycle recycle) {
         DocModel doc = new DocModel();
-        doc.setKey("key " + i);
         doc.setAuthor(author);
         doc.setSort(300 + i);
         doc.setSubject("subject " + i);

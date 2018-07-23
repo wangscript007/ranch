@@ -8,7 +8,7 @@
 
 |名称|类型|必须|说明|
 |---|---|---|---|
-|key|char(100)|否|类型KEY。|
+|classify|char(100)|否|分类ID。|
 |author|char(36)|否|作者，ID或UID。|
 |subject|char(100)|否|标题，模糊匹配。|
 |label|char(100)|否|标签，模糊匹配。|
@@ -25,7 +25,7 @@
     "list": [
         {
             "id": "ID值",
-            "key": "类型KEY",
+            "classifies": ["分类ID集"],
             "author": {},
             "sort": "顺序",
             "subject": "标题",

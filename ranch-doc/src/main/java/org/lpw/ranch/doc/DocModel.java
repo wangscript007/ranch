@@ -21,7 +21,6 @@ import java.sql.Timestamp;
 public class DocModel extends AuditModelSupport {
     static final String NAME = "ranch.doc";
 
-    private String key; // 类型KEY
     private String author; // 作者ID
     private int sort; // 顺序
     private String subject; // 标题
@@ -38,16 +37,6 @@ public class DocModel extends AuditModelSupport {
     private int praise; // 点赞数
     private int score; // 得分
     private Timestamp time; // 更新时间
-
-    @Jsonable
-    @Column(name = "c_key")
-    public String getKey() {
-        return key;
-    }
-
-    public void setKey(String key) {
-        this.key = key;
-    }
 
     @Jsonable
     @Column(name = "c_author")
@@ -119,7 +108,6 @@ public class DocModel extends AuditModelSupport {
         this.label = label;
     }
 
-    @Jsonable
     @Column(name = "c_source")
     public String getSource() {
         return source;

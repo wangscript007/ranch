@@ -2,7 +2,6 @@ DROP TABLE IF EXISTS t_doc;
 CREATE TABLE t_doc
 (
   c_id CHAR(36) NOT NULL COMMENT '主键',
-  c_key VARCHAR(255) NOT NULL COMMENT '类型KEY',
   c_author CHAR(36) NOT NULL COMMENT '作者ID',
   c_sort INT DEFAULT 0 COMMENT '顺序',
   c_subject VARCHAR(255) NOT NULL COMMENT '标题',
@@ -24,6 +23,6 @@ CREATE TABLE t_doc
   c_recycle INT DEFAULT 0 COMMENT '回收站；0-否，1-是',
 
   PRIMARY KEY pk(c_id) USING HASH,
-  KEY k_recycle_audit_key(c_recycle,c_audit,c_key) USING BTREE,
+  KEY k_recycle_audit(c_recycle,c_audit) USING BTREE,
   KEY k_recycle_author(c_recycle,c_author,c_time) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
