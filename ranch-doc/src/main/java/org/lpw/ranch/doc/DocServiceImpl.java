@@ -6,6 +6,7 @@ import com.vladsch.flexmark.html.HtmlRenderer;
 import com.vladsch.flexmark.parser.Parser;
 import org.lpw.ranch.audit.Audit;
 import org.lpw.ranch.audit.AuditHelper;
+import org.lpw.ranch.doc.relation.RelationService;
 import org.lpw.ranch.doc.topic.TopicModel;
 import org.lpw.ranch.doc.topic.TopicService;
 import org.lpw.ranch.recycle.Recycle;
@@ -13,9 +14,12 @@ import org.lpw.ranch.recycle.RecycleHelper;
 import org.lpw.ranch.user.helper.UserHelper;
 import org.lpw.ranch.util.Carousel;
 import org.lpw.ranch.util.Pagination;
+import org.lpw.tephra.bean.BeanFactory;
 import org.lpw.tephra.cache.Cache;
 import org.lpw.tephra.dao.model.ModelHelper;
 import org.lpw.tephra.dao.orm.PageList;
+import org.lpw.tephra.lucene.LuceneHelper;
+import org.lpw.tephra.scheduler.DateJob;
 import org.lpw.tephra.scheduler.MinuteJob;
 import org.lpw.tephra.util.DateTime;
 import org.lpw.tephra.util.Generator;
@@ -24,6 +28,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -37,9 +42,10 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @author lpw
  */
 @Service(DocModel.NAME + ".service")
-public class DocServiceImpl implements DocService, MinuteJob {
+public class DocServiceImpl implements DocService, MinuteJob, DateJob {
     private static final String CACHE_MODEL = DocModel.NAME + ".service.model:";
     private static final String CACHE_JSON = DocModel.NAME + ".service.json:";
+    private static final String CACHE_FIND = DocModel.NAME + ".service.find:";
 
     @Inject
     private Cache cache;
@@ -51,6 +57,8 @@ public class DocServiceImpl implements DocService, MinuteJob {
     private DateTime dateTime;
     @Inject
     private ModelHelper modelHelper;
+    @Inject
+    private LuceneHelper luceneHelper;
     @Inject
     private Carousel carousel;
     @Inject
@@ -64,6 +72,8 @@ public class DocServiceImpl implements DocService, MinuteJob {
     @Inject
     private TopicService topicService;
     @Inject
+    private RelationService relationService;
+    @Inject
     private DocDao docDao;
     @Value("${" + DocModel.NAME + ".audit.default:0}")
     private int defaultAudit;
@@ -71,21 +81,29 @@ public class DocServiceImpl implements DocService, MinuteJob {
     private Map<String, AtomicInteger> praise = new ConcurrentHashMap<>();
 
     @Override
-    public JSONObject query(String classify, String author, String subject, String label, Audit audit) {
+    public JSONObject query(String classify, String author, String subject, String label, String type, Audit audit) {
+        if (!validator.isEmpty(author))
+            author = userHelper.findIdByUid(author, author);
         if (validator.isEmpty(classify))
-            return query(docDao.query(userHelper.findIdByUid(author, author), subject, label, audit, Recycle.No,
+            return query(docDao.query(author, subject, label, type, audit, Recycle.No,
                     pagination.getPageSize(20), pagination.getPageNum()));
 
-        PageList<TopicModel> pl = topicService.query(classify, subject, label, audit);
+        PageList<TopicModel> pl = topicService.query(classify, author, subject, label, type, audit);
         Set<String> ids = new HashSet<>();
         pl.getList().forEach(topic -> ids.add(topic.getDoc()));
+        JSONObject object = pl.toJson(false);
+        if (ids.isEmpty()) {
+            object.put("list", new JSONArray());
 
-        return query(pl.toJson(false), docDao.query(ids).getList());
+            return object;
+        }
+
+        return query(object, docDao.query(ids, 0, 0).getList());
     }
 
     @Override
     public JSONObject queryByAuthor() {
-        return query(docDao.query(userHelper.id(), null, null, null, Recycle.No,
+        return query(docDao.query(userHelper.id(), null, null, null, null, Recycle.No,
                 pagination.getPageSize(), pagination.getPageNum()));
     }
 
@@ -113,7 +131,15 @@ public class DocServiceImpl implements DocService, MinuteJob {
 
     @Override
     public JSONObject find(String id) {
-        return toJson(findById(id), true);
+        String cacheKey = CACHE_FIND + id;
+        JSONObject object = cache.get(cacheKey);
+        if (object == null) {
+            object = toJson(findById(id), true);
+            object.put("refresh", relationService.find(id));
+            cache.put(cacheKey, object, false);
+        }
+
+        return object;
     }
 
     @Override
@@ -134,6 +160,18 @@ public class DocServiceImpl implements DocService, MinuteJob {
     }
 
     @Override
+    public JSONObject search(String[] words) {
+        List<String> ids = luceneHelper.query(DocModel.NAME, words, true, 1024);
+        if (ids==null)
+            return query(null, null, null, null, null, Audit.Pass);
+
+        if (ids.isEmpty())
+            return BeanFactory.getBean(PageList.class).setPage(0, 0, 0).toJson();
+
+        return query(docDao.query(new HashSet<>(ids), pagination.getPageSize(20), pagination.getPageNum()));
+    }
+
+    @Override
     public JSONObject save(DocModel doc, String[] classifies, boolean markdown) {
         DocModel model = validator.isEmpty(doc.getId()) ? new DocModel() : findById(doc.getId());
         model.setAuthor(userHelper.id());
@@ -143,6 +181,7 @@ public class DocServiceImpl implements DocService, MinuteJob {
         model.setThumbnail(doc.getThumbnail());
         model.setSummary(doc.getSummary());
         model.setLabel(doc.getLabel());
+        model.setType(doc.getType());
         model.setSource(doc.getSource());
         model.setContent(markdown ?
                 HtmlRenderer.builder().build().render(Parser.builder().build().parse(doc.getSource())).trim() : doc.getSource());
@@ -292,6 +331,40 @@ public class DocServiceImpl implements DocService, MinuteJob {
         });
     }
 
+    @Override
+    public void refresh() {
+        luceneHelper.clear(DocModel.NAME);
+        relationService.clear();
+        List<DocModel> list = docDao.query(null, null, null, null, Audit.Pass, Recycle.No,
+                0, 0).getList();
+        if (list.isEmpty())
+            return;
+
+        Map<String, String> map = new HashMap<>();
+        DocModel previous = null;
+        for (DocModel doc : list) {
+            if (previous != null) {
+                relationService.save(doc.getId(), previous.getId(), "previous", 0);
+                relationService.save(previous.getId(), doc.getId(), "next", 0);
+            }
+            previous = doc;
+            map.put(doc.getId(), doc.getSubject() + "," + doc.getSummary() + "," + doc.getLabel() + "," + doc.getSource());
+            luceneHelper.source(DocModel.NAME, doc.getId(), map.get(doc.getId()));
+        }
+
+        luceneHelper.index(DocModel.NAME);
+        list.forEach(doc -> {
+            List<String> ids = luceneHelper.query(DocModel.NAME, map.get(doc.getId()), false, 11);
+            for (int i = 1, size = ids.size(); i < size; i++)
+                relationService.save(doc.getId(), ids.get(i), "alike", i - 1);
+        });
+    }
+
+    @Override
+    public void executeDateJob() {
+        refresh();
+    }
+
     private void clearCache(String[] ids) {
         for (String id : ids)
             clearCache(id);
@@ -301,5 +374,6 @@ public class DocServiceImpl implements DocService, MinuteJob {
         cache.remove(CACHE_MODEL + id);
         cache.remove(CACHE_JSON + id + ":true");
         cache.remove(CACHE_JSON + id + ":false");
+        cache.remove(CACHE_FIND + id);
     }
 }

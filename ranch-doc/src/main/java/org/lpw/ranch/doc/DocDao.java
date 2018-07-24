@@ -10,9 +10,10 @@ import java.util.Set;
  * @author lpw
  */
 interface DocDao {
-    PageList<DocModel> query(String author, String subject, String label, Audit audit, Recycle recycle, int pageSize, int pageNum);
+    PageList<DocModel> query(String author, String subject, String label, String type,
+                             Audit audit, Recycle recycle, int pageSize, int pageNum);
 
-    PageList<DocModel> query(Set<String> ids);
+    PageList<DocModel> query(Set<String> ids, int pageSize, int pageNum);
 
     DocModel findById(String id);
 

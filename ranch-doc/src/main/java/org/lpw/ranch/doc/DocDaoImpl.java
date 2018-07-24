@@ -28,12 +28,14 @@ class DocDaoImpl implements DocDao {
     private DaoHelper daoHelper;
 
     @Override
-    public PageList<DocModel> query(String author, String subject, String label, Audit audit, Recycle recycle, int pageSize, int pageNum) {
+    public PageList<DocModel> query(String author, String subject, String label, String type,
+                                    Audit audit, Recycle recycle, int pageSize, int pageNum) {
         StringBuilder where = new StringBuilder().append(recycle.getSql());
         if (audit != null)
             where.append(" and ").append(audit.getSql());
         List<Object> args = new ArrayList<>();
         daoHelper.where(where, args, "c_author", DaoOperation.Equals, author, true);
+        daoHelper.where(where, args, "c_type", DaoOperation.Equals, type, true);
         daoHelper.like(null, where, args, "c_subject", subject, true);
         daoHelper.like(null, where, args, "c_label", label, true);
 
@@ -42,12 +44,13 @@ class DocDaoImpl implements DocDao {
     }
 
     @Override
-    public PageList<DocModel> query(Set<String> ids) {
+    public PageList<DocModel> query(Set<String> ids, int pageSize, int pageNum) {
         StringBuilder where = new StringBuilder();
         List<Object> args = new ArrayList<>();
         daoHelper.in(where, args, "c_id", ids);
 
-        return liteOrm.query(new LiteQuery(DocModel.class).where(where.toString()).order("c_sort,c_time desc"), args.toArray());
+        return liteOrm.query(new LiteQuery(DocModel.class).where(where.toString()).order("c_sort,c_time desc")
+                .size(pageSize).page(pageNum), args.toArray());
     }
 
     @Override

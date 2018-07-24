@@ -1,4 +1,4 @@
-package org.lpw.ranch.doc.topic;
+package org.lpw.ranch.doc.relation;
 
 import org.lpw.tephra.ctrl.context.Request;
 import org.lpw.tephra.ctrl.execute.Execute;
@@ -9,11 +9,11 @@ import javax.inject.Inject;
 /**
  * @author lpw
  */
-@Controller(TopicModel.NAME + ".ctrl")
-@Execute(name = "/doc/topic/", key = TopicModel.NAME, code = "0")
-public class TopicCtrl {
+@Controller(RelationModel.NAME + ".ctrl")
+@Execute(name = "/doc/refresh/", key = RelationModel.NAME, code = "0")
+public class RelationCtrl {
     @Inject
     private Request request;
     @Inject
-    private TopicService topicService;
+    private RelationService relationService;
 }

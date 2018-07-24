@@ -20,10 +20,11 @@ public interface DocService extends AuditService {
      * @param author   作者ID。
      * @param subject  标题，模糊匹配。
      * @param label    标签，模糊匹配。
+     * @param type     类型。
      * @param audit    审核状态。
      * @return 文档信息集。
      */
-    JSONObject query(String classify, String author, String subject, String label, Audit audit);
+    JSONObject query(String classify, String author, String subject, String label, String type, Audit audit);
 
     /**
      * 检索当前用户的文档信息集。
@@ -55,6 +56,14 @@ public interface DocService extends AuditService {
      * @return 文档信息集。
      */
     JSONObject get(String[] ids);
+
+    /**
+     * 搜索。
+     *
+     * @param words 关键词集。
+     * @return 搜索结果。
+     */
+    JSONObject search(String[] words);
 
     /**
      * 保存文档信息。
@@ -111,4 +120,9 @@ public interface DocService extends AuditService {
      * @param id ID值。
      */
     void praise(String id);
+
+    /**
+     * 刷新。
+     */
+    void refresh();
 }

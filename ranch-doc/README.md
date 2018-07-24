@@ -4,7 +4,6 @@
 
 |属性|类型|说明|
 |---|---|---|
-|key|char(100)|类型KEY。|
 |author|char(36)|作者。|
 |sort|int|顺序。|
 |subject|char(100)|标题。|
@@ -12,6 +11,7 @@
 |thumbnail|char(100)|缩略图URI地址。|
 |summary|string|摘要。|
 |label|string|标签。|
+|type|char(100)|类型。|
 |source|string|内容源。|
 |content|string|内容。|
 |json|string|扩展属性集。|
@@ -41,6 +41,8 @@
 
 [检索已发布文档信息集](doc/index.md)
 
+[搜索已发布文档信息集](doc/search.md)
+
 [阅读文档](doc/read.md)
 
 [阅读JSON](doc/read-json.md)
@@ -50,6 +52,8 @@
 [增减评论数](doc/comment.md)
 
 [点赞](doc/praise.md)
+
+[刷新](doc/refresh.md)
 
 [审核通过](../ranch-base/doc/audit-pass.md)
 

@@ -16,12 +16,14 @@ public interface TopicService {
      * 检索。
      *
      * @param classify 分类。
+     * @param author   作者。
      * @param subject  标题，模糊匹配。
      * @param label    标签，模糊匹配。
+     * @param type     类型。
      * @param audit    审核状态。
      * @return 主题集。
      */
-    PageList<TopicModel> query(String classify, String subject, String label, Audit audit);
+    PageList<TopicModel> query(String classify, String author, String subject, String label, String type, Audit audit);
 
     /**
      * 查找分类ID集。

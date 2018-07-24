@@ -23,9 +23,11 @@ public class TopicModel extends RecycleModelSupport {
 
     private String doc; // 文档
     private String classify; // 分类
+    private String author; // 作者
     private int sort; // 顺序
     private String subject; // 标题
     private String label; // 标签
+    private String type; // 类型
     private Timestamp time; // 时间
     private int audit; // 审核：0-待审核；1-审核通过；2-审核不通过
 
@@ -47,6 +49,16 @@ public class TopicModel extends RecycleModelSupport {
 
     public void setClassify(String classify) {
         this.classify = classify;
+    }
+
+    @Jsonable
+    @Column(name = "c_author")
+    public String getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(String author) {
+        this.author = author;
     }
 
     @Jsonable
@@ -77,6 +89,16 @@ public class TopicModel extends RecycleModelSupport {
 
     public void setLabel(String label) {
         this.label = label;
+    }
+
+    @Jsonable
+    @Column(name = "c_type")
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     @Jsonable

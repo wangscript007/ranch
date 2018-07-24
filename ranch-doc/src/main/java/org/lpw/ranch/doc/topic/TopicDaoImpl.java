@@ -24,12 +24,15 @@ class TopicDaoImpl implements TopicDao {
     private DaoHelper daoHelper;
 
     @Override
-    public PageList<TopicModel> query(String classify, String subject, String label, Audit audit, Recycle recycle, int pageSize, int pageNum) {
+    public PageList<TopicModel> query(String classify, String author, String subject, String label, String type,
+                                      Audit audit, Recycle recycle, int pageSize, int pageNum) {
         StringBuilder where = new StringBuilder().append(recycle.getSql());
         if (audit != null)
             where.append(" and ").append(audit.getSql());
         List<Object> args = new ArrayList<>();
         daoHelper.where(where, args, "c_classify", DaoOperation.Equals, classify, true);
+        daoHelper.where(where, args, "c_author", DaoOperation.Equals, author, true);
+        daoHelper.where(where, args, "c_type", DaoOperation.Equals, type, true);
         daoHelper.like(null, where, args, "c_subject", subject, true);
         daoHelper.like(null, where, args, "c_label", label, true);
 

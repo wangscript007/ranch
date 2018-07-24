@@ -21,7 +21,7 @@
     "list": [
         {
             "id": "ID值",
-            "classifies": ["分类ID集"],
+            "classifies": ["分类集"],
             "author": {},
             "sort": "顺序",
             "subject": "标题",
@@ -29,6 +29,7 @@
             "thumbnail": "缩略图URI地址",
             "summary": "摘要",
             "label": "标签",
+            "type": "类型",
             "read": "阅读次数",
             "favorite": "收藏次数",
             "comment": "评论次数",

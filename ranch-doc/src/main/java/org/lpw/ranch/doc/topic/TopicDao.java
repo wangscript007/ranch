@@ -8,7 +8,8 @@ import org.lpw.tephra.dao.orm.PageList;
  * @author lpw
  */
 interface TopicDao {
-    PageList<TopicModel> query(String classify, String subject, String label, Audit audit, Recycle recycle, int pageSize, int pageNum);
+    PageList<TopicModel> query(String classify, String author, String subject, String label, String type,
+                               Audit audit, Recycle recycle, int pageSize, int pageNum);
 
     PageList<TopicModel> query(String doc);
 

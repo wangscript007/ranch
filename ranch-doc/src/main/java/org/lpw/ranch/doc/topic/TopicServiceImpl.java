@@ -22,8 +22,9 @@ public class TopicServiceImpl implements TopicService {
     private TopicDao topicDao;
 
     @Override
-    public PageList<TopicModel> query(String classify, String subject, String label, Audit audit) {
-        return topicDao.query(classify, subject, label, audit, Recycle.No, pagination.getPageSize(20), pagination.getPageNum());
+    public PageList<TopicModel> query(String classify, String author, String subject, String label, String type, Audit audit) {
+        return topicDao.query(classify, author, subject, label, type, audit, Recycle.No,
+                pagination.getPageSize(20), pagination.getPageNum());
     }
 
     @Override
@@ -44,9 +45,11 @@ public class TopicServiceImpl implements TopicService {
             TopicModel topic = new TopicModel();
             topic.setDoc(doc.getId());
             topic.setClassify(classify);
+            topic.setAuthor(doc.getAuthor());
             topic.setSort(doc.getSort());
             topic.setSubject(doc.getSubject());
             topic.setLabel(doc.getLabel());
+            topic.setType(doc.getType());
             topic.setTime(doc.getTime());
             topic.setAudit(doc.getAudit());
             topic.setRecycle(doc.getRecycle());

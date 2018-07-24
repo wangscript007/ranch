@@ -34,7 +34,7 @@ public class DocCtrl extends AuditCtrlSupport {
     })
     public Object query() {
         return docService.query(request.get("classify"), request.get("author"), request.get("subject"), request.get("label"),
-                auditHelper.get(request.getAsInt("audit", -1)));
+                request.get("type"), auditHelper.get(request.getAsInt("audit", -1)));
     }
 
     @Execute(name = "query-by-author", validates = {
@@ -45,30 +45,31 @@ public class DocCtrl extends AuditCtrlSupport {
     }
 
     @Execute(name = "find", validates = {
-            @Validate(validator = Validators.ID, parameter = "id", failureCode = 11),
+            @Validate(validator = Validators.ID, parameter = "id", failureCode = 1),
             @Validate(validator = Validators.SIGN),
-            @Validate(validator = DocService.VALIDATOR_EXISTS, parameter = "id", failureCode = 12)
+            @Validate(validator = DocService.VALIDATOR_EXISTS, parameter = "id", failureCode = 2)
     })
     public Object find() {
         return docService.find(request.get("id"));
     }
 
     @Execute(name = "get", validates = {
-            @Validate(validator = Validators.NOT_EMPTY, parameter = "ids", failureCode = 13)
+            @Validate(validator = Validators.NOT_EMPTY, parameter = "ids", failureCode = 3)
     })
     public Object get() {
         return docService.get(request.getAsArray("ids"));
     }
 
     @Execute(name = "save", validates = {
-            @Validate(validator = Validators.NOT_EMPTY, parameter = "classifies", failureCode = 1),
+            @Validate(validator = Validators.NOT_EMPTY, parameter = "classifies", failureCode = 4),
             @Validate(validator = Validators.NOT_EMPTY, parameter = "subject", failureCode = 5),
             @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "subject", failureCode = 6),
             @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "image", failureCode = 7),
             @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "thumbnail", failureCode = 8),
-            @Validate(validator = Validators.NOT_EMPTY, parameter = "source", failureCode = 9),
+            @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "type", failureCode = 9),
+            @Validate(validator = Validators.NOT_EMPTY, parameter = "source", failureCode = 10),
             @Validate(validator = UserHelper.VALIDATOR_SIGN_IN),
-            @Validate(validator = DocService.VALIDATOR_EXISTS, emptyable = true, parameter = "id", failureCode = 12)
+            @Validate(validator = DocService.VALIDATOR_EXISTS, emptyable = true, parameter = "id", failureCode = 2)
     })
     public Object save() {
         return docService.save(request.setToModel(DocModel.class), request.getAsArray("classifies"),
@@ -76,24 +77,27 @@ public class DocCtrl extends AuditCtrlSupport {
     }
 
     @Execute(name = "source", validates = {
-            @Validate(validator = Validators.ID, parameter = "id", failureCode = 11),
+            @Validate(validator = Validators.ID, parameter = "id", failureCode = 1),
             @Validate(validator = Validators.SIGN),
-            @Validate(validator = DocService.VALIDATOR_EXISTS, parameter = "id", failureCode = 12)
+            @Validate(validator = DocService.VALIDATOR_EXISTS, parameter = "id", failureCode = 2)
     })
     public Object source() {
         return docService.source(request.get("id"));
     }
 
-    @Execute(name = "index", validates = {
-            @Validate(validator = Validators.NOT_EMPTY, parameter = "classify", failureCode = 1)
-    })
+    @Execute(name = "index")
     public Object index() {
-        return docService.query(request.get("classify"), null, null, null, Audit.Pass);
+        return docService.query(request.get("classify"), null, null, null, null, Audit.Pass);
+    }
+
+    @Execute(name = "search")
+    public Object search() {
+        return docService.search(request.getAsArray("words"));
     }
 
     @Execute(name = "read", type = Templates.FREEMARKER, template = "read", validates = {
-            @Validate(validator = Validators.ID, parameter = "id", failureCode = 11),
-            @Validate(validator = DocService.VALIDATOR_EXISTS, parameter = "id", failureCode = 12)
+            @Validate(validator = Validators.ID, parameter = "id", failureCode = 1),
+            @Validate(validator = DocService.VALIDATOR_EXISTS, parameter = "id", failureCode = 2)
     })
     public Object read() {
         Map<String, Object> map = new HashMap<>();
@@ -109,17 +113,17 @@ public class DocCtrl extends AuditCtrlSupport {
     }
 
     @Execute(name = "read-json", validates = {
-            @Validate(validator = Validators.ID, parameter = "id", failureCode = 11),
-            @Validate(validator = DocService.VALIDATOR_EXISTS, parameter = "id", failureCode = 12)
+            @Validate(validator = Validators.ID, parameter = "id", failureCode = 1),
+            @Validate(validator = DocService.VALIDATOR_EXISTS, parameter = "id", failureCode = 2)
     })
     public Object readJson() {
         return docService.readJson(request.get("id"));
     }
 
     @Execute(name = "favorite", validates = {
-            @Validate(validator = Validators.ID, parameter = "id", failureCode = 11),
+            @Validate(validator = Validators.ID, parameter = "id", failureCode = 1),
             @Validate(validator = Validators.SIGN),
-            @Validate(validator = DocService.VALIDATOR_EXISTS, parameter = "id", failureCode = 12)
+            @Validate(validator = DocService.VALIDATOR_EXISTS, parameter = "id", failureCode = 2)
     })
     public Object favorite() {
         docService.favorite(request.get("id"), request.getAsInt("favorite"));
@@ -128,9 +132,9 @@ public class DocCtrl extends AuditCtrlSupport {
     }
 
     @Execute(name = "comment", validates = {
-            @Validate(validator = Validators.ID, parameter = "id", failureCode = 11),
+            @Validate(validator = Validators.ID, parameter = "id", failureCode = 1),
             @Validate(validator = Validators.SIGN),
-            @Validate(validator = DocService.VALIDATOR_EXISTS, parameter = "id", failureCode = 12)
+            @Validate(validator = DocService.VALIDATOR_EXISTS, parameter = "id", failureCode = 2)
     })
     public Object comment() {
         docService.comment(request.get("id"), request.getAsInt("comment"));
@@ -139,11 +143,20 @@ public class DocCtrl extends AuditCtrlSupport {
     }
 
     @Execute(name = "praise", validates = {
-            @Validate(validator = Validators.ID, parameter = "id", failureCode = 11),
-            @Validate(validator = DocService.VALIDATOR_EXISTS, parameter = "id", failureCode = 12)
+            @Validate(validator = Validators.ID, parameter = "id", failureCode = 1),
+            @Validate(validator = DocService.VALIDATOR_EXISTS, parameter = "id", failureCode = 2)
     })
     public Object praise() {
         docService.praise(request.get("id"));
+
+        return "";
+    }
+
+    @Execute(name = "refresh", validates = {
+            @Validate(validator = Validators.SIGN)
+    })
+    public Object refresh() {
+        docService.refresh();
 
         return "";
     }

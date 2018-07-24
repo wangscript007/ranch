@@ -16,6 +16,7 @@
 |thumbnail|char(100)|否|缩略图URI地址。|
 |summary|string|否|摘要。|
 |label|string|否|标签。|
+|type|char(100)|否|类型。|
 |source|string|是|内容源。|
 |markdown|boolean|否|是否为Markdown文档：true-是；其他-否。|
 
@@ -32,7 +33,7 @@
 ```json
 {
     "id": "ID值",
-    "classifies": ["分类ID集"],
+    "classifies": ["分类集"],
     "author": {},
     "sort": "顺序",
     "subject": "标题",
@@ -40,6 +41,7 @@
     "thumbnail": "缩略图URI地址",
     "summary": "摘要",
     "label": "标签",
+    "type": "类型",
     "source": "内容源",
     "content": "内容",
     "read": "阅读次数",

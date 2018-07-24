@@ -28,6 +28,7 @@ public class DocModel extends AuditModelSupport {
     private String thumbnail; // 缩略图URI地址
     private String summary; // 摘要
     private String label; // 标签
+    private String type; // 类型
     private String source; // 内容源
     private String content; // 内容
     private String json; // 扩展属性集
@@ -106,6 +107,16 @@ public class DocModel extends AuditModelSupport {
 
     public void setLabel(String label) {
         this.label = label;
+    }
+
+    @Jsonable
+    @Column(name = "c_type")
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     @Column(name = "c_source")
