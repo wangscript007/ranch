@@ -30,7 +30,7 @@ import org.springframework.stereotype.Service;
 import javax.inject.Inject;
 import java.io.File;
 import java.sql.Timestamp;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -311,8 +311,11 @@ public class EditorServiceImpl implements EditorService, DateJob {
     @Override
     public JSONObject searchTemplate(String type, String[] words, Order order) {
         int pageSize = pagination.getPageSize(20);
-        List<String> list = Arrays.asList(words);
-        list.remove("");
+        List<String> list = new ArrayList<>();
+        if (!validator.isEmpty(words))
+            for (String word : words)
+                if (!validator.isEmpty(word))
+                    list.add(word);
         if (list.isEmpty())
             return searchTemplate(type, order, pageSize);
 
