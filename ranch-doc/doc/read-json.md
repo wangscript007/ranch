@@ -30,6 +30,11 @@
     "comment": "评论次数",
     "praise": "点赞数",
     "score": "得分",
-    "time": "更新时间"
+    "time": "更新时间",
+    "relation": {
+        "previous": {},
+        "next": {}
+        "relates": [{}]
+    }
 }
 ```
