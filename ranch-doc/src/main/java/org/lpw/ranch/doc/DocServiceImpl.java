@@ -28,7 +28,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -45,7 +44,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class DocServiceImpl implements DocService, MinuteJob, DateJob {
     private static final String CACHE_MODEL = DocModel.NAME + ".service.model:";
     private static final String CACHE_JSON = DocModel.NAME + ".service.json:";
-    private static final String CACHE_FIND = DocModel.NAME + ".service.find:";
+    private static final String CACHE_READ = DocModel.NAME + ".service.read:";
 
     @Inject
     private Cache cache;
@@ -131,15 +130,7 @@ public class DocServiceImpl implements DocService, MinuteJob, DateJob {
 
     @Override
     public JSONObject find(String id) {
-        String cacheKey = CACHE_FIND + id;
-        JSONObject object = cache.get(cacheKey);
-        if (object == null) {
-            object = toJson(findById(id), true);
-            object.put("refresh", relationService.find(id));
-            cache.put(cacheKey, object, false);
-        }
-
-        return object;
+        return toJson(findById(id), true);
     }
 
     @Override
@@ -162,7 +153,7 @@ public class DocServiceImpl implements DocService, MinuteJob, DateJob {
     @Override
     public JSONObject search(String[] words) {
         List<String> ids = luceneHelper.query(DocModel.NAME, words, true, 1024);
-        if (ids==null)
+        if (ids == null)
             return query(null, null, null, null, null, Audit.Pass);
 
         if (ids.isEmpty())
@@ -225,8 +216,15 @@ public class DocServiceImpl implements DocService, MinuteJob, DateJob {
     @Override
     public JSONObject readJson(String id) {
         DocModel doc = putRead(id);
+        String cacheKey = CACHE_READ + id;
+        JSONObject object = cache.get(cacheKey);
+        if (object == null) {
+            object = toJson(doc, true);
+            object.put("relation", relationService.find(id));
+            cache.put(cacheKey, object, false);
+        }
 
-        return toJson(doc, true);
+        return object;
     }
 
     private DocModel putRead(String id) {
@@ -374,6 +372,6 @@ public class DocServiceImpl implements DocService, MinuteJob, DateJob {
         cache.remove(CACHE_MODEL + id);
         cache.remove(CACHE_JSON + id + ":true");
         cache.remove(CACHE_JSON + id + ":false");
-        cache.remove(CACHE_FIND + id);
+        cache.remove(CACHE_READ + id);
     }
 }
