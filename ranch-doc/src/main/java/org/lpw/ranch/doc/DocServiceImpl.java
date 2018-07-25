@@ -355,6 +355,7 @@ public class DocServiceImpl implements DocService, MinuteJob, DateJob {
             List<String> ids = luceneHelper.query(DocModel.NAME, map.get(doc.getId()), false, 11);
             for (int i = 1, size = ids.size(); i < size; i++)
                 relationService.save(doc.getId(), ids.get(i), "alike", i - 1);
+            clearCache(doc.getId());
         });
     }
 
