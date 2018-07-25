@@ -24,15 +24,15 @@ public class RelationServiceImpl implements RelationService {
         relationDao.query(doc).getList().forEach(relation -> {
             switch (relation.getType()) {
                 case "previous":
-                    object.put("previous", docService.find(relation.getDoc()));
+                    object.put("previous", docService.find(relation.getRelate()));
 
                     return;
                 case "next":
-                    object.put("next", docService.find(relation.getDoc()));
+                    object.put("next", docService.find(relation.getRelate()));
 
                     return;
                 case "alike":
-                    array.add(docService.find(relation.getDoc()));
+                    array.add(docService.find(relation.getRelate()));
             }
         });
         object.put("relates", array);

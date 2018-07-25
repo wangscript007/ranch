@@ -1,7 +1,7 @@
 package org.lpw.ranch.doc.relation;
 
 import org.lpw.tephra.dao.model.Jsonable;
-import org.lpw.ranch.recycle.RecycleModelSupport;
+import org.lpw.tephra.dao.model.ModelSupport;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -17,7 +17,7 @@ import javax.persistence.Table;
 @Scope(BeanDefinition.SCOPE_PROTOTYPE)
 @Entity(name = RelationModel.NAME)
 @Table(name = "t_doc_relation")
-public class RelationModel extends RecycleModelSupport {
+public class RelationModel extends ModelSupport {
     static final String NAME = "ranch.doc.refresh";
 
     private String doc; // 文档

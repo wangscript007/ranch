@@ -6,7 +6,6 @@ CREATE TABLE t_doc_relation
   c_relate CHAR(36) DEFAULT NULL COMMENT '关联文档',
   c_type VARCHAR(255) DEFAULT NULL COMMENT '类型：previous-前一篇；next-后一篇；alike-相似的',
   c_sort INT DEFAULT 0 COMMENT '顺序',
-  c_recycle INT DEFAULT 0 COMMENT '回收站；0-否，1-是',
 
   PRIMARY KEY pk(c_id) USING HASH,
   KEY k_doc(c_doc) USING HASH
