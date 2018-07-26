@@ -346,7 +346,8 @@ public class DocServiceImpl implements DocService, MinuteJob, DateJob {
                 relationService.save(previous.getId(), doc.getId(), "next", 0);
             }
             previous = doc;
-            map.put(doc.getId(), doc.getSubject() + "," + doc.getSummary() + "," + doc.getLabel() + "," + doc.getSource());
+            map.put(doc.getId(), doc.getSubject() + "," + doc.getSummary() + "," + doc.getLabel() + ","
+                    + doc.getSource().replaceAll("<[^>]*>", "").replaceAll("\\s+", " "));
             luceneHelper.source(DocModel.NAME, doc.getId(), map.get(doc.getId()));
         }
 
