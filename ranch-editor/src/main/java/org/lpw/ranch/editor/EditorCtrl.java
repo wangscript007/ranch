@@ -139,8 +139,8 @@ public class EditorCtrl {
             @Validate(validator = Validators.NOT_EMPTY, parameter = "type", failureCode = 3)
     })
     public Object search() {
-        return editorService.searchTemplate(request.get("type"), request.getAsArray("words"),
-                Order.find(request.get("order"), Order.Hot));
+        return editorService.searchTemplate(request.get("type"), request.getAsArray("labels"),
+                request.getAsArray("words"), Order.find(request.get("order"), Order.Hot));
     }
 
     @Execute(name = "reset-search-index", validates = {

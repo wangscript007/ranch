@@ -26,7 +26,7 @@ public interface EditorService {
      * @param template    模板。
      * @param type        类型。
      * @param name        名称。
-     * @param label     关键词。
+     * @param label       关键词。
      * @param states      状态集。
      * @param createStart 创建开始日期，格式：yyyy-MM-dd。
      * @param createEnd   创建结束日期，格式：yyyy-MM-dd。
@@ -138,12 +138,13 @@ public interface EditorService {
     /**
      * 搜索模板信息集。
      *
-     * @param type  类型。
-     * @param words 关键词集。
-     * @param order 排序规则。
+     * @param type   类型。
+     * @param labels 标签集。
+     * @param words  关键词集。
+     * @param order  排序规则。
      * @return 编辑器信息集。
      */
-    JSONObject searchTemplate(String type, String[] words, Order order);
+    JSONObject searchTemplate(String type, String[] labels, String[] words, Order order);
 
     /**
      * 重建搜索索引。

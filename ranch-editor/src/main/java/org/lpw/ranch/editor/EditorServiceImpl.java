@@ -309,21 +309,33 @@ public class EditorServiceImpl implements EditorService, DateJob {
     }
 
     @Override
-    public JSONObject searchTemplate(String type, String[] words, Order order) {
-        int pageSize = pagination.getPageSize(20);
+    public JSONObject searchTemplate(String type, String[] labels, String[] words, Order order) {
+        List<String> list = searchWords(labels);
+
+        return list.isEmpty() ? searchTemplate(type, "", searchWords(words), order)
+                : searchTemplate(type, ".label", list, order);
+    }
+
+    private List<String> searchWords(String[] words) {
         List<String> list = new ArrayList<>();
         if (!validator.isEmpty(words))
             for (String word : words)
                 if (!validator.isEmpty(word))
                     list.add(word);
+
+        return list;
+    }
+
+    private JSONObject searchTemplate(String type, String suffix, List<String> list, Order order) {
+        int pageSize = pagination.getPageSize(20);
         if (list.isEmpty())
             return searchTemplate(type, order, pageSize);
 
-        String cacheKey = getSearchCacheKey(type, converter.toString(list) + ":" + order
+        String cacheKey = getSearchCacheKey(type, suffix + ":" + converter.toString(list) + ":" + order
                 + ":" + pageSize + ":" + pagination.getPageNum());
         JSONObject object = cache.get(cacheKey);
         if (object == null) {
-            List<String> ids = luceneHelper.query(getLuceneKey(type), list, true, 1024);
+            List<String> ids = luceneHelper.query(getLuceneKey(type) + suffix, list, true, 1024);
             if (ids.isEmpty())
                 object = BeanFactory.getBean(PageList.class).setPage(0, pageSize, 0).toJson();
             else
@@ -378,6 +390,8 @@ public class EditorServiceImpl implements EditorService, DateJob {
     private void setSearchIndex(String type) {
         String luceneKey = getLuceneKey(type);
         luceneHelper.clear(luceneKey);
+        String labelLuceneKey = luceneKey + ".label";
+        luceneHelper.clear(labelLuceneKey);
         for (int i = 1; i < Integer.MAX_VALUE; i++) {
             PageList<EditorModel> pl = editorDao.query(null, 1, type, null, null, onsaleState,
                     null, null, null, null, Order.None, 20, i);
@@ -385,11 +399,13 @@ public class EditorServiceImpl implements EditorService, DateJob {
                 StringBuilder data = new StringBuilder().append(editor.getName()).append(',').append(editor.getLabel());
                 elementService.text(editor.getId(), data);
                 luceneHelper.source(luceneKey, editor.getId(), data.toString());
+                luceneHelper.source(labelLuceneKey, editor.getId(), editor.getLabel());
             });
             if (pl.getNumber() == pl.getPage())
                 break;
         }
         luceneHelper.index(luceneKey);
+        luceneHelper.index(labelLuceneKey);
         resetRandom(type);
     }
 

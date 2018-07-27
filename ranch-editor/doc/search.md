@@ -9,6 +9,7 @@
 |名称|类型|必须|说明|
 |---|---|---|---|
 |type|string|是|类型。|
+|labels|string|否|标签，多个标签以逗号分隔，空表示搜索关键词。|
 |words|string|否|关键词，多个关键词以逗号分隔，空表示所有。|
 |order|string|否|排序规则：hot-热门（默认）；newest-最新；none-不排序。|
 |pageSize|int|否|每页显示记录数，默认20。|
