@@ -165,6 +165,15 @@ public class EditorServiceImpl implements EditorService, DateJob {
     }
 
     @Override
+    public JSONObject name(String id, String name) {
+        EditorModel editor = findById(id);
+        editor.setName(name);
+        save(editor, 0, null, false);
+
+        return toJson(editor);
+    }
+
+    @Override
     public String image(String id) {
         if (validator.isEmpty(image))
             return "";

@@ -29,6 +29,8 @@
 
 [保存](doc/save.md)
 
+[修改名称](doc/name.md)
+
 [生成预览图](doc/image.md)
 
 [审核通过](doc/pass.md)
