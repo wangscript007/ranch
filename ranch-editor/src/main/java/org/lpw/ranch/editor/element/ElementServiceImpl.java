@@ -161,11 +161,6 @@ public class ElementServiceImpl implements ElementService, MinuteJob {
         logService.save(element, LogService.Operation.Delete);
         elementDao.delete(element);
         cache.remove(CACHE_MODEL + element.getId());
-
-        List<ElementModel> list = elementDao.query(element.getEditor(), element.getParent()).getList();
-        for (int i = 0, size = list.size(); i < size; i++)
-            save(list.get(i), i + 1);
-
         elementDao.query(element.getEditor(), element.getId()).getList().forEach(this::delete);
     }
 
