@@ -73,6 +73,14 @@ public interface EditorService {
     JSONObject save(EditorModel editor);
 
     /**
+     * 修改编辑器信息。
+     *
+     * @param editor 编辑器信息。
+     * @return 保存后的JSON信息。
+     */
+    JSONObject modify(EditorModel editor);
+
+    /**
      * 修改名称。
      *
      * @param id   ID值。

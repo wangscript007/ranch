@@ -1,15 +1,20 @@
-# 修改名称
+# 修改
 
 请求
-- Service Key - ranch.editor.name
-- URI - /editor/name
+- Service Key - ranch.editor.modify
+- URI - /editor/modify
 
 参数
 
 |名称|类型|必须|说明|
 |---|---|---|---|
 |id|char(36)|是|ID值。|
-|name|char(100)|是|名称。|
+|type|char(100)|否|类型。|
+|name|char(100)|否|名称。|
+|label|char(100)|否|标签。|
+|width|int|否|宽度。|
+|height|int|否|高度。|
+|image|char(100)|否|预览图。|
 
 返回值
 ```json

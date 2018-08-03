@@ -29,7 +29,7 @@
 
 [保存](doc/save.md)
 
-[修改名称](doc/name.md)
+[修改](doc/modify.md)
 
 [生成预览图](doc/image.md)
 

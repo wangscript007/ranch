@@ -165,6 +165,32 @@ public class EditorServiceImpl implements EditorService, DateJob {
     }
 
     @Override
+    public JSONObject modify(EditorModel editor) {
+        EditorModel model = findById(editor.getId());
+        if (!validator.isEmpty(editor.getTemplate()))
+            model.setTemplate(editor.getTemplate());
+        if (!validator.isEmpty(editor.getType()))
+            model.setType(editor.getType());
+        if (editor.getSort() > 0)
+            model.setSort(editor.getSort());
+        if (!validator.isEmpty(editor.getName()))
+            model.setName(editor.getName());
+        if (!validator.isEmpty(editor.getLabel()))
+            model.setLabel(editor.getLabel());
+        if (editor.getWidth() > 0)
+            model.setWidth(editor.getWidth());
+        if (editor.getHeight() > 0)
+            model.setHeight(editor.getHeight());
+        if (!validator.isEmpty(editor.getImage()))
+            model.setImage(editor.getImage());
+        if (!validator.isEmpty(editor.getJson()))
+            model.setJson(editor.getJson());
+        save(model, 0, null, false);
+
+        return toJson(model);
+    }
+
+    @Override
     public JSONObject name(String id, String name) {
         EditorModel editor = findById(id);
         editor.setName(name);
