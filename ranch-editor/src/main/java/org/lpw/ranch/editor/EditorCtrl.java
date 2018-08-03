@@ -80,7 +80,7 @@ public class EditorCtrl {
             @Validate(validator = RoleService.VALIDATOR_OWNER, parameter = "id", failureCode = 41)
     })
     public Object modify() {
-        return editorService.modify(request.setToModel(EditorModel.class));
+        return editorService.modify(request.setToModel(EditorModel.class), request.getAsInt("template", -1));
     }
 
     @Execute(name = "image", validates = {

@@ -75,10 +75,11 @@ public interface EditorService {
     /**
      * 修改编辑器信息。
      *
-     * @param editor 编辑器信息。
+     * @param editor   编辑器信息。
+     * @param template 模板：-1-不修改；0-否；1-是。
      * @return 保存后的JSON信息。
      */
-    JSONObject modify(EditorModel editor);
+    JSONObject modify(EditorModel editor, int template);
 
     /**
      * 修改名称。

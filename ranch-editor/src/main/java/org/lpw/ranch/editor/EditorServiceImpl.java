@@ -165,10 +165,10 @@ public class EditorServiceImpl implements EditorService, DateJob {
     }
 
     @Override
-    public JSONObject modify(EditorModel editor) {
+    public JSONObject modify(EditorModel editor, int template) {
         EditorModel model = findById(editor.getId());
-        if (!validator.isEmpty(editor.getTemplate()))
-            model.setTemplate(editor.getTemplate());
+        if (template > 0)
+            model.setTemplate(template);
         if (!validator.isEmpty(editor.getType()))
             model.setType(editor.getType());
         if (editor.getSort() > 0)
