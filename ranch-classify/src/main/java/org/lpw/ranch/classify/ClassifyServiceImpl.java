@@ -174,10 +174,10 @@ public class ClassifyServiceImpl implements ClassifyService, DateJob {
         model.setValue(classify.getValue());
         model.setName(classify.getName());
         model.setJson(classify.getJson());
-        classifyDao.save(classify);
+        classifyDao.save(model);
         resetRandom();
 
-        return toJson(classify.getId(), classify, Recycle.No);
+        return toJson(model.getId(), model, Recycle.No);
     }
 
     private JSONObject toJson(String id, ClassifyModel classify, Recycle recycle) {
