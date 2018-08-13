@@ -21,13 +21,16 @@ import org.lpw.tephra.dao.orm.PageList;
 import org.lpw.tephra.lucene.LuceneHelper;
 import org.lpw.tephra.scheduler.DateJob;
 import org.lpw.tephra.scheduler.MinuteJob;
+import org.lpw.tephra.util.Context;
 import org.lpw.tephra.util.DateTime;
 import org.lpw.tephra.util.Generator;
+import org.lpw.tephra.util.Io;
 import org.lpw.tephra.util.Validator;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
+import java.io.File;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -55,6 +58,10 @@ public class DocServiceImpl implements DocService, MinuteJob, DateJob {
     @Inject
     private DateTime dateTime;
     @Inject
+    private Context context;
+    @Inject
+    private Io io;
+    @Inject
     private ModelHelper modelHelper;
     @Inject
     private LuceneHelper luceneHelper;
@@ -74,6 +81,8 @@ public class DocServiceImpl implements DocService, MinuteJob, DateJob {
     private RelationService relationService;
     @Inject
     private DocDao docDao;
+    @Value("${" + DocModel.NAME + ".content.folder:}")
+    private String folder;
     @Value("${" + DocModel.NAME + ".audit.default:0}")
     private int defaultAudit;
     private Map<String, AtomicInteger> read = new ConcurrentHashMap<>();
@@ -173,17 +182,32 @@ public class DocServiceImpl implements DocService, MinuteJob, DateJob {
         model.setSummary(doc.getSummary());
         model.setLabel(doc.getLabel());
         model.setType(doc.getType());
-        model.setSource(doc.getSource());
-        model.setContent(markdown ?
-                HtmlRenderer.builder().build().render(Parser.builder().build().parse(doc.getSource())).trim() : doc.getSource());
         model.setJson(doc.getJson());
         model.setTime(dateTime.now());
         model.setAudit(defaultAudit);
+        docDao.save(model);
+        saveSourceContent(model, doc.getSource(), markdown);
         docDao.save(model);
         topicService.save(model, new HashSet<>(Arrays.asList(classifies)));
         clearCache(model.getId());
 
         return toJson(model, true);
+    }
+
+    private void saveSourceContent(DocModel doc, String source, boolean markdown) {
+        doc.setSource(source);
+        if (markdown)
+            doc.setContent(HtmlRenderer.builder().build().render(Parser.builder().build().parse(source)).trim());
+        if (validator.isEmpty(folder))
+            return;
+
+        String path = context.getAbsolutePath(folder) + "/";
+        io.mkdirs(path);
+        io.write(path + doc.getId() + ".source", source.getBytes());
+        if (markdown)
+            io.write(path + doc.getId() + ".content", doc.getContent().getBytes());
+        doc.setSource(null);
+        doc.setContent(null);
     }
 
     private JSONObject toJson(DocModel doc, boolean full) {
@@ -194,8 +218,10 @@ public class DocServiceImpl implements DocService, MinuteJob, DateJob {
             object.put("classifies", topicService.classifies(doc.getId()));
             object.put("author", userHelper.get(doc.getAuthor()));
             if (full) {
-                object.put("source", doc.getSource());
-                object.put("content", doc.getContent());
+                object.put("source", getSource(doc));
+                String content = getContent(doc);
+                if (content != null)
+                    object.put("content", content);
             }
             cache.put(key, object, false);
         }
@@ -205,12 +231,15 @@ public class DocServiceImpl implements DocService, MinuteJob, DateJob {
 
     @Override
     public String source(String id) {
-        return findById(id).getSource();
+        return getSource(findById(id));
     }
 
     @Override
     public String read(String id) {
-        return putRead(id).getContent();
+        DocModel doc = putRead(id);
+        String content = getContent(doc);
+
+        return content == null ? getSource(doc) : content;
     }
 
     @Override
@@ -347,7 +376,7 @@ public class DocServiceImpl implements DocService, MinuteJob, DateJob {
             }
             previous = doc;
             map.put(doc.getId(), doc.getSubject() + "," + doc.getSummary() + "," + doc.getLabel() + ","
-                    + doc.getSource().replaceAll("<[^>]*>", " ").replace('"', ' ')
+                    + getSource(doc).replaceAll("<[^>]*>", " ").replace('"', ' ')
                     .replace('“', ' ').replace('”', ' ').replace('\'', ' ')
                     .replaceAll("&nbsp;", " ").replaceAll("\\s+", " "));
             luceneHelper.source(DocModel.NAME, doc.getId(), map.get(doc.getId()));
@@ -360,7 +389,20 @@ public class DocServiceImpl implements DocService, MinuteJob, DateJob {
                 relationService.save(doc.getId(), ids.get(i), "alike", i - 1);
             clearCache(doc.getId());
         });
+    }
 
+    private String getSource(DocModel doc) {
+        return doc.getSource() == null ? readFromFile(doc.getId(), ".source") : doc.getSource();
+    }
+
+    private String getContent(DocModel doc) {
+        return doc.getContent() == null ? readFromFile(doc.getId(), ".content") : doc.getContent();
+    }
+
+    private String readFromFile(String id, String suffix) {
+        File file = new File(context.getAbsolutePath(folder) + "/" + id + suffix);
+
+        return file.exists() ? io.readAsString(file.getAbsolutePath()) : null;
     }
 
     @Override
