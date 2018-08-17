@@ -233,6 +233,9 @@ public class WeixinServiceImpl implements WeixinService, ContextRefreshedListene
         object.put("unionid", object.getString("unionId"));
         infoService.save(key, weixin.getAppId(), object.getString("unionid"), object.getString("openid"));
 
+        if (logger.isDebugEnable())
+            logger.debug("获得微信小程序用户认证信息[{}:{}:{}]。", key, code, object);
+
         return object;
     }
 
