@@ -40,7 +40,7 @@ public class WeixinMiniImpl implements Type {
 
     @Override
     public String getNick(String uid, String password) {
-        return null;
+        return getAuth(uid, password).getString("nickname");
     }
 
     @Override
