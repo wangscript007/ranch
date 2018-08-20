@@ -96,8 +96,11 @@ public class ChromeServiceImpl implements ChromeService {
     public String pdf(String key, String url, int width, int height, String pages, int wait, Map<String, String> map) {
         ChromeModel model = findByKey(key, 0, 0, width, height, pages, wait);
 
-        return asyncService.submit(ChromeModel.NAME + ".pdf", converter.toString(map), model.getWait() * 3, () ->
-                chromeHelper.pdf(url, model.getWait(), model.getWidth(), model.getHeight(), model.getPages(), asyncService.root()));
+        return asyncService.submit(ChromeModel.NAME + ".pdf", converter.toString(map), model.getWait() * 3, () -> {
+            String file = chromeHelper.pdf(url, model.getWait(), model.getWidth(), model.getHeight(), model.getPages(), asyncService.root());
+
+            return file.substring(file.lastIndexOf(asyncService.root()));
+        });
     }
 
     @Override
