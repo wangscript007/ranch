@@ -7,6 +7,7 @@ import org.lpw.tephra.util.Image;
 import org.springframework.stereotype.Controller;
 
 import javax.inject.Inject;
+import java.io.ByteArrayOutputStream;
 
 /**
  * @author lpw
@@ -28,7 +29,15 @@ public class UploadListenerImpl implements UploadListener {
         String contentType = uploadReader.getContentType();
         String fileName = uploadReader.getFileName();
 
-        return (image.is(contentType, fileName) || (contentType.equals("audio/mpeg") && fileName.endsWith(".mp3"))
+        return (isImage(contentType, fileName, uploadReader) || (contentType.equals("audio/mpeg") && fileName.endsWith(".mp3"))
                 || (contentType.equals("application/json") && fileName.endsWith(".json"))) && userHelper.signIn();
+    }
+
+    private boolean isImage(String contentType, String fileName, UploadReader uploadReader) {
+        if (!image.is(contentType, fileName))
+            return false;
+
+        return !contentType.equals("image/svg+xml")
+                || image.svg2png(new String(uploadReader.getBytes()), 64, 64, new ByteArrayOutputStream());
     }
 }
