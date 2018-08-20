@@ -32,6 +32,8 @@
 
 [下架](doc/nonsale.md)
 
+[校验SVG](doc/svg.md)
+
 [上传](doc/upload.md)
 
 [删除](doc/delete.md)

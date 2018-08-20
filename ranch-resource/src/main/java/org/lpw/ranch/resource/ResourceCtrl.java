@@ -33,6 +33,14 @@ public class ResourceCtrl {
         return resourceService.onsale(request.get("type"), request.get("label"));
     }
 
+    @Execute(name = "svg", validates = {
+            @Validate(validator = Validators.NOT_EMPTY, parameter = "base64", failureCode = 11),
+            @Validate(validator = Validators.SIGN)
+    })
+    public Object svg() {
+        return resourceService.svg(request.get("base64"));
+    }
+
     @Execute(name = "save", validates = {
             @Validate(validator = Validators.NOT_EMPTY, parameter = "type", failureCode = 3),
             @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "type", failureCode = 4),

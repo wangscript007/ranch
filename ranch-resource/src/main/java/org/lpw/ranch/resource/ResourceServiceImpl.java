@@ -6,14 +6,19 @@ import org.lpw.ranch.user.helper.UserHelper;
 import org.lpw.ranch.util.Pagination;
 import org.lpw.tephra.cache.Cache;
 import org.lpw.tephra.dao.model.ModelHelper;
+import org.lpw.tephra.util.Coder;
 import org.lpw.tephra.util.DateTime;
 import org.lpw.tephra.util.Generator;
+import org.lpw.tephra.util.Image;
 import org.lpw.tephra.util.Logger;
 import org.lpw.tephra.util.Validator;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 
 /**
  * @author lpw
@@ -30,6 +35,10 @@ public class ResourceServiceImpl implements ResourceService {
     private Generator generator;
     @Inject
     private Cache cache;
+    @Inject
+    private Coder coder;
+    @Inject
+    private Image image;
     @Inject
     private Logger logger;
     @Inject
@@ -70,6 +79,15 @@ public class ResourceServiceImpl implements ResourceService {
     @Override
     public ResourceModel findById(String id) {
         return resourceDao.findById(id);
+    }
+
+    @Override
+    public boolean svg(String base64) {
+        try (OutputStream outputStream = new ByteArrayOutputStream()) {
+            return image.svg2png(new String(coder.decodeBase64(base64)), 64, 64, outputStream);
+        } catch (IOException e) {
+            return false;
+        }
     }
 
     @Override

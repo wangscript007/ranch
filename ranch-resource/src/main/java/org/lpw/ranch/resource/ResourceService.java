@@ -45,6 +45,14 @@ public interface ResourceService {
     ResourceModel findById(String id);
 
     /**
+     * 验证是否为标准的SVG文档。
+     *
+     * @param base64 Base64编码后的SVG文档。
+     * @return 如果是则返回true；否则返回false。
+     */
+    boolean svg(String base64);
+
+    /**
      * 保存资源信息。
      *
      * @param resource 资源信息。
