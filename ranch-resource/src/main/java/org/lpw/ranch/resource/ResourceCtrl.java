@@ -34,11 +34,10 @@ public class ResourceCtrl {
     }
 
     @Execute(name = "svg", validates = {
-            @Validate(validator = Validators.NOT_EMPTY, parameter = "base64", failureCode = 11),
             @Validate(validator = Validators.SIGN)
     })
     public Object svg() {
-        return resourceService.svg(request.get("base64"));
+        return resourceService.svg(request.get("string"), request.get("base64"));
     }
 
     @Execute(name = "save", validates = {

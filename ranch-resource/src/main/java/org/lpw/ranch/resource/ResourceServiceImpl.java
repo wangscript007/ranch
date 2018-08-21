@@ -82,9 +82,10 @@ public class ResourceServiceImpl implements ResourceService {
     }
 
     @Override
-    public boolean svg(String base64) {
+    public boolean svg(String string, String base64) {
         try (OutputStream outputStream = new ByteArrayOutputStream()) {
-            return image.svg2png(new String(coder.decodeBase64(base64)), 64, 64, outputStream);
+            return image.svg2png(validator.isEmpty(string) ? new String(coder.decodeBase64(base64)) : string,
+                    64, 64, outputStream);
         } catch (IOException e) {
             return false;
         }

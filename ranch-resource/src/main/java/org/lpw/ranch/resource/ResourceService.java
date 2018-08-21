@@ -47,10 +47,11 @@ public interface ResourceService {
     /**
      * 验证是否为标准的SVG文档。
      *
+     * @param string SVG文档。
      * @param base64 Base64编码后的SVG文档。
      * @return 如果是则返回true；否则返回false。
      */
-    boolean svg(String base64);
+    boolean svg(String string, String base64);
 
     /**
      * 保存资源信息。
