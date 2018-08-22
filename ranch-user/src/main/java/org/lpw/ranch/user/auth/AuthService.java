@@ -28,13 +28,14 @@ public interface AuthService {
     /**
      * 创建新认证。
      *
-     * @param userId 用户ID。
-     * @param uid    UID值。
-     * @param type   认证类型。
-     * @param nick   第三方账号昵称。
+     * @param userId   用户ID。
+     * @param uid      UID值。
+     * @param type     认证类型。
+     * @param nick     第三方账号昵称。
+     * @param portrait 第三方头像URL。
      * @return 认证信息。
      */
-    AuthModel create(String userId, String uid, int type, String nick);
+    AuthModel create(String userId, String uid, int type, String nick, String portrait);
 
     /**
      * 根据uid检索认证信息。

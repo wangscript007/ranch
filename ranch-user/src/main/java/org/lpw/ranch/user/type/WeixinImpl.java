@@ -46,6 +46,11 @@ public class WeixinImpl implements Type {
     }
 
     @Override
+    public String getPortrait(String uid, String password) {
+        return getAuth(uid, password).getString("headimgurl");
+    }
+
+    @Override
     public JSONObject getAuth(String uid, String password) {
         String key = "ranch.user.type.weixin.uid-password:" + uid + "-" + password;
         JSONObject object = context.getThreadLocal(key);

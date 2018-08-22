@@ -26,6 +26,7 @@ public class AuthModel extends ModelSupport {
     private Timestamp time; // 绑定时间
     private int type; // 类型：0-自有账号；1-微信公众号；2-微信小程序
     private String nick; // 第三方账号昵称
+    private String portrait; // 第三方头像URL
 
     @Jsonable
     @Column(name = "c_user")
@@ -75,5 +76,15 @@ public class AuthModel extends ModelSupport {
 
     public void setNick(String nick) {
         this.nick = nick;
+    }
+
+    @Jsonable
+    @Column(name = "c_portrait")
+    public String getPortrait() {
+        return portrait;
+    }
+
+    public void setPortrait(String portrait) {
+        this.portrait = portrait;
     }
 }

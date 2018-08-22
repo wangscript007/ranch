@@ -32,6 +32,11 @@ public class TypesImpl implements Types, ContextRefreshedListener {
     }
 
     @Override
+    public String getPortrait(String uid, String password, int type) {
+        return map.get(type).getPortrait(uid, password);
+    }
+
+    @Override
     public JSONObject getAuth(String uid, String password, int type) {
         return map.get(type).getAuth(uid, password);
     }

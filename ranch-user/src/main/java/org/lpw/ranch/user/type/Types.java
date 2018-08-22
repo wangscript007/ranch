@@ -57,6 +57,16 @@ public interface Types {
     String getNick(String uid, String password, int type);
 
     /**
+     * 获取第三方头像URL。
+     *
+     * @param uid      UID。
+     * @param password 密码。
+     * @param type     类型。
+     * @return 头像URL，不存在则返回null。
+     */
+    String getPortrait(String uid, String password, int type);
+
+    /**
      * 获取第三方认证信息。
      *
      * @param uid      UID。
