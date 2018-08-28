@@ -13,18 +13,11 @@
     <name>ranch-alipay</name>
     <url>http://maven.apache.org</url>
 
-    <repositories>
-        <repository>
-            <id>ranch-alipay-repository</id>
-            <url>file:///${project.basedir}/lib</url>
-        </repository>
-    </repositories>
-
     <dependencies>
         <dependency>
-            <groupId>com.alipay</groupId>
-            <artifactId>alipay-sdk</artifactId>
-            <version>20170607114101</version>
+            <groupId>com.alipay.sdk</groupId>
+            <artifactId>alipay-sdk-java</artifactId>
+            <version>LATEST</version>
         </dependency>
         <dependency>
             <groupId>org.lpw.ranch</groupId>
