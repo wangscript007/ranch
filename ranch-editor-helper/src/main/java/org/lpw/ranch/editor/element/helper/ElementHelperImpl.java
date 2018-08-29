@@ -1,5 +1,6 @@
 package org.lpw.ranch.editor.element.helper;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import org.lpw.ranch.util.Carousel;
 import org.lpw.tephra.util.Numeric;
@@ -24,7 +25,23 @@ public class ElementHelperImpl implements ElementHelper {
     private Carousel carousel;
     @Value("${ranch.editor.element.key:ranch.editor.element}")
     private String key;
+    private String queryKey;
     private String saveKey;
+
+    @Override
+    public JSONArray query(String editor, String parent, boolean recursive) {
+        if (queryKey == null)
+            queryKey = key + ".query";
+
+        Map<String, String> parameter = new HashMap<>();
+        parameter.put("editor", editor);
+        if (!validator.isEmpty(parent))
+            parameter.put("parent", parent);
+        if (recursive)
+            parameter.put("recursive", "true");
+
+        return carousel.service(queryKey, null, parameter, false, JSONArray.class);
+    }
 
     @Override
     public JSONObject save(String id, String editor, String parent, int sort, Map<String, String> map) {

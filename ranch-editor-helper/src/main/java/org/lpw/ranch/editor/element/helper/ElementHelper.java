@@ -1,5 +1,6 @@
 package org.lpw.ranch.editor.element.helper;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
 import java.util.Map;
@@ -8,6 +9,16 @@ import java.util.Map;
  * @author lpw
  */
 public interface ElementHelper {
+    /**
+     * 检索元素集。
+     *
+     * @param editor    编辑器ID值。
+     * @param parent    父元素ID值。
+     * @param recursive 是否递归获取子元素集。
+     * @return 元素集。
+     */
+    JSONArray query(String editor, String parent, boolean recursive);
+
     /**
      * 保存元素信息。
      *
