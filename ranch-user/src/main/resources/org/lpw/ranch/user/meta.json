@@ -88,7 +88,7 @@
                     "state": 0
                 },
                 "success": ".query",
-                "when": "row.state===1"
+                "when": "model.state==1"
             },
             {
                 "type": "post-id",
@@ -98,7 +98,7 @@
                     "state": 1
                 },
                 "success": ".query",
-                "when": "row.state===0"
+                "when": "model.state==0"
             },
             {
                 "type": "post-id",
@@ -108,7 +108,7 @@
                     "grade": 90
                 },
                 "success": ".query",
-                "when": "row.grade<90"
+                "when": "model.grade<90"
             },
             {
                 "type": "post-id",
@@ -118,7 +118,7 @@
                     "grade": 0
                 },
                 "success": ".query",
-                "when": "row.grade>=90"
+                "when": "model.grade>=90"
             }
         ]
     },

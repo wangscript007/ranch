@@ -143,19 +143,20 @@
         ],
         "ops": [
             {
-                "type": "lite-modify"
+                "type": "modify",
+                "service":".lite-modify"
             },
             {
                 "type": "pass",
                 "service": ".pass",
                 "success": ".lite-query",
-                "when": "row.audit!==1"
+                "when": "model.audit!==1"
             },
             {
                 "type": "reject",
                 "service": ".reject",
                 "success": ".lite-query",
-                "when": "row.audit!==2"
+                "when": "model.audit!==2"
             },
             {
                 "type": "delete",
@@ -165,7 +166,8 @@
         ],
         "toolbar": [
             {
-                "type": "lite-create"
+                "type": "create",
+                "service":".lite-create"
             }
         ]
     },
@@ -174,7 +176,6 @@
         "toolbar": [
             {
                 "type": "save",
-                "service": ".save",
                 "success": ".lite-query"
             }
         ]
@@ -184,7 +185,6 @@
         "toolbar": [
             {
                 "type": "save",
-                "service": ".save",
                 "success": ".lite-query"
             }
         ]

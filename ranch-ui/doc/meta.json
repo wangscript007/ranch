@@ -1,0 +1,45 @@
+{
+    "key": "",
+    "props": [
+        {
+            "name": "",
+            "label": "",
+            "labels": ""
+        }
+    ],
+    "service": {
+        "type": "",
+        "search": [
+            {}
+        ],
+        "toolbar": [
+            {
+                "type": "",
+                "service": "",
+                "label": "",
+                "icon": "",
+                "data": "true/false",
+                "success": {
+                    "service": "",
+                    "header": {},
+                    "parameter": {}
+                }
+            }
+        ],
+        "ops": [
+            {
+                "type": "",
+                "service": "",
+                "label": "",
+                "icon": "",
+                "data": "true/false",
+                "when": "",
+                "success": {
+                    "service": "",
+                    "header": {},
+                    "parameter": {}
+                }
+            }
+        ]
+    }
+}
