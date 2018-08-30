@@ -14,6 +14,7 @@ export interface MetaProp {
     label: string;
     type?: string;
     labels?: string[];
+    values?: object;
     ignore?: string[];
 }
 
@@ -193,6 +194,23 @@ class Pager {
             return (
                 <Select>
                     {prop.labels.map((label, i) => <Option key={i} value={i}>{label}</Option>)}
+                </Select>
+            );
+        }
+
+        if (prop.values) {
+            const keys = Object.keys(prop.values);
+            if (keys.length <= 3) {
+                return (
+                    <RadioGroup >
+                        {keys.map((key) => <Radio key={key} value={key}>{(prop.values || {})[key]}</Radio>)}
+                    </RadioGroup>
+                );
+            }
+
+            return (
+                <Select>
+                    {keys.map((key) => <Option key={key} value={key}>{(prop.values || {})[key]}</Option>)}
                 </Select>
             );
         }

@@ -49,6 +49,17 @@ export default class Grid extends React.Component<PageState, State> {
                 continue;
             }
 
+            if(prop.values){
+                columns.push({
+                    title: prop.label,
+                    render: (model: Model) => {
+                        return (prop.values || {})[model[prop.name]];
+                    }
+                });
+
+                continue;
+            }
+
             columns.push({
                 title: prop.label,
                 dataIndex: prop.name,
