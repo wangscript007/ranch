@@ -165,16 +165,7 @@ public class ClassifyServiceImpl implements ClassifyService, DateJob {
 
     @Override
     public JSONObject save(ClassifyModel classify) {
-        ClassifyModel model = classifyDao.findByCodeKey(classify.getCode(), classify.getKey());
-        if (model == null) {
-            model = new ClassifyModel();
-            model.setCode(classify.getCode());
-            model.setKey(classify.getKey());
-        }
-        model.setValue(classify.getValue());
-        model.setName(classify.getName());
-        model.setJson(classify.getJson());
-        classifyDao.save(model);
+        ClassifyModel model = save(classify.getCode(), classify.getKey(), classify.getValue(), classify.getName(), classify.getJson());
         resetRandom();
 
         return toJson(model.getId(), model, Recycle.No);
@@ -194,6 +185,41 @@ public class ClassifyServiceImpl implements ClassifyService, DateJob {
         }
 
         return object;
+    }
+
+    @Override
+    public void saves(JSONArray array) {
+        if (validator.isEmpty(array))
+            return;
+
+        for (int i = 0, size = array.size(); i < size; i++) {
+            JSONObject object = array.getJSONObject(i);
+            String code = object.getString("code");
+            String key = object.getString("key");
+            String name = object.getString("name");
+            if (nonEmptyMaxLength(code) && nonEmptyMaxLength(key) && nonEmptyMaxLength(name))
+                save(code, key, object.getString("value"), name, null);
+        }
+        resetRandom();
+    }
+
+    private boolean nonEmptyMaxLength(String string) {
+        return !validator.isEmpty(string) && string.length() <= 100;
+    }
+
+    private ClassifyModel save(String code, String key, String value, String name, String json) {
+        ClassifyModel classify = classifyDao.findByCodeKey(code, key);
+        if (classify == null) {
+            classify = new ClassifyModel();
+            classify.setCode(code);
+            classify.setKey(key);
+        }
+        classify.setValue(value);
+        classify.setName(name);
+        classify.setJson(json);
+        classifyDao.save(classify);
+
+        return classify;
     }
 
     @Override

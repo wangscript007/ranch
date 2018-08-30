@@ -3,6 +3,7 @@ import { pager, MetaProp, PageMeta } from './pager';
 import Grid from './grid';
 import Form from './form';
 import Dashboard from './dashboard';
+import Settings from './settings';
 import './page.scss';
 
 export interface PageState {
@@ -12,7 +13,7 @@ export interface PageState {
     meta: PageMeta;
     props: MetaProp[];
     data?: any;
-    form?:any;
+    form?: any;
 }
 
 export class Page extends React.Component<object, PageState> {
@@ -43,6 +44,10 @@ export class Page extends React.Component<object, PageState> {
 
         if (this.state.meta.type === 'form') {
             return <Form {...this.state} />
+        }
+
+        if (this.state.meta.type === 'settings') {
+            return <Settings {...this.state} />
         }
 
         return <Dashboard {...this.state} />

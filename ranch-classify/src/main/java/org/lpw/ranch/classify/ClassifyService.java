@@ -4,8 +4,6 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import org.lpw.ranch.recycle.RecycleService;
 
-import java.util.Map;
-
 /**
  * @author lpw
  */
@@ -73,6 +71,13 @@ public interface ClassifyService extends RecycleService {
      * @return 分类JSON格式数据。
      */
     JSONObject save(ClassifyModel classify);
+
+    /**
+     * 批量保存。
+     *
+     * @param array 分类信息集。
+     */
+    void saves(JSONArray array);
 
     /**
      * 刷新缓存。

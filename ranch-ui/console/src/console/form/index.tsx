@@ -5,8 +5,6 @@ import { pager, Action } from '../pager';
 import { PageState } from '../page';
 import './index.scss';
 
-const FormItem = Form.Item;
-
 interface Props extends PageState {
     form: any;
 }
@@ -26,11 +24,11 @@ class FormPage extends React.Component<Props> {
 
         return <Form>
             {this.props.props.map((prop, i) =>
-                <FormItem key={i} label={prop.label} {...formItemLayout}>
+                <Form.Item key={i} label={prop.label} {...formItemLayout}>
                     {pager.getInput(this.props.form, prop, this.props.data)}
-                </FormItem>
+                </Form.Item>
             )}
-            <FormItem
+            <Form.Item
                 wrapperCol={{
                     xs: { span: 24, offset: 0 },
                     sm: { span: 16, offset: 8 },
@@ -39,7 +37,7 @@ class FormPage extends React.Component<Props> {
                 {this.props.meta.toolbar ? this.props.meta.toolbar.map((button) =>
                     <Button key={button.type} type="primary" icon={button.icon} onClick={this.click.bind(this, button)}>{button.label}</Button>
                 ) : null}
-            </FormItem>
+            </Form.Item>
         </Form>;
     }
 

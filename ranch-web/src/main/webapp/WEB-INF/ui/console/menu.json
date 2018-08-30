@@ -70,6 +70,11 @@
         "label": "系统",
         "items": [
             {
+                "icon": "profile",
+                "label": "设置",
+                "service": "settings.query"
+            },
+            {
                 "icon": "user",
                 "label": "用户",
                 "service": "ranch.user.query",

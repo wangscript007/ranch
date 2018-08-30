@@ -70,6 +70,15 @@ public class ClassifyCtrl extends RecycleCtrlSupport {
         return templates.get().success(classifyService.save(request.setToModel(ClassifyModel.class)), null);
     }
 
+    @Execute(name = "saves", validates = {
+            @Validate(validator = Validators.SIGN)
+    })
+    public Object saves() {
+        classifyService.saves(request.getAsJsonArray("classifies"));
+
+        return "";
+    }
+
     @Execute(name = "refresh", validates = {
             @Validate(validator = Validators.SIGN)
     })

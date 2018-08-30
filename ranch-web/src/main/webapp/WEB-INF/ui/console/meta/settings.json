@@ -1,0 +1,20 @@
+{
+    "key": "settings",
+    "props": [
+        {
+            "name": "console.title"
+        },
+        {
+            "name": "console.logo",
+            "type": "image"
+        }
+    ],
+    "query": {
+        "type": "settings",
+        "toolbar": [
+            {
+                "type": "save"
+            }
+        ]
+    }
+}

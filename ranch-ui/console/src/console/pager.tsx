@@ -11,7 +11,7 @@ export interface Meta {
 
 export interface MetaProp {
     name: string;
-    label: string;
+    label?: string;
     type?: string;
     labels?: string[];
     values?: object;
