@@ -1,6 +1,5 @@
 package org.lpw.ranch.editor;
 
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import org.lpw.ranch.async.AsyncService;
 import org.lpw.ranch.editor.element.ElementService;
@@ -109,13 +108,7 @@ public class EditorServiceImpl implements EditorService, DateJob {
 
     @Override
     public JSONObject queryUser(int template, String type, String[] states) {
-        PageList<RoleModel> roles = roleService.query(userHelper.id(), template, type, getStates(states));
-        JSONArray list = new JSONArray();
-        roles.getList().forEach(role -> list.add(find(role.getEditor())));
-        JSONObject object = roles.toJson(false);
-        object.put("list", list);
-
-        return object;
+        return roleService.query(userHelper.id(), template, type, getStates(states)).toJson(role -> this.find(role.getEditor()));
     }
 
     private Set<Integer> getStates(String[] states) {

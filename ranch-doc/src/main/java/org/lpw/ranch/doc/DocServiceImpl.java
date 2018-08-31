@@ -1,6 +1,5 @@
 package org.lpw.ranch.doc;
 
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.vladsch.flexmark.html.HtmlRenderer;
 import com.vladsch.flexmark.parser.Parser;
@@ -93,38 +92,23 @@ public class DocServiceImpl implements DocService, MinuteJob, DateJob {
         if (!validator.isEmpty(author))
             author = userHelper.findIdByUid(author, author);
         if (validator.isEmpty(classify))
-            return query(docDao.query(author, subject, label, type, audit, Recycle.No,
-                    pagination.getPageSize(20), pagination.getPageNum()));
+            return docDao.query(author, subject, label, type, audit, Recycle.No,
+                    pagination.getPageSize(20), pagination.getPageNum()).toJson(this::toJson);
 
         PageList<TopicModel> pl = topicService.query(classify, author, subject, label, type, audit);
+        if (pl.getList().isEmpty())
+            return pl.toJson();
+
         Set<String> ids = new HashSet<>();
         pl.getList().forEach(topic -> ids.add(topic.getDoc()));
-        JSONObject object = pl.toJson(false);
-        if (ids.isEmpty()) {
-            object.put("list", new JSONArray());
 
-            return object;
-        }
-
-        return query(object, docDao.query(ids, 0, 0).getList());
+        return docDao.query(ids, 0, 0).toJson(this::toJson);
     }
 
     @Override
     public JSONObject queryByAuthor() {
-        return query(docDao.query(userHelper.id(), null, null, null, null, Recycle.No,
-                pagination.getPageSize(), pagination.getPageNum()));
-    }
-
-    private JSONObject query(PageList<DocModel> pl) {
-        return query(pl.toJson(false), pl.getList());
-    }
-
-    private JSONObject query(JSONObject object, List<DocModel> docs) {
-        JSONArray list = new JSONArray();
-        docs.forEach(doc -> list.add(toJson(doc, false)));
-        object.put("list", list);
-
-        return object;
+        return docDao.query(userHelper.id(), null, null, null, null, Recycle.No,
+                pagination.getPageSize(), pagination.getPageNum()).toJson(this::toJson);
     }
 
     @Override
@@ -168,7 +152,7 @@ public class DocServiceImpl implements DocService, MinuteJob, DateJob {
         if (ids.isEmpty())
             return BeanFactory.getBean(PageList.class).setPage(0, 0, 0).toJson();
 
-        return query(docDao.query(new HashSet<>(ids), pagination.getPageSize(20), pagination.getPageNum()));
+        return docDao.query(new HashSet<>(ids), pagination.getPageSize(20), pagination.getPageNum()).toJson(doc -> toJson(doc, false));
     }
 
     @Override
@@ -208,6 +192,10 @@ public class DocServiceImpl implements DocService, MinuteJob, DateJob {
             io.write(path + doc.getId() + ".content", doc.getContent().getBytes());
         doc.setSource(null);
         doc.setContent(null);
+    }
+
+    private JSONObject toJson(DocModel doc) {
+        return toJson(doc, false);
     }
 
     private JSONObject toJson(DocModel doc, boolean full) {

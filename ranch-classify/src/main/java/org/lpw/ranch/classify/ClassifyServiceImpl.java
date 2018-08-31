@@ -7,7 +7,6 @@ import org.lpw.ranch.recycle.RecycleHelper;
 import org.lpw.ranch.util.Pagination;
 import org.lpw.tephra.cache.Cache;
 import org.lpw.tephra.dao.model.ModelHelper;
-import org.lpw.tephra.dao.orm.PageList;
 import org.lpw.tephra.scheduler.DateJob;
 import org.lpw.tephra.util.Converter;
 import org.lpw.tephra.util.Generator;
@@ -49,8 +48,9 @@ public class ClassifyServiceImpl implements ClassifyService, DateJob {
 
     @Override
     public JSONObject query(String code, String key, String value, String name) {
-        return toJson(validator.isEmpty(code) ? classifyDao.query(pagination.getPageSize(20), pagination.getPageNum())
-                : classifyDao.query(code, key, value, name, pagination.getPageSize(20), pagination.getPageNum()));
+        return (validator.isEmpty(code) ? classifyDao.query(pagination.getPageSize(20), pagination.getPageNum())
+                : classifyDao.query(code, key, value, name, pagination.getPageSize(20), pagination.getPageNum()))
+                .toJson(classify -> toJson(classify.getId(), classify, Recycle.No));
     }
 
     @Override
@@ -231,15 +231,6 @@ public class ClassifyServiceImpl implements ClassifyService, DateJob {
     @Override
     public JSONObject recycle() {
         return recycleHelper.recycle(ClassifyModel.class);
-    }
-
-    private JSONObject toJson(PageList<ClassifyModel> pl) {
-        JSONObject object = pl.toJson(false);
-        JSONArray array = new JSONArray();
-        pl.getList().forEach(classify -> array.add(toJson(classify.getId(), classify, Recycle.No)));
-        object.put("list", array);
-
-        return object;
     }
 
     @Override

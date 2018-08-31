@@ -1,6 +1,5 @@
 package org.lpw.ranch.user.online;
 
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import org.lpw.ranch.user.UserService;
 import org.lpw.ranch.user.auth.AuthModel;
@@ -9,7 +8,6 @@ import org.lpw.ranch.util.Pagination;
 import org.lpw.tephra.ctrl.context.Header;
 import org.lpw.tephra.ctrl.context.Session;
 import org.lpw.tephra.dao.model.ModelHelper;
-import org.lpw.tephra.dao.orm.PageList;
 import org.lpw.tephra.scheduler.MinuteJob;
 import org.lpw.tephra.util.DateTime;
 import org.lpw.tephra.util.TimeUnit;
@@ -48,17 +46,12 @@ public class OnlineServiceImpl implements OnlineService, MinuteJob {
 
     @Override
     public JSONObject query(String user, String uid, String ip) {
-        PageList<OnlineModel> pl = onlineDao.query(getUser(user, uid), ip, pagination.getPageSize(20), pagination.getPageNum());
-        JSONObject object = pl.toJson(false);
-        JSONArray list = new JSONArray();
-        pl.getList().forEach(online -> {
-            JSONObject obj = modelHelper.toJson(online);
-            obj.put("user", modelHelper.toJson(userService.findById(online.getUser())));
-            list.add(obj);
-        });
-        object.put("list", list);
+        return onlineDao.query(getUser(user, uid), ip, pagination.getPageSize(20), pagination.getPageNum()).toJson(online -> {
+            JSONObject object = modelHelper.toJson(online);
+            object.put("user", modelHelper.toJson(userService.findById(online.getUser())));
 
-        return object;
+            return object;
+        });
     }
 
     @Override

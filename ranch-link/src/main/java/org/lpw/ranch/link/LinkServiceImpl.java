@@ -1,10 +1,8 @@
 package org.lpw.ranch.link;
 
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import org.lpw.ranch.util.Pagination;
 import org.lpw.tephra.dao.model.ModelHelper;
-import org.lpw.tephra.dao.orm.PageList;
 import org.lpw.tephra.util.DateTime;
 import org.lpw.tephra.util.Json;
 import org.lpw.tephra.util.Validator;
@@ -32,15 +30,8 @@ public class LinkServiceImpl implements LinkService {
 
     @Override
     public JSONObject query(String type, String id1, String id2) {
-        PageList<LinkModel> pl = validator.isEmpty(id1) ? linkDao.query2(type, id2, pagination.getPageSize(20), pagination.getPageNum())
-                : linkDao.query1(type, id1, pagination.getPageSize(20), pagination.getPageNum());
-
-        JSONObject object = pl.toJson(false);
-        JSONArray array = new JSONArray();
-        pl.getList().forEach(link -> array.add(modelHelper.toJson(link)));
-        object.put("list", array);
-
-        return object;
+        return (validator.isEmpty(id1) ? linkDao.query2(type, id2, pagination.getPageSize(20), pagination.getPageNum())
+                : linkDao.query1(type, id1, pagination.getPageSize(20), pagination.getPageNum())).toJson();
     }
 
     @Override

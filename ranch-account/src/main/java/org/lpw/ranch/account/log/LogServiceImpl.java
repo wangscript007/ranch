@@ -8,7 +8,6 @@ import org.lpw.ranch.lock.LockHelper;
 import org.lpw.ranch.user.helper.UserHelper;
 import org.lpw.ranch.util.Pagination;
 import org.lpw.tephra.dao.model.ModelHelper;
-import org.lpw.tephra.dao.orm.PageList;
 import org.lpw.tephra.scheduler.SecondsJob;
 import org.lpw.tephra.util.DateTime;
 import org.lpw.tephra.util.Json;
@@ -69,14 +68,8 @@ public class LogServiceImpl implements LogService, SecondsJob {
             userId = user.isEmpty() ? uid : user.getString("id");
         }
 
-        PageList<LogModel> pl = logDao.query(userId, owner, type, channel, state, dateTime.getStart(start),
-                dateTime.getEnd(end), pagination.getPageSize(20), pagination.getPageNum());
-        JSONObject object = pl.toJson(false);
-        JSONArray list = new JSONArray();
-        pl.getList().forEach(log -> list.add(toJson(log)));
-        object.put("list", list);
-
-        return object;
+        return logDao.query(userId, owner, type, channel, state, dateTime.getStart(start),
+                dateTime.getEnd(end), pagination.getPageSize(20), pagination.getPageNum()).toJson(this::toJson);
     }
 
     private JSONObject toJson(LogModel log) {

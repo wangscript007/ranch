@@ -67,12 +67,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     private JSONObject toJson(PageList<CommentModel> pl, boolean key, boolean owner, boolean author, boolean child) {
-        JSONObject object = pl.toJson(false);
-        JSONArray array = new JSONArray();
-        pl.getList().forEach(comment -> array.add(getJson(comment.getId(), comment, key, owner, author, child)));
-        object.put("list", array);
-
-        return object;
+        return pl.toJson(comment -> getJson(comment.getId(), comment, key, owner, author, child));
     }
 
     @Override
