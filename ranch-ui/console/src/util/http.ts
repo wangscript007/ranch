@@ -32,12 +32,16 @@ class Http {
             }
         }
 
-        return fetch((location.port === '3000' ? (location.protocol + "//" + location.hostname + ":8080") : "") + uri, {
+        return fetch(this.url(uri), {
             method: type,
             mode: 'cors',
             headers: headers,
             body: JSON.stringify(parameter)
         }).then(res => res.json());
+    }
+
+    public url(uri: string): string {
+        return location.port === '3000' ? (location.protocol + "//" + location.hostname + ":8080" + uri) : uri;
     }
 }
 

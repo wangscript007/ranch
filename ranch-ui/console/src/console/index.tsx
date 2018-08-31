@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { Layout, Menu, Dropdown, Avatar, Icon } from 'antd';
 import storage from '../util/storage';
+import http from '../util/http';
 import { service, User } from '../service';
 import { Page } from './page';
 import { pager } from './pager';
@@ -63,7 +64,7 @@ export default class Console extends React.Component<Props, State> {
                         </Menu>
                     }>
                         <div>
-                            {this.props.user.portrait ? <Avatar src={this.props.user.portrait} /> : <Avatar icon="user" />}
+                            {this.props.user.portrait ? <Avatar src={http.url(this.props.user.portrait)} /> : <Avatar icon="user" />}
                             <span className="nick">{this.props.user.nick || 'Ranch UI'}</span>
                             <Icon type="down" />
                         </div>

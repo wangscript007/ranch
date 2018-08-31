@@ -4,6 +4,7 @@ import moment from 'moment';
 import merger from '../util/merger';
 import { service } from '../service';
 import { Page } from './page';
+import { Image, getImageValue } from './ui/image';
 
 export interface Meta {
     props: MetaProp[];
@@ -15,6 +16,7 @@ export interface MetaProp {
     type?: string;
     labels?: string[];
     values?: object;
+    upload?: string;
     ignore?: string[];
 }
 
@@ -224,11 +226,15 @@ class Pager {
         }
 
         if (prop.type === 'read-only') {
-            return <Input disabled={true} />;
+            return <Input readOnly={true} />;
         }
 
         if (prop.type === 'text-area') {
             return <TextArea />;
+        }
+
+        if (prop.type === 'image') {
+            return <Image name={prop.name} upload={prop.upload || ''} />;
         }
 
         return <Input />;
@@ -237,8 +243,14 @@ class Pager {
     public getFormValue(form: any, props: MetaProp[]): {} {
         const obj = {};
         const { getFieldValue } = form;
-        props.map((prop) => {
+        props.map(prop => {
             if (prop.type === 'read-only') {
+                return;
+            }
+
+            if (prop.type === 'image') {
+                obj[prop.name] = getImageValue(prop.name);
+
                 return;
             }
 

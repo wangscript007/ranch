@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { Button, Table, Divider } from 'antd';
+import http from '../../util/http';
 import merger from '../../util/merger';
 import { pager, Action, Model } from '../pager';
 import { PageState } from '../page';
@@ -38,33 +39,39 @@ export default class Grid extends React.Component<PageState, State> {
     private table(elements: JSX.Element[]): void {
         const columns: Array<{}> = [];
         for (const prop of this.props.props) {
-            if (prop.labels && prop.labels.length > 0) {
-                columns.push({
-                    title: prop.label,
-                    render: (model: Model) => {
-                        return (prop.labels || [])[model[prop.name]];
-                    }
-                });
-
-                continue;
-            }
-
-            if(prop.values){
-                columns.push({
-                    title: prop.label,
-                    render: (model: Model) => {
-                        return (prop.values || {})[model[prop.name]];
-                    }
-                });
-
-                continue;
-            }
-
-            columns.push({
+            const column: any = {
                 title: prop.label,
-                dataIndex: prop.name,
                 key: prop.name
-            });
+            };
+            columns.push(column);
+
+            if (prop.labels && prop.labels.length > 0) {
+                column.render = (model: Model) => {
+                    return (prop.labels || [])[model[prop.name]];
+                };
+
+                continue;
+            }
+
+            if (prop.values) {
+                column.render = (model: Model) => {
+                    return (prop.values || {})[model[prop.name]];
+                };
+
+                continue;
+            }
+
+            if (prop.type === 'image') {
+                column.render = (model: Model) => {
+                    const uri = model[prop.name];
+
+                    return uri ? <img key={prop.name} className="grid-img" src={http.url(model[prop.name])} /> : null;
+                };
+
+                continue;
+            }
+
+            column.dataIndex = prop.name;
         }
         if (this.props.meta.ops && this.props.meta.ops.length > 0) {
             columns.push({
@@ -105,8 +112,6 @@ export default class Grid extends React.Component<PageState, State> {
 
     private click(action: Action, model?: Model): void {
         const key: string = pager.getService(this.props.service, action);
-        console.log(key);
-        console.log(action);
         pager.getMeta(key).then(meta => {
             if (meta === null) {
                 return;

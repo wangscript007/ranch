@@ -6,7 +6,8 @@
         },
         {
             "name": "console.logo",
-            "type": "image"
+            "type": "image",
+            "upload": "ranch.classify.image"
         }
     ],
     "query": {
