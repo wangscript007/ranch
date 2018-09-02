@@ -36,12 +36,14 @@ public interface PushService {
     /**
      * 检索推送配置集。
      *
-     * @param key     引用键，支持模糊匹配。
-     * @param subject 标题，支持模糊匹配。
-     * @param state   状态，-1表示全部。
+     * @param key      引用键，支持模糊匹配。
+     * @param sender   推送器。
+     * @param subject  标题，支持模糊匹配。
+     * @param template 模板。
+     * @param state    状态，-1表示全部。
      * @return 推送配置集。
      */
-    JSONObject query(String key, String subject, int state);
+    JSONObject query(String key, String sender, String subject, String template, int state);
 
     /**
      * 查找推送配置。

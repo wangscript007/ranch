@@ -6,18 +6,18 @@
 
 参数
 
-|名称|类型|说明|
-|---|---|---|
-|id|char(36)|ID值。|
-|key|char(100)|引用键。|
-|sender|char(100)|推送器，可选值见下表。|
-|appCode|char(100)|APP编码。|
-|subject|char(100)|标题。|
-|content|strng|内容。|
-|template|char(100)|模板ID。|
-|name|char(100)|发送者名称。|
-|args|string|默认参数集，JSON格式。|
-|state|int|状态：0-待审核；1-使用中。|
+|名称|类型|必须|说明|
+|---|---|---|---|
+|id|char(36)|否|ID值。|
+|key|char(100)|是|引用键。|
+|sender|char(100)|是|推送器。|
+|appCode|char(100)|否|APP编码。|
+|subject|char(100)|否|标题。|
+|content|strng|否|内容。|
+|template|char(100)|否|模板ID。|
+|name|char(100)|否|发送者名称。|
+|args|string|否|默认参数集，JSON格式。|
+|state|int|否|状态：0-待审核；1-使用中。|
 
 返回值
 ```json

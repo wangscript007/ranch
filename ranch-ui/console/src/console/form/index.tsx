@@ -23,8 +23,8 @@ class FormPage extends React.Component<Props> {
         };
 
         return <Form>
-            {this.props.props.map((prop, i) =>
-                <Form.Item key={i} label={prop.label} {...formItemLayout}>
+            {this.props.props.map(prop =>
+                <Form.Item key={prop.name} label={prop.label} {...formItemLayout}>
                     {pager.getInput(this.props.form, prop, this.props.data)}
                 </Form.Item>
             )}
@@ -34,8 +34,8 @@ class FormPage extends React.Component<Props> {
                     sm: { span: 16, offset: 8 },
                 }}
             >
-                {this.props.meta.toolbar ? this.props.meta.toolbar.map((button) =>
-                    <Button key={button.type} type="primary" icon={button.icon} onClick={this.click.bind(this, button)}>{button.label}</Button>
+                {this.props.meta.toolbar ? this.props.meta.toolbar.map(button =>
+                    <Button key={button.service || button.type} type="primary" icon={button.icon} onClick={this.click.bind(this, button)}>{button.label}</Button>
                 ) : null}
             </Form.Item>
         </Form>;

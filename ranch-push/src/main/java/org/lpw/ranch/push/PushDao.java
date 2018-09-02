@@ -6,7 +6,7 @@ import org.lpw.tephra.dao.orm.PageList;
  * @author lpw
  */
 interface PushDao {
-    PageList<PushModel> query(String key, String subject, int state, int pageSize, int pageNum);
+    PageList<PushModel> query(String key, String sender, String subject, String template, int state, int pageSize, int pageNum);
 
     PushModel findById(String id);
 

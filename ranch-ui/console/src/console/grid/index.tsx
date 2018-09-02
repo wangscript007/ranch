@@ -1,39 +1,77 @@
 import * as React from 'react';
-import { Button, Table, Divider } from 'antd';
+import { Button, Table, Divider, Form } from 'antd';
 import http from '../../util/http';
 import merger from '../../util/merger';
-import { pager, Action, Model } from '../pager';
+import { pager, MetaProp, Action, Model } from '../pager';
 import { PageState } from '../page';
 import './index.scss';
 
-interface State {
-    list?: Array<{}>;
-    size?: number;
-    number?: number;
+interface Props extends PageState {
+    form: any;
 }
 
-export default class Grid extends React.Component<PageState, State> {
-    public constructor(props: PageState) {
+interface State {
+    data: {
+        list?: Array<{}>;
+        size?: number;
+        number?: number;
+    };
+    pagination: boolean;
+}
+
+class Grid extends React.Component<Props, State> {
+    public constructor(props: Props) {
         super(props);
-        this.state = {};
+        this.state = this.getState(this.props.data);
     }
 
     public render(): JSX.Element[] {
+        const searchToolbar: JSX.Element[] = [];
+        this.search(searchToolbar);
+        this.toolbar(searchToolbar);
         const elements: JSX.Element[] = [];
-        this.toolbar(elements);
+        if (searchToolbar.length > 0) {
+            elements.push(<Form key='search-toolbar' className="grid-search-toolbar" layout="inline">{searchToolbar}</Form>);
+        }
         this.table(elements);
 
         return elements;
     }
 
-    private toolbar(elements: JSX.Element[]): void {
-        if (!this.props.meta.toolbar) {
+    private search(searchToolbar: JSX.Element[]): void {
+        if (!this.props.meta.search || this.props.meta.search.length === 0) {
             return;
         }
 
-        elements.push(<div key="grid-toolbar" className="grid-toolbar">{this.props.meta.toolbar.map((button) =>
-            <Button key={button.type} type="primary" icon={button.icon} onClick={this.click.bind(this, button)}>{button.label}</Button>
-        )}</div>);
+        const props: MetaProp[] = [];
+        for (const s of this.props.meta.search) {
+            for (const p of this.props.props) {
+                if (s.name === p.name) {
+                    props.push(merger.merge(p, s));
+
+                    break;
+                }
+            }
+        }
+
+        props.map(prop =>
+            searchToolbar.push(
+                <Form.Item key={prop.name} label={prop.label} >
+                    {pager.getInput(this.props.form, prop, {})}
+                </Form.Item>
+            )
+        );
+        searchToolbar.push(<Button key="search" type="primary" icon="search" onClick={this.click.bind(this, { type: 'search' })}>搜索</Button>);
+    }
+
+    private toolbar(searchToolbar: JSX.Element[]): void {
+        if (!this.props.meta.toolbar || this.props.meta.toolbar.length === 0) {
+            return;
+        }
+
+        this.props.meta.toolbar.map(action =>
+            searchToolbar.push(<Button key={action.type} type="primary" icon={action.icon} onClick={this.click.bind(this, action)}>{action.label}</Button>)
+        );
     }
 
     private table(elements: JSX.Element[]): void {
@@ -96,24 +134,36 @@ export default class Grid extends React.Component<PageState, State> {
 
         let dataSource: Array<{}> = [];
         let pagination: object | boolean = false;
-        if (this.props.data) {
-            const hasList = this.props.data.hasOwnProperty('list');
-            dataSource = hasList ? this.props.data.list : this.props.data;
-            if (hasList) {
+        if (this.state.data) {
+            dataSource = this.state.data.list || [];
+            if (this.state.pagination) {
                 pagination = {
-                    pageSize: this.state.size,
-                    current: this.state.number
+                    pageSize: this.state.data.size,
+                    current: this.state.data.number
                 };
             }
         }
 
-        elements.push(<Table key="grid-table" rowKey="id" columns={columns} dataSource={dataSource} pagination={pagination} />);
+        elements.push(<Table key="grid-table" rowKey="id" columns={columns} dataSource={dataSource} pagination={pagination} onChange={this.click.bind(this, { type: 'search' }, null)} />);
     }
 
-    private click(action: Action, model?: Model): void {
+    private click(action: Action, model?: Model, pagination?: { current: number }): void {
         const key: string = pager.getService(this.props.service, action);
         pager.getMeta(key).then(meta => {
             if (meta === null) {
+                return;
+            }
+
+            if (action.type === 'search') {
+                const page = { pageNum: pagination ? pagination.current : this.state.data.number };
+                pager.post(this.props.service, this.props.header, merger.merge(pager.getFormValue(this.props.form, this.props.props), page, this.props.parameter || {})).then(data => {
+                    if (data === null) {
+                        return;
+                    }
+
+                    this.setState(this.getState(data));
+                });
+
                 return;
             }
 
@@ -130,12 +180,24 @@ export default class Grid extends React.Component<PageState, State> {
             }
 
             if (action.type === 'delete' && model) {
-                pager.post(key, this.props.header, merger.merge(this.props.parameter || {}, model)).then(data => {
+                pager.post(key, this.props.header, merger.merge(model, this.props.parameter || {})).then(data => {
                     if (data === null || !action.success) {
                         return;
                     }
 
-                    pager.success(this.props.service, action, this.props.header, this.props.parameter, model);
+                    this.success(action, model);
+                });
+
+                return;
+            }
+
+            if (action.type === 'post' && model) {
+                pager.post(key, this.props.header, merger.merge(model, action.parameter || {}, this.props.parameter || {})).then(data => {
+                    if (data === null || !action.success) {
+                        return;
+                    }
+
+                    this.success(action, model);
                 });
 
                 return;
@@ -144,4 +206,39 @@ export default class Grid extends React.Component<PageState, State> {
             console.log(action);
         });
     }
+
+    private getState(data: any): State {
+        if (Array.isArray(data)) {
+            return {
+                data: {
+                    list: data
+                },
+                pagination: false
+            };
+        }
+
+        return {
+            data: data,
+            pagination: true
+        };
+    }
+
+    private success(action: Action, model?: Model): void {
+        if (!action.success) {
+            return;
+        }
+
+        const service = typeof action.success === 'string' ? action.success : action.success.service;
+        console.log(service);
+        if (service === 'search') {
+            console.log(1234);
+            this.click({ type: 'search' });
+
+            return;
+        }
+
+        pager.success(this.props.service, action, this.props.header, this.props.parameter, model);
+    }
 }
+
+export default Form.create()(Grid);

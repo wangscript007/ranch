@@ -89,6 +89,11 @@
                 "parameter": {
                     "minGrade": 50
                 }
+            },
+            {
+                "icon": "bulb",
+                "label": "在线用户",
+                "service": "ranch.user.online.query"
             }
         ]
     }

@@ -24,6 +24,7 @@ export interface PageMeta {
     type: string;
     service?: string;
     parameter?: object;
+    search?: MetaProp[];
     toolbar?: Action[];
     ops?: Action[];
 }
@@ -34,6 +35,7 @@ export interface Action {
     icon?: string;
     label?: string;
     when?: string;
+    parameter?: {};
     success?: {
         service: string,
         header?: {},
@@ -86,7 +88,7 @@ class Pager {
 
     public getMeta(key: string): Promise<Meta> {
         const k = key.substring(0, key.lastIndexOf('.'));
-        if (this.metas[k]) {
+        if (this.metas.hasOwnProperty(k)) {
             return new Promise((resolve, reject) => {
                 resolve(this.metas[k]);
             });
@@ -194,7 +196,7 @@ class Pager {
             }
 
             return (
-                <Select>
+                <Select style={{ minWidth: 200 }}>
                     {prop.labels.map((label, i) => <Option key={i} value={i}>{label}</Option>)}
                 </Select>
             );
@@ -211,7 +213,7 @@ class Pager {
             }
 
             return (
-                <Select>
+                <Select style={{ minWidth: 200 }}>
                     {keys.map((key) => <Option key={key} value={key}>{(prop.values || {})[key]}</Option>)}
                 </Select>
             );
@@ -219,6 +221,10 @@ class Pager {
 
         if (prop.type === 'date') {
             return <DatePicker format={DateFormat} />;
+        }
+
+        if (prop.type === 'date-range') {
+            return <DatePicker.RangePicker format={DateFormat} />;
         }
 
         if (prop.type === 'number') {
@@ -262,6 +268,8 @@ class Pager {
             obj[prop.name] = value;
             if (prop.type === 'date') {
                 obj[prop.name] = value.format(DateFormat);
+            } else if (prop.type === 'date-range') {
+                obj[prop.name] = value.length === 0 ? '' : (value[0].format(DateFormat) + ',' + value[1].format(DateFormat));
             }
         });
 

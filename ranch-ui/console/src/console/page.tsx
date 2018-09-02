@@ -13,7 +13,6 @@ export interface PageState {
     meta: PageMeta;
     props: MetaProp[];
     data?: any;
-    form?: any;
 }
 
 export class Page extends React.Component<object, PageState> {

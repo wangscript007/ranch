@@ -174,22 +174,21 @@ public interface UserService {
     /**
      * 检索用户信息集。
      *
-     * @param uid           UID。
-     * @param idcard        身份证号；为空则表示所有。
-     * @param name          姓名；为空则表示所有。
-     * @param nick          昵称；为空则表示所有。
-     * @param mobile        用户手机号；为空则表示所有。
-     * @param email         Email地址；为空则表示所有。
-     * @param code          唯一编码；为空则表示所有。
-     * @param minGrade      最小等级，-1表示不限制。
-     * @param maxGrade      最大等级，-1表示不限制。
-     * @param state         状态：-1-所有；0-正常；1-禁用。
-     * @param registerStart 开始注册日期，格式：yyyy-MM-dd；为空表示不限制。
-     * @param registerEnd   结束注册日期，格式：yyyy-MM-dd；为空表示不限制。
+     * @param uid      UID。
+     * @param idcard   身份证号；为空则表示所有。
+     * @param name     姓名；为空则表示所有。
+     * @param nick     昵称；为空则表示所有。
+     * @param mobile   用户手机号；为空则表示所有。
+     * @param email    Email地址；为空则表示所有。
+     * @param code     唯一编码；为空则表示所有。
+     * @param minGrade 最小等级，-1表示不限制。
+     * @param maxGrade 最大等级，-1表示不限制。
+     * @param state    状态：-1-所有；0-正常；1-禁用。
+     * @param register 注册日期范围，格式：yyyy-MM-dd；为空表示不限制。
      * @return 用户信息集。
      */
     JSONObject query(String uid, String idcard, String name, String nick, String mobile, String email, String code,
-                     int minGrade, int maxGrade, int state, String registerStart, String registerEnd);
+                     int minGrade, int maxGrade, int state, String[] register);
 
     /**
      * 设置用户等级。

@@ -1,0 +1,54 @@
+{
+    "key": "ranch.user.online",
+    "props": [
+        {
+            "name": "portrait",
+            "label": "ranch.user.portrait",
+            "type": "image"
+        },
+        {
+            "name": "name",
+            "label": "ranch.user.name"
+        },
+        {
+            "name": "nick",
+            "label": "ranch.user.nick"
+        },
+        {
+            "name": "mobile",
+            "label": "ranch.user.mobile"
+        },
+        {
+            "name": "email",
+            "label": "ranch.user.email"
+        },
+        {
+            "name": "register",
+            "label": "ranch.user.register"
+        },
+        {
+            "name": "grade",
+            "label": "ranch.user.grade"
+        },
+        {
+            "name": "ip"
+        },
+        {
+            "name": "signIn"
+        },
+        {
+            "name": "lastVisit"
+        }
+    ],
+    "query": {
+        "type": "grid",
+        "ops": [
+            {
+                "type": "post",
+                "service": ".sign-out",
+                "label": "ranch.user.online.sign-out",
+                "success": ".query"
+            }
+        ]
+    }
+}

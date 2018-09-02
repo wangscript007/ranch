@@ -1,5 +1,7 @@
 package org.lpw.ranch.push;
 
+import org.lpw.ranch.util.DaoHelper;
+import org.lpw.ranch.util.DaoOperation;
 import org.lpw.tephra.dao.jdbc.DataSource;
 import org.lpw.tephra.dao.orm.PageList;
 import org.lpw.tephra.dao.orm.lite.LiteOrm;
@@ -22,27 +24,18 @@ class PushDaoImpl implements PushDao {
     private DataSource dataSource;
     @Inject
     private LiteOrm liteOrm;
+    @Inject
+    private DaoHelper daoHelper;
 
     @Override
-    public PageList<PushModel> query(String key, String subject, int state, int pageSize, int pageNum) {
+    public PageList<PushModel> query(String key, String sender, String subject, String template, int state, int pageSize, int pageNum) {
         StringBuilder where = new StringBuilder();
         List<Object> args = new ArrayList<>();
-        if (!validator.isEmpty(key)) {
-            where.append("c_key like ?");
-            args.add(dataSource.getDialect(null).getLike(key, true, true));
-        }
-        if (!validator.isEmpty(subject)) {
-            if (!args.isEmpty())
-                where.append(" and ");
-            where.append("c_subject like ?");
-            args.add(dataSource.getDialect(null).getLike(subject, true, true));
-        }
-        if (state > -1) {
-            if (!args.isEmpty())
-                where.append(" and ");
-            where.append("c_state=?");
-            args.add(state);
-        }
+        daoHelper.where(where, args, "c_sender", DaoOperation.Equals, sender);
+        daoHelper.where(where, args, "c_template", DaoOperation.Equals, template);
+        daoHelper.where(where, args, "c_state", DaoOperation.Equals, state);
+        daoHelper.like(null, where, args, "c_key", key);
+        daoHelper.like(null, where, args, "c_subject", subject);
 
         return liteOrm.query(new LiteQuery(PushModel.class).where(where.toString())
                 .order("c_state desc,c_time desc").size(pageSize).page(pageNum), args.toArray());

@@ -44,8 +44,8 @@ public class PushServiceImpl implements PushService, ContextRefreshedListener {
     private Map<String, PushSender> senders;
 
     @Override
-    public JSONObject query(String key, String subject, int state) {
-        return pushDao.query(key, subject, state, pagination.getPageSize(20), pagination.getPageNum()).toJson();
+    public JSONObject query(String key, String sender, String subject, String template, int state) {
+        return pushDao.query(key, sender, subject, template, state, pagination.getPageSize(20), pagination.getPageNum()).toJson();
     }
 
     @Override

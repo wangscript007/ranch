@@ -18,8 +18,7 @@
 |minGrade|int|否|最小等级，为空则检索全部。|
 |maxGrade|int|否|最大等级，为空则检索全部。|
 |state|int|否|状态：-1：全部；0-正常；1-禁用。|
-|registerStart|char(100)|否|注册开始日期，格式：yyyy-MM-dd，为空则检索全部。|
-|registerEnd|char(100)|否|注册结束日期，格式：yyyy-MM-dd，为空则检索全部。|
+|register|string|否|注册日期范围，以逗号分隔，格式：yyyy-MM-dd，为空则检索全部。|
 |pageSize|int|否|每页显示记录数，默认20。|
 |pageNum|int|否|当前显示页数。|
 

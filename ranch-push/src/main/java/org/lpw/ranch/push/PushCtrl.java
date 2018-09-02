@@ -21,10 +21,12 @@ public class PushCtrl {
     private PushService pushService;
 
     @Execute(name = "query", validates = {
+            @Validate(validator = PushService.VALIDATOR_EXISTS_SENDER, emptyable = true, parameter = "sender", failureCode = 4),
             @Validate(validator = Validators.SIGN)
     })
     public Object query() {
-        return pushService.query(request.get("key"), request.get("subject"), request.getAsInt("state", -1));
+        return pushService.query(request.get("key"), request.get("sender"), request.get("subject"), request.get("template"),
+                request.getAsInt("state", -1));
     }
 
     @Execute(name = "save", validates = {
