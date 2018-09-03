@@ -118,7 +118,12 @@ class Grid extends React.Component<Props, State> {
 
             if (prop.type === 'money') {
                 column.render = (model: Model) => {
-                    return (model[prop.name] * 0.01).toFixed(2);
+                    const value = model[prop.name];
+                    if (value === 0) {
+                        return '0.00';
+                    }
+
+                    return <span className={value > 0 ? 'grid-money-positive' : 'grid-money-negative'}>{(model[prop.name] * 0.01).toFixed(2)}</span>;
                 };
 
                 continue;
