@@ -77,6 +77,12 @@ class Grid extends React.Component<Props, State> {
 
     private table(elements: JSX.Element[]): void {
         const columns: Array<{}> = [];
+        columns.push({
+            title: '',
+            key: 'index',
+            render: (text: Model, record: Model, index: number) => index + 1
+        });
+
         for (const prop of this.props.props) {
             const column: any = {
                 title: prop.label,
@@ -112,6 +118,7 @@ class Grid extends React.Component<Props, State> {
 
             column.dataIndex = prop.name;
         }
+
         if (this.props.meta.ops && this.props.meta.ops.length > 0) {
             columns.push({
                 title: '',
