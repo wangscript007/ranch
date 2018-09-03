@@ -14,6 +14,7 @@ interface State {
     data: {
         list?: Array<{}>;
         size?: number;
+        count?: number;
         number?: number;
     };
     pagination: boolean;
@@ -139,6 +140,7 @@ class Grid extends React.Component<Props, State> {
             if (this.state.pagination) {
                 pagination = {
                     pageSize: this.state.data.size,
+                    total: this.state.data.count,
                     current: this.state.data.number
                 };
             }
@@ -149,7 +151,7 @@ class Grid extends React.Component<Props, State> {
 
     private click(action: Action, model?: Model, pagination?: { current: number }): void {
         const key: string = pager.getService(this.props.service, action);
-        const service:string=key.substring(key.lastIndexOf('.')+1);
+        const service: string = key.substring(key.lastIndexOf('.') + 1);
         pager.getMeta(key).then(meta => {
             if (meta === null) {
                 return;
@@ -230,7 +232,6 @@ class Grid extends React.Component<Props, State> {
         }
 
         const service = typeof action.success === 'string' ? action.success : action.success.service;
-        console.log(service);
         if (service === 'search') {
             this.click({ type: 'search' });
 
