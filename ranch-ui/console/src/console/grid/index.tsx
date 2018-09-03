@@ -124,7 +124,7 @@ class Grid extends React.Component<Props, State> {
                         if (ops.length > 0) {
                             ops.push(<Divider key={'divider-' + ops.length} type="vertical" />);
                         }
-                        ops.push(<a key={'op-' + ops.length} href="javascript:void(0);" onClick={this.click.bind(this, op, model)}>{op.label}</a>);
+                        ops.push(<a key={'op-' + ops.length} className="grid-op" href="javascript:void(0);" onClick={this.click.bind(this, op, model)}>{op.label}</a>);
                     }
 
                     return ops;
@@ -232,7 +232,6 @@ class Grid extends React.Component<Props, State> {
         const service = typeof action.success === 'string' ? action.success : action.success.service;
         console.log(service);
         if (service === 'search') {
-            console.log(1234);
             this.click({ type: 'search' });
 
             return;
