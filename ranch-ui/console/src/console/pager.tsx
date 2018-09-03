@@ -180,6 +180,8 @@ class Pager {
             } else {
                 config.initialValue = moment(config.initialValue, DateFormat);
             }
+        } else if (prop.type === 'money') {
+            config.initialValue = (config.initialValue * 0.01).toFixed(2);
         }
 
         return getFieldDecorator(prop.name, config)(this.getInputElement(prop));
@@ -270,6 +272,8 @@ class Pager {
                 obj[prop.name] = value.format(DateFormat);
             } else if (prop.type === 'date-range') {
                 obj[prop.name] = value.length === 0 ? '' : (value[0].format(DateFormat) + ',' + value[1].format(DateFormat));
+            } else if (prop.type === 'money') {
+                obj[prop.name] = Math.round(value * 100);
             }
         });
 

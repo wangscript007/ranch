@@ -116,6 +116,14 @@ class Grid extends React.Component<Props, State> {
                 continue;
             }
 
+            if (prop.type === 'money') {
+                column.render = (model: Model) => {
+                    return (model[prop.name] * 0.01).toFixed(2);
+                };
+
+                continue;
+            }
+
             column.dataIndex = prop.name;
         }
 
