@@ -39,6 +39,7 @@
         },
         {
             "name": "grade",
+            "type": "read-only",
             "ignore": [
                 "sign"
             ]
