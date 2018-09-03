@@ -252,24 +252,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void modify(UserModel user) {
-        UserModel model = fromSession();
-        if (user.getIdcard() != null)
-            model.setIdcard(user.getIdcard());
-        if (user.getName() != null)
-            model.setName(user.getName());
-        if (user.getNick() != null)
-            model.setNick(user.getNick());
-        if (user.getMobile() != null)
-            model.setMobile(user.getMobile());
-        if (user.getEmail() != null)
-            model.setEmail(user.getEmail());
-        if (user.getGender() > 0)
-            model.setGender(user.getGender());
-        if (user.getBirthday() != null)
-            model.setBirthday(user.getBirthday());
-        userDao.save(model);
-        session.set(SESSION, model);
-        clearCache(model);
+        session.set(SESSION, save(fromSession().getId(), user));
     }
 
     @Override
@@ -279,9 +262,8 @@ public class UserServiceImpl implements UserService {
             return false;
 
         user.setPassword(password(newPassword));
-        userDao.save(user);
+        save(user);
         session.set(SESSION, user);
-        clearCache(user);
 
         return true;
     }
@@ -289,15 +271,6 @@ public class UserServiceImpl implements UserService {
     @Override
     public String password(String password) {
         return digest.md5(UserModel.NAME + digest.sha1(password + UserModel.NAME));
-    }
-
-    @Override
-    public void portrait(String uri) {
-        UserModel user = fromSession();
-        user.setPortrait(uri);
-        userDao.save(user);
-        session.set(SESSION, user);
-        clearCache(user);
     }
 
     @Override
@@ -416,17 +389,40 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public void update(UserModel user) {
+        save(user.getId(), user);
+    }
+
+    private UserModel save(String id, UserModel user) {
+        UserModel model = findById(id);
+        model.setIdcard(user.getIdcard());
+        model.setName(user.getName());
+        model.setNick(user.getNick());
+        model.setMobile(user.getMobile());
+        model.setEmail(user.getEmail());
+        model.setPortrait(user.getPortrait());
+        model.setGender(user.getGender());
+        model.setBirthday(user.getBirthday());
+        save(model);
+
+        return model;
+    }
+
+    @Override
     public void grade(String id, int grade) {
         UserModel user = findById(id);
         user.setGrade(grade);
-        userDao.save(user);
-        clearCache(user);
+        save(user);
     }
 
     @Override
     public void state(String id, int state) {
         UserModel user = findById(id);
         user.setState(state);
+        save(user);
+    }
+
+    private void save(UserModel user) {
         userDao.save(user);
         clearCache(user);
     }

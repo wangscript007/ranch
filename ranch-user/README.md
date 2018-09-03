@@ -41,8 +41,6 @@
 
 [修改当前用户认证密码](doc/password.md)
 
-[修改当前用户头像](doc/portrait.md)
-
 [获取用户信息](doc/get.md)
 
 [使用唯一编码获取用户信息](doc/find-by-code.md)
@@ -50,6 +48,8 @@
 [使用UID获取用户信息](doc/find-by-uid.md)
 
 [检索用户](doc/query.md)
+
+[修改用户信息](doc/update.md)
 
 [修改用户等级](doc/grade.md)
 

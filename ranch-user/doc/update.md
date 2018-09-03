@@ -1,13 +1,14 @@
-# 修改当前用户信息
+# 修改用户信息
 
 请求
-- Service Key - ranch.user.modify
-- URI - /user/modify
+- Service Key - ranch.user.update
+- URI - /user/update
 
 参数
 
 |名称|类型|必须|说明|
 |---|---|---|---|
+|id|char(100)|是|ID值。|
 |idcard|char(100)|否|身份证号。|
 |name|char(100)|否|姓名。|
 |nick|char(100)|否|昵称。|
@@ -24,7 +25,6 @@
 - [HTTP上传文件](https://github.com/heisedebaise/tephra/blob/master/tephra-ctrl-http/doc/upload.md)
 
 上传时需将`name`或`key`设置为`ranch.user.portrait`。
-
 
 返回值
 ```json
@@ -46,3 +46,5 @@
     "state": "状态：0-正常；1-禁用"
 }
 ```
+
+> 后台管理接口，需验证[请求参数签名](https://github.com/heisedebaise/tephra/blob/master/tephra-ctrl/doc/sign.md)。

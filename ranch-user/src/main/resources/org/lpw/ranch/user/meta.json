@@ -82,6 +82,10 @@
         ],
         "ops": [
             {
+                "type": "modify",
+                "service": ".update"
+            },
+            {
                 "type": "post",
                 "label": "ranch.user.state.enable",
                 "service": ".state",
@@ -120,6 +124,16 @@
                 },
                 "success": "search",
                 "when": "model.grade>=90"
+            }
+        ]
+    },
+    "update": {
+        "type": "form",
+        "toolbar": [
+            {
+                "type": "save",
+                "service": ".update",
+                "success": ".query"
             }
         ]
     },

@@ -111,13 +111,6 @@ public interface UserService {
     String password(String password);
 
     /**
-     * 设置当前用户头像。
-     *
-     * @param uri 头像URI地址。
-     */
-    void portrait(String uri);
-
-    /**
      * 获取当前Session中用户对象。
      *
      * @return 用户对象；不存在则返回null。
@@ -189,6 +182,13 @@ public interface UserService {
      */
     JSONObject query(String uid, String idcard, String name, String nick, String mobile, String email, String code,
                      int minGrade, int maxGrade, int state, String[] register);
+
+    /**
+     * 更新用户信息。
+     *
+     * @param user 用户信息。
+     */
+    void update(UserModel user);
 
     /**
      * 设置用户等级。

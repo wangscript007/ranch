@@ -47,7 +47,7 @@ class Grid extends React.Component<Props, State> {
         for (const s of this.props.meta.search) {
             for (const p of this.props.props) {
                 if (s.name === p.name) {
-                    props.push(merger.merge(p, s));
+                    props.push(merger.merge({ name: '' }, p, s));
 
                     break;
                 }
@@ -149,6 +149,7 @@ class Grid extends React.Component<Props, State> {
 
     private click(action: Action, model?: Model, pagination?: { current: number }): void {
         const key: string = pager.getService(this.props.service, action);
+        const service:string=key.substring(key.lastIndexOf('.')+1);
         pager.getMeta(key).then(meta => {
             if (meta === null) {
                 return;
@@ -168,13 +169,13 @@ class Grid extends React.Component<Props, State> {
             }
 
             if (action.type === 'create') {
-                pager.setPage(key, meta, meta[action.type], {}, this.props.header, this.props.parameter);
+                pager.setPage(key, meta, meta[service], {}, this.props.header, this.props.parameter);
 
                 return;
             }
 
             if (action.type === 'modify') {
-                pager.setPage(key, meta, meta[action.type], model, this.props.header, this.props.parameter);
+                pager.setPage(key, meta, meta[service], model, this.props.header, this.props.parameter);
 
                 return;
             }

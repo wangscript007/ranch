@@ -160,6 +160,17 @@ public class UserCtrl {
                 request.getAsArray("register"));
     }
 
+    @Execute(name = "update", validates = {
+            @Validate(validator = Validators.ID, parameter = "id", failureCode = 22),
+            @Validate(validator = Validators.SIGN),
+            @Validate(validator = UserService.VALIDATOR_EXISTS, parameter = "id", failureCode = 25)
+    })
+    public Object update() {
+        userService.update(request.setToModel(UserModel.class));
+
+        return "";
+    }
+
     @Execute(name = "grade", validates = {
             @Validate(validator = Validators.ID, parameter = "id", failureCode = 22),
             @Validate(validator = Validators.BETWEEN, number = {0, 99}, parameter = "grade", failureCode = 23),

@@ -1,6 +1,5 @@
 package org.lpw.ranch.user;
 
-import com.alibaba.fastjson.JSONObject;
 import org.lpw.tephra.ctrl.upload.UploadListener;
 import org.lpw.tephra.ctrl.upload.UploadReader;
 import org.lpw.tephra.util.Image;
@@ -26,10 +25,5 @@ public class PortraitUploadListenerImpl implements UploadListener {
     @Override
     public boolean isUploadEnable(UploadReader uploadReader) {
         return image.is(uploadReader.getContentType(), uploadReader.getFileName()) && !userService.sign().isEmpty();
-    }
-
-    @Override
-    public void complete(UploadReader uploadReader, JSONObject object) {
-        userService.portrait(object.getString("path"));
     }
 }

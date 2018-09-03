@@ -14,7 +14,7 @@ public interface UserHelper {
     /**
      * 系统用户ID值。
      */
-    String SYSTEM_USER_ID = "ranch-user-system-000000000000000000";
+    String SYSTEM_USER_ID = "00000000-0000-0000-0000-000000000000";
 
     /**
      * 用户是否已登入验证器Bean名称。

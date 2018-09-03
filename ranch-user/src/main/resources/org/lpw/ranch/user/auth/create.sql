@@ -13,5 +13,5 @@ CREATE TABLE t_user_auth
   UNIQUE KEY uk_uid(c_uid) USING HASH
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-INSERT INTO t_user_auth(c_id,c_user,c_uid) VALUES('ranch-user-auth-system-0000000000000','ranch-user-system-000000000000000000','system');
-INSERT INTO t_user_auth(c_id,c_user,c_uid) VALUES('ranch-user-auth-root-999999999999999','ranch-user-root-99999999999999999999','root');
+INSERT INTO t_user_auth(c_id,c_user,c_uid) VALUES('00000000-0000-0000-0000-000000000000','ranch-user-system-000000000000000000','system');
+INSERT INTO t_user_auth(c_id,c_user,c_uid) VALUES('99999999-9999-9999-9999-999999999999','99999999-9999-9999-9999-999999999999','root');
