@@ -25,5 +25,5 @@ CREATE TABLE t_user
   KEY k_register(c_register) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-INSERT INTO t_user(c_id,c_code,c_grade) VALUES('ranch-user-system-000000000000000000','00000000',99);
-INSERT INTO t_user(c_id,c_code,c_grade) VALUES('ranch-user-root-99999999999999999999','99999999',99);
+INSERT INTO t_user(c_id,c_password,c_code,c_grade) VALUES('ranch-user-system-000000000000000000','','00000000',99);
+INSERT INTO t_user(c_id,c_password,c_code,c_grade) VALUES('ranch-user-root-99999999999999999999','','99999999',99);
