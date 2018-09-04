@@ -215,7 +215,15 @@ class Grid extends React.Component<Props, State> {
             }
 
             if (action.type === 'post' && model) {
-                pager.post(key, this.props.header, merger.merge(model, action.parameter || {}, this.props.parameter || {})).then(data => {
+                const parameter: Model = merger.merge({}, model);
+                if (action.parameter) {
+                    for (const key in action.parameter) {
+                        if (action.parameter.hasOwnProperty(key)) {
+                            parameter[key] = model[action.parameter[key]] || action.parameter[key];
+                        }
+                    }
+                }
+                pager.post(key, this.props.header, merger.merge(parameter, this.props.parameter || {})).then(data => {
                     if (data === null || !action.success) {
                         return;
                     }
