@@ -215,15 +215,7 @@ class Grid extends React.Component<Props, State> {
             }
 
             if (action.type === 'post' && model) {
-                const parameter: Model = merger.merge({}, model);
-                if (action.parameter) {
-                    for (const key in action.parameter) {
-                        if (action.parameter.hasOwnProperty(key)) {
-                            parameter[key] = model[action.parameter[key]] || action.parameter[key];
-                        }
-                    }
-                }
-                pager.post(key, this.props.header, merger.merge(parameter, this.props.parameter || {})).then(data => {
+                pager.post(key, this.props.header, this.mergeParameter(action, model)).then(data => {
                     if (data === null || !action.success) {
                         return;
                     }
@@ -234,8 +226,31 @@ class Grid extends React.Component<Props, State> {
                 return;
             }
 
+            if (action.type === 'to') {
+                pager.to(key, this.props.header, this.mergeParameter(action, model));
+                
+                return;
+            }
+
             console.log(action);
         });
+    }
+
+    private mergeParameter(action: Action, model?: Model): object {
+        let parameter: object = model ? merger.merge({}, model) : {};
+        if (action.parameter) {
+            if (model) {
+                for (const key in action.parameter) {
+                    if (action.parameter.hasOwnProperty(key)) {
+                        parameter[key] = model[action.parameter[key]] || action.parameter[key];
+                    }
+                }
+            } else {
+                parameter = merger.merge(parameter, action.parameter);
+            }
+        }
+
+        return merger.merge(parameter, this.props.parameter || {});
     }
 
     private getState(data: any): State {
