@@ -3,8 +3,7 @@
     "props": [
         {
             "name": "portrait",
-            "type": "image",
-            "upload": "ranch.user.portrait"
+            "type": "image"
         },
         {
             "name": "idcard"

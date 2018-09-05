@@ -228,7 +228,7 @@ class Grid extends React.Component<Props, State> {
 
             if (action.type === 'to') {
                 pager.to(key, this.props.header, this.mergeParameter(action, model));
-                
+
                 return;
             }
 

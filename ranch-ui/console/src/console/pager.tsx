@@ -64,6 +64,7 @@ const DateFormat = 'YYYY-MM-DD';
 class Pager {
     private page: Page;
     private metas: { [key: string]: Meta } = {};
+    private key: string;
 
     public bind(page: Page): void {
         this.page = page;
@@ -87,19 +88,19 @@ class Pager {
     }
 
     public getMeta(key: string): Promise<Meta> {
-        const k = key.substring(0, key.lastIndexOf('.'));
-        if (this.metas.hasOwnProperty(k)) {
+        this.key = key.substring(0, key.lastIndexOf('.'));
+        if (this.metas.hasOwnProperty(this.key)) {
             return new Promise((resolve, reject) => {
-                resolve(this.metas[k]);
+                resolve(this.metas[this.key]);
             });
         }
 
-        return service.post('/ui/console/meta', { key: k }, {}).then(data => {
+        return service.post('/ui/console/meta', { key: this.key }, {}).then(data => {
             if (data === null) {
                 return null;
             }
 
-            this.metas[k] = data;
+            this.metas[this.key] = data;
 
             return data;
         });
@@ -242,7 +243,7 @@ class Pager {
         }
 
         if (prop.type === 'image') {
-            return <Image name={prop.name} upload={prop.upload || ''} />;
+            return <Image name={prop.name} upload={prop.upload || (this.key + '.' + prop.name)} />;
         }
 
         return <Input />;
