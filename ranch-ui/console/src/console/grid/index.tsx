@@ -159,9 +159,7 @@ class Grid extends React.Component<Props, State> {
                             continue;
                         }
 
-                        const key = op.key;
-                        op.key = null;
-                        items.push(<Menu.Item key={key}>{op}</Menu.Item>);
+                        items.push(<Menu.Item key={op.key}>{op}</Menu.Item>);
                     }
                     const actions: JSX.Element[] = [];
                     actions.push(ops[0]);
