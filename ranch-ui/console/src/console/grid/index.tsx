@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Button, Table, Divider, Form } from 'antd';
+import { Button, Table, Divider, Form, Menu, Dropdown, Icon } from 'antd';
 import http from '../../util/http';
 import merger from '../../util/merger';
 import { pager, MetaProp, Action, Model } from '../pager';
@@ -148,7 +148,31 @@ class Grid extends React.Component<Props, State> {
                         ops.push(<a key={'op-' + ops.length} className="grid-op" href="javascript:void(0);" onClick={this.click.bind(this, op, model)}>{op.label}</a>);
                     }
 
-                    return ops;
+                    if (ops.length <= 3) {
+                        return ops;
+                    }
+
+                    const items: JSX.Element[] = [];
+                    for (let i = 2; i < ops.length; i++) {
+                        const op: JSX.Element = ops[i];
+                        if (!op.key || typeof op.key !== 'string' || op.key.indexOf('divider-') === 0) {
+                            continue;
+                        }
+
+                        const key = op.key;
+                        op.key = null;
+                        items.push(<Menu.Item key={key}>{op}</Menu.Item>);
+                    }
+                    const actions: JSX.Element[] = [];
+                    actions.push(ops[0]);
+                    actions.push(ops[1]);
+                    actions.push(
+                        <Dropdown overlay={<Menu>{items}</Menu>} trigger={['click']}>
+                            <a className="ant-dropdown-link" href="javascript:void(0);">更多<Icon type="down" /></a>
+                        </Dropdown>
+                    );
+
+                    return actions;
                 }
             });
         }
