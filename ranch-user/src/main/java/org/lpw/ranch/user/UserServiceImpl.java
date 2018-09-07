@@ -108,9 +108,11 @@ public class UserServiceImpl implements UserService {
         setInviter(user);
         if (validator.isEmpty(user.getPortrait()))
             user.setPortrait(types.getPortrait(uid, password, type));
+        String nick = types.getNick(uid, password, type);
+        if (validator.isEmpty(user.getNick()))
+            user.setNick(validator.isEmpty(nick) ? uid : nick);
         userDao.save(user);
-        authService.create(user.getId(), types.getUid(uid, password, type), type,
-                types.getNick(uid, password, type), types.getPortrait(uid, password, type));
+        authService.create(user.getId(), types.getUid(uid, password, type), type, nick, types.getPortrait(uid, password, type));
         clearCache(user);
         onlineService.signIn(user.getId());
         session.set(SESSION, user);
