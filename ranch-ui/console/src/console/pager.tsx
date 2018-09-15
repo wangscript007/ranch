@@ -239,7 +239,7 @@ class Pager {
         }
 
         if (prop.type === 'text-area') {
-            return <TextArea />;
+            return <TextArea autosize={{ minRows: 2, maxRows: 8 }} />;
         }
 
         if (prop.type === 'image') {
