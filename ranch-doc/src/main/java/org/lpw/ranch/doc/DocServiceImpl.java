@@ -123,7 +123,7 @@ public class DocServiceImpl implements DocService, MinuteJob, DateJob {
 
     @Override
     public JSONObject find(String id) {
-        return toJson(findById(id), true);
+        return toJsonFull(findById(id), true);
     }
 
     @Override
@@ -137,7 +137,7 @@ public class DocServiceImpl implements DocService, MinuteJob, DateJob {
             if (doc == null || doc.getAudit() != Audit.Pass.getValue() || doc.getRecycle() != Recycle.No.getValue())
                 continue;
 
-            object.put(id, toJson(doc, true));
+            object.put(id, toJsonFull(doc, true));
         }
 
         return object;
@@ -152,7 +152,8 @@ public class DocServiceImpl implements DocService, MinuteJob, DateJob {
         if (ids.isEmpty())
             return BeanFactory.getBean(PageList.class).setPage(0, 0, 0).toJson();
 
-        return docDao.query(new HashSet<>(ids), pagination.getPageSize(20), pagination.getPageNum()).toJson(doc -> toJson(doc, false));
+        return docDao.query(new HashSet<>(ids), pagination.getPageSize(20), pagination.getPageNum())
+                .toJson(doc -> toJsonFull(doc, false));
     }
 
     @Override
@@ -175,7 +176,7 @@ public class DocServiceImpl implements DocService, MinuteJob, DateJob {
         topicService.save(model, new HashSet<>(Arrays.asList(classifies)));
         clearCache(model.getId());
 
-        return toJson(model, true);
+        return toJsonFull(model, true);
     }
 
     private void saveSourceContent(DocModel doc, String source, boolean markdown) {
@@ -195,10 +196,10 @@ public class DocServiceImpl implements DocService, MinuteJob, DateJob {
     }
 
     private JSONObject toJson(DocModel doc) {
-        return toJson(doc, false);
+        return toJsonFull(doc, false);
     }
 
-    private JSONObject toJson(DocModel doc, boolean full) {
+    private JSONObject toJsonFull(DocModel doc, boolean full) {
         String key = CACHE_JSON + doc.getId() + ":" + full;
         JSONObject object = cache.get(key);
         if (object == null) {
@@ -236,7 +237,7 @@ public class DocServiceImpl implements DocService, MinuteJob, DateJob {
         String cacheKey = CACHE_READ + id;
         JSONObject object = cache.get(cacheKey);
         if (object == null) {
-            object = toJson(doc, true);
+            object = toJsonFull(doc, true);
             object.put("relation", relationService.find(id));
             cache.put(cacheKey, object, false);
         }
