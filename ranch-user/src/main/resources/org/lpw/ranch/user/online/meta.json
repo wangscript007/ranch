@@ -2,32 +2,32 @@
     "key": "ranch.user.online",
     "props": [
         {
-            "name": "portrait",
+            "name": "user.portrait",
             "label": "ranch.user.portrait",
             "type": "image"
         },
         {
-            "name": "name",
+            "name": "user.name",
             "label": "ranch.user.name"
         },
         {
-            "name": "nick",
+            "name": "user.nick",
             "label": "ranch.user.nick"
         },
         {
-            "name": "mobile",
+            "name": "user.mobile",
             "label": "ranch.user.mobile"
         },
         {
-            "name": "email",
+            "name": "user.email",
             "label": "ranch.user.email"
         },
         {
-            "name": "register",
+            "name": "user.register",
             "label": "ranch.user.register"
         },
         {
-            "name": "grade",
+            "name": "user.grade",
             "label": "ranch.user.grade"
         },
         {

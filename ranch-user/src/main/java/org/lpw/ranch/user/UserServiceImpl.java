@@ -307,6 +307,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public JSONObject get(String id) {
+        return getJson(id, null);
+    }
+
+    @Override
     public UserModel findById(String id) {
         String cacheKey = CACHE_MODEL + id;
         UserModel user = cache.get(cacheKey);

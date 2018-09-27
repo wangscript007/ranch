@@ -173,7 +173,7 @@ class Pager {
     public getInput(form: any, prop: MetaProp, data?: {}): JSX.Element {
         const { getFieldDecorator } = form;
         const config = {
-            initialValue: data && data.hasOwnProperty(prop.name) ? data[prop.name] : ''
+            initialValue: this.getModelValue(data, prop.name)
         };
         if (prop.type === 'date') {
             if (config.initialValue === '') {
@@ -247,6 +247,31 @@ class Pager {
         }
 
         return <Input />;
+    }
+
+    public getModelValue(model?: Model, name?: string): any {
+        if (!model || !name) {
+            return '';
+        }
+
+        if (model.hasOwnProperty(name)) {
+            return model[name];
+        }
+
+        if (name.indexOf('.') === -1) {
+            return '';
+        }
+
+        let obj: any = model;
+        for (const n of name.split('.')) {
+            if (!obj.hasOwnProperty(n)) {
+                return '';
+            }
+
+            obj = obj[n];
+        }
+
+        return obj;
     }
 
     public getFormValue(form: any, props: MetaProp[]): {} {

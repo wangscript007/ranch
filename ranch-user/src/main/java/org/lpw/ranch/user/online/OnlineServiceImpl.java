@@ -47,7 +47,7 @@ public class OnlineServiceImpl implements OnlineService, MinuteJob {
     @Override
     public JSONObject query(String user, String uid, String ip) {
         return onlineDao.query(getUser(user, uid), ip, pagination.getPageSize(20), pagination.getPageNum())
-                .toJson((online, object) -> object.putAll(modelHelper.toJson(userService.findById(online.getUser()))));
+                .toJson((online, object) -> object.put("user", userService.get(online.getUser())));
     }
 
     @Override

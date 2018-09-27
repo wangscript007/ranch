@@ -92,7 +92,7 @@ class Grid extends React.Component<Props, State> {
 
             if (prop.labels && prop.labels.length > 0) {
                 column.render = (model: Model) => {
-                    return (prop.labels || [])[model[prop.name]];
+                    return (prop.labels || [])[pager.getModelValue(model, prop.name)];
                 };
 
                 continue;
@@ -100,7 +100,7 @@ class Grid extends React.Component<Props, State> {
 
             if (prop.values) {
                 column.render = (model: Model) => {
-                    return (prop.values || {})[model[prop.name]];
+                    return (prop.values || {})[pager.getModelValue(model, prop.name)];
                 };
 
                 continue;
@@ -108,9 +108,9 @@ class Grid extends React.Component<Props, State> {
 
             if (prop.type === 'image') {
                 column.render = (model: Model) => {
-                    const uri = model[prop.name];
+                    const uri = pager.getModelValue(model, prop.name);
 
-                    return uri ? <img key={prop.name} className="grid-img" src={http.url(model[prop.name])} /> : null;
+                    return uri ? <a href={http.url(uri)} target="_blank"><img key={prop.name} className="grid-img" src={http.url(uri)} /></a> : null;
                 };
 
                 continue;
@@ -118,12 +118,12 @@ class Grid extends React.Component<Props, State> {
 
             if (prop.type === 'money') {
                 column.render = (model: Model) => {
-                    const value = model[prop.name];
+                    const value = pager.getModelValue(model, prop.name);
                     if (value === 0) {
                         return '0.00';
                     }
 
-                    return <span className={value > 0 ? 'grid-money-positive' : 'grid-money-negative'}>{(model[prop.name] * 0.01).toFixed(2)}</span>;
+                    return <span className={value > 0 ? 'grid-money-positive' : 'grid-money-negative'}>{(value * 0.01).toFixed(2)}</span>;
                 };
 
                 continue;
@@ -166,7 +166,7 @@ class Grid extends React.Component<Props, State> {
                     actions.push(ops[1]);
                     actions.push(
                         <Dropdown overlay={<Menu>{items}</Menu>} trigger={['click']}>
-                            <a className="ant-dropdown-link" href="javascript:void(0);">更多<Icon type="down" /></a>
+                            <a className="ant-dropdown-link grid-op" href="javascript:void(0);">更多<Icon type="down" /></a>
                         </Dropdown>
                     );
 
