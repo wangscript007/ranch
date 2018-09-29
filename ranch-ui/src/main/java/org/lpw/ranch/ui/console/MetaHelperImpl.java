@@ -15,8 +15,8 @@ import javax.inject.Inject;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.InputStream;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author lpw
@@ -41,15 +41,8 @@ public class MetaHelperImpl implements MetaHelper, ContextRefreshedListener {
 
     @Override
     public JSONObject get(String domain, String key) {
-        return json.toObject(find(domain, key));
-    }
-
-    private String find(String domain, String key) {
-        String k = domain + ":" + key;
-        if (map.containsKey(k))
-            return map.get(k);
-
-        return domain.equals("console") ? null : map.get("console:" + key);
+        return json.toObject(map.computeIfAbsent(domain + ":" + key,
+                k -> domain.equals("console") ? "" : map.getOrDefault("console:" + key, "")));
     }
 
     @Override
@@ -59,7 +52,7 @@ public class MetaHelperImpl implements MetaHelper, ContextRefreshedListener {
 
     @Override
     public void onContextRefreshed() {
-        map = new HashMap<>();
+        map = new ConcurrentHashMap<>();
         modelTables.getModelClasses().forEach(modelClass -> {
             try (InputStream inputStream = modelClass.getResourceAsStream("meta.json");
                  ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
