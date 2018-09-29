@@ -2,7 +2,8 @@ import * as React from 'react';
 import { Button, Table, Divider, Form, Menu, Dropdown, Icon } from 'antd';
 import http from '../../util/http';
 import merger from '../../util/merger';
-import { pager, MetaProp, Action, Model } from '../pager';
+import { meta, PropMeta, ActionMeta } from '../meta';
+import { pager, Model } from '../pager';
 import { PageState } from '../page';
 import './index.scss';
 
@@ -44,7 +45,7 @@ class Grid extends React.Component<Props, State> {
             return;
         }
 
-        const props: MetaProp[] = [];
+        const props: PropMeta[] = [];
         for (const s of this.props.meta.search) {
             for (const p of this.props.props) {
                 if (s.name === p.name) {
@@ -191,17 +192,20 @@ class Grid extends React.Component<Props, State> {
         elements.push(<Table key="grid-table" rowKey="id" columns={columns} dataSource={dataSource} pagination={pagination} onChange={this.click.bind(this, { type: 'search' }, null)} />);
     }
 
-    private click(action: Action, model?: Model, pagination?: { current: number }): void {
-        const key: string = pager.getService(this.props.service, action);
-        const service: string = key.substring(key.lastIndexOf('.') + 1);
-        pager.getMeta(key).then(meta => {
-            if (meta === null) {
+    private click(action: ActionMeta, model?: Model, pagination?: { current: number }): void {
+        const service: string = pager.getService(this.props.service, action);
+        meta.get(service).then(mt => {
+            if (mt === null) {
                 return;
             }
 
             if (action.type === 'search') {
                 const page = { pageNum: pagination ? pagination.current : this.state.data.number };
-                pager.post(this.props.service, this.props.header, merger.merge(pager.getFormValue(this.props.form, this.props.props), page, this.props.parameter || {})).then(data => {
+                pager.post({
+                    service: this.props.service,
+                    header: this.props.header,
+                    parameter: merger.merge(pager.getFormValue(this.props.form, this.props.props), page, this.props.parameter || {})
+                }).then(data => {
                     if (data === null) {
                         return;
                     }
@@ -213,19 +217,23 @@ class Grid extends React.Component<Props, State> {
             }
 
             if (action.type === 'create') {
-                pager.setPage(key, meta, meta[service], {}, this.props.header, this.props.parameter);
+                pager.setPage({ service: service, data: {}, header: this.props.header, parameter: this.props.parameter });
 
                 return;
             }
 
             if (action.type === 'modify') {
-                pager.setPage(key, meta, meta[service], model, this.props.header, this.props.parameter);
+                pager.setPage({ service: service, data: model, header: this.props.header, parameter: this.props.parameter });
 
                 return;
             }
 
             if (action.type === 'delete' && model) {
-                pager.post(key, this.props.header, merger.merge(model, this.props.parameter || {})).then(data => {
+                pager.post({
+                    service: service,
+                    header: this.props.header,
+                    parameter: merger.merge(model, this.props.parameter || {})
+                }).then(data => {
                     if (data === null || !action.success) {
                         return;
                     }
@@ -237,7 +245,11 @@ class Grid extends React.Component<Props, State> {
             }
 
             if (action.type === 'post' && model) {
-                pager.post(key, this.props.header, this.mergeParameter(action, model)).then(data => {
+                pager.post({
+                    service: service,
+                    header: this.props.header,
+                    parameter: this.mergeParameter(action, model)
+                }).then(data => {
                     if (data === null || !action.success) {
                         return;
                     }
@@ -249,7 +261,7 @@ class Grid extends React.Component<Props, State> {
             }
 
             if (action.type === 'to') {
-                pager.to(key, this.props.header, this.mergeParameter(action, model));
+                pager.to({ service: service, header: this.props.header, parameter: this.mergeParameter(action, model) });
 
                 return;
             }
@@ -258,7 +270,7 @@ class Grid extends React.Component<Props, State> {
         });
     }
 
-    private mergeParameter(action: Action, model?: Model): object {
+    private mergeParameter(action: ActionMeta, model?: Model): object {
         let parameter: object = model ? merger.merge({}, model) : {};
         if (action.parameter) {
             if (model) {
@@ -291,7 +303,7 @@ class Grid extends React.Component<Props, State> {
         };
     }
 
-    private success(action: Action, model?: Model): void {
+    private success(action: ActionMeta, model?: Model): void {
         if (!action.success) {
             return;
         }

@@ -1,5 +1,6 @@
 import * as React from 'react';
-import { pager, MetaProp, PageMeta } from './pager';
+import { PropMeta, PageMeta } from './meta';
+import { pager } from './pager';
 import Grid from './grid';
 import Form from './form';
 import Dashboard from './dashboard';
@@ -11,7 +12,7 @@ export interface PageState {
     parameter?: {};
     header?: {};
     meta: PageMeta;
-    props: MetaProp[];
+    props: PropMeta[];
     data?: any;
 }
 
@@ -37,18 +38,15 @@ export class Page extends React.Component<object, PageState> {
     }
 
     private page(): JSX.Element {
-        if (this.state.meta.type === 'grid') {
-            return <Grid {...this.state} />
+        switch (this.state.meta.type) {
+            case 'grid':
+                return <Grid {...this.state} />;
+            case 'form':
+                return <Form {...this.state} />;
+            case 'settings':
+                return <Settings {...this.state} />;
+            default:
+                return <Dashboard {...this.state} />;
         }
-
-        if (this.state.meta.type === 'form') {
-            return <Form {...this.state} />
-        }
-
-        if (this.state.meta.type === 'settings') {
-            return <Settings {...this.state} />
-        }
-
-        return <Dashboard {...this.state} />
     }
 }

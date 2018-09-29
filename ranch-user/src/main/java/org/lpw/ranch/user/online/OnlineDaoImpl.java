@@ -55,4 +55,14 @@ class OnlineDaoImpl implements OnlineDao {
     public void delete(OnlineModel online) {
         liteOrm.delete(online);
     }
+
+    @Override
+    public void deleteById(String id) {
+        liteOrm.deleteById(OnlineModel.class, id);
+    }
+
+    @Override
+    public void deleteByUser(String user) {
+        liteOrm.delete(new LiteQuery(OnlineModel.class).where("c_user=?"), new Object[]{user});
+    }
 }

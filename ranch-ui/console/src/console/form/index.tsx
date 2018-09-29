@@ -1,7 +1,8 @@
 import * as React from 'react';
 import { Form, Button } from 'antd';
 import merger from '../../util/merger';
-import { pager, Action } from '../pager';
+import { ActionMeta } from '../meta';
+import { pager } from '../pager';
 import { PageState } from '../page';
 import './index.scss';
 
@@ -41,16 +42,19 @@ class FormPage extends React.Component<Props> {
         </Form>;
     }
 
-    private click(action: Action): void {
+    private click(action: ActionMeta): void {
         if (action.type === 'save' || action.type === 'modify') {
-            pager.post(pager.getService(this.props.service, action), merger.merge({}, this.props.header || {}),
-                merger.merge({}, this.props.data, pager.getFormValue(this.props.form, this.props.props), this.props.parameter || {})).then(data => {
-                    if (data === null) {
-                        return;
-                    }
+            pager.post({
+                service: pager.getService(this.props.service, action),
+                header: merger.merge({}, this.props.header || {}),
+                parameter: merger.merge({}, this.props.data, pager.getFormValue(this.props.form, this.props.props), this.props.parameter || {})
+            }).then(data => {
+                if (data === null) {
+                    return;
+                }
 
-                    pager.success(this.props.service, action, this.props.header, this.props.parameter);
-                });
+                pager.success(this.props.service, action, this.props.header, this.props.parameter);
+            });
 
             return;
         }

@@ -2,7 +2,7 @@ import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { LocaleProvider } from 'antd';
 import zh_CN from 'antd/lib/locale-provider/zh_CN';
-import { service, User } from './service';
+import { user, User } from './user';
 import SignIn from './sign-in';
 import Console from './console';
 import registerServiceWorker from './registerServiceWorker';
@@ -17,18 +17,9 @@ class Index extends React.Component<object, State> {
         super(props);
 
         this.state = {
-            user: {
-            }
+            user: user.get()
         };
         this.sign = this.sign.bind(this);
-
-        service.post('/user/sign').then(data => {
-            if (data === null) {
-                return;
-            }
-
-            this.setState({ user: data });
-        });
     }
 
     public render(): JSX.Element {
@@ -44,9 +35,12 @@ class Index extends React.Component<object, State> {
     }
 }
 
-ReactDOM.render(
-    <Index />,
-    document.getElementById('root') as HTMLElement
-);
-registerServiceWorker();
+user.sign().then(data => {
+    ReactDOM.render(
+        <Index />,
+        document.getElementById('root') as HTMLElement
+    );
+    registerServiceWorker();
+});
+
 

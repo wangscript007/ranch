@@ -10,6 +10,11 @@ import com.alibaba.fastjson.JSONObject;
  */
 public interface ClassifyHelper {
     /**
+     * 分类信息是否存在验证器Bean名称。
+     */
+    String VALIDATOR_EXISTS="ranch.classify.helper.exists";
+
+    /**
      * 获取分类信息。
      *
      * @param id ID值。

@@ -30,7 +30,7 @@ public class OnlineCtrl {
             @Validate(validator = Validators.SIGN)
     })
     public Object signOut() {
-        onlineService.signOut(request.get("user"), request.get("uid"), request.get("ip"));
+        onlineService.signOutId(request.get("id"));
 
         return "";
     }

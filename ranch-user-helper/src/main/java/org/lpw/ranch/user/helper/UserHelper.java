@@ -144,6 +144,13 @@ public interface UserHelper {
     String id();
 
     /**
+     * 获取当前登入用户等级。
+     *
+     * @return 当前登入用户等级；如果未登入则返回-1。
+     */
+    int grade();
+
+    /**
      * 检索用户ID集。
      *
      * @param idcard        身份证号；为空则表示所有。

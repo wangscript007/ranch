@@ -10,8 +10,8 @@ import javax.inject.Inject;
 /**
  * @author lpw
  */
-@Controller(AddressService.VALIDATOR_UPDATABLE)
-public class UpdatableValidatorImpl extends ValidatorSupport {
+@Controller(AddressService.VALIDATOR_OWNER)
+public class OwnerValidatorImpl extends ValidatorSupport {
     @Inject
     private UserHelper userHelper;
     @Inject
@@ -26,6 +26,6 @@ public class UpdatableValidatorImpl extends ValidatorSupport {
 
     @Override
     protected String getDefaultFailureMessageKey() {
-        return AddressModel.NAME + ".update.disabled";
+        return AddressModel.NAME + ".not-owner";
     }
 }

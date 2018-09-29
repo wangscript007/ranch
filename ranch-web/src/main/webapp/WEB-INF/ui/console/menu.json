@@ -1,100 +1,103 @@
-[
-    {
-        "label": "文档",
-        "items": [
-            {
-                "label": "文章资讯",
-                "service": "ranch.doc.lite-query",
-                "parameter": {
-                    "key": "setting.doc"
+{
+    "grade": 90,
+    "menus": [
+        {
+            "label": "文档",
+            "items": [
+                {
+                    "label": "文章资讯",
+                    "service": "ranch.doc.lite-query",
+                    "parameter": {
+                        "key": "setting.doc"
+                    }
+                },
+                {
+                    "label": "关于我们",
+                    "service": "ranch.classify.find-editor",
+                    "parameter": {
+                        "code": "setting.doc",
+                        "key": "about-us"
+                    }
+                },
+                {
+                    "icon": "contacts",
+                    "label": "联系我们",
+                    "service": "ranch.classify.find-editor",
+                    "parameter": {
+                        "code": "setting.doc",
+                        "key": "contact-us"
+                    }
                 }
-            },
-            {
-                "label": "关于我们",
-                "service": "ranch.classify.find-editor",
-                "parameter": {
-                    "code": "setting.doc",
-                    "key": "about-us"
+            ]
+        },
+        {
+            "icon": "global",
+            "label": "配置",
+            "items": [
+                {
+                    "icon": "notification",
+                    "label": "推送",
+                    "service": "ranch.push.query"
+                },
+                {
+                    "icon": "apple-o",
+                    "label": "iOS推送",
+                    "service": "ranch.push.ios.query"
+                },
+                {
+                    "icon": "aliyun",
+                    "label": "阿里云推送",
+                    "service": "ranch.push.aliyun.query"
                 }
-            },
-            {
-                "icon": "contacts",
-                "label": "联系我们",
-                "service": "ranch.classify.find-editor",
-                "parameter": {
-                    "code": "setting.doc",
-                    "key": "contact-us"
+            ]
+        },
+        {
+            "icon": "bank",
+            "label": "交易",
+            "items": [
+                {
+                    "icon": "alipay",
+                    "label": "支付宝",
+                    "service": "ranch.alipay.query"
+                },
+                {
+                    "icon": "wechat",
+                    "label": "微信",
+                    "service": "ranch.weixin.query"
                 }
-            }
-        ]
-    },
-    {
-        "icon": "global",
-        "label": "配置",
-        "items": [
-            {
-                "icon": "notification",
-                "label": "推送",
-                "service": "ranch.push.query"
-            },
-            {
-                "icon": "apple-o",
-                "label": "iOS推送",
-                "service": "ranch.push.ios.query"
-            },
-            {
-                "icon": "aliyun",
-                "label": "阿里云推送",
-                "service": "ranch.push.aliyun.query"
-            }
-        ]
-    },
-    {
-        "icon": "bank",
-        "label": "交易",
-        "items": [
-            {
-                "icon": "alipay",
-                "label": "支付宝",
-                "service": "ranch.alipay.query"
-            },
-            {
-                "icon": "wechat",
-                "label": "微信",
-                "service": "ranch.weixin.query"
-            }
-        ]
-    },
-    {
-        "icon": "setting",
-        "label": "系统",
-        "items": [
-            {
-                "icon": "profile",
-                "label": "设置",
-                "service": "settings.query"
-            },
-            {
-                "icon": "user",
-                "label": "用户",
-                "service": "ranch.user.query",
-                "parameter": {
-                    "maxGrade": 49
+            ]
+        },
+        {
+            "icon": "setting",
+            "label": "系统",
+            "items": [
+                {
+                    "icon": "profile",
+                    "label": "设置",
+                    "service": "settings.query"
+                },
+                {
+                    "icon": "user",
+                    "label": "用户",
+                    "service": "ranch.user.query",
+                    "parameter": {
+                        "maxGrade": 49
+                    }
+                },
+                {
+                    "icon": "team",
+                    "label": "管理员",
+                    "service": "ranch.user.query",
+                    "parameter": {
+                        "minGrade": 50
+                    }
+                },
+                {
+                    "icon": "bulb",
+                    "label": "在线用户",
+                    "service": "ranch.user.online.query"
                 }
-            },
-            {
-                "icon": "team",
-                "label": "管理员",
-                "service": "ranch.user.query",
-                "parameter": {
-                    "minGrade": 50
-                }
-            },
-            {
-                "icon": "bulb",
-                "label": "在线用户",
-                "service": "ranch.user.online.query"
-            }
-        ]
-    }
-]
+            ]
+        }
+    ]
+}

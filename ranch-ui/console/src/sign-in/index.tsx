@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { Layout, Form, Icon, Input, Button } from 'antd';
-import { service, User } from '../service';
+import { service } from '../service';
+import { user, User } from '../user';
 import './index.scss';
 
 const { Content } = Layout;
@@ -52,11 +53,12 @@ export default class SginIn extends React.Component<Props, object> {
             return;
         }
 
-        service.post('/user/sign-in', {}, { uid: uid.value, password: password.value }).then(data => {
+        service.post({ uri: '/user/sign-in', parameter: { uid: uid.value, password: password.value } }).then(data => {
             if (data === null) {
                 return;
             }
 
+            user.set(data);
             this.props.sign(data);
         });
     }

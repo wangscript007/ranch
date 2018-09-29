@@ -1,6 +1,5 @@
 import * as React from 'react';
-import { Upload, Icon } from 'antd';
-import http from '../../../util/http';
+import { Upload, Button, Icon } from 'antd';
 import { service } from '../../../service';
 import './index.scss';
 
@@ -15,7 +14,7 @@ interface State {
     value?: string;
 }
 
-export class Image extends React.Component<Props, State> {
+export class Attachment extends React.Component<Props, State> {
     public constructor(props: Props) {
         super(props);
 
@@ -26,27 +25,16 @@ export class Image extends React.Component<Props, State> {
         this.upload = this.upload.bind(this);
     }
 
-    public render(): JSX.Element {
+    public render(): JSX.Element[] {
         const value: string | undefined = this.state.value || this.props.value;
 
-        return (
-            <Upload name={this.props.name} listType="picture-card" className="avatar-uploader" showUploadList={false} beforeUpload={this.upload}>
-                <input type="hidden" id={'image-' + this.props.name.replace(/[^a-zA-Z0-9]+/g, '_')} value={value} />
-                {this.view(value)}
-            </Upload>
-        );
-    }
-
-    private view(value: string | undefined): JSX.Element {
-        if (this.state.loading) {
-            return <Icon type='loading' />;
-        }
-
-        if (value) {
-            return <img src={http.url(value)} />;
-        }
-
-        return <Icon type='plus' />;
+        return [
+            <Upload key="upload" name={this.props.name} showUploadList={false} beforeUpload={this.upload}>
+                <input type="hidden" id={'attachment-' + this.props.name.replace(/[^a-zA-Z0-9]+/g, '_')} value={value} />
+                {this.state.loading ? <Icon type='loading' /> : <Button key="upload" type="primary" shape="circle" icon="upload" />}
+            </Upload>,
+            <div key="value" className="attachment-value">{value || ''}</div>
+        ];
     }
 
     private upload(file: File): boolean {
@@ -82,8 +70,8 @@ export class Image extends React.Component<Props, State> {
     }
 }
 
-export function getImageValue(name: string): string {
-    const input: HTMLInputElement | null = document.querySelector('#image-' + name.replace(/[^a-zA-Z0-9]+/g, '_'));
+export function getAttachmentValue(name: string): string {
+    const input: HTMLInputElement | null = document.querySelector('#attachment-' + name.replace(/[^a-zA-Z0-9]+/g, '_'));
 
     return input === null ? '' : input.value;
 }

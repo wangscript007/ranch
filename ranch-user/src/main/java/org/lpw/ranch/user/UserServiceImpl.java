@@ -427,6 +427,8 @@ public class UserServiceImpl implements UserService {
         UserModel user = findById(id);
         user.setState(state);
         save(user);
+        if (state == 1)
+            onlineService.signOutUser(id);
     }
 
     private void save(UserModel user) {

@@ -8,9 +8,9 @@ import com.alibaba.fastjson.JSONObject;
  */
 public interface AddressService {
     /**
-     * 地址信息可更新验证器Bean名称。
+     * 地址信息是否为当前用户所有验证器Bean名称。
      */
-    String VALIDATOR_UPDATABLE = AddressModel.NAME + ".validator.updatable";
+    String VALIDATOR_OWNER = AddressModel.NAME + ".validator.owner";
 
     /**
      * 检索当前用户地址集。
@@ -23,10 +23,10 @@ public interface AddressService {
      * 保存地址信息。
      * 如果ID不存在则新增；存在则更新。
      *
-     * @param model 地址信息。
+     * @param address 地址信息。
      * @return 地址信息JSON数据。
      */
-    JSONObject save(AddressModel model);
+    JSONObject save(AddressModel address);
 
     /**
      * 使用地址。

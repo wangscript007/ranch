@@ -17,4 +17,8 @@ interface OnlineDao {
     void save(OnlineModel online);
 
     void delete(OnlineModel online);
+
+    void deleteById(String id);
+
+    void deleteByUser(String user);
 }

@@ -92,8 +92,13 @@ public class OnlineServiceImpl implements OnlineService, MinuteJob {
     }
 
     @Override
-    public void signOut(String user, String uid, String ip) {
-        onlineDao.query(getUser(user, uid), ip, 0, 0).getList().forEach(onlineDao::delete);
+    public void signOutId(String id) {
+        onlineDao.deleteById(id);
+    }
+
+    @Override
+    public void signOutUser(String user) {
+        onlineDao.deleteByUser(user);
     }
 
     private String getUser(String user, String uid) {

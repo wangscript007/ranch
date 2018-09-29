@@ -3,44 +3,16 @@ import { Input, Radio, Select, DatePicker, InputNumber } from 'antd';
 import moment from 'moment';
 import merger from '../util/merger';
 import { service } from '../service';
+import { meta, PropMeta, PageMeta, ActionMeta } from './meta';
 import { Page } from './page';
 import { Image, getImageValue } from './ui/image';
+import { Attachment, getAttachmentValue } from './ui/attachment';
 
-export interface Meta {
-    props: MetaProp[];
-}
-
-export interface MetaProp {
-    name: string;
-    label?: string;
-    type?: string;
-    labels?: string[];
-    values?: object;
-    upload?: string;
-    ignore?: string[];
-}
-
-export interface PageMeta {
-    type: string;
-    service?: string;
+export interface Request {
+    service: string;
+    meta?: string;
+    header?: object;
     parameter?: object;
-    search?: MetaProp[];
-    toolbar?: Action[];
-    ops?: Action[];
-}
-
-export interface Action {
-    type: string;
-    service?: string;
-    icon?: string;
-    label?: string;
-    when?: string;
-    parameter?: {};
-    success?: {
-        service: string,
-        header?: {},
-        parameter?: {}
-    };
 }
 
 export interface Model {
@@ -63,68 +35,53 @@ const DateFormat = 'YYYY-MM-DD';
 
 class Pager {
     private page: Page;
-    private metas: { [key: string]: Meta } = {};
     private key: string;
 
     public bind(page: Page): void {
         this.page = page;
     }
 
-    public to(key: string, header?: {}, parameter?: {}): void {
-        this.getMeta(key).then(meta => {
-            if (meta === null) {
+    public to(request: Request): void {
+        meta.get(request.service).then(mt => {
+            if (mt === null) {
                 return;
             }
 
-            const pageMeta = meta[key.substring(key.lastIndexOf('.') + 1)];
-            let postKey = key;
-            if (pageMeta.service) {
-                postKey = key.substring(0, key.lastIndexOf('.') + 1) + pageMeta.service;
-            }
-            this.post(postKey, header, parameter).then(data => {
-                this.setPage(key, meta, pageMeta, data, header, parameter);
+            this.post(request).then(data => {
+                if (data === null) {
+                    return;
+                }
+
+                this.setPage({
+                    service: request.service,
+                    data: data,
+                    header: request.header,
+                    parameter: request.parameter
+                });
             });
         });
     }
 
-    public getMeta(key: string): Promise<Meta> {
-        this.key = key.substring(0, key.lastIndexOf('.'));
-        if (this.metas.hasOwnProperty(this.key)) {
-            return new Promise((resolve, reject) => {
-                resolve(this.metas[this.key]);
-            });
-        }
-
-        return service.post('/ui/console/meta', { key: this.key }, {}).then(data => {
-            if (data === null) {
-                return null;
-            }
-
-            this.metas[this.key] = data;
-
-            return data;
-        });
-    }
-
-    public setPage(key: string, meta: Meta, pageMeta: PageMeta, data: any, header?: {}, parameter?: {}): void {
+    public setPage(page: { service: string, data: any, header?: object, parameter?: object }): void {
+        const name: string = page.service.substring(page.service.lastIndexOf(page.service.indexOf('.') === -1 ? '/' : '.') + 1);
+        const pageMeta: PageMeta = meta.now()[name];
         this.toolbar(pageMeta.toolbar);
         this.page.setState({ service: 'blank' }, () => {
             this.page.setState({
-                service: key,
-                header: header,
-                parameter: parameter,
+                service: page.service,
+                header: page.header,
+                parameter: page.parameter,
                 meta: pageMeta,
-                props: this.ignoreProps(key, meta.props),
-                data: data
+                props: this.ignoreProps(name),
+                data: page.data
             });
         });
     }
 
-    private ignoreProps(key: string, props: MetaProp[]): MetaProp[] {
-        const array: MetaProp[] = [];
-        const suffix = key.substring(key.lastIndexOf('.') + 1);
-        for (const prop of props) {
-            if (!this.ignorable(prop, suffix)) {
+    private ignoreProps(name: string): PropMeta[] {
+        const array: PropMeta[] = [];
+        for (const prop of meta.now().props) {
+            if (!this.ignorable(prop, name)) {
                 array.push(prop);
             }
         }
@@ -132,13 +89,13 @@ class Pager {
         return array;
     }
 
-    private ignorable(prop: MetaProp, suffix: string): boolean {
+    private ignorable(prop: PropMeta, name: string): boolean {
         if (!prop.ignore || prop.ignore.length === 0) {
             return false;
         }
 
-        for (const i of prop.ignore) {
-            if (i === suffix) {
+        for (const ignore of prop.ignore) {
+            if (ignore === name) {
                 return true;
             }
         }
@@ -146,7 +103,7 @@ class Pager {
         return false;
     }
 
-    private toolbar(toolbar?: Action[]): void {
+    private toolbar(toolbar?: ActionMeta[]): void {
         if (!toolbar) {
             return;
         }
@@ -170,7 +127,7 @@ class Pager {
         return undefined;
     }
 
-    public getInput(form: any, prop: MetaProp, data?: {}): JSX.Element {
+    public getInput(form: any, prop: PropMeta, data?: {}): JSX.Element {
         const { getFieldDecorator } = form;
         const config = {
             initialValue: this.getModelValue(data, prop.name)
@@ -188,7 +145,7 @@ class Pager {
         return getFieldDecorator(prop.name, config)(this.getInputElement(prop));
     }
 
-    private getInputElement(prop: MetaProp): JSX.Element {
+    private getInputElement(prop: PropMeta): JSX.Element {
         if (prop.labels) {
             if (prop.labels.length <= 3) {
                 return (
@@ -222,31 +179,24 @@ class Pager {
             );
         }
 
-        if (prop.type === 'date') {
-            return <DatePicker format={DateFormat} />;
+        switch (prop.type) {
+            case 'date':
+                return <DatePicker format={DateFormat} />;
+            case 'date-range':
+                return <DatePicker.RangePicker format={DateFormat} />;
+            case 'number':
+                return <InputNumber />;
+            case 'read-only':
+                return <Input readOnly={true} />;
+            case 'text-area':
+                return <TextArea autosize={{ minRows: 4, maxRows: 16 }} />;
+            case 'image':
+                return <Image name={prop.name} upload={prop.upload || (this.key + '.' + prop.name)} />;
+            case 'attachment':
+                return <Attachment name={prop.name} upload={prop.upload || (this.key + '.' + prop.name)} />;
+            default:
+                return <Input />;
         }
-
-        if (prop.type === 'date-range') {
-            return <DatePicker.RangePicker format={DateFormat} />;
-        }
-
-        if (prop.type === 'number') {
-            return <InputNumber />;
-        }
-
-        if (prop.type === 'read-only') {
-            return <Input readOnly={true} />;
-        }
-
-        if (prop.type === 'text-area') {
-            return <TextArea autosize={{ minRows: 4, maxRows: 16 }} />;
-        }
-
-        if (prop.type === 'image') {
-            return <Image name={prop.name} upload={prop.upload || (this.key + '.' + prop.name)} />;
-        }
-
-        return <Input />;
     }
 
     public getModelValue(model?: Model, name?: string): any {
@@ -274,7 +224,7 @@ class Pager {
         return obj;
     }
 
-    public getFormValue(form: any, props: MetaProp[]): {} {
+    public getFormValue(form: any, props: PropMeta[]): {} {
         const obj = {};
         const { getFieldValue } = form;
         props.map(prop => {
@@ -284,6 +234,12 @@ class Pager {
 
             if (prop.type === 'image') {
                 obj[prop.name] = getImageValue(prop.name);
+
+                return;
+            }
+
+            if (prop.type === 'attachment') {
+                obj[prop.name] = getAttachmentValue(prop.name);
 
                 return;
             }
@@ -306,19 +262,30 @@ class Pager {
         return obj;
     }
 
-    public getService(key: string, action: Action, service?: string): string {
-        const k = service || action.service || '.' + action.type;
+    public getService(key: string, action: ActionMeta, service?: string): string {
+        const k = service || action.service || ((key.charAt(0) === '/' ? '#' : '.') + action.type);
+        if (k.charAt(0) === '.') {
+            return key.substring(0, key.lastIndexOf('.')) + k;
+        }
 
-        return k.charAt(0) === '.' ? (key.substring(0, key.lastIndexOf('.')) + k) : k;
+        if (k.charAt(0) === '#') {
+            return key.substring(0, key.lastIndexOf('/') + 1) + k.substring(1);
+        }
+
+        return k;
     }
 
-    public success(key: string, action: Action, header?: {}, parameter?: {}, model?: {}): void {
+    public success(key: string, action: ActionMeta, header?: {}, parameter?: {}, model?: {}): void {
         if (!action.success) {
             return;
         }
 
         if (typeof action.success === 'string') {
-            pager.to(this.getService(key, action, action.success), header, parameter);
+            pager.to({
+                service: this.getService(key, action, action.success),
+                header: header,
+                parameter: parameter
+            });
 
             return;
         }
@@ -335,11 +302,27 @@ class Pager {
             }
         }
 
-        pager.to(this.getService(key, action, action.success.service), merger.merge(header || {}, action.success.header || {}), param);
+        pager.to({
+            service: this.getService(key, action, action.success.service),
+            header: merger.merge(header || {}, action.success.header || {}),
+            parameter: param
+        });
     }
 
-    public post(key: string, header: object = {}, parameter: object = {}): Promise<any> {
-        return service.post('/ui/console/service', merger.merge({}, header, { key: key }), parameter);
+    public post(request: Request): Promise<any> {
+        if (request.service.charAt(0) === '/') {
+            return service.post({
+                uri: request.service,
+                header: request.header,
+                parameter: request.parameter
+            });
+        }
+
+        return service.post({
+            uri: '/ui/console/service',
+            header: merger.merge({}, request.header || {}, { key: request.service }),
+            parameter: request.parameter
+        });
     }
 }
 

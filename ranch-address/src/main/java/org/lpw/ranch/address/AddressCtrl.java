@@ -1,5 +1,6 @@
 package org.lpw.ranch.address;
 
+import org.lpw.ranch.classify.helper.ClassifyHelper;
 import org.lpw.ranch.user.helper.UserHelper;
 import org.lpw.tephra.ctrl.context.Request;
 import org.lpw.tephra.ctrl.execute.Execute;
@@ -41,7 +42,8 @@ public class AddressCtrl {
             @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "label", failureCode = 10),
             @Validate(validator = Validators.BETWEEN, number = {0, 1}, parameter = "major", failureCode = 11),
             @Validate(validator = UserHelper.VALIDATOR_SIGN_IN),
-            @Validate(validator = AddressService.VALIDATOR_UPDATABLE, emptyable = true, parameter = "id", failureCode = 1)
+            @Validate(validator = ClassifyHelper.VALIDATOR_EXISTS, parameter = "region", failureCode = 12),
+            @Validate(validator = AddressService.VALIDATOR_OWNER, emptyable = true, parameter = "id", failureCode = 1)
     })
     public Object save() {
         return addressService.save(request.setToModel(AddressModel.class));
@@ -49,7 +51,7 @@ public class AddressCtrl {
 
     @Execute(name = "use", validates = {
             @Validate(validator = UserHelper.VALIDATOR_SIGN_IN),
-            @Validate(validator = AddressService.VALIDATOR_UPDATABLE, parameter = "id", failureCode = 1)
+            @Validate(validator = AddressService.VALIDATOR_OWNER, parameter = "id", failureCode = 1)
     })
     public Object use() {
         return addressService.use(request.get("id"));
@@ -57,7 +59,7 @@ public class AddressCtrl {
 
     @Execute(name = "major", validates = {
             @Validate(validator = UserHelper.VALIDATOR_SIGN_IN),
-            @Validate(validator = AddressService.VALIDATOR_UPDATABLE, parameter = "id", failureCode = 1)
+            @Validate(validator = AddressService.VALIDATOR_OWNER, parameter = "id", failureCode = 1)
     })
     public Object major() {
         return addressService.major(request.get("id"));
@@ -65,7 +67,7 @@ public class AddressCtrl {
 
     @Execute(name = "delete", validates = {
             @Validate(validator = UserHelper.VALIDATOR_SIGN_IN),
-            @Validate(validator = AddressService.VALIDATOR_UPDATABLE, parameter = "id", failureCode = 1)
+            @Validate(validator = AddressService.VALIDATOR_OWNER, parameter = "id", failureCode = 1)
     })
     public Object delete() {
         addressService.delete(request.get("id"));

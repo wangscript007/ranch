@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { Form, Button } from 'antd';
-import { pager, Action } from '../pager';
+import { ActionMeta } from '../meta';
+import { pager } from '../pager';
 import { PageState } from '../page';
 
 interface Props extends PageState {
@@ -11,7 +12,12 @@ class Settings extends React.Component<Props> {
     public constructor(props: Props) {
         super(props);
 
-        pager.post('ranch.classify.list', {}, { code: "settings" }).then(data => {
+        pager.post({
+            service: 'ranch.classify.list',
+            parameter: {
+                code: "settings"
+            }
+        }).then(data => {
             if (data === null) {
                 return;
             }
@@ -57,7 +63,7 @@ class Settings extends React.Component<Props> {
         );
     }
 
-    private click(action: Action): void {
+    private click(action: ActionMeta): void {
         const array: Array<{}> = [];
         const obj = pager.getFormValue(this.props.form, this.props.props);
         this.props.props.map(prop => {
@@ -72,8 +78,11 @@ class Settings extends React.Component<Props> {
                 name: prop.label
             });
         });
-        pager.post('ranch.classify.saves', {}, {
-            classifies: JSON.stringify(array)
+        pager.post({
+            service: 'ranch.classify.saves',
+            parameter: {
+                classifies: JSON.stringify(array)
+            }
         });
     }
 }

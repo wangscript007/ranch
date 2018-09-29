@@ -22,19 +22,21 @@ public interface ConsoleService {
     boolean permit();
 
     /**
-     * 获取菜单集。
+     * 获取菜单。
      *
-     * @return 菜单集。
+     * @param domain 所属域。
+     * @return 菜单。
      */
-    JSONArray menus();
+    JSONObject menu(String domain);
 
     /**
      * 获取模块元数据。
      *
-     * @param key 模块key。
+     * @param domain 所属域。
+     * @param key    模块key。
      * @return 模块元数据；如果不存在则返回空JSON。
      */
-    JSONObject meta(String key);
+    JSONObject meta(String domain, String key);
 
     /**
      * 执行服务。

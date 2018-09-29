@@ -44,11 +44,16 @@ public interface OnlineService {
     void signOut();
 
     /**
-     * 登出。
+     * 强制登出。
      *
-     * @param user 用户ID。
-     * @param uid  认证ID。
-     * @param ip   IP地址。
+     * @param id ID值。
      */
-    void signOut(String user, String uid, String ip);
+    void signOutId(String id);
+
+    /**
+     * 强制登出。
+     *
+     * @param user 用户ID值。
+     */
+    void signOutUser(String user);
 }

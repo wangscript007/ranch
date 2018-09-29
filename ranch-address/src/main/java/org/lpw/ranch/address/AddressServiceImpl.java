@@ -31,28 +31,17 @@ public class AddressServiceImpl implements AddressService {
 
     @Override
     public JSONArray query() {
-        JSONArray array = new JSONArray();
-        addressDao.query(userHelper.id()).getList().forEach(address -> array.add(getJson(address)));
-
-        return array;
+        return modelHelper.toJson(addressDao.query(userHelper.id()).getList(), this::getJson);
     }
 
     @Override
-    public JSONObject save(AddressModel model) {
-        AddressModel address = validator.isEmpty(model.getId()) ? new AddressModel() : addressDao.findById(model.getId());
-        String user = userHelper.id();
-        address.setUser(user);
-        address.setRegion(model.getRegion());
-        address.setDetail(model.getDetail());
-        address.setPostcode(model.getPostcode());
-        address.setName(model.getName());
-        address.setPhone(model.getPhone());
-        address.setLatitude(model.getLatitude());
-        address.setLongitude(model.getLongitude());
-        address.setLabel(model.getLabel());
-        address.setMajor(model.getMajor());
+    public JSONObject save(AddressModel address) {
+        AddressModel model = validator.isEmpty(address.getId()) ? null : addressDao.findById(address.getId());
+        if (model == null)
+            address.setId(null);
+        address.setUser(userHelper.id());
         if (address.getMajor() == 1)
-            addressDao.major(user, 0);
+            addressDao.major(address.getUser(), 0);
 
         return update(address);
     }

@@ -2,9 +2,10 @@ import * as React from 'react';
 import { Layout, Menu, Dropdown, Avatar, Icon } from 'antd';
 import storage from '../util/storage';
 import http from '../util/http';
-import { service, User } from '../service';
+import { service } from '../service';
+import { User } from '../user';
 import { Page } from './page';
-import { pager } from './pager';
+import { pager, Request } from './pager';
 import './index.scss';
 
 const { Header, Sider, Content } = Layout;
@@ -23,12 +24,9 @@ interface State {
     }>;
 }
 
-interface MenuItem {
+interface MenuItem extends Request {
     icon?: string;
     label: string;
-    service: string;
-    header?: {};
-    parameter?: {};
 }
 
 export default class Console extends React.Component<Props, State> {
@@ -39,12 +37,12 @@ export default class Console extends React.Component<Props, State> {
             menus: []
         };
 
-        service.post('/ui/console/menu').then(data => {
+        service.post({ uri: '/ui/console/menu' }).then(data => {
             if (data === null) {
                 return;
             }
 
-            this.setState({ menus: data })
+            this.setState({ menus: data.menus })
         });
     }
 
@@ -93,15 +91,15 @@ export default class Console extends React.Component<Props, State> {
     }
 
     private item(item: MenuItem): void {
-        pager.to(item.service, item.header, item.parameter);
+        pager.to(item);
     }
 
     private sign(): void {
-        pager.to('ranch.user.sign');
+        pager.to({ service: '/user/sign' });
     }
 
     private signOut(): void {
-        service.post('/user/sign-out').then(data => {
+        service.post({ uri: '/user/sign-out' }).then(data => {
             storage.remove('tephra-session-id');
             location.reload();
         });

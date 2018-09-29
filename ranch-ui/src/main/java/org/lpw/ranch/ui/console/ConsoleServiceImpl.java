@@ -4,8 +4,6 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import org.lpw.ranch.user.helper.UserHelper;
 import org.lpw.ranch.util.Carousel;
-import org.lpw.tephra.storage.StorageListener;
-import org.lpw.tephra.storage.Storages;
 import org.lpw.tephra.util.Context;
 import org.lpw.tephra.util.Io;
 import org.lpw.tephra.util.Json;
@@ -18,12 +16,13 @@ import org.springframework.stereotype.Service;
 import javax.inject.Inject;
 import java.util.Arrays;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author lpw
  */
 @Service(ConsoleModel.NAME + ".service")
-public class ConsoleServiceImpl implements ConsoleService, StorageListener {
+public class ConsoleServiceImpl implements ConsoleService {
     @Inject
     private Validator validator;
     @Inject
@@ -42,31 +41,48 @@ public class ConsoleServiceImpl implements ConsoleService, StorageListener {
     private MetaHelper metaHelper;
     @Inject
     private UserHelper userHelper;
-    @Value("${" + ConsoleModel.NAME + ".menu:/WEB-INF/ui/console/menu.json}")
-    private String menu;
-    private JSONArray menus;
+    @Value("${" + ConsoleModel.NAME + ".root:/WEB-INF/ui/}")
+    private String root;
+    private Map<String, JSONObject> map = new ConcurrentHashMap<>();
 
     @Override
     public boolean permit() {
-        return userHelper.sign().getIntValue("grade") >= 90;
+        return userHelper.grade() >= 90;
     }
 
     @Override
-    public JSONArray menus() {
-        return permit() ? menus : new JSONArray();
+    public JSONObject menu(String domain) {
+        JSONObject menu = map.computeIfAbsent(domain, key -> {
+            JSONObject object = json.toObject(io.readAsString(context.getAbsolutePath(root + domain + "/menu.json")));
+            if (object == null) {
+                logger.warn(null, "读取[{}]菜单配置失败！", key);
+
+                return new JSONObject();
+            }
+
+            if (logger.isInfoEnable())
+                if (logger.isInfoEnable())
+                    logger.info("载入菜单配置[{}:{}]。", key, object);
+
+            return object;
+        });
+
+        if (menu.containsKey("grade") && menu.getIntValue("grade") > userHelper.grade())
+            return new JSONObject();
+
+        return menu;
     }
 
     @Override
-    public JSONObject meta(String key) {
-        JSONObject meta = metaHelper.get(key);
+    public JSONObject meta(String domain, String key) {
+        JSONObject meta = metaHelper.get(domain, key);
         if (meta == null)
             return new JSONObject();
 
-        meta = json.toObject(meta.toJSONString());
         String prefix = meta.getString("key");
         setLabel(prefix, meta, "props", "name");
         for (String k : meta.keySet()) {
-            if (k.equals("key") || k.equals("props"))
+            if (k.equals("key") || k.equals("uri") || k.equals("props"))
                 continue;
 
             JSONObject object = meta.getJSONObject(k);
@@ -122,22 +138,5 @@ public class ConsoleServiceImpl implements ConsoleService, StorageListener {
     @Override
     public JSONObject service(String service, Map<String, String> parameter) {
         return carousel.service(service, null, parameter, false);
-    }
-
-    @Override
-    public String getStorageType() {
-        return Storages.TYPE_DISK;
-    }
-
-    @Override
-    public String[] getScanPathes() {
-        return new String[]{menu};
-    }
-
-    @Override
-    public void onStorageChanged(String path, String absolutePath) {
-        menus = json.toArray(io.readAsString(absolutePath));
-        if (logger.isInfoEnable())
-            logger.info("载入菜单配置[{}:{}]。", absolutePath, menus.toJSONString());
     }
 }

@@ -1,5 +1,6 @@
 package org.lpw.ranch.ui.console;
 
+import org.lpw.ranch.user.helper.UserHelper;
 import org.lpw.tephra.ctrl.context.Header;
 import org.lpw.tephra.ctrl.context.Request;
 import org.lpw.tephra.ctrl.execute.Execute;
@@ -25,21 +26,26 @@ public class ConsoleCtrl {
     @Inject
     private ConsoleService consoleService;
 
-    @Execute(name = "menu")
+    @Execute(name = "menu", validates = {
+            @Validate(validator = Validators.NOT_EMPTY, scope = Validate.Scope.Header, parameter = "domain", failureCode = 1),
+            @Validate(validator = UserHelper.VALIDATOR_SIGN_IN)
+    })
     public Object menu() {
-        return consoleService.menus();
+        return consoleService.menu(header.get("domain"));
     }
 
     @Execute(name = "meta", validates = {
-            @Validate(validator = Validators.NOT_EMPTY, scope = Validate.Scope.Header, parameter = "key", failureCode = 1)
+            @Validate(validator = Validators.NOT_EMPTY, scope = Validate.Scope.Header, parameter = "domain", failureCode = 1),
+            @Validate(validator = Validators.NOT_EMPTY, scope = Validate.Scope.Header, parameter = "key", failureCode = 2)
     })
     public Object meta() {
-        return consoleService.meta(header.get("key"));
+        return consoleService.meta(header.get("domain"), header.get("key"));
     }
 
     @Execute(name = "service", validates = {
-            @Validate(validator = Validators.NOT_EMPTY, scope = Validate.Scope.Header, parameter = "key", failureCode = 1),
-            @Validate(validator = ConsoleService.VALIDATOR_PERMIT, scope = Validate.Scope.Header, parameter = "key", failureCode = 2)
+            @Validate(validator = Validators.NOT_EMPTY, scope = Validate.Scope.Header, parameter = "key", failureCode = 2),
+            @Validate(validator = UserHelper.VALIDATOR_SIGN_IN),
+            @Validate(validator = ConsoleService.VALIDATOR_PERMIT, scope = Validate.Scope.Header, parameter = "key", failureCode = 3)
     })
     public Object service() {
         return consoleService.service(header.get("key"), request.getMap());
