@@ -146,5 +146,14 @@
                 "icon": "save"
             }
         ]
+    },
+    "password": {
+        "type": "password",
+        "toolbar": [
+            {
+                "type": "modify",
+                "icon": "save"
+            }
+        ]
     }
 }

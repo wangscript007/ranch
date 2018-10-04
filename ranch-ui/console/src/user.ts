@@ -1,3 +1,4 @@
+import storage from './util/storage';
 import { service } from './service';
 
 export interface User {
@@ -19,6 +20,13 @@ class UserHelper {
 
     public set(user: User): void {
         this.user = user;
+    }
+
+    public out(): void {
+        service.post({ uri: '/user/sign-out' }).then(data => {
+            storage.remove('tephra-session-id');
+            location.reload();
+        });
     }
 }
 

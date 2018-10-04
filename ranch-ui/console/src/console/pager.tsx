@@ -179,6 +179,8 @@ class Pager {
         }
 
         switch (prop.type) {
+            case 'password':
+                return <Input type="password" />;
             case 'date':
                 return <DatePicker format={DateFormat} />;
             case 'date-range':

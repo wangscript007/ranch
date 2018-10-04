@@ -4,6 +4,7 @@ import { pager } from './pager';
 import Grid from './grid';
 import Form from './form';
 import Dashboard from './dashboard';
+import Password from './user/password';
 import Settings from './settings';
 import './page.scss';
 
@@ -43,6 +44,8 @@ export class Page extends React.Component<object, PageState> {
                 return <Grid {...this.state} />;
             case 'form':
                 return <Form {...this.state} />;
+            case 'password':
+                return <Password {...this.state} />;
             case 'settings':
                 return <Settings {...this.state} />;
             default:

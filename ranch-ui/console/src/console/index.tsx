@@ -1,9 +1,9 @@
 import * as React from 'react';
 import { Layout, Menu, Dropdown, Avatar, Icon } from 'antd';
-import storage from '../util/storage';
 import http from '../util/http';
 import { service } from '../service';
-import { User } from '../user';
+import { User, user } from '../user';
+import { meta } from './meta';
 import { Page } from './page';
 import { pager, Request } from './pager';
 import './index.scss';
@@ -55,9 +55,12 @@ export default class Console extends React.Component<Props, State> {
                             <Menu.Item>
                                 <div onClick={this.sign}><Icon type="form" /> 修改信息</div>
                             </Menu.Item>
+                            <Menu.Item>
+                                <div onClick={this.password}><Icon type="lock" /> 修改密码</div>
+                            </Menu.Item>
                             <Divider />
                             <Menu.Item>
-                                <div onClick={this.signOut}><Icon type="logout" /> 登出</div>
+                                <div onClick={user.out}><Icon type="logout" /> 登出</div>
                             </Menu.Item>
                         </Menu>
                     }>
@@ -100,10 +103,16 @@ export default class Console extends React.Component<Props, State> {
         });
     }
 
-    private signOut(): void {
-        service.post({ uri: '/user/sign-out' }).then(data => {
-            storage.remove('tephra-session-id');
-            location.reload();
+    private password(): void {
+        meta.get('/user/password').then(data => {
+            if (data === null) {
+                return;
+            }
+
+            pager.setPage({
+                service: '/user/password',
+                data: {}
+            });
         });
     }
 }
