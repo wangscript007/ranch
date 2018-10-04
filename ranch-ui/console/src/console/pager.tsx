@@ -35,7 +35,6 @@ const DateFormat = 'YYYY-MM-DD';
 
 class Pager {
     private page: Page;
-    private key: string;
 
     public bind(page: Page): void {
         this.page = page;
@@ -191,9 +190,9 @@ class Pager {
             case 'text-area':
                 return <TextArea autosize={{ minRows: 4, maxRows: 16 }} />;
             case 'image':
-                return <Image name={prop.name} upload={prop.upload || (this.key + '.' + prop.name)} />;
+                return <Image name={prop.name} upload={prop.upload || (meta.now().key + '.' + prop.name)} />;
             case 'attachment':
-                return <Attachment name={prop.name} upload={prop.upload || (this.key + '.' + prop.name)} />;
+                return <Attachment name={prop.name} upload={prop.upload || (meta.now().key + '.' + prop.name)} />;
             default:
                 return <Input />;
         }
@@ -214,7 +213,7 @@ class Pager {
 
         let obj: any = model;
         for (const n of name.split('.')) {
-            if (!obj.hasOwnProperty(n)) {
+            if (!obj || !obj.hasOwnProperty(n)) {
                 return '';
             }
 

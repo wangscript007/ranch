@@ -95,7 +95,9 @@ export default class Console extends React.Component<Props, State> {
     }
 
     private sign(): void {
-        pager.to({ service: '/user/sign' });
+        pager.to({
+            service: '/user/sign'
+        });
     }
 
     private signOut(): void {

@@ -79,8 +79,6 @@ class MetaHelper {
     }
 
     public now(): Meta {
-        console.log(this.key);
-        console.log(this.map[this.key]);
         return this.map[this.key];
     }
 }

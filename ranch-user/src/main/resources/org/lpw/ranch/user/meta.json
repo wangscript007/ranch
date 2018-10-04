@@ -1,5 +1,6 @@
 {
     "key": "ranch.user",
+    "uri": "/user/",
     "props": [
         {
             "name": "portrait",
