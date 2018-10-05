@@ -6,7 +6,6 @@ import org.lpw.tephra.cache.Cache;
 import org.lpw.tephra.dao.model.ModelHelper;
 import org.lpw.tephra.util.DateTime;
 import org.lpw.tephra.util.Validator;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
@@ -30,8 +29,6 @@ public class AuthServiceImpl implements AuthService {
     private UserService userService;
     @Inject
     private AuthDao authDao;
-    @Value("${" + AuthModel.NAME + ".bind.effective:604800}")
-    private long effective;
 
     @Override
     public JSONArray query(String user) {
