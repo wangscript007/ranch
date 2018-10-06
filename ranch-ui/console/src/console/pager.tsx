@@ -132,7 +132,7 @@ class Pager {
             initialValue: this.getModelValue(data, prop.name)
         };
         if (prop.labels && typeof config.initialValue === 'string') {
-            config.initialValue = config.initialValue ? parseInt(config.initialValue) : 0;
+            config.initialValue = config.initialValue ? parseInt(config.initialValue, 10) : 0;
         }
         else if (prop.type === 'date') {
             if (config.initialValue === '') {
