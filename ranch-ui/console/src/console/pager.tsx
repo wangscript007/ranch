@@ -131,7 +131,10 @@ class Pager {
         const config = {
             initialValue: this.getModelValue(data, prop.name)
         };
-        if (prop.type === 'date') {
+        if (prop.labels && typeof config.initialValue === 'string') {
+            config.initialValue = config.initialValue ? parseInt(config.initialValue) : 0;
+        }
+        else if (prop.type === 'date') {
             if (config.initialValue === '') {
                 delete config.initialValue;
             } else {
@@ -148,7 +151,7 @@ class Pager {
         if (prop.labels) {
             if (prop.labels.length <= 3) {
                 return (
-                    <RadioGroup >
+                    <RadioGroup>
                         {prop.labels.map((label, i) => <Radio key={i} value={i}>{label}</Radio>)}
                     </RadioGroup>
                 );
@@ -165,7 +168,7 @@ class Pager {
             const keys = Object.keys(prop.values);
             if (keys.length <= 3) {
                 return (
-                    <RadioGroup >
+                    <RadioGroup>
                         {keys.map((key) => <Radio key={key} value={key}>{(prop.values || {})[key]}</Radio>)}
                     </RadioGroup>
                 );

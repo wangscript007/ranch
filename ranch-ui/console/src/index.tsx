@@ -23,11 +23,7 @@ class Index extends React.Component<object, State> {
     }
 
     public render(): JSX.Element {
-        return (
-            <LocaleProvider locale={zh_CN}>
-                {this.state.user.id ? <Console user={this.state.user} /> : <SignIn sign={this.sign} />}
-            </LocaleProvider>
-        );
+        return this.state.user.id ? <Console user={this.state.user} /> : <SignIn sign={this.sign} />;
     }
 
     private sign(user: User): void {
@@ -37,7 +33,7 @@ class Index extends React.Component<object, State> {
 
 user.sign().then(data => {
     ReactDOM.render(
-        <Index />,
+        <LocaleProvider locale={zh_CN}><Index /></LocaleProvider>,
         document.getElementById('root') as HTMLElement
     );
     registerServiceWorker();
