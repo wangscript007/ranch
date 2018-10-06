@@ -59,7 +59,7 @@ class Grid extends React.Component<Props, State> {
         props.map(prop =>
             searchToolbar.push(
                 <Form.Item key={prop.name} label={prop.label} >
-                    {pager.getInput(this.props.form, prop, {})}
+                    {pager.getInput(this.props.form, prop, {}, true)}
                 </Form.Item>
             )
         );

@@ -126,7 +126,7 @@ class Pager {
         return undefined;
     }
 
-    public getInput(form: any, prop: PropMeta, data?: {}): JSX.Element {
+    public getInput(form: any, prop: PropMeta, data?: {}, search?: boolean): JSX.Element {
         const { getFieldDecorator } = form;
         const config = {
             initialValue: this.getModelValue(data, prop.name)
@@ -144,10 +144,10 @@ class Pager {
             config.initialValue = (config.initialValue * 0.01).toFixed(2);
         }
 
-        return getFieldDecorator(prop.name, config)(this.getInputElement(prop));
+        return getFieldDecorator(prop.name, config)(this.getInputElement(prop, search));
     }
 
-    private getInputElement(prop: PropMeta): JSX.Element {
+    private getInputElement(prop: PropMeta, search?: boolean): JSX.Element {
         if (prop.labels) {
             if (prop.labels.length <= 3) {
                 return (
@@ -159,6 +159,7 @@ class Pager {
 
             return (
                 <Select style={{ minWidth: 200 }}>
+                    {search ? <Option value="">全部</Option> : null}
                     {prop.labels.map((label, i) => <Option key={i} value={i}>{label}</Option>)}
                 </Select>
             );
@@ -176,6 +177,7 @@ class Pager {
 
             return (
                 <Select style={{ minWidth: 200 }}>
+                    {search ? <Option value="">全部</Option> : null}
                     {keys.map((key) => <Option key={key} value={key}>{(prop.values || {})[key]}</Option>)}
                 </Select>
             );
