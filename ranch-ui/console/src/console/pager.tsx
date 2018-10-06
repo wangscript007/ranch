@@ -131,10 +131,9 @@ class Pager {
         const config = {
             initialValue: this.getModelValue(data, prop.name)
         };
-        if (prop.labels && typeof config.initialValue === 'string') {
-            config.initialValue = config.initialValue ? parseInt(config.initialValue, 10) : 0;
-        }
-        else if (prop.type === 'date') {
+        if (prop.labels && config.initialValue && typeof config.initialValue === 'string') {
+            config.initialValue = parseInt(config.initialValue, 10);
+        } else if (prop.type === 'date') {
             if (config.initialValue === '') {
                 delete config.initialValue;
             } else {
