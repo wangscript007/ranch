@@ -148,7 +148,7 @@ class Pager {
 
     private getInputElement(prop: PropMeta, search?: boolean): JSX.Element {
         if (prop.labels) {
-            if (prop.labels.length <= 3) {
+            if (!search && prop.labels.length <= 3) {
                 return (
                     <RadioGroup>
                         {prop.labels.map((label, i) => <Radio key={i} value={i}>{label}</Radio>)}
@@ -166,7 +166,7 @@ class Pager {
 
         if (prop.values) {
             const keys = Object.keys(prop.values);
-            if (keys.length <= 3) {
+            if (!search && keys.length <= 3) {
                 return (
                     <RadioGroup>
                         {keys.map((key) => <Radio key={key} value={key}>{(prop.values || {})[key]}</Radio>)}
