@@ -47,12 +47,17 @@ class Grid extends React.Component<Props, State> {
 
         const props: PropMeta[] = [];
         for (const s of this.props.meta.search) {
+            let has: boolean = false;
             for (const p of this.props.props) {
                 if (s.name === p.name) {
                     props.push(merger.merge({ name: '' }, p, s));
+                    has = true;
 
                     break;
                 }
+            }
+            if (!has) {
+                props.push(s);
             }
         }
 
