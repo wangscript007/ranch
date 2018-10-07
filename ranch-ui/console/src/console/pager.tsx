@@ -71,30 +71,54 @@ class Pager {
                 header: page.header,
                 parameter: page.parameter,
                 meta: pageMeta,
-                props: this.ignoreProps(name),
+                props: this.getProps(name),
                 data: page.data
             });
         });
     }
 
-    private ignoreProps(name: string): PropMeta[] {
+    private getProps(name: string): PropMeta[] {
         const array: PropMeta[] = [];
         for (const prop of meta.now().props) {
-            if (!this.ignorable(prop, name)) {
-                array.push(prop);
+            if (this.ignore(prop, name)) {
+                continue;
             }
+
+            if (this.readonly(prop, name)) {
+                prop.readonly = true;
+            }
+            array.push(prop);
         }
 
         return array;
     }
 
-    private ignorable(prop: PropMeta, name: string): boolean {
+    private ignore(prop: PropMeta, name: string): boolean {
         if (!prop.ignore || prop.ignore.length === 0) {
             return false;
         }
 
         for (const ignore of prop.ignore) {
             if (ignore === name) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private readonly(prop: PropMeta, name: string): boolean {
+        if (!prop.hasOwnProperty('read-only')) {
+            return false;
+        }
+
+        const readonly: string[] = prop['read-only'];
+        if (readonly.length === 0) {
+            return false;
+        }
+
+        for (const ro of readonly) {
+            if (ro === name) {
                 return true;
             }
         }
@@ -141,6 +165,18 @@ class Pager {
             }
         } else if (prop.type === 'money') {
             config.initialValue = (config.initialValue * 0.01).toFixed(2);
+        }
+
+        if (prop.readonly || prop.type === 'read-only') {
+            if (prop.labels) {
+                return <Input readOnly={true} value={prop.labels[config.initialValue || 0]} />;
+            }
+
+            if (prop.values) {
+                return <Input readOnly={true} value={prop.values[config.initialValue]} />;
+            }
+
+            return <Input readOnly={true} value={config.initialValue} />;
         }
 
         return getFieldDecorator(prop.name, config)(this.getInputElement(prop, search));
@@ -191,8 +227,6 @@ class Pager {
                 return <DatePicker.RangePicker format={DateFormat} />;
             case 'number':
                 return <InputNumber />;
-            case 'read-only':
-                return <Input readOnly={true} />;
             case 'text-area':
                 return <TextArea autosize={{ minRows: 4, maxRows: 16 }} />;
             case 'image':

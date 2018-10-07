@@ -14,6 +14,7 @@ export interface PropMeta {
     values?: object;
     upload?: string;
     ignore?: string[];
+    readonly?: boolean;
 }
 
 export interface PageMeta {
