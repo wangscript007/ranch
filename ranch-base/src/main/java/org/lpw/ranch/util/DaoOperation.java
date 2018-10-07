@@ -11,6 +11,10 @@ public enum DaoOperation {
      */
     Equals("="),
     /**
+     * 不等于。
+     */
+    NotEquals("<>"),
+    /**
      * 小于。
      */
     Less("<"),
