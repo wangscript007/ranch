@@ -7,6 +7,7 @@ import { meta, PropMeta, PageMeta, ActionMeta } from './meta';
 import { Page } from './page';
 import { Image, getImageValue } from './ui/image';
 import { Attachment, getAttachmentValue } from './ui/attachment';
+import http from '../util/http';
 
 export interface Request {
     service: string;
@@ -174,6 +175,10 @@ class Pager {
 
             if (prop.values) {
                 return <Input readOnly={true} value={prop.values[config.initialValue]} />;
+            }
+
+            if (prop.type === 'image') {
+                return <div className="read-only-image"><img src={http.url(config.initialValue)} /></div>
             }
 
             return <Input readOnly={true} value={config.initialValue} />;
