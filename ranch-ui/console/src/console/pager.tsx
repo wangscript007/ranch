@@ -178,7 +178,7 @@ class Pager {
             }
 
             if (prop.type === 'image') {
-                return <div className="read-only-image"><img src={http.url(config.initialValue)} /></div>
+                return <a className="read-only-image" href={http.url(config.initialValue)} target="_blank"><img src={http.url(config.initialValue)} /></a>
             }
 
             return <Input readOnly={true} value={config.initialValue} />;
