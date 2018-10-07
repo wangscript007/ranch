@@ -204,7 +204,7 @@ class Grid extends React.Component<Props, State> {
                 pager.post({
                     service: this.props.service,
                     header: this.props.header,
-                    parameter: merger.merge(pager.getFormValue(this.props.form, this.props.props), page, this.props.parameter || {})
+                    parameter: merger.merge(pager.getFormValue(this.props.form, this.props.meta.search || []), page, this.props.parameter || {})
                 }).then(data => {
                     if (data === null) {
                         return;
