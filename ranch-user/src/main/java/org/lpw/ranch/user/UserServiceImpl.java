@@ -437,6 +437,15 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public JSONObject count() {
+        JSONObject object = new JSONObject();
+        object.put("total", userDao.count());
+        object.put("online", onlineService.count());
+
+        return object;
+    }
+
+    @Override
     public void clearCache() {
         clearCache(fromSession());
     }

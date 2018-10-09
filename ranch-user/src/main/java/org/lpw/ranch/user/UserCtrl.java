@@ -194,4 +194,11 @@ public class UserCtrl {
 
         return "";
     }
+
+    @Execute(name = "count", validates = {
+            @Validate(validator = Validators.SIGN)
+    })
+    public Object count() {
+        return userService.count();
+    }
 }

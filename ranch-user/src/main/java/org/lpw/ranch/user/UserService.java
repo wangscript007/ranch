@@ -215,6 +215,13 @@ public interface UserService {
     void state(String id, int state);
 
     /**
+     * 统计用户数。
+     *
+     * @return 用户数。
+     */
+    JSONObject count();
+
+    /**
      * 清空当前用户缓存数据。
      */
     void clearCache();

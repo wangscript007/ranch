@@ -55,6 +55,11 @@ class UserDaoImpl implements UserDao {
     }
 
     @Override
+    public int count() {
+        return liteOrm.count(new LiteQuery(UserModel.class), null);
+    }
+
+    @Override
     public void save(UserModel user) {
         liteOrm.save(user);
     }

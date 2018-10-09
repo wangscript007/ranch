@@ -56,4 +56,11 @@ public interface OnlineService {
      * @param user 用户ID值。
      */
     void signOutUser(String user);
+
+    /**
+     * 统计在线用户数。
+     *
+     * @return 在线用户数。
+     */
+    int count();
 }

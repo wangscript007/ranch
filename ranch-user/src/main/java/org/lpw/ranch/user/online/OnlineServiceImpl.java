@@ -111,6 +111,11 @@ public class OnlineServiceImpl implements OnlineService, MinuteJob {
     }
 
     @Override
+    public int count() {
+        return onlineDao.count();
+    }
+
+    @Override
     public void executeMinuteJob() {
         onlineDao.query(new Timestamp(System.currentTimeMillis() - effective * TimeUnit.Minute.getTime())).getList().forEach(online -> {
             userService.signOut(online.getSid());

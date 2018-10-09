@@ -16,5 +16,7 @@ interface UserDao {
 
     UserModel findByCode(String code);
 
+    int count();
+
     void save(UserModel user);
 }

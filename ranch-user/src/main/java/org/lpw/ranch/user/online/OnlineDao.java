@@ -14,6 +14,8 @@ interface OnlineDao {
 
     OnlineModel findBySid(String sid);
 
+    int count();
+
     void save(OnlineModel online);
 
     void delete(OnlineModel online);

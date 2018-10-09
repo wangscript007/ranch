@@ -47,6 +47,11 @@ class OnlineDaoImpl implements OnlineDao {
     }
 
     @Override
+    public int count() {
+        return liteOrm.count(new LiteQuery(OnlineModel.class), null);
+    }
+
+    @Override
     public void save(OnlineModel online) {
         liteOrm.save(online);
     }
