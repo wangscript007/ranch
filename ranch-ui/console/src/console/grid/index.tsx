@@ -171,7 +171,7 @@ class Grid extends React.Component<Props, State> {
                     actions.push(ops[0]);
                     actions.push(ops[1]);
                     actions.push(
-                        <Dropdown overlay={<Menu>{items}</Menu>} trigger={['click']}>
+                        <Dropdown key="dropdown" overlay={<Menu>{items}</Menu>} trigger={['click']}>
                             <a className="ant-dropdown-link grid-op" href="javascript:void(0);">更多<Icon type="down" /></a>
                         </Dropdown>
                     );
