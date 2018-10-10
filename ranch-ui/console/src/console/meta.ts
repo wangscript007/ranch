@@ -15,6 +15,13 @@ export interface PropMeta {
     upload?: string;
     ignore?: string[];
     readonly?: boolean;
+    remote?: {
+        service: string;
+        header?: object;
+        parameter?: object;
+        value?: string;
+        label: string[];
+    }
 }
 
 export interface PageMeta {

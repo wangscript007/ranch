@@ -7,6 +7,7 @@ import { meta, PropMeta, PageMeta, ActionMeta } from './meta';
 import { Page } from './page';
 import { Image, getImageValue } from './ui/image';
 import { Attachment, getAttachmentValue } from './ui/attachment';
+import Remote from './ui/remote';
 import http from '../util/http';
 
 export interface Request {
@@ -221,6 +222,10 @@ class Pager {
                     {keys.map((key) => <Option key={key} value={key}>{(prop.values || {})[key]}</Option>)}
                 </Select>
             );
+        }
+
+        if (prop.remote) {
+            return <Remote {...prop.remote} />
         }
 
         switch (prop.type) {
