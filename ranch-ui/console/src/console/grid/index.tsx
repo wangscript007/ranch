@@ -77,7 +77,7 @@ class Grid extends React.Component<Props, State> {
         }
 
         this.props.meta.toolbar.map(action =>
-            searchToolbar.push(<Button key={action.type} type="primary" icon={action.icon} onClick={this.click.bind(this, action)}>{action.label}</Button>)
+            searchToolbar.push(<Button key={'btn:' + action.type} type="primary" icon={action.icon} onClick={this.click.bind(this, action)}>{action.label}</Button>)
         );
     }
 

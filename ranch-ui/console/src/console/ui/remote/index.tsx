@@ -4,6 +4,7 @@ import { pager } from '../../pager';
 import './index.scss';
 
 interface Props {
+    getFieldDecorator?: any;
     service: string;
     header?: object;
     parameter?: object;
@@ -39,8 +40,18 @@ export default class Remote extends React.Component<Props, State>{
     }
 
     public render(): JSX.Element {
+        if (this.props.getFieldDecorator) {
+            return this.props.getFieldDecorator(
+                <Select style={{ minWidth: 200 }}>
+                    {this.state.list.map((obj, index) =>
+                        <Select.Option key={index} value={obj[this.props.value || 'id']}>{this.label(obj)}</Select.Option>
+                    )}
+                </Select>
+            );
+        }
+
         return (
-            <Select>
+            <Select style={{ minWidth: 200 }}>
                 {this.state.list.map((obj, index) =>
                     <Select.Option key={index} value={obj[this.props.value || 'id']}>{this.label(obj)}</Select.Option>
                 )}

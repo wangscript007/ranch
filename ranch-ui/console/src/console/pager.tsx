@@ -185,6 +185,10 @@ class Pager {
             return <Input readOnly={true} value={config.initialValue} />;
         }
 
+        if (prop.remote) {
+            return <Remote {...prop.remote} getFieldDecorator={getFieldDecorator(prop.name, config)} />;
+        }
+
         return getFieldDecorator(prop.name, config)(this.getInputElement(prop, search));
     }
 
