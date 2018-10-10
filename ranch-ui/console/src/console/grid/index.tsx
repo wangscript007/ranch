@@ -233,23 +233,7 @@ class Grid extends React.Component<Props, State> {
                 return;
             }
 
-            if (action.type === 'delete' && model) {
-                pager.post({
-                    service: service,
-                    header: this.props.header,
-                    parameter: merger.merge(model, this.props.parameter || {})
-                }).then(data => {
-                    if (data === null || !action.success) {
-                        return;
-                    }
-
-                    this.success(action, model);
-                });
-
-                return;
-            }
-
-            if (action.type === 'post' && model) {
+            if ((action.type === 'delete' || action.type === 'cancel' || action.type === 'post') && model) {
                 pager.post({
                     service: service,
                     header: this.props.header,
