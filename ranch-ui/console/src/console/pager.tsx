@@ -79,6 +79,17 @@ class Pager {
         });
     }
 
+    public dashboard(): void {
+        this.page.setState({ service: 'blank' }, () => {
+            this.page.setState({
+                service: '',
+                meta: {
+                    type: ''
+                }
+            });
+        });
+    }
+
     private getProps(name: string): PropMeta[] {
         const array: PropMeta[] = [];
         for (const prop of meta.now().props) {

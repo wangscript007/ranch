@@ -70,6 +70,7 @@ export default class Console extends React.Component<Props, State> {
                             <Icon type="down" />
                         </div>
                     </Dropdown>
+                    <div className="dashboard" onClick={this.dashboard}><Icon type="dashboard" theme="twoTone" /></div>
                 </Header>
                 <Layout>
                     <Sider>
@@ -91,6 +92,10 @@ export default class Console extends React.Component<Props, State> {
                 </Layout>
             </Layout>
         );
+    }
+
+    private dashboard(): void {
+        pager.dashboard();
     }
 
     private item(item: MenuItem): void {

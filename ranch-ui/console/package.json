@@ -1,12 +1,12 @@
 {
-  "name": "admin",
+  "name": "ranch-ui-console",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "antd": "^3.6.4",
-    "react": "^16.4.1",
-    "react-dom": "^16.4.1",
-    "react-scripts-ts-antd": "2.15.1"
+    "antd": "^3.10.0",
+    "react": "^16.5.2",
+    "react-dom": "^16.5.2",
+    "react-scripts-ts-antd": "2.17.0"
   },
   "scripts": {
     "start": "react-scripts-ts-antd start",
@@ -15,10 +15,10 @@
     "eject": "react-scripts-ts-antd eject"
   },
   "devDependencies": {
-    "@types/jest": "^23.1.2",
-    "@types/node": "^10.3.6",
-    "@types/react": "^16.4.2",
-    "@types/react-dom": "^16.0.6",
-    "typescript": "^2.9.2"
+    "@types/jest": "^23.3.5",
+    "@types/node": "^10.11.7",
+    "@types/react": "^16.4.16",
+    "@types/react-dom": "^16.0.9",
+    "typescript": "^3.1.2"
   }
 }

@@ -85,7 +85,7 @@
                     }
                 },
                 {
-                    "icon": "team",
+                    "icon": "audit",
                     "label": "管理员",
                     "service": "ranch.user.query",
                     "parameter": {

@@ -4,9 +4,6 @@ import { service } from '../service';
 import { user, User } from '../user';
 import './index.scss';
 
-const { Content } = Layout;
-const FormItem = Form.Item;
-
 interface Props {
     sign(user: User): void;
 }
@@ -25,19 +22,17 @@ export default class SginIn extends React.Component<Props, object> {
 
         return (
             <Layout className="sign-in">
-                <Content>
-                    <Form action="javascript:void(0);">
-                        <FormItem>
-                            <Input prefix={<Icon type="user" style={style} />} name="uid" placeholder="用户名" autoFocus={true} />
-                        </FormItem>
-                        <FormItem>
-                            <Input prefix={<Icon type="lock" style={style} />} name="password" type="password" placeholder="密码" onPressEnter={this.signIn} />
-                        </FormItem>
-                        <FormItem>
-                            <Button type="primary" icon="login" onClick={this.signIn}>登入</Button>
-                        </FormItem>
-                    </Form>
-                </Content>
+                <Form action="javascript:void(0);">
+                    <Form.Item>
+                        <Input prefix={<Icon type="user" style={style} />} name="uid" placeholder="用户名" autoFocus={true} />
+                    </Form.Item>
+                    <Form.Item>
+                        <Input prefix={<Icon type="lock" style={style} />} name="password" type="password" placeholder="密码" onPressEnter={this.signIn} />
+                    </Form.Item>
+                    <Form.Item>
+                        <Button type="primary" icon="login" onClick={this.signIn}>登入</Button>
+                    </Form.Item>
+                </Form>
             </Layout>
         );
     }
