@@ -50,6 +50,7 @@ export default class Console extends React.Component<Props, State> {
         return (
             <Layout className="console">
                 <Header>
+                    <div className="dashboard" onClick={this.dashboard}><Icon type="dashboard" /></div>
                     <Dropdown className="user-info" overlay={
                         <Menu>
                             <Menu.Item>
@@ -70,7 +71,6 @@ export default class Console extends React.Component<Props, State> {
                             <Icon type="down" />
                         </div>
                     </Dropdown>
-                    <div className="dashboard" onClick={this.dashboard}><Icon type="dashboard" theme="twoTone" /></div>
                 </Header>
                 <Layout>
                     <Sider>

@@ -42,8 +42,7 @@ export default class Dashboard extends React.Component<object, State> {
     public render(): JSX.Element {
         return (
             <Panels columns='8-8-8'>
-                <Panel title="实时数据"
-                    extra={<Icon type="reload" onClick={this.refresh} />}
+                <Panel title="实时数据" extra={<Icon type="sync" onClick={this.refresh} />}
                     actions={[
                         <div key="user" onClick={this.user}><Icon type="user" />用户</div>,
                         <div key="online" onClick={this.online}><Icon type="bulb" />在线</div>
