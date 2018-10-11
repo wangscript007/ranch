@@ -107,6 +107,16 @@ class Pager {
     }
 
     private ignore(prop: PropMeta, name: string): boolean {
+        if (prop.showonly && prop.showonly.length > 0) {
+            for (const so of prop.showonly) {
+                if (so === name) {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
         if (!prop.ignore || prop.ignore.length === 0) {
             return false;
         }

@@ -13,6 +13,7 @@ export interface PropMeta {
     labels?: string[];
     values?: object;
     upload?: string;
+    showonly?: string[];
     ignore?: string[];
     readonly?: boolean;
     remote?: {
