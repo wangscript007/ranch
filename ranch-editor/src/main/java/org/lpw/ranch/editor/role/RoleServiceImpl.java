@@ -99,6 +99,16 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
+    public JSONObject countOwner() {
+        JSONObject object = new JSONObject();
+        String user = userHelper.id();
+        object.put("total", roleDao.count(user, Type.Owner.ordinal()));
+        object.put("recycle", roleDao.count(user, Type.Owner.ordinal(), 5));
+
+        return object;
+    }
+
+    @Override
     public void save(String user, String editor, Type type) {
         save(user, editor, type, null);
     }
@@ -155,7 +165,8 @@ public class RoleServiceImpl implements RoleService {
         if (role.getType() >= Type.Editor.ordinal())
             delete(role);
         else {
-            roleDao.query(editor, false).getList().forEach(this::delete);
+            roleDao.query(editor, false).getList().stream()
+                    .filter(r -> r.getType() >= Type.Editor.ordinal()).forEach(this::delete);
             editorService.delete(editor);
         }
     }
@@ -166,6 +177,6 @@ public class RoleServiceImpl implements RoleService {
     }
 
     private String getCacheKey(String user, String editor) {
-        return CACHE_USER_EDITOR + user + "," + editor;
+        return CACHE_USER_EDITOR + user + ":" + editor;
     }
 }

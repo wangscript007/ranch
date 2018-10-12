@@ -27,6 +27,10 @@ public interface RoleService {
     }
 
     /**
+     * 是否可创建验证器Bean名称。
+     */
+    String VALIDATOR_CREATABLE = RoleModel.NAME + ".validator.creatable";
+    /**
      * 是否为所有者验证器Bean名称。
      */
     String VALIDATOR_OWNER = RoleModel.NAME + ".validator.owner";
@@ -68,6 +72,7 @@ public interface RoleService {
 
     /**
      * 查找。
+     *
      * @param id ID值。
      * @return 角色信息；不存在则返回null。
      */
@@ -99,6 +104,13 @@ public interface RoleService {
      * @return 如果包含则返回true；否则返回false。
      */
     boolean hasType(String user, String editor, Type type);
+
+    /**
+     * 统计创建数。
+     *
+     * @return 创建数。
+     */
+    JSONObject countOwner();
 
     /**
      * 保存角色。

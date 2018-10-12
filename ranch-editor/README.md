@@ -71,6 +71,8 @@
 
 [设置访问密码](doc/role/password.md)
 
+[统计创建数](doc/role/count-owner.md)
+
 [删除](doc/role/delete.md)
 
 ## 用户媒体

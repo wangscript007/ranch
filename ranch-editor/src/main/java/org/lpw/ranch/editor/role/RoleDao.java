@@ -18,6 +18,10 @@ interface RoleDao {
 
     RoleModel find(String user, String editor);
 
+    int count(String user, int type);
+
+    int count(String user, int type, int state);
+
     void save(RoleModel role);
 
     void delete(RoleModel role);

@@ -57,6 +57,13 @@ public class RoleCtrl {
         return "";
     }
 
+    @Execute(name = "count-owner", validates = {
+            @Validate(validator = UserHelper.VALIDATOR_SIGN_IN)
+    })
+    public Object countOwner() {
+        return roleService.countOwner();
+    }
+
     @Execute(name = "delete", validates = {
             @Validate(validator = Validators.ID, parameter = "editor", failureCode = 41),
             @Validate(validator = UserHelper.VALIDATOR_SIGN_IN),

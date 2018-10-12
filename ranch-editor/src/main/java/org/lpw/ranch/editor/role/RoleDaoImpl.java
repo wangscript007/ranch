@@ -61,6 +61,16 @@ class RoleDaoImpl implements RoleDao {
     }
 
     @Override
+    public int count(String user, int type) {
+        return liteOrm.count(new LiteQuery(RoleModel.class).where("c_user=? and c_type=?"), new Object[]{user, type});
+    }
+
+    @Override
+    public int count(String user, int type, int state) {
+        return liteOrm.count(new LiteQuery(RoleModel.class).where("c_user=? and c_type=? and c_state=?"), new Object[]{user, type, state});
+    }
+
+    @Override
     public void save(RoleModel role) {
         liteOrm.save(role);
     }
