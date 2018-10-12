@@ -99,7 +99,7 @@ public class UserServiceImpl implements UserService {
             if (userDao.findByCode(code) == null)
                 user.setCode(code);
         }
-        if (type == 1) {
+        if (type == Types.SELF) {
             if (validator.isMobile(uid))
                 user.setMobile(uid);
             else if (validator.isEmail(uid))
