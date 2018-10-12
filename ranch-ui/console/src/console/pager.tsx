@@ -97,9 +97,6 @@ class Pager {
                 continue;
             }
 
-            if (this.readonly(prop, name)) {
-                prop.readonly = true;
-            }
             array.push(prop);
         }
 
@@ -117,31 +114,16 @@ class Pager {
             return true;
         }
 
-        if (!prop.ignore || prop.ignore.length === 0) {
-            return false;
-        }
-
-        for (const ignore of prop.ignore) {
-            if (ignore === name) {
-                return true;
-            }
-        }
-
-        return false;
+        return this.has(prop, 'ignore', name);
     }
 
-    private readonly(prop: PropMeta, name: string): boolean {
-        if (!prop.hasOwnProperty('read-only')) {
+    private has(prop: PropMeta, key: string, name: string): boolean {
+        if (!prop.hasOwnProperty(key)) {
             return false;
         }
 
-        const readonly: string[] = prop['read-only'];
-        if (readonly.length === 0) {
-            return false;
-        }
-
-        for (const ro of readonly) {
-            if (ro === name) {
+        for (const value of prop[key]) {
+            if (value === name) {
                 return true;
             }
         }
@@ -190,7 +172,7 @@ class Pager {
             config.initialValue = (config.initialValue * 0.01).toFixed(2);
         }
 
-        if (prop.readonly || prop.type === 'read-only') {
+        if (prop.type === 'read-only' || this.has(prop, 'read-only', meta.nowService())) {
             if (prop.labels) {
                 return <Input readOnly={true} value={prop.labels[config.initialValue || 0]} />;
             }

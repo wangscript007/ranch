@@ -50,9 +50,13 @@ export interface ActionMeta {
 class MetaHelper {
     private map: { [key: string]: Meta } = {};
     private key: string;
+    private service: string;
 
     public get(key: string): Promise<Meta> {
-        this.key = this.getKey(key);
+        const uri = key.charAt(0) === '/';
+        const indexOf: number = uri ? (key.lastIndexOf('/') + 1) : key.lastIndexOf('.');
+        this.key = key.substring(0, indexOf);
+        this.service = key.substring(uri ? indexOf : (indexOf + 1));
         if (this.map.hasOwnProperty(this.key)) {
             return new Promise((resolve, reject) => resolve(this.now()));
         }
@@ -78,12 +82,12 @@ class MetaHelper {
         });
     }
 
-    private getKey(key: string): string {
-        if (key.charAt(0) === '/') {
-            return key.substring(0, key.lastIndexOf('/') + 1);
-        }
+    public nowKey(): string {
+        return this.key;
+    }
 
-        return key.substring(0, key.lastIndexOf('.'));
+    public nowService(): string {
+        return this.service;
     }
 
     public now(): Meta {
