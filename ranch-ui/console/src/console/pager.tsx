@@ -186,7 +186,7 @@ class Pager {
         }
 
         if (prop.remote) {
-            return <Remote {...prop.remote} getFieldDecorator={getFieldDecorator(prop.name, config)} />;
+            return <Remote {...prop.remote} search={search} getFieldDecorator={getFieldDecorator(prop.name, config)} />;
         }
 
         return getFieldDecorator(prop.name, config)(this.getInputElement(prop, search));
