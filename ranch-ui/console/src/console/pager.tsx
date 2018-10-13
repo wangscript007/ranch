@@ -30,9 +30,6 @@ const icons = {
     'delete': 'delete'
 };
 
-const RadioGroup = Radio.Group;
-const Option = Select.Option;
-const TextArea = Input.TextArea;
 const DateFormat = 'YYYY-MM-DD';
 
 class Pager {
@@ -199,16 +196,16 @@ class Pager {
         if (prop.labels) {
             if (!search && prop.labels.length <= 3) {
                 return (
-                    <RadioGroup>
+                    <Radio.Group>
                         {prop.labels.map((label, i) => <Radio key={i} value={i}>{label}</Radio>)}
-                    </RadioGroup>
+                    </Radio.Group>
                 );
             }
 
             return (
                 <Select style={{ minWidth: 200 }}>
-                    {search ? <Option value="">全部</Option> : null}
-                    {prop.labels.map((label, i) => <Option key={i} value={i}>{label}</Option>)}
+                    {search ? <Select.Option value="">全部</Select.Option> : null}
+                    {prop.labels.map((label, i) => <Select.Option key={i} value={i}>{label}</Select.Option>)}
                 </Select>
             );
         }
@@ -217,16 +214,16 @@ class Pager {
             const keys = Object.keys(prop.values);
             if (!search && keys.length <= 3) {
                 return (
-                    <RadioGroup>
+                    <Radio.Group>
                         {keys.map((key) => <Radio key={key} value={key}>{(prop.values || {})[key]}</Radio>)}
-                    </RadioGroup>
+                    </Radio.Group>
                 );
             }
 
             return (
                 <Select style={{ minWidth: 200 }}>
-                    {search ? <Option value="">全部</Option> : null}
-                    {keys.map((key) => <Option key={key} value={key}>{(prop.values || {})[key]}</Option>)}
+                    {search ? <Select.Option value="">全部</Select.Option> : null}
+                    {keys.map((key) => <Select.Option key={key} value={key}>{(prop.values || {})[key]}</Select.Option>)}
                 </Select>
             );
         }
@@ -245,7 +242,7 @@ class Pager {
             case 'number':
                 return <InputNumber />;
             case 'text-area':
-                return <TextArea autosize={{ minRows: 4, maxRows: 16 }} />;
+                return <Input.TextArea autosize={{ minRows: 4, maxRows: 16 }} />;
             case 'image':
                 return <Image name={prop.name} upload={prop.upload || (meta.now().key + '.' + prop.name)} />;
             case 'attachment':

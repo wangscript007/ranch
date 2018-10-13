@@ -10,6 +10,7 @@ interface Props {
     parameter?: object;
     value?: string;
     label: string[];
+    search?: boolean;
 }
 
 interface State {
@@ -43,6 +44,7 @@ export default class Remote extends React.Component<Props, State>{
         if (this.props.getFieldDecorator) {
             return this.props.getFieldDecorator(
                 <Select style={{ minWidth: 200 }}>
+                    {this.props.search ? <Select.Option value="">全部</Select.Option> : null}
                     {this.state.list.map((obj, index) =>
                         <Select.Option key={index} value={obj[this.props.value || 'id']}>{this.label(obj)}</Select.Option>
                     )}
