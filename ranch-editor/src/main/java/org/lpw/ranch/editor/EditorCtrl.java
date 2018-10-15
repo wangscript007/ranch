@@ -35,8 +35,8 @@ public class EditorCtrl {
     @Execute(name = "query-user", validates = {
             @Validate(validator = UserHelper.VALIDATOR_SIGN_IN)
     })
-    public Object queryUser() {
-        return editorService.queryUser(request.getAsInt("template", -1), request.get("type"),
+    public Object user() {
+        return editorService.user(request.getAsInt("template", -1), request.get("type"),
                 request.getAsArray("states"));
     }
 

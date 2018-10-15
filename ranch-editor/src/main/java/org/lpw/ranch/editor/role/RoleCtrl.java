@@ -18,6 +18,7 @@ import javax.inject.Inject;
 public class RoleCtrl {
     @Inject
     private Request request;
+    @Inject private EditorService editorService;
     @Inject
     private RoleService roleService;
 
@@ -73,6 +74,30 @@ public class RoleCtrl {
     })
     public Object delete() {
         roleService.delete(request.get("user"), request.get("editor"));
+
+        return "";
+    }
+
+    @Execute(name = "restore", validates = {
+            @Validate(validator = Validators.ID, parameter = "editor", failureCode = 41),
+            @Validate(validator = UserHelper.VALIDATOR_SIGN_IN),
+            @Validate(validator = EditorService.VALIDATOR_EXISTS, parameter = "editor", failureCode = 42),
+            @Validate(validator = RoleService.VALIDATOR_OWNER, parameter = "editor", failureCode = 43)
+    })
+    public Object restore() {
+        editorService.restore(request.get("editor"));
+
+        return "";
+    }
+
+    @Execute(name = "remove", validates = {
+            @Validate(validator = Validators.ID, parameter = "editor", failureCode = 41),
+            @Validate(validator = UserHelper.VALIDATOR_SIGN_IN),
+            @Validate(validator = EditorService.VALIDATOR_EXISTS, parameter = "editor", failureCode = 42),
+            @Validate(validator = RoleService.VALIDATOR_OWNER, parameter = "editor", failureCode = 43)
+    })
+    public Object remove() {
+        roleService.remove(request.get("editor"));
 
         return "";
     }

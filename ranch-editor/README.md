@@ -75,6 +75,10 @@
 
 [删除](doc/role/delete.md)
 
+[从回收站还原](doc/role/restore.md)
+
+[从回收站移除](doc/role/remove.md)
+
 ## 用户媒体
 
 属性

@@ -107,7 +107,7 @@ public class EditorServiceImpl implements EditorService, DateJob {
     }
 
     @Override
-    public JSONObject queryUser(int template, String type, String[] states) {
+    public JSONObject user(int template, String type, String[] states) {
         return roleService.query(userHelper.id(), template, type, getStates(states)).toJson(role -> this.find(role.getEditor()));
     }
 
@@ -299,19 +299,22 @@ public class EditorServiceImpl implements EditorService, DateJob {
     @Override
     public void modify(String id) {
         EditorModel editor = findById(id);
-        if (editor == null)
-            return;
-
-        save(editor, 0, new Timestamp(System.currentTimeMillis()), false);
+        if (editor != null)
+            save(editor, 0, new Timestamp(System.currentTimeMillis()), false);
     }
 
     @Override
     public void delete(String id) {
         EditorModel editor = findById(id);
-        if (editor == null)
-            return;
+        if (editor != null)
+            save(editor, 5, new Timestamp(System.currentTimeMillis()), false);
+    }
 
-        save(editor, 5, new Timestamp(System.currentTimeMillis()), false);
+    @Override
+    public void restore(String id) {
+        EditorModel editor = findById(id);
+        if (editor != null)
+            save(editor, 0, new Timestamp(System.currentTimeMillis()), true);
     }
 
     private void save(EditorModel editor, int state, Timestamp modify, boolean owner) {

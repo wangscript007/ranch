@@ -152,4 +152,11 @@ public interface RoleService {
      * @param editor 编辑器。
      */
     void delete(String user, String editor);
+
+    /**
+     * 从回收站移除。
+     *
+     * @param editor 编辑器。
+     */
+    void remove(String editor);
 }

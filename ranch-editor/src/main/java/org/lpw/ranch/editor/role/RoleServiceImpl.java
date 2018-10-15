@@ -176,6 +176,13 @@ public class RoleServiceImpl implements RoleService {
         cache.remove(getCacheKey(role.getUser(), role.getEditor()));
     }
 
+    @Override
+    public void remove(String editor) {
+        RoleModel role = roleDao.find(userHelper.id(), editor);
+        if (role != null)
+            roleDao.delete(role);
+    }
+
     private String getCacheKey(String user, String editor) {
         return CACHE_USER_EDITOR + user + ":" + editor;
     }

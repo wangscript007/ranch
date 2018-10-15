@@ -46,7 +46,7 @@ public interface EditorService {
      * @param states   状态集。
      * @return 编辑器信息集。
      */
-    JSONObject queryUser(int template, String type, String[] states);
+    JSONObject user(int template, String type, String[] states);
 
     /**
      * 查找编辑器信息。
@@ -152,6 +152,13 @@ public interface EditorService {
      * @param id ID值。
      */
     void delete(String id);
+
+    /**
+     * 从回收站还原。
+     *
+     * @param id ID值。
+     */
+    void restore(String id);
 
     /**
      * 搜索模板信息集。
