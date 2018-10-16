@@ -87,8 +87,10 @@ public class EditorServiceImpl implements EditorService, DateJob {
     private boolean autoSale;
     @Value("${" + EditorModel.NAME + ".image:}")
     private String image;
-    @Value("${" + EditorModel.NAME + ".pdf:}")
-    private String pdf;
+    @Value("${" + EditorModel.NAME + ".pdf.ordinary:}")
+    private String pdfOrdinary;
+    @Value("${" + EditorModel.NAME + ".pdf.vip:}")
+    private String pdfVip;
     @Value("${" + EditorModel.NAME + ".template-types:}")
     private String templateTypes;
     private Map<String, String> random = new ConcurrentHashMap<>();
@@ -231,14 +233,15 @@ public class EditorServiceImpl implements EditorService, DateJob {
 
     @Override
     public String pdf(String id) {
+        StringBuilder pdf = new StringBuilder(userHelper.isVip() ? pdfVip : pdfOrdinary);
         if (validator.isEmpty(pdf))
             return "";
 
         EditorModel editor = findById(id);
-        String sid = session.getId();
+        pdf.append(pdf.indexOf("?") == -1 ? '?' : '&').append("sid=").append(session.getId()).append("&id=").append(id);
 
         return asyncService.submit(EditorModel.NAME + ".pdf." + id, "", 60, () -> {
-            String path = chromeHelper.pdf(pdf + "?sid=" + sid + "&id=" + id, 30,
+            String path = chromeHelper.pdf(pdf.toString(), 30,
                     editor.getWidth(), editor.getHeight(), "", asyncService.root());
 
             return path.substring(path.lastIndexOf(asyncService.root()));

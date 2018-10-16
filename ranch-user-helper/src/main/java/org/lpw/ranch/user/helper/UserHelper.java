@@ -151,6 +151,13 @@ public interface UserHelper {
     int grade();
 
     /**
+     * 获取当前用户是否为VIP用户。
+     *
+     * @return 如果是则返回true；否则返回false。
+     */
+    boolean isVip();
+
+    /**
      * 检索用户ID集。
      *
      * @param idcard        身份证号；为空则表示所有。
