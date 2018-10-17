@@ -10,5 +10,4 @@ name='console'
 cd $name
 yarn build
 mv build $webapp/$name
-sed -i 's,/static/,static/,g' $webapp/$name/index.html
 cd $dir
