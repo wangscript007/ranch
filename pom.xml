@@ -35,6 +35,7 @@
         <module>ranch-payment-helper</module>
         <module>ranch-alipay</module>
         <module>ranch-link</module>
+        <module>ranch-link-helper</module>
         <module>ranch-captcha</module>
         <module>ranch-captcha-helper</module>
         <module>ranch-chrome</module>
