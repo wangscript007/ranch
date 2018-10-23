@@ -23,7 +23,7 @@ public class CreatableValidatorImpl extends ValidatorSupport {
     @Override
     public boolean validate(ValidateWrapper validate, String parameter) {
         return !validator.isEmpty(parameter) || userHelper.isVip()
-                || roleDao.count(userHelper.id(), RoleService.Type.Owner.ordinal()) <= freeCreate;
+                || roleDao.count(userHelper.id(), RoleService.Type.Owner.ordinal()) < freeCreate;
     }
 
     @Override

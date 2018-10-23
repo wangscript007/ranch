@@ -42,6 +42,26 @@ public class LinkHelperImpl implements LinkHelper {
     }
 
     @Override
+    public int count(String type, String id1, String id2) {
+        Map<String, String> map = new HashMap<>();
+        map.put("type", type);
+        map.put("id1", id1);
+        map.put("id2", id2);
+
+        return carousel.service(key + ".count", null, map, false).getIntValue("data");
+    }
+
+    @Override
+    public JSONObject find(String type, String id1, String id2) {
+        Map<String, String> map = new HashMap<>();
+        map.put("type", type);
+        map.put("id1", id1);
+        map.put("id2", id2);
+
+        return carousel.service(key + ".find", null, map, false, JSONObject.class);
+    }
+
+    @Override
     public JSONObject save(String type, String id1, String id2) {
         Map<String, String> map = new HashMap<>();
         map.put("type", type);
