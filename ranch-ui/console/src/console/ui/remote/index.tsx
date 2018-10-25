@@ -15,7 +15,11 @@ interface Props {
 }
 
 interface State {
-    list: Array<any>;
+    list: Node[];
+}
+
+interface Node {
+    children?: Node[]
 }
 
 export default class Remote extends React.Component<Props, State>{
@@ -57,7 +61,7 @@ export default class Remote extends React.Component<Props, State>{
         );
     }
 
-    private treeNodes(list: Array<any>): JSX.Element[] {
+    private treeNodes(list?: Node[]): JSX.Element[] {
         if (!list || list.length === 0) {
             return [];
         }
