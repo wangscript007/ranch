@@ -77,6 +77,6 @@ public class LinkHelperImpl implements LinkHelper {
         map.put("type", type);
         map.put("id1", id1);
         map.put("id2", id2);
-        carousel.service(key + ".delte", null, map, false);
+        carousel.service(key + ".delete", null, map, false);
     }
 }
