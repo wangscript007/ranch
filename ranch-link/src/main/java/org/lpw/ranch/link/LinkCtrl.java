@@ -51,9 +51,7 @@ public class LinkCtrl {
     }
 
     @Execute(name = "delete", validates = {
-            @Validate(validator = Validators.NOT_EMPTY, parameter = "type", failureCode = 1),
-            @Validate(validator = Validators.NOT_EMPTY, parameter = "id1", failureCode = 3),
-            @Validate(validator = Validators.NOT_EMPTY, parameter = "id2", failureCode = 5)
+            @Validate(validator = Validators.NOT_EMPTY, parameter = "type", failureCode = 1)
     })
     public Object delete() {
         linkService.delete(request.get("type"), request.get("id1"), request.get("id2"));
