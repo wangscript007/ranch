@@ -36,7 +36,7 @@ public class LinkServiceImpl implements LinkService {
 
     @Override
     public int count(String type, String id1, String id2) {
-        return validator.isEmpty(id1) ? linkDao.count2(type, id2) : linkDao.count1(type, id1);
+        return linkDao.count(type, id1, id2);
     }
 
     @Override

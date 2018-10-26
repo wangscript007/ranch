@@ -10,9 +10,7 @@ interface LinkDao {
 
     PageList<LinkModel> query2(String type, String id2, int pageSize, int pageNum);
 
-    int count1(String type, String id1);
-
-    int count2(String type, String id2);
+    int count(String type, String id1, String id2);
 
     LinkModel find(String type, String id1, String id2);
 
