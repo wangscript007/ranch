@@ -31,6 +31,7 @@ const icons = {
 };
 
 const DateFormat = 'YYYY-MM-DD';
+const DateTimeFormat = DateFormat + ' HH:mm:ss';
 
 class Pager {
     private page: Page;
@@ -239,6 +240,10 @@ class Pager {
                 return <DatePicker format={DateFormat} />;
             case 'date-range':
                 return <DatePicker.RangePicker format={DateFormat} />;
+            case 'datetime':
+                return <DatePicker showTime={true} format={DateTimeFormat} />;
+            case 'datetime-range':
+                return <DatePicker.RangePicker showTime={true} format={DateTimeFormat} />;
             case 'number':
                 return <InputNumber />;
             case 'text-area':
@@ -307,6 +312,10 @@ class Pager {
                 obj[prop.name] = value.format(DateFormat);
             } else if (prop.type === 'date-range') {
                 obj[prop.name] = value.length === 0 ? '' : (value[0].format(DateFormat) + ',' + value[1].format(DateFormat));
+            } else if (prop.type === 'datetime') {
+                obj[prop.name] = value.format(DateTimeFormat);
+            } else if (prop.type === 'datetime-range') {
+                obj[prop.name] = value.length === 0 ? '' : (value[0].format(DateTimeFormat) + ',' + value[1].format(DateTimeFormat));
             } else if (prop.type === 'money') {
                 obj[prop.name] = Math.round(value * 100);
             }
