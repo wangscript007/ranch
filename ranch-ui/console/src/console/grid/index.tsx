@@ -68,7 +68,7 @@ class Grid extends React.Component<Props, State> {
                 </Form.Item>
             )
         );
-        searchToolbar.push(<Button key="search" type="primary" icon="search" onClick={this.click.bind(this, { type: 'search' })}>搜索</Button>);
+        searchToolbar.push(<Button key="search" type="primary" icon="search" onClick={this.click.bind(this, { type: 'search' }, {})}>搜索</Button>);
     }
 
     private toolbar(searchToolbar: JSX.Element[]): void {
