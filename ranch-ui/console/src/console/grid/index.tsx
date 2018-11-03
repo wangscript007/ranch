@@ -77,7 +77,7 @@ class Grid extends React.Component<Props, State> {
         }
 
         this.props.meta.toolbar.map(action =>
-            searchToolbar.push(<Button key={'btn:' + action.type} type="primary" icon={action.icon} onClick={this.click.bind(this, action)}>{action.label}</Button>)
+            searchToolbar.push(<Button key={'btn:' + action.type} type="primary" icon={action.icon} onClick={this.click.bind(this, action, {})}>{action.label}</Button>)
         );
     }
 
@@ -197,7 +197,7 @@ class Grid extends React.Component<Props, State> {
         elements.push(<Table key="grid-table" rowKey="id" columns={columns} dataSource={dataSource} pagination={pagination} onChange={this.click.bind(this, { type: 'search' }, null)} />);
     }
 
-    private click(action: ActionMeta, model?: Model, pagination?: { current: number }): void {
+    private click(action: ActionMeta, model: Model, pagination?: { current: number }): void {
         const service: string = pager.getService(this.props.service, action);
         meta.get(service).then(mt => {
             if (mt === null) {
@@ -233,7 +233,7 @@ class Grid extends React.Component<Props, State> {
                 return;
             }
 
-            if ((action.type === 'delete' || action.type === 'cancel' || action.type === 'post') && model) {
+            if (action.type === 'delete' || action.type === 'cancel' || action.type === 'post') {
                 pager.post({
                     service: service,
                     header: this.props.header,
@@ -299,7 +299,7 @@ class Grid extends React.Component<Props, State> {
 
         const service = typeof action.success === 'string' ? action.success : action.success.service;
         if (service === 'search') {
-            this.click({ type: 'search' });
+            this.click({ type: 'search' }, {});
 
             return;
         }
