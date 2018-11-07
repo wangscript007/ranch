@@ -56,7 +56,6 @@ public class AsyncServiceImpl implements AsyncService, SecondsJob, MinuteJob, Ho
     private int size;
     private ExecutorService executorService;
     private Map<String, Future<String>> map = new ConcurrentHashMap<>();
-    private boolean mkRoot = false;
 
     @Override
     public String submit(String key, String parameter, int timeout, Callable<String> callable) {
@@ -82,10 +81,7 @@ public class AsyncServiceImpl implements AsyncService, SecondsJob, MinuteJob, Ho
 
     @Override
     public String newSavePath(String suffix) {
-        if (!mkRoot) {
-            mkRoot = true;
-            io.mkdirs(context.getAbsolutePath(root()));
-        }
+        io.mkdirs(context.getAbsolutePath(root()));
 
         return root() + generator.random(32) + suffix;
     }
