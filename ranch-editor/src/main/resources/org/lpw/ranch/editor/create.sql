@@ -11,6 +11,8 @@ CREATE TABLE t_editor
   c_height INT DEFAULT 0 COMMENT '高度',
   c_image VARCHAR(255) DEFAULT NULL COMMENT '预览图',
   c_screenshot VARCHAR(255) DEFAULT NULL COMMENT '主截图',
+  c_total INT DEFAULT 0 COMMENT '总根节点数',
+  c_modified INT DEFAULT 0 COMMENT '已修改根节点数',
   c_state INT DEFAULT 0 COMMENT '状态：0-待审核；1-审核通过；2-审核拒绝；3-已上架；4-已下架；5-已删除',
   c_json TEXT DEFAULT NULL COMMENT '扩展属性集',
   c_source VARCHAR(255) DEFAULT NULL COMMENT '来源',

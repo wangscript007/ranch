@@ -26,6 +26,12 @@
             "name": "screenshot"
         },
         {
+            "name": "total"
+        },
+        {
+            "name": "modified"
+        },
+        {
             "name": "state",
             "labels": ".states"
         },

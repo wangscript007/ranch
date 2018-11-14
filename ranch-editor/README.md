@@ -13,6 +13,8 @@
 |height|int|高度。|
 |image|char(100)|预览图。|
 |screenshot|char(100)|主截图。|
+|total|int|总根节点数。|
+|modified|int|已修改根节点数。|
 |state|int|状态：0-待审核；1-审核通过；2-审核拒绝；3-已上架；4-已下架；5-已删除。|
 |source|char(100)|来源。|
 |used|int|被使用次数。|

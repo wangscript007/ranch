@@ -30,6 +30,8 @@ public class EditorModel extends ModelSupport {
     private int height; // 高度
     private String image; // 预览图
     private String screenshot; // 主截图
+    private int total; // 总根节点数
+    private int modified; // 已修改根节点数
     private int state; // 状态：0-待审核；1-审核通过；2-审核拒绝；3-已上架；4-已下架；5-已删除
     private String json; // 扩展属性集
     private String source; // 来源
@@ -125,6 +127,26 @@ public class EditorModel extends ModelSupport {
 
     public void setScreenshot(String screenshot) {
         this.screenshot = screenshot;
+    }
+
+    @Jsonable
+    @Column(name = "c_total")
+    public int getTotal() {
+        return total;
+    }
+
+    public void setTotal(int total) {
+        this.total = total;
+    }
+
+    @Jsonable
+    @Column(name = "c_modified")
+    public int getModified() {
+        return modified;
+    }
+
+    public void setModified(int modified) {
+        this.modified = modified;
     }
 
     @Jsonable

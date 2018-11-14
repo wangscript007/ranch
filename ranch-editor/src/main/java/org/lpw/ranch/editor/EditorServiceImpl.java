@@ -2,6 +2,7 @@ package org.lpw.ranch.editor;
 
 import com.alibaba.fastjson.JSONObject;
 import org.lpw.ranch.async.AsyncService;
+import org.lpw.ranch.editor.element.ElementModel;
 import org.lpw.ranch.editor.element.ElementService;
 import org.lpw.ranch.editor.role.RoleModel;
 import org.lpw.ranch.editor.role.RoleService;
@@ -15,6 +16,7 @@ import org.lpw.tephra.dao.model.ModelHelper;
 import org.lpw.tephra.dao.orm.PageList;
 import org.lpw.tephra.lucene.LuceneHelper;
 import org.lpw.tephra.scheduler.DateJob;
+import org.lpw.tephra.scheduler.HourJob;
 import org.lpw.tephra.util.Converter;
 import org.lpw.tephra.util.DateTime;
 import org.lpw.tephra.util.Generator;
@@ -41,7 +43,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @author lpw
  */
 @Service(EditorModel.NAME + ".service")
-public class EditorServiceImpl implements EditorService, DateJob {
+public class EditorServiceImpl implements EditorService, HourJob, DateJob {
     private static final String CACHE_MODEL = EditorModel.NAME + ".service.cache.model:";
     private static final String CACHE_QUERY = EditorModel.NAME + ".service.cache.query:";
 
@@ -410,6 +412,19 @@ public class EditorServiceImpl implements EditorService, DateJob {
 
     private void resetRandom(String type) {
         random.remove(type);
+    }
+
+    @Override
+    public void executeHourJob() {
+        editorDao.query(new Timestamp[]{new Timestamp(System.currentTimeMillis() - TimeUnit.Hour.getTime() << 1),
+                new Timestamp(System.currentTimeMillis() - TimeUnit.Hour.getTime())}).getList().forEach(editor -> {
+            List<ElementModel> elements = elementService.list(editor.getId());
+            editor.setTotal(elements.size());
+            editor.setModified(numeric.toInt(elements.stream().filter(element ->
+                    element.getModify() - TimeUnit.Second.getTime() > element.getCreate().getTime()).count()));
+            editorDao.save(editor);
+            cache.remove(CACHE_MODEL + editor.getId());
+        });
     }
 
     @Override

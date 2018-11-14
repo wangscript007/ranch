@@ -45,6 +45,11 @@ class EditorDaoImpl implements EditorDao {
     }
 
     @Override
+    public PageList<EditorModel> query(Timestamp[] modify) {
+        return liteOrm.query(new LiteQuery(EditorModel.class).where("c_modify between ? and ?"), new Object[]{modify[0], modify[1]});
+    }
+
+    @Override
     public EditorModel findById(String id) {
         return liteOrm.findById(EditorModel.class, id);
     }
