@@ -23,7 +23,7 @@ export default class Summary extends React.Component<Props, State>{
         };
 
         pager.post({ service: this.props.service }).then(data => {
-            if (data === null) {
+            if (data === null || data.length === 0) {
                 return;
             }
 
