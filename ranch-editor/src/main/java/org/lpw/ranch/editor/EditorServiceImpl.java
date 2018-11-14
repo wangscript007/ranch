@@ -416,7 +416,7 @@ public class EditorServiceImpl implements EditorService, HourJob, DateJob {
 
     @Override
     public void executeHourJob() {
-        editorDao.query(new Timestamp[]{new Timestamp(System.currentTimeMillis() - TimeUnit.Hour.getTime() << 1),
+        editorDao.query(new Timestamp[]{new Timestamp(System.currentTimeMillis() - (TimeUnit.Hour.getTime() << 1)),
                 new Timestamp(System.currentTimeMillis() - TimeUnit.Hour.getTime())}).getList().forEach(editor -> {
             List<ElementModel> elements = elementService.list(editor.getId());
             editor.setTotal(elements.size());
