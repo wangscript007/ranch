@@ -1,0 +1,14 @@
+.console .ant-layout-content .content .page .summary,
+.console .ant-layout-content .content .page .summary .summary-label,
+.console .ant-layout-content .content .page .summary .summary-value {
+    display: inline-block;
+}
+
+.console .ant-layout-content .content .page .summary {
+    padding-right: 8px;
+}
+
+.console .ant-layout-content .content .page .summary .summary-value {
+    padding: 0 3px;
+    color: #52c41a;
+}

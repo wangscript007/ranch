@@ -1,0 +1,52 @@
+import * as React from 'react';
+import { Alert } from 'antd';
+import { pager } from '../pager';
+import './index.scss';
+
+interface Props {
+    service: string;
+    header?: object;
+    parameter?: object;
+}
+
+interface State {
+    list: Array<{
+        label: string;
+        value: string;
+    }>;
+}
+
+export default class Summary extends React.Component<Props, State>{
+    constructor(props: Props) {
+        super(props);
+
+        this.state = {
+            list: []
+        };
+
+        pager.post(this.props).then(data => {
+            if (data === null) {
+                return;
+            }
+
+            this.setState({
+                list: data
+            });
+        });
+    }
+
+    public render(): JSX.Element | null {
+        if (!this.state.list || this.state.list.length === 0) {
+            return null;
+        }
+
+        return (
+            <Alert type="info" message={this.state.list.map((obj, i) =>
+                <div key={i} className="summary">
+                    <div className="summary-label">{obj.label}</div>
+                    <div className="summary-value">{obj.value}</div>
+                </div>
+            )} />
+        );
+    }
+}

@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { Button, Table, Divider, Form, Menu, Dropdown, Icon } from 'antd';
+import Summary from '../summary';
 import http from '../../util/http';
 import merger from '../../util/merger';
 import { meta, PropMeta, ActionMeta } from '../meta';
@@ -28,10 +29,13 @@ class Grid extends React.Component<Props, State> {
     }
 
     public render(): JSX.Element[] {
+        const elements: JSX.Element[] = [];
+        if (this.props.meta.summary) {
+            elements.push(<Summary key="summary" service={this.props.meta.summary} />);
+        }
         const searchToolbar: JSX.Element[] = [];
         this.search(searchToolbar);
         this.toolbar(searchToolbar);
-        const elements: JSX.Element[] = [];
         if (searchToolbar.length > 0) {
             elements.push(<Form key='search-toolbar' className="grid-search-toolbar" layout="inline">{searchToolbar}</Form>);
         }

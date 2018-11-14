@@ -23,23 +23,25 @@ class FormPage extends React.Component<Props> {
             },
         };
 
-        return <Form>
-            {this.props.props.map(prop =>
-                <Form.Item key={prop.name} label={prop.label} {...formItemLayout}>
-                    {pager.getInput(this.props.form, prop, this.props.data)}
+        return (
+            <Form>
+                {this.props.props.map(prop =>
+                    <Form.Item key={prop.name} label={prop.label} {...formItemLayout}>
+                        {pager.getInput(this.props.form, prop, this.props.data)}
+                    </Form.Item>
+                )}
+                <Form.Item
+                    wrapperCol={{
+                        xs: { span: 24, offset: 0 },
+                        sm: { span: 16, offset: 8 },
+                    }}
+                >
+                    {this.props.meta.toolbar ? this.props.meta.toolbar.map(button =>
+                        <Button key={button.service || button.type} type="primary" icon={button.icon} onClick={this.click.bind(this, button)}>{button.label}</Button>
+                    ) : null}
                 </Form.Item>
-            )}
-            <Form.Item
-                wrapperCol={{
-                    xs: { span: 24, offset: 0 },
-                    sm: { span: 16, offset: 8 },
-                }}
-            >
-                {this.props.meta.toolbar ? this.props.meta.toolbar.map(button =>
-                    <Button key={button.service || button.type} type="primary" icon={button.icon} onClick={this.click.bind(this, button)}>{button.label}</Button>
-                ) : null}
-            </Form.Item>
-        </Form>;
+            </Form>
+        );
     }
 
     private click(action: ActionMeta): void {

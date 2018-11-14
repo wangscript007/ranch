@@ -28,6 +28,7 @@ export interface PageMeta {
     type: string;
     service?: string;
     parameter?: object;
+    summary?: string;
     search?: PropMeta[];
     toolbar?: ActionMeta[];
     ops?: ActionMeta[];
