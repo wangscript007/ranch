@@ -31,7 +31,7 @@ class Grid extends React.Component<Props, State> {
     public render(): JSX.Element[] {
         const elements: JSX.Element[] = [];
         if (this.props.meta.summary) {
-            elements.push(<Summary key="summary" service={this.props.meta.summary} />);
+            elements.push(<Summary key="summary" service={pager.getService(this.props.service, { type: 'summary' }, this.props.meta.summary)} />);
         }
         const searchToolbar: JSX.Element[] = [];
         this.search(searchToolbar);

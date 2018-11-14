@@ -5,8 +5,6 @@ import './index.scss';
 
 interface Props {
     service: string;
-    header?: object;
-    parameter?: object;
 }
 
 interface State {
@@ -24,7 +22,7 @@ export default class Summary extends React.Component<Props, State>{
             list: []
         };
 
-        pager.post(this.props).then(data => {
+        pager.post({ service: this.props.service }).then(data => {
             if (data === null) {
                 return;
             }
