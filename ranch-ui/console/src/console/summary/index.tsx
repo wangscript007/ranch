@@ -39,7 +39,7 @@ export default class Summary extends React.Component<Props, State>{
         }
 
         return (
-            <Alert type="info" message={this.state.list.map((obj, i) =>
+            <Alert type="info" className="summaries" message={this.state.list.map((obj, i) =>
                 <div key={i} className="summary">
                     <div className="summary-label">{obj.label}</div>
                     <div className="summary-value">{obj.value}</div>

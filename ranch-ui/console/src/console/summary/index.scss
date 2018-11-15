@@ -1,14 +1,18 @@
-.console .ant-layout-content .content .page .summary,
-.console .ant-layout-content .content .page .summary .summary-label,
-.console .ant-layout-content .content .page .summary .summary-value {
+.console .ant-layout-content .content .page .summaries {
+    margin-bottom: 5px;
+}
+
+.console .ant-layout-content .content .page .summaries .summary,
+.console .ant-layout-content .content .page .summaries .summary-label,
+.console .ant-layout-content .content .page .summaries .summary-value {
     display: inline-block;
 }
 
-.console .ant-layout-content .content .page .summary {
+.console .ant-layout-content .content .page .summaries .summary {
     padding-right: 8px;
 }
 
-.console .ant-layout-content .content .page .summary .summary-value {
+.console .ant-layout-content .content .page .summaries .summary-value {
     padding: 0 3px;
     color: #52c41a;
 }
