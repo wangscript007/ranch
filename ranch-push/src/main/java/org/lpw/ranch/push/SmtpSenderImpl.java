@@ -14,14 +14,19 @@ import org.lpw.tephra.util.Validator;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import javax.activation.DataHandler;
+import javax.activation.FileDataSource;
 import javax.inject.Inject;
 import javax.mail.Authenticator;
 import javax.mail.Message;
+import javax.mail.Multipart;
 import javax.mail.PasswordAuthentication;
 import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeMultipart;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -69,7 +74,22 @@ public class SmtpSenderImpl implements PushSender, ContextRefreshedListener {
             message.setFrom(new InternetAddress(sender.from, push.getName(), context.getCharset(null)));
             message.setRecipient(Message.RecipientType.TO, new InternetAddress(receiver));
             message.setSubject(pushService.parse(PushService.Type.Subject, push.getKey(), push.getSubject(), args), context.getCharset(null));
-            message.setContent(pushService.parse(PushService.Type.Content, push.getKey(), push.getContent(), args), "text/html;charset=utf-8");
+            Multipart multipart = new MimeMultipart();
+            MimeBodyPart content = new MimeBodyPart();
+            content.setText(pushService.parse(PushService.Type.Content, push.getKey(), push.getContent(), args),
+                    "text/html;charset=utf-8");
+            multipart.addBodyPart(content);
+            if (args.containsKey("attachments")) {
+                JSONArray attachments = args.getJSONArray("attachments");
+                for (int i = 0, size = attachments.size(); i < size; i++) {
+                    MimeBodyPart attachment = new MimeBodyPart();
+                    String filename = attachments.getString(i);
+                    attachment.setDataHandler(new DataHandler(new FileDataSource(filename)));
+                    attachment.setFileName(filename.substring(filename.lastIndexOf('/') + 1));
+                    multipart.addBodyPart(attachment);
+                }
+            }
+            message.setContent(multipart);
             message.setSentDate(dateTime.today());
             Transport transport = sender.session.getTransport();
             transport.connect();
