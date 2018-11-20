@@ -76,8 +76,7 @@ public class SmtpSenderImpl implements PushSender, ContextRefreshedListener {
             message.setSubject(pushService.parse(PushService.Type.Subject, push.getKey(), push.getSubject(), args), context.getCharset(null));
             Multipart multipart = new MimeMultipart();
             MimeBodyPart content = new MimeBodyPart();
-            content.setText(pushService.parse(PushService.Type.Content, push.getKey(), push.getContent(), args),
-                    "text/html;charset=utf-8");
+            content.setText(pushService.parse(PushService.Type.Content, push.getKey(), push.getContent(), args));
             multipart.addBodyPart(content);
             if (args.containsKey("attachments")) {
                 JSONArray attachments = args.getJSONArray("attachments");
