@@ -61,6 +61,11 @@ class RoleDaoImpl implements RoleDao {
     }
 
     @Override
+    public RoleModel find(String editor, int type) {
+        return liteOrm.findOne(new LiteQuery(RoleModel.class).where("c_editor=? and c_type=?"), new Object[]{editor, type});
+    }
+
+    @Override
     public int count(String user, int type) {
         return liteOrm.count(new LiteQuery(RoleModel.class).where("c_user=? and c_type=?"), new Object[]{user, type});
     }

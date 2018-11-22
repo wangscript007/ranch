@@ -99,15 +99,20 @@ public class EditorServiceImpl implements EditorService, HourJob, DateJob {
     private Set<Integer> onsaleState = Collections.singleton(3);
 
     @Override
-    public JSONObject query(String mobile, String email, String nick, int template, String type, String name, String label,
-                            String[] states, String createStart, String createEnd, String modifyStart, String modifyEnd, Order order) {
-        Set<String> ids = validator.isEmpty(mobile) && validator.isEmpty(email) && validator.isEmpty(nick) ? new HashSet<>()
-                : roleService.editors(userHelper.ids(null, null, nick, mobile, email,
+    public JSONObject query(String uid, String mobile, String email, String nick, int template, String type, String name, String label,
+                            int modified, String[] states, String createStart, String createEnd, String modifyStart, String modifyEnd,
+                            Order order) {
+        Set<String> ids = validator.isEmpty(uid) && validator.isEmpty(mobile) && validator.isEmpty(email) && validator.isEmpty(nick) ?
+                new HashSet<>() : roleService.editors(userHelper.ids(uid, null, null, nick, mobile, email,
                 null, -1, -1, -1, null, null));
 
-        return editorDao.query(ids, template, type, name, label, getStates(states), dateTime.getStart(createStart),
+        return editorDao.query(ids, template, type, name, label, modified, getStates(states), dateTime.getStart(createStart),
                 dateTime.getEnd(createEnd), dateTime.getStart(modifyStart), dateTime.getEnd(modifyEnd), order,
-                pagination.getPageSize(20), pagination.getPageNum()).toJson();
+                pagination.getPageSize(20), pagination.getPageNum()).toJson((editor, object) -> {
+            RoleModel role = roleService.findOwner(editor.getId());
+            if (role != null)
+                object.put("owner", userHelper.get(role.getUser()));
+        });
     }
 
     @Override
@@ -375,7 +380,7 @@ public class EditorServiceImpl implements EditorService, HourJob, DateJob {
             if (ids.isEmpty())
                 object = BeanFactory.getBean(PageList.class).setPage(0, pageSize, 0).toJson();
             else
-                object = editorDao.query(new HashSet<>(ids), 1, type, null, null, onsaleState, null,
+                object = editorDao.query(new HashSet<>(ids), 1, type, null, null, -1, onsaleState, null,
                         null, null, null, order, pageSize, pagination.getPageNum()).toJson();
             cache.put(cacheKey, object, false);
         }
@@ -387,7 +392,7 @@ public class EditorServiceImpl implements EditorService, HourJob, DateJob {
         String cacheKey = getSearchCacheKey(type, order + ":" + pageSize + ":" + pagination.getPageNum());
         JSONObject object = cache.get(cacheKey);
         if (object == null)
-            cache.put(cacheKey, object = editorDao.query(null, 1, type, null, null, onsaleState,
+            cache.put(cacheKey, object = editorDao.query(null, 1, type, null, null, -1, onsaleState,
                     null, null, null, null, order, pageSize,
                     pagination.getPageNum()).toJson(), false);
 
@@ -442,7 +447,7 @@ public class EditorServiceImpl implements EditorService, HourJob, DateJob {
         String labelLuceneKey = luceneKey + ".label";
         luceneHelper.clear(labelLuceneKey);
         for (int i = 1; i < Integer.MAX_VALUE; i++) {
-            PageList<EditorModel> pl = editorDao.query(null, 1, type, null, null, onsaleState,
+            PageList<EditorModel> pl = editorDao.query(null, 1, type, null, null, -1, onsaleState,
                     null, null, null, null, Order.None, 20, i);
             pl.getList().forEach(editor -> {
                 StringBuilder data = new StringBuilder().append(editor.getName()).append(',').append(editor.getLabel());

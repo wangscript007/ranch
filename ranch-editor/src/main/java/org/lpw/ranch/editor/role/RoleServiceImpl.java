@@ -70,6 +70,11 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
+    public RoleModel findOwner(String editor) {
+        return roleDao.find(editor, Type.Owner.ordinal());
+    }
+
+    @Override
     public Set<String> editors(Set<String> users) {
         Set<String> set = new HashSet<>();
         roleDao.query(users).getList().forEach(role -> set.add(role.getEditor()));

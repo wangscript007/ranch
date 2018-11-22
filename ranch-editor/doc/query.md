@@ -8,6 +8,7 @@
 
 |名称|类型|必须|说明|
 |---|---|---|---|
+|uid|string|否|用户UID，为空表示不限制。|
 |mobile|string|否|用户手机号，为空表示不限制。|
 |email|string|否|用户Email，为空表示不限制。|
 |nick|string|否|用户昵称，为空表示不限制。|
@@ -15,6 +16,7 @@
 |type|string|否|类型，为空表示不限制。|
 |name|string|否|名称，模糊匹配，为空表示不限制。|
 |label|string|否|标签，模糊匹配，为空表示不限制。|
+|modified|int|否|最小已修改根节点数，-1表示不限制。|
 |states|string|否|状态集，多个状态以逗号分隔，为空表示不限制。|
 |createStart|string|否|创建开始日期，格式：yyyy-MM-dd，为空表示不限制。|
 |createEnd|string|否|创建结束日期，格式：yyyy-MM-dd，为空表示不限制。|
@@ -47,10 +49,13 @@
             "source": "来源",
             "used": "被使用次数",
             "create": "创建时间",
-            "modify": "修改时间"
+            "modify": "修改时间",
+            "owner": {}
         }
     ]
 }
 ```
+
+> `owner`为创建者用户信息。
 
 > 后台管理接口，需验证[请求参数签名](https://github.com/heisedebaise/tephra/blob/master/tephra-ctrl/doc/sign.md)。

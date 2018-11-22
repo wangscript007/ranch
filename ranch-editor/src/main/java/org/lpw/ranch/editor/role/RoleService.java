@@ -88,6 +88,14 @@ public interface RoleService {
     RoleModel find(String user, String editor);
 
     /**
+     * 查找所有者。
+     *
+     * @param editor 编辑器。
+     * @return 角色信息；不存在则返回null。
+     */
+    RoleModel findOwner(String editor);
+
+    /**
      * 检索用户的编辑器ID集。
      *
      * @param users 用户ID集。

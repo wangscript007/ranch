@@ -25,10 +25,10 @@ public class EditorCtrl {
             @Validate(validator = Validators.SIGN)
     })
     public Object query() {
-        return editorService.query(request.get("mobile"), request.get("email"), request.get("nick"),
+        return editorService.query(request.get("uid"), request.get("mobile"), request.get("email"), request.get("nick"),
                 request.getAsInt("template", -1), request.get("type"), request.get("name"),
-                request.get("label"), request.getAsArray("states"), request.get("createStart"),
-                request.get("createEnd"), request.get("modifyStart"), request.get("modifyEnd"),
+                request.get("label"), request.getAsInt("modified", -1), request.getAsArray("states"),
+                request.get("createStart"), request.get("createEnd"), request.get("modifyStart"), request.get("modifyEnd"),
                 Order.find(request.get("order"), Order.Newest));
     }
 
