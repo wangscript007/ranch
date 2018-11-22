@@ -148,12 +148,13 @@ public class UserHelperImpl extends ServiceHelperSupport implements UserHelper {
     }
 
     @Override
-    public Set<String> ids(String idcard, String name, String nick, String mobile, String email, String code,
+    public Set<String> ids(String uid, String idcard, String name, String nick, String mobile, String email, String code,
                            int minGrade, int maxGrade, int state, String registerStart, String registerEnd) {
         if (queryKey == null)
             queryKey = key + ".query";
 
         Map<String, String> parameter = new HashMap<>();
+        parameter.put("uid", uid);
         parameter.put("idcard", idcard);
         parameter.put("name", name);
         parameter.put("nick", nick);
