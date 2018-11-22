@@ -76,16 +76,17 @@ public class SmtpSenderImpl implements PushSender, ContextRefreshedListener {
             message.setSubject(pushService.parse(PushService.Type.Subject, push.getKey(), push.getSubject(), args), context.getCharset(null));
             Multipart multipart = new MimeMultipart();
             MimeBodyPart content = new MimeBodyPart();
-            content.setText(pushService.parse(PushService.Type.Content, push.getKey(), push.getContent(), args), context.getCharset(null));
+            content.setText(pushService.parse(PushService.Type.Content, push.getKey(), push.getContent(), args),
+                    context.getCharset(null), "html");
             multipart.addBodyPart(content);
-            if (args.containsKey("attachments")) {
-                JSONArray attachments = args.getJSONArray("attachments");
-                for (int i = 0, size = attachments.size(); i < size; i++) {
-                    MimeBodyPart attachment = new MimeBodyPart();
-                    String filename = attachments.getString(i);
-                    attachment.setDataHandler(new DataHandler(new FileDataSource(filename)));
-                    attachment.setFileName(filename.substring(filename.lastIndexOf('/') + 1));
-                    multipart.addBodyPart(attachment);
+            if (args.containsKey("files")) {
+                JSONArray files = args.getJSONArray("files");
+                for (int i = 0, size = files.size(); i < size; i++) {
+                    MimeBodyPart file = new MimeBodyPart();
+                    String filename = files.getString(i);
+                    file.setDataHandler(new DataHandler(new FileDataSource(filename)));
+                    file.setFileName(filename.substring(filename.lastIndexOf('/') + 1));
+                    multipart.addBodyPart(file);
                 }
             }
             message.setContent(multipart);
