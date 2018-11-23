@@ -446,7 +446,7 @@ public class EditorServiceImpl implements EditorService, HourJob, MinuteJob, Dat
             editor.setTotal(count[0]);
             editor.setModified(count[1]);
             editorDao.save(editor);
-            System.out.println(editor.getId() + ";" + count[0] + ";" + count[1]);
+            System.out.println("editorhour:"+editor.getId() + ";" + count[0] + ";" + count[1]);
             cache.remove(CACHE_MODEL + editor.getId());
         });
 
