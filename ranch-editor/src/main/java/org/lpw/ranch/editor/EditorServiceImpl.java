@@ -6,6 +6,7 @@ import org.lpw.ranch.editor.element.ElementModel;
 import org.lpw.ranch.editor.element.ElementService;
 import org.lpw.ranch.editor.role.RoleModel;
 import org.lpw.ranch.editor.role.RoleService;
+import org.lpw.ranch.lock.LockHelper;
 import org.lpw.ranch.user.helper.UserHelper;
 import org.lpw.ranch.util.Pagination;
 import org.lpw.tephra.bean.BeanFactory;
@@ -73,6 +74,8 @@ public class EditorServiceImpl implements EditorService, HourJob, DateJob {
     private LuceneHelper luceneHelper;
     @Inject
     private Pagination pagination;
+    @Inject
+    private LockHelper lockHelper;
     @Inject
     private AsyncService asyncService;
     @Inject
@@ -431,15 +434,20 @@ public class EditorServiceImpl implements EditorService, HourJob, DateJob {
 
     @Override
     public void executeHourJob() {
+        String lockId = lockHelper.lock(EditorModel.NAME + ".hour", 100L, 3600);
+        if (lockId == null)
+            return;
+
         editorDao.query(new Timestamp[]{new Timestamp(System.currentTimeMillis() - (TimeUnit.Hour.getTime() << 1)),
                 new Timestamp(System.currentTimeMillis() - TimeUnit.Hour.getTime())}).getList().forEach(editor -> {
-            List<ElementModel> elements = elementService.list(editor.getId());
-            editor.setTotal(elements.size());
-            editor.setModified(numeric.toInt(elements.stream().filter(element ->
-                    element.getModify() - TimeUnit.Second.getTime() > element.getCreate().getTime()).count()));
+            int[] count = elementService.count(editor.getId());
+            editor.setTotal(count[0]);
+            editor.setModified(count[1]);
             editorDao.save(editor);
             cache.remove(CACHE_MODEL + editor.getId());
         });
+
+        lockHelper.unlock(lockId);
     }
 
     @Override

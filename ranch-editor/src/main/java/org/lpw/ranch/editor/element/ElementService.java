@@ -58,6 +58,14 @@ public interface ElementService {
     ElementModel findById(String id);
 
     /**
+     * 统计编辑器根元素数及已修改过的根元素数。
+     *
+     * @param editor 编辑器。
+     * @return 根元素数及已修改过的根元素数。
+     */
+    int[] count(String editor);
+
+    /**
      * 保存元素信息。
      *
      * @param element 元素信息。

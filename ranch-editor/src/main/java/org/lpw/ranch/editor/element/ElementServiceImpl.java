@@ -20,8 +20,10 @@ import org.springframework.stereotype.Service;
 import javax.inject.Inject;
 import java.sql.Timestamp;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * @author lpw
@@ -91,6 +93,28 @@ public class ElementServiceImpl implements ElementService, MinuteJob {
             cache.put(cacheKey, element = elementDao.findById(id), false);
 
         return element;
+    }
+
+    @Override
+    public int[] count(String editor) {
+        int modified = 0;
+        List<ElementModel> list = elementDao.query(editor, editor).getList();
+        for (ElementModel element : list)
+            if (modified(element))
+                modified++;
+
+        return new int[]{list.size(), modified};
+    }
+
+    private boolean modified(ElementModel element) {
+        if (element.getCreate().getTime() / 1000L < element.getModify() / 1000L)
+            return true;
+
+        for (ElementModel child : elementDao.query(element.getEditor(), element.getId()).getList())
+            if (modified(child))
+                return true;
+
+        return false;
     }
 
     @Override
