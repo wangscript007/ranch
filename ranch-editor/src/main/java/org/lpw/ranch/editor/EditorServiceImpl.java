@@ -46,7 +46,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @author lpw
  */
 @Service(EditorModel.NAME + ".service")
-public class EditorServiceImpl implements EditorService, HourJob, MinuteJob, DateJob {
+public class EditorServiceImpl implements EditorService, HourJob, DateJob {
     private static final String CACHE_MODEL = EditorModel.NAME + ".service.cache.model:";
     private static final String CACHE_QUERY = EditorModel.NAME + ".service.cache.query:";
 
@@ -446,17 +446,10 @@ public class EditorServiceImpl implements EditorService, HourJob, MinuteJob, Dat
             editor.setTotal(count[0]);
             editor.setModified(count[1]);
             editorDao.save(editor);
-            System.out.println("editorhour:"+editor.getId() + ";" + count[0] + ";" + count[1]);
             cache.remove(CACHE_MODEL + editor.getId());
         });
 
         lockHelper.unlock(lockId);
-    }
-
-    @Override
-    public void executeMinuteJob() {
-        if (Calendar.getInstance().get(Calendar.MINUTE) % 5 == 0)
-            executeHourJob();
     }
 
     @Override
