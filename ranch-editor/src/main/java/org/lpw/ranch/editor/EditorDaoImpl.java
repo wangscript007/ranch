@@ -36,8 +36,8 @@ class EditorDaoImpl implements EditorDao {
         daoHelper.in(where, args, "c_state", states);
         daoHelper.where(where, args, "c_create", DaoOperation.GreaterEquals, createStart);
         daoHelper.where(where, args, "c_create", DaoOperation.LessEquals, createEnd);
-        daoHelper.where(where, args, "c_modify", DaoOperation.GreaterEquals, createStart);
-        daoHelper.where(where, args, "c_modify", DaoOperation.LessEquals, createEnd);
+        daoHelper.where(where, args, "c_modify", DaoOperation.GreaterEquals, modifyStart);
+        daoHelper.where(where, args, "c_modify", DaoOperation.LessEquals, modifyEnd);
         daoHelper.like(null, where, args, "c_name", name);
         daoHelper.like(null, where, args, "c_label", label);
 

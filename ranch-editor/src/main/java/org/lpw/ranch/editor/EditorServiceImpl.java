@@ -102,9 +102,9 @@ public class EditorServiceImpl implements EditorService, HourJob, DateJob {
     public JSONObject query(String uid, String mobile, String email, String nick, int template, String type, String name, String label,
                             int modified, String[] states, String createStart, String createEnd, String modifyStart, String modifyEnd,
                             Order order) {
-        Set<String> ids = validator.isEmpty(uid) && validator.isEmpty(mobile) && validator.isEmpty(email) && validator.isEmpty(nick) ?
-                new HashSet<>() : roleService.editors(userHelper.ids(uid, null, null, nick, mobile, email,
-                null, -1, -1, -1, null, null));
+        Set<String> ids = ids(uid, mobile, email, nick);
+        if (ids != null && ids.isEmpty())
+            return BeanFactory.getBean(PageList.class).setPage(0, 0, 0).toJson();
 
         return editorDao.query(ids, template, type, name, label, modified, getStates(states), dateTime.getStart(createStart),
                 dateTime.getEnd(createEnd), dateTime.getStart(modifyStart), dateTime.getEnd(modifyEnd), order,
@@ -113,6 +113,16 @@ public class EditorServiceImpl implements EditorService, HourJob, DateJob {
             if (role != null)
                 object.put("owner", userHelper.get(role.getUser()));
         });
+    }
+
+    private Set<String> ids(String uid, String mobile, String email, String nick) {
+        if (validator.isEmpty(uid) && validator.isEmpty(mobile) && validator.isEmpty(email) && validator.isEmpty(nick))
+            return null;
+
+        Set<String> set = userHelper.ids(uid, null, null, nick, mobile, email, null,
+                -1, -1, -1, null, null);
+
+        return set.isEmpty() ? set : roleService.editors(set);
     }
 
     @Override
