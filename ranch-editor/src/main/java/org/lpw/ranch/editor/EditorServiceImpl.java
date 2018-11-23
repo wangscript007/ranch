@@ -18,6 +18,7 @@ import org.lpw.tephra.dao.orm.PageList;
 import org.lpw.tephra.lucene.LuceneHelper;
 import org.lpw.tephra.scheduler.DateJob;
 import org.lpw.tephra.scheduler.HourJob;
+import org.lpw.tephra.scheduler.MinuteJob;
 import org.lpw.tephra.util.Converter;
 import org.lpw.tephra.util.DateTime;
 import org.lpw.tephra.util.Generator;
@@ -33,6 +34,7 @@ import javax.inject.Inject;
 import java.io.File;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -44,7 +46,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @author lpw
  */
 @Service(EditorModel.NAME + ".service")
-public class EditorServiceImpl implements EditorService, HourJob, DateJob {
+public class EditorServiceImpl implements EditorService, HourJob, MinuteJob, DateJob {
     private static final String CACHE_MODEL = EditorModel.NAME + ".service.cache.model:";
     private static final String CACHE_QUERY = EditorModel.NAME + ".service.cache.query:";
 
@@ -444,10 +446,17 @@ public class EditorServiceImpl implements EditorService, HourJob, DateJob {
             editor.setTotal(count[0]);
             editor.setModified(count[1]);
             editorDao.save(editor);
+            System.out.println(editor.getId() + ";" + count[0] + ";" + count[1]);
             cache.remove(CACHE_MODEL + editor.getId());
         });
 
         lockHelper.unlock(lockId);
+    }
+
+    @Override
+    public void executeMinuteJob() {
+        if (Calendar.getInstance().get(Calendar.MINUTE) % 5 == 0)
+            executeHourJob();
     }
 
     @Override
