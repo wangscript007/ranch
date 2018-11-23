@@ -115,21 +115,16 @@ public interface PushService {
     boolean send(String key, String user, String receiver, JSONObject args);
 
     /**
-     * 直接推送，不使用推送模板。
+     * 推送到指定用户。
      *
-     * @param sender   推送器。
-     * @param appCode  APP编码。
-     * @param subject  标题。
-     * @param content  内容。
-     * @param template 模板。
-     * @param name     发送者名称。
-     * @param user     用户。
-     * @param receiver 接收者。
-     * @param args     参数集。
+     * @param user    用户。
+     * @param appCode APP编码。
+     * @param subject 标题。
+     * @param content 内容。
+     * @param args    参数集。
      * @return 推送结果：true-成功；false-失败。
      */
-    boolean send(String sender, String appCode, String subject, String content, String template, String name,
-                 String user, String receiver, JSONObject args);
+    boolean send(String user, String appCode, String subject, String content, JSONObject args);
 
     /**
      * 解析模板数据。

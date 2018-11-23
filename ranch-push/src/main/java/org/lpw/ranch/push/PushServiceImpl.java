@@ -1,6 +1,8 @@
 package org.lpw.ranch.push;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import org.lpw.ranch.device.helper.DeviceHelper;
 import org.lpw.ranch.push.log.LogModel;
 import org.lpw.ranch.push.log.LogService;
 import org.lpw.ranch.user.helper.UserHelper;
@@ -37,6 +39,8 @@ public class PushServiceImpl implements PushService, ContextRefreshedListener {
     private Pagination pagination;
     @Inject
     private UserHelper userHelper;
+    @Inject
+    private DeviceHelper deviceHelper;
     @Inject
     private LogService logService;
     @Inject
@@ -112,18 +116,26 @@ public class PushServiceImpl implements PushService, ContextRefreshedListener {
     }
 
     @Override
-    public boolean send(String sender, String appCode, String subject, String content, String template, String name,
-                        String user, String receiver, JSONObject args) {
-        PushModel push = new PushModel();
-        push.setKey("");
-        push.setSender(sender);
-        push.setAppCode(appCode);
-        push.setSubject(subject);
-        push.setContent(content);
-        push.setTemplate(template);
-        push.setName(name);
+    public boolean send(String user, String appCode, String subject, String content, JSONObject args) {
+        JSONArray devices = deviceHelper.query(user, appCode, null, null, null, 1024, 1)
+                .getJSONArray("list");
+        if (devices.isEmpty())
+            return false;
 
-        return send(push, user, receiver, args);
+        for (int i = 0, size = devices.size(); i < size; i++) {
+            JSONObject device = devices.getJSONObject(i);
+            PushModel push = new PushModel();
+            push.setKey("");
+            push.setSender(device.getString("type").equals("ios") ? "app.ios" : "app.aliyun");
+            push.setAppCode(appCode);
+            push.setSubject(subject);
+            push.setContent(content);
+            push.setTemplate("");
+            push.setName("");
+            send(push, UserHelper.SYSTEM_USER_ID, device.getString("macId"), args);
+        }
+
+        return true;
     }
 
     private boolean send(PushModel push, String user, String receiver, JSONObject args) {

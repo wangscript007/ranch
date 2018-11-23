@@ -77,4 +77,13 @@ public class PushCtrl {
     public Object send() {
         return pushService.send(request.get("key"), request.get("user"), request.get("receiver"), request.getAsJsonObject("args"));
     }
+
+    @Execute(name = "send-user", validates = {
+            @Validate(validator = Validators.SIGN),
+            @Validate(validator = UserHelper.VALIDATOR_EXISTS, parameter = "user", failureCode = 11)
+    })
+    public Object sendUser() {
+        return pushService.send(request.get("user"), request.get("appCode"), request.get("subject"), request.get("content"),
+                request.getAsJsonObject("args"));
+    }
 }

@@ -38,4 +38,19 @@ public class PushHelprImpl implements PushHelper {
 
         return object.containsKey("data") && object.getBoolean("data");
     }
+
+    @Override
+    public boolean send(String user, String appCode, String subject, String content, JSONObject args) {
+        Map<String, String> parameter = new HashMap<>();
+        parameter.put("user", user);
+        parameter.put("appCode", appCode);
+        parameter.put("subject", subject);
+        parameter.put("content", content);
+        if (!validator.isEmpty(args))
+            parameter.put("args", args.toJSONString());
+        sign.put(parameter, null);
+        JSONObject object = carousel.service(key + ".send-user", null, parameter, false);
+
+        return object.containsKey("data") && object.getBoolean("data");
+    }
 }
