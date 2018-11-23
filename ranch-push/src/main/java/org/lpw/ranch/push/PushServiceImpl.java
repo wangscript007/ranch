@@ -132,7 +132,7 @@ public class PushServiceImpl implements PushService, ContextRefreshedListener {
             push.setContent(content);
             push.setTemplate("");
             push.setName("");
-            send(push, UserHelper.SYSTEM_USER_ID, device.getString("macId"), args);
+            send(push, user, device.getString("macId"), args);
         }
 
         return true;
