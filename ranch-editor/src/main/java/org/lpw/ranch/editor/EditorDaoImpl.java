@@ -58,5 +58,6 @@ class EditorDaoImpl implements EditorDao {
     @Override
     public void save(EditorModel editor) {
         liteOrm.save(editor);
+        liteOrm.close();
     }
 }
