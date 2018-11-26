@@ -198,7 +198,7 @@ class Grid extends React.Component<Props, State> {
             }
         }
 
-        elements.push(<Table key="grid-table" rowKey="id" columns={columns} dataSource={dataSource} pagination={pagination} onChange={this.click.bind(this, { type: 'search' }, null)} />);
+        elements.push(<Table key="grid-table" className="grid-table" rowKey="id" columns={columns} dataSource={dataSource} pagination={pagination} onChange={this.click.bind(this, { type: 'search' }, null)} />);
     }
 
     private click(action: ActionMeta, model: Model, pagination?: { current: number }): void {
