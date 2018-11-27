@@ -6,8 +6,13 @@
     margin-right: 5px;
 }
 
-.console .ant-layout-content .content .page .grid-table th {
-    min-width: 88px;
+.console .ant-layout-content .content .page .grid-table .ant-table-body {
+    overflow-x: auto;
+}
+
+.console .ant-layout-content .content .page .grid-table th,
+.console .ant-layout-content .content .page .grid-table td {
+    white-space: nowrap;
 }
 
 .console .ant-layout-content .content .page .grid-img {
