@@ -34,6 +34,8 @@ sender可选值
 
 [推送](doc/send.md)
 
+[推送到用户](doc/send-user.md)
+
 ## 参数设置与获取
 
 调用[推送](doc/send.md)接口时，可以传递JSON格式的参数给模板，如：
