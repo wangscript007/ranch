@@ -1,0 +1,134 @@
+package org.lpw.ranch.editor.speech;
+
+import com.alibaba.fastjson.JSONArray;
+import org.lpw.tephra.dao.model.Jsonable;
+import org.lpw.tephra.dao.model.ModelSupport;
+import org.springframework.beans.factory.config.BeanDefinition;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
+
+import java.sql.Timestamp;
+
+/**
+ * @author lpw
+ */
+@Component(SpeechModel.NAME + ".model")
+@Scope(BeanDefinition.SCOPE_PROTOTYPE)
+@Entity(name = SpeechModel.NAME)
+@Table(name = "t_editor_speech")
+public class SpeechModel extends ModelSupport {
+    static final String NAME = "ranch.editor.speech";
+
+    private String user; // 用户
+    private String editor; // 编辑器
+    private String name; // 名称
+    private int width; // 宽度
+    private int height; // 高度
+    private String image; // 预览图
+    private JSONArray data; // 数据
+    private String password; // 密码
+    private String wsUrl; // WebSocket地址
+    private Timestamp time; // 时间
+
+    @Jsonable
+    @Column(name = "c_user")
+    public String getUser() {
+        return user;
+    }
+
+    public void setUser(String user) {
+        this.user = user;
+    }
+
+    @Jsonable
+    @Column(name = "c_editor")
+    public String getEditor() {
+        return editor;
+    }
+
+    public void setEditor(String editor) {
+        this.editor = editor;
+    }
+
+    @Jsonable
+    @Column(name = "c_name")
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    @Jsonable
+    @Column(name = "c_width")
+    public int getWidth() {
+        return width;
+    }
+
+    public void setWidth(int width) {
+        this.width = width;
+    }
+
+    @Jsonable
+    @Column(name = "c_height")
+    public int getHeight() {
+        return height;
+    }
+
+    public void setHeight(int height) {
+        this.height = height;
+    }
+
+    @Jsonable
+    @Column(name = "c_image")
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
+    public JSONArray getData() {
+        return data;
+    }
+
+    public void setData(JSONArray data) {
+        this.data = data;
+    }
+
+    @Jsonable
+    @Column(name = "c_password")
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    @Jsonable
+    @Column(name = "c_ws_url")
+    public String getWsUrl() {
+        return wsUrl;
+    }
+
+    public void setWsUrl(String wsUrl) {
+        this.wsUrl = wsUrl;
+    }
+
+    @Jsonable
+    @Column(name = "c_time")
+    public Timestamp getTime() {
+        return time;
+    }
+
+    public void setTime(Timestamp time) {
+        this.time = time;
+    }
+}

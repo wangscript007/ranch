@@ -171,3 +171,30 @@
 [查找截图](doc/screenshot/find.md)
 
 [截图](doc/screenshot/capture.md)
+
+## 在线演示
+
+属性
+
+|属性|类型|说明|
+|---|---|---|
+|user|char(36)|用户。|
+|editor|char(36)|编辑器。|
+|name|char(100)|名称。|
+|width|int|宽度。|
+|height|int|高度。|
+|image|char(100)|预览图。|
+|data|array|数据。|
+|password|char(100)|密码。|
+|wsUrl|char(100)|WebSocket地址。|
+|time|datetime|时间。|
+
+[用户数据集](doc/speech/user.md)
+
+[创建](doc/speech/create.md)
+
+[设置密码](doc/speech/password.md)
+
+[演示](doc/speech/produce.md)
+
+[观看](doc/speech/consume.md)
