@@ -11,6 +11,7 @@ CREATE TABLE t_editor_speech
   c_data TEXT DEFAULT NULL COMMENT '数据',
   c_password VARCHAR(255) DEFAULT NULL COMMENT '密码',
   c_ws_url VARCHAR(255) DEFAULT NULL COMMENT 'WebSocket地址',
+  c_state INT DEFAULT 0 COMMENT '状态：0-未开始；1-演示中；2-已结束',
   c_time DATETIME DEFAULT NULL COMMENT '时间',
 
   PRIMARY KEY pk(c_id) USING HASH,

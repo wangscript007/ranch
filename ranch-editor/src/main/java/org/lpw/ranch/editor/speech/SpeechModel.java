@@ -32,6 +32,7 @@ public class SpeechModel extends ModelSupport {
     private JSONArray data; // 数据
     private String password; // 密码
     private String wsUrl; // WebSocket地址
+    private int state; // 状态：0-未开始；1-演示中；2-已结束
     private Timestamp time; // 时间
 
     @Jsonable
@@ -120,6 +121,16 @@ public class SpeechModel extends ModelSupport {
 
     public void setWsUrl(String wsUrl) {
         this.wsUrl = wsUrl;
+    }
+
+    @Jsonable
+    @Column(name = "c_state")
+    public int getState() {
+        return state;
+    }
+
+    public void setState(int state) {
+        this.state = state;
     }
 
     @Jsonable

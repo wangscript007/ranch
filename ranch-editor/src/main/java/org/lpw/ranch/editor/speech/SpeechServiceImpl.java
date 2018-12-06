@@ -83,28 +83,42 @@ public class SpeechServiceImpl implements SpeechService {
     public void password(String id, String password) {
         SpeechModel speech = findById(id);
         speech.setPassword(password);
-        speechDao.save(speech);
-        cache.remove(CACHE_MODEL + id);
     }
 
     @Override
     public JSONObject produce(String id) {
-        return entry(id, AuthType.Producer);
+        SpeechModel speech = findById(id);
+        speech.setState(1);
+        save(speech);
+
+        return entry(id, AuthType.Producer, speech);
     }
 
     @Override
     public JSONObject consume(String id) {
-        return entry(id, AuthType.Consumer);
+        return entry(id, AuthType.Consumer, findById(id));
     }
 
-    private JSONObject entry(String id, AuthType authType) {
+    private JSONObject entry(String id, AuthType authType, SpeechModel speech) {
         String unique = generator.random(32);
         wormholeHelper.auth(authType, id, unique);
         JSONObject object = new JSONObject();
         object.put("auth", unique);
-        object.put("speech", modelHelper.toJson(findById(id)));
+        object.put("speech", modelHelper.toJson(speech));
         object.put("data", json.toArray(speechDao.getData(id)));
 
         return object;
+    }
+
+    @Override
+    public void finish(String id) {
+        SpeechModel speech = findById(id);
+        speech.setState(2);
+        save(speech);
+    }
+
+    private void save(SpeechModel speech) {
+        speechDao.save(speech);
+        cache.remove(CACHE_MODEL + speech.getId());
     }
 }

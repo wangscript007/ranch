@@ -21,4 +21,6 @@ public interface SpeechService {
     JSONObject produce(String id);
 
     JSONObject consume(String id);
+
+    void finish(String id);
 }

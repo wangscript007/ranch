@@ -71,4 +71,16 @@ public class SpeechCtrl {
     public Object consume() {
         return speechService.consume(request.get("id"));
     }
+
+    @Execute(name = "finish", validates = {
+            @Validate(validator = Validators.ID, parameter = "id", failureCode = 71),
+            @Validate(validator = UserHelper.VALIDATOR_SIGN_IN),
+            @Validate(validator = SpeechService.VALIDATOR_EXISTS, parameter = "id", failureCode = 72),
+            @Validate(validator = SpeechService.VALIDATOR_OWNER, parameter = "id", failureCode = 73)
+    })
+    public Object finish() {
+        speechService.finish(request.get("id"));
+
+        return "";
+    }
 }
