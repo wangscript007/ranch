@@ -35,9 +35,7 @@ public class SpeechCtrl {
             @Validate(validator = EditorService.VALIDATOR_EDITABLE, parameter = "editor", failureCode = 11)
     })
     public Object create() {
-        speechService.create(request.get("editor"));
-
-        return "";
+        return speechService.create(request.get("editor"));
     }
 
     @Execute(name = "password", validates = {

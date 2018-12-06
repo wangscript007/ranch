@@ -64,7 +64,7 @@ public class SpeechServiceImpl implements SpeechService {
     }
 
     @Override
-    public void create(String editor) {
+    public JSONObject create(String editor) {
         EditorModel editorModel = editorService.findById(editor);
         SpeechModel speech = new SpeechModel();
         speech.setUser(userHelper.id());
@@ -77,6 +77,8 @@ public class SpeechServiceImpl implements SpeechService {
         speech.setTime(dateTime.now());
         speechDao.save(speech);
         speechDao.setData(speech.getId(), elementService.query(editor, editor, true).toJSONString());
+
+        return modelHelper.toJson(speech);
     }
 
     @Override
