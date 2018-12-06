@@ -123,4 +123,10 @@ public class SpeechServiceImpl implements SpeechService {
         speechDao.save(speech);
         cache.remove(CACHE_MODEL + speech.getId());
     }
+
+    @Override
+    public void delete(String id) {
+        speechDao.delete(id);
+        cache.remove(CACHE_MODEL + id);
+    }
 }

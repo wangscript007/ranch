@@ -201,3 +201,5 @@
 [观看](doc/speech/consume.md)
 
 [结束](doc/speech/finish.md)
+
+[删除](doc/speech/delete.md)
