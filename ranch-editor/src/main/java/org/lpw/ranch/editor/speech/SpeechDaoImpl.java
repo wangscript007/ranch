@@ -29,10 +29,11 @@ class SpeechDaoImpl implements SpeechDao {
     private DaoHelper daoHelper;
 
     @Override
-    public PageList<SpeechModel> query(String user, Timestamp[] times, int pageSize, int pageNum) {
+    public PageList<SpeechModel> query(String user, int state, Timestamp[] times, int pageSize, int pageNum) {
         StringBuilder where = new StringBuilder();
         List<Object> args = new ArrayList<>();
         daoHelper.where(where, args, "c_user", DaoOperation.Equals, user);
+        daoHelper.where(where, args, "c_state", DaoOperation.Equals, state);
         daoHelper.where(where, args, "c_time", DaoOperation.GreaterEquals, times[0]);
         daoHelper.where(where, args, "c_time", DaoOperation.LessEquals, times[1]);
 

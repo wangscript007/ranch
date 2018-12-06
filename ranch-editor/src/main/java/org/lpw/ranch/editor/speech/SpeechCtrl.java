@@ -25,7 +25,7 @@ public class SpeechCtrl {
             @Validate(validator = UserHelper.VALIDATOR_SIGN_IN)
     })
     public Object user() {
-        return speechService.user(request.getAsArray("time"));
+        return speechService.user(request.getAsInt("state", -1), request.getAsArray("time"));
     }
 
     @Execute(name = "create", validates = {

@@ -10,7 +10,7 @@ public interface SpeechService {
     String VALIDATOR_OWNER = SpeechModel.NAME + ".validator.owner";
     String VALIDATOR_PASSWORD = SpeechModel.NAME + ".validator.password";
 
-    JSONObject user(String[] time);
+    JSONObject user(int state, String[] time);
 
     SpeechModel findById(String id);
 

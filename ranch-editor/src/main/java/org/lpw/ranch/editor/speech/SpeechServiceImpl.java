@@ -48,8 +48,8 @@ public class SpeechServiceImpl implements SpeechService {
     private SpeechDao speechDao;
 
     @Override
-    public JSONObject user(String[] time) {
-        return speechDao.query(userHelper.id(), dateTime.toTimeRange(time), pagination.getPageSize(20),
+    public JSONObject user(int state, String[] time) {
+        return speechDao.query(userHelper.id(), state, dateTime.toTimeRange(time), pagination.getPageSize(20),
                 pagination.getPageNum()).toJson();
     }
 

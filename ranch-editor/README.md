@@ -187,6 +187,7 @@
 |data|array|数据。|
 |password|char(100)|密码。|
 |wsUrl|char(100)|WebSocket地址。|
+|state|int|状态：0-未开始；1-演示中；2-已结束。|
 |time|datetime|时间。|
 
 [用户数据集](doc/speech/user.md)

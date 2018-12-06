@@ -8,7 +8,7 @@ import java.sql.Timestamp;
  * @author lpw
  */
 interface SpeechDao {
-    PageList<SpeechModel> query(String user, Timestamp[] times, int pageSize, int pageNum);
+    PageList<SpeechModel> query(String user, int state, Timestamp[] times, int pageSize, int pageNum);
 
     SpeechModel findById(String id);
 
