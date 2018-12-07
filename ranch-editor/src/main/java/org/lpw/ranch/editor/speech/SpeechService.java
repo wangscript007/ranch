@@ -14,9 +14,13 @@ public interface SpeechService {
 
     SpeechModel findById(String id);
 
+    JSONObject info(String id);
+
     JSONObject create(String editor);
 
     void password(String id, String password);
+
+    void personal(String id, int personal);
 
     JSONObject produce(String id);
 

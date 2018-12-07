@@ -188,9 +188,12 @@
 |password|char(100)|密码。|
 |wsUrl|char(100)|WebSocket地址。|
 |state|int|状态：0-未开始；1-演示中；2-已结束。|
+|personal|int|私有：0-否；1-是。|
 |time|datetime|时间。|
 
 [用户数据集](doc/speech/user.md)
+
+[获取详情](doc/speech/info.md)
 
 [创建](doc/speech/create.md)
 

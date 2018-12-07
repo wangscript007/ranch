@@ -28,6 +28,14 @@ public class SpeechCtrl {
         return speechService.user(request.getAsInt("state", -1), request.getAsArray("time"));
     }
 
+    @Execute(name = "info", validates = {
+            @Validate(validator = Validators.ID, parameter = "id", failureCode = 71),
+            @Validate(validator = SpeechService.VALIDATOR_EXISTS, parameter = "id", failureCode = 72)
+    })
+    public Object info() {
+        return speechService.info(request.get("id"));
+    }
+
     @Execute(name = "create", validates = {
             @Validate(validator = Validators.ID, parameter = "editor", failureCode = 1),
             @Validate(validator = UserHelper.VALIDATOR_SIGN_IN),
@@ -46,6 +54,19 @@ public class SpeechCtrl {
     })
     public Object password() {
         speechService.password(request.get("id"), request.get("password"));
+
+        return "";
+    }
+
+    @Execute(name = "personal", validates = {
+            @Validate(validator = Validators.ID, parameter = "id", failureCode = 71),
+            @Validate(validator = Validators.IN, number = {0, 1}, parameter = "personal", failureCode = 75),
+            @Validate(validator = UserHelper.VALIDATOR_SIGN_IN),
+            @Validate(validator = SpeechService.VALIDATOR_EXISTS, parameter = "id", failureCode = 72),
+            @Validate(validator = SpeechService.VALIDATOR_OWNER, parameter = "id", failureCode = 73)
+    })
+    public Object personal() {
+        speechService.personal(request.get("id"), request.getAsInt("personal"));
 
         return "";
     }

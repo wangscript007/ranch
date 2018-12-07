@@ -11,6 +11,7 @@ import org.lpw.tephra.dao.model.ModelHelper;
 import org.lpw.tephra.util.DateTime;
 import org.lpw.tephra.util.Generator;
 import org.lpw.tephra.util.Json;
+import org.lpw.tephra.util.Validator;
 import org.lpw.tephra.wormhole.AuthType;
 import org.lpw.tephra.wormhole.WormholeHelper;
 import org.springframework.stereotype.Service;
@@ -30,6 +31,8 @@ public class SpeechServiceImpl implements SpeechService {
     private Generator generator;
     @Inject
     private Json json;
+    @Inject
+    private Validator validator;
     @Inject
     private Cache cache;
     @Inject
@@ -64,6 +67,15 @@ public class SpeechServiceImpl implements SpeechService {
     }
 
     @Override
+    public JSONObject info(String id) {
+        SpeechModel speech = findById(id);
+        JSONObject object = modelHelper.toJson(speech);
+        object.put("password", !validator.isEmpty(speech.getPassword()));
+
+        return object;
+    }
+
+    @Override
     public JSONObject create(String editor) {
         EditorModel editorModel = editorService.findById(editor);
         SpeechModel speech = new SpeechModel();
@@ -85,6 +97,14 @@ public class SpeechServiceImpl implements SpeechService {
     public void password(String id, String password) {
         SpeechModel speech = findById(id);
         speech.setPassword(password);
+        save(speech);
+    }
+
+    @Override
+    public void personal(String id, int personal) {
+        SpeechModel speech = findById(id);
+        speech.setPersonal(personal);
+        save(speech);
     }
 
     @Override

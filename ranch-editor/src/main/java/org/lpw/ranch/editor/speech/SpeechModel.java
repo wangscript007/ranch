@@ -10,7 +10,6 @@ import org.springframework.stereotype.Component;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
-
 import java.sql.Timestamp;
 
 /**
@@ -33,6 +32,7 @@ public class SpeechModel extends ModelSupport {
     private String password; // 密码
     private String wsUrl; // WebSocket地址
     private int state; // 状态：0-未开始；1-演示中；2-已结束
+    private int personal; // 私有：0-否；1-是
     private Timestamp time; // 时间
 
     @Jsonable
@@ -131,6 +131,16 @@ public class SpeechModel extends ModelSupport {
 
     public void setState(int state) {
         this.state = state;
+    }
+
+    @Jsonable
+    @Column(name = "c_personal")
+    public int getPersonal() {
+        return personal;
+    }
+
+    public void setPersonal(int personal) {
+        this.personal = personal;
     }
 
     @Jsonable
