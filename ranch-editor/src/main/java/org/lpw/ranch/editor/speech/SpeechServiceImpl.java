@@ -73,7 +73,7 @@ public class SpeechServiceImpl implements SpeechService {
         speech.setWidth(editorModel.getWidth());
         speech.setHeight(editorModel.getHeight());
         speech.setImage(editorModel.getImage());
-        speech.setWsUrl(wormholeHelper.getWebSocketUrl());
+        speech.setWsUrl(wormholeHelper.getWssUrl());
         speech.setTime(dateTime.now());
         speechDao.save(speech);
         speechDao.setData(speech.getId(), elementService.query(editor, editor, true).toJSONString());
