@@ -22,6 +22,7 @@
     "password": "密码",
     "wsUrl": "WebSocket地址",
     "state": "状态：0-未开始；1-演示中；2-已结束",
+    "personal": "私有：0-否；1-是",
     "time": "时间"
 }
 ```

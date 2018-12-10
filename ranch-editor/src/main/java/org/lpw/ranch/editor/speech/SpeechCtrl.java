@@ -83,7 +83,6 @@ public class SpeechCtrl {
 
     @Execute(name = "consume", validates = {
             @Validate(validator = Validators.ID, parameter = "id", failureCode = 71),
-            @Validate(validator = UserHelper.VALIDATOR_SIGN_IN),
             @Validate(validator = SpeechService.VALIDATOR_EXISTS, parameter = "id", failureCode = 72),
             @Validate(validator = SpeechService.VALIDATOR_PASSWORD, parameters = {"id", "password"}, failureCode = 74)
     })
