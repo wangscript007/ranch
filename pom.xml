@@ -52,6 +52,8 @@
         <module>ranch-shortcut</module>
         <module>ranch-notice</module>
         <module>ranch-notice-helper</module>
+        <module>ranch-milestone</module>
+        <module>ranch-milestone-helper</module>
         <module>ranch-ui</module>
         <module>ranch-web</module>
         <module>ranch-test</module>
