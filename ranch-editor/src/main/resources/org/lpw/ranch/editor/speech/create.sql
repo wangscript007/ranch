@@ -8,7 +8,7 @@ CREATE TABLE t_editor_speech
   c_width INT DEFAULT 0 COMMENT '宽度',
   c_height INT DEFAULT 0 COMMENT '高度',
   c_image VARCHAR(255) DEFAULT NULL COMMENT '预览图',
-  c_data TEXT DEFAULT NULL COMMENT '数据',
+  c_data LONGTEXT DEFAULT NULL COMMENT '数据',
   c_password VARCHAR(255) DEFAULT NULL COMMENT '密码',
   c_ws_url VARCHAR(255) DEFAULT NULL COMMENT 'WebSocket地址',
   c_state INT DEFAULT 0 COMMENT '状态：0-未开始；1-演示中；2-已结束',

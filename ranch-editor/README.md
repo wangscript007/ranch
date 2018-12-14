@@ -199,6 +199,8 @@
 
 [设置密码](doc/speech/password.md)
 
+[私有](doc/speech/personal.md)
+
 [演示](doc/speech/produce.md)
 
 [观看](doc/speech/consume.md)
