@@ -10,13 +10,11 @@ import java.sql.Timestamp;
 interface SpeechDao {
     PageList<SpeechModel> query(String user, int state, Timestamp[] times, int pageSize, int pageNum);
 
+    PageList<SpeechModel> query(int state);
+
     SpeechModel findById(String id);
 
     void save(SpeechModel speech);
-
-    String getData(String id);
-
-    void setData(String id, String data);
 
     void delete(String id);
 }

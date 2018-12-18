@@ -42,6 +42,11 @@ class SpeechDaoImpl implements SpeechDao {
     }
 
     @Override
+    public PageList<SpeechModel> query(int state) {
+        return liteOrm.query(new LiteQuery(SpeechModel.class).where("c_state<?"), new Object[]{state});
+    }
+
+    @Override
     public SpeechModel findById(String id) {
         return liteOrm.findById(SpeechModel.class, id);
     }
@@ -49,17 +54,6 @@ class SpeechDaoImpl implements SpeechDao {
     @Override
     public void save(SpeechModel speech) {
         liteOrm.save(speech);
-    }
-
-    @Override
-    public String getData(String id) {
-        return sql.query("SELECT c_data FROM " + modelTables.get(SpeechModel.class).getTableName() + " WHERE c_id=?",
-                new Object[]{id}).get(0, 0);
-    }
-
-    @Override
-    public void setData(String id, String data) {
-        liteOrm.update(new LiteQuery(SpeechModel.class).set("c_data=?").where("c_id=?"), new Object[]{data, id});
     }
 
     @Override

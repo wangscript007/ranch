@@ -1,6 +1,5 @@
 package org.lpw.ranch.editor.speech;
 
-import com.alibaba.fastjson.JSONArray;
 import org.lpw.tephra.dao.model.Jsonable;
 import org.lpw.tephra.dao.model.ModelSupport;
 import org.springframework.beans.factory.config.BeanDefinition;
@@ -28,11 +27,11 @@ public class SpeechModel extends ModelSupport {
     private int width; // 宽度
     private int height; // 高度
     private String image; // 预览图
-    private JSONArray data; // 数据
     private String password; // 密码
     private String wsUrl; // WebSocket地址
     private int state; // 状态：0-未开始；1-演示中；2-已结束
     private int personal; // 私有：0-否；1-是
+    private String outline; // 概要
     private Timestamp time; // 时间
 
     @Jsonable
@@ -95,14 +94,6 @@ public class SpeechModel extends ModelSupport {
         this.image = image;
     }
 
-    public JSONArray getData() {
-        return data;
-    }
-
-    public void setData(JSONArray data) {
-        this.data = data;
-    }
-
     @Jsonable
     @Column(name = "c_password")
     public String getPassword() {
@@ -141,6 +132,16 @@ public class SpeechModel extends ModelSupport {
 
     public void setPersonal(int personal) {
         this.personal = personal;
+    }
+
+    @Jsonable(extend = true)
+    @Column(name = "c_outline")
+    public String getOutline() {
+        return outline;
+    }
+
+    public void setOutline(String outline) {
+        this.outline = outline;
     }
 
     @Jsonable

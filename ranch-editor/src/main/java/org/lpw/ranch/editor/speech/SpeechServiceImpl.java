@@ -8,21 +8,25 @@ import org.lpw.ranch.user.helper.UserHelper;
 import org.lpw.ranch.util.Pagination;
 import org.lpw.tephra.cache.Cache;
 import org.lpw.tephra.dao.model.ModelHelper;
+import org.lpw.tephra.scheduler.MinuteJob;
 import org.lpw.tephra.util.DateTime;
 import org.lpw.tephra.util.Generator;
 import org.lpw.tephra.util.Json;
+import org.lpw.tephra.util.Logger;
 import org.lpw.tephra.util.Validator;
 import org.lpw.tephra.wormhole.AuthType;
 import org.lpw.tephra.wormhole.WormholeHelper;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author lpw
  */
 @Service(SpeechModel.NAME + ".service")
-public class SpeechServiceImpl implements SpeechService {
+public class SpeechServiceImpl implements SpeechService, MinuteJob {
     private static final String CACHE_MODEL = SpeechModel.NAME + ".model:";
 
     @Inject
@@ -35,6 +39,8 @@ public class SpeechServiceImpl implements SpeechService {
     private Validator validator;
     @Inject
     private Cache cache;
+    @Inject
+    private Logger logger;
     @Inject
     private ModelHelper modelHelper;
     @Inject
@@ -88,7 +94,11 @@ public class SpeechServiceImpl implements SpeechService {
         speech.setWsUrl(wormholeHelper.getWssUrl());
         speech.setTime(dateTime.now());
         speechDao.save(speech);
-        speechDao.setData(speech.getId(), elementService.query(editor, editor, true).toJSONString());
+
+        Map<String, String> map = new HashMap<>();
+        map.put("token", speech.getId());
+        map.put("data", elementService.query(editor, editor, true).toJSONString());
+        wormholeHelper.post("/whspeech/save", null, map);
 
         return modelHelper.toJson(speech);
     }
@@ -122,12 +132,11 @@ public class SpeechServiceImpl implements SpeechService {
     }
 
     private JSONObject entry(String id, AuthType authType, SpeechModel speech) {
-        String unique = generator.random(32);
-        wormholeHelper.auth(authType, id, unique);
+        String ticket = generator.random(32);
+        wormholeHelper.auth(authType, id, ticket);
         JSONObject object = new JSONObject();
-        object.put("auth", unique);
+        object.put("auth", ticket);
         object.put("speech", modelHelper.toJson(speech));
-        object.put("data", json.toArray(speechDao.getData(id)));
 
         return object;
     }
@@ -148,5 +157,27 @@ public class SpeechServiceImpl implements SpeechService {
     public void delete(String id) {
         speechDao.delete(id);
         cache.remove(CACHE_MODEL + id);
+    }
+
+    @Override
+    public void executeMinuteJob() {
+        speechDao.query(2).getList().forEach(speech -> {
+            Map<String, String> map = new HashMap<>();
+            map.put("auth", speech.getId());
+            String string = wormholeHelper.post("/whspeech/outline", null, map);
+            JSONObject object = json.toObject(string);
+            if (object == null) {
+                logger.warn(null, "获取演示[{}]概要[{}]失败！", map, string);
+
+                return;
+            }
+
+            if (speech.getState() == 0)
+                speech.setState(1);
+            else if (json.hasTrue(object, "finish"))
+                speech.setState(2);
+            speech.setOutline(string);
+            speechDao.save(speech);
+        });
     }
 }
