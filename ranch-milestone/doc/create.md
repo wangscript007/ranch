@@ -1,7 +1,5 @@
 # 新增
 
-如果未查找到则新增里程碑。
-
 请求
 - Service Key - ranch.milestone.create
 - URI - /milestone/create
