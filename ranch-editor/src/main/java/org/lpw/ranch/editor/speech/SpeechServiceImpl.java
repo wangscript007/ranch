@@ -6,7 +6,6 @@ import org.lpw.ranch.editor.EditorService;
 import org.lpw.ranch.editor.element.ElementService;
 import org.lpw.ranch.user.helper.UserHelper;
 import org.lpw.ranch.util.Pagination;
-import org.lpw.tephra.cache.Cache;
 import org.lpw.tephra.dao.model.ModelHelper;
 import org.lpw.tephra.scheduler.MinuteJob;
 import org.lpw.tephra.util.DateTime;
@@ -28,8 +27,6 @@ import java.util.Map;
  */
 @Service(SpeechModel.NAME + ".service")
 public class SpeechServiceImpl implements SpeechService, MinuteJob {
-    private static final String CACHE_MODEL = SpeechModel.NAME + ".model:";
-
     @Inject
     private DateTime dateTime;
     @Inject
@@ -38,8 +35,6 @@ public class SpeechServiceImpl implements SpeechService, MinuteJob {
     private Json json;
     @Inject
     private Validator validator;
-    @Inject
-    private Cache cache;
     @Inject
     private Logger logger;
     @Inject
@@ -65,12 +60,7 @@ public class SpeechServiceImpl implements SpeechService, MinuteJob {
 
     @Override
     public SpeechModel findById(String id) {
-        String cacheKey = CACHE_MODEL + id;
-        SpeechModel speech = cache.get(cacheKey);
-        if (speech == null)
-            cache.put(cacheKey, speech = speechDao.findById(id), false);
-
-        return speech;
+        return speechDao.findById(id);
     }
 
     @Override
@@ -111,21 +101,21 @@ public class SpeechServiceImpl implements SpeechService, MinuteJob {
     public void password(String id, String password) {
         SpeechModel speech = findById(id);
         speech.setPassword(password);
-        save(speech);
+        speechDao.save(speech);
     }
 
     @Override
     public void personal(String id, int personal) {
         SpeechModel speech = findById(id);
         speech.setPersonal(personal);
-        save(speech);
+        speechDao.save(speech);
     }
 
     @Override
     public JSONObject produce(String id) {
         SpeechModel speech = findById(id);
         speech.setState(1);
-        save(speech);
+        speechDao.save(speech);
 
         return entry(id, AuthType.Producer, speech);
     }
@@ -151,18 +141,12 @@ public class SpeechServiceImpl implements SpeechService, MinuteJob {
     public void finish(String id) {
         SpeechModel speech = findById(id);
         speech.setState(2);
-        save(speech);
-    }
-
-    private void save(SpeechModel speech) {
         speechDao.save(speech);
-        cache.remove(CACHE_MODEL + speech.getId());
     }
 
     @Override
     public void delete(String id) {
         speechDao.delete(id);
-        cache.remove(CACHE_MODEL + id);
     }
 
     @Override
