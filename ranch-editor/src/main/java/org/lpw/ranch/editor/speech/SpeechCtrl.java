@@ -1,11 +1,14 @@
 package org.lpw.ranch.editor.speech;
 
+import com.alibaba.fastjson.JSONObject;
 import org.lpw.ranch.editor.EditorService;
 import org.lpw.ranch.user.helper.UserHelper;
 import org.lpw.tephra.ctrl.context.Request;
 import org.lpw.tephra.ctrl.execute.Execute;
+import org.lpw.tephra.ctrl.template.Templates;
 import org.lpw.tephra.ctrl.validate.Validate;
 import org.lpw.tephra.ctrl.validate.Validators;
+import org.lpw.tephra.util.Message;
 import org.springframework.stereotype.Controller;
 
 import javax.inject.Inject;
@@ -17,7 +20,11 @@ import javax.inject.Inject;
 @Execute(name = "/editor/speech/", key = SpeechModel.NAME, code = "32")
 public class SpeechCtrl {
     @Inject
+    private Message message;
+    @Inject
     private Request request;
+    @Inject
+    private Templates templates;
     @Inject
     private SpeechService speechService;
 
@@ -78,7 +85,7 @@ public class SpeechCtrl {
             @Validate(validator = SpeechService.VALIDATOR_OWNER, parameter = "id", failureCode = 73)
     })
     public Object produce() {
-        return speechService.produce(request.get("id"));
+        return entry(speechService.produce(request.get("id")));
     }
 
     @Execute(name = "consume", validates = {
@@ -87,7 +94,12 @@ public class SpeechCtrl {
             @Validate(validator = SpeechService.VALIDATOR_PASSWORD, parameters = {"id", "password"}, failureCode = 74)
     })
     public Object consume() {
-        return speechService.consume(request.get("id"));
+        return entry(speechService.consume(request.get("id")));
+    }
+
+    private Object entry(JSONObject object) {
+        return object == null ? templates.get().failure(3276, message.get(SpeechModel.NAME + ".entry.failure"),
+                null, null) : object;
     }
 
     @Execute(name = "finish", validates = {

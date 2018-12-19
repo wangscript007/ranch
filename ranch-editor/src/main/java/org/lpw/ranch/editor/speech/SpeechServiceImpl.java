@@ -13,6 +13,7 @@ import org.lpw.tephra.util.DateTime;
 import org.lpw.tephra.util.Generator;
 import org.lpw.tephra.util.Json;
 import org.lpw.tephra.util.Logger;
+import org.lpw.tephra.util.TimeUnit;
 import org.lpw.tephra.util.Validator;
 import org.lpw.tephra.wormhole.AuthType;
 import org.lpw.tephra.wormhole.WormholeHelper;
@@ -96,9 +97,12 @@ public class SpeechServiceImpl implements SpeechService, MinuteJob {
         speechDao.save(speech);
 
         Map<String, String> map = new HashMap<>();
-        map.put("token", speech.getId());
+        map.put("id", speech.getId());
         map.put("data", elementService.query(editor, editor, true).toJSONString());
-        wormholeHelper.post("/whspeech/save", null, map);
+        String string = wormholeHelper.post("/whspeech/save", null, map);
+        JSONObject object = json.toObject(string);
+        if (!json.has(object, "code", "0"))
+            logger.warn(null, "保存演示数据[{}:{}]到Wormhole失败！", map, string);
 
         return modelHelper.toJson(speech);
     }
@@ -133,7 +137,9 @@ public class SpeechServiceImpl implements SpeechService, MinuteJob {
 
     private JSONObject entry(String id, AuthType authType, SpeechModel speech) {
         String ticket = generator.random(32);
-        wormholeHelper.auth(authType, id, ticket);
+        if (!wormholeHelper.auth(authType, id, ticket))
+            return null;
+
         JSONObject object = new JSONObject();
         object.put("auth", ticket);
         object.put("speech", modelHelper.toJson(speech));
@@ -168,13 +174,15 @@ public class SpeechServiceImpl implements SpeechService, MinuteJob {
             JSONObject object = json.toObject(string);
             if (object == null) {
                 logger.warn(null, "获取演示[{}]概要[{}]失败！", map, string);
-
-                return;
+                if (System.currentTimeMillis() - speech.getTime().getTime() < TimeUnit.Day.getTime())
+                    return;
             }
 
             if (speech.getState() == 0)
                 speech.setState(1);
             else if (json.hasTrue(object, "finish"))
+                speech.setState(2);
+            if (object == null)
                 speech.setState(2);
             speech.setOutline(string);
             speechDao.save(speech);
