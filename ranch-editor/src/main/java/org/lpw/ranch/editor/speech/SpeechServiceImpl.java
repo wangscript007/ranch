@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import org.lpw.ranch.editor.EditorModel;
 import org.lpw.ranch.editor.EditorService;
 import org.lpw.ranch.editor.element.ElementService;
+import org.lpw.ranch.milestone.helper.MilestoneHelper;
 import org.lpw.ranch.user.helper.UserHelper;
 import org.lpw.ranch.util.Pagination;
 import org.lpw.tephra.dao.model.ModelHelper;
@@ -45,6 +46,8 @@ public class SpeechServiceImpl implements SpeechService, MinuteJob {
     private Pagination pagination;
     @Inject
     private UserHelper userHelper;
+    @Inject
+    private MilestoneHelper milestoneHelper;
     @Inject
     private EditorService editorService;
     @Inject
@@ -93,6 +96,7 @@ public class SpeechServiceImpl implements SpeechService, MinuteJob {
         JSONObject object = json.toObject(string);
         if (!json.has(object, "code", "0"))
             logger.warn(null, "保存演示数据[{}:{}]到Wormhole失败！", map, string);
+        milestoneHelper.create(speech.getUser(), SpeechModel.NAME + ".create", null);
 
         return modelHelper.toJson(speech);
     }

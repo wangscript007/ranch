@@ -6,6 +6,7 @@ import com.alibaba.fastjson.JSONObject;
  * @author lpw
  */
 public interface SpeechService {
+    String VALIDATOR_CREATE = SpeechModel.NAME + ".validator.create";
     String VALIDATOR_EXISTS = SpeechModel.NAME + ".validator.exists";
     String VALIDATOR_OWNER = SpeechModel.NAME + ".validator.owner";
     String VALIDATOR_PASSWORD = SpeechModel.NAME + ".validator.password";
