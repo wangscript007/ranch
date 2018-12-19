@@ -28,39 +28,22 @@ public class MilestoneCtrl {
     }
 
     @Execute(name = "find", validates = {
-            @Validate(validator = Validators.ID, parameter = "user", failureCode = 1),
             @Validate(validator = Validators.NOT_EMPTY, parameter = "type", failureCode = 2),
             @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "type", failureCode = 3),
-            @Validate(validator = Validators.SIGN),
-            @Validate(validator = UserHelper.VALIDATOR_EXISTS, parameter = "user", failureCode = 4),
-            @Validate(validator = MilestoneService.VALIDATOR_EXISTS, parameters = {"user", "type"}, failureCode = 5)
+            @Validate(validator = UserHelper.VALIDATOR_SIGN_IN)
     })
     public Object find() {
-        return milestoneService.find(request.get("user"), request.get("type"));
+        return milestoneService.find(request.get("type"));
     }
 
-    @Execute(name = "save", validates = {
-            @Validate(validator = Validators.ID, parameter = "user", failureCode = 1),
-            @Validate(validator = Validators.NOT_EMPTY, parameter = "type", failureCode = 2),
-            @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "type", failureCode = 3),
-            @Validate(validator = Validators.SIGN),
-            @Validate(validator = UserHelper.VALIDATOR_EXISTS, parameter = "user", failureCode = 4),
-            @Validate(validator = MilestoneService.VALIDATOR_NOT_EXISTS, parameters = {"user", "type"}, failureCode = 6)
-    })
-    public Object save() {
-        milestoneService.save(request.setToModel(MilestoneModel.class));
-
-        return "";
-    }
-
-    @Execute(name = "find-save", validates = {
+    @Execute(name = "create", validates = {
             @Validate(validator = Validators.ID, parameter = "user", failureCode = 1),
             @Validate(validator = Validators.NOT_EMPTY, parameter = "type", failureCode = 2),
             @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "type", failureCode = 3),
             @Validate(validator = Validators.SIGN),
             @Validate(validator = UserHelper.VALIDATOR_EXISTS, parameter = "user", failureCode = 4)
     })
-    public Object findSave() {
-        return milestoneService.findSave(request.setToModel(MilestoneModel.class));
+    public Object create() {
+        return milestoneService.create(request.setToModel(MilestoneModel.class));
     }
 }

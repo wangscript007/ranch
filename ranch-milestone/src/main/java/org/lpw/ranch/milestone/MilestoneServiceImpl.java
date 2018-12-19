@@ -31,19 +31,14 @@ public class MilestoneServiceImpl implements MilestoneService {
     }
 
     @Override
-    public JSONObject find(String user, String type) {
-        return modelHelper.toJson(milestoneDao.find(user, type));
+    public JSONObject find(String type) {
+        MilestoneModel milestone = milestoneDao.find(userHelper.id(), type);
+
+        return milestone == null ? new JSONObject() : modelHelper.toJson(milestone);
     }
 
     @Override
-    public void save(MilestoneModel milestone) {
-        milestone.setId(null);
-        milestone.setTime(dateTime.now());
-        milestoneDao.save(milestone);
-    }
-
-    @Override
-    public JSONObject findSave(MilestoneModel milestone) {
+    public JSONObject create(MilestoneModel milestone) {
         MilestoneModel model = milestoneDao.find(milestone.getUser(), milestone.getType());
         if (model == null) {
             model = new MilestoneModel();

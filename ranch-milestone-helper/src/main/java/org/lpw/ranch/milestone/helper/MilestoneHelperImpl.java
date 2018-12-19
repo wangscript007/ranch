@@ -15,17 +15,28 @@ public class MilestoneHelperImpl implements MilestoneHelper {
     private Carousel carousel;
     @Value("${ranch.milestone.key:ranch.milestone}")
     private String key;
-    private String findSaveKey;
+    private String findKey;
+    private String createKey;
 
     @Override
-    public JSONObject findSave(String user, String type, Map<String, String> map) {
-        if (findSaveKey == null)
-            findSaveKey = key + ".find-save";
+    public JSONObject find(String type) {
+        if (findKey == null)
+            findKey = key + ".find";
+        Map<String, String> map = new HashMap<>();
+        map.put("type", type);
+
+        return carousel.service(findKey, null, map, false, JSONObject.class);
+    }
+
+    @Override
+    public JSONObject create(String user, String type, Map<String, String> map) {
+        if (createKey == null)
+            createKey = key + ".create";
         if (map == null)
             map = new HashMap<>();
         map.put("user", user);
         map.put("type", type);
 
-        return carousel.service(findSaveKey, null, map, false, JSONObject.class);
+        return carousel.service(createKey, null, map, false, JSONObject.class);
     }
 }

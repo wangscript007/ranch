@@ -6,12 +6,20 @@ import java.util.Map;
 
 public interface MilestoneHelper {
     /**
-     * 查找或新建里程碑。
+     * 查找。
+     *
+     * @param type 类型。
+     * @return 里程碑。
+     */
+    JSONObject find(String type);
+
+    /**
+     * 新增。
      *
      * @param user 用户。
      * @param type 类型。
      * @param map  扩展属性集。
      * @return 里程碑。
      */
-    JSONObject findSave(String user, String type, Map<String, String> map);
+    JSONObject create(String user, String type, Map<String, String> map);
 }
