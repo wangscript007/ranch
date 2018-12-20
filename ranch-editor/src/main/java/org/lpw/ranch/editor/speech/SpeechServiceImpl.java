@@ -71,6 +71,7 @@ public class SpeechServiceImpl implements SpeechService, MinuteJob {
         SpeechModel speech = findById(id);
         JSONObject object = modelHelper.toJson(speech);
         object.put("password", !validator.isEmpty(speech.getPassword()));
+        object.put("owner", speech.getUser().equals(userHelper.id()));
 
         return object;
     }
