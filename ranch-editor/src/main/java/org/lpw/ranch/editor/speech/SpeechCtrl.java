@@ -47,7 +47,8 @@ public class SpeechCtrl {
             @Validate(validator = Validators.ID, parameter = "editor", failureCode = 1),
             @Validate(validator = UserHelper.VALIDATOR_SIGN_IN),
             @Validate(validator = EditorService.VALIDATOR_EXISTS, parameter = "editor", failureCode = 2),
-            @Validate(validator = EditorService.VALIDATOR_EDITABLE, parameter = "editor", failureCode = 11)
+            @Validate(validator = EditorService.VALIDATOR_EDITABLE, parameter = "editor", failureCode = 11),
+            @Validate(validator = SpeechService.VALIDATOR_CREATE, failureCode = 77)
     })
     public Object create() {
         return speechService.create(request.get("editor"));
