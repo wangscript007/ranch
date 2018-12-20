@@ -20,6 +20,7 @@
     "height": "高度",
     "image": "预览图",
     "password": "true/false",
+    "owner": "true/false",
     "wsUrl": "WebSocket地址",
     "state": "状态：0-未开始；1-演示中；2-已结束",
     "personal": "私有：0-否；1-是",
