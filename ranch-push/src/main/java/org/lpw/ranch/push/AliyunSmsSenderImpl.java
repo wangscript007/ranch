@@ -51,8 +51,14 @@ public class AliyunSmsSenderImpl implements PushSender, ContextRefreshedListener
             request.setTemplateCode(push.getTemplate());
             if (!validator.isEmpty(args))
                 request.setTemplateParam(args.toJSONString());
+            boolean ok = "OK".equals(acsClient.getAcsResponse(request).getCode());
+            if (ok) {
+                if (logger.isDebugEnable())
+                    logger.debug("通过阿里云成功发送短信[{}:{}:{}]。", modelHelper.toJson(push), receiver, args);
+            } else
+                logger.warn(null, "通过阿里云发送短信[{}:{}:{}]失败！", modelHelper.toJson(push), receiver, args);
 
-            return "OK".equals(acsClient.getAcsResponse(request).getCode());
+            return ok;
         } catch (Exception e) {
             logger.warn(e, "通过阿里云发送短信[{}:{}:{}]时发生异常！", receiver, modelHelper.toJson(push), args);
 
