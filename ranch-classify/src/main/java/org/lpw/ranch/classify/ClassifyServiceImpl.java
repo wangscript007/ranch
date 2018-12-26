@@ -165,7 +165,8 @@ public class ClassifyServiceImpl implements ClassifyService, DateJob {
 
     @Override
     public JSONObject save(ClassifyModel classify) {
-        ClassifyModel model = save(classify.getCode(), classify.getKey(), classify.getValue(), classify.getName(), classify.getJson());
+        ClassifyModel model = save(classify.getId(), classify.getCode(), classify.getKey(), classify.getValue(),
+                classify.getName(), classify.getJson());
         resetRandom();
 
         return toJson(model.getId(), model, Recycle.No);
@@ -198,7 +199,7 @@ public class ClassifyServiceImpl implements ClassifyService, DateJob {
             String key = object.getString("key");
             String name = object.getString("name");
             if (nonEmptyMaxLength(code) && nonEmptyMaxLength(key) && nonEmptyMaxLength(name))
-                save(code, key, object.getString("value"), name, null);
+                save(object.getString("id"), code, key, object.getString("value"), name, null);
         }
         resetRandom();
     }
@@ -207,8 +208,8 @@ public class ClassifyServiceImpl implements ClassifyService, DateJob {
         return !validator.isEmpty(string) && string.length() <= 100;
     }
 
-    private ClassifyModel save(String code, String key, String value, String name, String json) {
-        ClassifyModel classify = classifyDao.findByCodeKey(code, key);
+    private ClassifyModel save(String id, String code, String key, String value, String name, String json) {
+        ClassifyModel classify = validator.isEmpty(id) ? classifyDao.findByCodeKey(code, key) : classifyDao.findById(id);
         if (classify == null) {
             classify = new ClassifyModel();
             classify.setCode(code);

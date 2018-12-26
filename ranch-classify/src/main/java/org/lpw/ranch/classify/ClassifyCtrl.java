@@ -58,13 +58,15 @@ public class ClassifyCtrl extends RecycleCtrlSupport {
     }
 
     @Execute(name = "save", validates = {
+            @Validate(validator = Validators.ID, emptyable = true, parameter = "id", failureCode = 8),
             @Validate(validator = Validators.NOT_EMPTY, parameter = "code", failureCode = 2),
             @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "code", failureCode = 3),
             @Validate(validator = Validators.NOT_EMPTY, parameter = "key", failureCode = 4),
             @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "key", failureCode = 5),
             @Validate(validator = Validators.NOT_EMPTY, parameter = "name", failureCode = 6),
             @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "name", failureCode = 7),
-            @Validate(validator = Validators.SIGN)
+            @Validate(validator = Validators.SIGN),
+            @Validate(validator = ClassifyService.VALIDATOR_EXISTS, emptyable = true, parameter = "id", failureCode = 9)
     })
     public Object save() {
         return templates.get().success(classifyService.save(request.setToModel(ClassifyModel.class)), null);
@@ -89,7 +91,7 @@ public class ClassifyCtrl extends RecycleCtrlSupport {
     }
 
     @Execute(name = "restore", validates = {
-            @Validate(validator = Validators.ID, parameter = "id", failureCode = 86),
+            @Validate(validator = Validators.ID, parameter = "id", failureCode = 8),
             @Validate(validator = Validators.SIGN),
             @Validate(validator = ClassifyService.VALIDATOR_EXISTS, parameter = "id", failureCode = 9),
             @Validate(validator = ClassifyService.VALIDATOR_CODE_KEY_NOT_EXISTS, parameter = "id", failureCode = 10)
