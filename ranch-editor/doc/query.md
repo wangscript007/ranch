@@ -8,6 +8,7 @@
 
 |名称|类型|必须|说明|
 |---|---|---|---|
+|user|string|否|用户ID，为空表示不限制。|
 |uid|string|否|用户UID，为空表示不限制。|
 |mobile|string|否|用户手机号，为空表示不限制。|
 |email|string|否|用户Email，为空表示不限制。|

@@ -20,6 +20,7 @@ public interface EditorService {
     /**
      * 检索编辑器信息集。
      *
+     * @param user        用户ID。
      * @param uid         UID。
      * @param mobile      用户手机号。
      * @param email       用户Email。
@@ -37,7 +38,7 @@ public interface EditorService {
      * @param order       排序规则。
      * @return 编辑器信息集。
      */
-    JSONObject query(String uid, String mobile, String email, String nick, int template, String type, String name, String label,
+    JSONObject query(String user, String uid, String mobile, String email, String nick, int template, String type, String name, String label,
                      int modified, String[] states, String createStart, String createEnd, String modifyStart, String modifyEnd, Order order);
 
     /**

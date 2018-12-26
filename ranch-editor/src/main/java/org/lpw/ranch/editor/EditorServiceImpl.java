@@ -2,7 +2,6 @@ package org.lpw.ranch.editor;
 
 import com.alibaba.fastjson.JSONObject;
 import org.lpw.ranch.async.AsyncService;
-import org.lpw.ranch.editor.element.ElementModel;
 import org.lpw.ranch.editor.element.ElementService;
 import org.lpw.ranch.editor.role.RoleModel;
 import org.lpw.ranch.editor.role.RoleService;
@@ -18,7 +17,6 @@ import org.lpw.tephra.dao.orm.PageList;
 import org.lpw.tephra.lucene.LuceneHelper;
 import org.lpw.tephra.scheduler.DateJob;
 import org.lpw.tephra.scheduler.HourJob;
-import org.lpw.tephra.scheduler.MinuteJob;
 import org.lpw.tephra.util.Converter;
 import org.lpw.tephra.util.DateTime;
 import org.lpw.tephra.util.Generator;
@@ -34,7 +32,6 @@ import javax.inject.Inject;
 import java.io.File;
 import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -104,10 +101,10 @@ public class EditorServiceImpl implements EditorService, HourJob, DateJob {
     private Set<Integer> onsaleState = Collections.singleton(3);
 
     @Override
-    public JSONObject query(String uid, String mobile, String email, String nick, int template, String type, String name, String label,
+    public JSONObject query(String user, String uid, String mobile, String email, String nick, int template, String type, String name, String label,
                             int modified, String[] states, String createStart, String createEnd, String modifyStart, String modifyEnd,
                             Order order) {
-        Set<String> ids = ids(uid, mobile, email, nick);
+        Set<String> ids = ids(user, uid, mobile, email, nick);
         if (ids != null && ids.isEmpty())
             return BeanFactory.getBean(PageList.class).setPage(0, 0, 0).toJson();
 
@@ -120,12 +117,12 @@ public class EditorServiceImpl implements EditorService, HourJob, DateJob {
         });
     }
 
-    private Set<String> ids(String uid, String mobile, String email, String nick) {
+    private Set<String> ids(String user, String uid, String mobile, String email, String nick) {
         if (validator.isEmpty(uid) && validator.isEmpty(mobile) && validator.isEmpty(email) && validator.isEmpty(nick))
             return null;
 
-        Set<String> set = userHelper.ids(uid, null, null, nick, mobile, email, null,
-                -1, -1, -1, null, null);
+        Set<String> set = validator.isEmpty(user) ? userHelper.ids(uid, null, null, nick, mobile, email, null,
+                -1, -1, -1, null, null) : Collections.singleton(user);
 
         return set.isEmpty() ? set : roleService.editors(set);
     }
