@@ -210,11 +210,10 @@ public class ClassifyServiceImpl implements ClassifyService, DateJob {
 
     private ClassifyModel save(String id, String code, String key, String value, String name, String json) {
         ClassifyModel classify = validator.isEmpty(id) ? classifyDao.findByCodeKey(code, key) : classifyDao.findById(id);
-        if (classify == null) {
+        if (classify == null)
             classify = new ClassifyModel();
-            classify.setCode(code);
-            classify.setKey(key);
-        }
+        classify.setCode(code);
+        classify.setKey(key);
         classify.setValue(value);
         classify.setName(name);
         classify.setJson(json);
