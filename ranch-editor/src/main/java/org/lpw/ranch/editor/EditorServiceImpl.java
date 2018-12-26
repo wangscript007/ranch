@@ -118,7 +118,7 @@ public class EditorServiceImpl implements EditorService, HourJob, DateJob {
     }
 
     private Set<String> ids(String user, String uid, String mobile, String email, String nick) {
-        if (validator.isEmpty(uid) && validator.isEmpty(mobile) && validator.isEmpty(email) && validator.isEmpty(nick))
+        if (validator.isEmpty(user) && validator.isEmpty(uid) && validator.isEmpty(mobile) && validator.isEmpty(email) && validator.isEmpty(nick))
             return null;
 
         Set<String> set = validator.isEmpty(user) ? userHelper.ids(uid, null, null, nick, mobile, email, null,
