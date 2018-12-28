@@ -44,23 +44,25 @@ public interface ElementService {
      * 查找元素。
      *
      * @param id        ID值。
+     * @param editor    编辑器ID值。
      * @param recursive 是否递归获取子元素集。
      * @return 元素。
      */
-    JSONObject find(String id, boolean recursive);
+    JSONObject find(String id, String editor, boolean recursive);
 
     /**
      * 查找元素信息。
      *
-     * @param id ID值。
+     * @param id     ID值。
+     * @param editor 编辑器ID值。
      * @return 元素信息，不存在则返回null。
      */
-    ElementModel findById(String id);
+    ElementModel findById(String id, String editor);
 
     /**
      * 统计编辑器根元素数及已修改过的根元素数。
      *
-     * @param editor 编辑器。
+     * @param editor 编辑器ID值。
      * @return 根元素数及已修改过的根元素数。
      */
     int[] count(String editor);
@@ -87,14 +89,15 @@ public interface ElementService {
     /**
      * 删除元素。
      *
-     * @param id ID值。
+     * @param id     ID值。
+     * @param editor 编辑器ID值。
      */
-    void delete(String id);
+    void delete(String id, String editor);
 
     /**
      * 删除所有元素。
      *
-     * @param editor 编辑器ID。
+     * @param editor 编辑器ID值。
      */
     void deletes(String editor);
 

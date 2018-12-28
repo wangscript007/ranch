@@ -20,10 +20,8 @@ import org.springframework.stereotype.Service;
 import javax.inject.Inject;
 import java.sql.Timestamp;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * @author lpw
@@ -76,8 +74,8 @@ public class ElementServiceImpl implements ElementService, MinuteJob {
     }
 
     @Override
-    public JSONObject find(String id, boolean recursive) {
-        ElementModel element = findById(id);
+    public JSONObject find(String id, String editor, boolean recursive) {
+        ElementModel element = findById(id, editor);
         JSONObject object = modelHelper.toJson(element);
         if (recursive)
             object.put("children", query(element.getEditor(), element.getId(), true));
@@ -86,11 +84,11 @@ public class ElementServiceImpl implements ElementService, MinuteJob {
     }
 
     @Override
-    public ElementModel findById(String id) {
+    public ElementModel findById(String id, String editor) {
         String cacheKey = CACHE_MODEL + id;
         ElementModel element = cache.get(cacheKey);
         if (element == null)
-            cache.put(cacheKey, element = elementDao.findById(id), false);
+            cache.put(cacheKey, element = elementDao.findById(id, editor), false);
 
         return element;
     }
@@ -119,7 +117,7 @@ public class ElementServiceImpl implements ElementService, MinuteJob {
 
     @Override
     public JSONObject save(ElementModel element) {
-        ElementModel model = validator.isEmpty(element.getId()) ? null : findById(element.getId());
+        ElementModel model = validator.isEmpty(element.getId()) ? null : findById(element.getId(), element.getEditor());
         boolean isNew = model == null;
         if (isNew) {
             model = new ElementModel();
@@ -146,7 +144,7 @@ public class ElementServiceImpl implements ElementService, MinuteJob {
         if (validator.isEmpty(parent))
             parent = editor;
         for (int i = 0; i < ids.length; i++) {
-            ElementModel element = findById(ids[i]);
+            ElementModel element = findById(ids[i], editor);
             if (element == null || !element.getEditor().equals(editor) || !element.getParent().equals(parent)
                     || element.getSort() == i + 1 || element.getModify() != numeric.toLong(modifies[i]))
                 continue;
@@ -169,8 +167,8 @@ public class ElementServiceImpl implements ElementService, MinuteJob {
     }
 
     @Override
-    public void delete(String id) {
-        ElementModel element = findById(id);
+    public void delete(String id, String editor) {
+        ElementModel element = findById(id, editor);
         delete(element);
         editorService.modify(element.getEditor());
     }
@@ -214,12 +212,12 @@ public class ElementServiceImpl implements ElementService, MinuteJob {
 
             switch (object.getString("operation")) {
                 case "save":
-                    if (parentNotExists(object.getString("parent"))
+                    if (parentNotExists(object.getString("parent"), editor)
                             || modifyDisable(object.getString("id"), false, editor, object.getLongValue("modify")))
                         return array;
                     continue;
                 case "sort":
-                    if (parentNotExists(object.getString("parent")))
+                    if (parentNotExists(object.getString("parent"), editor))
                         return array;
                     continue;
                 case "delete":
@@ -244,7 +242,7 @@ public class ElementServiceImpl implements ElementService, MinuteJob {
                             converter.toArray(object.getString("modifies"), ",")));
                     continue;
                 case "delete":
-                    delete(object.getString("id"));
+                    delete(object.getString("id"), editor);
                     array.add("");
             }
         }
@@ -252,15 +250,15 @@ public class ElementServiceImpl implements ElementService, MinuteJob {
         return array;
     }
 
-    private boolean parentNotExists(String parent) {
-        return !validator.isEmpty(parent) && findById(parent) == null;
+    private boolean parentNotExists(String parent, String editor) {
+        return !validator.isEmpty(parent) && findById(parent, editor) == null;
     }
 
     private boolean modifyDisable(String id, boolean exists, String editor, long modify) {
         if (validator.isEmpty(id))
             return exists;
 
-        ElementModel element = findById(id);
+        ElementModel element = findById(id, editor);
         if (element == null)
             return exists;
 

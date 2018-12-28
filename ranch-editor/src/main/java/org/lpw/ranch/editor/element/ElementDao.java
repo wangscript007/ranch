@@ -2,7 +2,6 @@ package org.lpw.ranch.editor.element;
 
 import org.lpw.tephra.dao.orm.PageList;
 
-import java.sql.Timestamp;
 import java.util.Map;
 
 /**
@@ -11,7 +10,7 @@ import java.util.Map;
 interface ElementDao {
     PageList<ElementModel> query(String editor, String parent);
 
-    ElementModel findById(String id);
+    ElementModel findById(String id, String editor);
 
     Map<String, Long> modify(long modify);
 

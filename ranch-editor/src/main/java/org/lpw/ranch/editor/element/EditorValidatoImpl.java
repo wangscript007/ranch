@@ -16,7 +16,7 @@ public class EditorValidatoImpl extends ValidatorSupport {
 
     @Override
     public boolean validate(ValidateWrapper validate, String[] parameters) {
-        return validator.isEmpty(parameters[0]) || elementService.findById(parameters[0]).getEditor().equals(parameters[1]);
+        return validator.isEmpty(parameters[0]) || elementService.findById(parameters[0], parameters[1]).getEditor().equals(parameters[1]);
     }
 
     @Override

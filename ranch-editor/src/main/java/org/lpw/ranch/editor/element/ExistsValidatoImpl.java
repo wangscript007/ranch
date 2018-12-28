@@ -15,8 +15,8 @@ public class ExistsValidatoImpl extends ValidatorSupport {
     private ElementService elementService;
 
     @Override
-    public boolean validate(ValidateWrapper validate, String parameter) {
-        return elementService.findById(parameter) != null;
+    public boolean validate(ValidateWrapper validate, String[] parameters) {
+        return elementService.findById(parameters[0], parameters[1]) != null;
     }
 
     @Override
