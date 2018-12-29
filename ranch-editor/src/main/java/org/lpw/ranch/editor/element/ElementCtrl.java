@@ -27,7 +27,7 @@ public class ElementCtrl {
             @Validate(validator = Validators.ID, emptyable = true, parameter = "parent", failureCode = 22),
             @Validate(validator = EditorService.VALIDATOR_EXISTS, parameter = "editor", failureCode = 2),
             @Validate(validator = RoleService.VALIDATOR_VIEWABLE, parameters = {"user", "editor"}, failureCode = 12),
-            @Validate(validator = ElementService.VALIDATOR_EXISTS, emptyable = true, parameters = {"parent", "editor"}, failureCode = 24)
+            @Validate(validator = ElementService.VALIDATOR_EXISTS, parameters = {"parent", "editor"}, failureCode = 24)
     })
     public Object query() {
         return elementService.query(request.get("editor"), request.get("parent"), request.getAsBoolean("recursive"));
