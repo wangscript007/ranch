@@ -39,7 +39,7 @@ class DocDaoImpl implements DocDao {
         daoHelper.like(null, where, args, "c_subject", subject, true);
         daoHelper.like(null, where, args, "c_label", label, true);
 
-        return liteOrm.query(new LiteQuery(DocModel.class).where(where.toString()).order("c_sort,c_time desc")
+        return liteOrm.query(new LiteQuery(DocModel.class).where(where.toString()).order("c_sort,c_modify desc")
                 .size(pageSize).page(pageNum), args.toArray());
     }
 
@@ -49,7 +49,7 @@ class DocDaoImpl implements DocDao {
         List<Object> args = new ArrayList<>();
         daoHelper.in(where, args, "c_id", ids);
 
-        return liteOrm.query(new LiteQuery(DocModel.class).where(where.toString()).order("c_sort,c_time desc")
+        return liteOrm.query(new LiteQuery(DocModel.class).where(where.toString()).order("c_sort,c_modify desc")
                 .size(pageSize).page(pageNum), args.toArray());
     }
 

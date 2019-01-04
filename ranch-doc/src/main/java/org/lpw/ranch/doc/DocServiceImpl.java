@@ -158,7 +158,11 @@ public class DocServiceImpl implements DocService, MinuteJob, DateJob {
 
     @Override
     public JSONObject save(DocModel doc, String[] classifies, boolean markdown) {
-        DocModel model = validator.isEmpty(doc.getId()) ? new DocModel() : findById(doc.getId());
+        DocModel model = validator.isEmpty(doc.getId()) ? null : findById(doc.getId());
+        if (model == null) {
+            model = new DocModel();
+            model.setCreate(dateTime.now());
+        }
         model.setAuthor(userHelper.id());
         model.setSort(doc.getSort());
         model.setSubject(doc.getSubject());
@@ -168,7 +172,7 @@ public class DocServiceImpl implements DocService, MinuteJob, DateJob {
         model.setLabel(doc.getLabel());
         model.setType(doc.getType());
         model.setJson(doc.getJson());
-        model.setTime(dateTime.now());
+        model.setModify(dateTime.now());
         model.setAudit(defaultAudit);
         docDao.save(model);
         saveSourceContent(model, doc.getSource(), markdown);

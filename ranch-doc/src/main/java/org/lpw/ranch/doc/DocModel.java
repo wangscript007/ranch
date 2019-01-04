@@ -37,7 +37,8 @@ public class DocModel extends AuditModelSupport {
     private int comment; // 评论次数
     private int praise; // 点赞数
     private int score; // 得分
-    private Timestamp time; // 更新时间
+    private Timestamp create; // 创建时间
+    private Timestamp modify; // 更新时间
 
     @Jsonable
     @Column(name = "c_author")
@@ -198,12 +199,22 @@ public class DocModel extends AuditModelSupport {
     }
 
     @Jsonable
-    @Column(name = "c_time")
-    public Timestamp getTime() {
-        return time;
+    @Column(name = "c_create")
+    public Timestamp getCreate() {
+        return create;
     }
 
-    public void setTime(Timestamp time) {
-        this.time = time;
+    public void setCreate(Timestamp create) {
+        this.create = create;
+    }
+
+    @Jsonable
+    @Column(name = "c_modify")
+    public Timestamp getModify() {
+        return modify;
+    }
+
+    public void setModify(Timestamp modify) {
+        this.modify = modify;
     }
 }
