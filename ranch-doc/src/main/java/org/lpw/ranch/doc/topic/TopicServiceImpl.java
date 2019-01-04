@@ -50,7 +50,7 @@ public class TopicServiceImpl implements TopicService {
             topic.setSubject(doc.getSubject());
             topic.setLabel(doc.getLabel());
             topic.setType(doc.getType());
-            topic.setTime(doc.getTime());
+            topic.setTime(doc.getModify());
             topic.setAudit(doc.getAudit());
             topic.setRecycle(doc.getRecycle());
             topicDao.save(topic);
