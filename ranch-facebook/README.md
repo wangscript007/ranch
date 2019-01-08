@@ -15,3 +15,5 @@
 [保存](doc/save.md)
 
 [删除](doc/delete.md)
+
+[认证](doc/auth.md)
