@@ -22,9 +22,13 @@ public interface Types {
      */
     int WEIXIN_MINI = 2;
     /**
+     * Facebook。
+     */
+    int FACEBOOK = 3;
+    /**
      * 类型最大值。
      */
-    int MAX = 2;
+    int MAX = 3;
 
     /**
      * 获取UID。
