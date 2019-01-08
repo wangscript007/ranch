@@ -26,7 +26,7 @@ public class FacebookCtrl {
         return facebookService.query();
     }
 
-    @Execute(name = "query", validates = {
+    @Execute(name = "save", validates = {
             @Validate(validator = Validators.NOT_EMPTY, parameter = "key", failureCode = 1),
             @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "key", failureCode = 2),
             @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "name", failureCode = 3),
