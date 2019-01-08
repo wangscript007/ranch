@@ -31,3 +31,5 @@
 |time|datetime|时间。|
 
 [检索](doc/receipt/query.md)
+
+[校验](doc/receipt/verify.md)
