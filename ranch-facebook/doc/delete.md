@@ -2,7 +2,7 @@
 
 请求
 - Service Key - ranch.facebook.delete
-- URI - /appstore/facebook
+- URI - /facebook/delete
 
 参数
 
