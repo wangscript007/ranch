@@ -7,13 +7,13 @@ import com.alibaba.fastjson.JSONObject;
  */
 public interface ReceiptService {
     /**
-     * 检索收据集。
+     * 检索。
      *
-     * @param productId 产品ID。
-     * @param times     时间范围，格式：yyyy-MM-dd或yyyy-MM-dd HH:mm:ss。
+     * @param user  用户ID。
+     * @param times 时间范围，格式：yyyy-MM-dd或yyyy-MM-dd HH:mm:ss。
      * @return 收据集。
      */
-    JSONObject query(String productId, String[] times);
+    JSONObject query(String user, String[] times);
 
     /**
      * 验证。

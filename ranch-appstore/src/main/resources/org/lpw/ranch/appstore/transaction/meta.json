@@ -1,18 +1,27 @@
 {
-    "key": "ranch.appstore.receipt",
-    "uri": "/appstore/receipt/",
+    "key": "ranch.appstore.transaction",
+    "uri": "/appstore/transaction/",
     "props": [
         {
             "name": "user"
         },
         {
-            "name": "status"
+            "name": "receipt"
         },
         {
-            "name": "request"
+            "name": "transactionId"
         },
         {
-            "name": "response"
+            "name": "productId"
+        },
+        {
+            "name": "price"
+        },
+        {
+            "name": "quantity"
+        },
+        {
+            "name": "amount"
         },
         {
             "name": "time"

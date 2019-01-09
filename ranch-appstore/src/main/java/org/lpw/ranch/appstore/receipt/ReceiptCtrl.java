@@ -24,7 +24,7 @@ public class ReceiptCtrl {
             @Validate(validator = Validators.SIGN)
     })
     public Object query() {
-        return receiptService.query(request.get("productId"), request.getAsArray("time"));
+        return receiptService.query(request.get("user"), request.getAsArray("time"));
     }
 
     @Execute(name = "verify", validates = {

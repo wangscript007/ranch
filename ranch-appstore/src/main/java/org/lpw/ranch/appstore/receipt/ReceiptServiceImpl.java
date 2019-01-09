@@ -1,9 +1,9 @@
 package org.lpw.ranch.appstore.receipt;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import org.lpw.ranch.appstore.AppstoreModel;
-import org.lpw.ranch.appstore.AppstoreService;
-import org.lpw.ranch.payment.helper.PaymentHelper;
+import org.lpw.ranch.appstore.transaction.TransactionService;
+import org.lpw.ranch.user.helper.UserHelper;
 import org.lpw.ranch.util.Pagination;
 import org.lpw.tephra.crypto.Digest;
 import org.lpw.tephra.util.DateTime;
@@ -32,15 +32,15 @@ public class ReceiptServiceImpl implements ReceiptService {
     @Inject
     private Pagination pagination;
     @Inject
-    private PaymentHelper paymentHelper;
+    private UserHelper userHelper;
     @Inject
-    private AppstoreService appstoreService;
+    private TransactionService transactionService;
     @Inject
     private ReceiptDao receiptDao;
 
     @Override
-    public JSONObject query(String productId, String[] times) {
-        return receiptDao.query(productId, dateTime.toTimeRange(times), pagination.getPageSize(20), pagination.getPageNum()).toJson();
+    public JSONObject query(String user, String[] times) {
+        return receiptDao.query(user, dateTime.toTimeRange(times), pagination.getPageSize(20), pagination.getPageNum()).toJson();
     }
 
     @Override
@@ -52,16 +52,14 @@ public class ReceiptServiceImpl implements ReceiptService {
             return null;
 
         ReceiptModel receipt = new ReceiptModel();
+        receipt.setUser(userHelper.id());
         receipt.setStatus(object.getIntValue("status"));
-        receipt.setMd5(digest.md5(data));
         receipt.setRequest(data);
         receipt.setResponse(object.toJSONString());
         receipt.setTime(dateTime.now());
+        receiptDao.save(receipt);
         if (receipt.getStatus() == 0)
             success(receipt, object.getJSONObject("receipt"));
-        else
-            receipt.setProductId("");
-        receiptDao.save(receipt);
 
         return object;
     }
@@ -78,17 +76,11 @@ public class ReceiptServiceImpl implements ReceiptService {
     }
 
     private void success(ReceiptModel receipt, JSONObject object) {
-        receipt.setProductId(object.getString("product_id"));
-        AppstoreModel appstore = appstoreService.findByProductId(receipt.getProductId());
-        if (appstore != null)
-            receipt.setPrice(appstore.getAmount());
-        receipt.setQuantity(object.getIntValue("quantity"));
-        receipt.setAmount(receipt.getPrice() * receipt.getQuantity());
-        if (receipt.getAmount() <= 0 || receiptDao.find(receipt.getMd5(), 0) != null)
+        if (!json.containsKey(object, "in_app"))
             return;
 
-        String orderNo = paymentHelper.create("app-store", receipt.getProductId(), "", receipt.getAmount(),
-                receipt.getMd5(), "", null);
-        paymentHelper.complete(orderNo, receipt.getAmount(), object.getString("transaction_id"), 1, null);
+        JSONArray array = object.getJSONArray("in_app");
+        for (int i = 0, size = array.size(); i < size; i++)
+            transactionService.save(receipt.getId(), array.getJSONObject(i));
     }
 }

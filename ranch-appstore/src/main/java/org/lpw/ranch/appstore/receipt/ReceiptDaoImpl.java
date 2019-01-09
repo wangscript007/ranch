@@ -26,20 +26,15 @@ class ReceiptDaoImpl implements ReceiptDao {
     private DaoHelper daoHelper;
 
     @Override
-    public PageList<ReceiptModel> query(String productId, Timestamp[] times, int pageSize, int pageNum) {
+    public PageList<ReceiptModel> query(String user, Timestamp[] times, int pageSize, int pageNum) {
         StringBuilder where = new StringBuilder();
         List<Object> args = new ArrayList<>();
-        daoHelper.where(where, args, "c_product_id", DaoOperation.Equals, productId);
+        daoHelper.where(where, args, "c_user", DaoOperation.Equals, user);
         daoHelper.where(where, args, "c_time", DaoOperation.GreaterEquals, times[0]);
         daoHelper.where(where, args, "c_time", DaoOperation.LessEquals, times[1]);
 
         return liteOrm.query(new LiteQuery(ReceiptModel.class).where(where.toString()).order("c_time desc")
                 .size(pageSize).page(pageNum), args.toArray());
-    }
-
-    @Override
-    public ReceiptModel find(String md5, int status) {
-        return liteOrm.findOne(new LiteQuery(ReceiptModel.class).where("c_md5=? and c_status=?"), new Object[]{md5, status});
     }
 
     @Override

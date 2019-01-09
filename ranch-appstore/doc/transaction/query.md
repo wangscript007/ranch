@@ -1,14 +1,16 @@
 # 检索
 
 请求
-- Service Key - ranch.appstore.receipt.query
-- URI - /appstore/receipt/query
+- Service Key - ranch.appstore.transaction.query
+- URI - /appstore/transaction/query
 
 参数
 
 |名称|类型|必须|说明|
 |---|---|---|---|
-|user|char(100)|否|用户ID。|
+|user|char(36)|否|用户ID。|
+|transactionId|char(100)|否|交易ID。|
+|productId|char(100)|否|产品ID。|
 |time|string|否|时间范围，以逗号分隔，格式：yyyy-MM-dd或yyyy-MM-dd HH:mm:ss。|
 |pageSize|int|否|每页显示记录数，小于等于0则默认20。|
 |pageNum|int|否|当前显示页数。|

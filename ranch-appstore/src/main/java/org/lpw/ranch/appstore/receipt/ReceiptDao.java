@@ -8,9 +8,7 @@ import java.sql.Timestamp;
  * @author lpw
  */
 interface ReceiptDao {
-    PageList<ReceiptModel> query(String productId, Timestamp[] times, int pageSize, int pageNum);
-
-    ReceiptModel find(String md5, int status);
+    PageList<ReceiptModel> query(String user, Timestamp[] times, int pageSize, int pageNum);
 
     void save(ReceiptModel receipt);
 }
