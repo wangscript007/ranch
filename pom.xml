@@ -57,6 +57,8 @@
         <module>ranch-appstore</module>
         <module>ranch-facebook</module>
         <module>ranch-facebook-helper</module>
+        <module>ranch-linkedin</module>
+        <module>ranch-linkedin-helper</module>
         <module>ranch-ui</module>
         <module>ranch-web</module>
         <module>ranch-test</module>

@@ -26,9 +26,13 @@ public interface Types {
      */
     int FACEBOOK = 3;
     /**
+     * Linkedin。
+     */
+    int LINKEDIN = 4;
+    /**
      * 类型最大值。
      */
-    int MAX = 3;
+    int MAX = 4;
 
     /**
      * 获取UID。
