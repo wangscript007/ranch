@@ -61,6 +61,8 @@ public class ReceiptServiceImpl implements ReceiptService {
         receipt.setTime(dateTime.now());
         if (receipt.getStatus() == 0)
             success(receipt, object.getJSONObject("receipt"));
+        else
+            receipt.setProductId("");
         receiptDao.save(receipt);
 
         return object;
