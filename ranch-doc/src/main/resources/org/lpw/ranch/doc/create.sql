@@ -3,6 +3,7 @@ CREATE TABLE t_doc
 (
   c_id CHAR(36) NOT NULL COMMENT '主键',
   c_author CHAR(36) NOT NULL COMMENT '作者ID',
+  c_category VARCHAR(255) NOT NULL COMMENT '类别',
   c_sort INT DEFAULT 0 COMMENT '顺序',
   c_subject VARCHAR(255) NOT NULL COMMENT '标题',
   c_image VARCHAR(255) DEFAULT NULL COMMENT '主图URI地址',

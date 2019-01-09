@@ -33,8 +33,8 @@ public class DocCtrl extends AuditCtrlSupport {
             @Validate(validator = Validators.SIGN)
     })
     public Object query() {
-        return docService.query(request.get("classify"), request.get("author"), request.get("subject"), request.get("label"),
-                request.get("type"), auditHelper.get(request.getAsInt("audit", -1)));
+        return docService.query(request.get("classify"), request.get("author"), request.get("category"), request.get("subject"),
+                request.get("label"), request.get("type"), auditHelper.get(request.getAsInt("audit", -1)));
     }
 
     @Execute(name = "query-by-author", validates = {
@@ -87,7 +87,7 @@ public class DocCtrl extends AuditCtrlSupport {
 
     @Execute(name = "index")
     public Object index() {
-        return docService.query(request.get("classify"), null, null, null, null, Audit.Pass);
+        return docService.query(request.get("classify"), null, null, null, null, null, Audit.Pass);
     }
 
     @Execute(name = "search")

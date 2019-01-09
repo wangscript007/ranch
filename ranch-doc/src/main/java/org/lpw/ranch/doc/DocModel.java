@@ -22,6 +22,7 @@ public class DocModel extends AuditModelSupport {
     static final String NAME = "ranch.doc";
 
     private String author; // 作者ID
+    private String category; // 类别
     private int sort; // 顺序
     private String subject; // 标题
     private String image; // 主图URI地址
@@ -48,6 +49,16 @@ public class DocModel extends AuditModelSupport {
 
     public void setAuthor(String author) {
         this.author = author;
+    }
+
+    @Jsonable
+    @Column(name = "c_category")
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
     }
 
     @Jsonable

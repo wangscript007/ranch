@@ -28,13 +28,14 @@ class DocDaoImpl implements DocDao {
     private DaoHelper daoHelper;
 
     @Override
-    public PageList<DocModel> query(String author, String subject, String label, String type,
+    public PageList<DocModel> query(String author, String category, String subject, String label, String type,
                                     Audit audit, Recycle recycle, int pageSize, int pageNum) {
         StringBuilder where = new StringBuilder().append(recycle.getSql());
         if (audit != null)
             where.append(" and ").append(audit.getSql());
         List<Object> args = new ArrayList<>();
         daoHelper.where(where, args, "c_author", DaoOperation.Equals, author, true);
+        daoHelper.where(where, args, "c_category", DaoOperation.Equals, category, true);
         daoHelper.where(where, args, "c_type", DaoOperation.Equals, type, true);
         daoHelper.like(null, where, args, "c_subject", subject, true);
         daoHelper.like(null, where, args, "c_label", label, true);

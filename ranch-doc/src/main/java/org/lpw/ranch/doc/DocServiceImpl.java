@@ -30,6 +30,7 @@ import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -88,11 +89,11 @@ public class DocServiceImpl implements DocService, MinuteJob, DateJob {
     private Map<String, AtomicInteger> praise = new ConcurrentHashMap<>();
 
     @Override
-    public JSONObject query(String classify, String author, String subject, String label, String type, Audit audit) {
+    public JSONObject query(String classify, String author, String category, String subject, String label, String type, Audit audit) {
         if (!validator.isEmpty(author))
             author = userHelper.findIdByUid(author, author);
         if (validator.isEmpty(classify))
-            return docDao.query(author, subject, label, type, audit, Recycle.No,
+            return docDao.query(author, category, subject, label, type, audit, Recycle.No,
                     pagination.getPageSize(20), pagination.getPageNum()).toJson(this::toJson);
 
         PageList<TopicModel> pl = topicService.query(classify, author, subject, label, type, audit);
@@ -107,7 +108,7 @@ public class DocServiceImpl implements DocService, MinuteJob, DateJob {
 
     @Override
     public JSONObject queryByAuthor() {
-        return docDao.query(userHelper.id(), null, null, null, null, Recycle.No,
+        return docDao.query(userHelper.id(), null, null, null, null, null, Recycle.No,
                 pagination.getPageSize(), pagination.getPageNum()).toJson(this::toJson);
     }
 
@@ -144,10 +145,10 @@ public class DocServiceImpl implements DocService, MinuteJob, DateJob {
     }
 
     @Override
-    public JSONObject search(String[] words) {
-        List<String> ids = luceneHelper.query(DocModel.NAME, words, true, 1024);
+    public JSONObject search(String category, String[] words) {
+        List<String> ids = luceneHelper.query(getLuceneKey(category), words, true, 1024);
         if (ids == null)
-            return query(null, null, null, null, null, Audit.Pass);
+            return query(null, null, null, null, null, null, Audit.Pass);
 
         if (ids.isEmpty())
             return BeanFactory.getBean(PageList.class).setPage(0, 0, 0).toJson();
@@ -164,6 +165,7 @@ public class DocServiceImpl implements DocService, MinuteJob, DateJob {
             model.setCreate(dateTime.now());
         }
         model.setAuthor(userHelper.id());
+        model.setCategory(doc.getCategory());
         model.setSort(doc.getSort());
         model.setSubject(doc.getSubject());
         model.setImage(doc.getImage());
@@ -353,35 +355,45 @@ public class DocServiceImpl implements DocService, MinuteJob, DateJob {
 
     @Override
     public void refresh() {
-        luceneHelper.clear(DocModel.NAME);
         relationService.clear();
-        List<DocModel> list = docDao.query(null, null, null, null, Audit.Pass, Recycle.No,
+        List<DocModel> list = docDao.query(null, null, null, null, null, Audit.Pass, Recycle.No,
                 0, 0).getList();
         if (list.isEmpty())
             return;
 
-        Map<String, String> map = new HashMap<>();
-        DocModel previous = null;
-        for (DocModel doc : list) {
-            if (previous != null) {
-                relationService.save(doc.getId(), previous.getId(), "previous", 0);
-                relationService.save(previous.getId(), doc.getId(), "next", 0);
-            }
-            previous = doc;
-            map.put(doc.getId(), doc.getSubject() + "," + doc.getSummary() + "," + doc.getLabel() + ","
-                    + getSource(doc).replaceAll("<[^>]*>", " ").replace('"', ' ')
-                    .replace('“', ' ').replace('”', ' ').replace('\'', ' ')
-                    .replaceAll("&nbsp;", " ").replaceAll("\\s+", " "));
-            luceneHelper.source(DocModel.NAME, doc.getId(), map.get(doc.getId()));
-        }
+        Map<String, List<DocModel>> map = new HashMap<>();
+        list.forEach(doc -> map.computeIfAbsent(doc.getCategory(), key -> new ArrayList<>()).add(doc));
+        map.forEach((category, docs) -> {
+            String luceneKey = getLuceneKey(category);
+            luceneHelper.clear(luceneKey);
 
-        luceneHelper.index(DocModel.NAME);
-        list.forEach(doc -> {
-            List<String> ids = luceneHelper.query(DocModel.NAME, map.get(doc.getId()), false, 11);
-            for (int i = 1, size = ids.size(); i < size; i++)
-                relationService.save(doc.getId(), ids.get(i), "alike", i - 1);
-            clearCache(doc.getId());
+            Map<String, String> sources = new HashMap<>();
+            DocModel previous = null;
+            for (DocModel doc : docs) {
+                if (previous != null) {
+                    relationService.save(doc.getId(), previous.getId(), "previous", 0);
+                    relationService.save(previous.getId(), doc.getId(), "next", 0);
+                }
+                previous = doc;
+                sources.put(doc.getId(), doc.getSubject() + "," + doc.getSummary() + "," + doc.getLabel() + ","
+                        + getSource(doc).replaceAll("<[^>]*>", " ").replace('"', ' ')
+                        .replace('“', ' ').replace('”', ' ').replace('\'', ' ')
+                        .replaceAll("&nbsp;", " ").replaceAll("\\s+", " "));
+                luceneHelper.source(luceneKey, doc.getId(), sources.get(doc.getId()));
+            }
+
+            luceneHelper.index(luceneKey);
+            docs.forEach(doc -> {
+                List<String> ids = luceneHelper.query(luceneKey, sources.get(doc.getId()), false, 11);
+                for (int i = 1, size = ids.size(); i < size; i++)
+                    relationService.save(doc.getId(), ids.get(i), "alike", i - 1);
+                clearCache(doc.getId());
+            });
         });
+    }
+
+    private String getLuceneKey(String category) {
+        return DocModel.NAME + "." + category;
     }
 
     private String getSource(DocModel doc) {
