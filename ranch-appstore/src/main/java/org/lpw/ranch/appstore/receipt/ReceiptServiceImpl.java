@@ -13,8 +13,6 @@ import org.lpw.tephra.util.Logger;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * @author lpw
@@ -69,12 +67,12 @@ public class ReceiptServiceImpl implements ReceiptService {
     }
 
     private JSONObject verifyReceipt(String url, String receiptData) {
-        Map<String, String> map = new HashMap<>();
-        map.put("receipt-data", receiptData);
-        String string = http.post(url, null, map);
+        JSONObject parameter = new JSONObject();
+        parameter.put("receipt-data", receiptData);
+        String string = http.post(url, null, parameter.toJSONString());
         JSONObject object = json.toObject(string);
         if (object == null)
-            logger.warn(null, "校验AppStore[{}]收据[{}:{}]失败！", url, map, string);
+            logger.warn(null, "校验AppStore[{}]收据[{}:{}]失败！", url, parameter, string);
 
         return object;
     }
