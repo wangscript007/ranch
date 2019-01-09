@@ -46,7 +46,7 @@ public class ReceiptServiceImpl implements ReceiptService {
     @Override
     public JSONObject verify(String data) {
         JSONObject object = verifyReceipt("https://buy.itunes.apple.com/verifyReceipt", data);
-        if (object == null)
+        if (object == null || object.getIntValue("status") == 21007)
             object = verifyReceipt("https://sandbox.itunes.apple.com/verifyReceipt", data);
         if (object == null)
             return null;
