@@ -5,6 +5,7 @@
 |属性|类型|说明|
 |---|---|---|
 |author|char(36)|作者。|
+|category|char(100)|类别。|
 |sort|int|顺序。|
 |subject|char(100)|标题。|
 |image|char(100)|主图URI地址。|

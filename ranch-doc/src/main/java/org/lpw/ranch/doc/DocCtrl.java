@@ -62,6 +62,7 @@ public class DocCtrl extends AuditCtrlSupport {
 
     @Execute(name = "save", validates = {
             @Validate(validator = Validators.NOT_EMPTY, parameter = "classifies", failureCode = 4),
+            @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "category", failureCode = 11),
             @Validate(validator = Validators.NOT_EMPTY, parameter = "subject", failureCode = 5),
             @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "subject", failureCode = 6),
             @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "image", failureCode = 7),
@@ -87,12 +88,12 @@ public class DocCtrl extends AuditCtrlSupport {
 
     @Execute(name = "index")
     public Object index() {
-        return docService.query(request.get("classify"), null, null, null, null, null, Audit.Pass);
+        return docService.query(request.get("classify"), null, request.get("category"), null, null, null, Audit.Pass);
     }
 
     @Execute(name = "search")
     public Object search() {
-        return docService.search(request.getAsArray("words"));
+        return docService.search(request.get("category"), request.getAsArray("words"));
     }
 
     @Execute(name = "read", type = Templates.FREEMARKER, template = "read", validates = {

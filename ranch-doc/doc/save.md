@@ -10,6 +10,7 @@
 |---|---|---|---|
 |id|char(36)|否|ID值，如果不存在则新增。|
 |classifies|string|是|分类ID集，多个ID间以逗号分隔。|
+|category|char(100)|否|类别。|
 |sort|int|否|顺序。|
 |subject|char(100)|是|标题。|
 |image|char(100)|否|主图URI地址。|
@@ -35,6 +36,7 @@
     "id": "ID值",
     "classifies": ["分类集"],
     "author": {},
+    "category": "类别",
     "sort": "顺序",
     "subject": "标题",
     "image": "主图URI地址",

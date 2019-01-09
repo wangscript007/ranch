@@ -16,8 +16,8 @@
     "id-value": {
         "id": "ID值",
         "classifies": ["分类集"],
-        "owner": {},
         "author": {},
+        "category": "类别",
         "scoreMin": "最小分值",
         "scoreMax": "最大分值",
         "sort": "顺序",

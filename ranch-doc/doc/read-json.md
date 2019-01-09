@@ -16,6 +16,7 @@
     "id": "ID值",
     "classifies": ["分类集"],
     "author": {},
+    "category": "类别",
     "sort": "顺序",
     "subject": "标题",
     "image": "主图URI地址",

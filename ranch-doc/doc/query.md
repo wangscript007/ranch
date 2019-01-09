@@ -10,6 +10,7 @@
 |---|---|---|---|
 |classify|char(36)|否|分类。|
 |author|char(36)|否|作者，ID或UID。|
+|category|char(100)|否|类别。|
 |subject|char(100)|否|标题，模糊匹配。|
 |label|char(100)|否|标签，模糊匹配。|
 |type|char(100)|否|类型。|
@@ -28,6 +29,7 @@
             "id": "ID值",
             "classifies": ["分类集"],
             "author": {},
+            "category": "类别",
             "sort": "顺序",
             "subject": "标题",
             "image": "主图URI地址",

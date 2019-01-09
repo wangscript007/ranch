@@ -8,6 +8,7 @@
 
 |名称|类型|必须|说明|
 |---|---|---|---|
+|category|char(100)|否|类别。|
 |words|char(36)|是|分类ID。|
 |pageSize|int|否|每页显示记录数，默认20。|
 |pageNum|int|否|当前显示页数。|
@@ -23,6 +24,7 @@
             "id": "ID值",
             "classifies": ["分类集"],
             "author": {},
+            "category": "类别",
             "sort": "顺序",
             "subject": "标题",
             "image": "主图URI地址",
