@@ -165,7 +165,7 @@ public class DocServiceImpl implements DocService, MinuteJob, DateJob {
             model.setCreate(dateTime.now());
         }
         model.setAuthor(userHelper.id());
-        model.setCategory(doc.getCategory());
+        model.setCategory(validator.isEmpty(doc.getCategory()) ? "" : doc.getCategory());
         model.setSort(doc.getSort());
         model.setSubject(doc.getSubject());
         model.setImage(doc.getImage());
