@@ -23,6 +23,7 @@ import org.lpw.tephra.util.Generator;
 import org.lpw.tephra.util.Io;
 import org.lpw.tephra.util.Logger;
 import org.lpw.tephra.util.Numeric;
+import org.lpw.tephra.util.Thread;
 import org.lpw.tephra.util.TimeUnit;
 import org.lpw.tephra.util.Validator;
 import org.lpw.tephra.wormhole.WormholeHelper;
@@ -62,6 +63,8 @@ public class EditorServiceImpl implements EditorService, HourJob, DateJob {
     private Generator generator;
     @Inject
     private Converter converter;
+    @Inject
+    private Thread thread;
     @Inject
     private Logger logger;
     @Inject
@@ -477,7 +480,7 @@ public class EditorServiceImpl implements EditorService, HourJob, DateJob {
             pl.getList().forEach(editor -> {
                 StringBuilder data = new StringBuilder().append(editor.getName()).append(',').append(editor.getLabel());
                 elementService.text(editor.getId(), data);
-                luceneHelper.source(luceneKey, editor.getId(), data.toString());
+                luceneHelper.source(luceneKey, editor.getId(), data.toString().replaceAll(",", ""));
                 luceneHelper.source(labelLuceneKey, editor.getId(), editor.getLabel());
             });
             if (logger.isInfoEnable())
@@ -485,6 +488,7 @@ public class EditorServiceImpl implements EditorService, HourJob, DateJob {
             if (pl.getNumber() == pl.getPage())
                 break;
         }
+        thread.sleep(5, TimeUnit.Minute);
         luceneHelper.index(luceneKey);
         luceneHelper.index(labelLuceneKey);
         resetRandom(type);
