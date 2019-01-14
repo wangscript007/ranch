@@ -21,6 +21,7 @@ import org.lpw.tephra.util.Converter;
 import org.lpw.tephra.util.DateTime;
 import org.lpw.tephra.util.Generator;
 import org.lpw.tephra.util.Io;
+import org.lpw.tephra.util.Logger;
 import org.lpw.tephra.util.Numeric;
 import org.lpw.tephra.util.TimeUnit;
 import org.lpw.tephra.util.Validator;
@@ -62,6 +63,8 @@ public class EditorServiceImpl implements EditorService, HourJob, DateJob {
     @Inject
     private Converter converter;
     @Inject
+    private Logger logger;
+    @Inject
     private ModelHelper modelHelper;
     @Inject
     private Session session;
@@ -101,9 +104,9 @@ public class EditorServiceImpl implements EditorService, HourJob, DateJob {
     private Set<Integer> onsaleState = Collections.singleton(3);
 
     @Override
-    public JSONObject query(String user, String uid, String mobile, String email, String nick, int template, String type, String name, String label,
-                            int modified, String[] states, String createStart, String createEnd, String modifyStart, String modifyEnd,
-                            Order order) {
+    public JSONObject query(String user, String uid, String mobile, String email, String nick, int template, String type,
+                            String name, String label, int modified, String[] states, String createStart, String createEnd,
+                            String modifyStart, String modifyEnd, Order order) {
         Set<String> ids = ids(user, uid, mobile, email, nick);
         if (ids != null && ids.isEmpty())
             return BeanFactory.getBean(PageList.class).setPage(0, 0, 0).toJson();
@@ -118,7 +121,8 @@ public class EditorServiceImpl implements EditorService, HourJob, DateJob {
     }
 
     private Set<String> ids(String user, String uid, String mobile, String email, String nick) {
-        if (validator.isEmpty(user) && validator.isEmpty(uid) && validator.isEmpty(mobile) && validator.isEmpty(email) && validator.isEmpty(nick))
+        if (validator.isEmpty(user) && validator.isEmpty(uid) && validator.isEmpty(mobile)
+                && validator.isEmpty(email) && validator.isEmpty(nick))
             return null;
 
         Set<String> set = validator.isEmpty(user) ? userHelper.ids(uid, null, null, nick, mobile, email, null,
@@ -476,6 +480,8 @@ public class EditorServiceImpl implements EditorService, HourJob, DateJob {
                 luceneHelper.source(luceneKey, editor.getId(), data.toString());
                 luceneHelper.source(labelLuceneKey, editor.getId(), editor.getLabel());
             });
+            if (logger.isInfoEnable())
+                logger.info("添加[{}:{}]编辑器索引。", type, pl.getList().size());
             if (pl.getNumber() == pl.getPage())
                 break;
         }
