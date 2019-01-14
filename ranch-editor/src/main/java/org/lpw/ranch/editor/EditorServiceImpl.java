@@ -397,7 +397,7 @@ public class EditorServiceImpl implements EditorService, HourJob, DateJob {
                 + ":" + pageSize + ":" + pagination.getPageNum());
         JSONObject object = cache.get(cacheKey);
         if (object == null) {
-            List<String> ids = luceneHelper.query(getLuceneKey(type) + suffix, list, true, 1024);
+            List<String> ids = luceneHelper.query(getLuceneKey(type) + suffix, list, false, 1024);
             if (ids.isEmpty())
                 object = BeanFactory.getBean(PageList.class).setPage(0, pageSize, 0).toJson();
             else
