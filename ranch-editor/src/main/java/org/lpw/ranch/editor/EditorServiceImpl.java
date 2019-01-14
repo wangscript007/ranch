@@ -64,8 +64,6 @@ public class EditorServiceImpl implements EditorService, HourJob, DateJob {
     @Inject
     private Converter converter;
     @Inject
-    private Thread thread;
-    @Inject
     private Logger logger;
     @Inject
     private ModelHelper modelHelper;
@@ -488,7 +486,6 @@ public class EditorServiceImpl implements EditorService, HourJob, DateJob {
             if (pl.getNumber() == pl.getPage())
                 break;
         }
-        thread.sleep(5, TimeUnit.Minute);
         luceneHelper.index(luceneKey);
         luceneHelper.index(labelLuceneKey);
         resetRandom(type);
