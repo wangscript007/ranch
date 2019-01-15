@@ -44,7 +44,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @author lpw
  */
 @Service(DocModel.NAME + ".service")
-public class DocServiceImpl implements DocService, MinuteJob, DateJob {
+public class DocServiceImpl implements DocService, MinuteJob {
     private static final String CACHE_MODEL = DocModel.NAME + ".service.model:";
     private static final String CACHE_JSON = DocModel.NAME + ".service.json:";
     private static final String CACHE_READ = DocModel.NAME + ".service.read:";
@@ -410,10 +410,10 @@ public class DocServiceImpl implements DocService, MinuteJob, DateJob {
         return file.exists() ? io.readAsString(file.getAbsolutePath()) : null;
     }
 
-    @Override
-    public void executeDateJob() {
-        refresh();
-    }
+//    @Override
+//    public void executeDateJob() {
+//        refresh();
+//    }
 
     private void clearCache(String[] ids) {
         for (String id : ids)
