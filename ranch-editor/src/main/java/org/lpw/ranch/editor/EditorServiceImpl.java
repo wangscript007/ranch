@@ -44,7 +44,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @author lpw
  */
 @Service(EditorModel.NAME + ".service")
-public class EditorServiceImpl implements EditorService, HourJob, DateJob {
+public class EditorServiceImpl implements EditorService, HourJob {
     private static final String CACHE_MODEL = EditorModel.NAME + ".service.cache.model:";
     private static final String CACHE_QUERY = EditorModel.NAME + ".service.cache.query:";
 
@@ -457,15 +457,15 @@ public class EditorServiceImpl implements EditorService, HourJob, DateJob {
         lockHelper.unlock(lockId);
     }
 
-    @Override
-    public void executeDateJob() {
-        if (validator.isEmpty(templateTypes))
-            return;
-
-        for (String type : converter.toArray(templateTypes, ","))
-            for (int i = 1; i <= 2; i++)
-                setSearchIndex(type, i);
-    }
+//    @Override
+//    public void executeDateJob() {
+//        if (validator.isEmpty(templateTypes))
+//            return;
+//
+//        for (String type : converter.toArray(templateTypes, ","))
+//            for (int i = 1; i <= 2; i++)
+//                setSearchIndex(type, i);
+//    }
 
     private void setSearchIndex(String type, int template) {
         String luceneKey = getLuceneKey(type, template);
