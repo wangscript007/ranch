@@ -172,6 +172,7 @@ public class EditorServiceImpl implements EditorService, HourJob {
         model.setSort(editor.getSort());
         model.setName(editor.getName());
         model.setLabel(editor.getLabel());
+        model.setSummary(editor.getSummary());
         model.setWidth(editor.getWidth());
         model.setHeight(editor.getHeight());
         model.setImage(editor.getImage());
@@ -196,6 +197,8 @@ public class EditorServiceImpl implements EditorService, HourJob {
             model.setName(editor.getName());
         if (!validator.isEmpty(editor.getLabel()))
             model.setLabel(editor.getLabel());
+        if (!validator.isEmpty(editor.getSummary()))
+            model.setSummary(editor.getSummary());
         if (editor.getWidth() > 0)
             model.setWidth(editor.getWidth());
         if (editor.getHeight() > 0)
@@ -468,6 +471,8 @@ public class EditorServiceImpl implements EditorService, HourJob {
                     null, null, null, null, Order.None, 20, i);
             pl.getList().forEach(editor -> {
                 StringBuilder data = new StringBuilder().append(editor.getName()).append(',').append(editor.getLabel());
+                if (!validator.isEmpty(editor.getSummary()))
+                    data.append(editor.getSummary());
                 elementService.text(editor.getId(), data);
                 luceneHelper.source(luceneKey, editor.getId(), data.toString().replaceAll(",", ""));
                 luceneHelper.source(labelLuceneKey, editor.getId(), editor.getLabel());

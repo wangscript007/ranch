@@ -7,6 +7,7 @@ CREATE TABLE t_editor
   c_sort INT DEFAULT 0 COMMENT '顺序',
   c_name VARCHAR(255) DEFAULT NULL COMMENT '名称',
   c_label VARCHAR(255) DEFAULT NULL COMMENT '标签',
+  c_summary TEXT DEFAULT NULL COMMENT '摘要',
   c_width INT DEFAULT 0 COMMENT '宽度',
   c_height INT DEFAULT 0 COMMENT '高度',
   c_image VARCHAR(255) DEFAULT NULL COMMENT '预览图',
