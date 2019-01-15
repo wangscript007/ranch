@@ -15,7 +15,6 @@ import org.lpw.tephra.ctrl.context.Session;
 import org.lpw.tephra.dao.model.ModelHelper;
 import org.lpw.tephra.dao.orm.PageList;
 import org.lpw.tephra.lucene.LuceneHelper;
-import org.lpw.tephra.scheduler.DateJob;
 import org.lpw.tephra.scheduler.HourJob;
 import org.lpw.tephra.util.Converter;
 import org.lpw.tephra.util.DateTime;
@@ -176,6 +175,8 @@ public class EditorServiceImpl implements EditorService, HourJob {
         model.setWidth(editor.getWidth());
         model.setHeight(editor.getHeight());
         model.setImage(editor.getImage());
+        if (!validator.isEmpty(editor.getSource()))
+            model.setSource(editor.getSource());
         model.setJson(editor.getJson());
         save(model, 0, null, true);
 
@@ -456,16 +457,6 @@ public class EditorServiceImpl implements EditorService, HourJob {
 
         lockHelper.unlock(lockId);
     }
-
-//    @Override
-//    public void executeDateJob() {
-//        if (validator.isEmpty(templateTypes))
-//            return;
-//
-//        for (String type : converter.toArray(templateTypes, ","))
-//            for (int i = 1; i <= 2; i++)
-//                setSearchIndex(type, i);
-//    }
 
     private void setSearchIndex(String type, int template) {
         String luceneKey = getLuceneKey(type, template);
