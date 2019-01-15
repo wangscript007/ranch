@@ -153,18 +153,20 @@ public class EditorCtrl {
     }
 
     @Execute(name = "search", validates = {
-            @Validate(validator = Validators.NOT_EMPTY, parameter = "type", failureCode = 3)
+            @Validate(validator = Validators.NOT_EMPTY, parameter = "type", failureCode = 3),
+            @Validate(validator = Validators.BETWEEN, number = {1, 2}, parameter = "template", failureCode = 13)
     })
     public Object search() {
-        return editorService.searchTemplate(request.get("type"), request.getAsArray("labels"),
+        return editorService.searchTemplate(request.get("type"), request.getAsInt("template"), request.getAsArray("labels"),
                 request.getAsArray("words"), Order.find(request.get("order"), Order.Hot));
     }
 
     @Execute(name = "reset-search-index", validates = {
             @Validate(validator = Validators.NOT_EMPTY, parameter = "type", failureCode = 3),
+            @Validate(validator = Validators.BETWEEN, number = {1, 2}, parameter = "template", failureCode = 13),
             @Validate(validator = Validators.SIGN)
     })
     public Object resetSearchIndex() {
-        return editorService.resetSearchIndex(request.get("type"));
+        return editorService.resetSearchIndex(request.get("type"), request.getAsInt("template"));
     }
 }

@@ -166,19 +166,21 @@ public interface EditorService {
     /**
      * 搜索模板信息集。
      *
-     * @param type   类型。
-     * @param labels 标签集。
-     * @param words  关键词集。
-     * @param order  排序规则。
+     * @param type     类型。
+     * @param template 模板。
+     * @param labels   标签集。
+     * @param words    关键词集。
+     * @param order    排序规则。
      * @return 编辑器信息集。
      */
-    JSONObject searchTemplate(String type, String[] labels, String[] words, Order order);
+    JSONObject searchTemplate(String type, int template, String[] labels, String[] words, Order order);
 
     /**
      * 重建搜索索引。
      *
-     * @param type 类型。
+     * @param type     类型。
+     * @param template 模板。
      * @return 异步ID。
      */
-    String resetSearchIndex(String type);
+    String resetSearchIndex(String type, int template);
 }

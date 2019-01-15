@@ -21,7 +21,7 @@ import java.sql.Timestamp;
 public class EditorModel extends ModelSupport {
     static final String NAME = "ranch.editor";
 
-    private int template; // 模板：0-否；1-是
+    private int template; // 模板：0-否；1-模板；2-范文
     private String type; // 类型
     private int sort; // 顺序
     private String name; // 名称

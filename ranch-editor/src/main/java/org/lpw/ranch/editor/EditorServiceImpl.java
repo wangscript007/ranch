@@ -23,7 +23,6 @@ import org.lpw.tephra.util.Generator;
 import org.lpw.tephra.util.Io;
 import org.lpw.tephra.util.Logger;
 import org.lpw.tephra.util.Numeric;
-import org.lpw.tephra.util.Thread;
 import org.lpw.tephra.util.TimeUnit;
 import org.lpw.tephra.util.Validator;
 import org.lpw.tephra.wormhole.WormholeHelper;
@@ -186,7 +185,7 @@ public class EditorServiceImpl implements EditorService, HourJob, DateJob {
     @Override
     public JSONObject modify(EditorModel editor, int template) {
         EditorModel model = findById(editor.getId());
-        if (template > 0)
+        if (template > -1)
             model.setTemplate(template);
         if (!validator.isEmpty(editor.getType()))
             model.setType(editor.getType());
@@ -278,7 +277,7 @@ public class EditorServiceImpl implements EditorService, HourJob, DateJob {
         editor.setId(null);
         if (!validator.isEmpty(type))
             editor.setType(type);
-        boolean fromTemplate = editor.getTemplate() == 1;
+        boolean fromTemplate = editor.getTemplate() > 0;
         editor.setSource(fromTemplate ? id : editor.getSource());
         editor.setTemplate(0);
         if (fromTemplate)
@@ -371,11 +370,11 @@ public class EditorServiceImpl implements EditorService, HourJob, DateJob {
     }
 
     @Override
-    public JSONObject searchTemplate(String type, String[] labels, String[] words, Order order) {
+    public JSONObject searchTemplate(String type, int template, String[] labels, String[] words, Order order) {
         List<String> list = searchWords(labels);
 
-        return list.isEmpty() ? searchTemplate(type, "", searchWords(words), order)
-                : searchTemplate(type, ".label", list, order);
+        return list.isEmpty() ? searchTemplate(type, template, "", searchWords(words), order)
+                : searchTemplate(type, template, ".label", list, order);
     }
 
     private List<String> searchWords(String[] words) {
@@ -388,20 +387,20 @@ public class EditorServiceImpl implements EditorService, HourJob, DateJob {
         return list;
     }
 
-    private JSONObject searchTemplate(String type, String suffix, List<String> list, Order order) {
+    private JSONObject searchTemplate(String type, int template, String suffix, List<String> list, Order order) {
         int pageSize = pagination.getPageSize(20);
         if (list.isEmpty())
-            return searchTemplate(type, order, pageSize);
+            return searchTemplate(type, template, order, pageSize);
 
-        String cacheKey = getSearchCacheKey(type, suffix + ":" + converter.toString(list) + ":" + order
+        String cacheKey = getSearchCacheKey(type, template, suffix + ":" + converter.toString(list) + ":" + order
                 + ":" + pageSize + ":" + pagination.getPageNum());
         JSONObject object = cache.get(cacheKey);
         if (object == null) {
-            List<String> ids = luceneHelper.query(getLuceneKey(type) + suffix, list, false, 1024);
+            List<String> ids = luceneHelper.query(getLuceneKey(type, template) + suffix, list, false, 1024);
             if (ids.isEmpty())
                 object = BeanFactory.getBean(PageList.class).setPage(0, pageSize, 0).toJson();
             else
-                object = editorDao.query(new HashSet<>(ids), 1, type, null, null, -1, onsaleState, null,
+                object = editorDao.query(new HashSet<>(ids), template, type, null, null, -1, onsaleState, null,
                         null, null, null, order, pageSize, pagination.getPageNum()).toJson();
             cache.put(cacheKey, object, false);
         }
@@ -409,28 +408,28 @@ public class EditorServiceImpl implements EditorService, HourJob, DateJob {
         return object;
     }
 
-    private JSONObject searchTemplate(String type, Order order, int pageSize) {
-        String cacheKey = getSearchCacheKey(type, order + ":" + pageSize + ":" + pagination.getPageNum());
+    private JSONObject searchTemplate(String type, int template, Order order, int pageSize) {
+        String cacheKey = getSearchCacheKey(type, template, order + ":" + pageSize + ":" + pagination.getPageNum());
         JSONObject object = cache.get(cacheKey);
         if (object == null)
-            cache.put(cacheKey, object = editorDao.query(null, 1, type, null, null, -1, onsaleState,
+            cache.put(cacheKey, object = editorDao.query(null, template, type, null, null, -1, onsaleState,
                     null, null, null, null, order, pageSize,
                     pagination.getPageNum()).toJson(), false);
 
         return object;
     }
 
-    private String getSearchCacheKey(String type, String key) {
-        return random.computeIfAbsent(type, k -> CACHE_QUERY + type + ":" + generator.random(32) + ":") + key;
+    private String getSearchCacheKey(String type, int template, String key) {
+        return random.computeIfAbsent(type, k -> CACHE_QUERY + type + "." + template + ":" + generator.random(32) + ":") + key;
     }
 
     @Override
-    public String resetSearchIndex(String type) {
+    public String resetSearchIndex(String type, int template) {
         if (!templateTypes.contains(type))
             return "";
 
-        return asyncService.submit(EditorModel.NAME + ".reset-search-index", type, 60 * 60, () -> {
-            setSearchIndex(type);
+        return asyncService.submit(EditorModel.NAME + ".reset-search-index", type + "." + template, 60 * 60, () -> {
+            setSearchIndex(type, template);
 
             return "";
         });
@@ -464,16 +463,17 @@ public class EditorServiceImpl implements EditorService, HourJob, DateJob {
             return;
 
         for (String type : converter.toArray(templateTypes, ","))
-            setSearchIndex(type);
+            for (int i = 1; i <= 2; i++)
+                setSearchIndex(type, i);
     }
 
-    private void setSearchIndex(String type) {
-        String luceneKey = getLuceneKey(type);
+    private void setSearchIndex(String type, int template) {
+        String luceneKey = getLuceneKey(type, template);
         luceneHelper.clear(luceneKey);
         String labelLuceneKey = luceneKey + ".label";
         luceneHelper.clear(labelLuceneKey);
         for (int i = 1; i < Integer.MAX_VALUE; i++) {
-            PageList<EditorModel> pl = editorDao.query(null, 1, type, null, null, -1, onsaleState,
+            PageList<EditorModel> pl = editorDao.query(null, template, type, null, null, -1, onsaleState,
                     null, null, null, null, Order.None, 20, i);
             pl.getList().forEach(editor -> {
                 StringBuilder data = new StringBuilder().append(editor.getName()).append(',').append(editor.getLabel());
@@ -491,7 +491,7 @@ public class EditorServiceImpl implements EditorService, HourJob, DateJob {
         resetRandom(type);
     }
 
-    private String getLuceneKey(String type) {
-        return EditorModel.NAME + "." + type;
+    private String getLuceneKey(String type, int template) {
+        return EditorModel.NAME + "." + type + "." + template;
     }
 }
