@@ -24,10 +24,12 @@
     "number": "当前显示页数",
     "list": [
         {
+            "template": "模板：0-否；1-模板；2-范文",
             "type": "类型",
             "sort": "顺序",
             "name": "名称",
             "label": "标签",
+            "summary": "摘要",
             "width": "宽度",
             "height": "高度",
             "image": "预览图",

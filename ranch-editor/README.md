@@ -4,11 +4,12 @@
 
 |属性|类型|说明|
 |---|---|---|
-|template|int|模板：0-否；1-是。|
+|template|int|模板：0-否；1-模板；2-范文。|
 |type|char(100)|类型。|
 |sort|int|顺序，默认0，降序。|
 |name|char(100)|名称。|
-|keyword|char(100)|关键词。|
+|label|char(100)|标签。|
+|summary|string|摘要。|
 |width|int|宽度。|
 |height|int|高度。|
 |image|char(100)|预览图。|

@@ -13,7 +13,7 @@
 |mobile|string|否|用户手机号，为空表示不限制。|
 |email|string|否|用户Email，为空表示不限制。|
 |nick|string|否|用户昵称，为空表示不限制。|
-|template|int|否|模板：-1-全部；0-否；1-是。|
+|template|int|否|模板：-1-全部；0-否；1-模板；2-范文。|
 |type|string|否|类型，为空表示不限制。|
 |name|string|否|名称，模糊匹配，为空表示不限制。|
 |label|string|否|标签，模糊匹配，为空表示不限制。|
@@ -35,11 +35,12 @@
     "number": "当前显示页数",
     "list": [
         {
-            "template": "模板：0-否；1-是",
+            "template": "模板：0-否；1-模板；2-范文",
             "type": "类型",
             "sort": "顺序",
             "name": "名称",
             "label": "标签",
+            "summary": "摘要",
             "width": "宽度",
             "height": "高度",
             "image": "预览图",
