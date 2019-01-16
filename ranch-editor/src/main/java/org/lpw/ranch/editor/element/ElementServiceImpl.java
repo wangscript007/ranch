@@ -286,7 +286,11 @@ public class ElementServiceImpl implements ElementService, MinuteJob {
 
     @Override
     public void text(String editor, StringBuilder data) {
-        text(editor, editor, data);
+        try {
+            text(editor, editor, data);
+        } catch (Throwable throwable) {
+            logger.warn(throwable, "拼接编辑器元素文本内容时发生异常！");
+        }
     }
 
     private void text(String editor, String parent, StringBuilder data) {
