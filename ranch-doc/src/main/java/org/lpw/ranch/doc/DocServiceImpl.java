@@ -379,10 +379,9 @@ public class DocServiceImpl implements DocService, MinuteJob {
                         + getSource(doc).replaceAll("<[^>]*>", " ").replace('"', ' ')
                         .replace('“', ' ').replace('”', ' ').replace('\'', ' ')
                         .replaceAll("&nbsp;", " ").replaceAll("\\s+", " "));
-                luceneHelper.source(luceneKey, doc.getId(), sources.get(doc.getId()));
+                luceneHelper.index(luceneKey, doc.getId(), sources.get(doc.getId()));
             }
 
-            luceneHelper.index(luceneKey);
             docs.forEach(doc -> {
                 List<String> ids = luceneHelper.query(luceneKey, sources.get(doc.getId()), false, 11);
                 for (int i = 1, size = ids.size(); i < size; i++)
@@ -409,11 +408,6 @@ public class DocServiceImpl implements DocService, MinuteJob {
 
         return file.exists() ? io.readAsString(file.getAbsolutePath()) : null;
     }
-
-//    @Override
-//    public void executeDateJob() {
-//        refresh();
-//    }
 
     private void clearCache(String[] ids) {
         for (String id : ids)
