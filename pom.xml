@@ -59,6 +59,7 @@
         <module>ranch-facebook-helper</module>
         <module>ranch-linkedin</module>
         <module>ranch-linkedin-helper</module>
+        <module>ranch-log</module>
         <module>ranch-ui</module>
         <module>ranch-web</module>
         <module>ranch-test</module>
