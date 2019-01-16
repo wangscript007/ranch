@@ -474,16 +474,14 @@ public class EditorServiceImpl implements EditorService, HourJob {
                 if (!validator.isEmpty(editor.getSummary()))
                     data.append(editor.getSummary());
                 elementService.text(editor.getId(), data);
-                luceneHelper.source(luceneKey, editor.getId(), data.toString().replaceAll(",", ""));
-                luceneHelper.source(labelLuceneKey, editor.getId(), editor.getLabel());
+                luceneHelper.index(luceneKey, editor.getId(), data.toString().replaceAll(",", ""));
+                luceneHelper.index(labelLuceneKey, editor.getId(), editor.getLabel());
             });
             if (logger.isInfoEnable())
                 logger.info("添加[{}:{}]编辑器索引。", type, pl.getList().size());
             if (pl.getNumber() == pl.getPage())
                 break;
         }
-        luceneHelper.index(luceneKey);
-        luceneHelper.index(labelLuceneKey);
         resetRandom(type);
     }
 
