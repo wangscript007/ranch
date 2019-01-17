@@ -44,7 +44,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @author lpw
  */
 @Service(DocModel.NAME + ".service")
-public class DocServiceImpl implements DocService, MinuteJob {
+public class DocServiceImpl implements DocService, MinuteJob, DateJob {
     private static final String CACHE_MODEL = DocModel.NAME + ".service.model:";
     private static final String CACHE_JSON = DocModel.NAME + ".service.json:";
     private static final String CACHE_READ = DocModel.NAME + ".service.read:";
@@ -351,6 +351,11 @@ public class DocServiceImpl implements DocService, MinuteJob {
             docDao.save(doc);
             clearCache(id);
         });
+    }
+
+    @Override
+    public void executeDateJob() {
+        refresh();
     }
 
     @Override
