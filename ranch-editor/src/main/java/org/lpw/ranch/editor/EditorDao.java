@@ -13,6 +13,8 @@ interface EditorDao {
                                 Timestamp createStart, Timestamp createEnd, Timestamp modifyStart, Timestamp modifyEnd,
                                 Order order, int pageSize, int pageNum);
 
+    PageList<EditorModel> query(int template,String type, int state, int pageSize, int pageNum);
+
     PageList<EditorModel> query(Timestamp[] modify);
 
     EditorModel findById(String id);

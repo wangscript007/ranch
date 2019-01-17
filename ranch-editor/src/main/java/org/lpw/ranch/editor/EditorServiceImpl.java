@@ -15,6 +15,7 @@ import org.lpw.tephra.ctrl.context.Session;
 import org.lpw.tephra.dao.model.ModelHelper;
 import org.lpw.tephra.dao.orm.PageList;
 import org.lpw.tephra.lucene.LuceneHelper;
+import org.lpw.tephra.scheduler.DateJob;
 import org.lpw.tephra.scheduler.HourJob;
 import org.lpw.tephra.util.Converter;
 import org.lpw.tephra.util.DateTime;
@@ -43,7 +44,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @author lpw
  */
 @Service(EditorModel.NAME + ".service")
-public class EditorServiceImpl implements EditorService, HourJob {
+public class EditorServiceImpl implements EditorService, HourJob, DateJob {
     private static final String CACHE_MODEL = EditorModel.NAME + ".service.cache.model:";
     private static final String CACHE_QUERY = EditorModel.NAME + ".service.cache.query:";
 
@@ -461,14 +462,23 @@ public class EditorServiceImpl implements EditorService, HourJob {
         lockHelper.unlock(lockId);
     }
 
+    @Override
+    public void executeDateJob() {
+        if (validator.isEmpty(templateTypes))
+            return;
+
+        for (String type : converter.toArray(templateTypes, ","))
+            for (int i = 1; i <= 2; i++)
+                setSearchIndex(type, i);
+    }
+
     private void setSearchIndex(String type, int template) {
         String luceneKey = getLuceneKey(type, template);
         luceneHelper.clear(luceneKey);
         String labelLuceneKey = luceneKey + ".label";
         luceneHelper.clear(labelLuceneKey);
         for (int i = 1; i < Integer.MAX_VALUE; i++) {
-            PageList<EditorModel> pl = editorDao.query(null, template, type, null, null, -1, onsaleState,
-                    null, null, null, null, Order.None, 20, i);
+            PageList<EditorModel> pl = editorDao.query(template, type, 3, 20, i);
             pl.getList().forEach(editor -> {
                 StringBuilder data = new StringBuilder().append(editor.getName()).append(',').append(editor.getLabel());
                 if (!validator.isEmpty(editor.getSummary()))
