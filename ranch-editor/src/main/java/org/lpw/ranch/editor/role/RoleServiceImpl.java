@@ -100,7 +100,7 @@ public class RoleServiceImpl implements RoleService {
         if (userHelper.get(user).getIntValue("grade") < 50)
             return false;
 
-        return editor.getTemplate() == 1 || editor.getTemplate() == 2 || type == Type.Viewer;
+        return editor.getTemplate() > 0 || type == Type.Viewer;
     }
 
     @Override
