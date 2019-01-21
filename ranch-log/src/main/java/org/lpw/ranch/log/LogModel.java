@@ -20,7 +20,6 @@ import java.sql.Timestamp;
 @Scope(BeanDefinition.SCOPE_PROTOTYPE)
 @Entity(name = LogModel.NAME)
 @Table(name = "t_log")
-@Daily(overdue = 60)
 public class LogModel extends ModelSupport {
     static final String NAME = "ranch.log";
 
