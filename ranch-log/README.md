@@ -5,6 +5,7 @@
 |属性|类型|说明|
 |---|---|---|
 |type|char(100)|类型。|
+|sid|char(100)|Session ID。|
 |user|char(36)|用户。|
 |ip|char(100)|IP。|
 |header|json|请求头。|

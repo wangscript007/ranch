@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import org.lpw.ranch.user.helper.UserHelper;
 import org.lpw.tephra.ctrl.context.Header;
 import org.lpw.tephra.ctrl.context.Request;
+import org.lpw.tephra.ctrl.context.Session;
 import org.lpw.tephra.scheduler.DateJob;
 import org.lpw.tephra.util.DateTime;
 import org.springframework.stereotype.Service;
@@ -24,6 +25,8 @@ public class LogServiceImpl implements LogService, DateJob {
     @Inject
     private Request request;
     @Inject
+    private Session session;
+    @Inject
     private UserHelper userHelper;
     @Inject
     private LogDao logDao;
@@ -32,6 +35,7 @@ public class LogServiceImpl implements LogService, DateJob {
     public void save(String type) {
         LogModel log = new LogModel();
         log.setType(type);
+        log.setSid(session.getId());
         log.setUser(userHelper.id());
         log.setIp(header.getIp());
         log.setHeader(toJson(header.getMap()));

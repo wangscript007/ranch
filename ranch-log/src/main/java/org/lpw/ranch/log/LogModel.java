@@ -1,6 +1,5 @@
 package org.lpw.ranch.log;
 
-import org.lpw.tephra.dao.model.Daily;
 import org.lpw.tephra.dao.model.Jsonable;
 import org.lpw.tephra.dao.model.ModelSupport;
 import org.springframework.beans.factory.config.BeanDefinition;
@@ -10,7 +9,6 @@ import org.springframework.stereotype.Component;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
-
 import java.sql.Timestamp;
 
 /**
@@ -24,6 +22,7 @@ public class LogModel extends ModelSupport {
     static final String NAME = "ranch.log";
 
     private String type; // 类型
+    private String sid; // Session ID
     private String user; // 用户
     private String ip; // IP
     private String header; // 请求头
@@ -38,6 +37,16 @@ public class LogModel extends ModelSupport {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    @Jsonable
+    @Column(name = "c_sid")
+    public String getSid() {
+        return sid;
+    }
+
+    public void setSid(String sid) {
+        this.sid = sid;
     }
 
     @Jsonable
