@@ -32,8 +32,8 @@ public class CreatableValidatorImpl extends ValidatorSupport {
             return true;
 
         RoleModel role = roleDao.newest(userHelper.id(), RoleService.Type.Owner.ordinal());
-        if (role == null || System.currentTimeMillis() - role.getCreate().getTime() > 5 * TimeUnit.Minute.getTime())
-            return true;
+        if (role != null && System.currentTimeMillis() - role.getCreate().getTime() <= 5 * TimeUnit.Minute.getTime())
+            return false;
 
         return roleDao.count(userHelper.id(), RoleService.Type.Owner.ordinal()) < freeCreate
                 || (userHelper.isVip() && roleDao.count(userHelper.id(), RoleService.Type.Owner.ordinal(),
