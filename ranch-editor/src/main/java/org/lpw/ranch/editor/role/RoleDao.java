@@ -21,6 +21,8 @@ interface RoleDao {
 
     RoleModel find(String editor, int type);
 
+    RoleModel newest(String user, int type);
+
     int count(String user, int type);
 
     int count(String user, int type, Timestamp start, Timestamp end);

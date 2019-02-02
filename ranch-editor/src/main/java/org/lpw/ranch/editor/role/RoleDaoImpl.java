@@ -67,6 +67,11 @@ class RoleDaoImpl implements RoleDao {
     }
 
     @Override
+    public RoleModel newest(String user, int type) {
+        return liteOrm.findOne(new LiteQuery(RoleModel.class).where("c_user=? and c_type=?").order("c_create desc"), new Object[]{user, type});
+    }
+
+    @Override
     public int count(String user, int type) {
         return liteOrm.count(new LiteQuery(RoleModel.class).where("c_user=? and c_type=?"), new Object[]{user, type});
     }
