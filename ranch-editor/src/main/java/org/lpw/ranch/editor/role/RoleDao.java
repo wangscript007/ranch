@@ -2,6 +2,7 @@ package org.lpw.ranch.editor.role;
 
 import org.lpw.tephra.dao.orm.PageList;
 
+import java.sql.Timestamp;
 import java.util.Set;
 
 /**
@@ -21,6 +22,8 @@ interface RoleDao {
     RoleModel find(String editor, int type);
 
     int count(String user, int type);
+
+    int count(String user, int type, Timestamp start, Timestamp end);
 
     int count(String user, int type, int state);
 

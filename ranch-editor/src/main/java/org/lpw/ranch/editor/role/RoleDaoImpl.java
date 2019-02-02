@@ -8,6 +8,7 @@ import org.lpw.tephra.dao.orm.lite.LiteQuery;
 import org.springframework.stereotype.Repository;
 
 import javax.inject.Inject;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -68,6 +69,12 @@ class RoleDaoImpl implements RoleDao {
     @Override
     public int count(String user, int type) {
         return liteOrm.count(new LiteQuery(RoleModel.class).where("c_user=? and c_type=?"), new Object[]{user, type});
+    }
+
+    @Override
+    public int count(String user, int type, Timestamp start, Timestamp end) {
+        return liteOrm.count(new LiteQuery(RoleModel.class).where("c_user=? and c_type=? and c_create between ? and ?"),
+                new Object[]{user, type, start, end});
     }
 
     @Override
