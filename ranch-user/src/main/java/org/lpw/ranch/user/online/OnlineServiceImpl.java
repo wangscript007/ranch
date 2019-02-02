@@ -73,7 +73,7 @@ public class OnlineServiceImpl implements OnlineService, MinuteJob {
     @Override
     public boolean isSign() {
         OnlineModel online = onlineDao.findBySid(session.getId());
-        if (online == null)
+        if (online == null || !online.getIp().equals(header.getIp()))
             return false;
 
         if (System.currentTimeMillis() - online.getLastVisit().getTime() > TimeUnit.Minute.getTime()) {
