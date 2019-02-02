@@ -27,6 +27,10 @@ public interface RoleService {
     }
 
     /**
+     * 创建时间间隔验证器Bean名称。
+     */
+    String VALIDATOR_INTERVAL = RoleModel.NAME + ".validator.interval";
+    /**
      * 是否可创建验证器Bean名称。
      */
     String VALIDATOR_CREATABLE = RoleModel.NAME + ".validator.creatable";

@@ -60,6 +60,7 @@ public class EditorCtrl {
             @Validate(validator = Validators.GREATER_THAN, number = {0}, parameter = "height", failureCode = 9),
             @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "image", failureCode = 10),
             @Validate(validator = UserHelper.VALIDATOR_SIGN_IN),
+            @Validate(validator = RoleService.VALIDATOR_INTERVAL, parameter = "id", failureCode = 14),
             @Validate(validator = RoleService.VALIDATOR_CREATABLE, parameter = "id", failureCode = 12),
             @Validate(validator = EditorService.VALIDATOR_EXISTS, emptyable = true, parameter = "id", failureCode = 2),
             @Validate(validator = EditorService.VALIDATOR_EDITABLE, emptyable = true, parameter = "id", failureCode = 11),
@@ -145,6 +146,7 @@ public class EditorCtrl {
             @Validate(validator = Validators.ID, parameter = "id", failureCode = 1),
             @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "type", failureCode = 4),
             @Validate(validator = UserHelper.VALIDATOR_SIGN_IN),
+            @Validate(validator = RoleService.VALIDATOR_INTERVAL, failureCode = 14),
             @Validate(validator = RoleService.VALIDATOR_CREATABLE, failureCode = 12),
             @Validate(validator = EditorService.VALIDATOR_EXISTS, parameter = "id", failureCode = 2)
     })
