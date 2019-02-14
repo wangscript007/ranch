@@ -3,6 +3,7 @@ package org.lpw.ranch.editor;
 import com.alibaba.fastjson.JSONObject;
 import org.lpw.ranch.async.AsyncService;
 import org.lpw.ranch.editor.element.ElementService;
+import org.lpw.ranch.editor.label.LabelService;
 import org.lpw.ranch.editor.role.RoleModel;
 import org.lpw.ranch.editor.role.RoleService;
 import org.lpw.ranch.lock.LockHelper;
@@ -84,6 +85,8 @@ public class EditorServiceImpl implements EditorService, HourJob, DateJob {
     private UserHelper userHelper;
     @Inject
     private RoleService roleService;
+    @Inject
+    private LabelService labelService;
     @Inject
     private ElementService elementService;
     @Inject
@@ -172,7 +175,7 @@ public class EditorServiceImpl implements EditorService, HourJob, DateJob {
         model.setType(editor.getType());
         model.setSort(editor.getSort());
         model.setName(editor.getName());
-        model.setLabel(editor.getLabel());
+        setLabel(model, editor.getLabel());
         model.setSummary(editor.getSummary());
         model.setWidth(editor.getWidth());
         model.setHeight(editor.getHeight());
@@ -197,7 +200,7 @@ public class EditorServiceImpl implements EditorService, HourJob, DateJob {
         if (!validator.isEmpty(editor.getName()))
             model.setName(editor.getName());
         if (!validator.isEmpty(editor.getLabel()))
-            model.setLabel(editor.getLabel());
+            setLabel(model, editor.getLabel());
         if (!validator.isEmpty(editor.getSummary()))
             model.setSummary(editor.getSummary());
         if (editor.getWidth() > 0)
@@ -211,6 +214,14 @@ public class EditorServiceImpl implements EditorService, HourJob, DateJob {
         save(model, 0, null, false);
 
         return toJson(model);
+    }
+
+    private void setLabel(EditorModel editor, String label) {
+        if (editor.getLabel().equals(label))
+            return;
+
+        editor.setLabel(label);
+        labelService.save(editor.getId(), label);
     }
 
     @Override
@@ -376,10 +387,44 @@ public class EditorServiceImpl implements EditorService, HourJob, DateJob {
 
     @Override
     public JSONObject searchTemplate(String type, int template, String[] labels, String[] words, Order order) {
-        List<String> list = searchWords(labels);
+        int pageSize = pagination.getPageSize(20);
+        if (validator.isEmpty(labels) && validator.isEmpty(words))
+            return searchTemplate(type, template, order, pageSize);
 
-        return list.isEmpty() ? searchTemplate(type, template, "", searchWords(words), order)
-                : searchTemplate(type, template, ".label", list, order);
+        String cacheKey = getSearchCacheKey(type, template, converter.toString(labels) + ":" + converter.toString(words) + ":" + order
+                + ":" + pageSize + ":" + pagination.getPageNum());
+        JSONObject object = cache.get(cacheKey);
+        if (object != null)
+            return object;
+
+        Set<String> ids = null;
+        List<String> lbs = searchWords(labels);
+        if (!lbs.isEmpty()) {
+            ids = labelService.query(lbs);
+            if (validator.isEmpty(ids))
+                return searchTemplateEmpty(cacheKey, pageSize);
+        }
+
+        List<String> wds = searchWords(words);
+        if (!wds.isEmpty()) {
+            List<String> list = luceneHelper.query(getLuceneKey(type, template), wds, true, 1024);
+            if (list.isEmpty())
+                return searchTemplateEmpty(cacheKey, pageSize);
+
+            if (ids == null)
+                ids = new HashSet<>(list);
+            else {
+                ids.retainAll(list);
+                if (ids.isEmpty())
+                    return searchTemplateEmpty(cacheKey, pageSize);
+            }
+        }
+
+        object = editorDao.query(ids, template, type, null, null, -1, onsaleState, null,
+                null, null, null, order, pageSize, pagination.getPageNum()).toJson();
+        cache.put(cacheKey, object, false);
+
+        return object;
     }
 
     private List<String> searchWords(String[] words) {
@@ -401,7 +446,7 @@ public class EditorServiceImpl implements EditorService, HourJob, DateJob {
                 + ":" + pageSize + ":" + pagination.getPageNum());
         JSONObject object = cache.get(cacheKey);
         if (object == null) {
-            List<String> ids = luceneHelper.query(getLuceneKey(type, template) + suffix, list, false, 1024);
+            List<String> ids = luceneHelper.query(getLuceneKey(type, template) + suffix, list, true, 1024);
             if (ids.isEmpty())
                 object = BeanFactory.getBean(PageList.class).setPage(0, pageSize, 0).toJson();
             else
@@ -422,6 +467,14 @@ public class EditorServiceImpl implements EditorService, HourJob, DateJob {
                     pagination.getPageNum()).toJson(), false);
 
         return object;
+    }
+
+    private JSONObject searchTemplateEmpty(String cacheKey, int pageSize) {
+        JSONObject object = BeanFactory.getBean(PageList.class).setPage(0, pageSize, 0).toJson();
+        cache.put(cacheKey, object, false);
+
+        return object;
+
     }
 
     private String getSearchCacheKey(String type, int template, String key) {
@@ -467,25 +520,29 @@ public class EditorServiceImpl implements EditorService, HourJob, DateJob {
         if (validator.isEmpty(templateTypes))
             return;
 
+        String lockId = lockHelper.lock(EditorModel.NAME + ".date", 100L, 3600);
+        if (lockId == null)
+            return;
+
         for (String type : converter.toArray(templateTypes, ","))
             for (int i = 1; i <= 2; i++)
                 setSearchIndex(type, i);
+
+        lockHelper.unlock(lockId);
     }
 
     private void setSearchIndex(String type, int template) {
         String luceneKey = getLuceneKey(type, template);
         luceneHelper.clear(luceneKey);
-        String labelLuceneKey = luceneKey + ".label";
-        luceneHelper.clear(labelLuceneKey);
         for (int i = 1; i < Integer.MAX_VALUE; i++) {
             PageList<EditorModel> pl = editorDao.query(template, type, 3, 20, i);
             pl.getList().forEach(editor -> {
-                StringBuilder data = new StringBuilder().append(editor.getName()).append(',').append(editor.getLabel());
+                labelService.save(editor.getId(), editor.getLabel());
+                StringBuilder data = new StringBuilder().append(editor.getName()).append(editor.getLabel());
                 if (!validator.isEmpty(editor.getSummary()))
                     data.append(editor.getSummary());
                 elementService.text(editor.getId(), data);
                 luceneHelper.index(luceneKey, editor.getId(), data.toString().replaceAll(",", ""));
-                luceneHelper.index(labelLuceneKey, editor.getId(), editor.getLabel());
             });
             if (logger.isInfoEnable())
                 logger.info("添加[{}:{}]编辑器索引。", type, pl.getList().size());
