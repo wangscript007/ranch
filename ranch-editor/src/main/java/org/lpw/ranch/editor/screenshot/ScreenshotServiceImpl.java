@@ -20,7 +20,6 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * @author lpw
@@ -105,16 +104,13 @@ public class ScreenshotServiceImpl implements ScreenshotService {
     @Override
     public void index() {
         while (true) {
-            Map<String,String> map = screenshotDao.index(100);
+            Map<String, String> map = screenshotDao.index(100);
             if (map.isEmpty())
                 return;
 
-            map.forEach((page,editor)->{
-                ElementModel element=elementService.findById(page,editor);
-                if(element==null)
-                    return;
-
-                screenshotDao.index(page,element.getSort());
+            map.forEach((page, editor) -> {
+                ElementModel element = elementService.findById(page, editor);
+                screenshotDao.index(page, element == null ? 99 : (element.getSort() + 1));
             });
             screenshotDao.close();
         }
