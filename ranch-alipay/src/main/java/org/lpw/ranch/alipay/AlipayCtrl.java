@@ -45,7 +45,6 @@ public class AlipayCtrl {
             @Validate(validator = Validators.NOT_EMPTY, parameter = "publicKey", failureCode = 7),
             @Validate(validator = Validators.SIGN, string = {"ranch-alipay"}),
             @Validate(validator = AlipayService.VALIDATOR_NOT_EXISTS, parameters = {"key", "appId"}, failureCode = 8)
-
     })
     public Object save() {
         return alipayService.save(request.setToModel(AlipayModel.class));
