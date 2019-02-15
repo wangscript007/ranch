@@ -164,6 +164,7 @@
 |属性|类型|说明|
 |---|---|---|
 |editor|char(36)|编辑器。|
+|editor|index|序号。|
 |page|char(100)|页面ID，主页面为空`""`。|
 |uri|char(100)|URI地址。|
 

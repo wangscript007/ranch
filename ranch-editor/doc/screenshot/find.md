@@ -15,6 +15,7 @@
 ```json
 {
     "editor": "编辑器",
+    "index": "序号",
     "page": "页面",
     "uri": "URI地址"
 }
