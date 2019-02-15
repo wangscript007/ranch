@@ -437,27 +437,6 @@ public class EditorServiceImpl implements EditorService, HourJob, DateJob {
         return list;
     }
 
-    private JSONObject searchTemplate(String type, int template, String suffix, List<String> list, Order order) {
-        int pageSize = pagination.getPageSize(20);
-        if (list.isEmpty())
-            return searchTemplate(type, template, order, pageSize);
-
-        String cacheKey = getSearchCacheKey(type, template, suffix + ":" + converter.toString(list) + ":" + order
-                + ":" + pageSize + ":" + pagination.getPageNum());
-        JSONObject object = cache.get(cacheKey);
-        if (object == null) {
-            List<String> ids = luceneHelper.query(getLuceneKey(type, template) + suffix, list, true, 1024);
-            if (ids.isEmpty())
-                object = BeanFactory.getBean(PageList.class).setPage(0, pageSize, 0).toJson();
-            else
-                object = editorDao.query(new HashSet<>(ids), template, type, null, null, -1, onsaleState, null,
-                        null, null, null, order, pageSize, pagination.getPageNum()).toJson();
-            cache.put(cacheKey, object, false);
-        }
-
-        return object;
-    }
-
     private JSONObject searchTemplate(String type, int template, Order order, int pageSize) {
         String cacheKey = getSearchCacheKey(type, template, order + ":" + pageSize + ":" + pagination.getPageNum());
         JSONObject object = cache.get(cacheKey);
@@ -538,11 +517,11 @@ public class EditorServiceImpl implements EditorService, HourJob, DateJob {
             PageList<EditorModel> pl = editorDao.query(template, type, 3, 20, i);
             pl.getList().forEach(editor -> {
                 labelService.save(editor.getId(), editor.getLabel());
-                StringBuilder data = new StringBuilder().append(editor.getName()).append(editor.getLabel());
+                StringBuilder data = new StringBuilder().append(editor.getName()).append(',').append(editor.getLabel()).append(',');
                 if (!validator.isEmpty(editor.getSummary()))
-                    data.append(editor.getSummary());
+                    data.append(editor.getSummary()).append(',');
                 elementService.text(editor.getId(), data);
-                luceneHelper.index(luceneKey, editor.getId(), data.toString().replaceAll(",", ""));
+                luceneHelper.index(luceneKey, editor.getId(), data.toString());
             });
             if (logger.isInfoEnable())
                 logger.info("添加[{}:{}]编辑器索引。", type, pl.getList().size());
