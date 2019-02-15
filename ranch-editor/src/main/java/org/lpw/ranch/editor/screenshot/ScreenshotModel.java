@@ -21,6 +21,7 @@ public class ScreenshotModel extends ModelSupport {
     static final String NAME = "ranch.editor.screenshot";
 
     private String editor; // 编辑器
+    private int index; // 序号
     private String page; // 页面
     private String uri; // 资源URI地址
 
@@ -32,6 +33,16 @@ public class ScreenshotModel extends ModelSupport {
 
     public void setEditor(String editor) {
         this.editor = editor;
+    }
+
+    @Jsonable
+    @Column(name = "c_index")
+    public int getIndex() {
+        return index;
+    }
+
+    public void setIndex(int index) {
+        this.index = index;
     }
 
     @Jsonable

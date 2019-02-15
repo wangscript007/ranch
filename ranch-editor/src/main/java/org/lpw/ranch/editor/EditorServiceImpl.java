@@ -175,7 +175,7 @@ public class EditorServiceImpl implements EditorService, HourJob, DateJob {
         model.setType(editor.getType());
         model.setSort(editor.getSort());
         model.setName(editor.getName());
-        setLabel(model, editor.getLabel());
+        model.setLabel(editor.getLabel());
         model.setSummary(editor.getSummary());
         model.setWidth(editor.getWidth());
         model.setHeight(editor.getHeight());
@@ -200,7 +200,7 @@ public class EditorServiceImpl implements EditorService, HourJob, DateJob {
         if (!validator.isEmpty(editor.getName()))
             model.setName(editor.getName());
         if (!validator.isEmpty(editor.getLabel()))
-            setLabel(model, editor.getLabel());
+            model.setLabel(editor.getLabel());
         if (!validator.isEmpty(editor.getSummary()))
             model.setSummary(editor.getSummary());
         if (editor.getWidth() > 0)
@@ -214,15 +214,6 @@ public class EditorServiceImpl implements EditorService, HourJob, DateJob {
         save(model, 0, null, false);
 
         return toJson(model);
-    }
-
-    private void setLabel(EditorModel editor, String label) {
-        if (!validator.isEmpty(editor.getLabel()) && editor.getLabel().equals(label))
-            return;
-
-        editor.setLabel(label);
-        if (editor.getTemplate() > 0)
-            labelService.save(editor.getId(), label);
     }
 
     @Override
@@ -368,15 +359,17 @@ public class EditorServiceImpl implements EditorService, HourJob, DateJob {
         int oldState = editor.getState();
         editor.setState(state);
         autoState(editor);
-        boolean resetRandom = editor.getTemplate() == 1 && (editor.getState() == 3 || oldState == 3);
+        boolean templatePassed = editor.getTemplate() > 0 && (editor.getState() == 3 || oldState == 3);
         editor.setModify(modify == null ? dateTime.now() : modify);
         editorDao.save(editor);
         if (owner)
             roleService.save(userHelper.id(), editor.getId(), RoleService.Type.Owner);
         roleService.modify(editor);
         cache.remove(CACHE_MODEL + editor.getId());
-        if (resetRandom)
+        if (templatePassed) {
+            labelService.save(editor.getId(), editor.getLabel());
             resetRandom(editor.getType());
+        }
     }
 
     private void autoState(EditorModel editor) {

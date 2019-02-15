@@ -52,4 +52,13 @@ public class ScreenshotCtrl {
         return screenshotService.capture(request.get("editor"), request.getAsInt("mainWidth"),
                 request.getAsInt("mainHeight"), request.getAsInt("pageWidth"), request.getAsInt("pageHeight"));
     }
+
+    @Execute(name = "index", validates = {
+            @Validate(validator = Validators.SIGN)
+    })
+    public Object index() {
+        screenshotService.index();
+
+        return "";
+    }
 }

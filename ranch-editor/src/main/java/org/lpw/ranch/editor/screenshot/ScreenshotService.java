@@ -35,4 +35,6 @@ public interface ScreenshotService {
      * @return 异步ID。
      */
     String capture(String editor, int mainWidth, int mainHeight, int pageWidth, int pageHeight);
+
+    void index();
 }
