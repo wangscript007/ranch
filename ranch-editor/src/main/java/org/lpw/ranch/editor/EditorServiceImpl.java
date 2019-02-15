@@ -447,7 +447,6 @@ public class EditorServiceImpl implements EditorService, HourJob, DateJob {
         cache.put(cacheKey, object, false);
 
         return object;
-
     }
 
     private String getSearchCacheKey(String type, int template, String key) {
