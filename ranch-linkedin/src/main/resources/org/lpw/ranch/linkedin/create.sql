@@ -1,5 +1,5 @@
-DROP TABLE IF EXISTS t_facebook;
-CREATE TABLE t_facebook
+DROP TABLE IF EXISTS t_linkedin;
+CREATE TABLE t_linkedin
 (
   c_id CHAR(36) NOT NULL COMMENT '主键',
   c_key VARCHAR(255) NOT NULL COMMENT '引用key',
