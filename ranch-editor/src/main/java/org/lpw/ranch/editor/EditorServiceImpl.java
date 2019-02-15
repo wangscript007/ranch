@@ -217,11 +217,12 @@ public class EditorServiceImpl implements EditorService, HourJob, DateJob {
     }
 
     private void setLabel(EditorModel editor, String label) {
-        if (editor.getLabel().equals(label))
+        if (!validator.isEmpty(editor.getLabel()) && editor.getLabel().equals(label))
             return;
 
         editor.setLabel(label);
-        labelService.save(editor.getId(), label);
+        if (editor.getTemplate() > 0)
+            labelService.save(editor.getId(), label);
     }
 
     @Override
