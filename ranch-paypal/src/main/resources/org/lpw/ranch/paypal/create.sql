@@ -1,0 +1,13 @@
+DROP TABLE IF EXISTS t_paypal;
+CREATE TABLE t_paypal
+(
+  c_id CHAR(36) NOT NULL COMMENT '主键',
+  c_key VARCHAR(255) NOT NULL COMMENT '引用key',
+  c_name VARCHAR(255) DEFAULT NULL COMMENT '名称',
+  c_app_id VARCHAR(255) NOT NULL COMMENT 'APP ID',
+  c_secret TEXT DEFAULT NULL COMMENT '密钥',
+
+  PRIMARY KEY pk(c_id) USING HASH,
+  UNIQUE KEY uk_key(c_key) USING HASH,
+  UNIQUE KEY uk_app_id(c_app_id) USING HASH
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
