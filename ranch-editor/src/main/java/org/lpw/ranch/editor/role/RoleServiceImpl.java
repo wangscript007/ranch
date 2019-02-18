@@ -85,15 +85,16 @@ public class RoleServiceImpl implements RoleService {
     @Override
     public boolean hasType(String user, String editorId, Type type) {
         EditorModel editor = editorService.findById(editorId);
-        if (editor.getTemplate() > 0 && editor.getState() == 3 && type == Type.Viewer)
-            return true;
 
-        if (validator.isEmpty(user))
-            user = userHelper.id();
+        return (editor.getTemplate() > 0 && editor.getState() == 3 && type == Type.Viewer)
+                || hasType(user, editor, type) || hasType(userHelper.id(), editor, type);
+    }
+
+    private boolean hasType(String user, EditorModel editor, Type type) {
         if (validator.isEmpty(user))
             return false;
 
-        RoleModel role = find(user, editorId);
+        RoleModel role = find(user, editor.getId());
         if (role != null && role.getType() <= type.ordinal())
             return true;
 
