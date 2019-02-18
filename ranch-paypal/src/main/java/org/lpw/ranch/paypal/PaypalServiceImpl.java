@@ -78,34 +78,6 @@ public class PaypalServiceImpl implements PaypalService, PaymentListener {
     }
 
     @Override
-    public String create(String key, String user, int amount, String currency, String billNo, String notice, String returnUrl) {
-        PaypalModel paypal = findByKey(key);
-        if (validator.isEmpty(user))
-            user = userHelper.id();
-        String orderNo = paymentHelper.create(getType(), paypal.getAppId(), user, amount, billNo, notice, null);
-        if (validator.isEmpty(orderNo))
-            return null;
-
-        OrderRequest orderRequest = new OrderRequest();
-        orderRequest.intent("CAPTURE");
-        List<PurchaseUnitRequest> purchaseUnits = new ArrayList<>();
-        purchaseUnits.add(new PurchaseUnitRequest().amount(new AmountWithBreakdown().currencyCode(currency.toUpperCase())
-                .value(numeric.toString(amount * 0.01D, "0.00"))));
-        orderRequest.purchaseUnits(purchaseUnits);
-        OrdersCreateRequest request = new OrdersCreateRequest().requestBody(orderRequest);
-        PayPalHttpClient client = new PayPalHttpClient(new PayPalEnvironment.Live(paypal.getAppId(), paypal.getSecret()));
-        try {
-            Order order = client.execute(request).result();
-
-            return null;
-        } catch (Throwable throwable) {
-            logger.warn(throwable, "创建PayPal订单[{}:{}:{}:{}]时发生异常！", paypal.getKey(), paypal.getAppId(), amount, currency);
-
-            return null;
-        }
-    }
-
-    @Override
     public String getType() {
         return "paypal";
     }
