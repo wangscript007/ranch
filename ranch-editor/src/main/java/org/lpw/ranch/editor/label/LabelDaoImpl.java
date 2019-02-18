@@ -29,4 +29,9 @@ class LabelDaoImpl implements LabelDao {
     public void delete(String editor) {
         liteOrm.delete(new LiteQuery(LabelModel.class).where("c_editor=?"), new Object[]{editor});
     }
+
+    @Override
+    public void close() {
+        liteOrm.close();
+    }
 }

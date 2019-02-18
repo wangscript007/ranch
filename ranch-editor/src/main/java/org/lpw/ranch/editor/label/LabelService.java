@@ -18,8 +18,9 @@ public interface LabelService {
     /**
      * 保存标签名称集。
      *
-     * @param editor 编辑器ID。
-     * @param names  名称集。
+     * @param editor    编辑器ID。
+     * @param names     名称集。
+     * @param autoClose 是否自动提交保存。
      */
-    void save(String editor, String names);
+    void save(String editor, String names, boolean autoClose);
 }

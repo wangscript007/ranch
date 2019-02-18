@@ -367,7 +367,7 @@ public class EditorServiceImpl implements EditorService, HourJob, DateJob {
         roleService.modify(editor);
         cache.remove(CACHE_MODEL + editor.getId());
         if (templatePassed) {
-            labelService.save(editor.getId(), editor.getLabel());
+            labelService.save(editor.getId(), editor.getLabel(), false);
             resetRandom(editor.getType());
         }
     }
@@ -509,7 +509,7 @@ public class EditorServiceImpl implements EditorService, HourJob, DateJob {
         for (int i = 1; i < Integer.MAX_VALUE; i++) {
             PageList<EditorModel> pl = editorDao.query(template, type, 3, 20, i);
             pl.getList().forEach(editor -> {
-                labelService.save(editor.getId(), editor.getLabel());
+                labelService.save(editor.getId(), editor.getLabel(), true);
                 StringBuilder data = new StringBuilder().append(editor.getName()).append(',').append(editor.getLabel()).append(',');
                 if (!validator.isEmpty(editor.getSummary()))
                     data.append(editor.getSummary()).append(',');

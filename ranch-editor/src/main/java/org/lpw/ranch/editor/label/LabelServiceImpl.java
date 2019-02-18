@@ -48,7 +48,7 @@ public class LabelServiceImpl implements LabelService {
     }
 
     @Override
-    public void save(String editor, String names) {
+    public void save(String editor, String names, boolean autoClose) {
         labelDao.delete(editor);
         for (String name : converter.toArray(names, ",")) {
             if (validator.isEmpty(name))
@@ -59,5 +59,7 @@ public class LabelServiceImpl implements LabelService {
             label.setName(name);
             labelDao.save(label);
         }
+        if (autoClose)
+            labelDao.close();
     }
 }

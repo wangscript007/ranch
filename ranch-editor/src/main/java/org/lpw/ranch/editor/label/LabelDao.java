@@ -11,4 +11,6 @@ interface LabelDao {
     void save(LabelModel label);
 
     void delete(String editor);
+
+    void close();
 }
