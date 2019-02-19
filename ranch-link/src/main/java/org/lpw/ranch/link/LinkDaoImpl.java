@@ -12,6 +12,7 @@ import org.springframework.stereotype.Repository;
 import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author lpw
@@ -40,6 +41,26 @@ class LinkDaoImpl implements LinkDao {
     private PageList<LinkModel> query(String type, int i, String value, int pageSize, int pageNum) {
         return liteOrm.query(new LiteQuery(LinkModel.class).where("c_type=? and c_id" + i + "=?").order("c_time desc")
                 .size(pageSize).page(pageNum), new Object[]{type, value});
+    }
+
+    @Override
+    public PageList<LinkModel> query1(String type, Set<String> id1s, int pageSize, int pageNum) {
+        return query(type, 1, id1s, pageSize, pageNum);
+    }
+
+    @Override
+    public PageList<LinkModel> query2(String type, Set<String> id2s, int pageSize, int pageNum) {
+        return query(type, 2, id2s, pageSize, pageNum);
+    }
+
+    private PageList<LinkModel> query(String type, int i, Set<String> values, int pageSize, int pageNum) {
+        StringBuilder where = new StringBuilder();
+        List<Object> args = new ArrayList<>();
+        daoHelper.where(where, args, "c_type", DaoOperation.Equals, type);
+        daoHelper.in(where, args, "c_id" + i, values);
+
+        return liteOrm.query(new LiteQuery(LinkModel.class).where(where.toString()).order("c_time desc")
+                .size(pageSize).page(pageNum), args.toArray());
     }
 
     @Override
