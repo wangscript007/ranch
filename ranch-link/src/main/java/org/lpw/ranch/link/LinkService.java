@@ -1,5 +1,6 @@
 package org.lpw.ranch.link;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
 /**
@@ -25,6 +26,16 @@ public interface LinkService {
      * @return 关联数据量。
      */
     int count(String type, String id1, String id2);
+
+    /**
+     * 判断关联数据是否存在。
+     *
+     * @param type 类型。
+     * @param id1s  ID1集。
+     * @param id2s  ID2集。
+     * @return 关联数据是否存在集合。
+     */
+    JSONArray exists(String type, String[] id1s, String[] id2s);
 
     /**
      * 查找关联数据。

@@ -16,6 +16,8 @@
 
 [统计关联数](doc/count.md)
 
+[判断关联数据是否存在](doc/exists.md)
+
 [查找](doc/find.md)
 
 [保存](doc/save.md)

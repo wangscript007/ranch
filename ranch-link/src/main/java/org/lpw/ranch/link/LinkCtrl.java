@@ -29,6 +29,11 @@ public class LinkCtrl {
         return linkService.count(request.get("type"), request.get("id1"), request.get("id2"));
     }
 
+    @Execute(name = "exists")
+    public Object exists() {
+        return linkService.exists(request.get("type"), request.getAsArray("id1s"), request.getAsArray("id2s"));
+    }
+
     @Execute(name = "find", validates = {
             @Validate(validator = Validators.NOT_EMPTY, parameter = "type", failureCode = 1),
             @Validate(validator = Validators.NOT_EMPTY, parameter = "id1", failureCode = 3),

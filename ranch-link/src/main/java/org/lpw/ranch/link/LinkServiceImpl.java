@@ -1,5 +1,6 @@
 package org.lpw.ranch.link;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import org.lpw.ranch.util.Pagination;
 import org.lpw.tephra.dao.model.ModelHelper;
@@ -52,6 +53,22 @@ public class LinkServiceImpl implements LinkService {
     @Override
     public int count(String type, String id1, String id2) {
         return linkDao.count(type, id1, id2);
+    }
+
+    @Override
+    public JSONArray exists(String type, String[] id1s, String[] id2s) {
+        JSONArray array = new JSONArray();
+        for (String id1 : id1s) {
+            for (String id2 : id2s) {
+                JSONObject object = new JSONObject();
+                object.put("id1", id1);
+                object.put("id2", id2);
+                object.put("exists", linkDao.count(type, id1, id2) == 1);
+                array.add(object);
+            }
+        }
+
+        return array;
     }
 
     @Override
