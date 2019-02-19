@@ -76,7 +76,7 @@ public class FacebookServiceImpl implements FacebookService {
         String string = http.get("https://graph.accountkit.com/" + facebook.getVersion() + "/access_token", null, map);
         JSONObject object = json.toObject(string);
         if (object == null || !object.containsKey("access_token")) {
-            logger.warn(null, "获取Facebook认证信息[{}:{}]失败！", map, string);
+            logger.warn(null, "获取Facebook认证信息[{}:{}:{}]失败！", map, http.getStatusCode(), string);
 
             return new JSONObject();
         }
