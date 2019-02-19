@@ -70,25 +70,15 @@ public class FacebookServiceImpl implements FacebookService {
     public JSONObject auth(String key, String code) {
         FacebookModel facebook = findByKey(key);
         Map<String, String> map = new HashMap<>();
-        map.put("grant_type", "authorization_code");
-        map.put("code", code);
-        map.put("access_token", "AA|" + facebook.getAppId() + "|" + facebook.getSecret());
-        String string = http.get("https://graph.accountkit.com/" + facebook.getVersion() + "/access_token", null, map);
+        map.put("fields", "id,name,email");
+        map.put("access_token", code);
+        String string = http.get("https://graph.facebook.com/" + facebook.getVersion() + "/me", null, map);
         JSONObject object = json.toObject(string);
-        if (object == null || !object.containsKey("access_token")) {
-            logger.warn(null, "获取Facebook认证信息[{}:{}:{}]失败！", map, http.getStatusCode(), string);
+        if (object == null) {
+            logger.warn(null, "获取Facebook用户信息[{}:{}]失败！", map, string);
 
             return new JSONObject();
         }
-
-        map.clear();
-        map.put("access_token", object.getString("access_token"));
-        string = http.get("https://graph.accountkit.com/" + facebook.getVersion() + "/me", null, map);
-        JSONObject me = json.toObject(string);
-        if (me == null)
-            logger.warn(null, "获取Facebook用户信息[{}:{}]失败！", map, string);
-        else
-            object.putAll(me);
 
         return object;
     }
