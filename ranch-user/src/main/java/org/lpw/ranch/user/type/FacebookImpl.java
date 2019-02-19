@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import org.lpw.ranch.facebook.helper.FacebookHelper;
 import org.lpw.ranch.user.UserModel;
 import org.lpw.tephra.util.Context;
+import org.lpw.tephra.util.Validator;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
@@ -13,6 +14,8 @@ import javax.inject.Inject;
  */
 @Service("ranch.user.type.facebook")
 public class FacebookImpl implements Type {
+    @Inject
+    private Validator validator;
     @Inject
     private Context context;
     @Inject
@@ -32,11 +35,15 @@ public class FacebookImpl implements Type {
 
     @Override
     public void signUp(UserModel user, String uid, String password) {
+        if (validator.isEmpty(user.getEmail()))
+            user.setEmail(getAuth(uid, password).getString("email"));
+        if (validator.isEmpty(user.getNick()))
+            user.setEmail(getAuth(uid, password).getString("name"));
     }
 
     @Override
     public String getNick(String uid, String password) {
-        return null;
+        return getAuth(uid, password).getString("name");
     }
 
     @Override
