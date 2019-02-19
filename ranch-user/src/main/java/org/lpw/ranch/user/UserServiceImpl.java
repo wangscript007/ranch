@@ -138,8 +138,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean signIn(String uid, String password, int type) {
-        if (type == Types.WEIXIN || type == Types.WEIXIN_MINI)
-            uid = getWeixinId(uid, password, type);
+        if (type > Types.SELF)
+            uid = getThirdId(uid, password, type);
         if (uid == null)
             return false;
 
@@ -163,15 +163,15 @@ public class UserServiceImpl implements UserService {
         return true;
     }
 
-    private String getWeixinId(String uid, String password, int type) {
-        String wxid = types.getUid(uid, password, type);
-        if (wxid == null)
+    private String getThirdId(String uid, String password, int type) {
+        String thirdId = types.getUid(uid, password, type);
+        if (thirdId == null)
             return null;
 
-        if (authService.findByUid(wxid) == null)
+        if (authService.findByUid(thirdId) == null)
             signUp(uid, password, type);
 
-        return wxid;
+        return thirdId;
     }
 
     private boolean sameType(AuthModel auth, int type) {
