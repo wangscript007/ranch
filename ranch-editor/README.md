@@ -34,6 +34,8 @@
 
 [修改](doc/modify.md)
 
+[排序](doc/sort.md)
+
 [生成预览图](doc/image.md)
 
 [审核通过](doc/pass.md)

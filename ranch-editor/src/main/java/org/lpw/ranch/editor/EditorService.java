@@ -150,6 +150,15 @@ public interface EditorService {
     void modify(String id);
 
     /**
+     * 修改顺序。
+     *
+     * @param type  类型。
+     * @param ids   ID集。
+     * @param sorts 顺序集。
+     */
+    void sort(String type, String[] ids, String[] sorts);
+
+    /**
      * 删除。
      *
      * @param id ID值。

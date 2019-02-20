@@ -66,4 +66,9 @@ class EditorDaoImpl implements EditorDao {
         liteOrm.save(editor);
         liteOrm.close();
     }
+
+    @Override
+    public void sort(String id, String type, int sort) {
+        liteOrm.update(new LiteQuery(EditorModel.class).set("c_sort=?").where("c_id=? and c_template>0 and c_type=?"), new Object[]{sort, id});
+    }
 }

@@ -342,6 +342,16 @@ public class EditorServiceImpl implements EditorService, HourJob, DateJob {
     }
 
     @Override
+    public void sort(String type, String[] ids, String[] sorts) {
+        if (validator.isEmpty(ids) || validator.isEmpty(sorts) || ids.length != sorts.length)
+            return;
+
+        for (int i = 0; i < ids.length; i++)
+            editorDao.sort(ids[i], type, numeric.toInt(sorts[i]));
+        resetRandom(type);
+    }
+
+    @Override
     public void delete(String id) {
         EditorModel editor = findById(id);
         if (editor != null)

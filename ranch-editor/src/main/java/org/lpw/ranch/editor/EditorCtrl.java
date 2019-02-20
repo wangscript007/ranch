@@ -85,6 +85,15 @@ public class EditorCtrl {
         return editorService.modify(request.setToModel(EditorModel.class), request.getAsInt("template", -1));
     }
 
+    @Execute(name = "sort", validates = {
+            @Validate(validator = Validators.SIGN)
+    })
+    public Object sort() {
+        editorService.sort(request.get("type"), request.getAsArray("ids"), request.getAsArray("sorts"));
+
+        return "";
+    }
+
     @Execute(name = "image", validates = {
             @Validate(validator = Validators.ID, parameter = "id", failureCode = 1),
             @Validate(validator = UserHelper.VALIDATOR_SIGN_IN),
