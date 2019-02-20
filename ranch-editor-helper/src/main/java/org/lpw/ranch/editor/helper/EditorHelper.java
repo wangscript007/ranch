@@ -73,4 +73,13 @@ public interface EditorHelper {
      * @return 编辑器信息；保存失败则返回空JSON{}。
      */
     JSONObject save(Map<String, String> header, JSONObject object);
+
+    /**
+     * 复制。
+     *
+     * @param id   源ID值。
+     * @param type 目标类型。
+     * @return 新编辑器信息。
+     */
+    JSONObject copy(String id, String type);
 }

@@ -26,6 +26,7 @@ public class EditorHelperImpl implements EditorHelper {
     private String key;
     private String findKey;
     private String saveKey;
+    private String copyKey;
 
     @Override
     public JSONObject find(String id) {
@@ -86,5 +87,17 @@ public class EditorHelperImpl implements EditorHelper {
             saveKey = key + ".save";
 
         return carousel.service(saveKey, header, map, false, JSONObject.class);
+    }
+
+    @Override
+    public JSONObject copy(String id, String type) {
+        if (copyKey == null)
+            copyKey = key + ".copy";
+
+        Map<String, String> map = new HashMap<>();
+        map.put("id", id);
+        map.put("type", type);
+
+        return carousel.service(copyKey, null, map, false, JSONObject.class);
     }
 }
