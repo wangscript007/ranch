@@ -10,7 +10,8 @@ public interface Callabler extends Callable<String> {
      * 设置执行实例。
      *
      * @param callable 执行实例。
+     * @param notifier 通知器。
      * @return 当前实例。
      */
-    Callabler set(Callable<String> callable);
+    Callabler set(Callable<String> callable, Notifier notifier);
 }

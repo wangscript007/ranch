@@ -59,6 +59,11 @@ public class AsyncServiceImpl implements AsyncService, SecondsJob, MinuteJob, Ho
 
     @Override
     public String submit(String key, String parameter, int timeout, Callable<String> callable) {
+        return submit(key, parameter, timeout, callable, null);
+    }
+
+    @Override
+    public String submit(String key, String parameter, int timeout, Callable<String> callable, Notifier notifier) {
         AsyncModel async = new AsyncModel();
         async.setKey(key);
         async.setParameter(parameter);
@@ -66,7 +71,7 @@ public class AsyncServiceImpl implements AsyncService, SecondsJob, MinuteJob, Ho
         async.setTimeout(new Timestamp(System.currentTimeMillis() + timeout * TimeUnit.Second.getTime()));
         asyncDao.save(async);
         putCache(async);
-        map.put(async.getId(), executorService.submit(BeanFactory.getBean(Callabler.class).set(callable)));
+        map.put(async.getId(), executorService.submit(BeanFactory.getBean(Callabler.class).set(callable, notifier)));
 
         return async.getId();
     }

@@ -21,10 +21,12 @@ public class CallablerImpl implements Callabler {
     @Inject
     private Set<Failable> failables;
     private Callable<String> callable;
+    private Notifier notifier;
 
     @Override
-    public Callabler set(Callable<String> callable) {
+    public Callabler set(Callable<String> callable, Notifier notifier) {
         this.callable = callable;
+        this.notifier = notifier;
 
         return this;
     }
@@ -33,10 +35,14 @@ public class CallablerImpl implements Callabler {
     public String call() throws Exception {
         try {
             String result = callable.call();
+            if (notifier != null)
+                notifier.success(result);
             closables.close();
 
             return result;
         } catch (Exception e) {
+            if (notifier != null)
+                notifier.failure();
             failables.forEach(failable -> failable.fail(e));
 
             throw e;
