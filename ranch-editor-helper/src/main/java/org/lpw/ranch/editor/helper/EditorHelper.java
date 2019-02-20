@@ -75,6 +75,14 @@ public interface EditorHelper {
     JSONObject save(Map<String, String> header, JSONObject object);
 
     /**
+     * 异步导出PDF。
+     *
+     * @param id 编辑器ID。
+     * @return 异步ID。
+     */
+    JSONObject pdf(String id);
+
+    /**
      * 复制。
      *
      * @param id   源ID值。
