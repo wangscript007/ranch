@@ -98,6 +98,6 @@ public class EditorHelperImpl implements EditorHelper {
         map.put("id", id);
         map.put("type", type);
 
-        return carousel.service(copyKey, null, map, false, JSONObject.class);
+        return carousel.service(copyKey, null, map, false);
     }
 }
