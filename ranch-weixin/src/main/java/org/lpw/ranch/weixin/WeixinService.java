@@ -73,6 +73,14 @@ public interface WeixinService {
     String echo(String appId, String signature, String timestamp, String nonce, String echostr);
 
     /**
+     * 生成关注公众号二维码URL。
+     *
+     * @param key 配置key。
+     * @return 关注公众号二维码URL。
+     */
+    String subscribeQr(String key);
+
+    /**
      * 认证用户信息。
      *
      * @param key  配置key。

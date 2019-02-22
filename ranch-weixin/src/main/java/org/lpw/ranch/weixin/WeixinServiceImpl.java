@@ -176,6 +176,27 @@ public class WeixinServiceImpl implements WeixinService, ContextRefreshedListene
     }
 
     @Override
+    public String subscribeQr(String key) {
+        WeixinModel weixin = weixinDao.findByKey(key);
+        JSONObject object = new JSONObject();
+        object.put("expire_seconds", 3600);
+        object.put("action_name", "QR_STR_SCENE");
+        JSONObject info = new JSONObject();
+        info.put("scene_str", "sign-in-sid:" + session.getId());
+        object.put("action_info", info);
+        String string = http.post("https://api.weixin.qq.com/cgi-bin/qrcode/create?access_token=" + weixin.getAccessToken(),
+                null, object.toJSONString());
+        JSONObject obj = json.toObject(string);
+        if (obj == null || !obj.containsKey("url")) {
+            logger.warn(null, "获取微信关注二维码[{}]信息失败！", string);
+
+            return null;
+        }
+
+        return obj.getString("url");
+    }
+
+    @Override
     public JSONObject auth(String key, String code) {
         WeixinModel weixin = weixinDao.findByKey(key);
         Map<String, String> map = getAuthMap(weixin);

@@ -37,13 +37,15 @@ public class LinkServiceImpl implements LinkService {
 
     @Override
     public JSONObject query(String type, String id1, String id2) {
-        if (validator.isEmpty(id1))
+        if (!validator.isEmpty(id1))
+            return id1.contains(",") ? linkDao.query1(type, toSet(id1), pagination.getPageSize(20), pagination.getPageNum()).toJson()
+                    : linkDao.query1(type, id1, pagination.getPageSize(20), pagination.getPageNum()).toJson();
+
+        if (!validator.isEmpty(id2))
             return id2.contains(",") ? linkDao.query2(type, toSet(id2), pagination.getPageSize(20), pagination.getPageNum()).toJson()
                     : linkDao.query2(type, id2, pagination.getPageSize(20), pagination.getPageNum()).toJson();
 
-
-        return id1.contains(",") ? linkDao.query1(type, toSet(id1), pagination.getPageSize(20), pagination.getPageNum()).toJson()
-                : linkDao.query1(type, id1, pagination.getPageSize(20), pagination.getPageNum()).toJson();
+        return new JSONObject();
     }
 
     private Set<String> toSet(String string) {

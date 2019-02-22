@@ -89,6 +89,17 @@ public class WeixinCtrl {
         return "";
     }
 
+    @Execute(name = "subscribe-qr", validates = {
+            @Validate(validator = Validators.NOT_EMPTY, parameter = "key", failureCode = 2),
+            @Validate(validator = WeixinService.VALIDATOR_EXISTS, parameter = "key", failureCode = 52)
+    })
+    public Object subscribeQr() {
+        String qr = weixinService.subscribeQr(request.get("key"));
+
+        return qr == null ? templates.get().failure(2453, message.get(WeixinModel.NAME + ".subscribe-qr.failure"),
+                null, null) : qr;
+    }
+
     @Execute(name = "app-id", validates = {
             @Validate(validator = Validators.NOT_EMPTY, parameter = "key", failureCode = 2),
             @Validate(validator = Validators.SIGN),
