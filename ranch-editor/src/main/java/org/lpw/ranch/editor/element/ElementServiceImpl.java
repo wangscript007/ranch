@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import org.lpw.ranch.editor.EditorService;
 import org.lpw.ranch.editor.log.LogService;
 import org.lpw.ranch.editor.role.RoleService;
+import org.lpw.ranch.lock.LockHelper;
 import org.lpw.tephra.cache.Cache;
 import org.lpw.tephra.dao.model.ModelHelper;
 import org.lpw.tephra.scheduler.MinuteJob;
@@ -46,6 +47,8 @@ public class ElementServiceImpl implements ElementService, MinuteJob {
     private Logger logger;
     @Inject
     private ModelHelper modelHelper;
+    @Inject
+    private LockHelper lockHelper;
     @Inject
     private EditorService editorService;
     @Inject
@@ -303,6 +306,11 @@ public class ElementServiceImpl implements ElementService, MinuteJob {
 
     @Override
     public void executeMinuteJob() {
+        String lockId = lockHelper.lock(ElementModel.NAME + ".minute", 100L, 60);
+        if (lockId == null)
+            return;
+
         editorService.modify(elementDao.modify(System.currentTimeMillis() - 3 * TimeUnit.Minute.getTime()));
+        lockHelper.unlock(lockId);
     }
 }
