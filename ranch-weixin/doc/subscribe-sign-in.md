@@ -34,4 +34,4 @@ url
 
 ## 登入
 
-调用用户登入接口，并设置`uid=password=subscribe-sign-in`。
+调用用户[登入](../../ranch-user/doc/sign-in.md)接口，并设置`uid=password=subscribe-sign-in`。
