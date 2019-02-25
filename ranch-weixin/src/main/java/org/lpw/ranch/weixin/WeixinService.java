@@ -73,12 +73,27 @@ public interface WeixinService {
     String echo(String appId, String signature, String timestamp, String nonce, String echostr);
 
     /**
+     * 处理微信通知。
+     *
+     * @param appId  微信公众号AppID。
+     * @param string 通知消息。
+     */
+    void notice(String appId, String string);
+
+    /**
      * 生成关注公众号二维码URL。
      *
      * @param key 配置key。
      * @return 关注公众号二维码URL。
      */
     String subscribeQr(String key);
+
+    /**
+     * 获取关注并登入信息。
+     *
+     * @return 微信用户信息；不存在则返回空JSON。
+     */
+    JSONObject subscribeSignIn();
 
     /**
      * 认证用户信息。

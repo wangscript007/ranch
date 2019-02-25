@@ -6,10 +6,12 @@ import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.lpw.ranch.payment.helper.PaymentHelper;
 import org.lpw.ranch.weixin.info.InfoService;
 import org.lpw.tephra.bean.ContextRefreshedListener;
+import org.lpw.tephra.cache.Cache;
 import org.lpw.tephra.crypto.Digest;
 import org.lpw.tephra.crypto.Sign;
 import org.lpw.tephra.ctrl.context.Header;
 import org.lpw.tephra.ctrl.context.Session;
+import org.lpw.tephra.ctrl.http.ServiceHelper;
 import org.lpw.tephra.dao.model.ModelHelper;
 import org.lpw.tephra.scheduler.HourJob;
 import org.lpw.tephra.scheduler.MinuteJob;
@@ -51,7 +53,10 @@ import java.util.Map;
  */
 @Service(WeixinModel.NAME + ".service")
 public class WeixinServiceImpl implements WeixinService, ContextRefreshedListener, HourJob, MinuteJob {
-    private static final String SESSION_MINI_SESSION_KEY = WeixinModel.NAME + ".service.mini.session-key";
+    private static final String CACHE_TICKET_SESSION_ID = WeixinModel.NAME + ".ticket-session-id:";
+    private static final String SESSION_SUBSCRIBE_SIGN_IN = WeixinModel.NAME + ".subscribe-sign-in";
+    private static final String SESSION_MINI_SESSION_KEY = WeixinModel.NAME + ".mini.session-key";
+
     @Inject
     private Digest digest;
     @Inject
@@ -80,6 +85,8 @@ public class WeixinServiceImpl implements WeixinService, ContextRefreshedListene
     private Coder coder;
     @Inject
     private Context context;
+    @Inject
+    private Cache cache;
     @Inject
     private Logger logger;
     @Inject
@@ -176,6 +183,54 @@ public class WeixinServiceImpl implements WeixinService, ContextRefreshedListene
     }
 
     @Override
+    public void notice(String appId, String string) {
+        WeixinModel weixin = weixinDao.findByAppId(appId);
+        if (weixin == null)
+            return;
+
+        signIn(weixin, string);
+    }
+
+    private void signIn(WeixinModel weixin, String string) {
+        if (!string.contains("<Event><![CDATA[SCAN]]></Event>") && !string.contains("<Event><![CDATA[subscribe]]></Event>"))
+            return;
+
+        String ticket = getTicket(string);
+        if (ticket == null)
+            return;
+
+        String sessionId = cache.get(CACHE_TICKET_SESSION_ID + getTicket(string));
+        if (validator.isEmpty(sessionId))
+            return;
+
+        String openId = getOpenId(string);
+        if (openId == null)
+            return;
+
+        Map<String, String> map = new HashMap<>();
+        map.put("access_token", weixin.getAccessToken());
+        map.put("openid", openId);
+        String str = http.get("https://api.weixin.qq.com/cgi-bin/user/info", null, map);
+        JSONObject object = json.toObject(str);
+        if (object == null || object.containsKey("errcode") || object.size() <= 2) {
+            logger.warn(null, "获取微信[{}]用户[{}:{}]信息失败！", weixin.getKey(), openId, str);
+
+            return;
+        }
+
+        session.set(sessionId, SESSION_SUBSCRIBE_SIGN_IN, object);
+    }
+
+    private String getTicket(String string) {
+        return string.contains("<Ticket>") ? string.substring(string.indexOf("<Ticket><![CDATA[") + 17, string.indexOf("]]></Ticket>")) : null;
+    }
+
+    private String getOpenId(String string) {
+        return string.contains("<FromUserName>") ? string.substring(string.indexOf("<FromUserName><![CDATA[") + 23,
+                string.indexOf("]]></FromUserName>")) : null;
+    }
+
+    @Override
     public String subscribeQr(String key) {
         WeixinModel weixin = weixinDao.findByKey(key);
         JSONObject object = new JSONObject();
@@ -187,17 +242,41 @@ public class WeixinServiceImpl implements WeixinService, ContextRefreshedListene
         String string = http.post("https://api.weixin.qq.com/cgi-bin/qrcode/create?access_token=" + weixin.getAccessToken(),
                 null, object.toJSONString());
         JSONObject obj = json.toObject(string);
-        if (obj == null || !obj.containsKey("url")) {
+        if (obj == null || !obj.containsKey("ticket") || !obj.containsKey("url")) {
             logger.warn(null, "获取微信关注二维码[{}]信息失败！", string);
 
             return null;
         }
 
+        cache.put(CACHE_TICKET_SESSION_ID + obj.getString("ticket"), session.getId(), false);
+
         return obj.getString("url");
     }
 
     @Override
+    public JSONObject subscribeSignIn() {
+        JSONObject object = session.get(SESSION_SUBSCRIBE_SIGN_IN);
+        if (object != null)
+            return object;
+
+        if (validator.isEmpty(synchUrl))
+            return new JSONObject();
+
+        Map<String, String> map = new HashMap<>();
+        map.put(ServiceHelper.SESSION_ID, session.getId());
+        JSONObject obj = json.toObject(http.post(synchUrl + "/weixin/subscribe-sign-in", map, ""));
+
+        return obj == null || !obj.containsKey("data") ? new JSONObject() : obj.getJSONObject("data");
+    }
+
+    @Override
     public JSONObject auth(String key, String code) {
+        if (key.equals("subscribe-sign-in")) {
+            JSONObject object = session.get(SESSION_SUBSCRIBE_SIGN_IN);
+
+            return object == null ? new JSONObject() : object;
+        }
+
         WeixinModel weixin = weixinDao.findByKey(key);
         Map<String, String> map = getAuthMap(weixin);
         map.put("code", code);

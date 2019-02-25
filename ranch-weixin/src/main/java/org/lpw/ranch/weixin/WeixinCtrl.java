@@ -86,6 +86,8 @@ public class WeixinCtrl {
         if (!validator.isEmpty(echostr))
             return weixinService.echo(appId, request.get("signature"), request.get("timestamp"), request.get("nonce"), echostr);
 
+        weixinService.notice(appId, request.getFromInputStream());
+
         return "";
     }
 
@@ -98,6 +100,11 @@ public class WeixinCtrl {
 
         return qr == null ? templates.get().failure(2453, message.get(WeixinModel.NAME + ".subscribe-qr.failure"),
                 null, null) : qr;
+    }
+
+    @Execute(name = "subscribe-sign-in")
+    public Object subscribeSignIn() {
+        return weixinService.subscribeSignIn();
     }
 
     @Execute(name = "app-id", validates = {
