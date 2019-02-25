@@ -16,6 +16,10 @@ public interface EditorService {
      * 编辑器状态是否可编辑验证器Bean名称。
      */
     String VALIDATOR_EDITABLE = EditorModel.NAME + ".validator.editable";
+    /**
+     * 复制VIP验证器Bean名称。
+     */
+    String VALIDATOR_COPY_VIP = EditorModel.NAME + ".validator.copy-vip";
 
     /**
      * 检索编辑器信息集。
