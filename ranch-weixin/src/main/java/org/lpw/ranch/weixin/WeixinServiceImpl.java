@@ -273,7 +273,7 @@ public class WeixinServiceImpl implements WeixinService, ContextRefreshedListene
 
     @Override
     public JSONObject auth(String key, String code) {
-        if (key.equals("subscribe-sign-in")) {
+        if (code.equals("subscribe-sign-in")) {
             JSONObject object = session.get(SESSION_SUBSCRIBE_SIGN_IN);
 
             return object == null ? new JSONObject() : object;
