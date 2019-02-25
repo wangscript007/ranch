@@ -3,6 +3,7 @@ package org.lpw.ranch.weixin;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
+import org.lpw.ranch.lock.LockHelper;
 import org.lpw.ranch.payment.helper.PaymentHelper;
 import org.lpw.ranch.weixin.info.InfoService;
 import org.lpw.tephra.bean.ContextRefreshedListener;
@@ -42,7 +43,6 @@ import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.security.Security;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -99,6 +99,8 @@ public class WeixinServiceImpl implements WeixinService, ContextRefreshedListene
     private Header header;
     @Inject
     private Session session;
+    @Inject
+    private LockHelper lockHelper;
     @Inject
     private PaymentHelper paymentHelper;
     @Inject
@@ -213,7 +215,7 @@ public class WeixinServiceImpl implements WeixinService, ContextRefreshedListene
         String str = http.get("https://api.weixin.qq.com/cgi-bin/user/info", null, map);
         JSONObject object = json.toObject(str);
         if (object == null || object.containsKey("errcode") || object.size() <= 2) {
-            logger.warn(null, "获取微信[{}]用户[{}:{}]信息失败！", weixin.getKey(), openId, str);
+            logger.warn(null, "获取微信[{}]用户[{}:{}]信息失败！", weixin.getKey(), map, str);
 
             return;
         }
@@ -243,7 +245,7 @@ public class WeixinServiceImpl implements WeixinService, ContextRefreshedListene
                 null, object.toJSONString());
         JSONObject obj = json.toObject(string);
         if (obj == null || !obj.containsKey("ticket") || !obj.containsKey("url")) {
-            logger.warn(null, "获取微信关注二维码[{}]信息失败！", string);
+            logger.warn(null, "获取微信关注二维码[{}:{}:{}]信息失败！", weixin.getAccessToken(), object, string);
 
             return null;
         }
@@ -568,9 +570,14 @@ public class WeixinServiceImpl implements WeixinService, ContextRefreshedListene
         if (!auto || !validator.isEmpty(synchUrl))
             return;
 
+        String lockId = lockHelper.lock(WeixinModel.NAME + ".hour", 100, 60);
+        if (lockId == null)
+            return;
+
         List<WeixinModel> list = weixinDao.query().getList();
         weixinDao.close();
         list.forEach(this::update);
+        lockHelper.unlock(lockId);
     }
 
     private void update(WeixinModel weixin) {
@@ -601,18 +608,28 @@ public class WeixinServiceImpl implements WeixinService, ContextRefreshedListene
 
     @Override
     public void executeMinuteJob() {
-        if (!auto || validator.isEmpty(synchUrl) || Calendar.getInstance().get(Calendar.MINUTE) % 5 > 0)
+        if (!auto || validator.isEmpty(synchUrl))
+            return;
+
+        String lockId = lockHelper.lock(WeixinModel.NAME + ".hour", 100, 60);
+        if (lockId == null)
             return;
 
         Map<String, String> parameter = new HashMap<>();
         sign.put(parameter, synchKey);
         JSONObject object = json.toObject(http.get(synchUrl + "/weixin/query", null, parameter));
-        if (object == null)
+        if (object == null || !object.containsKey("data")) {
+            lockHelper.unlock(lockId);
+
             return;
+        }
 
         JSONArray array = object.getJSONArray("data");
-        if (validator.isEmpty(array))
+        if (validator.isEmpty(array)) {
+            lockHelper.unlock(lockId);
+
             return;
+        }
 
         for (int i = 0, size = array.size(); i < size; i++) {
             JSONObject obj = array.getJSONObject(i);
@@ -632,5 +649,6 @@ public class WeixinServiceImpl implements WeixinService, ContextRefreshedListene
             weixin.setTime(dateTime.now());
             weixinDao.save(weixin);
         }
+        lockHelper.unlock(lockId);
     }
 }

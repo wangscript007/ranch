@@ -27,6 +27,8 @@
 
 [获取APP ID](doc/app-id.md)
 
+[关注并登入](doc/subscribe-sign-in.md)
+
 [登入认证](doc/auth.md)
 
 [小程序登入认证](doc/auth-mini.md)
