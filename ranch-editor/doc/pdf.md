@@ -9,7 +9,7 @@
 |名称|类型|必须|说明|
 |---|---|---|---|
 |id|char(36)|是|ID值。|
-|email|string|否|Email地址，如果未合法Email地址将在导出完成后将导出文件以附件的形式发送到此Email地址；需要配置[推送](../../ranch-push/)`key=ranch.editor.pdf`。|
+|email|string|否|Email地址，如果为合法Email地址将在导出完成后将导出文件以附件的形式发送到此Email地址；需要配置[推送](../../ranch-push/)`key=ranch.editor.pdf`。|
 
 返回值
 ```
