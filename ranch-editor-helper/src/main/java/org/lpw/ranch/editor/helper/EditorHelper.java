@@ -77,10 +77,11 @@ public interface EditorHelper {
     /**
      * 异步导出PDF。
      *
-     * @param id 编辑器ID。
+     * @param id    编辑器ID。
+     * @param email Email地址。
      * @return 异步ID。
      */
-    JSONObject pdf(String id);
+    JSONObject pdf(String id, String email);
 
     /**
      * 复制。

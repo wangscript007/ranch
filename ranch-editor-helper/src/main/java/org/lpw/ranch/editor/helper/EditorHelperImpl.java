@@ -91,12 +91,13 @@ public class EditorHelperImpl implements EditorHelper {
     }
 
     @Override
-    public JSONObject pdf(String id) {
+    public JSONObject pdf(String id, String email) {
         if (pdfKey == null)
             pdfKey = key + ".pdf";
 
         Map<String, String> map = new HashMap<>();
         map.put("id", id);
+        map.put("email", email);
 
         return carousel.service(pdfKey, null, map, false);
     }
