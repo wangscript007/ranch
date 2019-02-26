@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import org.lpw.ranch.editor.EditorModel;
 import org.lpw.ranch.editor.EditorService;
 import org.lpw.ranch.editor.element.ElementService;
+import org.lpw.ranch.lock.LockHelper;
 import org.lpw.ranch.milestone.helper.MilestoneHelper;
 import org.lpw.ranch.user.helper.UserHelper;
 import org.lpw.ranch.util.Pagination;
@@ -44,6 +45,8 @@ public class SpeechServiceImpl implements SpeechService, MinuteJob {
     private WormholeHelper wormholeHelper;
     @Inject
     private Pagination pagination;
+    @Inject
+    private LockHelper lockHelper;
     @Inject
     private UserHelper userHelper;
     @Inject
@@ -156,6 +159,10 @@ public class SpeechServiceImpl implements SpeechService, MinuteJob {
 
     @Override
     public void executeMinuteJob() {
+        String lockId = lockHelper.lock(SpeechModel.NAME + ".minute", 100, 60);
+        if (lockId == null)
+            return;
+
         speechDao.query(2).getList().forEach(speech -> {
             Map<String, String> map = new HashMap<>();
             map.put("auth", speech.getId());
@@ -176,5 +183,6 @@ public class SpeechServiceImpl implements SpeechService, MinuteJob {
             speech.setOutline(string);
             speechDao.save(speech);
         });
+        lockHelper.unlock(lockId);
     }
 }
