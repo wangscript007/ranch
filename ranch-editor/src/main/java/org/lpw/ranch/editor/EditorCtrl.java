@@ -143,12 +143,13 @@ public class EditorCtrl {
 
     @Execute(name = "pdf", validates = {
             @Validate(validator = Validators.ID, parameter = "id", failureCode = 1),
+            @Validate(validator = Validators.EMAIL, emptyable = true, parameter = "email", failureCode = 16),
             @Validate(validator = UserHelper.VALIDATOR_SIGN_IN),
             @Validate(validator = EditorService.VALIDATOR_EXISTS, parameter = "id", failureCode = 2),
             @Validate(validator = RoleService.VALIDATOR_VIEWABLE, parameter = "id", failureCode = 41)
     })
     public Object pdf() {
-        return editorService.pdf(request.get("id"));
+        return editorService.pdf(request.get("id"), request.get("email"));
     }
 
     @Execute(name = "copy", validates = {

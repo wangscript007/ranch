@@ -36,6 +36,11 @@
         </dependency>
         <dependency>
             <groupId>org.lpw.ranch</groupId>
+            <artifactId>ranch-push-helper</artifactId>
+            <version>${version.ranch}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.lpw.ranch</groupId>
             <artifactId>ranch-milestone-helper</artifactId>
             <version>${version.ranch}</version>
         </dependency>

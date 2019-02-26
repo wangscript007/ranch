@@ -125,10 +125,11 @@ public interface EditorService {
     /**
      * 异步导出PDF。
      *
-     * @param id 编辑器ID。
+     * @param id    编辑器ID。
+     * @param email 发送Email，不为空将在导出完成后发送Email。
      * @return 异步ID。
      */
-    String pdf(String id);
+    String pdf(String id, String email);
 
     /**
      * 复制。

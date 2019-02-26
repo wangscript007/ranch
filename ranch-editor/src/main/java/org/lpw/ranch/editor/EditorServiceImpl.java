@@ -1,5 +1,6 @@
 package org.lpw.ranch.editor;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import org.lpw.ranch.async.AsyncService;
 import org.lpw.ranch.editor.element.ElementService;
@@ -7,6 +8,7 @@ import org.lpw.ranch.editor.label.LabelService;
 import org.lpw.ranch.editor.role.RoleModel;
 import org.lpw.ranch.editor.role.RoleService;
 import org.lpw.ranch.lock.LockHelper;
+import org.lpw.ranch.push.helper.PushHelper;
 import org.lpw.ranch.user.helper.UserHelper;
 import org.lpw.ranch.util.Pagination;
 import org.lpw.tephra.bean.BeanFactory;
@@ -83,6 +85,8 @@ public class EditorServiceImpl implements EditorService, HourJob, DateJob {
     private AsyncService asyncService;
     @Inject
     private UserHelper userHelper;
+    @Inject
+    private PushHelper pushHelper;
     @Inject
     private RoleService roleService;
     @Inject
@@ -263,17 +267,25 @@ public class EditorServiceImpl implements EditorService, HourJob, DateJob {
     }
 
     @Override
-    public String pdf(String id) {
+    public String pdf(String id, String email) {
         StringBuilder pdf = new StringBuilder(userHelper.isVip() ? pdfVip : pdfOrdinary);
         if (validator.isEmpty(pdf))
             return "";
 
         EditorModel editor = findById(id);
         pdf.append(pdf.indexOf("?") == -1 ? '?' : '&').append("sid=").append(session.getId()).append("&id=").append(id);
+        String user = userHelper.id();
 
         return asyncService.submit(EditorModel.NAME + ".pdf." + id, "", 60, () -> {
             String path = chromeHelper.pdf(pdf.toString(), 30,
                     editor.getWidth(), editor.getHeight(), "", asyncService.root());
+            if (validator.isEmail(email)) {
+                JSONArray files = new JSONArray();
+                files.add(path);
+                JSONObject args = new JSONObject();
+                args.put("files", files);
+                pushHelper.send(EditorModel.NAME + ".pdf", user, email, args);
+            }
 
             return path.substring(path.lastIndexOf(asyncService.root()));
         });
