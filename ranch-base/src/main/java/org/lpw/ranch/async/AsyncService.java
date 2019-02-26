@@ -22,14 +22,14 @@ public interface AsyncService {
     /**
      * 提交。
      *
-     * @param key       引用KEY。
-     * @param parameter 参数。
-     * @param timeout   超时时长，单位：秒。
-     * @param callable  执行处理器。
-     * @param notifier  通知器。
+     * @param key           引用KEY。
+     * @param parameter     参数。
+     * @param timeout       超时时长，单位：秒。
+     * @param callable      执行处理器。
+     * @param asyncNotifier 通知器。
      * @return 异步ID。
      */
-    String submit(String key, String parameter, int timeout, Callable<String> callable, Notifier notifier);
+    String submit(String key, String parameter, int timeout, Callable<String> callable, AsyncNotifier asyncNotifier);
 
     /**
      * 保存数据。

@@ -5,7 +5,7 @@ package org.lpw.ranch.async;
  *
  * @author lpw
  */
-public interface Notifier {
+public interface AsyncNotifier {
     /**
      * 执行成功。
      *
