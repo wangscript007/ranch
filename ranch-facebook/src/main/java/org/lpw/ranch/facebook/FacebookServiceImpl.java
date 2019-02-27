@@ -70,7 +70,7 @@ public class FacebookServiceImpl implements FacebookService {
     public JSONObject auth(String key, String code) {
         FacebookModel facebook = findByKey(key);
         Map<String, String> map = new HashMap<>();
-        map.put("fields", "id,name,email");
+        map.put("fields", "id,name,email,picture");
         map.put("access_token", code);
         String string = http.get("https://graph.facebook.com/" + facebook.getVersion() + "/me", null, map);
         JSONObject object = json.toObject(string);
