@@ -114,8 +114,7 @@ public class UserServiceImpl implements UserService {
         userDao.save(user);
         authService.create(user.getId(), types.getUid(uid, password, type), type, nick, types.getPortrait(uid, password, type));
         clearCache(user);
-        onlineService.signIn(user.getId());
-        session.set(SESSION, user);
+        signIn(user, uid);
     }
 
     private void setInviter(UserModel user) {
@@ -156,9 +155,7 @@ public class UserServiceImpl implements UserService {
                 return false;
         } else if (type > Types.SELF)
             session.set(SESSION_AUTH3, types.getAuth(uid, password, type));
-        onlineService.signIn(user.getId());
-        session.set(SESSION, user);
-        session.set(SESSION_UID, uid);
+        signIn(user, uid);
 
         return true;
     }
@@ -204,6 +201,12 @@ public class UserServiceImpl implements UserService {
         cache.put(cacheKey, failure + 1 + "," + System.currentTimeMillis(), false);
 
         return false;
+    }
+
+    private void signIn(UserModel user, String uid) {
+        onlineService.signIn(user.getId());
+        session.set(SESSION, user);
+        session.set(SESSION_UID, uid);
     }
 
     @Override
