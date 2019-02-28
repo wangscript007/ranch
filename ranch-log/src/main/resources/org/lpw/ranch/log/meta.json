@@ -12,6 +12,9 @@
             "name": "ip"
         },
         {
+            "name": "referer"
+        },
+        {
             "name": "header"
         },
         {

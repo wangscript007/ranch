@@ -25,6 +25,7 @@ public class LogModel extends ModelSupport {
     private String sid; // Session ID
     private String user; // 用户
     private String ip; // IP
+    private String referer; // 引用页
     private String header; // 请求头
     private String parameter; // 请求参数
     private Timestamp time; // 时间
@@ -67,6 +68,16 @@ public class LogModel extends ModelSupport {
 
     public void setIp(String ip) {
         this.ip = ip;
+    }
+
+    @Jsonable
+    @Column(name = "c_referer")
+    public String getReferer() {
+        return referer;
+    }
+
+    public void setReferer(String referer) {
+        this.referer = referer;
     }
 
     @Jsonable

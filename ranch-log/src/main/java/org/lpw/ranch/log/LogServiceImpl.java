@@ -38,6 +38,7 @@ public class LogServiceImpl implements LogService, DateJob {
         log.setSid(session.getId());
         log.setUser(userHelper.id());
         log.setIp(header.getIp());
+        log.setReferer(header.get("referer"));
         log.setHeader(toJson(header.getMap()));
         log.setParameter(toJson(request.getMap()));
         log.setTime(dateTime.now());
