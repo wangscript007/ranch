@@ -157,9 +157,9 @@ public class EditorCtrl {
             @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "type", failureCode = 4),
             @Validate(validator = UserHelper.VALIDATOR_SIGN_IN),
             @Validate(validator = RoleService.VALIDATOR_INTERVAL, failureCode = 14),
-            @Validate(validator = RoleService.VALIDATOR_CREATABLE, failureCode = 12),
             @Validate(validator = EditorService.VALIDATOR_EXISTS, parameter = "id", failureCode = 2),
-            @Validate(validator = EditorService.VALIDATOR_COPY_VIP, parameter = "id", failureCode = 15)
+            @Validate(validator = EditorService.VALIDATOR_COPY_VIP, parameter = "id", failureCode = 15),
+            @Validate(validator = RoleService.VALIDATOR_CREATABLE, failureCode = 12)
     })
     public Object copy() {
         return editorService.copy(request.get("id"), request.get("type"));
