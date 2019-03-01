@@ -602,8 +602,10 @@ public class WeixinServiceImpl implements WeixinService, ContextRefreshedListene
         if (validator.isEmpty(param))
             return null;
 
+        WeixinModel weixin = findByKey(key);
+        param.put("appid", weixin.getAppId());
         param.put("noncestr", generator.random(32));
-        param.put("jsapi_ticket", findByKey(key).getJsapiTicket());
+        param.put("jsapi_ticket", weixin.getJsapiTicket());
         param.put("timestamp", System.currentTimeMillis() / 1000);
         List<String> list = new ArrayList<>(param.keySet());
         Collections.sort(list);
