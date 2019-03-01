@@ -54,6 +54,13 @@ public interface WeixinService {
     JSONObject save(WeixinModel weixin);
 
     /**
+     * 刷新AccessToken。
+     *
+     * @param key 引用key。
+     */
+    void refreshAccessToken(String key);
+
+    /**
      * 删除微信配置。
      *
      * @param id ID值。

@@ -21,6 +21,8 @@
 
 [保存配置](doc/save.md)
 
+[刷新Access Token](doc/refresh-access-token.md)
+
 [删除配置](doc/delete.md)
 
 [接收微信通知](doc/wx.+.md)

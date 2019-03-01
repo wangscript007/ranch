@@ -152,9 +152,14 @@ public class WeixinServiceImpl implements WeixinService, ContextRefreshedListene
         model.setMchKey(weixin.getMchKey());
         weixinDao.save(model);
         if (modify && auto && validator.isEmpty(synchUrl))
-            update(model);
+            refreshAccessToken(model);
 
         return modelHelper.toJson(model);
+    }
+
+    @Override
+    public void refreshAccessToken(String key) {
+        refreshAccessToken(findByKey(key));
     }
 
     @Override
@@ -631,26 +636,44 @@ public class WeixinServiceImpl implements WeixinService, ContextRefreshedListene
 
         List<WeixinModel> list = weixinDao.query().getList();
         weixinDao.close();
-        list.forEach(this::update);
+        list.forEach(this::refreshAccessToken);
         lockHelper.unlock(lockId);
     }
 
-    private void update(WeixinModel weixin) {
-        JSONObject object = json.toObject(http.get("https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid="
-                + weixin.getAppId() + "&secret=" + weixin.getSecret(), null, ""));
-        if (object == null || !object.containsKey("access_token")) {
-            logger.warn(null, "获取微信公众号Token[{}]失败！", object);
+    private void refreshAccessToken(WeixinModel weixin) {
+        for (int i = 0; i < 5; i++) {
+            try {
+                if (refreshAccessTokenOnce(weixin))
+                    break;
+            } catch (Throwable throwable) {
+                logger.warn(throwable, "更新微信Access Token时发生异常！", modelHelper.toJson(weixin));
+            }
+        }
+    }
 
-            return;
+    private boolean refreshAccessTokenOnce(WeixinModel weixin) {
+        Map<String, String> map = new HashMap<>();
+        map.put("grant_type", "client_credential");
+        map.put("appid", weixin.getAppId());
+        map.put("secret", weixin.getSecret());
+        String string = http.get("https://api.weixin.qq.com/cgi-bin/token", null, map);
+        JSONObject object = json.toObject(string);
+        if (object == null || !object.containsKey("access_token")) {
+            logger.warn(null, "获取微信公众号[{}]Token[{}]失败！", map, string);
+
+            return false;
         }
 
         weixin.setAccessToken(object.getString("access_token"));
-        object = json.toObject(http.get("https://api.weixin.qq.com/cgi-bin/ticket/getticket?type=jsapi&access_token="
-                + weixin.getAccessToken(), null, ""));
+        map.clear();
+        map.put("type", "jsapi");
+        map.put("access_token", weixin.getAccessToken());
+        string = http.get("https://api.weixin.qq.com/cgi-bin/ticket/getticket", null, map);
+        object = json.toObject(string);
         if (object != null && object.containsKey("ticket"))
             weixin.setJsapiTicket(object.getString("ticket"));
         else
-            logger.warn(null, "获取微信公众号JSAPI Ticket[{}]失败！", object);
+            logger.warn(null, "获取微信公众号JSAPI Ticket[{}:{}]失败！", modelHelper.toJson(weixin), object);
 
         weixin.setTime(dateTime.now());
         weixinDao.save(weixin);
@@ -659,6 +682,8 @@ public class WeixinServiceImpl implements WeixinService, ContextRefreshedListene
         if (logger.isInfoEnable())
             logger.info("更新微信公众号[{}]Access Token[{}]与Jsapi Ticket[{}]。",
                     weixin.getAppId(), weixin.getAccessToken(), weixin.getJsapiTicket());
+
+        return true;
     }
 
     @Override
