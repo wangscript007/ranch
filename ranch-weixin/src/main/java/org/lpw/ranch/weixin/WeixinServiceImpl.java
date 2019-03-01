@@ -268,11 +268,19 @@ public class WeixinServiceImpl implements WeixinService, ContextRefreshedListene
             return obj.getString("url");
         }
 
-        Map<String, String> map = new HashMap<>();
-        map.put(ServiceHelper.SESSION_ID, session.getId());
-        JSONObject object = json.toObject(http.post(synchUrl + "/weixin/subscribe-qr", map, ""));
+        Map<String, String> header = new HashMap<>();
+        header.put(ServiceHelper.SESSION_ID, session.getId());
+        Map<String, String> parameter = new HashMap<>();
+        parameter.put("key", key);
+        String string = http.post(synchUrl + "/weixin/subscribe-qr", header, parameter);
+        JSONObject object = json.toObject(string);
+        if (object == null || object.getIntValue("code") > 0) {
+            logger.warn(null, "获取微信关注二维码[{}:{}:{}]信息失败！", synchUrl, key, string);
 
-        return object == null || !object.containsKey("data") ? null : object.getString("data");
+            return null;
+        }
+
+        return object.getString("data");
     }
 
     @Override
