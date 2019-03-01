@@ -187,8 +187,11 @@ public class WeixinServiceImpl implements WeixinService, ContextRefreshedListene
     @Override
     public void notice(String appId, String string) {
         WeixinModel weixin = weixinDao.findByAppId(appId);
-        if (weixin == null)
+        if (weixin == null) {
+            logger.warn(null, "无法获得微信[{}:{}]配置！", appId, string);
+
             return;
+        }
 
         signIn(weixin, string);
     }
@@ -198,16 +201,25 @@ public class WeixinServiceImpl implements WeixinService, ContextRefreshedListene
             return;
 
         String ticket = getTicket(string);
-        if (ticket == null)
-            return;
+        if (ticket == null) {
+            logger.warn(null, "无法获得微信消息[{}]中Ticket信息！", string);
 
-        String sessionId = cache.get(CACHE_TICKET_SESSION_ID + getTicket(string));
-        if (validator.isEmpty(sessionId))
             return;
+        }
+
+        String sessionId = cache.get(CACHE_TICKET_SESSION_ID + ticket);
+        if (validator.isEmpty(sessionId)) {
+            logger.warn(null, "无法获得微信消息Ticket[{}]缓存的Session ID！", ticket);
+
+            return;
+        }
 
         String openId = getOpenId(string);
-        if (openId == null)
+        if (openId == null) {
+            logger.warn(null, "无法获得微信消息[{}]中Open ID信息！", string);
+
             return;
+        }
 
         Map<String, String> map = new HashMap<>();
         map.put("access_token", weixin.getAccessToken());
@@ -234,25 +246,33 @@ public class WeixinServiceImpl implements WeixinService, ContextRefreshedListene
 
     @Override
     public String subscribeQr(String key) {
-        WeixinModel weixin = weixinDao.findByKey(key);
-        JSONObject object = new JSONObject();
-        object.put("expire_seconds", 3600);
-        object.put("action_name", "QR_STR_SCENE");
-        JSONObject info = new JSONObject();
-        info.put("scene_str", "sign-in-sid:" + session.getId());
-        object.put("action_info", info);
-        String string = http.post("https://api.weixin.qq.com/cgi-bin/qrcode/create?access_token=" + weixin.getAccessToken(),
-                null, object.toJSONString());
-        JSONObject obj = json.toObject(string);
-        if (obj == null || !obj.containsKey("ticket") || !obj.containsKey("url")) {
-            logger.warn(null, "获取微信关注二维码[{}:{}:{}]信息失败！", weixin.getAccessToken(), object, string);
+        if (validator.isEmpty(synchUrl)) {
+            WeixinModel weixin = weixinDao.findByKey(key);
+            JSONObject object = new JSONObject();
+            object.put("expire_seconds", 3600);
+            object.put("action_name", "QR_STR_SCENE");
+            JSONObject info = new JSONObject();
+            info.put("scene_str", "sign-in-sid:" + session.getId());
+            object.put("action_info", info);
+            String string = http.post("https://api.weixin.qq.com/cgi-bin/qrcode/create?access_token=" + weixin.getAccessToken(),
+                    null, object.toJSONString());
+            JSONObject obj = json.toObject(string);
+            if (obj == null || !obj.containsKey("ticket") || !obj.containsKey("url")) {
+                logger.warn(null, "获取微信关注二维码[{}:{}:{}]信息失败！", weixin.getAccessToken(), object, string);
 
-            return null;
+                return null;
+            }
+
+            cache.put(CACHE_TICKET_SESSION_ID + obj.getString("ticket"), session.getId(), false);
+
+            return obj.getString("url");
         }
 
-        cache.put(CACHE_TICKET_SESSION_ID + obj.getString("ticket"), session.getId(), false);
+        Map<String, String> map = new HashMap<>();
+        map.put(ServiceHelper.SESSION_ID, session.getId());
+        JSONObject object = json.toObject(http.post(synchUrl + "/weixin/subscribe-qr", map, ""));
 
-        return obj.getString("url");
+        return object == null || !object.containsKey("data") ? null : object.getString("data");
     }
 
     @Override
