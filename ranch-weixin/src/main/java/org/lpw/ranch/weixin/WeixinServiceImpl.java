@@ -299,11 +299,12 @@ public class WeixinServiceImpl implements WeixinService, ContextRefreshedListene
         if (object == null || object.getIntValue("code") > 0) {
             logger.warn(null, "获取微信关注登入[{}:{}:{}]同步信息失败！", synchUrl, session.getId(), string);
 
-            return null;
+            return new JSONObject();
         }
 
         JSONObject data = object.getJSONObject("data");
-        session.set(SESSION_SUBSCRIBE_SIGN_IN, data);
+        if (!data.isEmpty())
+            session.set(SESSION_SUBSCRIBE_SIGN_IN, data);
 
         return data;
     }
