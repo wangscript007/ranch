@@ -574,14 +574,13 @@ public class WeixinServiceImpl implements WeixinService, ContextRefreshedListene
             http.post("https://api.weixin.qq.com/wxa/getwxacodeunlimit?access_token="
                     + findByKey(key).getAccessToken(), headers, object.toJSONString(), null, responseHeaders, outputStream);
             outputStream.close();
-            switch (responseHeaders.get("Content-Type")) {
-                case "image/jpeg":
-                    return wormholeHelper.image(null, null, null, file);
-                default:
-                    String failure = io.readAsString(file.getAbsolutePath());
-                    logger.warn(null, "获取微信二维码[{}:{}:{}]失败！", object, converter.toString(responseHeaders), failure);
+            if ("image/jpeg".equals(responseHeaders.get("Content-Type")))
+                return wormholeHelper.image(null, null, null, file);
+            else {
+                String failure = io.readAsString(file.getAbsolutePath());
+                logger.warn(null, "获取微信二维码[{}:{}:{}]失败！", object, converter.toString(responseHeaders), failure);
 
-                    return failure;
+                return failure;
             }
         } catch (Throwable throwable) {
             logger.warn(throwable, "获取微信二维码[{}:{}:{}]时发生异常！", object,
@@ -591,6 +590,24 @@ public class WeixinServiceImpl implements WeixinService, ContextRefreshedListene
         } finally {
             io.delete(file);
         }
+    }
+
+    @Override
+    public JSONObject jsapiTicketSignature(String key, JSONObject param) {
+        if (validator.isEmpty(param))
+            return null;
+
+        param.put("noncestr", generator.random(32));
+        param.put("jsapi_ticket", findByKey(key).getJsapiTicket());
+        param.put("timestamp", System.currentTimeMillis() / 1000);
+        List<String> list = new ArrayList<>(param.keySet());
+        Collections.sort(list);
+        StringBuilder sb = new StringBuilder();
+        list.forEach(k -> sb.append('&').append(k).append('=').append(param.get(k)));
+        param.remove("jsapi_ticket");
+        param.put("signature", digest.sha1(sb.deleteCharAt(0).toString()));
+
+        return param;
     }
 
     @Override

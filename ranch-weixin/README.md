@@ -42,3 +42,5 @@
 [小程序数据解密](doc/decrypt-aes-cbc-pkcs7.md)
 
 [获取二维码](doc/wxa-code-unlimit.md)
+
+[获取JS API Ticket签名](doc/jsapi-ticket-signature.md)

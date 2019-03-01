@@ -210,4 +210,13 @@ public interface WeixinService {
      * @return 二维码地址。
      */
     String wxaCodeUnlimit(String key, String scene, String page, int width, boolean autoColor, JSONObject lineColor, boolean hyaline);
+
+    /**
+     * 获取JS API Ticket签名。
+     *
+     * @param key   引用key。
+     * @param param 参数集。
+     * @return 签名信息。
+     */
+    JSONObject jsapiTicketSignature(String key, JSONObject param);
 }

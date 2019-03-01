@@ -225,4 +225,15 @@ public class WeixinCtrl {
         return string.charAt(0) == '{' ? templates.get().failure(2428,
                 message.get(WeixinModel.NAME + ".wxa-code-unlimit.failure", string), null, null) : string;
     }
+
+    @Execute(name = "jsapi-ticket-signature", validates = {
+            @Validate(validator = Validators.NOT_EMPTY, parameter = "key", failureCode = 2),
+            @Validate(validator = WeixinService.VALIDATOR_EXISTS, parameter = "key", failureCode = 24)
+    })
+    public Object jsapiTicketSignature() {
+        JSONObject object = weixinService.jsapiTicketSignature(request.get("key"), request.getAsJsonObject("param"));
+
+        return object == null ? templates.get().failure(2429, message.get(WeixinModel.NAME + ".param.not-json"),
+                "param", request.get("param")) : object;
+    }
 }
