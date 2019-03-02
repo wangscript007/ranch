@@ -47,6 +47,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 
 /**
  * @author lpw
@@ -198,14 +199,33 @@ public class WeixinServiceImpl implements WeixinService, ContextRefreshedListene
             return;
         }
 
+        String msgType = getValue(string, "<MsgType><![CDATA[", "]]></MsgType>");
+        if (msgType == null) {
+            logger.warn(null, "无法获得微信消息类型[{}]信息！", string);
+
+            return;
+        }
+
+        if (msgType.equals("event"))
+            event(weixin, string);
+
         signIn(weixin, string);
     }
 
-    private void signIn(WeixinModel weixin, String string) {
-        if (!string.contains("<Event><![CDATA[SCAN]]></Event>") && !string.contains("<Event><![CDATA[subscribe]]></Event>"))
-            return;
+    private void event(WeixinModel weixin, String string) {
+        String event = getValue(string, "<Event><![CDATA[", "]]></Event>");
+        if (event == null) {
+            logger.warn(null, "无法获得微信事件类型[{}]信息！", string);
 
-        String ticket = getTicket(string);
+            return;
+        }
+
+        if (event.equals("subscribe") || event.equals("SCAN"))
+            signIn(weixin, string);
+    }
+
+    private void signIn(WeixinModel weixin, String string) {
+        String ticket = getValue(string, "<Ticket><![CDATA[", "]]></Ticket>");
         if (ticket == null) {
             logger.warn(null, "无法获得微信消息[{}]中Ticket信息！", string);
 
@@ -219,7 +239,7 @@ public class WeixinServiceImpl implements WeixinService, ContextRefreshedListene
             return;
         }
 
-        String openId = getOpenId(string);
+        String openId = getValue(string, "<FromUserName><![CDATA[", "]]></FromUserName>");
         if (openId == null) {
             logger.warn(null, "无法获得微信消息[{}]中Open ID信息！", string);
 
@@ -227,12 +247,14 @@ public class WeixinServiceImpl implements WeixinService, ContextRefreshedListene
         }
 
         Map<String, String> map = new HashMap<>();
-        map.put("access_token", weixin.getAccessToken());
         map.put("openid", openId);
-        String str = http.get("https://api.weixin.qq.com/cgi-bin/user/info", null, map);
-        JSONObject object = json.toObject(str);
+        JSONObject object = byAccessToken(weixin, (accessToken) -> {
+            map.put("access_token", weixin.getAccessToken());
+
+            return http.get("https://api.weixin.qq.com/cgi-bin/user/info", null, map);
+        });
         if (object == null || object.containsKey("errcode") || object.size() <= 2) {
-            logger.warn(null, "获取微信[{}]用户[{}:{}]信息失败！", weixin.getKey(), map, str);
+            logger.warn(null, "获取微信[{}]用户[{}:{}]信息失败！", weixin.getKey(), map, object);
 
             return;
         }
@@ -240,13 +262,11 @@ public class WeixinServiceImpl implements WeixinService, ContextRefreshedListene
         session.set(sessionId, SESSION_SUBSCRIBE_SIGN_IN, object);
     }
 
-    private String getTicket(String string) {
-        return string.contains("<Ticket>") ? string.substring(string.indexOf("<Ticket><![CDATA[") + 17, string.indexOf("]]></Ticket>")) : null;
-    }
+    private String getValue(String string, String prefix, String suffix) {
+        int prefixIndexOf = string.indexOf(prefix);
+        int suffixIndexOf = string.indexOf(suffix);
 
-    private String getOpenId(String string) {
-        return string.contains("<FromUserName>") ? string.substring(string.indexOf("<FromUserName><![CDATA[") + 23,
-                string.indexOf("]]></FromUserName>")) : null;
+        return prefixIndexOf == -1 || suffixIndexOf == -1 ? null : string.substring(prefixIndexOf + prefix.length(), suffixIndexOf);
     }
 
     @Override
@@ -259,11 +279,11 @@ public class WeixinServiceImpl implements WeixinService, ContextRefreshedListene
             JSONObject info = new JSONObject();
             info.put("scene_str", "sign-in-sid:" + session.getId());
             object.put("action_info", info);
-            String string = http.post("https://api.weixin.qq.com/cgi-bin/qrcode/create?access_token=" + weixin.getAccessToken(),
-                    null, object.toJSONString());
-            JSONObject obj = json.toObject(string);
+            JSONObject obj = byAccessToken(weixin, (accessToken) -> http.post(
+                    "https://api.weixin.qq.com/cgi-bin/qrcode/create?access_token=" + accessToken,
+                    null, object.toJSONString()));
             if (obj == null || !obj.containsKey("ticket") || !obj.containsKey("url")) {
-                logger.warn(null, "获取微信关注二维码[{}:{}:{}]信息失败！", weixin.getAccessToken(), object, string);
+                logger.warn(null, "获取微信关注二维码[{}:{}:{}]信息失败！", weixin.getAccessToken(), object, obj);
 
                 return null;
             }
@@ -286,6 +306,29 @@ public class WeixinServiceImpl implements WeixinService, ContextRefreshedListene
         }
 
         return object.getString("data");
+    }
+
+    private JSONObject byAccessToken(WeixinModel weixin, Function<String, String> function) {
+        String string = function.apply(weixin.getAccessToken());
+        JSONObject object = json.toObject(string);
+        if (object == null) {
+            logger.warn(null, "获取微信Access Token信息[{}:{}:{}]失败！", weixin.getKey(), weixin.getAppId(), string);
+
+            return null;
+        }
+
+        if (object.containsKey("errcode") && object.getIntValue("errcode") == 42001) {
+            refreshAccessToken(weixin);
+            string = function.apply(weixin.getAccessToken());
+            object = json.toObject(string);
+            if (object == null) {
+                logger.warn(null, "获取微信Access Token信息[{}:{}:{}]失败！", weixin.getKey(), weixin.getAppId(), string);
+
+                return null;
+            }
+        }
+
+        return object;
     }
 
     @Override

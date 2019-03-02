@@ -62,7 +62,6 @@ public class WeixinCtrl {
             @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "mchKey", failureCode = 11),
             @Validate(validator = Validators.SIGN, string = {"ranch-weixin"}),
             @Validate(validator = WeixinService.VALIDATOR_NOT_EXISTS, parameters = {"key", "appId"}, failureCode = 12)
-
     })
     public Object save() {
         return weixinService.save(request.setToModel(WeixinModel.class));
