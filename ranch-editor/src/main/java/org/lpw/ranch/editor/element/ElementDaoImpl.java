@@ -61,6 +61,7 @@ class ElementDaoImpl implements ElementDao {
                     + " WHERE c_modify>=? GROUP BY c_editor", new Object[]{modify});
             for (int i = 0; i < sqlTable.getRowCount(); i++)
                 map.put(sqlTable.get(i, 0), numeric.toLong(sqlTable.get(i, 1)));
+            sql.close();
         });
 
         return map;
