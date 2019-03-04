@@ -504,12 +504,18 @@ public class WeixinServiceImpl implements WeixinService, ContextRefreshedListene
     private Map<String, String> prepay(String key, String user, String openId, String subject, int amount, String billNo, String notice,
                                        String type, Map<String, String> map) {
         WeixinModel weixin = findByKey(key);
-        if (weixin == null)
+        if (weixin == null) {
+            logger.warn(null, "获取微信配置[{}]失败！", key);
+
             return null;
+        }
 
         String orderNo = paymentHelper.create("weixin", weixin.getAppId(), user, amount, billNo, notice, map);
-        if (validator.isEmpty(orderNo))
+        if (validator.isEmpty(orderNo)) {
+            logger.warn(null, "创建支付订单[{}:{}:{}:{}:{}:{}]失败！", weixin.getAppId(), user, amount, billNo, notice, map);
+
             return null;
+        }
 
         map.put("appid", weixin.getAppId());
         map.put("mch_id", weixin.getMchId());
@@ -560,8 +566,7 @@ public class WeixinServiceImpl implements WeixinService, ContextRefreshedListene
             return false;
         }
 
-        String sign = map.remove("sign");
-        if (!sign(map, weixin.getMchKey()).equals(sign)) {
+        if (!sign(map, weixin.getMchKey()).equals(map.get("sign"))) {
             logger.warn(null, "微信支付回调签名认证[{}]失败！", converter.toString(map));
 
             return false;
@@ -572,6 +577,7 @@ public class WeixinServiceImpl implements WeixinService, ContextRefreshedListene
 
     private String sign(Map<String, String> map, String mchKey) {
         List<String> list = new ArrayList<>(map.keySet());
+        list.remove("sign");
         Collections.sort(list);
         StringBuilder sb = new StringBuilder();
         list.forEach(key -> sb.append(key).append('=').append(map.get(key)).append('&'));
