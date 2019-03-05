@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 
 import java.io.OutputStream;
 import java.util.Map;
+import java.util.function.Function;
 
 /**
  * @author lpw
@@ -226,4 +227,13 @@ public interface WeixinService {
      * @return 签名信息。
      */
     JSONObject jsapiTicketSignature(String key, JSONObject param);
+
+    /**
+     * 使用AccessToken请求。如果返回AccessToken过期[42001]则刷新AccessToken。
+     *
+     * @param weixin   微信配置。
+     * @param function 处理函数。
+     * @return 请求结果。
+     */
+    JSONObject byAccessToken(WeixinModel weixin, Function<String, String> function);
 }

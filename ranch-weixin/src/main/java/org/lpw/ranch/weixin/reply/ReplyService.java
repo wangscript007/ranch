@@ -32,5 +32,13 @@ public interface ReplyService {
      */
     void delete(String id);
 
-    void send(WeixinModel weixin, String receiveType, String receiveMessage);
+    /**
+     * 回复。
+     *
+     * @param weixin         微信配置。
+     * @param openId         用户Open ID。
+     * @param receiveType    接收类型。
+     * @param receiveMessage 接收消息。
+     */
+    void send(WeixinModel weixin, String openId, String receiveType, String receiveMessage);
 }

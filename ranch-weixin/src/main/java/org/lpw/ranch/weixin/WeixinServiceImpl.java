@@ -6,6 +6,7 @@ import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.lpw.ranch.lock.LockHelper;
 import org.lpw.ranch.payment.helper.PaymentHelper;
 import org.lpw.ranch.weixin.info.InfoService;
+import org.lpw.ranch.weixin.reply.ReplyService;
 import org.lpw.tephra.bean.ContextRefreshedListener;
 import org.lpw.tephra.cache.Cache;
 import org.lpw.tephra.crypto.Digest;
@@ -106,6 +107,8 @@ public class WeixinServiceImpl implements WeixinService, ContextRefreshedListene
     private PaymentHelper paymentHelper;
     @Inject
     private InfoService infoService;
+    @Inject
+    private ReplyService replyService;
     @Inject
     private WeixinDao weixinDao;
     @Value("${tephra.ctrl.service-root:}")
@@ -208,8 +211,8 @@ public class WeixinServiceImpl implements WeixinService, ContextRefreshedListene
 
         if (msgType.equals("event"))
             event(weixin, string);
-
-        signIn(weixin, string);
+        else if (msgType.equals("text"))
+            replyService.send(weixin, getOpenId(string), "text", getValue(string, "<Content><![CDATA[", "]]></Content>"));
     }
 
     private void event(WeixinModel weixin, String string) {
@@ -221,10 +224,10 @@ public class WeixinServiceImpl implements WeixinService, ContextRefreshedListene
         }
 
         if (event.equals("subscribe") || event.equals("SCAN"))
-            signIn(weixin, string);
+            signIn(weixin, string, event);
     }
 
-    private void signIn(WeixinModel weixin, String string) {
+    private void signIn(WeixinModel weixin, String string, String event) {
         String ticket = getValue(string, "<Ticket><![CDATA[", "]]></Ticket>");
         if (ticket == null) {
             logger.warn(null, "无法获得微信消息[{}]中Ticket信息！", string);
@@ -239,7 +242,7 @@ public class WeixinServiceImpl implements WeixinService, ContextRefreshedListene
             return;
         }
 
-        String openId = getValue(string, "<FromUserName><![CDATA[", "]]></FromUserName>");
+        String openId = getOpenId(string);
         if (openId == null) {
             logger.warn(null, "无法获得微信消息[{}]中Open ID信息！", string);
 
@@ -260,6 +263,11 @@ public class WeixinServiceImpl implements WeixinService, ContextRefreshedListene
         }
 
         session.set(sessionId, SESSION_SUBSCRIBE_SIGN_IN, object);
+        replyService.send(weixin, openId, "event", event);
+    }
+
+    private String getOpenId(String string) {
+        return getValue(string, "<FromUserName><![CDATA[", "]]></FromUserName>");
     }
 
     private String getValue(String string, String prefix, String suffix) {
@@ -306,29 +314,6 @@ public class WeixinServiceImpl implements WeixinService, ContextRefreshedListene
         }
 
         return object.getString("data");
-    }
-
-    private JSONObject byAccessToken(WeixinModel weixin, Function<String, String> function) {
-        String string = function.apply(weixin.getAccessToken());
-        JSONObject object = json.toObject(string);
-        if (object == null) {
-            logger.warn(null, "获取微信Access Token信息[{}:{}:{}]失败！", weixin.getKey(), weixin.getAppId(), string);
-
-            return null;
-        }
-
-        if (object.containsKey("errcode") && object.getIntValue("errcode") == 42001) {
-            refreshAccessToken(weixin);
-            string = function.apply(weixin.getAccessToken());
-            object = json.toObject(string);
-            if (object == null) {
-                logger.warn(null, "获取微信Access Token信息[{}:{}:{}]失败！", weixin.getKey(), weixin.getAppId(), string);
-
-                return null;
-            }
-        }
-
-        return object;
     }
 
     @Override
@@ -664,6 +649,30 @@ public class WeixinServiceImpl implements WeixinService, ContextRefreshedListene
         param.put("signature", digest.sha1(sb.deleteCharAt(0).toString()));
 
         return param;
+    }
+
+    @Override
+    public JSONObject byAccessToken(WeixinModel weixin, Function<String, String> function) {
+        String string = function.apply(weixin.getAccessToken());
+        JSONObject object = json.toObject(string);
+        if (object == null) {
+            logger.warn(null, "获取微信Access Token信息[{}:{}:{}]失败！", weixin.getKey(), weixin.getAppId(), string);
+
+            return null;
+        }
+
+        if (object.containsKey("errcode") && object.getIntValue("errcode") == 42001) {
+            refreshAccessToken(weixin);
+            string = function.apply(weixin.getAccessToken());
+            object = json.toObject(string);
+            if (object == null) {
+                logger.warn(null, "获取微信Access Token信息[{}:{}:{}]失败！", weixin.getKey(), weixin.getAppId(), string);
+
+                return null;
+            }
+        }
+
+        return object;
     }
 
     @Override
