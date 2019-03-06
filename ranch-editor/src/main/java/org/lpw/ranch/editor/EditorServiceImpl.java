@@ -1,6 +1,5 @@
 package org.lpw.ranch.editor;
 
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import org.lpw.ranch.async.AsyncService;
 import org.lpw.ranch.editor.element.ElementService;
@@ -277,13 +276,10 @@ public class EditorServiceImpl implements EditorService, HourJob, DateJob {
         String user = userHelper.id();
 
         return asyncService.submit(EditorModel.NAME + ".pdf." + id, "", 60, () -> {
-            String path = chromeHelper.pdf(pdf.toString(), 30,
-                    editor.getWidth(), editor.getHeight(), "", asyncService.root());
+            String path = chromeHelper.pdf(pdf.toString(), 30, editor.getWidth(), editor.getHeight(), "", asyncService.root());
             if (validator.isEmail(email)) {
-                JSONArray files = new JSONArray();
-                files.add(path);
                 JSONObject args = new JSONObject();
-                args.put("files", files);
+                args.put("url", wormholeHelper.getUrl(wormholeHelper.file("editor", null, null, new File(path))));
                 pushHelper.send(EditorModel.NAME + ".pdf", user, email, args);
             }
 
