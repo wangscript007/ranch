@@ -80,4 +80,4 @@
 
 [保存](doc/reply/save.md)
 
-[修改](doc/reply/delete.md)
+[删除](doc/reply/delete.md)
