@@ -9,7 +9,7 @@
 |名称|类型|必须|说明|
 |---|---|---|---|
 |id|char(36)|是|ID值。|
-|email|string|否|Email地址，如果为合法Email地址将在导出完成后将文件下载URL发送到此Email地址；需要配置[推送](../../ranch-push/)`key=ranch.editor.pdf`，并设置`data.url`参数为下载地址。|
+|email|string|否|Email地址，如果为合法Email地址将在导出完成后将文件下载URL发送到此Email地址；需要配置[推送](../../ranch-push/)`key=ranch.editor.pdf`，并设置`data.url`参数为下载地址，下载地址`3`天内有效。|
 
 返回值
 ```
