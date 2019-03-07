@@ -279,7 +279,7 @@ public class EditorServiceImpl implements EditorService, HourJob, DateJob {
             String path = chromeHelper.pdf(pdf.toString(), 30, editor.getWidth(), editor.getHeight(), "", asyncService.root());
             if (validator.isEmail(email)) {
                 JSONObject args = new JSONObject();
-                args.put("url", wormholeHelper.getUrl(wormholeHelper.file("editor", null, null, new File(path))));
+                args.put("url", wormholeHelper.getUrl(wormholeHelper.file("editor", null, null, new File(path)), false));
                 pushHelper.send(EditorModel.NAME + ".pdf", user, email, args);
             }
 
