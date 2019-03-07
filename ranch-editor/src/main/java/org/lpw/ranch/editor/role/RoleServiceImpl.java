@@ -108,8 +108,8 @@ public class RoleServiceImpl implements RoleService {
     public JSONObject countOwner() {
         JSONObject object = new JSONObject();
         String user = userHelper.id();
-        object.put("total", roleDao.count(user, Type.Owner.ordinal()));
-        object.put("recycle", roleDao.count(user, Type.Owner.ordinal(), 5));
+        object.put("total", roleDao.count(user, Type.Owner.ordinal(), 0));
+        object.put("recycle", roleDao.count(user, Type.Owner.ordinal(), 0, 5));
 
         return object;
     }
