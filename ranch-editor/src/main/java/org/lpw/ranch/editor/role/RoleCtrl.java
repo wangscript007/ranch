@@ -60,7 +60,6 @@ public class RoleCtrl {
     }
 
     @Execute(name = "need-password", validates = {
-            @Validate(validator = Validators.ID, parameter = "user", failureCode = 48),
             @Validate(validator = Validators.ID, parameter = "editor", failureCode = 41),
     })
     public Object needPassword() {
