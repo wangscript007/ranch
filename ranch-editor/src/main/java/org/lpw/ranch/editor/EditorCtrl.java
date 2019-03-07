@@ -43,7 +43,8 @@ public class EditorCtrl {
     @Execute(name = "find", validates = {
             @Validate(validator = Validators.ID, parameter = "id", failureCode = 1),
             @Validate(validator = EditorService.VALIDATOR_EXISTS, parameter = "id", failureCode = 2),
-            @Validate(validator = RoleService.VALIDATOR_VIEWABLE, parameters = {"user", "id"}, failureCode = 41)
+            @Validate(validator = RoleService.VALIDATOR_VIEWABLE, parameters = {"user", "id"}, failureCode = 41),
+            @Validate(validator = RoleService.VALIDATOR_PASSWORD, parameters = {"user", "id", "password"}, failureCode = 49)
     })
     public Object find() {
         return editorService.find(request.get("id"));
@@ -64,7 +65,8 @@ public class EditorCtrl {
             @Validate(validator = RoleService.VALIDATOR_CREATABLE, parameter = "id", failureCode = 12),
             @Validate(validator = EditorService.VALIDATOR_EXISTS, emptyable = true, parameter = "id", failureCode = 2),
             @Validate(validator = EditorService.VALIDATOR_EDITABLE, emptyable = true, parameter = "id", failureCode = 11),
-            @Validate(validator = RoleService.VALIDATOR_OWNER, emptyable = true, parameter = "id", failureCode = 41)
+            @Validate(validator = RoleService.VALIDATOR_OWNER, emptyable = true, parameter = "id", failureCode = 50),
+            @Validate(validator = RoleService.VALIDATOR_PASSWORD, parameters = {"user", "id", "password"}, failureCode = 49)
     })
     public Object save() {
         return editorService.save(request.setToModel(EditorModel.class));
@@ -79,7 +81,8 @@ public class EditorCtrl {
             @Validate(validator = UserHelper.VALIDATOR_SIGN_IN),
             @Validate(validator = EditorService.VALIDATOR_EXISTS, parameter = "id", failureCode = 2),
             @Validate(validator = EditorService.VALIDATOR_EDITABLE, parameter = "id", failureCode = 11),
-            @Validate(validator = RoleService.VALIDATOR_OWNER, parameter = "id", failureCode = 41)
+            @Validate(validator = RoleService.VALIDATOR_OWNER, parameter = "id", failureCode = 50),
+            @Validate(validator = RoleService.VALIDATOR_PASSWORD, parameters = {"user", "id", "password"}, failureCode = 49)
     })
     public Object modify() {
         return editorService.modify(request.setToModel(EditorModel.class), request.getAsInt("template", -1));
@@ -146,7 +149,8 @@ public class EditorCtrl {
             @Validate(validator = Validators.EMAIL, emptyable = true, parameter = "email", failureCode = 16),
             @Validate(validator = UserHelper.VALIDATOR_SIGN_IN),
             @Validate(validator = EditorService.VALIDATOR_EXISTS, parameter = "id", failureCode = 2),
-            @Validate(validator = RoleService.VALIDATOR_VIEWABLE, parameter = "id", failureCode = 41)
+            @Validate(validator = RoleService.VALIDATOR_VIEWABLE, parameter = "id", failureCode = 41),
+            @Validate(validator = RoleService.VALIDATOR_PASSWORD, parameters = {"user", "id", "password"}, failureCode = 49)
     })
     public Object pdf() {
         return editorService.pdf(request.get("id"), request.get("email"));

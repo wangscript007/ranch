@@ -17,6 +17,7 @@
 |width|int|是|宽度。|
 |height|int|是|高度。|
 |image|char(100)|否|预览图。|
+|password|char(100)|否|密码。|
 
 返回值
 ```json

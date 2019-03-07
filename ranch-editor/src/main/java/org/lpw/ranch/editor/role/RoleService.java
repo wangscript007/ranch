@@ -51,6 +51,10 @@ public interface RoleService {
      */
     String VALIDATOR_VIEWABLE = RoleModel.NAME + ".validator.viewable";
     /**
+     * 密码验证器Bean名称。
+     */
+    String VALIDATOR_PASSWORD = RoleModel.NAME + ".validator.password";
+    /**
      * 是否存在验证器Bean名称。
      */
     String VALIDATOR_EXISTS = RoleModel.NAME + ".validator.exists";
@@ -156,6 +160,25 @@ public interface RoleService {
      * @param password 访问密码。
      */
     void password(String id, String password);
+
+    /**
+     * 判断是否需要密码。
+     *
+     * @param user   用户。
+     * @param editor 编辑器。
+     * @return 如果需要则返回true；否则返回false。
+     */
+    boolean needPassword(String user, String editor);
+
+    /**
+     * 校验密码。
+     *
+     * @param user     用户，空则使用当前用户。
+     * @param editor   编辑器。
+     * @param password 密码。
+     * @return 校验通过则返回true；否则返回false。
+     */
+    boolean password(String user, String editor, String password);
 
     /**
      * 删除角色。

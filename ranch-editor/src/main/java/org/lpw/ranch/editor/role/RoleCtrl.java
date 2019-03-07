@@ -18,7 +18,8 @@ import javax.inject.Inject;
 public class RoleCtrl {
     @Inject
     private Request request;
-    @Inject private EditorService editorService;
+    @Inject
+    private EditorService editorService;
     @Inject
     private RoleService roleService;
 
@@ -56,6 +57,14 @@ public class RoleCtrl {
         roleService.password(request.get("id"), request.get("password"));
 
         return "";
+    }
+
+    @Execute(name = "need-password", validates = {
+            @Validate(validator = Validators.ID, parameter = "user", failureCode = 48),
+            @Validate(validator = Validators.ID, parameter = "editor", failureCode = 41),
+    })
+    public Object needPassword() {
+        return roleService.needPassword(request.get("user"), request.get("editor"));
     }
 
     @Execute(name = "count-owner", validates = {

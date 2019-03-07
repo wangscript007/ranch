@@ -124,13 +124,6 @@ public class RoleServiceImpl implements RoleService {
         return modelHelper.toJson(save(generator.random(36), editor, Type.Viewer, password));
     }
 
-    @Override
-    public void password(String id, String password) {
-        RoleModel role = roleDao.findById(id);
-        role.setPassword(password);
-        save(role);
-    }
-
     private RoleModel save(String user, String editor, Type type, String password) {
         RoleModel role = find(user, editor);
         if (role == null) {
@@ -145,6 +138,27 @@ public class RoleServiceImpl implements RoleService {
         save(role);
 
         return role;
+    }
+
+    @Override
+    public void password(String id, String password) {
+        RoleModel role = roleDao.findById(id);
+        role.setPassword(password);
+        save(role);
+    }
+
+    @Override
+    public boolean needPassword(String user, String editor) {
+        RoleModel role = find(user, editor);
+
+        return role != null && !validator.isEmpty(role.getPassword());
+    }
+
+    @Override
+    public boolean password(String user, String editor, String password) {
+        RoleModel role = find(validator.isEmpty(user) ? userHelper.id() : user, editor);
+
+        return role == null || validator.isEmpty(role.getPassword()) || role.getPassword().equals(password);
     }
 
     @Override
