@@ -61,6 +61,8 @@
         <module>ranch-linkedin-helper</module>
         <module>ranch-log</module>
         <module>ranch-paypal</module>
+        <module>ranch-popular</module>
+        <module>ranch-inviter</module>
         <module>ranch-ui</module>
         <module>ranch-web</module>
         <module>ranch-test</module>
