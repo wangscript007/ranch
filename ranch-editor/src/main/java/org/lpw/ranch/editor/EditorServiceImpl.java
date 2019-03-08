@@ -7,6 +7,7 @@ import org.lpw.ranch.editor.label.LabelService;
 import org.lpw.ranch.editor.role.RoleModel;
 import org.lpw.ranch.editor.role.RoleService;
 import org.lpw.ranch.lock.LockHelper;
+import org.lpw.ranch.popular.PopularService;
 import org.lpw.ranch.push.helper.PushHelper;
 import org.lpw.ranch.user.helper.UserHelper;
 import org.lpw.ranch.util.Pagination;
@@ -84,6 +85,8 @@ public class EditorServiceImpl implements EditorService, HourJob, DateJob {
     private AsyncService asyncService;
     @Inject
     private UserHelper userHelper;
+    @Inject
+    private PopularService popularService;
     @Inject
     private PushHelper pushHelper;
     @Inject
@@ -412,6 +415,7 @@ public class EditorServiceImpl implements EditorService, HourJob, DateJob {
         Set<String> ids = null;
         List<String> lbs = searchWords(labels);
         if (!lbs.isEmpty()) {
+            popular(type, template, true, lbs);
             ids = labelService.query(lbs);
             if (validator.isEmpty(ids))
                 return searchTemplateEmpty(cacheKey, pageSize);
@@ -419,6 +423,7 @@ public class EditorServiceImpl implements EditorService, HourJob, DateJob {
 
         List<String> wds = searchWords(words);
         if (!wds.isEmpty()) {
+            popular(type, template, false, wds);
             List<String> list = luceneHelper.query(getLuceneKey(type, template), wds, true, 1024);
             if (list.isEmpty())
                 return searchTemplateEmpty(cacheKey, pageSize);
@@ -447,6 +452,10 @@ public class EditorServiceImpl implements EditorService, HourJob, DateJob {
                     list.add(word);
 
         return list;
+    }
+
+    private void popular(String type, int template, boolean label, List<String> list) {
+        list.forEach(string -> popularService.increase(EditorModel.NAME + ":" + type + ":" + template + (label ? ":label" : ":word"), string));
     }
 
     private JSONObject searchTemplate(String type, int template, Order order, int pageSize) {

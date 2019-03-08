@@ -47,3 +47,7 @@
 ```
 
 > 如果未检索到数据,将返回空JSON`{}`。
+
+## 热门
+
+搜索会记录搜索词的[热门](../../ranch-popular/)程度，引用key=`ranch.editor:{type}:{template}:{label|word}`。
