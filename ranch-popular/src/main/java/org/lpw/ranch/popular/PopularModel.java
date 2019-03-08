@@ -23,6 +23,7 @@ public class PopularModel extends ModelSupport {
     private String key; // 引用key
     private String value; // 值
     private int count; // 次数
+    private int state; // 状态：0-正常；1-禁用
 
     @Jsonable
     @Column(name = "c_key")
@@ -52,5 +53,15 @@ public class PopularModel extends ModelSupport {
 
     public void setCount(int count) {
         this.count = count;
+    }
+
+    @Jsonable
+    @Column(name = "c_state")
+    public int getState() {
+        return state;
+    }
+
+    public void setState(int state) {
+        this.state = state;
     }
 }

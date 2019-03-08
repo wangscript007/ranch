@@ -17,8 +17,19 @@ class PopularDaoImpl implements PopularDao {
 
     @Override
     public PageList<PopularModel> query(String key, int pageSize, int pageNum) {
-        return liteOrm.query(new LiteQuery(PopularModel.class).where("c_key=?").order("c_count desc")
+        return liteOrm.query(new LiteQuery(PopularModel.class).where("c_key=?").order("c_state,c_count desc")
                 .size(pageSize).page(pageNum), new Object[]{key});
+    }
+
+    @Override
+    public PageList<PopularModel> query(String key, int state, int pageSize, int pageNum) {
+        return liteOrm.query(new LiteQuery(PopularModel.class).where("c_key=? and c_state=?").order("c_count desc")
+                .size(pageSize).page(pageNum), new Object[]{key, state});
+    }
+
+    @Override
+    public PopularModel findById(String id) {
+        return liteOrm.findById(PopularModel.class, id);
     }
 
     @Override
@@ -29,10 +40,5 @@ class PopularDaoImpl implements PopularDao {
     @Override
     public void save(PopularModel popular) {
         liteOrm.save(popular);
-    }
-
-    @Override
-    public void delete(String id) {
-        liteOrm.deleteById(PopularModel.class, id);
     }
 }

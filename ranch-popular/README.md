@@ -6,10 +6,11 @@
 |---|---|---|
 |key|char(100)|引用key。|
 |value|char(100)|值。|
-|count|char(100)|次数。|
+|count|int|次数。|
+|state|int|状态：0-正常；1-禁用。|
 
 [检索](doc/query.md)
 
 [发布](doc/publish.md)
 
-[删除](doc/delete.md)
+[修改状态](doc/state.md)

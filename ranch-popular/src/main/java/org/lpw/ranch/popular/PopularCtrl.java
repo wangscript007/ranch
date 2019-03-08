@@ -24,7 +24,7 @@ public class PopularCtrl {
             @Validate(validator = Validators.SIGN)
     })
     public Object query() {
-        return popularService.query(request.get("key"));
+        return popularService.query(request.get("key"), request.getAsInt("state", -1));
     }
 
     @Execute(name = "publish", validates = {
@@ -34,12 +34,14 @@ public class PopularCtrl {
         return popularService.publish(request.get("key"), request.getAsInt("size", 10));
     }
 
-    @Execute(name = "delete", validates = {
+    @Execute(name = "state", validates = {
             @Validate(validator = Validators.ID, parameter = "id", failureCode = 1),
-            @Validate(validator = Validators.SIGN)
+            @Validate(validator = Validators.BETWEEN, number = {0, 1}, parameter = "state", failureCode = 3),
+            @Validate(validator = Validators.SIGN),
+            @Validate(validator = PopularService.VALIDATOR_EXISTS, parameter = "id", failureCode = 4)
     })
-    public Object delete() {
-        popularService.delete(request.get("id"));
+    public Object state() {
+        popularService.state(request.get("id"), request.getAsInt("state"));
 
         return "";
     }

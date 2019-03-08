@@ -34,8 +34,9 @@ public class PopularServiceImpl implements PopularService, MinuteJob {
     private List<String[]> list = Collections.synchronizedList(new ArrayList<>());
 
     @Override
-    public JSONObject query(String key) {
-        return popularDao.query(key, pagination.getPageSize(20), pagination.getPageNum()).toJson();
+    public JSONObject query(String key, int state) {
+        return state == -1 ? popularDao.query(key, pagination.getPageSize(20), pagination.getPageNum()).toJson() :
+                popularDao.query(key, state, pagination.getPageSize(20), pagination.getPageNum()).toJson();
     }
 
     @Override
@@ -43,7 +44,7 @@ public class PopularServiceImpl implements PopularService, MinuteJob {
         String cacheKey = CACHE_PUBLISH + key + ":" + size + ":" + System.currentTimeMillis() / TimeUnit.Hour.getTime();
         JSONArray array = cache.get(cacheKey);
         if (array == null)
-            cache.put(cacheKey, array = modelHelper.toJson(popularDao.query(key, size, 0).getList()), false);
+            cache.put(cacheKey, array = modelHelper.toJson(popularDao.query(key, 0, size, 0).getList()), false);
 
         return array;
     }
@@ -54,8 +55,10 @@ public class PopularServiceImpl implements PopularService, MinuteJob {
     }
 
     @Override
-    public void delete(String id) {
-        popularDao.delete(id);
+    public void state(String id, int state) {
+        PopularModel popular = popularDao.findById(id);
+        popular.setState(state);
+        popularDao.save(popular);
     }
 
     @Override
