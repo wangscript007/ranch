@@ -197,4 +197,15 @@ public interface EditorService {
      * @return 异步ID。
      */
     String resetSearchIndex(String type, int template);
+
+    /**
+     * 搜索模板信息集。
+     *
+     * @param type     类型。
+     * @param template 模板。
+     * @param label    标签。
+     * @param size     数量。
+     * @return 编辑器信息集。
+     */
+    JSONObject searchTemplate(String type, int template, String label, int size);
 }

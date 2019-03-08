@@ -186,4 +186,13 @@ public class EditorCtrl {
     public Object resetSearchIndex() {
         return editorService.resetSearchIndex(request.get("type"), request.getAsInt("template"));
     }
+
+    @Execute(name = "search-label", validates = {
+            @Validate(validator = Validators.NOT_EMPTY, parameter = "type", failureCode = 3),
+            @Validate(validator = Validators.BETWEEN, number = {1, 2}, parameter = "template", failureCode = 13)
+    })
+    public Object searchLabel() {
+        return editorService.searchTemplate(request.get("type"), request.getAsInt("template"), request.get("label"),
+                request.getAsInt("size"));
+    }
 }

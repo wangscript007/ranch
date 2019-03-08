@@ -54,6 +54,8 @@
 
 [重建搜索索引](doc/reset-search-index.md)
 
+[搜索标签](doc/search-label.md)
+
 ## 角色
 
 属性

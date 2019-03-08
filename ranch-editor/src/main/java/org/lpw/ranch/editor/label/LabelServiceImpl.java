@@ -48,6 +48,11 @@ public class LabelServiceImpl implements LabelService {
     }
 
     @Override
+    public List<LabelModel> query(String name) {
+        return labelDao.query(name).getList();
+    }
+
+    @Override
     public void save(String editor, String names, boolean autoClose) {
         labelDao.delete(editor);
         for (String name : converter.toArray(names, ",")) {

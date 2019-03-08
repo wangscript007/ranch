@@ -1,8 +1,10 @@
 package org.lpw.ranch.editor;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import org.lpw.ranch.async.AsyncService;
 import org.lpw.ranch.editor.element.ElementService;
+import org.lpw.ranch.editor.label.LabelModel;
 import org.lpw.ranch.editor.label.LabelService;
 import org.lpw.ranch.editor.role.RoleModel;
 import org.lpw.ranch.editor.role.RoleService;
@@ -49,7 +51,8 @@ import java.util.concurrent.ConcurrentHashMap;
 @Service(EditorModel.NAME + ".service")
 public class EditorServiceImpl implements EditorService, HourJob, DateJob {
     private static final String CACHE_MODEL = EditorModel.NAME + ".service.cache.model:";
-    private static final String CACHE_QUERY = EditorModel.NAME + ".service.cache.query:";
+    private static final String CACHE_SEARCH = EditorModel.NAME + ".service.cache.search:";
+    private static final String CACHE_SEARCH_LABEL = EditorModel.NAME + ".service.cache.search.label:";
 
     @Inject
     private Cache cache;
@@ -477,7 +480,7 @@ public class EditorServiceImpl implements EditorService, HourJob, DateJob {
     }
 
     private String getSearchCacheKey(String type, int template, String key) {
-        return random.computeIfAbsent(type, k -> CACHE_QUERY + type + "." + template + ":" + generator.random(32) + ":") + key;
+        return random.computeIfAbsent(type, k -> CACHE_SEARCH + type + "." + template + ":" + generator.random(32) + ":") + key;
     }
 
     @Override
@@ -494,6 +497,27 @@ public class EditorServiceImpl implements EditorService, HourJob, DateJob {
 
     private void resetRandom(String type) {
         random.remove(type);
+    }
+
+    @Override
+    public JSONObject searchTemplate(String type, int template, String label, int size) {
+        String cacheKey = CACHE_SEARCH_LABEL + type + ":" + template + ":" + label + ":" + size
+                + ":" + System.currentTimeMillis() / TimeUnit.Day.getTime();
+        JSONObject object = new JSONObject();
+        JSONArray array = cache.get(cacheKey);
+        if (array == null) {
+            object.put("refresh", true);
+            array = new JSONArray();
+            List<LabelModel> labels = labelService.query(label);
+            while (array.size() < size && !labels.isEmpty()) {
+                EditorModel editor = findById(labels.remove(generator.random(0, labels.size() - 1)).getEditor());
+                if (editor.getType().equals(type) && editor.getTemplate() == template)
+                    array.add(modelHelper.toJson(editor));
+            }
+        }
+        object.put("list", array);
+
+        return object;
     }
 
     @Override
