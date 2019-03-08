@@ -505,8 +505,8 @@ public class EditorServiceImpl implements EditorService, HourJob, DateJob {
                 + ":" + System.currentTimeMillis() / TimeUnit.Day.getTime();
         JSONObject object = new JSONObject();
         JSONArray array = cache.get(cacheKey);
+        object.put("refresh", array == null);
         if (array == null) {
-            object.put("refresh", true);
             array = new JSONArray();
             List<LabelModel> labels = labelService.query(label);
             while (array.size() < size && !labels.isEmpty()) {
@@ -514,6 +514,7 @@ public class EditorServiceImpl implements EditorService, HourJob, DateJob {
                 if (editor.getType().equals(type) && editor.getTemplate() == template)
                     array.add(modelHelper.toJson(editor));
             }
+            cache.put(cacheKey, array, false);
         }
         object.put("list", array);
 
