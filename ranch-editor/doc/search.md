@@ -12,7 +12,7 @@
 |template|int|是|模板：1-模板；2-范文。|
 |labels|string|否|标签，多个标签以逗号分隔，空表示搜索关键词。|
 |words|string|否|关键词，多个关键词以逗号分隔，空表示所有。|
-|order|string|否|排序规则：hot-热门（默认）；newest-最新；none-不排序。|
+|order|string|否|排序规则：hot-热门（默认）；used-使用最多;newest-最新；none-不排序。|
 |pageSize|int|否|每页显示记录数，默认20。|
 |pageNum|int|否|当前显示页数。|
 

@@ -23,7 +23,7 @@
 |createEnd|string|否|创建结束日期，格式：yyyy-MM-dd，为空表示不限制。|
 |modifyStart|string|否|编辑开始日期，格式：yyyy-MM-dd，为空表示不限制。|
 |modifyEnd|string|否|编辑结束日期，格式：yyyy-MM-dd，为空表示不限制。|
-|order|string|否|排序规则：hot-热门；newest-最新（默认）；none-不排序。|
+|order|string|否|排序规则：hot-热门；used-使用最多;newest-最新（默认）；none-不排序。|
 |pageSize|int|否|每页显示记录数，默认20。|
 |pageNum|int|否|当前显示页数。|
 
