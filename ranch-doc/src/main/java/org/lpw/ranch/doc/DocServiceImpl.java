@@ -8,6 +8,7 @@ import org.lpw.ranch.audit.AuditHelper;
 import org.lpw.ranch.doc.relation.RelationService;
 import org.lpw.ranch.doc.topic.TopicModel;
 import org.lpw.ranch.doc.topic.TopicService;
+import org.lpw.ranch.popular.PopularService;
 import org.lpw.ranch.recycle.Recycle;
 import org.lpw.ranch.recycle.RecycleHelper;
 import org.lpw.ranch.user.helper.UserHelper;
@@ -75,6 +76,8 @@ public class DocServiceImpl implements DocService, MinuteJob, DateJob {
     private RecycleHelper recycleHelper;
     @Inject
     private Pagination pagination;
+    @Inject
+    private PopularService popularService;
     @Inject
     private TopicService topicService;
     @Inject
@@ -146,7 +149,12 @@ public class DocServiceImpl implements DocService, MinuteJob, DateJob {
 
     @Override
     public JSONObject search(String category, String[] words) {
-        List<String> ids = luceneHelper.query(getLuceneKey(category), words, true, 1024);
+        String categoryKey = getLuceneKey(category);
+        if (!validator.isEmpty(words))
+            for (String word : words)
+                popularService.increase(categoryKey, word);
+
+        List<String> ids = luceneHelper.query(categoryKey, words, true, 1024);
         if (ids == null)
             return query(null, null, null, null, null, null, Audit.Pass);
 

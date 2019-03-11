@@ -42,3 +42,7 @@
     ]
 }
 ```
+
+## 热门
+
+搜索会记录搜索词的[热门](../../ranch-popular/)程度，引用key=`ranch.doc:{category}`。
