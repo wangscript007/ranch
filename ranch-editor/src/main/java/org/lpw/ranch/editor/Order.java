@@ -9,7 +9,7 @@ public enum Order {
      */
     Hot("c_sort,c_used desc"),
     /**
-     * 热门。
+     * 使用。
      */
     Used("c_used desc"),
     /**
