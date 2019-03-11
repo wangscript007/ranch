@@ -8,8 +8,8 @@
 
 |名称|类型|必须|说明|
 |---|---|---|---|
-|category|char(100)|否|类别。|
-|words|char(36)|是|分类ID。|
+|category|char(100)|是|类别。|
+|words|string|否|关键词，多个关键词以逗号分隔，空表示所有。|
 |pageSize|int|否|每页显示记录数，默认20。|
 |pageNum|int|否|当前显示页数。|
 
