@@ -7,7 +7,11 @@ public enum Order {
     /**
      * 热门。
      */
-    Hot("c_sort,c_used desc"),
+    Sort("c_sort,c_used desc"),
+    /**
+     * 热门。
+     */
+    Hot("c_used desc"),
     /**
      * 最新。
      */
@@ -44,6 +48,8 @@ public enum Order {
             return defaultOrder;
 
         switch (name) {
+            case "sort":
+                return Sort;
             case "hot":
                 return Hot;
             case "newest":

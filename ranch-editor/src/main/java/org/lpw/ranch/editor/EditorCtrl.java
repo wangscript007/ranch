@@ -175,7 +175,7 @@ public class EditorCtrl {
     })
     public Object search() {
         return editorService.searchTemplate(request.get("type"), request.getAsInt("template"), request.getAsArray("labels"),
-                request.getAsArray("words"), Order.find(request.get("order"), Order.Hot));
+                request.getAsArray("words"), Order.find(request.get("order"), Order.Sort));
     }
 
     @Execute(name = "reset-search-index", validates = {
