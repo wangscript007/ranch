@@ -126,7 +126,8 @@ public class RoleServiceImpl implements RoleService {
 
     private RoleModel save(String user, String editor, Type type, String password) {
         RoleModel role = find(user, editor);
-        if (role == null) {
+        boolean isNew = role == null;
+        if (isNew) {
             role = new RoleModel();
             role.setUser(user);
             role.setEditor(editor);
@@ -136,6 +137,8 @@ public class RoleServiceImpl implements RoleService {
         if (!validator.isEmpty(password))
             role.setPassword(password);
         save(role);
+        if (isNew && type == Type.Owner)
+            share(editor, null);
 
         return role;
     }
