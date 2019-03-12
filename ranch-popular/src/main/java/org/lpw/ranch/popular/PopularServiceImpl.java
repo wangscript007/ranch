@@ -41,7 +41,7 @@ public class PopularServiceImpl implements PopularService, MinuteJob {
 
     @Override
     public JSONArray publish(String key, int size) {
-        String cacheKey = CACHE_PUBLISH + key + ":" + size + ":" + System.currentTimeMillis() / TimeUnit.Hour.getTime();
+        String cacheKey = CACHE_PUBLISH + key + ":" + size + ":" + System.currentTimeMillis() / TimeUnit.Minute.getTime();
         JSONArray array = cache.get(cacheKey);
         if (array == null)
             cache.put(cacheKey, array = modelHelper.toJson(popularDao.query(key, 0, size, 0).getList()), false);
