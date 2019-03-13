@@ -185,6 +185,7 @@ public class EditorServiceImpl implements EditorService, HourJob, DateJob {
         model.setSort(editor.getSort());
         model.setName(editor.getName());
         model.setLabel(editor.getLabel());
+        model.setKeyword(editor.getKeyword());
         model.setSummary(editor.getSummary());
         model.setWidth(editor.getWidth());
         model.setHeight(editor.getHeight());
@@ -210,6 +211,8 @@ public class EditorServiceImpl implements EditorService, HourJob, DateJob {
             model.setName(editor.getName());
         if (!validator.isEmpty(editor.getLabel()))
             model.setLabel(editor.getLabel());
+        if (!validator.isEmpty(editor.getKeyword()))
+            model.setKeyword(editor.getKeyword());
         if (!validator.isEmpty(editor.getSummary()))
             model.setSummary(editor.getSummary());
         if (editor.getWidth() > 0)
@@ -562,9 +565,10 @@ public class EditorServiceImpl implements EditorService, HourJob, DateJob {
             PageList<EditorModel> pl = editorDao.query(template, type, 3, 20, i);
             pl.getList().forEach(editor -> {
                 labelService.save(editor.getId(), editor.getLabel(), true);
-                StringBuilder data = new StringBuilder().append(editor.getName()).append(',').append(editor.getLabel()).append(',');
-                if (!validator.isEmpty(editor.getSummary()))
-                    data.append(editor.getSummary()).append(',');
+                StringBuilder data = new StringBuilder().append(editor.getName()).append(',');
+                append(data, editor.getLabel());
+                append(data, editor.getKeyword());
+                append(data, editor.getSummary());
                 elementService.text(editor.getId(), data);
                 luceneHelper.index(luceneKey, editor.getId(), data.toString());
             });
@@ -574,6 +578,11 @@ public class EditorServiceImpl implements EditorService, HourJob, DateJob {
                 break;
         }
         resetRandom(type);
+    }
+
+    private void append(StringBuilder data, String string) {
+        if (!validator.isEmpty(string))
+            data.append(string).append(',');
     }
 
     private String getLuceneKey(String type, int template) {

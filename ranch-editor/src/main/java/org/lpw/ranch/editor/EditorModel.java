@@ -26,6 +26,7 @@ public class EditorModel extends ModelSupport {
     private int sort; // 顺序
     private String name; // 名称
     private String label; // 标签
+    private String keyword; // 关键词
     private String summary; // 摘要
     private int width; // 宽度
     private int height; // 高度
@@ -88,6 +89,16 @@ public class EditorModel extends ModelSupport {
 
     public void setLabel(String label) {
         this.label = label;
+    }
+
+    @Jsonable
+    @Column(name = "c_keyword")
+    public String getKeyword() {
+        return keyword;
+    }
+
+    public void setKeyword(String keyword) {
+        this.keyword = keyword;
     }
 
     @Jsonable
