@@ -149,11 +149,7 @@ public class DocServiceImpl implements DocService, MinuteJob, DateJob {
 
     @Override
     public JSONObject search(String category, String[] words) {
-        String key = DocModel.NAME + ":" + category;
-        if (!validator.isEmpty(words))
-            for (String word : words)
-                popularService.increase(key, word);
-
+        popularService.increase(DocModel.NAME + ":" + category, words);
         List<String> ids = luceneHelper.query(getLuceneKey(category), words, true, 1024);
         if (ids == null)
             return query(null, null, null, null, null, null, Audit.Pass);

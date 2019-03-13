@@ -7,6 +7,7 @@ import org.lpw.tephra.cache.Cache;
 import org.lpw.tephra.dao.model.ModelHelper;
 import org.lpw.tephra.scheduler.MinuteJob;
 import org.lpw.tephra.util.TimeUnit;
+import org.lpw.tephra.util.Validator;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
@@ -23,6 +24,8 @@ import java.util.Map;
 public class PopularServiceImpl implements PopularService, MinuteJob {
     private static final String CACHE_PUBLISH = PopularModel.NAME + ".publish:";
 
+    @Inject
+    private Validator validator;
     @Inject
     private Cache cache;
     @Inject
@@ -52,6 +55,15 @@ public class PopularServiceImpl implements PopularService, MinuteJob {
     @Override
     public void increase(String key, String value) {
         list.add(new String[]{key, value});
+    }
+
+    @Override
+    public void increase(String key, String[] values) {
+        if (validator.isEmpty(values))
+            return;
+
+        for (String value : values)
+            increase(key, value);
     }
 
     @Override

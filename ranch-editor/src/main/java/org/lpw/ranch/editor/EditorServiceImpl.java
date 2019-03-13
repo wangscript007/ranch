@@ -409,6 +409,8 @@ public class EditorServiceImpl implements EditorService, HourJob, DateJob {
         if (validator.isEmpty(labels) && validator.isEmpty(words))
             return searchTemplate(type, template, order, pageSize);
 
+        popular(type, template, true, labels);
+        popular(type, template, false, words);
         String cacheKey = getSearchCacheKey(type, template, converter.toString(labels) + ":" + converter.toString(words) + ":" + order
                 + ":" + pageSize + ":" + pagination.getPageNum());
         JSONObject object = cache.get(cacheKey);
@@ -418,7 +420,6 @@ public class EditorServiceImpl implements EditorService, HourJob, DateJob {
         Set<String> ids = null;
         List<String> lbs = searchWords(labels);
         if (!lbs.isEmpty()) {
-            popular(type, template, true, lbs);
             ids = labelService.query(lbs);
             if (validator.isEmpty(ids))
                 return searchTemplateEmpty(cacheKey, pageSize);
@@ -426,7 +427,6 @@ public class EditorServiceImpl implements EditorService, HourJob, DateJob {
 
         List<String> wds = searchWords(words);
         if (!wds.isEmpty()) {
-            popular(type, template, false, wds);
             List<String> list = luceneHelper.query(getLuceneKey(type, template), wds, true, 1024);
             if (list.isEmpty())
                 return searchTemplateEmpty(cacheKey, pageSize);
@@ -457,8 +457,8 @@ public class EditorServiceImpl implements EditorService, HourJob, DateJob {
         return list;
     }
 
-    private void popular(String type, int template, boolean label, List<String> list) {
-        list.forEach(string -> popularService.increase(EditorModel.NAME + ":" + type + ":" + template + (label ? ":label" : ":word"), string));
+    private void popular(String type, int template, boolean label, String[] values) {
+        popularService.increase(EditorModel.NAME + ":" + type + ":" + template + (label ? ":label" : ":word"), values);
     }
 
     private JSONObject searchTemplate(String type, int template, Order order, int pageSize) {

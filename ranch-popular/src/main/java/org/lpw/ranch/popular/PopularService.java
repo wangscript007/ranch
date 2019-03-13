@@ -39,6 +39,14 @@ public interface PopularService {
     void increase(String key, String value);
 
     /**
+     * 增加。
+     *
+     * @param key    引用key。
+     * @param values 值集。
+     */
+    void increase(String key, String[] values);
+
+    /**
      * 修改状态。
      *
      * @param id    ID值。
