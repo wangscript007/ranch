@@ -54,7 +54,8 @@ public class PopularServiceImpl implements PopularService, MinuteJob {
 
     @Override
     public void increase(String key, String value) {
-        list.add(new String[]{key, value});
+        if (!validator.isEmpty(value))
+            list.add(new String[]{key, value});
     }
 
     @Override
