@@ -88,6 +88,17 @@
 
 [从回收站移除](doc/role/remove.md)
 
+## 标签
+
+属性
+
+|属性|类型|说明|
+|---|---|---|
+|editor|char(36)|编辑器。|
+|name|char(100)|名称。|
+
+[修改名称](doc/label/rename.md)
+
 ## 用户媒体
 
 属性

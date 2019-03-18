@@ -6,6 +6,7 @@ import org.lpw.tephra.dao.orm.lite.LiteQuery;
 import org.springframework.stereotype.Repository;
 
 import javax.inject.Inject;
+import java.util.Set;
 
 /**
  * @author lpw
@@ -21,8 +22,26 @@ class LabelDaoImpl implements LabelDao {
     }
 
     @Override
+    public PageList<LabelModel> query(Set<String> editors) {
+        StringBuilder where = new StringBuilder("c_editor in(");
+        for (int i = 0, size = editors.size(); i < size; i++) {
+            if (i > 0)
+                where.append(',');
+            where.append('?');
+        }
+
+        return liteOrm.query(new LiteQuery(LabelModel.class).where(where.append(')').toString()), editors.toArray());
+    }
+
+    @Override
     public void save(LabelModel label) {
         liteOrm.save(label);
+    }
+
+    @Override
+    public void rename(String oldName, String newName) {
+        liteOrm.update(new LiteQuery(LabelModel.class).set("c_name=?").where("c_name=?"), new Object[]{newName, oldName});
+        liteOrm.close();
     }
 
     @Override

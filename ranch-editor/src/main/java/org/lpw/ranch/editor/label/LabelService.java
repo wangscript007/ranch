@@ -31,4 +31,12 @@ public interface LabelService {
      * @param autoClose 是否自动提交保存。
      */
     void save(String editor, String names, boolean autoClose);
+
+    /**
+     * 修改标签名称。
+     *
+     * @param oldName 旧名称。
+     * @param newName 新名称。
+     */
+    void rename(String oldName, String newName);
 }

@@ -359,6 +359,19 @@ public class EditorServiceImpl implements EditorService, HourJob, DateJob {
     }
 
     @Override
+    public void labels(Map<String, StringBuilder> map) {
+        Set<String> types=new HashSet<>();
+        map.forEach((id, label) -> {
+            EditorModel editor = findById(id);
+            editor.setLabel(label.substring(1));
+            editorDao.save(editor);
+            cache.remove(CACHE_MODEL + id);
+            types.add(editor.getType());
+        });
+        types.forEach(this::resetRandom);
+    }
+
+    @Override
     public void sort(String type, String[] ids, String[] sorts) {
         if (validator.isEmpty(ids) || validator.isEmpty(sorts) || ids.length != sorts.length)
             return;

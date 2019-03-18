@@ -5,8 +5,10 @@ import org.lpw.tephra.util.Validator;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -66,5 +68,18 @@ public class LabelServiceImpl implements LabelService {
         }
         if (autoClose)
             labelDao.close();
+    }
+
+    @Override
+    public void rename(String oldName, String newName) {
+        Set<String> editors = new HashSet<>();
+        labelDao.query(oldName).getList().forEach(label -> editors.add(label.getId()));
+        if (editors.isEmpty())
+            return;
+
+        labelDao.rename(oldName, newName);
+        Map<String, StringBuilder> map = new HashMap<>();
+        labelDao.query(editors).getList().forEach(label ->
+                map.computeIfAbsent(label.getEditor(), editor -> new StringBuilder()).append(',').append(label.getName()));
     }
 }

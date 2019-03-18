@@ -155,6 +155,13 @@ public interface EditorService {
     void modify(String id);
 
     /**
+     * 修改标签。
+     *
+     * @param map 标签集。
+     */
+    void labels(Map<String, StringBuilder> map);
+
+    /**
      * 修改顺序。
      *
      * @param type  类型。
