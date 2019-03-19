@@ -102,17 +102,12 @@ public class ScreenshotServiceImpl implements ScreenshotService {
     }
 
     @Override
-    public void index() {
-        while (true) {
-            Map<String, String> map = screenshotDao.index(100);
-            if (map.isEmpty())
-                return;
-
-            map.forEach((page, editor) -> {
-                ElementModel element = elementService.findById(page, editor);
-                screenshotDao.index(page, element == null ? 99 : (element.getSort() + 1));
-            });
-            screenshotDao.close();
-        }
+    public void create(String editor, int index, String page, String uri) {
+        ScreenshotModel screenshot = new ScreenshotModel();
+        screenshot.setEditor(editor);
+        screenshot.setIndex(index);
+        screenshot.setPage(page);
+        screenshot.setUri(uri);
+        screenshotDao.save(screenshot);
     }
 }

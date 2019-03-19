@@ -13,6 +13,7 @@
 |type|char(100)|是|类型。|
 |name|char(100)|是|名称。|
 |label|char(100)|是|标签。|
+|keyword|string|否|关键词。|
 |summary|string|否|摘要。|
 |width|int|是|宽度。|
 |height|int|是|高度。|

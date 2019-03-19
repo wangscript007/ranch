@@ -36,5 +36,13 @@ public interface ScreenshotService {
      */
     String capture(String editor, int mainWidth, int mainHeight, int pageWidth, int pageHeight);
 
-    void index();
+    /**
+     * 创建。
+     *
+     * @param editor 编辑器ID值。
+     * @param index  序号。
+     * @param page   页面。
+     * @param uri    资源URI地址。
+     */
+    void create(String editor, int index, String page, String uri);
 }

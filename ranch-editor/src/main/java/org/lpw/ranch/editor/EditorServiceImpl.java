@@ -190,6 +190,8 @@ public class EditorServiceImpl implements EditorService, HourJob, DateJob {
         model.setWidth(editor.getWidth());
         model.setHeight(editor.getHeight());
         model.setImage(editor.getImage());
+        if (!validator.isEmpty(editor.getScreenshot()))
+            model.setScreenshot(editor.getScreenshot());
         if (!validator.isEmpty(editor.getSource()))
             model.setSource(editor.getSource());
         model.setJson(editor.getJson());
@@ -360,7 +362,7 @@ public class EditorServiceImpl implements EditorService, HourJob, DateJob {
 
     @Override
     public void labels(Map<String, StringBuilder> map) {
-        Set<String> types=new HashSet<>();
+        Set<String> types = new HashSet<>();
         map.forEach((id, label) -> {
             EditorModel editor = findById(id);
             editor.setLabel(label.substring(1));
