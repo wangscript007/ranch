@@ -100,7 +100,7 @@ public class ScreenshotServiceImpl implements ScreenshotService {
         String sid = session.getId();
         List<ElementModel> list = elementService.list(editorId);
 
-        return asyncService.submit(ScreenshotModel.NAME + ".capture", "", 2 * (list.size() + 1) * wait, () -> {
+        return asyncService.submit(ScreenshotModel.NAME + ".capture", "", 2 * list.size() * wait, () -> {
             EditorModel editor = editorService.findById(editorId);
             Map<String, String> map = new HashMap<>();
             Map<String, Integer> index = new HashMap<>();
