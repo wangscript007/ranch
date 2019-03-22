@@ -32,6 +32,10 @@ public class EditorModel extends ModelSupport {
     private int height; // 高度
     private String image; // 预览图
     private String screenshot; // 主截图
+    private int price; // 价格，单位：分
+    private int vipPrice; // VIP价格，单位：分
+    private int limitedPrice; // 限时价格，单位：分
+    private Timestamp limitedTime; // 限时时间
     private int total; // 总根节点数
     private int modified; // 已修改根节点数
     private int state; // 状态：0-待审核；1-审核通过；2-审核拒绝；3-已上架；4-已下架；5-已删除
@@ -149,6 +153,46 @@ public class EditorModel extends ModelSupport {
 
     public void setScreenshot(String screenshot) {
         this.screenshot = screenshot;
+    }
+
+    @Jsonable
+    @Column(name = "c_price")
+    public int getPrice() {
+        return price;
+    }
+
+    public void setPrice(int price) {
+        this.price = price;
+    }
+
+    @Jsonable
+    @Column(name = "c_vip_price")
+    public int getVipPrice() {
+        return vipPrice;
+    }
+
+    public void setVipPrice(int vipPrice) {
+        this.vipPrice = vipPrice;
+    }
+
+    @Jsonable
+    @Column(name = "c_limited_price")
+    public int getLimitedPrice() {
+        return limitedPrice;
+    }
+
+    public void setLimitedPrice(int limitedPrice) {
+        this.limitedPrice = limitedPrice;
+    }
+
+    @Jsonable
+    @Column(name = "c_limited_time")
+    public Timestamp getLimitedTime() {
+        return limitedTime;
+    }
+
+    public void setLimitedTime(Timestamp limitedTime) {
+        this.limitedTime = limitedTime;
     }
 
     @Jsonable
