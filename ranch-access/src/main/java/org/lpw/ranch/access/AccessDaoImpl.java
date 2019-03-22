@@ -43,9 +43,4 @@ class AccessDaoImpl implements AccessDao {
         liteOrm.save(access);
         liteOrm.close();
     }
-
-    @Override
-    public void delete(Timestamp time) {
-        liteOrm.delete(new LiteQuery(AccessModel.class).where("c_time<?"), new Object[]{time});
-    }
 }

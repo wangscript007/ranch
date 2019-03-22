@@ -18,7 +18,7 @@ import java.util.concurrent.Executors;
  * @author lpw
  */
 @Service(AccessModel.NAME + ".service")
-public class AccessServiceImpl implements AccessService, DateJob {
+public class AccessServiceImpl implements AccessService {
     @Inject
     private Validator validator;
     @Inject
@@ -50,12 +50,5 @@ public class AccessServiceImpl implements AccessService, DateJob {
         access.setHeader(header.toString());
         access.setTime(dateTime.now());
         executorService.submit(() -> accessDao.save(access));
-    }
-
-    @Override
-    public void executeDateJob() {
-        Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.MONTH, -3);
-        accessDao.delete(dateTime.getStart(calendar.getTime()));
     }
 }

@@ -12,6 +12,4 @@ interface AccessDao {
                                 int pageSize, int pageNum);
 
     void save(AccessModel access);
-
-    void delete(Timestamp time);
 }
