@@ -26,6 +26,7 @@ public class ScreenshotHelperImpl implements ScreenshotHelper {
     @Value("${ranch.editor.screenshot.key:ranch.editor.screenshot}")
     private String key;
     private String queryKey;
+    private String imagesKey;
 
     @Override
     public JSONArray query(String editor) {
@@ -36,5 +37,17 @@ public class ScreenshotHelperImpl implements ScreenshotHelper {
         parameter.put("editor", editor);
 
         return carousel.service(queryKey, null, parameter, false, JSONArray.class);
+    }
+
+    @Override
+    public String images(String editor) {
+        if (imagesKey == null)
+            imagesKey = key + ".images";
+
+        Map<String, String> parameter = new HashMap<>();
+        parameter.put("editor", editor);
+        JSONObject object = carousel.service(imagesKey, null, parameter, false);
+
+        return object.getString("data");
     }
 }

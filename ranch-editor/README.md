@@ -191,6 +191,8 @@
 
 [截图](doc/screenshot/capture.md)
 
+[截图集](doc/screenshot/images.md)
+
 ## 在线演示
 
 属性

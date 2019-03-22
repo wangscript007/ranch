@@ -1,6 +1,7 @@
 package org.lpw.ranch.editor.screenshot;
 
 import org.lpw.ranch.editor.EditorService;
+import org.lpw.ranch.editor.role.RoleService;
 import org.lpw.ranch.user.helper.UserHelper;
 import org.lpw.tephra.ctrl.context.Request;
 import org.lpw.tephra.ctrl.execute.Execute;
@@ -51,5 +52,16 @@ public class ScreenshotCtrl {
     public Object capture() {
         return screenshotService.capture(request.get("editor"), request.getAsInt("mainWidth"),
                 request.getAsInt("mainHeight"), request.getAsInt("pageWidth"), request.getAsInt("pageHeight"));
+    }
+
+    @Execute(name = "images", validates = {
+            @Validate(validator = Validators.ID, parameter = "editor", failureCode = 1),
+            @Validate(validator = UserHelper.VALIDATOR_SIGN_IN),
+            @Validate(validator = EditorService.VALIDATOR_EXISTS, parameter = "editor", failureCode = 2),
+            @Validate(validator = EditorService.VALIDATOR_EDITABLE, parameter = "editor", failureCode = 11),
+            @Validate(validator = RoleService.VALIDATOR_EDITABLE, parameter = "editor", failureCode = 41)
+    })
+    public Object images(){
+        return screenshotService.capture(request.get("editor"));
     }
 }

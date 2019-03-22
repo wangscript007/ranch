@@ -37,6 +37,14 @@ public interface ScreenshotService {
     String capture(String editor, int mainWidth, int mainHeight, int pageWidth, int pageHeight);
 
     /**
+     * 截图。
+     *
+     * @param editor 编辑器ID值。
+     * @return 异步ID。
+     */
+    String capture(String editor);
+
+    /**
      * 创建。
      *
      * @param editor 编辑器ID值。

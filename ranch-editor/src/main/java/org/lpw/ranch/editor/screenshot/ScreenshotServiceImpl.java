@@ -3,6 +3,7 @@ package org.lpw.ranch.editor.screenshot;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import org.lpw.ranch.async.AsyncService;
+import org.lpw.ranch.editor.EditorModel;
 import org.lpw.ranch.editor.EditorService;
 import org.lpw.ranch.editor.element.ElementModel;
 import org.lpw.ranch.editor.element.ElementService;
@@ -88,6 +89,30 @@ public class ScreenshotServiceImpl implements ScreenshotService {
             });
 
             return converter.toString(map);
+        });
+    }
+
+    @Override
+    public String capture(String editorId) {
+        if (validator.isEmpty(capture))
+            return "";
+
+        String sid = session.getId();
+        List<ElementModel> list = elementService.list(editorId);
+
+        return asyncService.submit(ScreenshotModel.NAME + ".capture", "", 2 * (list.size() + 1) * wait, () -> {
+            EditorModel editor = editorService.findById(editorId);
+            Map<String, String> map = new HashMap<>();
+            Map<String, Integer> index = new HashMap<>();
+            JSONArray array = new JSONArray();
+            list.forEach(element -> {
+                capture(sid, editorId, element.getId(), editor.getWidth(), editor.getHeight(), map, index);
+                String uri = map.get(element.getId());
+                if (!validator.isEmpty(uri))
+                    array.add(uri);
+            });
+
+            return array.toJSONString();
         });
     }
 
