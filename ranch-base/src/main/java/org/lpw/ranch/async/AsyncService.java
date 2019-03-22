@@ -62,4 +62,13 @@ public interface AsyncService {
      * @return 执行状态与结果。
      */
     JSONObject find(String id);
+
+    /**
+     * 等待结果。
+     *
+     * @param id   ID值。
+     * @param time 等待时长，单位：秒。
+     * @return 执行结果，失败返回null。
+     */
+    String wait(String id, int time);
 }

@@ -14,6 +14,7 @@ import org.lpw.tephra.util.Generator;
 import org.lpw.tephra.util.Io;
 import org.lpw.tephra.util.Logger;
 import org.lpw.tephra.util.Numeric;
+import org.lpw.tephra.util.Thread;
 import org.lpw.tephra.util.TimeUnit;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -50,6 +51,8 @@ public class AsyncServiceImpl implements AsyncService, SecondsJob, MinuteJob, Ho
     private Logger logger;
     @Inject
     private Cache cache;
+    @Inject
+    private Thread thread;
     @Inject
     private AsyncDao asyncDao;
     @Value("${" + AsyncModel.NAME + ".size:64}")
@@ -102,6 +105,19 @@ public class AsyncServiceImpl implements AsyncService, SecondsJob, MinuteJob, Ho
         }
 
         return object;
+    }
+
+    @Override
+    public String wait(String id, int time) {
+        for (int i = 0; i < time; i++) {
+            thread.sleep(1, TimeUnit.Second);
+            JSONObject object = find(id);
+            int state = object.getIntValue("state");
+            if (state > 0)
+                return state == 1 ? object.getString("result") : null;
+        }
+
+        return null;
     }
 
     @Override
