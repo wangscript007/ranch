@@ -7,7 +7,7 @@ CREATE TABLE t_comment
   c_author CHAR(36) NOT NULL COMMENT '作者ID',
   c_subject VARCHAR(255) DEFAULT NULL COMMENT '标题',
   c_label VARCHAR(255) DEFAULT NULL COMMENT '标签',
-  c_content TEXT CHARACTER SET utf8mb4 DEFAULT NULL COMMENT '内容',
+  c_content TEXT DEFAULT NULL COMMENT '内容',
   c_score INT DEFAULT 0 COMMENT '评分',
   c_praise INT DEFAULT 0 COMMENT '点赞数',
   c_time DATETIME NOT NULL COMMENT '时间',
@@ -19,4 +19,4 @@ CREATE TABLE t_comment
   KEY k_audit(c_recycle,c_audit,c_time) USING BTREE,
   KEY k_audit_owner(c_recycle,c_audit,c_owner,c_time) USING BTREE,
   KEY k_author(c_recycle,c_author,c_time) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

@@ -16,4 +16,4 @@ CREATE TABLE t_access
   KEY k_uri(c_uri) USING BTREE,
   KEY k_user(c_user) USING HASH,
   KEY k_time(c_time) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

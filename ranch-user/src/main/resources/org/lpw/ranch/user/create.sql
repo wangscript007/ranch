@@ -6,7 +6,7 @@ CREATE TABLE t_user
   c_secret CHAR(32) DEFAULT NULL COMMENT '安全密码',
   c_idcard VARCHAR(255) DEFAULT NULL COMMENT '身份证号',
   c_name VARCHAR(255) DEFAULT NULL COMMENT '姓名',
-  c_nick VARCHAR(255) CHARACTER SET utf8mb4 DEFAULT NULL COMMENT '昵称',
+  c_nick VARCHAR(255) DEFAULT NULL COMMENT '昵称',
   c_mobile VARCHAR(255) DEFAULT NULL COMMENT '手机号',
   c_email VARCHAR(255) DEFAULT NULL COMMENT 'Email地址',
   c_portrait VARCHAR(255) DEFAULT NULL COMMENT '头像',
@@ -23,7 +23,7 @@ CREATE TABLE t_user
   KEY k_mobile(c_mobile) USING HASH,
   UNIQUE KEY uk_code(c_code) USING HASH,
   KEY k_register(c_register) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 INSERT INTO t_user(c_id,c_password,c_code,c_grade) VALUES('00000000-0000-0000-0000-000000000000','','00000000',99);
 INSERT INTO t_user(c_id,c_password,c_code,c_grade) VALUES('99999999-9999-9999-9999-999999999999','','99999999',99);

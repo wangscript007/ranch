@@ -14,4 +14,4 @@ CREATE TABLE t_dbtool_schema
   c_tables INT DEFAULT 0 COMMENT '表数量',
 
   PRIMARY KEY pk(c_id) USING HASH
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

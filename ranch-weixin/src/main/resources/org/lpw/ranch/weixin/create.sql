@@ -16,7 +16,7 @@ CREATE TABLE t_weixin
   PRIMARY KEY pk(c_id) USING HASH,
   UNIQUE KEY uk_key(c_key) USING HASH,
   UNIQUE KEY uk_app_id(c_app_id) USING HASH
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 DROP TABLE IF EXISTS m_weixin;
 CREATE TABLE m_weixin
@@ -36,4 +36,4 @@ CREATE TABLE m_weixin
   PRIMARY KEY pk(c_id) USING HASH,
   UNIQUE KEY uk_key(c_key) USING HASH,
   UNIQUE KEY uk_app_id(c_app_id) USING HASH
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

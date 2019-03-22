@@ -16,4 +16,4 @@ CREATE TABLE t_doc_topic
   PRIMARY KEY pk(c_id) USING HASH,
   KEY k_doc(c_doc) USING HASH,
   KEY k_classify(c_classify) USING HASH
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

@@ -28,4 +28,4 @@ CREATE TABLE t_doc
   PRIMARY KEY pk(c_id) USING HASH,
   KEY k_recycle_audit(c_recycle,c_audit) USING BTREE,
   KEY k_recycle_author(c_recycle,c_author,c_modify) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

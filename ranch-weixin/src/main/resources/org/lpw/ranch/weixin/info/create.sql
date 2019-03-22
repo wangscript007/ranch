@@ -11,4 +11,4 @@ CREATE TABLE t_weixin_info
   PRIMARY KEY pk(c_id) USING HASH,
   KEY k_union_id(c_union_id) USING HASH,
   UNIQUE KEY uk_open_id(c_open_id) USING HASH
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

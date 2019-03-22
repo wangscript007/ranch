@@ -12,4 +12,4 @@ CREATE TABLE t_weixin_reply
 
   PRIMARY KEY pk(c_id) USING HASH,
   KEY k_key(c_key) USING HASH
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

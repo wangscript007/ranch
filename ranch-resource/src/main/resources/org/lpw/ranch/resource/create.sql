@@ -21,4 +21,4 @@ CREATE TABLE t_resource
   KEY k_name(c_name) USING HASH,
   KEY k_state(c_state) USING HASH,
   KEY k_user(c_user) USING HASH
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

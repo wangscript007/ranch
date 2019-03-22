@@ -14,4 +14,4 @@ CREATE TABLE t_message
   PRIMARY KEY pk(c_id) USING HASH,
   KEY k_time(c_time) USING BTREE,
   UNIQUE KEY uk_code(c_code) USING HASH
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

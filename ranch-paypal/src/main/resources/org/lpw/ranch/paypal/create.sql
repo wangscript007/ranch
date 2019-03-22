@@ -10,4 +10,4 @@ CREATE TABLE t_paypal
   PRIMARY KEY pk(c_id) USING HASH,
   UNIQUE KEY uk_key(c_key) USING HASH,
   UNIQUE KEY uk_app_id(c_app_id) USING HASH
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

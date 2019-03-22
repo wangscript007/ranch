@@ -21,4 +21,4 @@ CREATE TABLE t_transfer
   KEY k_start_state(c_start,c_state) USING BTREE,
   KEY k_bill_no(c_bill_no) USING HASH,
   KEY k_trade_no(c_trade_no) USING HASH
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

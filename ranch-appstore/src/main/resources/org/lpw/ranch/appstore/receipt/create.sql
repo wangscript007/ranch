@@ -10,4 +10,4 @@ CREATE TABLE t_appstore_receipt
 
   PRIMARY KEY pk(c_id) USING HASH,
   KEY k_user(c_user) USING HASH
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

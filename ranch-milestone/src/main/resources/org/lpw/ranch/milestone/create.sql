@@ -9,4 +9,4 @@ CREATE TABLE t_milestone
 
   PRIMARY KEY pk(c_id) USING HASH,
   UNIQUE KEY uk_user_type(c_user,c_type) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

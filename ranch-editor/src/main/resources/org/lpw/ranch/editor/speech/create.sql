@@ -18,4 +18,4 @@ CREATE TABLE t_editor_speech
   PRIMARY KEY pk(c_id) USING HASH,
   KEY k_user_time(c_user,c_time) USING BTREE,
   KEY k_time(c_time) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

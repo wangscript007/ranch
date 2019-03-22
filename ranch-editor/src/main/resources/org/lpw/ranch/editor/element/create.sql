@@ -12,4 +12,4 @@ CREATE TABLE t_editor_element
 
   PRIMARY KEY pk(c_id) USING HASH,
   KEY k_editor_parent(c_editor,c_parent) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

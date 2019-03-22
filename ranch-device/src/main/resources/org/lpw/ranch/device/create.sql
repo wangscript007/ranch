@@ -12,4 +12,4 @@ CREATE TABLE t_device
   PRIMARY KEY pk(c_id) USING HASH,
   UNIQUE KEY uk_app_code_mac_id(c_app_code,c_mac_id) USING BTREE,
   KEY k_app_code_type(c_app_code,c_type) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

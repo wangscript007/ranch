@@ -15,4 +15,4 @@ CREATE TABLE t_appstore_transaction
   KEY k_user(c_user) USING HASH,
   UNIQUE KEY uk_transaction_id(c_transaction_id) USING HASH,
   KEY k_product_id(c_product_id) USING HASH
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

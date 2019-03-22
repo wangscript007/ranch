@@ -11,4 +11,4 @@ CREATE TABLE t_dbtool_column
 
   PRIMARY KEY pk(c_id) USING HASH,
   KEY k_table(c_table) USING HASH
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

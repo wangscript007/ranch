@@ -15,7 +15,7 @@ CREATE TABLE m_lock
   PRIMARY KEY pk(c_id) USING HASH,
   KEY k_key(c_key) USING HASH,
   UNIQUE KEY uk_index(c_index)
-) ENGINE=Memory AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+) ENGINE=Memory AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;
 ```
 
 2、设置数据源key：

@@ -18,4 +18,4 @@ CREATE TABLE t_paypal_transaction
   UNIQUE KEY uk_order_no(c_order_no) USING HASH,
   UNIQUE KEY uk_trade_no(c_trade_no) USING HASH,
   KEY k_create(c_create) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

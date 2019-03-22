@@ -8,4 +8,4 @@ CREATE TABLE t_appstore
 
   PRIMARY KEY pk(c_id) USING HASH,
   UNIQUE KEY uk_product_id(c_product_id) USING HASH
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

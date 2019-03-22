@@ -9,4 +9,4 @@ CREATE TABLE t_editor_screenshot
 
   PRIMARY KEY pk(c_id) USING HASH,
   KEY k_editor(c_editor) USING HASH
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

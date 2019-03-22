@@ -10,4 +10,4 @@ CREATE TABLE t_friend
 
   PRIMARY KEY pk(c_id) USING HASH,
   KEY k_owner(c_owner) USING HASH
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

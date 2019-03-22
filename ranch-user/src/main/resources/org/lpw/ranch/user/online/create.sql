@@ -10,7 +10,7 @@ CREATE TABLE t_user_online
 
   PRIMARY KEY pk(c_id) USING HASH,
   UNIQUE KEY uk_sid(c_sid) USING HASH
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 DROP TABLE IF EXISTS m_user_online;
 CREATE TABLE m_user_online
@@ -24,4 +24,4 @@ CREATE TABLE m_user_online
 
   PRIMARY KEY pk(c_id) USING HASH,
   UNIQUE KEY uk_sid(c_sid) USING HASH
-) ENGINE=Memory DEFAULT CHARSET=utf8;
+) ENGINE=Memory DEFAULT CHARSET=utf8mb4;

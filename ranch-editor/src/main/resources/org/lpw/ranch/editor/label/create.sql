@@ -8,4 +8,4 @@ CREATE TABLE t_editor_label
   PRIMARY KEY pk(c_id) USING HASH,
   KEY k_editor(c_editor) USING HASH,
   KEY k_name(c_name) USING HASH
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

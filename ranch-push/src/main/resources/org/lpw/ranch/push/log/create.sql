@@ -16,4 +16,4 @@ CREATE TABLE t_push_log
   KEY k_receiver_time(c_receiver,c_time) USING BTREE,
   KEY k_app_code_time(c_app_code,c_time) USING BTREE,
   KEY k_sender_time(c_sender,c_time) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

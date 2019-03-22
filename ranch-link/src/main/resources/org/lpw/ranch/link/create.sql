@@ -12,4 +12,4 @@ CREATE TABLE t_link
   UNIQUE KEY uk_type_id1_id2(c_type,c_id1,c_id2) USING HASH,
   KEY k_type_id1_time(c_type,c_id1,c_time) USING BTREE,
   KEY k_type_id2_time(c_type,c_id2,c_time) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

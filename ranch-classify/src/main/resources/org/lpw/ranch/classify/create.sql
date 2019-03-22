@@ -11,4 +11,4 @@ CREATE TABLE t_classify
 
   PRIMARY KEY pk(c_id) USING HASH,
   KEY k_code_key(c_recycle,c_code,c_key) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

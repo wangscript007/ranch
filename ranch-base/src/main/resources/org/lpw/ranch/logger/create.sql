@@ -30,4 +30,4 @@ CREATE TABLE t_logger
   KEY k_p9(c_p9) USING HASH,
   KEY k_state(c_state) USING BTREE,
   KEY k_time(c_time) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

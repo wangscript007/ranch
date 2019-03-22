@@ -9,4 +9,4 @@ CREATE TABLE t_last
 
   PRIMARY KEY pk(c_id) USING HASH,
   UNIQUE KEY uk_user_type(c_user,c_type)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

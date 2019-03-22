@@ -10,4 +10,4 @@ CREATE TABLE t_push_aliyun
 
   PRIMARY KEY pk(c_id) USING HASH,
   UNIQUE KEY uk_app_code(c_app_code) USING HASH
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

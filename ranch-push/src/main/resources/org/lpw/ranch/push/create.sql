@@ -15,4 +15,4 @@ CREATE TABLE t_push
 
   PRIMARY KEY pk(c_id) USING HASH,
   KEY k_key_state(c_key,c_state) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

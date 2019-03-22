@@ -26,4 +26,4 @@ CREATE TABLE t_editor
   KEY k_template(c_type) USING HASH,
   KEY k_type(c_type) USING HASH,
   KEY k_state(c_state) USING HASH
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

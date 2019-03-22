@@ -11,4 +11,4 @@ CREATE TABLE t_shortcut
   PRIMARY KEY pk(c_id) USING HASH,
   UNIQUE KEY uk_code(c_code) USING HASH,
   UNIQUE KEY uk_md5_length(c_md5,c_length) USING HASH
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

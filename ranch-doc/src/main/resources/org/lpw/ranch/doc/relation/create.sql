@@ -9,4 +9,4 @@ CREATE TABLE t_doc_relation
 
   PRIMARY KEY pk(c_id) USING HASH,
   KEY k_doc(c_doc) USING HASH
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
