@@ -195,6 +195,25 @@
 
 [截图集](doc/screenshot/images.md)
 
+## 价格
+
+属性
+
+|属性|类型|说明|
+|---|---|---|
+|type|char(100)|类型。|
+|group|char(100)|分组。|
+|amount|int|价格，单位：分。|
+|vip|int|VIP价格，单位：分。|
+|limited|int|限时价格，单位：分。|
+|time|datetime|限时时间。|
+
+[检索](doc/price/query.md)
+
+[保存](doc/price/save.md)
+
+[删除](doc/price/delete.md)
+
 ## 在线演示
 
 属性
