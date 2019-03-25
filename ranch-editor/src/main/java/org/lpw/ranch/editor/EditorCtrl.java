@@ -66,7 +66,6 @@ public class EditorCtrl {
             @Validate(validator = RoleService.VALIDATOR_INTERVAL, parameter = "id", failureCode = 14),
             @Validate(validator = RoleService.VALIDATOR_CREATABLE, parameter = "id", failureCode = 12),
             @Validate(validator = EditorService.VALIDATOR_EXISTS, emptyable = true, parameter = "id", failureCode = 2),
-            @Validate(validator = EditorService.VALIDATOR_EDITABLE, emptyable = true, parameter = "id", failureCode = 11),
             @Validate(validator = RoleService.VALIDATOR_OWNER, emptyable = true, parameter = "id", failureCode = 50),
             @Validate(validator = RoleService.VALIDATOR_PASSWORD, parameters = {"user", "id", "password"}, failureCode = 49)
     })
@@ -83,7 +82,6 @@ public class EditorCtrl {
             @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "group", failureCode = 18),
             @Validate(validator = UserHelper.VALIDATOR_SIGN_IN),
             @Validate(validator = EditorService.VALIDATOR_EXISTS, parameter = "id", failureCode = 2),
-            @Validate(validator = EditorService.VALIDATOR_EDITABLE, parameter = "id", failureCode = 11),
             @Validate(validator = RoleService.VALIDATOR_OWNER, parameter = "id", failureCode = 50),
             @Validate(validator = RoleService.VALIDATOR_PASSWORD, parameters = {"user", "id", "password"}, failureCode = 49)
     })
@@ -114,7 +112,6 @@ public class EditorCtrl {
             @Validate(validator = Validators.ID, parameter = "id", failureCode = 1),
             @Validate(validator = UserHelper.VALIDATOR_SIGN_IN),
             @Validate(validator = EditorService.VALIDATOR_EXISTS, parameter = "id", failureCode = 2),
-            @Validate(validator = EditorService.VALIDATOR_EDITABLE, parameter = "id", failureCode = 11),
             @Validate(validator = RoleService.VALIDATOR_EDITABLE, parameter = "id", failureCode = 41)
     })
     public Object image() {
