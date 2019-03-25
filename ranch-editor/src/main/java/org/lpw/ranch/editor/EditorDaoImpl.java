@@ -86,9 +86,17 @@ class EditorDaoImpl implements EditorDao {
         daoHelper.where(where, args, "c_type", DaoOperation.Equals, type);
         daoHelper.where(where, args, "c_template", DaoOperation.Greater, 0);
         daoHelper.where(where, args, "c_group", DaoOperation.Equals, group);
+        Object[] objects = new Object[4 + args.size()];
+        int i = 0;
+        objects[i++] = price;
+        objects[i++] = vipPrice;
+        objects[i++] = limitedPrice;
+        objects[i++] = limitedTime;
+        for (Object object : args)
+            objects[i++] = object;
 
         liteOrm.update(new LiteQuery(EditorModel.class).set("c_price=?,c_vip_price=?,c_limited_price=?,c_limited_time=?")
-                .where(where.toString()), args.toArray());
+                .where(where.toString()), objects);
     }
 
     @Override
