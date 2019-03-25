@@ -579,7 +579,7 @@ public class EditorServiceImpl implements EditorService, HourJob, DateJob {
             return;
 
         for (String type : converter.toArray(templateTypes, ","))
-            for (int i = 1; i <= 2; i++)
+            for (int i = 1; i <= 3; i++)
                 setSearchIndex(type, i);
 
         lockHelper.unlock(lockId);
