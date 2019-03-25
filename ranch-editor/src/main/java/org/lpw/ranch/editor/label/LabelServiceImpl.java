@@ -1,5 +1,6 @@
 package org.lpw.ranch.editor.label;
 
+import org.lpw.ranch.editor.EditorService;
 import org.lpw.tephra.util.Converter;
 import org.lpw.tephra.util.Validator;
 import org.springframework.stereotype.Service;
@@ -20,6 +21,8 @@ public class LabelServiceImpl implements LabelService {
     private Converter converter;
     @Inject
     private Validator validator;
+    @Inject
+    private EditorService editorService;
     @Inject
     private LabelDao labelDao;
 
@@ -81,5 +84,6 @@ public class LabelServiceImpl implements LabelService {
         Map<String, StringBuilder> map = new HashMap<>();
         labelDao.query(editors).getList().forEach(label ->
                 map.computeIfAbsent(label.getEditor(), editor -> new StringBuilder()).append(',').append(label.getName()));
+        editorService.labels(map);
     }
 }

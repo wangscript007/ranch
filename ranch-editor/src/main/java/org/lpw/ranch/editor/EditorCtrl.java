@@ -26,10 +26,11 @@ public class EditorCtrl {
     })
     public Object query() {
         return editorService.query(request.get("user"), request.get("uid"), request.get("mobile"), request.get("email"), request.get("nick"),
-                request.getAsInt("template", -1), request.get("type"), request.get("name"),
-                request.get("label"), request.getAsInt("modified", -1), request.getAsArray("states"),
-                request.get("createStart"), request.get("createEnd"), request.get("modifyStart"), request.get("modifyEnd"),
-                Order.find(request.get("order"), Order.Newest));
+                request.getAsInt("template", -1), request.get("type"), request.get("name"), request.get("label"),
+                request.get("group"), request.getAsInt("price", -1), request.getAsInt("vipPrice", -1),
+                request.getAsInt("limitedPrice", -1), request.getAsInt("modified", -1),
+                request.getAsArray("states"), request.get("createStart"), request.get("createEnd"),
+                request.get("modifyStart"), request.get("modifyEnd"), Order.find(request.get("order"), Order.Newest));
     }
 
     @Execute(name = "query-user", validates = {
@@ -60,6 +61,7 @@ public class EditorCtrl {
             @Validate(validator = Validators.GREATER_THAN, number = {0}, parameter = "width", failureCode = 8),
             @Validate(validator = Validators.GREATER_THAN, number = {0}, parameter = "height", failureCode = 9),
             @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "image", failureCode = 10),
+            @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "group", failureCode = 18),
             @Validate(validator = UserHelper.VALIDATOR_SIGN_IN),
             @Validate(validator = RoleService.VALIDATOR_INTERVAL, parameter = "id", failureCode = 14),
             @Validate(validator = RoleService.VALIDATOR_CREATABLE, parameter = "id", failureCode = 12),
@@ -78,6 +80,7 @@ public class EditorCtrl {
             @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "name", failureCode = 6),
             @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "label", failureCode = 7),
             @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "image", failureCode = 10),
+            @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "group", failureCode = 18),
             @Validate(validator = UserHelper.VALIDATOR_SIGN_IN),
             @Validate(validator = EditorService.VALIDATOR_EXISTS, parameter = "id", failureCode = 2),
             @Validate(validator = EditorService.VALIDATOR_EDITABLE, parameter = "id", failureCode = 11),
@@ -86,6 +89,16 @@ public class EditorCtrl {
     })
     public Object modify() {
         return editorService.modify(request.setToModel(EditorModel.class), request.getAsInt("template", -1));
+    }
+
+    @Execute(name = "price", validates = {
+            @Validate(validator = Validators.SIGN)
+    })
+    public Object price() {
+        editorService.price(request.getAsArray("ids"), request.get("type"), request.get("group"), request.getAsInt("price"),
+                request.getAsInt("vipPrice"), request.getAsInt("limitedPrice"), request.getAsTimestamp("limitedTime"));
+
+        return "";
     }
 
     @Execute(name = "sort", validates = {
@@ -175,7 +188,8 @@ public class EditorCtrl {
     })
     public Object search() {
         return editorService.searchTemplate(request.get("type"), request.getAsInt("template"), request.getAsArray("labels"),
-                request.getAsArray("words"), Order.find(request.get("order"), Order.Hot));
+                request.getAsArray("words"), request.getAsBoolean("free"), request.getAsBoolean("vipFree"),
+                request.getAsBoolean("limitedFree"), Order.find(request.get("order"), Order.Hot));
     }
 
     @Execute(name = "reset-search-index", validates = {

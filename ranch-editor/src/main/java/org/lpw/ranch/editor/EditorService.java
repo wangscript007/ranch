@@ -2,6 +2,7 @@ package org.lpw.ranch.editor;
 
 import com.alibaba.fastjson.JSONObject;
 
+import java.sql.Timestamp;
 import java.util.Map;
 
 /**
@@ -24,26 +25,31 @@ public interface EditorService {
     /**
      * 检索编辑器信息集。
      *
-     * @param user        用户ID。
-     * @param uid         UID。
-     * @param mobile      用户手机号。
-     * @param email       用户Email。
-     * @param nick        用户昵称。
-     * @param template    模板。
-     * @param type        类型。
-     * @param name        名称。
-     * @param label       关键词。
-     * @param modified    最小已修改根节点数。
-     * @param states      状态集。
-     * @param createStart 创建开始日期，格式：yyyy-MM-dd。
-     * @param createEnd   创建结束日期，格式：yyyy-MM-dd。
-     * @param modifyStart 编辑开始日期，格式：yyyy-MM-dd。
-     * @param modifyEnd   编辑结束日期，格式：yyyy-MM-dd。
-     * @param order       排序规则。
+     * @param user         用户ID。
+     * @param uid          UID。
+     * @param mobile       用户手机号。
+     * @param email        用户Email。
+     * @param nick         用户昵称。
+     * @param template     模板。
+     * @param type         类型。
+     * @param name         名称。
+     * @param label        标签。
+     * @param group        分组。
+     * @param price        价格。
+     * @param vipPrice     VIP价格。
+     * @param limitedPrice 限时价格。
+     * @param modified     最小已修改根节点数。
+     * @param states       状态集。
+     * @param createStart  创建开始日期，格式：yyyy-MM-dd。
+     * @param createEnd    创建结束日期，格式：yyyy-MM-dd。
+     * @param modifyStart  编辑开始日期，格式：yyyy-MM-dd。
+     * @param modifyEnd    编辑结束日期，格式：yyyy-MM-dd。
+     * @param order        排序规则。
      * @return 编辑器信息集。
      */
     JSONObject query(String user, String uid, String mobile, String email, String nick, int template, String type, String name, String label,
-                     int modified, String[] states, String createStart, String createEnd, String modifyStart, String modifyEnd, Order order);
+                     String group, int price, int vipPrice, int limitedPrice, int modified, String[] states, String createStart, String createEnd,
+                     String modifyStart, String modifyEnd, Order order);
 
     /**
      * 检索当前用户编辑器信息集。
@@ -162,6 +168,19 @@ public interface EditorService {
     void labels(Map<String, StringBuilder> map);
 
     /**
+     * 设置价格。
+     *
+     * @param ids          ID集。
+     * @param type         类型。
+     * @param group        分组。
+     * @param price        价格，单位：分。
+     * @param vipPrice     VIP价格，单位：分。
+     * @param limitedPrice 限时价格，单位：分。
+     * @param limitedTime  限时时间。
+     */
+    void price(String[] ids, String type, String group, int price, int vipPrice, int limitedPrice, Timestamp limitedTime);
+
+    /**
      * 修改顺序。
      *
      * @param type  类型。
@@ -187,14 +206,18 @@ public interface EditorService {
     /**
      * 搜索模板信息集。
      *
-     * @param type     类型。
-     * @param template 模板。
-     * @param labels   标签集。
-     * @param words    关键词集。
-     * @param order    排序规则。
+     * @param type        类型。
+     * @param template    模板。
+     * @param labels      标签集。
+     * @param words       关键词集。
+     * @param free        是否免费。
+     * @param vipFree     是否会员免费。
+     * @param limitedFree 是否限时免费。
+     * @param order       排序规则。
      * @return 编辑器信息集。
      */
-    JSONObject searchTemplate(String type, int template, String[] labels, String[] words, Order order);
+    JSONObject searchTemplate(String type, int template, String[] labels, String[] words, boolean free, boolean vipFree, boolean limitedFree,
+                              Order order);
 
     /**
      * 重建搜索索引。

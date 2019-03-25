@@ -116,15 +116,15 @@ public class EditorServiceImpl implements EditorService, HourJob, DateJob {
     private Set<Integer> onsaleState = Collections.singleton(3);
 
     @Override
-    public JSONObject query(String user, String uid, String mobile, String email, String nick, int template, String type,
-                            String name, String label, int modified, String[] states, String createStart, String createEnd,
-                            String modifyStart, String modifyEnd, Order order) {
+    public JSONObject query(String user, String uid, String mobile, String email, String nick, int template, String type, String name, String label,
+                            String group, int price, int vipPrice, int limitedPrice, int modified, String[] states,
+                            String createStart, String createEnd, String modifyStart, String modifyEnd, Order order) {
         Set<String> ids = ids(user, uid, mobile, email, nick);
         if (ids != null && ids.isEmpty())
             return BeanFactory.getBean(PageList.class).setPage(0, 0, 0).toJson();
 
-        return editorDao.query(ids, template, type, name, label, modified, getStates(states), dateTime.getStart(createStart),
-                dateTime.getEnd(createEnd), dateTime.getStart(modifyStart), dateTime.getEnd(modifyEnd), order,
+        return editorDao.query(ids, template, type, name, label, group, price, vipPrice, limitedPrice, null, modified, getStates(states),
+                dateTime.getStart(createStart), dateTime.getEnd(createEnd), dateTime.getStart(modifyStart), dateTime.getEnd(modifyEnd), order,
                 pagination.getPageSize(20), pagination.getPageNum()).toJson((editor, object) -> {
             RoleModel role = roleService.findOwner(editor.getId());
             if (role != null)
@@ -192,6 +192,7 @@ public class EditorServiceImpl implements EditorService, HourJob, DateJob {
         model.setImage(editor.getImage());
         if (!validator.isEmpty(editor.getScreenshot()))
             model.setScreenshot(editor.getScreenshot());
+        model.setGroup(editor.getGroup());
         if (!validator.isEmpty(editor.getSource()))
             model.setSource(editor.getSource());
         model.setJson(editor.getJson());
@@ -223,6 +224,8 @@ public class EditorServiceImpl implements EditorService, HourJob, DateJob {
             model.setHeight(editor.getHeight());
         if (!validator.isEmpty(editor.getImage()))
             model.setImage(editor.getImage());
+        if (!validator.isEmpty(editor.getGroup()))
+            model.setGroup(editor.getGroup());
         if (!validator.isEmpty(editor.getJson()))
             model.setJson(editor.getJson());
         save(model, 0, null, false);
@@ -374,6 +377,12 @@ public class EditorServiceImpl implements EditorService, HourJob, DateJob {
     }
 
     @Override
+    public void price(String[] ids, String type, String group, int price, int vipPrice, int limitedPrice, Timestamp limitedTime) {
+        editorDao.price(ids, type, group, price, vipPrice, limitedPrice, limitedTime);
+        resetRandom(type);
+    }
+
+    @Override
     public void sort(String type, String[] ids, String[] sorts) {
         if (validator.isEmpty(ids) || validator.isEmpty(sorts) || ids.length != sorts.length)
             return;
@@ -422,15 +431,16 @@ public class EditorServiceImpl implements EditorService, HourJob, DateJob {
     }
 
     @Override
-    public JSONObject searchTemplate(String type, int template, String[] labels, String[] words, Order order) {
+    public JSONObject searchTemplate(String type, int template, String[] labels, String[] words, boolean free, boolean vipFree,
+                                     boolean limitedFree, Order order) {
         int pageSize = pagination.getPageSize(20);
         if (validator.isEmpty(labels) && validator.isEmpty(words))
-            return searchTemplate(type, template, order, pageSize);
+            return searchTemplate(type, template, free, vipFree, limitedFree, order, pageSize);
 
         popular(type, template, true, labels);
         popular(type, template, false, words);
-        String cacheKey = getSearchCacheKey(type, template, converter.toString(labels) + ":" + converter.toString(words) + ":" + order
-                + ":" + pageSize + ":" + pagination.getPageNum());
+        String cacheKey = getSearchCacheKey(type, template, converter.toString(labels) + ":" + converter.toString(words)
+                + ":" + free + ":" + vipFree + ":" + limitedFree + ":" + order + ":" + pageSize + ":" + pagination.getPageNum());
         JSONObject object = cache.get(cacheKey);
         if (object != null)
             return object;
@@ -458,8 +468,9 @@ public class EditorServiceImpl implements EditorService, HourJob, DateJob {
             }
         }
 
-        object = editorDao.query(ids, template, type, null, null, -1, onsaleState, null,
-                null, null, null, order, pageSize, pagination.getPageNum()).toJson();
+        object = editorDao.query(ids, template, type, null, null, null, free ? 0 : -1, vipFree ? 0 : -1, limitedFree ? 0 : -1,
+                limitedFree ? dateTime.now() : null, -1, onsaleState, null, null, null, null,
+                order, pageSize, pagination.getPageNum()).toJson();
         cache.put(cacheKey, object, false);
 
         return object;
@@ -479,13 +490,14 @@ public class EditorServiceImpl implements EditorService, HourJob, DateJob {
         popularService.increase(EditorModel.NAME + ":" + type + ":" + template + (label ? ":label" : ":word"), values);
     }
 
-    private JSONObject searchTemplate(String type, int template, Order order, int pageSize) {
-        String cacheKey = getSearchCacheKey(type, template, order + ":" + pageSize + ":" + pagination.getPageNum());
+    private JSONObject searchTemplate(String type, int template, boolean free, boolean vipFree, boolean limitedFree, Order order, int pageSize) {
+        String cacheKey = getSearchCacheKey(type, template, free + ":" + vipFree + ":" + limitedFree + ":" + order
+                + ":" + pageSize + ":" + pagination.getPageNum());
         JSONObject object = cache.get(cacheKey);
         if (object == null)
-            cache.put(cacheKey, object = editorDao.query(null, template, type, null, null, -1, onsaleState,
-                    null, null, null, null, order, pageSize,
-                    pagination.getPageNum()).toJson(), false);
+            cache.put(cacheKey, object = editorDao.query(null, template, type, null, null, null, free ? 0 : -1,
+                    vipFree ? 0 : -1, limitedFree ? 0 : -1, limitedFree ? dateTime.now() : null, -1, onsaleState, null,
+                    null, null, null, order, pageSize, pagination.getPageNum()).toJson(), false);
 
         return object;
     }

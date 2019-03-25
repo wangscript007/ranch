@@ -32,6 +32,7 @@ public class EditorModel extends ModelSupport {
     private int height; // 高度
     private String image; // 预览图
     private String screenshot; // 主截图
+    private String group; // 分组
     private int price; // 价格，单位：分
     private int vipPrice; // VIP价格，单位：分
     private int limitedPrice; // 限时价格，单位：分
@@ -153,6 +154,16 @@ public class EditorModel extends ModelSupport {
 
     public void setScreenshot(String screenshot) {
         this.screenshot = screenshot;
+    }
+
+    @Jsonable
+    @Column(name = "c_group")
+    public String getGroup() {
+        return group;
+    }
+
+    public void setGroup(String group) {
+        this.group = group;
     }
 
     @Jsonable

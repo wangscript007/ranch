@@ -9,9 +9,9 @@ import java.util.Set;
  * @author lpw
  */
 interface EditorDao {
-    PageList<EditorModel> query(Set<String> ids, int template, String type, String name, String label, int modified, Set<Integer> states,
-                                Timestamp createStart, Timestamp createEnd, Timestamp modifyStart, Timestamp modifyEnd,
-                                Order order, int pageSize, int pageNum);
+    PageList<EditorModel> query(Set<String> ids, int template, String type, String name, String label, String group, int price, int vipPrice,
+                                int limitedPrice, Timestamp limitedTime, int modified, Set<Integer> states, Timestamp createStart,
+                                Timestamp createEnd, Timestamp modifyStart, Timestamp modifyEnd, Order order, int pageSize, int pageNum);
 
     PageList<EditorModel> query(int template, String type, int state, int pageSize, int pageNum);
 
@@ -20,6 +20,8 @@ interface EditorDao {
     EditorModel findById(String id);
 
     void save(EditorModel editor);
+
+    void price(String[] ids, String type, String group, int price, int vipPrice, int limitedPrice, Timestamp limitedTime);
 
     void sort(String id, String type, int sort);
 }
