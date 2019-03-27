@@ -7,6 +7,15 @@ import com.alibaba.fastjson.JSONObject;
  */
 public interface PriceService {
     /**
+     * 是否存在验证器Bean名称。
+     */
+    String VALIDATOR_EXISTS = PriceModel.NAME + ".validator.exists";
+    /**
+     * 分组是否不存在验证器Bean名称。
+     */
+    String VALIDATOR_GROUP_NOT_EXISTS = PriceModel.NAME + ".validator.group.not-exists";
+
+    /**
      * 检索。
      *
      * @param type  类型。

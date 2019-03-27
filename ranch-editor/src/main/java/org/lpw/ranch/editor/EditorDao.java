@@ -19,9 +19,13 @@ interface EditorDao {
 
     EditorModel findById(String id);
 
+    EditorModel findByGroup(String group);
+
     void save(EditorModel editor);
 
     void price(String[] ids, String type, String group, int price, int vipPrice, int limitedPrice, Timestamp limitedTime);
+
+    void group(String oldGroup, String newGroup);
 
     void sort(String id, String type, int sort);
 }

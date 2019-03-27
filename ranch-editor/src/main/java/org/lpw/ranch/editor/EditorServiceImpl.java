@@ -112,6 +112,7 @@ public class EditorServiceImpl implements EditorService, HourJob, DateJob {
     private String pdfVip;
     @Value("${" + EditorModel.NAME + ".template-types:}")
     private String templateTypes;
+    private Set<String> templateTypeSet;
     private Map<String, String> random = new ConcurrentHashMap<>();
     private Set<Integer> onsaleState = Collections.singleton(3);
 
@@ -171,6 +172,16 @@ public class EditorServiceImpl implements EditorService, HourJob, DateJob {
     @Override
     public JSONObject find(String id) {
         return toJson(findById(id));
+    }
+
+    @Override
+    public boolean existsType(String type) {
+        return getTemplateTypes().contains(type);
+    }
+
+    @Override
+    public boolean notExistsGroup(String group) {
+        return editorDao.findByGroup(group) == null;
     }
 
     @Override
@@ -383,6 +394,11 @@ public class EditorServiceImpl implements EditorService, HourJob, DateJob {
     }
 
     @Override
+    public void group(String oldGroup, String newGroup) {
+        editorDao.group(oldGroup, newGroup);
+    }
+
+    @Override
     public void sort(String type, String[] ids, String[] sorts) {
         if (validator.isEmpty(ids) || validator.isEmpty(sorts) || ids.length != sorts.length)
             return;
@@ -515,9 +531,6 @@ public class EditorServiceImpl implements EditorService, HourJob, DateJob {
 
     @Override
     public String resetSearchIndex(String type, int template) {
-        if (!templateTypes.contains(type))
-            return "";
-
         return asyncService.submit(EditorModel.NAME + ".reset-search-index", type + "." + template, 60 * 60, () -> {
             setSearchIndex(type, template);
 
@@ -571,18 +584,26 @@ public class EditorServiceImpl implements EditorService, HourJob, DateJob {
 
     @Override
     public void executeDateJob() {
-        if (validator.isEmpty(templateTypes))
-            return;
-
         String lockId = lockHelper.lock(EditorModel.NAME + ".date", 100L, 3600);
         if (lockId == null)
             return;
 
-        for (String type : converter.toArray(templateTypes, ","))
+        getTemplateTypes().forEach(type -> {
             for (int i = 1; i <= 3; i++)
                 setSearchIndex(type, i);
-
+        });
         lockHelper.unlock(lockId);
+    }
+
+    private Set<String> getTemplateTypes() {
+        if (templateTypeSet == null) {
+            templateTypeSet = new HashSet<>();
+            for (String type : converter.toArray(templateTypes, ","))
+                if (!validator.isEmpty(type))
+                    templateTypeSet.add(type);
+        }
+
+        return templateTypeSet;
     }
 
     private void setSearchIndex(String type, int template) {

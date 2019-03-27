@@ -72,6 +72,11 @@ class EditorDaoImpl implements EditorDao {
     }
 
     @Override
+    public EditorModel findByGroup(String group) {
+        return liteOrm.findOne(new LiteQuery(EditorModel.class).where("c_group=? and c_template>0"), new Object[]{group});
+    }
+
+    @Override
     public void save(EditorModel editor) {
         liteOrm.save(editor);
         liteOrm.close();
@@ -97,6 +102,11 @@ class EditorDaoImpl implements EditorDao {
 
         liteOrm.update(new LiteQuery(EditorModel.class).set("c_price=?,c_vip_price=?,c_limited_price=?,c_limited_time=?")
                 .where(where.toString()), objects);
+    }
+
+    @Override
+    public void group(String oldGroup, String newGroup) {
+        liteOrm.update(new LiteQuery(EditorModel.class).set("c_group=?").where("c_group=?"), new Object[]{newGroup, oldGroup});
     }
 
     @Override

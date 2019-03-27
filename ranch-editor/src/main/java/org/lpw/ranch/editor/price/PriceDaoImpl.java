@@ -33,6 +33,11 @@ class PriceDaoImpl implements PriceDao {
     }
 
     @Override
+    public PriceModel findById(String id) {
+        return liteOrm.findById(PriceModel.class, id);
+    }
+
+    @Override
     public PriceModel find(String type, String group) {
         return liteOrm.findOne(new LiteQuery(PriceModel.class).where("c_type=? and c_group=?"), new Object[]{type, group});
     }

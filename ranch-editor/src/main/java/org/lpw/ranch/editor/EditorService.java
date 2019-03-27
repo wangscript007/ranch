@@ -21,6 +21,10 @@ public interface EditorService {
      * 复制VIP验证器Bean名称。
      */
     String VALIDATOR_COPY_VIP = EditorModel.NAME + ".validator.copy-vip";
+    /**
+     * 类型是否存在验证器Bean名称。
+     */
+    String VALIDATOR_TYPE_EXISTS = EditorModel.NAME + ".validator.type.exists";
 
     /**
      * 检索编辑器信息集。
@@ -76,6 +80,22 @@ public interface EditorService {
      * @return 编辑器信息。
      */
     JSONObject find(String id);
+
+    /**
+     * 判断是否存在类型。
+     *
+     * @param type 类型。
+     * @return 如果存在则返回true；否则返回false。
+     */
+    boolean existsType(String type);
+
+    /**
+     * 分组不存在。
+     *
+     * @param group 分组。
+     * @return 不存在则返回true；否则返回false。
+     */
+    boolean notExistsGroup(String group);
 
     /**
      * 保存编辑器信息。
@@ -179,6 +199,14 @@ public interface EditorService {
      * @param limitedTime  限时时间。
      */
     void price(String[] ids, String type, String group, int price, int vipPrice, int limitedPrice, Timestamp limitedTime);
+
+    /**
+     * 修改分组。
+     *
+     * @param oldGroup 旧分组。
+     * @param newGroup 新分组。
+     */
+    void group(String oldGroup, String newGroup);
 
     /**
      * 修改顺序。

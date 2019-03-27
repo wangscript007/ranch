@@ -1,5 +1,6 @@
 package org.lpw.ranch.editor.price;
 
+import org.lpw.ranch.editor.EditorService;
 import org.lpw.tephra.ctrl.context.Request;
 import org.lpw.tephra.ctrl.execute.Execute;
 import org.lpw.tephra.ctrl.validate.Validate;
@@ -32,6 +33,7 @@ public class PriceCtrl {
             @Validate(validator = Validators.GREATER_THAN, number = {-1}, parameter = "amount", failureCode = 33),
             @Validate(validator = Validators.GREATER_THAN, number = {-1}, parameter = "vip", failureCode = 34),
             @Validate(validator = Validators.GREATER_THAN, number = {-1}, parameter = "limited", failureCode = 35),
+            @Validate(validator = EditorService.VALIDATOR_TYPE_EXISTS, parameter = "type", failureCode = 19),
             @Validate(validator = Validators.SIGN)
     })
     public Object save() {
@@ -41,7 +43,9 @@ public class PriceCtrl {
     }
 
     @Execute(name = "delete", validates = {
-            @Validate(validator = Validators.SIGN)
+            @Validate(validator = Validators.SIGN),
+            @Validate(validator = PriceService.VALIDATOR_EXISTS, parameter = "id", failureCode = 36),
+            @Validate(validator = PriceService.VALIDATOR_GROUP_NOT_EXISTS, parameter = "id", failureCode = 37)
     })
     public Object delete() {
         priceService.delete(request.get("id"));
