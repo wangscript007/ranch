@@ -433,10 +433,10 @@ public class EditorServiceImpl implements EditorService, HourJob, DateJob {
             roleService.save(userHelper.id(), editor.getId(), RoleService.Type.Owner);
         roleService.modify(editor);
         cache.remove(CACHE_MODEL + editor.getId());
-        if (templatePassed) {
+        if (editor.getTemplate() > 0)
             labelService.save(editor.getId(), editor.getLabel(), false);
+        if (templatePassed)
             resetRandom(editor.getType());
-        }
     }
 
     private void autoState(EditorModel editor) {
