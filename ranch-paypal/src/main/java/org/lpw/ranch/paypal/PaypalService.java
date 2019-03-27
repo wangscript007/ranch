@@ -46,10 +46,10 @@ public interface PaypalService {
      * 保存Paypal配置。
      * 如果key存在则更新；key不存在则新增。
      *
-     * @param Paypal Paypal配置。
+     * @param paypal Paypal配置。
      * @return 配置值。
      */
-    JSONObject save(PaypalModel Paypal);
+    JSONObject save(PaypalModel paypal);
 
     /**
      * 删除Paypal配置。
