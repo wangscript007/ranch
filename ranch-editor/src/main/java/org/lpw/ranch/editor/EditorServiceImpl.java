@@ -239,7 +239,7 @@ public class EditorServiceImpl implements EditorService, HourJob, DateJob {
             model.setGroup(editor.getGroup());
         if (!validator.isEmpty(editor.getJson()))
             model.setJson(editor.getJson());
-        save(model, 0, null, false);
+        save(model, model.getState(), null, false);
 
         return toJson(model);
     }
