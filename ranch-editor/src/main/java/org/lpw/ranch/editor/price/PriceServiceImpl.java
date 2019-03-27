@@ -3,6 +3,7 @@ package org.lpw.ranch.editor.price;
 import com.alibaba.fastjson.JSONObject;
 import org.lpw.ranch.editor.EditorService;
 import org.lpw.ranch.util.Pagination;
+import org.lpw.tephra.util.Validator;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
@@ -12,6 +13,8 @@ import javax.inject.Inject;
  */
 @Service(PriceModel.NAME + ".service")
 public class PriceServiceImpl implements PriceService {
+    @Inject
+    private Validator validator;
     @Inject
     private Pagination pagination;
     @Inject
@@ -26,9 +29,11 @@ public class PriceServiceImpl implements PriceService {
 
     @Override
     public void save(PriceModel price) {
-        PriceModel model = priceDao.find(price.getType(), price.getGroup());
+        PriceModel model = validator.isEmpty(price.getId()) ? null : priceDao.findById(price.getId());
         price.setId(model == null ? null : model.getId());
         priceDao.save(price);
+        if (model != null && !model.getGroup().equals(price.getGroup()))
+            editorService.group(price.getType(), model.getGroup(), price.getGroup());
         editorService.price(null, price.getType(), price.getGroup(), price.getAmount(), price.getVip(), price.getLimited(), price.getTime());
     }
 

@@ -10,8 +10,6 @@ interface PriceDao {
 
     PriceModel findById(String id);
 
-    PriceModel find(String type, String group);
-
     void save(PriceModel price);
 
     void delete(String id);

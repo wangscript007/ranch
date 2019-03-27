@@ -105,8 +105,8 @@ class EditorDaoImpl implements EditorDao {
     }
 
     @Override
-    public void group(String oldGroup, String newGroup) {
-        liteOrm.update(new LiteQuery(EditorModel.class).set("c_group=?").where("c_group=?"), new Object[]{newGroup, oldGroup});
+    public void group(String type, String oldGroup, String newGroup) {
+        liteOrm.update(new LiteQuery(EditorModel.class).set("c_group=?").where("c_type=? and c_group=?"), new Object[]{newGroup, type, oldGroup});
     }
 
     @Override

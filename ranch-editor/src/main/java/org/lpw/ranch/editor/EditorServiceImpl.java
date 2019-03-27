@@ -394,8 +394,8 @@ public class EditorServiceImpl implements EditorService, HourJob, DateJob {
     }
 
     @Override
-    public void group(String oldGroup, String newGroup) {
-        editorDao.group(oldGroup, newGroup);
+    public void group(String type, String oldGroup, String newGroup) {
+        editorDao.group(type, oldGroup, newGroup);
     }
 
     @Override

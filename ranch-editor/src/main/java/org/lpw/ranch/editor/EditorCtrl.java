@@ -103,16 +103,6 @@ public class EditorCtrl {
         return "";
     }
 
-    @Execute(name = "group", validates = {
-            @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "newGroup", failureCode = 18),
-            @Validate(validator = Validators.SIGN)
-    })
-    public Object group(){
-        editorService.group(request.get("oldGroup"),request.get("newGroup"));
-
-        return "";
-    }
-
     @Execute(name = "sort", validates = {
             @Validate(validator = EditorService.VALIDATOR_TYPE_EXISTS, parameter = "type", failureCode = 19),
             @Validate(validator = Validators.SIGN)

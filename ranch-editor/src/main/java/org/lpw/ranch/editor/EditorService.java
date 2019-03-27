@@ -203,10 +203,11 @@ public interface EditorService {
     /**
      * 修改分组。
      *
+     * @param type     类型。
      * @param oldGroup 旧分组。
      * @param newGroup 新分组。
      */
-    void group(String oldGroup, String newGroup);
+    void group(String type, String oldGroup, String newGroup);
 
     /**
      * 修改顺序。

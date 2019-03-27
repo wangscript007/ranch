@@ -9,6 +9,5 @@ CREATE TABLE t_editor_price
   c_limited INT DEFAULT 0 COMMENT '限时价格，单位：分',
   c_time DATETIME DEFAULT NULL COMMENT '限时时间',
 
-  PRIMARY KEY pk(c_id) USING HASH,
-  UNIQUE KEY uk_type_group(c_type,c_group) USING BTREE
+  PRIMARY KEY pk(c_id) USING HASH
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
