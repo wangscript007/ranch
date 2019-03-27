@@ -1,0 +1,59 @@
+{
+    "key": "ranch.stripe",
+    "uri": "/stripe/",
+    "props": [
+        {
+            "name": "key"
+        },
+        {
+            "name": "name"
+        },
+        {
+            "name": "email"
+        },
+        {
+            "name": "publishable"
+        },
+        {
+            "name": "secret"
+        }
+    ],
+    "query": {
+        "type": "grid",
+        "ops": [
+            {
+                "type": "modify"
+            },
+            {
+                "type": "delete",
+                "service": ".delete",
+                "success": ".query"
+            }
+        ],
+        "toolbar": [
+            {
+                "type": "create"
+            }
+        ]
+    },
+    "create": {
+        "type": "form",
+        "toolbar": [
+            {
+                "type": "save",
+                "service": ".save",
+                "success": ".query"
+            }
+        ]
+    },
+    "modify": {
+        "type": "form",
+        "toolbar": [
+            {
+                "type": "save",
+                "service": ".save",
+                "success": ".query"
+            }
+        ]
+    }
+}

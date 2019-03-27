@@ -62,6 +62,7 @@
         <module>ranch-log</module>
         <module>ranch-paypal</module>
         <module>ranch-popular</module>
+        <module>ranch-stripe</module>
         <module>ranch-inviter</module>
         <module>ranch-ui</module>
         <module>ranch-web</module>
