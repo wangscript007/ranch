@@ -76,7 +76,7 @@ public class LabelServiceImpl implements LabelService {
     @Override
     public void rename(String oldName, String newName) {
         Set<String> editors = new HashSet<>();
-        labelDao.query(oldName).getList().forEach(label -> editors.add(label.getId()));
+        labelDao.query(oldName).getList().forEach(label -> editors.add(label.getEditor()));
         if (editors.isEmpty())
             return;
 
