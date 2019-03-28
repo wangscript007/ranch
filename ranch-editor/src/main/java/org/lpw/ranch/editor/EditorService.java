@@ -219,6 +219,13 @@ public interface EditorService {
     void sort(String type, String[] ids, String[] sorts);
 
     /**
+     * 更新下载次数。
+     *
+     * @param map 编辑器-下载次数集。
+     */
+    void download(Map<String, Integer> map);
+
+    /**
      * 删除。
      *
      * @param id ID值。

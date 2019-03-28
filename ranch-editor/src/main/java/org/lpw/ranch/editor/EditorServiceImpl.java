@@ -409,6 +409,20 @@ public class EditorServiceImpl implements EditorService, HourJob, DateJob {
     }
 
     @Override
+    public void download(Map<String, Integer> map) {
+        map.forEach((id, count) -> {
+            if (count == 0)
+                return;
+
+            EditorModel editor = findById(id);
+            if (editor == null || editor.getTemplate() == 0 || editor.getDownload() == count)
+                return;
+
+            editorDao.download(id, count);
+        });
+    }
+
+    @Override
     public void delete(String id) {
         EditorModel editor = findById(id);
         if (editor != null)

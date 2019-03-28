@@ -21,7 +21,7 @@ import java.sql.Timestamp;
 public class EditorModel extends ModelSupport {
     static final String NAME = "ranch.editor";
 
-    private int template; // 模板：0-否；1-模板；2-范文
+    private int template; // 模板：0-否；1-模板；2-范文；3-文件
     private String type; // 类型
     private int sort; // 顺序
     private String name; // 名称
@@ -43,6 +43,7 @@ public class EditorModel extends ModelSupport {
     private String json; // 扩展属性集
     private String source; // 来源
     private int used; // 被使用次数
+    private int download; // 被下载次数
     private Timestamp create; // 创建时间
     private Timestamp modify; // 修改时间
 
@@ -264,6 +265,16 @@ public class EditorModel extends ModelSupport {
 
     public void setUsed(int used) {
         this.used = used;
+    }
+
+    @Jsonable
+    @Column(name = "c_download")
+    public int getDownload() {
+        return download;
+    }
+
+    public void setDownload(int download) {
+        this.download = download;
     }
 
     @Jsonable

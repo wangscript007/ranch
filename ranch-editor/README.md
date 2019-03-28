@@ -156,6 +156,21 @@
 
 [批量操作](doc/element/batch.md)
 
+## 元素
+
+属性
+
+|属性|类型|说明|
+|---|---|---|
+|editor|char(36)|编辑器。|
+|type|char(100)|类型。|
+|uri|char(100)|保存地址。|
+|size|long|文件大小。|
+|download|int|下载次数。|
+|time|datetime|时间。|
+
+[下载](doc/file/download.md)
+
 ## 日志
 
 属性

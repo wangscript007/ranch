@@ -28,4 +28,6 @@ interface EditorDao {
     void group(String type, String oldGroup, String newGroup);
 
     void sort(String id, String type, int sort);
+
+    void download(String id, int count);
 }
