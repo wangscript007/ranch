@@ -2,6 +2,7 @@ package org.lpw.ranch.async;
 
 import com.alibaba.fastjson.JSONObject;
 
+import java.io.InputStream;
 import java.util.concurrent.Callable;
 
 /**
@@ -36,9 +37,18 @@ public interface AsyncService {
      *
      * @param bytes  数据。
      * @param suffix 文件后缀。
-     * @return 文件路径。
+     * @return 文件相对路径。
      */
     String save(byte[] bytes, String suffix);
+
+    /**
+     * 保存流数据。
+     *
+     * @param inputStream 输入流。
+     * @param suffix      文件后缀。
+     * @return 文件相对路径。
+     */
+    String save(InputStream inputStream, String suffix);
 
     /**
      * 获取保存路径。

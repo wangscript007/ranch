@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
 import java.io.File;
+import java.io.InputStream;
 import java.sql.Timestamp;
 import java.util.HashSet;
 import java.util.Map;
@@ -83,6 +84,14 @@ public class AsyncServiceImpl implements AsyncService, SecondsJob, MinuteJob, Ho
     public String save(byte[] bytes, String suffix) {
         String path = newSavePath(suffix);
         io.write(context.getAbsolutePath(path), bytes);
+
+        return path;
+    }
+
+    @Override
+    public String save(InputStream inputStream, String suffix) {
+        String path = newSavePath(suffix);
+        io.write(context.getAbsolutePath(path), inputStream);
 
         return path;
     }
