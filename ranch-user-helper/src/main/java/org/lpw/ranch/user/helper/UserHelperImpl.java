@@ -174,8 +174,9 @@ public class UserHelperImpl extends ServiceHelperSupport implements UserHelper {
 
         Set<String> set = new HashSet<>();
         JSONArray list = carousel.service(queryKey, null, parameter, false, JSONObject.class).getJSONArray("list");
-        for (int i = 0, size = list.size(); i < size; i++)
-            set.add(list.getJSONObject(i).getString("id"));
+        if (!validator.isEmpty(list))
+            for (int i = 0, size = list.size(); i < size; i++)
+                set.add(list.getJSONObject(i).getString("id"));
 
         return set;
     }
