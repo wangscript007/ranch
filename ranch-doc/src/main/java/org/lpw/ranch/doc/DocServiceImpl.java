@@ -100,13 +100,15 @@ public class DocServiceImpl implements DocService, MinuteJob, DateJob {
                     pagination.getPageSize(20), pagination.getPageNum()).toJson(this::toJson);
 
         PageList<TopicModel> pl = topicService.query(classify, author, subject, label, type, audit);
+        JSONObject object = pl.toJson();
         if (pl.getList().isEmpty())
             return pl.toJson();
 
         Set<String> ids = new HashSet<>();
         pl.getList().forEach(topic -> ids.add(topic.getDoc()));
+        object.put("list", modelHelper.toJson(docDao.query(ids, 0, 0).getList(), this::toJson));
 
-        return docDao.query(ids, 0, 0).toJson(this::toJson);
+        return object;
     }
 
     @Override
