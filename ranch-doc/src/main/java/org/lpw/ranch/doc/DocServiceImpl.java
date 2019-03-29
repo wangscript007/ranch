@@ -102,7 +102,7 @@ public class DocServiceImpl implements DocService, MinuteJob, DateJob {
         PageList<TopicModel> pl = topicService.query(classify, author, subject, label, type, audit);
         JSONObject object = pl.toJson();
         if (pl.getList().isEmpty())
-            return pl.toJson();
+            return object;
 
         Set<String> ids = new HashSet<>();
         pl.getList().forEach(topic -> ids.add(topic.getDoc()));
