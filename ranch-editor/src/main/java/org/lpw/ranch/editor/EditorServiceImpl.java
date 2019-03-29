@@ -543,7 +543,8 @@ public class EditorServiceImpl implements EditorService, HourJob, DateJob {
     }
 
     private String getSearchCacheKey(String type, int template, String key) {
-        return random.computeIfAbsent(type, k -> CACHE_SEARCH + type + "." + template + ":" + generator.random(32) + ":") + key;
+        return random.computeIfAbsent(type + "." + template, k -> CACHE_SEARCH + type + "." + template
+                + ":" + generator.random(32) + ":") + key;
     }
 
     @Override
