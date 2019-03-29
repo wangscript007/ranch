@@ -11,6 +11,7 @@ import org.lpw.ranch.editor.role.RoleService;
 import org.lpw.ranch.lock.LockHelper;
 import org.lpw.ranch.popular.PopularService;
 import org.lpw.ranch.push.helper.PushHelper;
+import org.lpw.ranch.temporary.Temporary;
 import org.lpw.ranch.user.helper.UserHelper;
 import org.lpw.ranch.util.Pagination;
 import org.lpw.tephra.bean.BeanFactory;
@@ -80,6 +81,8 @@ public class EditorServiceImpl implements EditorService, HourJob, DateJob {
     private WormholeHelper wormholeHelper;
     @Inject
     private LuceneHelper luceneHelper;
+    @Inject
+    private Temporary temporary;
     @Inject
     private Pagination pagination;
     @Inject
@@ -263,7 +266,7 @@ public class EditorServiceImpl implements EditorService, HourJob, DateJob {
 
         return asyncService.submit(EditorModel.NAME + ".image." + id, "", 20, () -> {
             String file = chromeHelper.jpeg(image + "?sid=" + sid + "&id=" + id, 10,
-                    0, 0, editor.getWidth(), editor.getHeight(), 100, asyncService.root());
+                    0, 0, editor.getWidth(), editor.getHeight(), 100, temporary.root());
             if (validator.isEmpty(file))
                 return "";
 
@@ -301,14 +304,14 @@ public class EditorServiceImpl implements EditorService, HourJob, DateJob {
         String user = userHelper.id();
 
         return asyncService.submit(EditorModel.NAME + ".pdf." + id, "", 60, () -> {
-            String path = chromeHelper.pdf(pdf.toString(), 30, editor.getWidth(), editor.getHeight(), "", asyncService.root());
+            String path = chromeHelper.pdf(pdf.toString(), 30, editor.getWidth(), editor.getHeight(), "", temporary.root());
             if (validator.isEmail(email)) {
                 JSONObject args = new JSONObject();
                 args.put("url", wormholeHelper.getUrl(wormholeHelper.file("editor", null, null, new File(path)), false));
                 pushHelper.send(EditorModel.NAME + ".pdf", user, email, args);
             }
 
-            return path.substring(path.lastIndexOf(asyncService.root()));
+            return path.substring(path.lastIndexOf(temporary.root()));
         });
     }
 

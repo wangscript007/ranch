@@ -4,8 +4,6 @@ import com.alibaba.fastjson.JSONObject;
 import org.lpw.tephra.bean.BeanFactory;
 import org.lpw.tephra.bean.ContextRefreshedListener;
 import org.lpw.tephra.cache.Cache;
-import org.lpw.tephra.ctrl.upload.UploadService;
-import org.lpw.tephra.scheduler.HourJob;
 import org.lpw.tephra.scheduler.MinuteJob;
 import org.lpw.tephra.scheduler.SecondsJob;
 import org.lpw.tephra.util.Context;
@@ -20,8 +18,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
-import java.io.File;
-import java.io.InputStream;
 import java.sql.Timestamp;
 import java.util.HashSet;
 import java.util.Map;
@@ -36,7 +32,7 @@ import java.util.concurrent.Future;
  * @author lpw
  */
 @Service(AsyncModel.NAME + ".service")
-public class AsyncServiceImpl implements AsyncService, SecondsJob, MinuteJob, HourJob, ContextRefreshedListener {
+public class AsyncServiceImpl implements AsyncService, SecondsJob, MinuteJob, ContextRefreshedListener {
     private static final String CACHE_STATE = AsyncModel.NAME + ".service.state:";
     @Inject
     private DateTime dateTime;
@@ -78,29 +74,6 @@ public class AsyncServiceImpl implements AsyncService, SecondsJob, MinuteJob, Ho
         map.put(async.getId(), executorService.submit(BeanFactory.getBean(Callabler.class).set(callable, asyncNotifier)));
 
         return async.getId();
-    }
-
-    @Override
-    public String save(byte[] bytes, String suffix) {
-        String path = newSavePath(suffix);
-        io.write(context.getAbsolutePath(path), bytes);
-
-        return path;
-    }
-
-    @Override
-    public String save(InputStream inputStream, String suffix) {
-        String path = newSavePath(suffix);
-        io.write(context.getAbsolutePath(path), inputStream);
-
-        return path;
-    }
-
-    @Override
-    public String newSavePath(String suffix) {
-        io.mkdirs(context.getAbsolutePath(root()));
-
-        return root() + generator.random(32) + suffix;
     }
 
     @Override
@@ -184,22 +157,6 @@ public class AsyncServiceImpl implements AsyncService, SecondsJob, MinuteJob, Ho
         if (async.getState() == 1)
             object.put("result", async.getResult());
         cache.put(CACHE_STATE + async.getId(), object, false);
-    }
-
-    @Override
-    public void executeHourJob() {
-        File[] files = new File(context.getAbsolutePath(root())).listFiles();
-        if (files == null || files.length == 0)
-            return;
-
-        for (File file : files)
-            if (System.currentTimeMillis() - file.lastModified() > TimeUnit.Day.getTime())
-                io.delete(file);
-    }
-
-    @Override
-    public String root() {
-        return UploadService.ROOT + "async/";
     }
 
     @Override

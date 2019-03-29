@@ -7,6 +7,7 @@ import org.lpw.ranch.editor.EditorModel;
 import org.lpw.ranch.editor.EditorService;
 import org.lpw.ranch.editor.element.ElementModel;
 import org.lpw.ranch.editor.element.ElementService;
+import org.lpw.ranch.temporary.Temporary;
 import org.lpw.tephra.chrome.ChromeHelper;
 import org.lpw.tephra.ctrl.context.Session;
 import org.lpw.tephra.dao.model.ModelHelper;
@@ -39,6 +40,8 @@ public class ScreenshotServiceImpl implements ScreenshotService {
     private ChromeHelper chromeHelper;
     @Inject
     private WormholeHelper wormholeHelper;
+    @Inject
+    private Temporary temporary;
     @Inject
     private AsyncService asyncService;
     @Inject
@@ -118,7 +121,7 @@ public class ScreenshotServiceImpl implements ScreenshotService {
 
     private void capture(String sid, String editor, String page, int width, int height, Map<String, String> map, Map<String, Integer> index) {
         String file = chromeHelper.jpeg(capture + "?sid=" + sid + "&editor=" + editor + "&page=" + page,
-                wait, 0, 0, width, height, 100, asyncService.root());
+                wait, 0, 0, width, height, 100, temporary.root());
         if (validator.isEmpty(file))
             return;
 
