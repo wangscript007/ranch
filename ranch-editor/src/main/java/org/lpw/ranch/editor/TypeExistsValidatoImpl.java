@@ -16,7 +16,9 @@ public class TypeExistsValidatoImpl extends ValidatorSupport {
 
     @Override
     public boolean validate(ValidateWrapper validate, String parameter) {
-        return editorService.existsType(parameter);
+//        return editorService.existsType(parameter);
+
+        return true;
     }
 
     @Override
