@@ -32,7 +32,8 @@ public class ExportValidatoImpl extends ValidatorSupport {
                 return false;
 
             if (editor.getTemplate() > 0)
-                return buyService.find(userHelper.id(), id) != null;
+                return buyService.find(userHelper.id(), id) != null || (editor.getLimitedPrice() == 0 && editor.getLimitedTime() != null
+                        && editor.getLimitedTime().getTime() >= System.currentTimeMillis());
 
             if (validator.isEmpty(editor.getSource()))
                 return false;
