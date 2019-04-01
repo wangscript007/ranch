@@ -156,7 +156,7 @@
 
 [批量操作](doc/element/batch.md)
 
-## 元素
+## 文件
 
 属性
 
@@ -168,6 +168,8 @@
 |size|long|文件大小。|
 |download|int|下载次数。|
 |time|datetime|时间。|
+
+[上传](doc/file/upload.md)
 
 [下载](doc/file/download.md)
 
