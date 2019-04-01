@@ -10,6 +10,8 @@ import java.util.Map;
 interface FileDao {
     PageList<FileModel> query(String editor);
 
+    FileModel findById(String id);
+
     FileModel find(String editor, String type);
 
     Map<String, Integer> count();

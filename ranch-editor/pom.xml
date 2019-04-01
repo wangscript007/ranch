@@ -16,12 +16,17 @@
     <dependencies>
         <dependency>
             <groupId>org.lpw.tephra</groupId>
-            <artifactId>tephra-wormhole</artifactId>
+            <artifactId>tephra-chrome</artifactId>
             <version>LATEST</version>
         </dependency>
         <dependency>
             <groupId>org.lpw.tephra</groupId>
-            <artifactId>tephra-chrome</artifactId>
+            <artifactId>tephra-pdf</artifactId>
+            <version>LATEST</version>
+        </dependency>
+        <dependency>
+            <groupId>org.lpw.tephra</groupId>
+            <artifactId>tephra-office</artifactId>
             <version>LATEST</version>
         </dependency>
         <dependency>

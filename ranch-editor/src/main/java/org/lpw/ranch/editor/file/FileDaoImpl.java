@@ -33,6 +33,11 @@ class FileDaoImpl implements FileDao {
     }
 
     @Override
+    public FileModel findById(String id) {
+        return liteOrm.findById(FileModel.class, id);
+    }
+
+    @Override
     public FileModel find(String editor, String type) {
         return liteOrm.findOne(new LiteQuery(EditorModel.class).where("c_editor=? and c_type=?"), new Object[]{editor, type});
     }

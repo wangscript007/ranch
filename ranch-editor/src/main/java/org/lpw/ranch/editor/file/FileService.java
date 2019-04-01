@@ -1,6 +1,10 @@
 package org.lpw.ranch.editor.file;
 
+import com.alibaba.fastjson.JSONObject;
+import org.lpw.tephra.ctrl.upload.UploadReader;
+
 import java.io.File;
+import java.io.IOException;
 
 /**
  * @author lpw
@@ -24,6 +28,15 @@ public interface FileService {
      * @param size   文件大小。
      */
     void save(String editor, String type, String uri, long size);
+
+    /**
+     * 上传。
+     *
+     * @param uploadReader 文件读取器。
+     * @return 上传结果。
+     * @throws IOException 未处理IO异常。
+     */
+    JSONObject upload(UploadReader uploadReader) throws IOException;
 
     /**
      * 下载。
