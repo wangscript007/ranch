@@ -18,13 +18,13 @@ public interface EditorService {
      */
     String VALIDATOR_EDITABLE = EditorModel.NAME + ".validator.editable";
     /**
-     * 复制VIP验证器Bean名称。
-     */
-    String VALIDATOR_COPY_VIP = EditorModel.NAME + ".validator.copy-vip";
-    /**
      * 类型是否存在验证器Bean名称。
      */
     String VALIDATOR_TYPE_EXISTS = EditorModel.NAME + ".validator.type.exists";
+    /**
+     * 导出验证器Bean名称。
+     */
+    String VALIDATOR_EXPORT = EditorModel.NAME + ".validator.export";
 
     /**
      * 检索编辑器信息集。
