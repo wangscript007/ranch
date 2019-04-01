@@ -25,6 +25,7 @@ CREATE TABLE t_editor
   c_source VARCHAR(255) DEFAULT NULL COMMENT '来源',
   c_used INT DEFAULT 0 COMMENT '被使用次数',
   c_download INT DEFAULT 0 COMMENT '被下载次数',
+  c_buy INT DEFAULT 0 COMMENT '购买次数',
   c_create DATETIME DEFAULT NULL COMMENT '创建时间',
   c_modify DATETIME DEFAULT NULL COMMENT '修改时间',
 

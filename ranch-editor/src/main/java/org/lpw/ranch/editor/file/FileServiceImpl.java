@@ -12,7 +12,6 @@ import org.lpw.ranch.user.helper.UserHelper;
 import org.lpw.tephra.ctrl.upload.UploadReader;
 import org.lpw.tephra.office.pptx.PptxReader;
 import org.lpw.tephra.pdf.PdfReader;
-import org.lpw.tephra.scheduler.DateJob;
 import org.lpw.tephra.util.Context;
 import org.lpw.tephra.util.DateTime;
 import org.lpw.tephra.util.Io;
@@ -26,12 +25,13 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author lpw
  */
 @Service(FileModel.NAME + ".service")
-public class FileServiceImpl implements FileService, DateJob, org.lpw.tephra.pdf.MediaWriter, org.lpw.tephra.office.MediaWriter {
+public class FileServiceImpl implements FileService, org.lpw.tephra.pdf.MediaWriter, org.lpw.tephra.office.MediaWriter {
     @Inject
     private Validator validator;
     @Inject
@@ -60,6 +60,11 @@ public class FileServiceImpl implements FileService, DateJob, org.lpw.tephra.pdf
     private ScreenshotService screenshotService;
     @Inject
     private FileDao fileDao;
+
+    @Override
+    public Map<String, Integer> count() {
+        return fileDao.count();
+    }
 
     @Override
     public void save(String editor, String type, File file) {
@@ -164,10 +169,5 @@ public class FileServiceImpl implements FileService, DateJob, org.lpw.tephra.pdf
         }
 
         return url;
-    }
-
-    @Override
-    public void executeDateJob() {
-        editorService.download(fileDao.count());
     }
 }

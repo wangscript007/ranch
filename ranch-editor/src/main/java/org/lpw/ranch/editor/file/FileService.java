@@ -5,11 +5,19 @@ import org.lpw.tephra.ctrl.upload.UploadReader;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Map;
 
 /**
  * @author lpw
  */
 public interface FileService {
+    /**
+     * 统计下载数。
+     *
+     * @return 下载数集。
+     */
+    Map<String, Integer> count();
+
     /**
      * 保存。
      *

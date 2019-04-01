@@ -30,4 +30,6 @@ interface EditorDao {
     void sort(String id, String type, int sort);
 
     void download(String id, int count);
+
+    void buy(String id, int count);
 }

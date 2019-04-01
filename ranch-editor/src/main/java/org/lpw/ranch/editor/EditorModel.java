@@ -44,6 +44,7 @@ public class EditorModel extends ModelSupport {
     private String source; // 来源
     private int used; // 被使用次数
     private int download; // 被下载次数
+    private int buy; // 购买次数
     private Timestamp create; // 创建时间
     private Timestamp modify; // 修改时间
 
@@ -275,6 +276,16 @@ public class EditorModel extends ModelSupport {
 
     public void setDownload(int download) {
         this.download = download;
+    }
+
+    @Jsonable
+    @Column(name = "c_buy")
+    public int getBuy() {
+        return buy;
+    }
+
+    public void setBuy(int buy) {
+        this.buy = buy;
     }
 
     @Jsonable

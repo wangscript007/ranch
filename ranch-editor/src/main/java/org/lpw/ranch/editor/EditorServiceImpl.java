@@ -3,7 +3,9 @@ package org.lpw.ranch.editor;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import org.lpw.ranch.async.AsyncService;
+import org.lpw.ranch.editor.buy.BuyService;
 import org.lpw.ranch.editor.element.ElementService;
+import org.lpw.ranch.editor.file.FileService;
 import org.lpw.ranch.editor.label.LabelModel;
 import org.lpw.ranch.editor.label.LabelService;
 import org.lpw.ranch.editor.role.RoleModel;
@@ -101,6 +103,10 @@ public class EditorServiceImpl implements EditorService, HourJob, DateJob {
     private LabelService labelService;
     @Inject
     private ElementService elementService;
+    @Inject
+    private FileService fileService;
+    @Inject
+    private BuyService buyService;
     @Inject
     private EditorDao editorDao;
     @Value("${" + EditorModel.NAME + ".auto.pass:false}")
@@ -610,6 +616,8 @@ public class EditorServiceImpl implements EditorService, HourJob, DateJob {
             for (int i = 1; i <= 3; i++)
                 setSearchIndex(type, i);
         });
+        fileService.count().forEach(editorDao::download);
+        buyService.count().forEach(editorDao::buy);
         lockHelper.unlock(lockId);
     }
 
