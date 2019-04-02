@@ -1,6 +1,5 @@
 package org.lpw.ranch.editor.file;
 
-import org.lpw.ranch.editor.EditorModel;
 import org.lpw.tephra.dao.jdbc.Sql;
 import org.lpw.tephra.dao.model.ModelTables;
 import org.lpw.tephra.dao.orm.PageList;
@@ -29,7 +28,7 @@ class FileDaoImpl implements FileDao {
 
     @Override
     public PageList<FileModel> query(String editor) {
-        return liteOrm.query(new LiteQuery(EditorModel.class).where("c_editor=?"), new Object[]{editor});
+        return liteOrm.query(new LiteQuery(FileModel.class).where("c_editor=?"), new Object[]{editor});
     }
 
     @Override
@@ -39,7 +38,7 @@ class FileDaoImpl implements FileDao {
 
     @Override
     public FileModel find(String editor, String type) {
-        return liteOrm.findOne(new LiteQuery(EditorModel.class).where("c_editor=? and c_type=?"), new Object[]{editor, type});
+        return liteOrm.findOne(new LiteQuery(FileModel.class).where("c_editor=? and c_type=?"), new Object[]{editor, type});
     }
 
     @Override
