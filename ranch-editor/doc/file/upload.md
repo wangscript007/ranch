@@ -12,5 +12,6 @@
 |id|char(36)|否|ID值，如果存在则修改。|
 |editor|char(36)|否|编辑器ID值，新增时需要提供。|
 |type|char(100)|否|类型：pdf/ppt。|
+|etype|char(100)|否|编辑器类型。|
 
 > 如果`id`或`editor+type`已存在则修改，否则新增。

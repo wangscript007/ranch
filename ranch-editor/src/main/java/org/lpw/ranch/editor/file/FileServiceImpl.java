@@ -104,13 +104,13 @@ public class FileServiceImpl implements FileService, org.lpw.tephra.pdf.MediaWri
         String editor = uploadReader.getParameter("editor");
         if (editor != null && editorService.findById(editor) == null)
             editor = null;
-        if(editor==null){
+        if (editor == null) {
             EditorModel em = new EditorModel();
-            em.setType("");
+            em.setType(uploadReader.getParameter("etype"));
             em.setTemplate(3);
             em.setImage(list.get(0));
             em.setScreenshot(em.getImage());
-            editor=editorService.save(em).getString("id");
+            editor = editorService.save(em).getString("id");
         }
         if (model == null)
             model = fileDao.find(editor, type);
