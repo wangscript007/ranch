@@ -137,12 +137,12 @@ public class FileServiceImpl implements FileService, org.lpw.tephra.pdf.MediaWri
 
     @Override
     public String write(org.lpw.tephra.pdf.MediaType mediaType, String fileName, InputStream inputStream) {
-        return null;
+        return wormholeHelper.image(null, null, mediaType.getSuffix(), null, inputStream);
     }
 
     @Override
     public String write(org.lpw.tephra.office.MediaType mediaType, String fileName, InputStream inputStream) {
-        return null;
+        return wormholeHelper.image(null, null, mediaType.getSuffix(), null, inputStream);
     }
 
     @Override
