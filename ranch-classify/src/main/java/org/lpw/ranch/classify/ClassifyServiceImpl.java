@@ -93,7 +93,7 @@ public class ClassifyServiceImpl implements ClassifyService, DateJob {
 
     @Override
     public JSONObject get(String[] ids) {
-        String cacheKey = CACHE_GET + converter.toString(ids);
+        String cacheKey = CACHE_GET + getRandom() + converter.toString(ids);
         JSONObject object = cache.get(cacheKey);
         if (object == null) {
             object = new JSONObject();
