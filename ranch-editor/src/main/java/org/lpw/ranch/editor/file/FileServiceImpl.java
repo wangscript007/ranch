@@ -99,18 +99,24 @@ public class FileServiceImpl implements FileService, org.lpw.tephra.pdf.MediaWri
             return object;
         }
 
-        FileModel model = fileDao.findById(uploadReader.getParameter("id"));
+        String id = uploadReader.getParameter("id");
+        FileModel model = validator.isEmpty(id) ? null : fileDao.findById(id);
+        String editor = uploadReader.getParameter("editor");
+        if (editor != null && editorService.findById(editor) == null)
+            editor = null;
+        if(editor==null){
+            EditorModel em = new EditorModel();
+            em.setType("");
+            em.setTemplate(3);
+            em.setImage(list.get(0));
+            em.setScreenshot(em.getImage());
+            editor=editorService.save(em).getString("id");
+        }
         if (model == null)
-            model = fileDao.find(uploadReader.getParameter("editor"), type);
+            model = fileDao.find(editor, type);
         if (model == null) {
-            EditorModel editor = new EditorModel();
-            editor.setType("");
-            editor.setTemplate(3);
-            editor.setImage(list.get(0));
-            editor.setScreenshot(editor.getImage());
-
             model = new FileModel();
-            model.setEditor(editorService.save(editor).getString("id"));
+            model.setEditor(editor);
             model.setType(type);
         }
         model.setUri(wormholeHelper.file(null, null, null, file));
@@ -119,10 +125,10 @@ public class FileServiceImpl implements FileService, org.lpw.tephra.pdf.MediaWri
         fileDao.save(model);
         for (int i = 0, size = list.size(); i < size; i++) {
             ElementModel element = new ElementModel();
-            element.setEditor(model.getEditor());
-            element.setParent(model.getEditor());
+            element.setEditor(editor);
+            element.setParent(editor);
             element.setSort(i);
-            screenshotService.create(model.getEditor(), i, elementService.save(element).getString("id"), list.get(i));
+            screenshotService.create(editor, i, elementService.save(element).getString("id"), list.get(i));
         }
         io.delete(file);
 
