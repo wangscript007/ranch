@@ -19,6 +19,4 @@ interface ScreenshotDao {
     Map<String, String> index(int size);
 
     void index(String page, int index);
-
-    void close();
 }

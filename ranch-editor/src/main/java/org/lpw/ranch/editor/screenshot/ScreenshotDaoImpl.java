@@ -55,9 +55,4 @@ class ScreenshotDaoImpl implements ScreenshotDao {
     public void index(String page, int index) {
         sql.update("update t_editor_screenshot set c_index=? where c_page=?", new Object[]{index, page});
     }
-
-    @Override
-    public void close() {
-sql.close();
-    }
 }

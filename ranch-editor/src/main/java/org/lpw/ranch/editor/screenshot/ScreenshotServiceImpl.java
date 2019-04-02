@@ -138,4 +138,9 @@ public class ScreenshotServiceImpl implements ScreenshotService {
         screenshot.setUri(uri);
         screenshotDao.save(screenshot);
     }
+
+    @Override
+    public void delete(String editor) {
+        screenshotDao.delete(editor);
+    }
 }

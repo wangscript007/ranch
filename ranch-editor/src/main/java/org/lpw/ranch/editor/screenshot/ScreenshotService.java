@@ -53,4 +53,11 @@ public interface ScreenshotService {
      * @param uri    资源URI地址。
      */
     void create(String editor, int index, String page, String uri);
+
+    /**
+     * 删除。
+     *
+     * @param editor 编辑器ID值。
+     */
+    void delete(String editor);
 }

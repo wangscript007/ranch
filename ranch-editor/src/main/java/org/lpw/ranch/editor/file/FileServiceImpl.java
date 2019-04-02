@@ -132,6 +132,8 @@ public class FileServiceImpl implements FileService, org.lpw.tephra.pdf.MediaWri
         model.setSize(file.length());
         model.setTime(dateTime.now());
         fileDao.save(model);
+        elementService.deletes(editor);
+        screenshotService.delete(editor);
         for (int i = 0, size = list.size(); i < size; i++) {
             ElementModel element = new ElementModel();
             element.setEditor(editor);
