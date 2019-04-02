@@ -139,6 +139,7 @@ public class EditorServiceImpl implements EditorService, HourJob, DateJob {
             RoleModel role = roleService.findOwner(editor.getId());
             if (role != null)
                 object.put("owner", userHelper.get(role.getUser()));
+            appendToJson(editor, object);
         });
     }
 
@@ -356,12 +357,15 @@ public class EditorServiceImpl implements EditorService, HourJob, DateJob {
     private JSONObject toJson(EditorModel editor) {
         JSONObject object = modelHelper.toJson(editor);
         RoleModel role = roleService.find(userHelper.id(), editor.getId());
-        if (role == null)
-            return object;
-
-        object.put("role", role.getType());
+        if (role != null)
+            object.put("role", role.getType());
+        appendToJson(editor, object);
 
         return object;
+    }
+
+    private void appendToJson(EditorModel editor, JSONObject object) {
+        object.put("files", fileService.query(editor.getId()));
     }
 
     @Override
@@ -509,7 +513,7 @@ public class EditorServiceImpl implements EditorService, HourJob, DateJob {
 
         object = editorDao.query(ids, template, type, null, null, null, free ? 0 : -1, vipFree ? 0 : -1, limitedFree ? 0 : -1,
                 limitedFree ? dateTime.now() : null, -1, onsaleState, null, null, null, null,
-                order, pageSize, pagination.getPageNum()).toJson();
+                order, pageSize, pagination.getPageNum()).toJson(this::appendToJson);
         cache.put(cacheKey, object, false);
 
         return object;
@@ -536,7 +540,8 @@ public class EditorServiceImpl implements EditorService, HourJob, DateJob {
         if (object == null)
             cache.put(cacheKey, object = editorDao.query(null, template, type, null, null, null, free ? 0 : -1,
                     vipFree ? 0 : -1, limitedFree ? 0 : -1, limitedFree ? dateTime.now() : null, -1, onsaleState, null,
-                    null, null, null, order, pageSize, pagination.getPageNum()).toJson(), false);
+                    null, null, null, order, pageSize, pagination.getPageNum()).toJson(this::appendToJson),
+                    false);
 
         return object;
     }

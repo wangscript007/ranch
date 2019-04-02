@@ -1,5 +1,6 @@
 package org.lpw.ranch.editor.file;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import org.lpw.ranch.editor.EditorModel;
 import org.lpw.ranch.editor.EditorService;
@@ -10,6 +11,7 @@ import org.lpw.ranch.push.helper.PushHelper;
 import org.lpw.ranch.temporary.Temporary;
 import org.lpw.ranch.user.helper.UserHelper;
 import org.lpw.tephra.ctrl.upload.UploadReader;
+import org.lpw.tephra.dao.model.ModelHelper;
 import org.lpw.tephra.office.pptx.PptxReader;
 import org.lpw.tephra.pdf.PdfReader;
 import org.lpw.tephra.util.Context;
@@ -41,6 +43,8 @@ public class FileServiceImpl implements FileService, org.lpw.tephra.pdf.MediaWri
     @Inject
     private DateTime dateTime;
     @Inject
+    private ModelHelper modelHelper;
+    @Inject
     private WormholeHelper wormholeHelper;
     @Inject
     private PdfReader pdfReader;
@@ -60,6 +64,11 @@ public class FileServiceImpl implements FileService, org.lpw.tephra.pdf.MediaWri
     private ScreenshotService screenshotService;
     @Inject
     private FileDao fileDao;
+
+    @Override
+    public JSONArray query(String editor) {
+        return modelHelper.toJson(fileDao.query(editor).getList(), (file, object) -> object.remove("uri"));
+    }
 
     @Override
     public Map<String, Integer> count() {

@@ -1,5 +1,6 @@
 package org.lpw.ranch.editor.file;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import org.lpw.tephra.ctrl.upload.UploadReader;
 
@@ -11,6 +12,14 @@ import java.util.Map;
  * @author lpw
  */
 public interface FileService {
+    /**
+     * 检索。
+     *
+     * @param editor 编辑器。
+     * @return 数据集。
+     */
+    JSONArray query(String editor);
+
     /**
      * 统计下载数。
      *
