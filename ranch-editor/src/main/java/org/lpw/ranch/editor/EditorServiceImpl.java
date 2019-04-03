@@ -376,7 +376,7 @@ public class EditorServiceImpl implements EditorService, HourJob, DateJob {
         map.forEach((id, modify) -> {
             EditorModel editor = findById(id);
             if (Math.abs(editor.getModify().getTime() - modify) > TimeUnit.Second.getTime())
-                save(editor, 0, new Timestamp(modify), false);
+                save(editor, editor.getTemplate() == 3 ? editor.getState() : 0, new Timestamp(modify), false);
         });
     }
 
