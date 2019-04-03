@@ -67,7 +67,10 @@ public class FileServiceImpl implements FileService, org.lpw.tephra.pdf.MediaWri
 
     @Override
     public JSONArray query(String editor) {
-        return modelHelper.toJson(fileDao.query(editor).getList(), (file, object) -> object.remove("uri"));
+        return modelHelper.toJson(fileDao.query(editor).getList(), (file, object) -> {
+            object.remove("id");
+            object.remove("uri");
+        });
     }
 
     @Override
