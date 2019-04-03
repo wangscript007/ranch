@@ -52,6 +52,11 @@ public class EditorCtrl {
         return editorService.find(request.get("id"));
     }
 
+    @Execute(name = "templates")
+    public Object templates() {
+        return editorService.templates(request.getAsArray("ids"));
+    }
+
     @Execute(name = "save", validates = {
             @Validate(validator = Validators.ID, emptyable = true, parameter = "id", failureCode = 1),
             @Validate(validator = Validators.NOT_EMPTY, parameter = "type", failureCode = 3),

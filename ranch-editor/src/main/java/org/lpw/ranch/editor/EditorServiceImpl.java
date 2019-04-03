@@ -185,6 +185,20 @@ public class EditorServiceImpl implements EditorService, HourJob, DateJob {
     }
 
     @Override
+    public JSONObject templates(String[] ids) {
+        JSONObject object = new JSONObject();
+        for (String id : ids) {
+            EditorModel editor = findById(id);
+            if (editor == null || editor.getTemplate() == 0)
+                continue;
+
+            object.put(id, toJson(editor));
+        }
+
+        return object;
+    }
+
+    @Override
     public boolean existsType(String type) {
         return getTemplateTypes().contains(type);
     }

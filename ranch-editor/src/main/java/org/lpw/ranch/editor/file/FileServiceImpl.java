@@ -173,10 +173,12 @@ public class FileServiceImpl implements FileService, org.lpw.tephra.pdf.MediaWri
     @Override
     public String download(String editor, String type, String email) {
         FileModel file = fileDao.find(editor, type);
+        System.out.println("downloadfile:11:" + file);
         if (file == null)
             return null;
 
         String uri = wormholeHelper.temporary(file.getUri());
+        System.out.println("downloadfile:22:" + file.getUri() + ";" + uri);
         if (validator.isEmpty(uri))
             return null;
 
@@ -192,6 +194,7 @@ public class FileServiceImpl implements FileService, org.lpw.tephra.pdf.MediaWri
             args.put("url", url);
             pushHelper.send(FileModel.NAME + ".download", user, email, args);
         }
+        System.out.println("downloadfile:33:" + url);
 
         return url;
     }

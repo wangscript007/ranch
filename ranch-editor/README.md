@@ -30,6 +30,8 @@
 
 [查找](doc/find.md)
 
+[查找模板信息集](doc/templates.md)
+
 [保存](doc/save.md)
 
 [修改](doc/modify.md)

@@ -82,6 +82,13 @@ public interface EditorService {
     JSONObject find(String id);
 
     /**
+     * 查找模板信息集。
+     * @param ids ID集。
+     * @return 模板信息集。
+     */
+    JSONObject templates(String[] ids);
+
+    /**
      * 判断是否存在类型。
      *
      * @param type 类型。
