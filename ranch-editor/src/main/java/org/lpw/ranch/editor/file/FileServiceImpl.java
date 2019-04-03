@@ -118,7 +118,14 @@ public class FileServiceImpl implements FileService, org.lpw.tephra.pdf.MediaWri
             em.setImage(list.get(0));
             em.setScreenshot(em.getImage());
             editor = editorService.save(em).getString("id");
+        } else {
+            EditorModel em = new EditorModel();
+            em.setId(editor);
+            em.setImage(list.get(0));
+            em.setScreenshot(em.getImage());
+            editorService.modify(em, -1);
         }
+
         FileModel model = fileDao.find(editor, type);
         if (model == null) {
             model = new FileModel();
@@ -129,6 +136,7 @@ public class FileServiceImpl implements FileService, org.lpw.tephra.pdf.MediaWri
         model.setSize(file.length());
         model.setTime(dateTime.now());
         fileDao.save(model);
+
         elementService.deletes(editor);
         screenshotService.delete(editor);
         for (int i = 0, size = list.size(); i < size; i++) {
