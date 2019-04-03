@@ -1,6 +1,7 @@
 package org.lpw.ranch.user.online;
 
 import com.alibaba.fastjson.JSONObject;
+import org.lpw.ranch.user.UserModel;
 
 /**
  * @author lpw
@@ -27,9 +28,9 @@ public interface OnlineService {
     /**
      * 登入。
      *
-     * @param user 用户ID。
+     * @param user 用户。
      */
-    void signIn(String user);
+    void signIn(UserModel user);
 
     /**
      * 判断当前用户是否已登入。

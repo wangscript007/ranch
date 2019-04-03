@@ -27,8 +27,7 @@
             "label": "ranch.user.register"
         },
         {
-            "name": "user.grade",
-            "label": "ranch.user.grade"
+            "name": "grade"
         },
         {
             "name": "ip"

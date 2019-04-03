@@ -204,7 +204,7 @@ public class UserServiceImpl implements UserService {
     }
 
     private void signIn(UserModel user, String uid) {
-        onlineService.signIn(user.getId());
+        onlineService.signIn(user);
         session.set(SESSION, user);
         session.set(SESSION_UID, uid);
     }

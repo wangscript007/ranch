@@ -1,6 +1,7 @@
 package org.lpw.ranch.user.online;
 
 import com.alibaba.fastjson.JSONObject;
+import org.lpw.ranch.user.UserModel;
 import org.lpw.ranch.user.UserService;
 import org.lpw.ranch.user.auth.AuthModel;
 import org.lpw.ranch.user.auth.AuthService;
@@ -56,14 +57,15 @@ public class OnlineServiceImpl implements OnlineService, MinuteJob {
     }
 
     @Override
-    public void signIn(String user) {
+    public void signIn(UserModel user) {
         String sid = session.getId();
         OnlineModel online = onlineDao.findBySid(sid);
         if (online == null) {
             online = new OnlineModel();
             online.setSid(sid);
         }
-        online.setUser(user);
+        online.setUser(user.getId());
+        online.setGrade(user.getGrade());
         online.setIp(header.getIp());
         online.setSignIn(dateTime.now());
         online.setLastVisit(dateTime.now());

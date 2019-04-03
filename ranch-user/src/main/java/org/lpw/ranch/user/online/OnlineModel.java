@@ -24,6 +24,7 @@ public class OnlineModel extends ModelSupport {
     static final String NAME = "ranch.user.online";
 
     private String user; // 用户
+    private int grade; // 等级
     private String ip; // IP地址
     private String sid; // Session ID
     private Timestamp signIn; // 登入时间
@@ -37,6 +38,16 @@ public class OnlineModel extends ModelSupport {
 
     public void setUser(String user) {
         this.user = user;
+    }
+
+    @Jsonable
+    @Column(name = "c_grade")
+    public int getGrade() {
+        return grade;
+    }
+
+    public void setGrade(int grade) {
+        this.grade = grade;
     }
 
     @Jsonable

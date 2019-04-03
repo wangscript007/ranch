@@ -31,6 +31,7 @@ class OnlineDaoImpl implements OnlineDao {
         List<Object> args = new ArrayList<>();
         daoHelper.where(where, args, "c_user", DaoOperation.Equals, user);
         daoHelper.where(where, args, "c_ip", DaoOperation.Equals, ip);
+        daoHelper.where(where, args, "c_grade", DaoOperation.Less, 99);
 
         return liteOrm.query(new LiteQuery(OnlineModel.class).where(where.toString()).order("c_last_visit desc")
                 .size(pageSize).page(pageNum), args.toArray());
