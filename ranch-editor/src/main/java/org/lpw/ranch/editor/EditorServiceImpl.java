@@ -384,7 +384,7 @@ public class EditorServiceImpl implements EditorService, HourJob, DateJob {
     public void modify(String id) {
         EditorModel editor = findById(id);
         if (editor != null)
-            save(editor, 0, new Timestamp(System.currentTimeMillis()), false);
+            save(editor, editor.getTemplate() == 3 ? editor.getState() : 0, new Timestamp(System.currentTimeMillis()), false);
     }
 
     @Override
