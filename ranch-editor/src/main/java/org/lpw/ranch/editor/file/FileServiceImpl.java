@@ -108,8 +108,6 @@ public class FileServiceImpl implements FileService, org.lpw.tephra.pdf.MediaWri
             return object;
         }
 
-        String id = uploadReader.getParameter("id");
-        FileModel model = validator.isEmpty(id) ? null : fileDao.findById(id);
         String editor = uploadReader.getParameter("editor");
         if (editor != null && editorService.findById(editor) == null)
             editor = null;
@@ -121,8 +119,7 @@ public class FileServiceImpl implements FileService, org.lpw.tephra.pdf.MediaWri
             em.setScreenshot(em.getImage());
             editor = editorService.save(em).getString("id");
         }
-        if (model == null)
-            model = fileDao.find(editor, type);
+        FileModel model = fileDao.find(editor, type);
         if (model == null) {
             model = new FileModel();
             model.setEditor(editor);
