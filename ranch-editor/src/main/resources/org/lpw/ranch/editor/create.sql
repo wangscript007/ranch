@@ -2,7 +2,7 @@ DROP TABLE IF EXISTS t_editor;
 CREATE TABLE t_editor
 (
   c_id CHAR(36) NOT NULL COMMENT '主键',
-  c_template INT DEFAULT 0 COMMENT '模板：0-否；1-模板；2-范文',
+  c_template INT DEFAULT 0 COMMENT '模板：0-否；1-模板；2-范文；3-模板（文件）；4-范文（文件）',
   c_type VARCHAR(255) NOT NULL COMMENT '类型',
   c_sort INT DEFAULT 0 COMMENT '顺序',
   c_name VARCHAR(255) DEFAULT NULL COMMENT '名称',

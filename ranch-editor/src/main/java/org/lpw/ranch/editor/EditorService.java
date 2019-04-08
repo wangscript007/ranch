@@ -10,6 +10,10 @@ import java.util.Map;
  */
 public interface EditorService {
     /**
+     * Template最大值。
+     */
+    int MAX_TEMPLATE = 4;
+    /**
      * 编辑器信息是否存在验证器Bean名称。
      */
     String VALIDATOR_EXISTS = EditorModel.NAME + ".validator.exists";
@@ -83,6 +87,7 @@ public interface EditorService {
 
     /**
      * 查找模板信息集。
+     *
      * @param ids ID集。
      * @return 模板信息集。
      */

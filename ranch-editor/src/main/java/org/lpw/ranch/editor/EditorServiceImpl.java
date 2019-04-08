@@ -631,7 +631,7 @@ public class EditorServiceImpl implements EditorService, HourJob, DateJob {
             return;
 
         getTemplateTypes().forEach(type -> {
-            for (int i = 1; i <= 3; i++)
+            for (int i = 1; i <= MAX_TEMPLATE; i++)
                 setSearchIndex(type, i);
         });
         fileService.count().forEach(editorDao::download);

@@ -192,7 +192,7 @@ public class EditorCtrl {
 
     @Execute(name = "search", validates = {
             @Validate(validator = Validators.NOT_EMPTY, parameter = "type", failureCode = 3),
-            @Validate(validator = Validators.BETWEEN, number = {1, 3}, parameter = "template", failureCode = 13),
+            @Validate(validator = Validators.BETWEEN, number = {1, EditorService.MAX_TEMPLATE}, parameter = "template", failureCode = 13),
             @Validate(validator = EditorService.VALIDATOR_TYPE_EXISTS, parameter = "type", failureCode = 19)
     })
     public Object search() {
@@ -203,7 +203,7 @@ public class EditorCtrl {
 
     @Execute(name = "reset-search-index", validates = {
             @Validate(validator = Validators.NOT_EMPTY, parameter = "type", failureCode = 3),
-            @Validate(validator = Validators.BETWEEN, number = {1, 3}, parameter = "template", failureCode = 13),
+            @Validate(validator = Validators.BETWEEN, number = {1, EditorService.MAX_TEMPLATE}, parameter = "template", failureCode = 13),
             @Validate(validator = EditorService.VALIDATOR_TYPE_EXISTS, parameter = "type", failureCode = 19),
             @Validate(validator = Validators.SIGN)
     })
@@ -213,7 +213,7 @@ public class EditorCtrl {
 
     @Execute(name = "search-label", validates = {
             @Validate(validator = Validators.NOT_EMPTY, parameter = "type", failureCode = 3),
-            @Validate(validator = Validators.BETWEEN, number = {1, 3}, parameter = "template", failureCode = 13),
+            @Validate(validator = Validators.BETWEEN, number = {1, EditorService.MAX_TEMPLATE}, parameter = "template", failureCode = 13),
             @Validate(validator = Validators.GREATER_THAN, number = {0}, parameter = "size", failureCode = 17),
             @Validate(validator = EditorService.VALIDATOR_TYPE_EXISTS, parameter = "type", failureCode = 19)
     })
