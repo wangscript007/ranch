@@ -64,11 +64,11 @@
         <module>ranch-popular</module>
         <module>ranch-stripe</module>
         <module>ranch-google</module>
+        <module>ranch-google-helper</module>
         <module>ranch-inviter</module>
         <module>ranch-ui</module>
         <module>ranch-web</module>
         <module>ranch-test</module>
-        <module>ranch-google-helper</module>
     </modules>
 
     <properties>
