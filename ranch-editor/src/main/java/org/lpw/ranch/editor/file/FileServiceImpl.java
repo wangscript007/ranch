@@ -17,6 +17,7 @@ import org.lpw.tephra.pdf.PdfReader;
 import org.lpw.tephra.util.Context;
 import org.lpw.tephra.util.DateTime;
 import org.lpw.tephra.util.Io;
+import org.lpw.tephra.util.Numeric;
 import org.lpw.tephra.util.Validator;
 import org.lpw.tephra.wormhole.WormholeHelper;
 import org.springframework.stereotype.Service;
@@ -42,6 +43,8 @@ public class FileServiceImpl implements FileService, org.lpw.tephra.pdf.MediaWri
     private Io io;
     @Inject
     private DateTime dateTime;
+    @Inject
+    private Numeric numeric;
     @Inject
     private ModelHelper modelHelper;
     @Inject
@@ -117,7 +120,7 @@ public class FileServiceImpl implements FileService, org.lpw.tephra.pdf.MediaWri
         if (editor == null) {
             EditorModel em = new EditorModel();
             em.setType(uploadReader.getParameter("etype"));
-            em.setTemplate(3);
+            em.setTemplate(numeric.toInt(uploadReader.getParameter("template")));
             em.setImage(list.get(0));
             em.setScreenshot(em.getImage());
             editor = editorService.save(em).getString("id");
