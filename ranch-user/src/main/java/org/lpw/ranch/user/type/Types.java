@@ -30,9 +30,13 @@ public interface Types {
      */
     int LINKEDIN = 4;
     /**
+     * Google。
+     */
+    int GOOGLE = 5;
+    /**
      * 类型最大值。
      */
-    int MAX = 4;
+    int MAX = 5;
 
     /**
      * 获取UID。
