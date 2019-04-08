@@ -1,5 +1,7 @@
 package org.lpw.ranch.editor.buy;
 
+import com.alibaba.fastjson.JSONObject;
+
 import java.util.Map;
 
 /**
@@ -21,6 +23,14 @@ public interface BuyService {
      * @return 购买数集。
      */
     Map<String, Integer> count();
+
+    /**
+     * 是否购买。
+     *
+     * @param editors 编辑器ID集。
+     * @return 购买结果。
+     */
+    JSONObject purchased(String[] editors);
 
     /**
      * 购买。

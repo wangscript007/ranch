@@ -16,4 +16,9 @@ public class BuyCtrl {
     private Request request;
     @Inject
     private BuyService buyService;
+
+    @Execute(name = "purchased")
+    public Object purchased() {
+        return buyService.purchased(request.getAsArray("editors"));
+    }
 }

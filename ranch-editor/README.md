@@ -233,6 +233,19 @@
 
 [删除](doc/price/delete.md)
 
+## 购买
+
+属性
+
+|属性|类型|说明|
+|---|---|---|
+|user|char(36)|用户。|
+|editor|char(36)|编辑器。|
+|price|int|价格，单位：分。|
+|time|datetime|时间。|
+
+[是否购买](doc/buy/purchased.md)
+
 ## 在线演示
 
 属性
