@@ -37,16 +37,6 @@ public interface FileService {
     void save(String editor, String type, File file);
 
     /**
-     * 保存。
-     *
-     * @param editor 编辑器ID。
-     * @param type   类型。
-     * @param uri    URI地址。
-     * @param size   文件大小。
-     */
-    void save(String editor, String type, String uri, long size);
-
-    /**
      * 上传。
      *
      * @param uploadReader 文件读取器。

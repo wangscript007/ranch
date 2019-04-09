@@ -83,20 +83,15 @@ public class FileServiceImpl implements FileService, org.lpw.tephra.pdf.MediaWri
 
     @Override
     public void save(String editor, String type, File file) {
-        save(editor, type, wormholeHelper.file(null, null, null, file), file.length());
-    }
-
-    @Override
-    public void save(String editor, String type, String uri, long size) {
-        FileModel file = fileDao.find(editor, type);
-        if (file == null) {
-            file = new FileModel();
-            file.setEditor(editor);
-            file.setType(type);
+        FileModel model = fileDao.find(editor, type);
+        if (model == null) {
+            model = new FileModel();
+            model.setEditor(editor);
+            model.setType(type);
         }
-        file.setUri(uri);
-        file.setSize(size);
-        fileDao.save(file);
+        model.setUri(wormholeHelper.file(null, null, null, file));
+        model.setSize(file.length());
+        fileDao.save(model);
     }
 
     @Override

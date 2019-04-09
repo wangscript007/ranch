@@ -77,6 +77,16 @@ class EditorDaoImpl implements EditorDao {
     }
 
     @Override
+    public PageList<EditorModel> templates(Set<String> ids) {
+        StringBuilder where = new StringBuilder();
+        List<Object> args = new ArrayList<>();
+        daoHelper.in(where, args, "c_id", ids);
+        daoHelper.where(where, args, "c_template", DaoOperation.Greater, 0);
+
+        return liteOrm.query(new LiteQuery(EditorModel.class).where(where.toString()), args.toArray());
+    }
+
+    @Override
     public void save(EditorModel editor) {
         liteOrm.save(editor);
         liteOrm.close();

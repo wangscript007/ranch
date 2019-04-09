@@ -41,6 +41,7 @@ import javax.inject.Inject;
 import java.io.File;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -53,7 +54,6 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 @Service(EditorModel.NAME + ".service")
 public class EditorServiceImpl implements EditorService, HourJob, DateJob {
-    private static final String CACHE_MODEL = EditorModel.NAME + ".service.cache.model:";
     private static final String CACHE_SEARCH = EditorModel.NAME + ".service.cache.search:";
     private static final String CACHE_SEARCH_LABEL = EditorModel.NAME + ".service.cache.search.label:";
 
@@ -171,12 +171,7 @@ public class EditorServiceImpl implements EditorService, HourJob, DateJob {
 
     @Override
     public EditorModel findById(String id) {
-        String cacheKey = CACHE_MODEL + id;
-        EditorModel editor = cache.get(cacheKey);
-        if (editor == null)
-            cache.put(cacheKey, editor = editorDao.findById(id), false);
-
-        return editor;
+        return editorDao.findById(id);
     }
 
     @Override
@@ -187,13 +182,10 @@ public class EditorServiceImpl implements EditorService, HourJob, DateJob {
     @Override
     public JSONObject templates(String[] ids) {
         JSONObject object = new JSONObject();
-        for (String id : ids) {
-            EditorModel editor = findById(id);
-            if (editor == null || editor.getTemplate() == 0)
-                continue;
+        if (validator.isEmpty(ids))
+            return object;
 
-            object.put(id, toJson(editor));
-        }
+        editorDao.templates(new HashSet<>(Arrays.asList(ids))).getList().forEach(editor -> object.put(editor.getId(), toJson(editor)));
 
         return object;
     }
@@ -427,7 +419,6 @@ public class EditorServiceImpl implements EditorService, HourJob, DateJob {
             EditorModel editor = findById(id);
             editor.setLabel(label.substring(1));
             editorDao.save(editor);
-            cache.remove(CACHE_MODEL + id);
             types.add(editor.getType());
         });
         types.forEach(this::resetRandom);
@@ -492,7 +483,6 @@ public class EditorServiceImpl implements EditorService, HourJob, DateJob {
         if (owner)
             roleService.save(userHelper.id(), editor.getId(), RoleService.Type.Owner);
         roleService.modify(editor);
-        cache.remove(CACHE_MODEL + editor.getId());
         if (editor.getTemplate() > 0)
             labelService.save(editor.getId(), editor.getLabel(), false);
         if (templatePassed)
@@ -637,7 +627,6 @@ public class EditorServiceImpl implements EditorService, HourJob, DateJob {
             editor.setTotal(count[0]);
             editor.setModified(count[1]);
             editorDao.save(editor);
-            cache.remove(CACHE_MODEL + editor.getId());
         });
 
         lockHelper.unlock(lockId);

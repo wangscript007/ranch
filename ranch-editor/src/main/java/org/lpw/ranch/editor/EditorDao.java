@@ -21,6 +21,8 @@ interface EditorDao {
 
     EditorModel findByGroup(String group);
 
+    PageList<EditorModel> templates(Set<String> ids);
+
     void save(EditorModel editor);
 
     void price(String[] ids, String type, String group, int price, int vipPrice, int limitedPrice, Timestamp limitedTime);
