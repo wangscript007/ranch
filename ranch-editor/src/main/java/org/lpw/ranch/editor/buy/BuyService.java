@@ -9,6 +9,11 @@ import java.util.Map;
  */
 public interface BuyService {
     /**
+     * 未购买验证器Bean名称。
+     */
+    String VALIDATOR_NOT_EXISTS=BuyModel.NAME+".validator.not-exists";
+
+    /**
      * 查找。
      *
      * @param user   用户。
