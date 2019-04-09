@@ -4,12 +4,14 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import org.lpw.ranch.async.AsyncService;
 import org.lpw.ranch.editor.buy.BuyService;
+import org.lpw.ranch.editor.element.ElementModel;
 import org.lpw.ranch.editor.element.ElementService;
 import org.lpw.ranch.editor.file.FileService;
 import org.lpw.ranch.editor.label.LabelModel;
 import org.lpw.ranch.editor.label.LabelService;
 import org.lpw.ranch.editor.role.RoleModel;
 import org.lpw.ranch.editor.role.RoleService;
+import org.lpw.ranch.editor.screenshot.ScreenshotService;
 import org.lpw.ranch.lock.LockHelper;
 import org.lpw.ranch.popular.PopularService;
 import org.lpw.ranch.push.helper.PushHelper;
@@ -46,6 +48,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -104,9 +107,13 @@ public class EditorServiceImpl implements EditorService, HourJob, DateJob {
     @Inject
     private ElementService elementService;
     @Inject
+    private ScreenshotService screenshotService;
+    @Inject
     private FileService fileService;
     @Inject
     private BuyService buyService;
+    @Inject
+    private Optional<Set<EditorPublishListener>> listeners;
     @Inject
     private EditorDao editorDao;
     @Value("${" + EditorModel.NAME + ".auto.pass:false}")
@@ -327,16 +334,12 @@ public class EditorServiceImpl implements EditorService, HourJob, DateJob {
 
     @Override
     public String pdf(String id, String email) {
-        StringBuilder pdf = new StringBuilder(userHelper.isVip() ? pdfVip : pdfOrdinary);
-        if (validator.isEmpty(pdf))
-            return "";
-
-        EditorModel editor = findById(id);
-        pdf.append(pdf.indexOf("?") == -1 ? '?' : '&').append("sid=").append(session.getId()).append("&id=").append(id);
+        String sid = session.getId();
         String user = userHelper.id();
+        boolean vip = userHelper.isVip();
 
-        return asyncService.submit(EditorModel.NAME + ".pdf." + id, "", 60, () -> {
-            String path = chromeHelper.pdf(pdf.toString(), 30, editor.getWidth(), editor.getHeight(), "", temporary.root());
+        return asyncService.submit(EditorModel.NAME + ".pdf", id, 60, () -> {
+            String path = pdf(sid, findById(id), vip);
             if (validator.isEmail(email)) {
                 JSONObject args = new JSONObject();
                 args.put("url", wormholeHelper.getUrl(wormholeHelper.file("editor", null, null, new File(path)), false));
@@ -345,6 +348,16 @@ public class EditorServiceImpl implements EditorService, HourJob, DateJob {
 
             return path.substring(path.lastIndexOf(temporary.root()));
         });
+    }
+
+    private String pdf(String sid, EditorModel editor, boolean vip) {
+        StringBuilder pdf = new StringBuilder(vip ? pdfVip : pdfOrdinary);
+        if (validator.isEmpty(pdf))
+            return "";
+
+        pdf.append(pdf.indexOf("?") == -1 ? '?' : '&').append("sid=").append(sid).append("&id=").append(editor.getId());
+
+        return chromeHelper.pdf(pdf.toString(), 30, editor.getWidth(), editor.getHeight(), "", temporary.root());
     }
 
     @Override
@@ -494,6 +507,22 @@ public class EditorServiceImpl implements EditorService, HourJob, DateJob {
             editor.setState(1);
         if (autoSale && editor.getState() == 1)
             editor.setState(3);
+    }
+
+    @Override
+    public String publish(String id, int width, int height) {
+        String sid = session.getId();
+
+        return asyncService.submit(EditorModel.NAME + ".publish", id, 600, () -> {
+            EditorModel editor = findById(id);
+            List<ElementModel> elements = elementService.list(id);
+            screenshotService.capture(sid, editor, elements, width, height);
+            fileService.save(id, "pdf", new File(pdf(sid, editor, true)));
+            fileService.save(id, "pdf.free", new File(pdf(sid, editor, false)));
+            listeners.ifPresent(set -> set.forEach(listener -> listener.publish(sid, editor, elements)));
+
+            return "";
+        });
     }
 
     @Override

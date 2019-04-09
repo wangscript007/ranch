@@ -191,6 +191,15 @@ public class EditorCtrl {
         return editorService.copy(request.get("id"), request.get("type"));
     }
 
+    @Execute(name = "publish", validates = {
+            @Validate(validator = Validators.ID, parameter = "id", failureCode = 1),
+            @Validate(validator = Validators.SIGN),
+            @Validate(validator = EditorService.VALIDATOR_EXISTS, parameter = "id", failureCode = 2)
+    })
+    public Object publish() {
+        return editorService.publish(request.get("id"), request.getAsInt("width"), request.getAsInt("height"));
+    }
+
     @Execute(name = "search", validates = {
             @Validate(validator = Validators.NOT_EMPTY, parameter = "type", failureCode = 3),
             @Validate(validator = Validators.BETWEEN, number = {1, EditorService.MAX_TEMPLATE}, parameter = "template", failureCode = 13),

@@ -54,6 +54,8 @@
 
 [复制](doc/copy.md)
 
+[发布](doc/publish.md)
+
 [搜索模板信息集](doc/search.md)
 
 [重建搜索索引](doc/reset-search-index.md)
@@ -209,8 +211,6 @@
 [检索截图集](doc/screenshot/query.md)
 
 [查找截图](doc/screenshot/find.md)
-
-[截图](doc/screenshot/capture.md)
 
 [截图集](doc/screenshot/images.md)
 

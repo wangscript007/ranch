@@ -264,6 +264,16 @@ public interface EditorService {
     void restore(String id);
 
     /**
+     * 发布。
+     *
+     * @param id     ID值。
+     * @param width  主页面宽度。
+     * @param height 主页面高度。
+     * @return 异步ID。
+     */
+    String publish(String id, int width, int height);
+
+    /**
      * 搜索模板信息集。
      *
      * @param type        类型。

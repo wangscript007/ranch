@@ -66,57 +66,43 @@ public class ScreenshotServiceImpl implements ScreenshotService {
     }
 
     @Override
-    public String capture(String editor, int mainWidth, int mainHeight, int pageWidth, int pageHeight) {
-        if (validator.isEmpty(capture))
-            return "";
-
+    public String capture(String editor) {
         String sid = session.getId();
-        List<ElementModel> list = elementService.list(editor);
+        List<ElementModel> elements = elementService.list(editor);
 
-        return asyncService.submit(ScreenshotModel.NAME + ".capture", "", 2 * (list.size() + 1) * wait, () -> {
-            Map<String, String> map = new HashMap<>();
-            Map<String, Integer> index = new HashMap<>();
-            capture(sid, editor, "", mainWidth, mainHeight, map, index);
-            list.forEach(element -> capture(sid, editor, element.getId(), pageWidth, pageHeight, map, index));
+        return asyncService.submit(ScreenshotModel.NAME + ".capture", editor, 2 * elements.size() * wait, () -> {
+            Map<String, String> map = capture(sid, editorService.findById(editor), elements, 0, 0);
+            JSONArray array = new JSONArray();
+            elements.forEach(element -> array.add(map.get(element.getId())));
 
-            screenshotDao.delete(editor);
-            map.forEach((page, uri) -> {
-                if (page.equals(""))
-                    editorService.screenshot(editor, uri);
-                ScreenshotModel screenshot = new ScreenshotModel();
-                screenshot.setEditor(editor);
-                screenshot.setIndex(index.get(page));
-                screenshot.setPage(page);
-                screenshot.setUri(uri);
-                screenshotDao.save(screenshot);
-            });
-
-            return converter.toString(map);
+            return array.toJSONString();
         });
     }
 
     @Override
-    public String capture(String editorId) {
+    public Map<String, String> capture(String sid, EditorModel editor, List<ElementModel> elements, int width, int height) {
+        Map<String, String> map = new HashMap<>();
         if (validator.isEmpty(capture))
-            return "";
+            return map;
 
-        String sid = session.getId();
-        List<ElementModel> list = elementService.list(editorId);
+        Map<String, Integer> index = new HashMap<>();
+        if (width > 0 && height > 0)
+            capture(sid, editor.getId(), "", width, height, map, index);
+        elements.forEach(element -> capture(sid, editor.getId(), element.getId(), editor.getWidth(), editor.getHeight(), map, index));
 
-        return asyncService.submit(ScreenshotModel.NAME + ".capture", "", 2 * list.size() * wait, () -> {
-            EditorModel editor = editorService.findById(editorId);
-            Map<String, String> map = new HashMap<>();
-            Map<String, Integer> index = new HashMap<>();
-            JSONArray array = new JSONArray();
-            list.forEach(element -> {
-                capture(sid, editorId, element.getId(), editor.getWidth(), editor.getHeight(), map, index);
-                String uri = map.get(element.getId());
-                if (!validator.isEmpty(uri))
-                    array.add(uri);
-            });
-
-            return array.toJSONString();
+        screenshotDao.delete(editor.getId());
+        map.forEach((page, uri) -> {
+            if (page.equals(""))
+                editorService.screenshot(editor.getId(), uri);
+            ScreenshotModel screenshot = new ScreenshotModel();
+            screenshot.setEditor(editor.getId());
+            screenshot.setIndex(index.get(page));
+            screenshot.setPage(page);
+            screenshot.setUri(uri);
+            screenshotDao.save(screenshot);
         });
+
+        return map;
     }
 
     private void capture(String sid, String editor, String page, int width, int height, Map<String, String> map, Map<String, Integer> index) {
