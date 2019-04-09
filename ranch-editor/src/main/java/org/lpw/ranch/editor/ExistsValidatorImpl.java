@@ -10,7 +10,7 @@ import javax.inject.Inject;
  * @author lpw
  */
 @Controller(EditorService.VALIDATOR_EXISTS)
-public class ExistsValidatoImpl extends ValidatorSupport {
+public class ExistsValidatorImpl extends ValidatorSupport {
     @Inject
     private EditorService editorService;
 

@@ -9,20 +9,18 @@ import javax.inject.Inject;
 /**
  * @author lpw
  */
-@Controller(EditorService.VALIDATOR_TYPE_EXISTS)
-public class TypeExistsValidatoImpl extends ValidatorSupport {
+@Controller(EditorService.VALIDATOR_COPY)
+public class CopyValidatorImpl extends ValidatorSupport {
     @Inject
     private EditorService editorService;
 
     @Override
     public boolean validate(ValidateWrapper validate, String parameter) {
-//        return editorService.existsType(parameter);
-
-        return true;
+        return editorService.isTemplateOwner(parameter);
     }
 
     @Override
     protected String getDefaultFailureMessageKey() {
-        return EditorModel.NAME + ".type.not-exists";
+        return EditorModel.NAME + ".copy.disable";
     }
 }

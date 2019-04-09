@@ -26,6 +26,10 @@ public interface EditorService {
      */
     String VALIDATOR_TYPE_EXISTS = EditorModel.NAME + ".validator.type.exists";
     /**
+     * 可复制验证器Bean名称。
+     */
+    String VALIDATOR_COPY = EditorModel.NAME + ".validator.copy";
+    /**
      * 导出验证器Bean名称。
      */
     String VALIDATOR_EXPORT = EditorModel.NAME + ".validator.export";
@@ -108,6 +112,14 @@ public interface EditorService {
      * @return 不存在则返回true；否则返回false。
      */
     boolean notExistsGroup(String group);
+
+    /**
+     * 是否拥有模板。
+     *
+     * @param id ID值。
+     * @return 拥有则返回true；否则返回false。
+     */
+    boolean isTemplateOwner(String id);
 
     /**
      * 保存编辑器信息。

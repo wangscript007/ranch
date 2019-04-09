@@ -171,7 +171,7 @@ public class EditorCtrl {
             @Validate(validator = EditorService.VALIDATOR_EXISTS, parameter = "id", failureCode = 2),
             @Validate(validator = RoleService.VALIDATOR_VIEWABLE, parameter = "id", failureCode = 41),
             @Validate(validator = RoleService.VALIDATOR_PASSWORD, parameters = {"user", "id", "password"}, failureCode = 49),
-//            @Validate(validator = EditorService.VALIDATOR_EXPORT, parameter = "id", failureCode = 15)
+            @Validate(validator = EditorService.VALIDATOR_EXPORT, parameter = "id", failureCode = 15)
     })
     public Object pdf() {
         return editorService.pdf(request.get("id"), request.get("email"));
@@ -184,7 +184,8 @@ public class EditorCtrl {
             @Validate(validator = UserHelper.VALIDATOR_SIGN_IN),
             @Validate(validator = RoleService.VALIDATOR_INTERVAL, failureCode = 14),
             @Validate(validator = EditorService.VALIDATOR_EXISTS, parameter = "id", failureCode = 2),
-            @Validate(validator = RoleService.VALIDATOR_CREATABLE, failureCode = 12)
+            @Validate(validator = RoleService.VALIDATOR_CREATABLE, failureCode = 12),
+            @Validate(validator = EditorService.VALIDATOR_COPY, parameter = "id", failureCode = 20)
     })
     public Object copy() {
         return editorService.copy(request.get("id"), request.get("type"));

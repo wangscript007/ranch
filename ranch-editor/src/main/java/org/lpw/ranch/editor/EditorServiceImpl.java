@@ -209,6 +209,25 @@ public class EditorServiceImpl implements EditorService, HourJob, DateJob {
     }
 
     @Override
+    public boolean isTemplateOwner(String id) {
+        for (boolean vip = userHelper.isVip(); true; ) {
+            if (validator.isEmpty(id))
+                return false;
+
+            EditorModel editor = findById(id);
+            if (editor == null)
+                return false;
+
+            if (editor.getTemplate() > 0)
+                return editor.getPrice() == 0 || (vip && editor.getVipPrice() == 0) || (editor.getLimitedPrice() == 0
+                        && editor.getLimitedTime() != null && editor.getLimitedTime().getTime() > System.currentTimeMillis())
+                        || buyService.find(userHelper.id(), id) != null;
+
+            id = editor.getSource();
+        }
+    }
+
+    @Override
     public JSONObject save(EditorModel editor) {
         EditorModel model = validator.isEmpty(editor.getId()) ? null : findById(editor.getId());
         if (model == null) {
