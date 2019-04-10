@@ -337,7 +337,7 @@ public class EditorServiceImpl implements EditorService, HourJob, DateJob {
     public String pdf(String id, String email) {
         String sid = session.getId();
         String user = userHelper.id();
-        boolean vip = userHelper.isVip();
+        boolean vip = isTemplateOwner(id);
 
         return asyncService.submit(EditorModel.NAME + ".pdf", id, 60, () -> {
             String path = pdf(sid, findById(id), vip);
