@@ -177,7 +177,7 @@ public class FileServiceImpl implements FileService, org.lpw.tephra.pdf.MediaWri
 
     @Override
     public String download(String editor, String type, String email) {
-        if (!editorService.isTemplateOwner(editor))
+        if (!userHelper.isVip())
             type += ".free";
         FileModel file = fileDao.find(editor, type);
         if (file == null)
