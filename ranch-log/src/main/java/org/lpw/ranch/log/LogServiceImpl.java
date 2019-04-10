@@ -32,7 +32,6 @@ public class LogServiceImpl implements LogService, DateJob {
     private UserHelper userHelper;
     @Inject
     private LogDao logDao;
-    @Inject
     private ExecutorService executorService = Executors.newSingleThreadExecutor();
 
     @Override
