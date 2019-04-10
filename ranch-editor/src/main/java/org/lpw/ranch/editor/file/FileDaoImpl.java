@@ -10,7 +10,9 @@ import org.springframework.stereotype.Repository;
 
 import javax.inject.Inject;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * @author lpw
@@ -48,6 +50,15 @@ class FileDaoImpl implements FileDao {
                 null).forEach(list -> map.put((String) list.get(0), numeric.toInt(list.get(1))));
 
         return map;
+    }
+
+    @Override
+    public Set<String> editors() {
+        Set<String> set = new HashSet<>();
+        sql.query("SELECT c_editor FROM " + modelTables.get(FileModel.class).getTableName(), null)
+                .forEach(list -> set.add((String) list.get(0)));
+
+        return set;
     }
 
     @Override

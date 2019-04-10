@@ -274,6 +274,15 @@ public interface EditorService {
     String publish(String id, int width, int height);
 
     /**
+     * 获取一个未发布ID。
+     *
+     * @param type    类型。
+     * @param refresh 更新数据。
+     * @return ID值，不存在则返回空字符串""。
+     */
+    String unPublish(String type, boolean refresh);
+
+    /**
      * 搜索模板信息集。
      *
      * @param type        类型。

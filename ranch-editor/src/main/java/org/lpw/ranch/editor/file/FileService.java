@@ -7,6 +7,7 @@ import org.lpw.tephra.ctrl.upload.UploadReader;
 import java.io.File;
 import java.io.IOException;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * @author lpw
@@ -26,6 +27,13 @@ public interface FileService {
      * @return 下载数集。
      */
     Map<String, Integer> count();
+
+    /**
+     * 获取编辑器ID集。
+     *
+     * @return 编辑器ID集。
+     */
+    Set<String> editors();
 
     /**
      * 保存。

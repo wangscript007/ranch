@@ -2,6 +2,8 @@ package org.lpw.ranch.editor;
 
 import org.lpw.ranch.util.DaoHelper;
 import org.lpw.ranch.util.DaoOperation;
+import org.lpw.tephra.dao.jdbc.Sql;
+import org.lpw.tephra.dao.model.ModelTables;
 import org.lpw.tephra.dao.orm.PageList;
 import org.lpw.tephra.dao.orm.lite.LiteOrm;
 import org.lpw.tephra.dao.orm.lite.LiteQuery;
@@ -23,6 +25,10 @@ import java.util.Set;
 class EditorDaoImpl implements EditorDao {
     @Inject
     private Validator validator;
+    @Inject
+    private Sql sql;
+    @Inject
+    private ModelTables modelTables;
     @Inject
     private LiteOrm liteOrm;
     @Inject
@@ -84,6 +90,15 @@ class EditorDaoImpl implements EditorDao {
         daoHelper.where(where, args, "c_template", DaoOperation.Greater, 0);
 
         return liteOrm.query(new LiteQuery(EditorModel.class).where(where.toString()), args.toArray());
+    }
+
+    @Override
+    public List<String> templates(String type, int state) {
+        List<String> list = new ArrayList<>();
+        sql.query("SELECT c_id FROM " + modelTables.get(EditorModel.class).getTableName() + " WHERE c_template IN(1,2) AND c_type=? AND c_state=?",
+                new Object[]{type, state}).forEach(l -> list.add((String) l.get(0)));
+
+        return list;
     }
 
     @Override

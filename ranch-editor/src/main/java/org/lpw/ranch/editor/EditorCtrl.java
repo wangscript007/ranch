@@ -200,6 +200,13 @@ public class EditorCtrl {
         return editorService.publish(request.get("id"), request.getAsInt("width"), request.getAsInt("height"));
     }
 
+    @Execute(name = "un-publish", validates = {
+            @Validate(validator = Validators.SIGN)
+    })
+    public Object unPublish() {
+        return editorService.unPublish(request.get("type"), request.getAsBoolean("refresh"));
+    }
+
     @Execute(name = "search", validates = {
             @Validate(validator = Validators.NOT_EMPTY, parameter = "type", failureCode = 3),
             @Validate(validator = Validators.BETWEEN, number = {1, EditorService.MAX_TEMPLATE}, parameter = "template", failureCode = 13),

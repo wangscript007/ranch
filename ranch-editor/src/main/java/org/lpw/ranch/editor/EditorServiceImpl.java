@@ -131,6 +131,7 @@ public class EditorServiceImpl implements EditorService, HourJob, DateJob {
     private Set<String> templateTypeSet;
     private Map<String, String> random = new ConcurrentHashMap<>();
     private Set<Integer> onsaleState = Collections.singleton(3);
+    private List<String> unPublishIds;
 
     @Override
     public JSONObject query(String user, String uid, String mobile, String email, String nick, int template, String type, String name, String label,
@@ -414,7 +415,7 @@ public class EditorServiceImpl implements EditorService, HourJob, DateJob {
         map.forEach((id, modify) -> {
             EditorModel editor = findById(id);
             if (Math.abs(editor.getModify().getTime() - modify) > TimeUnit.Second.getTime())
-                save(editor, editor.getTemplate() == 3 ? editor.getState() : 0, new Timestamp(modify), false);
+                save(editor, editor.getState() == 3 ? editor.getState() : 0, new Timestamp(modify), false);
         });
     }
 
@@ -523,6 +524,18 @@ public class EditorServiceImpl implements EditorService, HourJob, DateJob {
 
             return "";
         });
+    }
+
+    @Override
+    public String unPublish(String type, boolean refresh) {
+        if (refresh || unPublishIds == null) {
+            unPublishIds = editorDao.templates(type, 3);
+            unPublishIds.removeAll(fileService.editors());
+        }
+        if (unPublishIds.isEmpty())
+            return "";
+
+        return unPublishIds.remove(0);
     }
 
     @Override

@@ -29,6 +29,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * @author lpw
@@ -79,6 +80,11 @@ public class FileServiceImpl implements FileService, org.lpw.tephra.pdf.MediaWri
     @Override
     public Map<String, Integer> count() {
         return fileDao.count();
+    }
+
+    @Override
+    public Set<String> editors() {
+        return fileDao.editors();
     }
 
     @Override
