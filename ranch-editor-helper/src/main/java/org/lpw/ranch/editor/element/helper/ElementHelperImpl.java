@@ -30,6 +30,11 @@ public class ElementHelperImpl implements ElementHelper {
 
     @Override
     public JSONArray query(String editor, String parent, boolean recursive) {
+        return query(null, editor, parent, recursive);
+    }
+
+    @Override
+    public JSONArray query(Map<String, String> header, String editor, String parent, boolean recursive) {
         if (queryKey == null)
             queryKey = key + ".query";
 
@@ -40,7 +45,7 @@ public class ElementHelperImpl implements ElementHelper {
         if (recursive)
             parameter.put("recursive", "true");
 
-        return carousel.service(queryKey, null, parameter, false, JSONArray.class);
+        return carousel.service(queryKey, header, parameter, false, JSONArray.class);
     }
 
     @Override

@@ -20,6 +20,17 @@ public interface ElementHelper {
     JSONArray query(String editor, String parent, boolean recursive);
 
     /**
+     * 检索元素集。
+     *
+     * @param header    请求Header信息集。
+     * @param editor    编辑器ID值。
+     * @param parent    父元素ID值。
+     * @param recursive 是否递归获取子元素集。
+     * @return 元素集。
+     */
+    JSONArray query(Map<String, String> header, String editor, String parent, boolean recursive);
+
+    /**
      * 保存元素信息。
      *
      * @param id     ID值。
