@@ -97,6 +97,7 @@ public class FileServiceImpl implements FileService, org.lpw.tephra.pdf.MediaWri
         }
         model.setUri(wormholeHelper.file(null, null, null, file));
         model.setSize(file.length());
+        model.setTime(dateTime.now());
         fileDao.save(model);
     }
 
