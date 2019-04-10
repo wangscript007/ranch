@@ -12,6 +12,8 @@ import org.springframework.stereotype.Service;
 import javax.inject.Inject;
 import java.util.Calendar;
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * @author lpw
@@ -30,6 +32,8 @@ public class LogServiceImpl implements LogService, DateJob {
     private UserHelper userHelper;
     @Inject
     private LogDao logDao;
+    @Inject
+    private ExecutorService executorService = Executors.newSingleThreadExecutor();
 
     @Override
     public void save(String type) {
@@ -42,7 +46,7 @@ public class LogServiceImpl implements LogService, DateJob {
         log.setHeader(toJson(header.getMap()));
         log.setParameter(toJson(request.getMap()));
         log.setTime(dateTime.now());
-        logDao.save(log);
+        executorService.submit(() -> logDao.save(log));
     }
 
     private String toJson(Map<String, String> map) {

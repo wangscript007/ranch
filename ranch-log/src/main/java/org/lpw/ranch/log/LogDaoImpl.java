@@ -18,6 +18,7 @@ class LogDaoImpl implements LogDao {
     @Override
     public void save(LogModel log) {
         liteOrm.save(log);
+        liteOrm.close();
     }
 
     @Override
