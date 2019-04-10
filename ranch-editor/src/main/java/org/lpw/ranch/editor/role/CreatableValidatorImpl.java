@@ -20,15 +20,12 @@ public class CreatableValidatorImpl extends ValidatorSupport {
     private UserHelper userHelper;
     @Inject
     private RoleDao roleDao;
-    @Value("${" + RoleModel.NAME + ".free-create:5}")
-    private int freeCreate;
     @Value("${" + RoleModel.NAME + ".date-create:99}")
     private int dateCreate;
 
     @Override
     public boolean validate(ValidateWrapper validate, String parameter) {
-        return !validator.isEmpty(parameter) || roleDao.count(userHelper.id(), RoleService.Type.Owner.ordinal(), 0) < freeCreate
-                || (userHelper.isVip() && roleDao.count(userHelper.id(), RoleService.Type.Owner.ordinal(),
+        return !validator.isEmpty(parameter) || (userHelper.isVip() && roleDao.count(userHelper.id(), RoleService.Type.Owner.ordinal(),
                 dateTime.getStart(dateTime.today()), dateTime.getEnd(dateTime.today())) < dateCreate);
     }
 
