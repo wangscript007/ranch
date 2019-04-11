@@ -3,11 +3,13 @@ package org.lpw.ranch.doc;
 import com.alibaba.fastjson.JSONObject;
 import com.vladsch.flexmark.html.HtmlRenderer;
 import com.vladsch.flexmark.parser.Parser;
+import org.lpw.ranch.async.AsyncService;
 import org.lpw.ranch.audit.Audit;
 import org.lpw.ranch.audit.AuditHelper;
 import org.lpw.ranch.doc.relation.RelationService;
 import org.lpw.ranch.doc.topic.TopicModel;
 import org.lpw.ranch.doc.topic.TopicService;
+import org.lpw.ranch.lock.LockHelper;
 import org.lpw.ranch.popular.PopularService;
 import org.lpw.ranch.recycle.Recycle;
 import org.lpw.ranch.recycle.RecycleHelper;
@@ -69,6 +71,8 @@ public class DocServiceImpl implements DocService, MinuteJob, DateJob {
     @Inject
     private Carousel carousel;
     @Inject
+    private LockHelper lockHelper;
+    @Inject
     private UserHelper userHelper;
     @Inject
     private AuditHelper auditHelper;
@@ -76,6 +80,8 @@ public class DocServiceImpl implements DocService, MinuteJob, DateJob {
     private RecycleHelper recycleHelper;
     @Inject
     private Pagination pagination;
+    @Inject
+    private AsyncService asyncService;
     @Inject
     private PopularService popularService;
     @Inject
@@ -151,6 +157,10 @@ public class DocServiceImpl implements DocService, MinuteJob, DateJob {
 
     @Override
     public JSONObject search(String category, String[] words) {
+        if (validator.isEmpty(words) || (words.length == 1 && validator.isEmpty(words[0])))
+            return docDao.query(null, category, null, null, null, Audit.Pass, Recycle.No,
+                    pagination.getPageSize(20), pagination.getPageNum()).toJson(doc -> toJsonFull(doc, false));
+
         popularService.increase(DocModel.NAME + ":" + category, words);
         List<String> ids = luceneHelper.query(getLuceneKey(category), words, true, 1024);
         if (ids == null)
@@ -365,40 +375,52 @@ public class DocServiceImpl implements DocService, MinuteJob, DateJob {
     }
 
     @Override
-    public void refresh() {
-        relationService.clear();
-        List<DocModel> list = docDao.query(null, null, null, null, null, Audit.Pass, Recycle.No,
-                0, 0).getList();
-        if (list.isEmpty())
-            return;
+    public String refresh() {
+        return asyncService.submit(DocModel.NAME + ".refresh", "", 3600, () -> {
+            String lockId = lockHelper.lock(DocModel.NAME + ".refresh", 1000L, 3600);
+            if (lockId == null)
+                return "lock";
 
-        Map<String, List<DocModel>> map = new HashMap<>();
-        list.forEach(doc -> map.computeIfAbsent(doc.getCategory(), key -> new ArrayList<>()).add(doc));
-        map.forEach((category, docs) -> {
-            String luceneKey = getLuceneKey(category);
-            luceneHelper.clear(luceneKey);
+            relationService.clear();
+            List<DocModel> list = docDao.query(null, null, null, null, null, Audit.Pass, Recycle.No,
+                    0, 0).getList();
+            if (list.isEmpty()) {
+                lockHelper.unlock(lockId);
 
-            Map<String, String> sources = new HashMap<>();
-            DocModel previous = null;
-            for (DocModel doc : docs) {
-                if (previous != null) {
-                    relationService.save(doc.getId(), previous.getId(), "previous", 0);
-                    relationService.save(previous.getId(), doc.getId(), "next", 0);
-                }
-                previous = doc;
-                sources.put(doc.getId(), doc.getSubject() + "," + doc.getSummary() + "," + doc.getLabel() + ","
-                        + getSource(doc).replaceAll("<[^>]*>", " ").replace('"', ' ')
-                        .replace('“', ' ').replace('”', ' ').replace('\'', ' ')
-                        .replaceAll("&nbsp;", " ").replaceAll("\\s+", " "));
-                luceneHelper.index(luceneKey, doc.getId(), sources.get(doc.getId()));
+                return "empty";
             }
 
-            docs.forEach(doc -> {
-                List<String> ids = luceneHelper.query(luceneKey, sources.get(doc.getId()), false, 11);
-                for (int i = 1, size = ids.size(); i < size; i++)
-                    relationService.save(doc.getId(), ids.get(i), "alike", i - 1);
-                clearCache(doc.getId());
+            Map<String, List<DocModel>> map = new HashMap<>();
+            list.forEach(doc -> map.computeIfAbsent(doc.getCategory(), key -> new ArrayList<>()).add(doc));
+            map.forEach((category, docs) -> {
+                String luceneKey = getLuceneKey(category);
+                luceneHelper.clear(luceneKey);
+
+                Map<String, String> sources = new HashMap<>();
+                DocModel previous = null;
+                for (DocModel doc : docs) {
+                    if (previous != null) {
+                        relationService.save(doc.getId(), previous.getId(), "previous", 0);
+                        relationService.save(previous.getId(), doc.getId(), "next", 0);
+                    }
+                    previous = doc;
+                    sources.put(doc.getId(), doc.getSubject() + "," + doc.getSummary() + "," + doc.getLabel() + ","
+                            + getSource(doc).replaceAll("<[^>]*>", " ").replace('"', ' ')
+                            .replace('“', ' ').replace('”', ' ').replace('\'', ' ')
+                            .replaceAll("&nbsp;", " ").replaceAll("\\s+", " "));
+                    luceneHelper.index(luceneKey, doc.getId(), sources.get(doc.getId()));
+                }
+
+                docs.forEach(doc -> {
+                    List<String> ids = luceneHelper.query(luceneKey, sources.get(doc.getId()), false, 11);
+                    for (int i = 1, size = ids.size(); i < size; i++)
+                        relationService.save(doc.getId(), ids.get(i), "alike", i - 1);
+                    clearCache(doc.getId());
+                });
             });
+            lockHelper.unlock(lockId);
+
+            return "success";
         });
     }
 

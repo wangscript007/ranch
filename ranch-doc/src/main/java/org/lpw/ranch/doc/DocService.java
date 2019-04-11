@@ -125,6 +125,8 @@ public interface DocService extends AuditService {
 
     /**
      * 刷新。
+     *
+     * @return 异步ID。
      */
-    void refresh();
+    String refresh();
 }

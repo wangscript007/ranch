@@ -157,9 +157,7 @@ public class DocCtrl extends AuditCtrlSupport {
             @Validate(validator = Validators.SIGN)
     })
     public Object refresh() {
-        docService.refresh();
-
-        return "";
+        return docService.refresh();
     }
 
     @Override
