@@ -230,18 +230,18 @@ public class EditorServiceImpl implements EditorService, HourJob, DateJob {
     }
 
     private EditorModel findTemplate(String id) {
-        for (String eid = id; true; ) {
-            if (validator.isEmpty(eid))
+        while (true) {
+            if (validator.isEmpty(id))
                 return null;
 
-            EditorModel editor = findById(eid);
+            EditorModel editor = findById(id);
             if (editor == null)
                 return null;
 
             if (editor.getTemplate() > 0)
                 return editor;
 
-            eid = editor.getSource();
+            id = editor.getSource();
         }
     }
 
