@@ -55,8 +55,11 @@ class FileDaoImpl implements FileDao {
     @Override
     public Set<String> editors() {
         Set<String> set = new HashSet<>();
-        sql.query("SELECT c_editor FROM " + modelTables.get(FileModel.class).getTableName(), null)
-                .forEach(list -> set.add((String) list.get(0)));
+        sql.query("SELECT c_editor,COUNT(*) FROM " + modelTables.get(FileModel.class).getTableName() + " GROUP BY c_editor",
+                null).forEach(list -> {
+            if (numeric.toInt(list.get(1)) == 4)
+                set.add((String) list.get(0));
+        });
 
         return set;
     }
