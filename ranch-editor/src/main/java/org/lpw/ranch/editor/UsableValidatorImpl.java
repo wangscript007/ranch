@@ -9,18 +9,18 @@ import javax.inject.Inject;
 /**
  * @author lpw
  */
-@Controller(EditorService.VALIDATOR_COPY)
-public class CopyValidatorImpl extends ValidatorSupport {
+@Controller(EditorService.VALIDATOR_USABLE)
+public class UsableValidatorImpl extends ValidatorSupport {
     @Inject
     private EditorService editorService;
 
     @Override
     public boolean validate(ValidateWrapper validate, String parameter) {
-        return editorService.isTemplateOwner(parameter);
+        return editorService.usable(parameter);
     }
 
     @Override
     protected String getDefaultFailureMessageKey() {
-        return EditorModel.NAME + ".copy.disable";
+        return EditorModel.NAME + ".use.disable";
     }
 }

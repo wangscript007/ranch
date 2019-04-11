@@ -122,10 +122,10 @@ public class EditorServiceImpl implements EditorService, HourJob, DateJob {
     private boolean autoSale;
     @Value("${" + EditorModel.NAME + ".image:}")
     private String image;
-    @Value("${" + EditorModel.NAME + ".pdf.ordinary:}")
-    private String pdfOrdinary;
-    @Value("${" + EditorModel.NAME + ".pdf.vip:}")
-    private String pdfVip;
+    @Value("${" + EditorModel.NAME + ".pdf.nomark:}")
+    private String pdfNomark;
+    @Value("${" + EditorModel.NAME + ".pdf.mark:}")
+    private String pdfMark;
     @Value("${" + EditorModel.NAME + ".template-types:}")
     private String templateTypes;
     private Set<String> templateTypeSet;
@@ -209,19 +209,37 @@ public class EditorServiceImpl implements EditorService, HourJob, DateJob {
     }
 
     @Override
-    public boolean isTemplateOwner(String id) {
-        for (boolean vip = userHelper.isVip(); true; ) {
+    public boolean usable(String id) {
+        EditorModel editor = findTemplate(id);
+        if (editor == null)
+            return false;
+
+        return editor.getPrice() == 0 || (userHelper.isVip() && editor.getVipPrice() == 0) || (editor.getLimitedPrice() == 0
+                && editor.getLimitedTime() != null && editor.getLimitedTime().getTime() > System.currentTimeMillis())
+                || buyService.find(userHelper.id(), id) != null;
+    }
+
+    @Override
+    public boolean nomark(String id) {
+        if (userHelper.isVip())
+            return true;
+
+        EditorModel editor = findTemplate(id);
+
+        return editor != null && buyService.find(userHelper.id(), editor.getId()) != null;
+    }
+
+    private EditorModel findTemplate(String id) {
+        while (true) {
             if (validator.isEmpty(id))
-                return false;
+                return null;
 
             EditorModel editor = findById(id);
             if (editor == null)
-                return false;
+                return null;
 
             if (editor.getTemplate() > 0)
-                return editor.getPrice() == 0 || (vip && editor.getVipPrice() == 0) || (editor.getLimitedPrice() == 0
-                        && editor.getLimitedTime() != null && editor.getLimitedTime().getTime() > System.currentTimeMillis())
-                        || buyService.find(userHelper.id(), id) != null;
+                return editor;
 
             id = editor.getSource();
         }
@@ -337,10 +355,10 @@ public class EditorServiceImpl implements EditorService, HourJob, DateJob {
     public String pdf(String id, String email) {
         String sid = session.getId();
         String user = userHelper.id();
-        boolean vip = isTemplateOwner(id);
+        boolean nomark = nomark(id);
 
         return asyncService.submit(EditorModel.NAME + ".pdf", id, 60, () -> {
-            String path = pdf(sid, findById(id), vip);
+            String path = pdf(sid, findById(id), nomark);
             if (validator.isEmail(email)) {
                 JSONObject args = new JSONObject();
                 args.put("url", wormholeHelper.getUrl(wormholeHelper.file("editor", null, null, new File(path)), false));
@@ -351,8 +369,8 @@ public class EditorServiceImpl implements EditorService, HourJob, DateJob {
         });
     }
 
-    private String pdf(String sid, EditorModel editor, boolean vip) {
-        StringBuilder pdf = new StringBuilder(vip ? pdfVip : pdfOrdinary);
+    private String pdf(String sid, EditorModel editor, boolean nomark) {
+        StringBuilder pdf = new StringBuilder(nomark ? pdfNomark : pdfMark);
         if (validator.isEmpty(pdf))
             return "";
 
