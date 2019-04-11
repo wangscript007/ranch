@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import org.lpw.ranch.editor.EditorModel;
 import org.lpw.ranch.editor.EditorService;
+import org.lpw.ranch.editor.download.DownloadService;
 import org.lpw.ranch.editor.element.ElementModel;
 import org.lpw.ranch.editor.element.ElementService;
 import org.lpw.ranch.editor.screenshot.ScreenshotService;
@@ -66,6 +67,8 @@ public class FileServiceImpl implements FileService, org.lpw.tephra.pdf.MediaWri
     private ElementService elementService;
     @Inject
     private ScreenshotService screenshotService;
+    @Inject
+    private DownloadService downloadService;
     @Inject
     private FileDao fileDao;
 
@@ -189,15 +192,13 @@ public class FileServiceImpl implements FileService, org.lpw.tephra.pdf.MediaWri
 
         file.setDownload(file.getDownload() + 1);
         fileDao.save(file);
+        downloadService.save(editor, type, file.getUri(), uri);
 
         String url = wormholeHelper.getUrl(uri, false);
         if (validator.isEmail(email)) {
-            String user = userHelper.id();
-            if (validator.isEmpty(user))
-                user = UserHelper.SYSTEM_USER_ID;
             JSONObject args = new JSONObject();
             args.put("url", url);
-            pushHelper.send(FileModel.NAME + ".download", user, email, args);
+            pushHelper.send(FileModel.NAME + ".download", userHelper.id(), email, args);
         }
 
         return url;
