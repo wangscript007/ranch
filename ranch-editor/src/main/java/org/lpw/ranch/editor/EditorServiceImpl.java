@@ -222,12 +222,11 @@ public class EditorServiceImpl implements EditorService, HourJob, DateJob {
 
     @Override
     public boolean nomark(String id) {
-        if (userHelper.isVip())
-            return true;
-
         EditorModel editor = findTemplate(id);
+        if (editor == null)
+            return false;
 
-        return editor != null && buyService.find(userHelper.id(), editor.getId()) != null;
+        return (userHelper.isVip() && editor.getVipPrice() == 0) || buyService.find(userHelper.id(), editor.getId()) != null;
     }
 
     private EditorModel findTemplate(String id) {
