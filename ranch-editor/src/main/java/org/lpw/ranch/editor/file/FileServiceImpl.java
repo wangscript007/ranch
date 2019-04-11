@@ -180,7 +180,8 @@ public class FileServiceImpl implements FileService, org.lpw.tephra.pdf.MediaWri
 
     @Override
     public String download(String editor, String type, String email) {
-        if (!userHelper.isVip())
+        boolean owner = editorService.isTemplateOwner(editor);
+        if (!owner)
             type += ".free";
         FileModel file = fileDao.find(editor, type);
         if (file == null)
@@ -192,7 +193,8 @@ public class FileServiceImpl implements FileService, org.lpw.tephra.pdf.MediaWri
 
         file.setDownload(file.getDownload() + 1);
         fileDao.save(file);
-        downloadService.save(editor, type, file.getUri(), uri);
+        if (!owner)
+            downloadService.save(editor, type, file.getUri(), uri);
 
         String url = wormholeHelper.getUrl(uri, false);
         if (validator.isEmail(email)) {
