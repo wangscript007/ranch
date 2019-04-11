@@ -35,6 +35,7 @@ import org.lpw.tephra.util.Logger;
 import org.lpw.tephra.util.Numeric;
 import org.lpw.tephra.util.TimeUnit;
 import org.lpw.tephra.util.Validator;
+import org.lpw.tephra.wormhole.Protocol;
 import org.lpw.tephra.wormhole.WormholeHelper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -134,16 +135,16 @@ public class EditorServiceImpl implements EditorService, HourJob, DateJob {
     private List<String> unPublishIds;
 
     @Override
-    public JSONObject query(String user, String uid, String mobile, String email, String nick, int template, String type, String name, String label,
-                            String group, int price, int vipPrice, int limitedPrice, int modified, String[] states,
+    public JSONObject query(String user, String uid, String mobile, String email, String nick, int template, String type, String name,
+                            String label, String group, int price, int vipPrice, int limitedPrice, int modified, String[] states,
                             String createStart, String createEnd, String modifyStart, String modifyEnd, Order order) {
         Set<String> ids = ids(user, uid, mobile, email, nick);
         if (ids != null && ids.isEmpty())
             return BeanFactory.getBean(PageList.class).setPage(0, 0, 0).toJson();
 
-        return editorDao.query(ids, template, type, name, label, group, price, vipPrice, limitedPrice, null, modified, getStates(states),
-                dateTime.getStart(createStart), dateTime.getEnd(createEnd), dateTime.getStart(modifyStart), dateTime.getEnd(modifyEnd), order,
-                pagination.getPageSize(20), pagination.getPageNum()).toJson((editor, object) -> {
+        return editorDao.query(ids, template, type, name, label, group, price, vipPrice, limitedPrice, null, modified,
+                getStates(states), dateTime.getStart(createStart), dateTime.getEnd(createEnd), dateTime.getStart(modifyStart),
+                dateTime.getEnd(modifyEnd), order, pagination.getPageSize(20), pagination.getPageNum()).toJson((editor, object) -> {
             RoleModel role = roleService.findOwner(editor.getId());
             if (role != null)
                 object.put("owner", userHelper.get(role.getUser()));
@@ -361,7 +362,8 @@ public class EditorServiceImpl implements EditorService, HourJob, DateJob {
             String path = pdf(sid, findById(id), nomark);
             if (validator.isEmail(email)) {
                 JSONObject args = new JSONObject();
-                args.put("url", wormholeHelper.getUrl(wormholeHelper.file("editor", null, null, new File(path)), false));
+                args.put("url", wormholeHelper.getUrl(Protocol.Https,
+                        wormholeHelper.file("editor", null, null, new File(path)), false));
                 pushHelper.send(EditorModel.NAME + ".pdf", user, email, args);
             }
 

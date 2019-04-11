@@ -89,7 +89,7 @@ public class SpeechServiceImpl implements SpeechService, MinuteJob {
         speech.setWidth(editorModel.getWidth());
         speech.setHeight(editorModel.getHeight());
         speech.setImage(editorModel.getImage());
-        speech.setWsUrl(wormholeHelper.getWssUrl());
+        speech.setWsUrl(wormholeHelper.getWsUrl(true));
         speech.setTime(dateTime.now());
         speechDao.save(speech);
 

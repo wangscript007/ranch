@@ -20,6 +20,7 @@ import org.lpw.tephra.util.DateTime;
 import org.lpw.tephra.util.Io;
 import org.lpw.tephra.util.Numeric;
 import org.lpw.tephra.util.Validator;
+import org.lpw.tephra.wormhole.Protocol;
 import org.lpw.tephra.wormhole.WormholeHelper;
 import org.springframework.stereotype.Service;
 
@@ -196,7 +197,7 @@ public class FileServiceImpl implements FileService, org.lpw.tephra.pdf.MediaWri
         if (markable)
             downloadService.save(editor, type, file.getUri(), uri);
 
-        String url = wormholeHelper.getUrl(uri, false);
+        String url = wormholeHelper.getUrl(Protocol.Https, uri, false);
         if (validator.isEmail(email)) {
             JSONObject args = new JSONObject();
             args.put("url", url);
