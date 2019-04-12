@@ -18,6 +18,8 @@ interface EditorDao {
 
     PageList<EditorModel> query(Timestamp[] modify);
 
+    PageList<EditorModel> search(Set<String> ids, int template, String type, boolean free, boolean vipFree, Order order, int pageSize, int pageNum);
+
     EditorModel findById(String id);
 
     EditorModel findByGroup(String group);

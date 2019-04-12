@@ -289,18 +289,16 @@ public interface EditorService {
     /**
      * 搜索模板信息集。
      *
-     * @param type        类型。
-     * @param template    模板。
-     * @param labels      标签集。
-     * @param words       关键词集。
-     * @param free        是否免费。
-     * @param vipFree     是否会员免费。
-     * @param limitedFree 是否限时免费。
-     * @param order       排序规则。
+     * @param type     类型。
+     * @param template 模板。
+     * @param labels   标签集。
+     * @param words    关键词集。
+     * @param free     是否免费。
+     * @param vipFree  是否会员免费。
+     * @param order    排序规则。
      * @return 编辑器信息集。
      */
-    JSONObject searchTemplate(String type, int template, String[] labels, String[] words, boolean free, boolean vipFree, boolean limitedFree,
-                              Order order);
+    JSONObject searchTemplate(String type, int template, String[] labels, String[] words, boolean free, boolean vipFree, Order order);
 
     /**
      * 重建搜索索引。

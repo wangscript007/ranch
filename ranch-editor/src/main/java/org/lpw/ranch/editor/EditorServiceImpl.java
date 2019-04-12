@@ -558,16 +558,15 @@ public class EditorServiceImpl implements EditorService, HourJob, DateJob {
     }
 
     @Override
-    public JSONObject searchTemplate(String type, int template, String[] labels, String[] words, boolean free, boolean vipFree,
-                                     boolean limitedFree, Order order) {
+    public JSONObject searchTemplate(String type, int template, String[] labels, String[] words, boolean free, boolean vipFree, Order order) {
         int pageSize = pagination.getPageSize(20);
         if (validator.isEmpty(labels) && validator.isEmpty(words))
-            return searchTemplate(type, template, free, vipFree, limitedFree, order, pageSize);
+            return searchTemplate(type, template, free, vipFree, order, pageSize);
 
         popular(type, template, true, labels);
         popular(type, template, false, words);
         String cacheKey = getSearchCacheKey(type, template, converter.toString(labels) + ":" + converter.toString(words)
-                + ":" + free + ":" + vipFree + ":" + limitedFree + ":" + order + ":" + pageSize + ":" + pagination.getPageNum());
+                + ":" + free + ":" + vipFree + ":" + order + ":" + pageSize + ":" + pagination.getPageNum());
         JSONObject object = cache.get(cacheKey);
         if (object != null)
             return object;
@@ -595,9 +594,7 @@ public class EditorServiceImpl implements EditorService, HourJob, DateJob {
             }
         }
 
-        object = editorDao.query(ids, template, type, null, null, null, free ? 0 : -1, vipFree ? 0 : -1, limitedFree ? 0 : -1,
-                limitedFree ? dateTime.now() : null, -1, onsaleState, null, null, null, null,
-                order, pageSize, pagination.getPageNum()).toJson(this::appendToJson);
+        object = editorDao.search(ids, template, type, free, vipFree, order, pageSize, pagination.getPageNum()).toJson(this::appendToJson);
         cache.put(cacheKey, object, false);
 
         return object;
@@ -617,15 +614,13 @@ public class EditorServiceImpl implements EditorService, HourJob, DateJob {
         popularService.increase(EditorModel.NAME + ":" + type + ":" + template + (label ? ":label" : ":word"), values);
     }
 
-    private JSONObject searchTemplate(String type, int template, boolean free, boolean vipFree, boolean limitedFree, Order order, int pageSize) {
-        String cacheKey = getSearchCacheKey(type, template, free + ":" + vipFree + ":" + limitedFree + ":" + order
+    private JSONObject searchTemplate(String type, int template, boolean free, boolean vipFree, Order order, int pageSize) {
+        String cacheKey = getSearchCacheKey(type, template, free + ":" + vipFree + ":" + order
                 + ":" + pageSize + ":" + pagination.getPageNum());
         JSONObject object = cache.get(cacheKey);
         if (object == null)
-            cache.put(cacheKey, object = editorDao.query(null, template, type, null, null, null, free ? 0 : -1,
-                    vipFree ? 0 : -1, limitedFree ? 0 : -1, limitedFree ? dateTime.now() : null, -1, onsaleState, null,
-                    null, null, null, order, pageSize, pagination.getPageNum()).toJson(this::appendToJson),
-                    false);
+            cache.put(cacheKey, object = editorDao.search(null, template, type, free, vipFree, order,
+                    pageSize, pagination.getPageNum()).toJson(this::appendToJson), false);
 
         return object;
     }
