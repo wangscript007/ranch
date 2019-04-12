@@ -58,8 +58,9 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 @Service(EditorModel.NAME + ".service")
 public class EditorServiceImpl implements EditorService, HourJob, DateJob {
-    private static final String CACHE_SEARCH = EditorModel.NAME + ".service.cache.search:";
-    private static final String CACHE_SEARCH_LABEL = EditorModel.NAME + ".service.cache.search.label:";
+    private static final String CACHE_SEARCH = EditorModel.NAME + ".search:";
+    private static final String CACHE_SEARCH_LABEL = EditorModel.NAME + ".search.label:";
+    private static final String CACHE_TEMPLATE = EditorModel.NAME + ".template:";
 
     @Inject
     private Cache cache;
@@ -202,9 +203,11 @@ public class EditorServiceImpl implements EditorService, HourJob, DateJob {
 
     @Override
     public boolean usable(String id) {
-        EditorModel editor = findTemplate(id);
-        if (editor == null)
+        String template = findTemplate(id);
+        if (template == null)
             return false;
+
+        EditorModel editor = findById(template);
 
         return editor.getPrice() == 0 || (userHelper.isVip() && editor.getVipPrice() == 0) || (editor.getLimitedPrice() == 0
                 && editor.getLimitedTime() != null && editor.getLimitedTime().getTime() > System.currentTimeMillis())
@@ -213,14 +216,22 @@ public class EditorServiceImpl implements EditorService, HourJob, DateJob {
 
     @Override
     public boolean nomark(String id) {
-        EditorModel editor = findTemplate(id);
-        if (editor == null)
+        String template = findTemplate(id);
+        if (template == null)
             return false;
+
+        EditorModel editor = findById(template);
 
         return (userHelper.isVip() && editor.getVipPrice() == 0) || buyService.find(userHelper.id(), editor.getId()) != null;
     }
 
-    private EditorModel findTemplate(String id) {
+    @Override
+    public String findTemplate(String id) {
+        String cacheKey = CACHE_TEMPLATE + id;
+        String template = cache.get(cacheKey);
+        if (!validator.isEmpty(template))
+            return template;
+
         while (true) {
             if (validator.isEmpty(id))
                 return null;
@@ -229,8 +240,11 @@ public class EditorServiceImpl implements EditorService, HourJob, DateJob {
             if (editor == null)
                 return null;
 
-            if (editor.getTemplate() > 0)
-                return editor;
+            if (editor.getTemplate() > 0) {
+                cache.put(cacheKey, editor.getId(), false);
+
+                return editor.getId();
+            }
 
             id = editor.getSource();
         }

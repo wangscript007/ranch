@@ -1,5 +1,6 @@
 package org.lpw.ranch.editor.download;
 
+import org.lpw.ranch.editor.EditorService;
 import org.lpw.ranch.editor.buy.BuyService;
 import org.lpw.ranch.user.helper.UserHelper;
 import org.lpw.tephra.ctrl.validate.ValidateWrapper;
@@ -19,9 +20,11 @@ public class CountValidatorImpl extends ValidatorSupport {
     @Inject
     private DateTime dateTime;
     @Inject
+    private UserHelper userHelper;
+    @Inject
     private BuyService buyService;
     @Inject
-    private UserHelper userHelper;
+    private EditorService editorService;
     @Inject
     private DownloadDao downloadDao;
     @Value("${" + DownloadModel.NAME + ".date-max:2}")
@@ -31,12 +34,16 @@ public class CountValidatorImpl extends ValidatorSupport {
 
     @Override
     public boolean validate(ValidateWrapper validate, String parameter) {
+        String template = editorService.findTemplate(parameter);
+        if (template == null)
+            return false;
+
         String user = userHelper.id();
-        if (buyService.find(user, parameter) != null)
+        if (buyService.find(user, template) != null)
             return true;
 
         Set<String> set = downloadDao.editors(user, dateTime.getStart(dateTime.now()));
-        set.remove(parameter);
+        set.remove(template);
         int count = set.size();
 
         return count < dateMax || (count < vipDateMax && userHelper.isVip());
