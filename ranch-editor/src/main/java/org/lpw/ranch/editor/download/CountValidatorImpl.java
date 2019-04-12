@@ -50,6 +50,11 @@ public class CountValidatorImpl extends ValidatorSupport {
     }
 
     @Override
+    public int getFailureCode(ValidateWrapper validate) {
+        return userHelper.isVip() ? 3292 : 3291;
+    }
+
+    @Override
     protected String getDefaultFailureMessageKey() {
         return DownloadModel.NAME + ".over-date-max";
     }

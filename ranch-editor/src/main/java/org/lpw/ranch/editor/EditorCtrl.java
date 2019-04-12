@@ -168,7 +168,7 @@ public class EditorCtrl {
             @Validate(validator = RoleService.VALIDATOR_VIEWABLE, parameter = "id", failureCode = 41),
             @Validate(validator = RoleService.VALIDATOR_PASSWORD, parameters = {"user", "id", "password"}, failureCode = 49),
             @Validate(validator = EditorService.VALIDATOR_USABLE, parameter = "id", failureCode = 15),
-            @Validate(validator = DownloadService.VALIDATOR_COUNT, parameter = "id", failureCode = 19)
+            @Validate(validator = DownloadService.VALIDATOR_COUNT, parameter = "id")
     })
     public Object pdf() {
         return editorService.pdf(request.get("id"), request.get("email"));

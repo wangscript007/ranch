@@ -34,7 +34,7 @@ public class FileCtrl {
             @Validate(validator = UserHelper.VALIDATOR_SIGN_IN),
             @Validate(validator = EditorService.VALIDATOR_EXISTS, parameter = "editor", failureCode = 2),
             @Validate(validator = RoleService.VALIDATOR_VIEWABLE, parameter = "editor", failureCode = 41),
-            @Validate(validator = DownloadService.VALIDATOR_COUNT, parameter = "editor", failureCode = 91)
+            @Validate(validator = DownloadService.VALIDATOR_COUNT, parameter = "editor")
     })
     public Object download() {
         String url = fileService.download(request.get("editor"), request.get("type"), request.get("email"));
