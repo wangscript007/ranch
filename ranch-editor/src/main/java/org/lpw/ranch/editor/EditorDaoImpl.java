@@ -81,7 +81,7 @@ class EditorDaoImpl implements EditorDao {
     }
 
     @Override
-    public PageList<EditorModel> search(Set<String> ids, int template, String type, boolean free, boolean vipFree, Order order,
+    public PageList<EditorModel> search(Set<String> ids, int template, String type, boolean free, boolean nofree, Order order,
                                         int pageSize, int pageNum) {
         StringBuilder where = new StringBuilder();
         List<Object> args = new ArrayList<>();
@@ -89,12 +89,12 @@ class EditorDaoImpl implements EditorDao {
         daoHelper.where(where, args, "c_template", DaoOperation.Equals, template);
         daoHelper.where(where, args, "c_type", DaoOperation.Equals, type);
         where.append(" AND c_state=3");
-        if (vipFree)
-            where.append(" AND c_vip_price=0");
         if (free) {
             where.append(" AND (c_price=0 OR (c_limited_price=0 AND c_limited_time>=?))");
             args.add(dateTime.now());
         }
+        if (nofree)
+            where.append(" AND c_price>0");
 
         return liteOrm.query(new LiteQuery(EditorModel.class).where(where.toString()).order(order.by())
                 .size(pageSize).page(pageNum), args.toArray());

@@ -13,8 +13,7 @@
 |labels|string|否|标签，多个标签以逗号分隔，空表示搜索关键词。|
 |words|string|否|关键词，多个关键词以逗号分隔，空表示所有。|
 |free|string|否|免费，true-是；其他-不限制。|
-|vipFree|string|否|会员免费，true-是；其他-不限制。|
-|limitedFree|string|否|限时免费，true-是；其他-不限制。|
+|nofree|string|否|收费，true-是；其他-不限制。|
 |order|string|否|排序规则：hot-热门（默认）；used-使用最多;newest-最新；none-不排序。|
 |pageSize|int|否|每页显示记录数，默认20。|
 |pageNum|int|否|当前显示页数。|

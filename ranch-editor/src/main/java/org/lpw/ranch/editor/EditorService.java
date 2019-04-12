@@ -290,11 +290,11 @@ public interface EditorService {
      * @param labels   标签集。
      * @param words    关键词集。
      * @param free     是否免费。
-     * @param vipFree  是否会员免费。
+     * @param nofree   是否收费。
      * @param order    排序规则。
      * @return 编辑器信息集。
      */
-    JSONObject searchTemplate(String type, int template, String[] labels, String[] words, boolean free, boolean vipFree, Order order);
+    JSONObject searchTemplate(String type, int template, String[] labels, String[] words, boolean free, boolean nofree, Order order);
 
     /**
      * 重建搜索索引。

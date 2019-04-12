@@ -209,7 +209,7 @@ public class EditorCtrl {
     })
     public Object search() {
         return editorService.searchTemplate(request.get("type"), request.getAsInt("template"), request.getAsArray("labels"),
-                request.getAsArray("words"), request.getAsBoolean("free"), request.getAsBoolean("vipFree"),
+                request.getAsArray("words"), request.getAsBoolean("free"), request.getAsBoolean("nofree"),
                 Order.find(request.get("order"), Order.Hot));
     }
 
