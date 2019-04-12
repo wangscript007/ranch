@@ -1,5 +1,6 @@
 package org.lpw.ranch.editor.download;
 
+import org.lpw.ranch.editor.buy.BuyService;
 import org.lpw.ranch.user.helper.UserHelper;
 import org.lpw.tephra.ctrl.validate.ValidateWrapper;
 import org.lpw.tephra.ctrl.validate.ValidatorSupport;
@@ -8,6 +9,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 
 import javax.inject.Inject;
+import java.util.Set;
 
 /**
  * @author lpw
@@ -16,6 +18,8 @@ import javax.inject.Inject;
 public class CountValidatorImpl extends ValidatorSupport {
     @Inject
     private DateTime dateTime;
+    @Inject
+    private BuyService buyService;
     @Inject
     private UserHelper userHelper;
     @Inject
@@ -27,7 +31,13 @@ public class CountValidatorImpl extends ValidatorSupport {
 
     @Override
     public boolean validate(ValidateWrapper validate, String parameter) {
-        int count = downloadDao.editors(userHelper.id(), dateTime.getStart(dateTime.now())).size();
+        String user = userHelper.id();
+        if (buyService.find(user, parameter) != null)
+            return true;
+
+        Set<String> set = downloadDao.editors(user, dateTime.getStart(dateTime.now()));
+        set.remove(parameter);
+        int count = set.size();
 
         return count < dateMax || (count < vipDateMax && userHelper.isVip());
     }

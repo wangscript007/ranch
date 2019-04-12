@@ -1,5 +1,6 @@
 package org.lpw.ranch.editor;
 
+import org.lpw.ranch.editor.download.DownloadService;
 import org.lpw.ranch.editor.role.RoleService;
 import org.lpw.ranch.user.helper.UserHelper;
 import org.lpw.tephra.ctrl.context.Request;
@@ -166,7 +167,8 @@ public class EditorCtrl {
             @Validate(validator = EditorService.VALIDATOR_EXISTS, parameter = "id", failureCode = 2),
             @Validate(validator = RoleService.VALIDATOR_VIEWABLE, parameter = "id", failureCode = 41),
             @Validate(validator = RoleService.VALIDATOR_PASSWORD, parameters = {"user", "id", "password"}, failureCode = 49),
-            @Validate(validator = EditorService.VALIDATOR_USABLE, parameter = "id", failureCode = 15)
+            @Validate(validator = EditorService.VALIDATOR_USABLE, parameter = "id", failureCode = 15),
+            @Validate(validator = DownloadService.VALIDATOR_COUNT, parameter = "id", failureCode = 19)
     })
     public Object pdf() {
         return editorService.pdf(request.get("id"), request.get("email"));
