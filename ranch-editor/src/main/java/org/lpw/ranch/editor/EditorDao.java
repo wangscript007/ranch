@@ -4,6 +4,7 @@ import org.lpw.tephra.dao.orm.PageList;
 
 import java.sql.Timestamp;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -27,6 +28,8 @@ interface EditorDao {
     PageList<EditorModel> templates(Set<String> ids);
 
     List<String> templates(String type, int state);
+
+    Map<String, Set<Integer>> typeTemplates();
 
     void save(EditorModel editor);
 

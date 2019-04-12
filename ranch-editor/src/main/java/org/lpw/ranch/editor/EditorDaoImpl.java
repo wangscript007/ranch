@@ -8,6 +8,7 @@ import org.lpw.tephra.dao.orm.PageList;
 import org.lpw.tephra.dao.orm.lite.LiteOrm;
 import org.lpw.tephra.dao.orm.lite.LiteQuery;
 import org.lpw.tephra.util.DateTime;
+import org.lpw.tephra.util.Numeric;
 import org.lpw.tephra.util.Validator;
 import org.springframework.stereotype.Repository;
 
@@ -15,8 +16,10 @@ import javax.inject.Inject;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -26,7 +29,10 @@ import java.util.Set;
 class EditorDaoImpl implements EditorDao {
     @Inject
     private Validator validator;
-    @Inject private DateTime dateTime;
+    @Inject
+    private DateTime dateTime;
+    @Inject
+    private Numeric numeric;
     @Inject
     private Sql sql;
     @Inject
@@ -83,9 +89,9 @@ class EditorDaoImpl implements EditorDao {
         daoHelper.where(where, args, "c_template", DaoOperation.Equals, template);
         daoHelper.where(where, args, "c_type", DaoOperation.Equals, type);
         where.append(" AND c_state=3");
-        if(vipFree)
+        if (vipFree)
             where.append(" AND c_vip_price=0");
-        if(free){
+        if (free) {
             where.append(" AND (c_price=0 OR (c_limited_price=0 AND c_limited_time>=?))");
             args.add(dateTime.now());
         }
@@ -117,10 +123,20 @@ class EditorDaoImpl implements EditorDao {
     @Override
     public List<String> templates(String type, int state) {
         List<String> list = new ArrayList<>();
-        sql.query("SELECT c_id FROM " + modelTables.get(EditorModel.class).getTableName() + " WHERE c_template IN(1,2) AND c_type=? AND c_state=?",
+        sql.query("SELECT c_id FROM " + modelTables.get(EditorModel.class).getTableName()
+                        + " WHERE c_template IN(1,2) AND c_type=? AND c_state=?",
                 new Object[]{type, state}).forEach(l -> list.add((String) l.get(0)));
 
         return list;
+    }
+
+    @Override
+    public Map<String, Set<Integer>> typeTemplates() {
+        Map<String, Set<Integer>> map = new HashMap<>();
+        sql.query("SELECT c_type,c_template FROM " + modelTables.get(EditorModel.class).getTableName() + " WHERE c_state=3", null)
+                .forEach(list -> map.computeIfAbsent((String) list.get(0), key -> new HashSet<>()).add(numeric.toInt(list.get(1))));
+
+        return map;
     }
 
     @Override

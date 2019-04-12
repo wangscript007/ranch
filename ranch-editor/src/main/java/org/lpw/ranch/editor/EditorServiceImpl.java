@@ -127,11 +127,7 @@ public class EditorServiceImpl implements EditorService, HourJob, DateJob {
     private String pdfNomark;
     @Value("${" + EditorModel.NAME + ".pdf.mark:}")
     private String pdfMark;
-    @Value("${" + EditorModel.NAME + ".template-types:}")
-    private String templateTypes;
-    private Set<String> templateTypeSet;
     private Map<String, String> random = new ConcurrentHashMap<>();
-    private Set<Integer> onsaleState = Collections.singleton(3);
     private List<String> unPublishIds;
 
     @Override
@@ -197,11 +193,6 @@ public class EditorServiceImpl implements EditorService, HourJob, DateJob {
         editorDao.templates(new HashSet<>(Arrays.asList(ids))).getList().forEach(editor -> object.put(editor.getId(), toJson(editor)));
 
         return object;
-    }
-
-    @Override
-    public boolean existsType(String type) {
-        return getTemplateTypes().contains(type);
     }
 
     @Override
@@ -694,24 +685,10 @@ public class EditorServiceImpl implements EditorService, HourJob, DateJob {
         if (lockId == null)
             return;
 
-        getTemplateTypes().forEach(type -> {
-            for (int i = 1; i <= MAX_TEMPLATE; i++)
-                setSearchIndex(type, i);
-        });
+        editorDao.typeTemplates().forEach((type, templates) -> templates.forEach(template -> setSearchIndex(type, template)));
         fileService.count().forEach(editorDao::download);
         buyService.count().forEach(editorDao::buy);
         lockHelper.unlock(lockId);
-    }
-
-    private Set<String> getTemplateTypes() {
-        if (templateTypeSet == null) {
-            templateTypeSet = new HashSet<>();
-            for (String type : converter.toArray(templateTypes, ","))
-                if (!validator.isEmpty(type))
-                    templateTypeSet.add(type);
-        }
-
-        return templateTypeSet;
     }
 
     private void setSearchIndex(String type, int template) {

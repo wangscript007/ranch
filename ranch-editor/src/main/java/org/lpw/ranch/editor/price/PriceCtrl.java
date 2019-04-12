@@ -33,7 +33,6 @@ public class PriceCtrl {
             @Validate(validator = Validators.GREATER_THAN, number = {-1}, parameter = "amount", failureCode = 33),
             @Validate(validator = Validators.GREATER_THAN, number = {-1}, parameter = "vip", failureCode = 34),
             @Validate(validator = Validators.GREATER_THAN, number = {-1}, parameter = "limited", failureCode = 35),
-            @Validate(validator = EditorService.VALIDATOR_TYPE_EXISTS, parameter = "type", failureCode = 19),
             @Validate(validator = Validators.SIGN)
     })
     public Object save() {

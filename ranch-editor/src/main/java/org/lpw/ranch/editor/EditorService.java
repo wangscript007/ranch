@@ -22,10 +22,6 @@ public interface EditorService {
      */
     String VALIDATOR_EDITABLE = EditorModel.NAME + ".validator.editable";
     /**
-     * 类型是否存在验证器Bean名称。
-     */
-    String VALIDATOR_TYPE_EXISTS = EditorModel.NAME + ".validator.type.exists";
-    /**
      * 可用验证器Bean名称。
      */
     String VALIDATOR_USABLE = EditorModel.NAME + ".validator.usable";
@@ -92,14 +88,6 @@ public interface EditorService {
      * @return 模板信息集。
      */
     JSONObject templates(String[] ids);
-
-    /**
-     * 判断是否存在类型。
-     *
-     * @param type 类型。
-     * @return 如果存在则返回true；否则返回false。
-     */
-    boolean existsType(String type);
 
     /**
      * 分组不存在。
