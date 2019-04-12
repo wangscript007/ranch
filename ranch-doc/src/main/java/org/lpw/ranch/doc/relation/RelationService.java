@@ -21,8 +21,9 @@ public interface RelationService {
      * @param relate 关联文档。
      * @param type   类型。
      * @param sort   顺序。
+     * @param close  提交事务。
      */
-    void save(String doc, String relate, String type, int sort);
+    void save(String doc, String relate, String type, int sort, boolean close);
 
     /**
      * 清空关联。

@@ -41,13 +41,13 @@ public class RelationServiceImpl implements RelationService {
     }
 
     @Override
-    public void save(String doc, String relate, String type, int sort) {
+    public void save(String doc, String relate, String type, int sort, boolean close) {
         RelationModel relation = new RelationModel();
         relation.setDoc(doc);
         relation.setRelate(relate);
         relation.setType(type);
         relation.setSort(sort);
-        relationDao.save(relation);
+        relationDao.save(relation, close);
     }
 
     @Override

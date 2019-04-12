@@ -398,10 +398,11 @@ public class DocServiceImpl implements DocService, MinuteJob, DateJob {
 
                 Map<String, String> sources = new HashMap<>();
                 DocModel previous = null;
-                for (DocModel doc : docs) {
+                for (int i = 0, size = docs.size(); i < size; i++) {
+                    DocModel doc = docs.get(i);
                     if (previous != null) {
-                        relationService.save(doc.getId(), previous.getId(), "previous", 0);
-                        relationService.save(previous.getId(), doc.getId(), "next", 0);
+                        relationService.save(doc.getId(), previous.getId(), "previous", 0, false);
+                        relationService.save(previous.getId(), doc.getId(), "next", 0, (i > 0 && i % size == 0) || i == size - 1);
                     }
                     previous = doc;
                     sources.put(doc.getId(), doc.getSubject() + "," + doc.getSummary() + "," + doc.getLabel() + ","
@@ -414,7 +415,7 @@ public class DocServiceImpl implements DocService, MinuteJob, DateJob {
                 docs.forEach(doc -> {
                     List<String> ids = luceneHelper.query(luceneKey, sources.get(doc.getId()), false, 11);
                     for (int i = 1, size = ids.size(); i < size; i++)
-                        relationService.save(doc.getId(), ids.get(i), "alike", i - 1);
+                        relationService.save(doc.getId(), ids.get(i), "alike", i - 1, i == size - 1);
                     clearCache(doc.getId());
                 });
             });

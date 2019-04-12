@@ -8,7 +8,7 @@ import org.lpw.tephra.dao.orm.PageList;
 interface RelationDao {
     PageList<RelationModel> query(String doc);
 
-    void save(RelationModel relation);
+    void save(RelationModel relation, boolean close);
 
     void clear();
 }

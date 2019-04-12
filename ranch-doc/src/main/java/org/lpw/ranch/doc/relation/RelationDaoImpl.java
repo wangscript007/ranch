@@ -21,12 +21,14 @@ class RelationDaoImpl implements RelationDao {
     }
 
     @Override
-    public void save(RelationModel relation) {
+    public void save(RelationModel relation, boolean close) {
         liteOrm.save(relation);
+        liteOrm.close();
     }
 
     @Override
     public void clear() {
         liteOrm.delete(new LiteQuery(RelationModel.class), null);
+        liteOrm.close();
     }
 }
