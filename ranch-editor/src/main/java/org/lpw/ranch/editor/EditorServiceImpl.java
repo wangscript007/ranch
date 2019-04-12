@@ -211,7 +211,7 @@ public class EditorServiceImpl implements EditorService, HourJob, DateJob {
 
         return editor.getPrice() == 0 || (userHelper.isVip() && editor.getVipPrice() == 0) || (editor.getLimitedPrice() == 0
                 && editor.getLimitedTime() != null && editor.getLimitedTime().getTime() > System.currentTimeMillis())
-                || buyService.find(userHelper.id(), id) != null;
+                || buyService.find(userHelper.id(), template) != null;
     }
 
     @Override
@@ -222,7 +222,7 @@ public class EditorServiceImpl implements EditorService, HourJob, DateJob {
 
         EditorModel editor = findById(template);
 
-        return (userHelper.isVip() && editor.getVipPrice() == 0) || buyService.find(userHelper.id(), editor.getId()) != null;
+        return (userHelper.isVip() && editor.getVipPrice() == 0) || buyService.find(userHelper.id(), template) != null;
     }
 
     @Override
