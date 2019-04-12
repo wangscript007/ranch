@@ -27,7 +27,7 @@ public class CountValidatorImpl extends ValidatorSupport {
 
     @Override
     public boolean validate(ValidateWrapper validate, String parameter) {
-        int count = downloadDao.editors(userHelper.id(), dateTime.now()).size();
+        int count = downloadDao.editors(userHelper.id(), dateTime.getStart(dateTime.now())).size();
 
         return count < dateMax || (count < vipDateMax && userHelper.isVip());
     }
