@@ -406,9 +406,8 @@ public class DocServiceImpl implements DocService, MinuteJob, DateJob {
                     }
                     previous = doc;
                     sources.put(doc.getId(), doc.getSubject() + "," + doc.getSummary() + "," + doc.getLabel() + ","
-                            + getSource(doc).replaceAll("<[^>]*>", " ").replace('"', ' ')
-                            .replace('“', ' ').replace('”', ' ').replace('\'', ' ')
-                            .replaceAll("&nbsp;", " ").replaceAll("\\s+", " "));
+                            + getSource(doc).replaceAll("<[^>]*>", " ").replace('“', ' ')
+                            .replace('”', ' ').replaceAll("&nbsp;", " "));
                     luceneHelper.index(luceneKey, doc.getId(), sources.get(doc.getId()));
                 }
 
