@@ -90,11 +90,11 @@ class EditorDaoImpl implements EditorDao {
         daoHelper.where(where, args, "c_type", DaoOperation.Equals, type);
         where.append(" AND c_state=3");
         if (free) {
-            where.append(" AND (c_price=0 OR (c_limited_price=0 AND c_limited_time>=?))");
+            where.append(" AND (c_price=0 OR (c_limited_price=0 AND c_limited_time IS NOT NULL AND c_limited_time>=?))");
             args.add(dateTime.now());
         }
         if (nofree) {
-            where.append(" AND c_price>0 AND (c_limited_price>0 OR c_limited_time<?)");
+            where.append(" AND c_price>0 AND (c_limited_price>0 OR c_limited_time IS NULL OR c_limited_time<?)");
             args.add(dateTime.now());
         }
 
