@@ -563,7 +563,8 @@ public class EditorServiceImpl implements EditorService, HourJob, DateJob {
             editorDao.templates(type, 3).forEach(id -> {
                 EditorModel editor = findById(id);
                 List<ElementModel> elements = elementService.list(id);
-                screenshotService.capture(sid, editor, elements, width, height);
+                if (set.isEmpty() || set.contains("screenshot"))
+                    screenshotService.capture(sid, editor, elements, width, height);
                 if (set.isEmpty() || set.contains("pdf"))
                     fileService.save(id, "pdf", new File(pdf(sid, editor, true)));
                 if (set.isEmpty() || set.contains("pdf.free"))
@@ -571,6 +572,7 @@ public class EditorServiceImpl implements EditorService, HourJob, DateJob {
                 listeners.ifPresent(s -> s.forEach(listener -> listener.publish(sid, set, editor, elements)));
                 editorDao.close();
             });
+            resetRandom(type);
 
             return "";
         });
