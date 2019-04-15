@@ -148,6 +148,11 @@ public class UserHelperImpl extends ServiceHelperSupport implements UserHelper {
     }
 
     @Override
+    public boolean isVip(int grade) {
+        return grade() == grade;
+    }
+
+    @Override
     public Set<String> ids(String uid, String idcard, String name, String nick, String mobile, String email, String code,
                            int minGrade, int maxGrade, int state, String registerStart, String registerEnd) {
         if (queryKey == null)

@@ -165,6 +165,14 @@ public interface UserHelper {
     boolean isVip();
 
     /**
+     * 获取当前用户是否为VIP用户。
+     *
+     * @param grade VIP等级。
+     * @return 如果是则返回true；否则返回false。
+     */
+    boolean isVip(int grade);
+
+    /**
      * 检索用户ID集。
      *
      * @param uid           UID。
