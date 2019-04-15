@@ -197,9 +197,8 @@ public class EditorCtrl {
     }
 
     @Execute(name = "publishes", validates = {
-            @Validate(validator = Validators.ID, parameter = "id", failureCode = 1),
-            @Validate(validator = Validators.SIGN),
-            @Validate(validator = EditorService.VALIDATOR_EXISTS, parameter = "id", failureCode = 2)
+            @Validate(validator = Validators.NOT_EMPTY, parameter = "type", failureCode = 3),
+            @Validate(validator = Validators.SIGN)
     })
     public Object publishes() {
         return editorService.publishes(request.get("type"), request.getAsArray("types"),
