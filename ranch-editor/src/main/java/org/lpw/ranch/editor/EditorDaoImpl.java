@@ -191,4 +191,9 @@ class EditorDaoImpl implements EditorDao {
         liteOrm.update(new LiteQuery(EditorModel.class).set("c_buy=?").where("c_id=?"), new Object[]{count, id});
         liteOrm.close();
     }
+
+    @Override
+    public void close() {
+        liteOrm.close();
+    }
 }

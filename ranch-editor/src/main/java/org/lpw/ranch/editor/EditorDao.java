@@ -42,4 +42,6 @@ interface EditorDao {
     void download(String id, int count);
 
     void buy(String id, int count);
+
+    void close();
 }

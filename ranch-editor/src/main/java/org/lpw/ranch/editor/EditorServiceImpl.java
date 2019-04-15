@@ -129,7 +129,6 @@ public class EditorServiceImpl implements EditorService, HourJob, DateJob {
     @Value("${" + EditorModel.NAME + ".pdf.mark:}")
     private String pdfMark;
     private Map<String, String> random = new ConcurrentHashMap<>();
-    private List<String> unPublishIds;
 
     @Override
     public JSONObject query(String user, String uid, String mobile, String email, String nick, int template, String type, String name,
@@ -544,22 +543,37 @@ public class EditorServiceImpl implements EditorService, HourJob, DateJob {
             screenshotService.capture(sid, editor, elements, width, height);
             fileService.save(id, "pdf", new File(pdf(sid, editor, true)));
             fileService.save(id, "pdf.free", new File(pdf(sid, editor, false)));
-            listeners.ifPresent(set -> set.forEach(listener -> listener.publish(sid, editor, elements)));
+            listeners.ifPresent(set -> set.forEach(listener -> listener.publish(sid, null, editor, elements)));
 
             return "";
         });
     }
 
     @Override
-    public String unPublish(String type, boolean refresh) {
-        if (refresh || unPublishIds == null) {
-            unPublishIds = editorDao.templates(type, 3);
-            unPublishIds.removeAll(fileService.editors());
-        }
-        if (unPublishIds.isEmpty())
-            return "";
+    public String publishes(String type, String[] types, int width, int height) {
+        String sid = session.getId();
 
-        return unPublishIds.remove(0);
+        return asyncService.submit(EditorModel.NAME + ".publishes", type, 24 * 60 * 60, () -> {
+            Set<String> set = new HashSet<>();
+            if (!validator.isEmpty(types)) {
+                Collections.addAll(set, types);
+                set.remove("");
+            }
+
+            editorDao.templates(type, 3).forEach(id -> {
+                EditorModel editor = findById(id);
+                List<ElementModel> elements = elementService.list(id);
+                screenshotService.capture(sid, editor, elements, width, height);
+                if (set.isEmpty() || set.contains("pdf"))
+                    fileService.save(id, "pdf", new File(pdf(sid, editor, true)));
+                if (set.isEmpty() || set.contains("pdf.free"))
+                    fileService.save(id, "pdf.free", new File(pdf(sid, editor, false)));
+                listeners.ifPresent(s -> s.forEach(listener -> listener.publish(sid, set, editor, elements)));
+                editorDao.close();
+            });
+
+            return "";
+        });
     }
 
     @Override

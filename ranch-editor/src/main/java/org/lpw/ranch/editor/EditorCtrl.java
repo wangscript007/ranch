@@ -196,11 +196,14 @@ public class EditorCtrl {
         return editorService.publish(request.get("id"), request.getAsInt("width"), request.getAsInt("height"));
     }
 
-    @Execute(name = "un-publish", validates = {
-            @Validate(validator = Validators.SIGN)
+    @Execute(name = "publishes", validates = {
+            @Validate(validator = Validators.ID, parameter = "id", failureCode = 1),
+            @Validate(validator = Validators.SIGN),
+            @Validate(validator = EditorService.VALIDATOR_EXISTS, parameter = "id", failureCode = 2)
     })
-    public Object unPublish() {
-        return editorService.unPublish(request.get("type"), request.getAsBoolean("refresh"));
+    public Object publishes() {
+        return editorService.publishes(request.get("type"), request.getAsArray("types"),
+                request.getAsInt("width"), request.getAsInt("height"));
     }
 
     @Execute(name = "search", validates = {
