@@ -93,8 +93,10 @@ class EditorDaoImpl implements EditorDao {
             where.append(" AND (c_price=0 OR (c_limited_price=0 AND c_limited_time>=?))");
             args.add(dateTime.now());
         }
-        if (nofree)
-            where.append(" AND c_price>0");
+        if (nofree) {
+            where.append(" AND c_price>0 AND (c_limited_price>0 OR c_limited_time<?)");
+            args.add(dateTime.now());
+        }
 
         return liteOrm.query(new LiteQuery(EditorModel.class).where(where.toString()).order(order.by())
                 .size(pageSize).page(pageNum), args.toArray());
