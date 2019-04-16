@@ -369,7 +369,7 @@ public class EditorServiceImpl implements EditorService, HourJob, DateJob {
             String uri = path.substring(path.lastIndexOf(temporary.root()));
             String template = findTemplate(id);
             if (template != null)
-                downloadService.save(template, "pdf", uri, path);
+                downloadService.save(user, template, "pdf", uri, path);
 
             if (validator.isEmail(email)) {
                 JSONObject args = new JSONObject();

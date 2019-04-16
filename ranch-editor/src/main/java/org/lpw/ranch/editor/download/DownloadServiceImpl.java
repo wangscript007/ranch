@@ -22,8 +22,13 @@ public class DownloadServiceImpl implements DownloadService, DateJob {
 
     @Override
     public void save(String editor, String type, String uri, String temporary) {
+        save(userHelper.id(), editor, type, uri, temporary);
+    }
+
+    @Override
+    public void save(String user, String editor, String type, String uri, String temporary) {
         DownloadModel download = new DownloadModel();
-        download.setUser(userHelper.id());
+        download.setUser(user);
         download.setEditor(editor);
         download.setType(type);
         download.setUri(uri);

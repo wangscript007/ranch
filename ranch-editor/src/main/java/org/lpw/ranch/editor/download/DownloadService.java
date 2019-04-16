@@ -18,4 +18,15 @@ public interface DownloadService {
      * @param temporary 临时URI。
      */
     void save(String editor, String type, String uri, String temporary);
+
+    /**
+     * 保存。
+     *
+     * @param user      用户。
+     * @param editor    编辑器。
+     * @param type      类型。
+     * @param uri       源URI。
+     * @param temporary 临时URI。
+     */
+    void save(String user, String editor, String type, String uri, String temporary);
 }
