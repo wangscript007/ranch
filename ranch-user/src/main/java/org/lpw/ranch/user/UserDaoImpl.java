@@ -24,8 +24,7 @@ class UserDaoImpl implements UserDao {
 
     @Override
     public PageList<UserModel> query(String idcard, String name, String nick, String mobile, String email, String code,
-                                     int minGrade, int maxGrade, int state, Timestamp registerStart, Timestamp registerEnd,
-                                     int pageSize, int pageNum) {
+                                     int minGrade, int maxGrade, int state, Timestamp[] register, int pageSize, int pageNum) {
         StringBuilder where = new StringBuilder();
         List<Object> args = new ArrayList<>();
         daoHelper.where(where, args, "c_code", DaoOperation.Equals, code);
@@ -37,8 +36,8 @@ class UserDaoImpl implements UserDao {
         daoHelper.where(where, args, "c_grade", DaoOperation.GreaterEquals, minGrade);
         daoHelper.where(where, args, "c_grade", DaoOperation.LessEquals, maxGrade);
         daoHelper.where(where, args, "c_state", DaoOperation.Equals, state);
-        daoHelper.where(where, args, "c_register", DaoOperation.GreaterEquals, registerStart);
-        daoHelper.where(where, args, "c_register", DaoOperation.LessEquals, registerEnd);
+        daoHelper.where(where, args, "c_register", DaoOperation.GreaterEquals, register[0]);
+        daoHelper.where(where, args, "c_register", DaoOperation.LessEquals, register[1]);
 
         return liteOrm.query(new LiteQuery(UserModel.class).where(where.toString()).order("c_register desc")
                 .size(pageSize).page(pageNum), args.toArray());
