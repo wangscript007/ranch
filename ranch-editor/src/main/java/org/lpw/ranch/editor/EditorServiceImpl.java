@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import org.lpw.ranch.async.AsyncService;
 import org.lpw.ranch.editor.buy.BuyService;
+import org.lpw.ranch.editor.download.DownloadService;
 import org.lpw.ranch.editor.element.ElementModel;
 import org.lpw.ranch.editor.element.ElementService;
 import org.lpw.ranch.editor.file.FileService;
@@ -112,6 +113,8 @@ public class EditorServiceImpl implements EditorService, HourJob, DateJob {
     private ScreenshotService screenshotService;
     @Inject
     private FileService fileService;
+    @Inject
+    private DownloadService downloadService;
     @Inject
     private BuyService buyService;
     @Inject
@@ -363,6 +366,11 @@ public class EditorServiceImpl implements EditorService, HourJob, DateJob {
 
         return asyncService.submit(EditorModel.NAME + ".pdf", id, 60, () -> {
             String path = pdf(sid, findById(id), nomark);
+            String uri = path.substring(path.lastIndexOf(temporary.root()));
+            String template = findTemplate(id);
+            if (template != null)
+                downloadService.save(template, "pdf", uri, path);
+
             if (validator.isEmail(email)) {
                 JSONObject args = new JSONObject();
                 args.put("url", wormholeHelper.getUrl(Protocol.Https,
@@ -370,7 +378,7 @@ public class EditorServiceImpl implements EditorService, HourJob, DateJob {
                 pushHelper.send(EditorModel.NAME + ".pdf", user, email, args);
             }
 
-            return path.substring(path.lastIndexOf(temporary.root()));
+            return uri;
         });
     }
 
