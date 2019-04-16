@@ -25,8 +25,8 @@ public class CreatableValidatorImpl extends ValidatorSupport {
 
     @Override
     public boolean validate(ValidateWrapper validate, String parameter) {
-        return !validator.isEmpty(parameter) || roleDao.count(userHelper.id(), RoleService.Type.Owner.ordinal(),
-                dateTime.getStart(dateTime.today()), dateTime.getEnd(dateTime.today())) < dateCreate;
+        return !validator.isEmpty(parameter)
+                || roleDao.count(userHelper.id(), RoleService.Type.Owner.ordinal(), dateTime.getStart(dateTime.today())) < dateCreate;
     }
 
     @Override

@@ -23,7 +23,7 @@ interface RoleDao {
 
     RoleModel newest(String user, int type);
 
-    int count(String user, int type, Timestamp start, Timestamp end);
+    int count(String user, int type, Timestamp create);
 
     int count(String user, int type,int template);
 
