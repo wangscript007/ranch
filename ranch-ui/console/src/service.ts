@@ -15,20 +15,19 @@ class Service {
         });
         const loading = message.loading('loading');
         const domain: string = location.pathname.replace(/\//g, '');
-        return http.post(request.uri, merger.merge({}, request.header || {}, { domain: domain === '' ? 'console' : domain }), request.parameter || {})
-            .then(json => {
-                loading();
-                if (json.code !== 0) {
-                    message.error('[' + json.code + ']' + json.message);
-                    if (json.code === 9901) {
-                        location.reload();
-                    }
-
-                    return null;
+        return http.post(request.uri, merger.merge({}, request.header || {}, { domain: domain === '' ? 'console' : domain }), request.parameter || {}).then(json => {
+            loading();
+            if (json.code !== 0) {
+                message.error('[' + json.code + ']' + json.message);
+                if (json.code === 9901) {
+                    location.reload();
                 }
 
-                return json.data;
-            });
+                return null;
+            }
+
+            return json.data;
+        });
     }
 }
 
