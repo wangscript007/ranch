@@ -63,23 +63,12 @@ public class ChromeServiceImpl implements ChromeService {
 
     @Override
     public JSONObject save(ChromeModel chrome) {
-        ChromeModel model = chromeDao.findByKey(chrome.getKey());
-        if (model == null) {
-            model = new ChromeModel();
-            model.setKey(chrome.getKey());
-        }
-        model.setName(chrome.getName());
-        model.setX(chrome.getX());
-        model.setY(chrome.getY());
-        model.setWidth(chrome.getWidth());
-        model.setHeight(chrome.getHeight());
-        model.setPages(chrome.getPages());
-        model.setWait(chrome.getWait());
-        model.setFilename(chrome.getFilename());
+        if (chromeDao.findByKey(chrome.getKey()) == null)
+            chrome.setId(null);
         chromeDao.save(chrome);
-        cache.remove(CACHE + model.getKey());
+        cache.remove(CACHE + chrome.getKey());
 
-        return modelHelper.toJson(model);
+        return modelHelper.toJson(chrome);
     }
 
     @Override
