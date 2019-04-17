@@ -45,10 +45,11 @@ public interface DocService extends AuditService {
     /**
      * 获取文档。
      *
-     * @param id ID值。
+     * @param id   ID值。
+     * @param full 包含所有信息。
      * @return 文档信息。
      */
-    JSONObject find(String id);
+    JSONObject find(String id, boolean full);
 
     /**
      * 获取指定ID的文档信息集。

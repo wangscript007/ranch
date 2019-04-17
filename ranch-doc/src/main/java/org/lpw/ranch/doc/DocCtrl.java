@@ -50,7 +50,7 @@ public class DocCtrl extends AuditCtrlSupport {
             @Validate(validator = DocService.VALIDATOR_EXISTS, parameter = "id", failureCode = 2)
     })
     public Object find() {
-        return docService.find(request.get("id"));
+        return docService.find(request.get("id"), true);
     }
 
     @Execute(name = "get", validates = {

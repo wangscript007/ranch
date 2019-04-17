@@ -48,9 +48,9 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 @Service(DocModel.NAME + ".service")
 public class DocServiceImpl implements DocService, MinuteJob, DateJob {
-    private static final String CACHE_MODEL = DocModel.NAME + ".service.model:";
-    private static final String CACHE_JSON = DocModel.NAME + ".service.json:";
-    private static final String CACHE_READ = DocModel.NAME + ".service.read:";
+    private static final String CACHE_MODEL = DocModel.NAME + ".model:";
+    private static final String CACHE_JSON = DocModel.NAME + ".json:";
+    private static final String CACHE_READ = DocModel.NAME + ".read:";
 
     @Inject
     private Cache cache;
@@ -134,8 +134,8 @@ public class DocServiceImpl implements DocService, MinuteJob, DateJob {
     }
 
     @Override
-    public JSONObject find(String id) {
-        return toJsonFull(findById(id), true);
+    public JSONObject find(String id, boolean full) {
+        return toJsonFull(findById(id), full);
     }
 
     @Override
