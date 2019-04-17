@@ -12,5 +12,6 @@ CREATE TABLE t_log
   c_time DATETIME DEFAULT NULL COMMENT '时间',
 
   PRIMARY KEY pk(c_id) USING HASH,
-  KEY k_type(c_type) USING HASH
+  KEY k_type(c_type) USING HASH,
+  KEY k_time(c_time) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
