@@ -63,8 +63,8 @@ public class ChromeServiceImpl implements ChromeService {
 
     @Override
     public JSONObject save(ChromeModel chrome) {
-        if (chromeDao.findByKey(chrome.getKey()) == null)
-            chrome.setId(null);
+        ChromeModel model = chromeDao.findByKey(chrome.getKey());
+        chrome.setId(model == null ? null : model.getId());
         chromeDao.save(chrome);
         cache.remove(CACHE + chrome.getKey());
 
