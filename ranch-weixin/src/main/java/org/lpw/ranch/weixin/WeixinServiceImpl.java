@@ -402,7 +402,7 @@ public class WeixinServiceImpl implements WeixinService, ContextRefreshedListene
             return object;
         }
 
-        object.putAll(decryptAesCbcPkcs7(iv, message));
+        object.putAll(decryptAesCbcPkcs7(sessionKey, iv, message));
         object.put("unionid", object.getString("unionId"));
         infoService.save(key, weixin.getAppId(), object.getString("unionid"), object.getString("openid"));
 
@@ -577,9 +577,11 @@ public class WeixinServiceImpl implements WeixinService, ContextRefreshedListene
             return new JSONObject();
 
         String sessionKey = session.get(SESSION_MINI_SESSION_KEY);
-        if (validator.isEmpty(sessionKey))
-            return new JSONObject();
 
+        return validator.isEmpty(sessionKey) ? new JSONObject() : decryptAesCbcPkcs7(sessionKey, iv, message);
+    }
+
+    private JSONObject decryptAesCbcPkcs7(String sessionKey, String iv, String message) {
         try {
             if (Security.getProvider("BC") == null)
                 Security.addProvider(new BouncyCastleProvider());
