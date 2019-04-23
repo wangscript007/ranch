@@ -121,8 +121,8 @@ public class ScreenshotServiceImpl implements ScreenshotService {
 
     private void capture(String capture, String sid, String editor, String page, int width, int height,
                          Map<String, String> map, Map<String, Integer> index, boolean internal) {
-        String file = chromeHelper.jpeg(capture + "?sid=" + sid + "&editor=" + editor + "&page=" + page,
-                wait, 0, 0, width, height, 100, temporary.root());
+        String file = chromeHelper.jpeg(capture + (capture.indexOf('?') == -1 ? "?" : "&") + "sid=" + sid + "&editor=" + editor
+                + "&page=" + page, wait, 0, 0, width, height, 100, temporary.root());
         if (validator.isEmpty(file))
             return;
 
