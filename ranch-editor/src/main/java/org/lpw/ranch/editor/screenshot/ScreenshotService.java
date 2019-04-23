@@ -50,6 +50,17 @@ public interface ScreenshotService {
     Map<String, String> capture(String sid, EditorModel editor, List<ElementModel> elements, int width, int height);
 
     /**
+     * 截图。
+     *
+     * @param sid      Session ID。
+     * @param editor   编辑器。
+     * @param elements 根元素集。
+     * @param nomark   无水印。
+     * @return 返回元素ID-文件集。
+     */
+    Map<String, String> capture(String sid, EditorModel editor, List<ElementModel> elements, boolean nomark);
+
+    /**
      * 创建。
      *
      * @param editor 编辑器ID值。

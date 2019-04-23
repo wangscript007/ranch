@@ -52,6 +52,8 @@
 
 [导出PDF](doc/pdf.md)
 
+[导出图片集](doc/images.md)
+
 [复制](doc/copy.md)
 
 [发布](doc/publish.md)

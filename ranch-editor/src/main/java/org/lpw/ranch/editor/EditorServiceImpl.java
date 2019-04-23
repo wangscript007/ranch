@@ -28,6 +28,7 @@ import org.lpw.tephra.dao.orm.PageList;
 import org.lpw.tephra.lucene.LuceneHelper;
 import org.lpw.tephra.scheduler.DateJob;
 import org.lpw.tephra.scheduler.HourJob;
+import org.lpw.tephra.util.Context;
 import org.lpw.tephra.util.Converter;
 import org.lpw.tephra.util.DateTime;
 import org.lpw.tephra.util.Generator;
@@ -36,6 +37,7 @@ import org.lpw.tephra.util.Logger;
 import org.lpw.tephra.util.Numeric;
 import org.lpw.tephra.util.TimeUnit;
 import org.lpw.tephra.util.Validator;
+import org.lpw.tephra.util.Zipper;
 import org.lpw.tephra.wormhole.Protocol;
 import org.lpw.tephra.wormhole.WormholeHelper;
 import org.springframework.beans.factory.annotation.Value;
@@ -47,6 +49,7 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -77,6 +80,10 @@ public class EditorServiceImpl implements EditorService, HourJob, DateJob {
     private Generator generator;
     @Inject
     private Converter converter;
+    @Inject
+    private Context context;
+    @Inject
+    private Zipper zipper;
     @Inject
     private Logger logger;
     @Inject
@@ -370,13 +377,8 @@ public class EditorServiceImpl implements EditorService, HourJob, DateJob {
             String template = findTemplate(id);
             if (template != null)
                 downloadService.save(user, template, "pdf", uri, path);
-
-            if (validator.isEmail(email)) {
-                JSONObject args = new JSONObject();
-                args.put("url", wormholeHelper.getUrl(Protocol.Https,
-                        wormholeHelper.file("editor", null, null, new File(path)), false));
-                pushHelper.send(EditorModel.NAME + ".pdf", user, email, args);
-            }
+            sendEmail(email, new File(path), user, EditorModel.NAME + ".pdf");
+            io.delete(path);
 
             return uri;
         });
@@ -390,6 +392,38 @@ public class EditorServiceImpl implements EditorService, HourJob, DateJob {
         pdf.append(pdf.indexOf("?") == -1 ? '?' : '&').append("sid=").append(sid).append("&id=").append(editor.getId());
 
         return chromeHelper.pdf(pdf.toString(), 30, editor.getWidth(), editor.getHeight(), "", temporary.root());
+    }
+
+    @Override
+    public String images(String id, String email) {
+        String sid = session.getId();
+        String user = userHelper.id();
+        boolean nomark = nomark(id);
+        EditorModel editor = findById(id);
+        List<ElementModel> elements = elementService.list(id);
+
+        return asyncService.submit(EditorModel.NAME + ".images", id, 10 * elements.size(), () -> {
+            Map<String, String> map = screenshotService.capture(sid, editor, elements, nomark);
+            Map<String, File> files = new HashMap<>();
+            for (int i = 0, size = elements.size(); i < size; i++)
+                files.put(i + 1 + ".jpeg", new File(map.get(elements.get(i).getId())));
+            String uri = temporary.newSavePath(".zip");
+            File file = new File(context.getAbsolutePath(uri));
+            zipper.zip(files, file);
+            sendEmail(email, file, user, EditorModel.NAME + ".images");
+            io.delete(file);
+
+            return uri;
+        });
+    }
+
+    private void sendEmail(String email, File file, String user, String key) {
+        if (!validator.isEmpty(email))
+            return;
+
+        JSONObject args = new JSONObject();
+        args.put("url", wormholeHelper.getUrl(Protocol.Https, wormholeHelper.file("temp", null, null, file), false));
+        pushHelper.send(key, user, email, args);
     }
 
     @Override

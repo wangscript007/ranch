@@ -50,8 +50,10 @@ public class ScreenshotServiceImpl implements ScreenshotService {
     private ElementService elementService;
     @Inject
     private ScreenshotDao screenshotDao;
-    @Value("${" + ScreenshotModel.NAME + ".capture:}")
-    private String capture;
+    @Value("${" + ScreenshotModel.NAME + ".capture.nomark:}")
+    private String captureNomark;
+    @Value("${" + ScreenshotModel.NAME + ".capture.mark:}")
+    private String captureMark;
     @Value("${" + ScreenshotModel.NAME + ".wait:5}")
     private int wait;
 
@@ -82,13 +84,14 @@ public class ScreenshotServiceImpl implements ScreenshotService {
     @Override
     public Map<String, String> capture(String sid, EditorModel editor, List<ElementModel> elements, int width, int height) {
         Map<String, String> map = new HashMap<>();
-        if (validator.isEmpty(capture))
+        if (validator.isEmpty(captureNomark))
             return map;
 
         Map<String, Integer> index = new HashMap<>();
         if (width > 0 && height > 0)
-            capture(sid, editor.getId(), "", width, height, map, index);
-        elements.forEach(element -> capture(sid, editor.getId(), element.getId(), editor.getWidth(), editor.getHeight(), map, index));
+            capture(captureNomark, sid, editor.getId(), "", width, height, map, index, false);
+        elements.forEach(element -> capture(captureNomark, sid, editor.getId(), element.getId(),
+                editor.getWidth(), editor.getHeight(), map, index, false));
 
         screenshotDao.delete(editor.getId());
         map.forEach((page, uri) -> {
@@ -105,14 +108,27 @@ public class ScreenshotServiceImpl implements ScreenshotService {
         return map;
     }
 
-    private void capture(String sid, String editor, String page, int width, int height, Map<String, String> map, Map<String, Integer> index) {
+    @Override
+    public Map<String, String> capture(String sid, EditorModel editor, List<ElementModel> elements, boolean nomark) {
+        Map<String, String> map = new HashMap<>();
+        String capture = nomark ? captureNomark : captureMark;
+        if (!validator.isEmpty(capture))
+            elements.forEach(element -> capture(capture, sid, editor.getId(), element.getId(),
+                    editor.getWidth(), editor.getHeight(), map, null, true));
+
+        return map;
+    }
+
+    private void capture(String capture, String sid, String editor, String page, int width, int height,
+                         Map<String, String> map, Map<String, Integer> index, boolean internal) {
         String file = chromeHelper.jpeg(capture + "?sid=" + sid + "&editor=" + editor + "&page=" + page,
                 wait, 0, 0, width, height, 100, temporary.root());
         if (validator.isEmpty(file))
             return;
 
-        index.put(page, index.size());
-        map.put(page, wormholeHelper.image(null, null, null, new File(file)));
+        if (index != null)
+            index.put(page, index.size());
+        map.put(page, internal ? file : wormholeHelper.image(null, null, null, new File(file)));
     }
 
     @Override

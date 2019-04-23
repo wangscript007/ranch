@@ -182,6 +182,15 @@ public interface EditorService {
     String pdf(String id, String email);
 
     /**
+     * 异步导出图片集。
+     *
+     * @param id    编辑器ID。
+     * @param email 发送Email，不为空将在导出完成后发送Email。
+     * @return 异步ID。
+     */
+    String images(String id, String email);
+
+    /**
      * 复制。
      *
      * @param id   源ID值。

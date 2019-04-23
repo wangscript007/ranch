@@ -174,6 +174,20 @@ public class EditorCtrl {
         return editorService.pdf(request.get("id"), request.get("email"));
     }
 
+    @Execute(name = "images", validates = {
+            @Validate(validator = Validators.ID, parameter = "id", failureCode = 1),
+            @Validate(validator = Validators.EMAIL, emptyable = true, parameter = "email", failureCode = 16),
+            @Validate(validator = UserHelper.VALIDATOR_SIGN_IN),
+            @Validate(validator = EditorService.VALIDATOR_EXISTS, parameter = "id", failureCode = 2),
+            @Validate(validator = RoleService.VALIDATOR_VIEWABLE, parameter = "id", failureCode = 41),
+            @Validate(validator = RoleService.VALIDATOR_PASSWORD, parameters = {"user", "id", "password"}, failureCode = 49),
+            @Validate(validator = EditorService.VALIDATOR_USABLE, parameter = "id", failureCode = 15),
+            @Validate(validator = DownloadService.VALIDATOR_COUNT, parameter = "id")
+    })
+    public Object images() {
+        return editorService.images(request.get("id"), request.get("email"));
+    }
+
     @Execute(name = "copy", validates = {
             @Validate(validator = Validators.ID, parameter = "id", failureCode = 1),
             @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "type", failureCode = 4),
