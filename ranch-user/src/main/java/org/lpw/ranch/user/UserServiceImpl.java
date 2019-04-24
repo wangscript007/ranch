@@ -137,6 +137,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean signIn(String uid, String password, int type) {
+        String ouid=uid;
         if (type > Types.SELF)
             uid = getThirdId(uid, password, type);
         if (uid == null)
@@ -154,7 +155,7 @@ public class UserServiceImpl implements UserService {
             if (!pass(user, password))
                 return false;
         } else if (type > Types.SELF)
-            session.set(SESSION_AUTH3, types.getAuth(uid, password, type));
+            session.set(SESSION_AUTH3, types.getAuth(ouid, password, type));
         signIn(user, uid);
 
         return true;
