@@ -383,15 +383,16 @@ public class WeixinServiceImpl implements WeixinService, ContextRefreshedListene
         WeixinModel weixin = weixinDao.findByKey(key);
         Map<String, String> map = getAuthMap(weixin);
         map.put("js_code", code);
-        JSONObject object = json.toObject(http.get("https://api.weixin.qq.com/sns/jscode2session", null, map));
+        String string=http.get("https://api.weixin.qq.com/sns/jscode2session", null, map);
+        JSONObject object = json.toObject(string);
         if (object == null || !object.containsKey("openid")) {
-            logger.warn(null, "获取微信小程序用户认证信息[{}:{}:{}]失败！", key, code, object);
+            logger.warn(null, "获取微信小程序用户认证信息[{}:{}:{}]失败！", key, map, string);
 
             return new JSONObject();
         }
 
         if (logger.isDebugEnable())
-            logger.debug("获得微信小程序用户认证信息[{}:{}:{}]。", key, code, object);
+            logger.debug("获得微信小程序用户认证信息[{}:{}:{}]。", key, map, object);
 
         String sessionKey = object.getString("session_key");
         session.set(SESSION_MINI_SESSION_KEY, sessionKey);
