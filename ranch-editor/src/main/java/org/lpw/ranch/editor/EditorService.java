@@ -345,4 +345,11 @@ public interface EditorService {
      * @return 截图渲染URL，未配置则返回null。
      */
     String getCaptureMark(String sid, String id);
+
+    /**
+     * 获取截图渲染等待时长。
+     *
+     * @return 截图渲染等待时长，单位：秒。
+     */
+    int getCaptureWait();
 }

@@ -138,6 +138,8 @@ public class EditorServiceImpl implements EditorService, HourJob, DateJob {
     private String captureNomark;
     @Value("${" + EditorModel.NAME + ".capture.mark:}")
     private String captureMark;
+    @Value("${" + EditorModel.NAME + ".capture.wait:5}")
+    private int captureWait;
     private Map<String, String> random = new ConcurrentHashMap<>();
 
     @Override
@@ -381,7 +383,7 @@ public class EditorServiceImpl implements EditorService, HourJob, DateJob {
         if (capture == null)
             return "";
 
-        return chromeHelper.pdf(capture, 30, editor.getWidth(), editor.getHeight(), "", temporary.root());
+        return chromeHelper.pdf(capture, captureWait, editor.getWidth(), editor.getHeight(), "", temporary.root());
     }
 
     @Override
@@ -773,6 +775,11 @@ public class EditorServiceImpl implements EditorService, HourJob, DateJob {
             return null;
 
         return capture + (capture.indexOf('?') == -1 ? "?" : "&") + "sid=" + sid + "&id=" + id;
+    }
+
+    @Override
+    public int getCaptureWait() {
+        return captureWait;
     }
 
     @Override

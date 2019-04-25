@@ -14,7 +14,6 @@ import org.lpw.tephra.util.Image;
 import org.lpw.tephra.util.Logger;
 import org.lpw.tephra.util.Validator;
 import org.lpw.tephra.wormhole.WormholeHelper;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
@@ -52,8 +51,6 @@ public class ScreenshotServiceImpl implements ScreenshotService {
     private EditorService editorService;
     @Inject
     private ScreenshotDao screenshotDao;
-    @Value("${" + ScreenshotModel.NAME + ".wait:5}")
-    private int wait;
 
     @Override
     public JSONArray query(String editor) {
@@ -72,7 +69,7 @@ public class ScreenshotServiceImpl implements ScreenshotService {
             return null;
 
         int size = elements.size();
-        String path = chromeHelper.jpeg(capture, wait, 0, 0, editor.getWidth(), editor.getHeight() * size,
+        String path = chromeHelper.jpeg(capture, editorService.getCaptureWait(), 0, 0, editor.getWidth(), editor.getHeight() * size,
                 100, temporary.root());
         if (validator.isEmpty(path))
             return null;
@@ -113,7 +110,8 @@ public class ScreenshotServiceImpl implements ScreenshotService {
         if (capture == null)
             return null;
 
-        String path = chromeHelper.jpeg(capture + "&page=" + page, wait, 0, 0, width, height, 100, temporary.root());
+        String path = chromeHelper.jpeg(capture + "&page=" + page, editorService.getCaptureWait(), 0, 0, width, height,
+                100, temporary.root());
 
         return validator.isEmpty(path) ? null : new File(path);
     }
