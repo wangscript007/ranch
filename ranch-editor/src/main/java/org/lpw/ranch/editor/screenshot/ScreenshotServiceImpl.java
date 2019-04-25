@@ -2,26 +2,28 @@ package org.lpw.ranch.editor.screenshot;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import org.lpw.ranch.async.AsyncService;
 import org.lpw.ranch.editor.EditorModel;
 import org.lpw.ranch.editor.EditorService;
 import org.lpw.ranch.editor.element.ElementModel;
-import org.lpw.ranch.editor.element.ElementService;
 import org.lpw.ranch.temporary.Temporary;
 import org.lpw.tephra.chrome.ChromeHelper;
 import org.lpw.tephra.ctrl.context.Session;
 import org.lpw.tephra.dao.model.ModelHelper;
-import org.lpw.tephra.util.Converter;
+import org.lpw.tephra.util.Context;
+import org.lpw.tephra.util.Image;
+import org.lpw.tephra.util.Logger;
 import org.lpw.tephra.util.Validator;
 import org.lpw.tephra.wormhole.WormholeHelper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
+import java.awt.image.BufferedImage;
 import java.io.File;
-import java.util.HashMap;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author lpw
@@ -31,7 +33,11 @@ public class ScreenshotServiceImpl implements ScreenshotService {
     @Inject
     private Validator validator;
     @Inject
-    private Converter converter;
+    private Context context;
+    @Inject
+    private Image image;
+    @Inject
+    private Logger logger;
     @Inject
     private ModelHelper modelHelper;
     @Inject
@@ -43,17 +49,9 @@ public class ScreenshotServiceImpl implements ScreenshotService {
     @Inject
     private Temporary temporary;
     @Inject
-    private AsyncService asyncService;
-    @Inject
     private EditorService editorService;
     @Inject
-    private ElementService elementService;
-    @Inject
     private ScreenshotDao screenshotDao;
-    @Value("${" + ScreenshotModel.NAME + ".capture.nomark:}")
-    private String captureNomark;
-    @Value("${" + ScreenshotModel.NAME + ".capture.mark:}")
-    private String captureMark;
     @Value("${" + ScreenshotModel.NAME + ".wait:5}")
     private int wait;
 
@@ -68,67 +66,56 @@ public class ScreenshotServiceImpl implements ScreenshotService {
     }
 
     @Override
-    public String capture(String editor) {
-        String sid = session.getId();
-        List<ElementModel> elements = elementService.list(editor);
+    public List<File> capture(String sid, EditorModel editor, List<ElementModel> elements, boolean nomark, boolean save) {
+        String capture = nomark ? editorService.getCaptureNomark(sid, editor.getId()) : editorService.getCaptureMark(sid, editor.getId());
+        if (capture == null)
+            return null;
 
-        return asyncService.submit(ScreenshotModel.NAME + ".capture", editor, 2 * elements.size() * wait, () -> {
-            Map<String, String> map = capture(sid, editorService.findById(editor), elements, 0, 0);
-            JSONArray array = new JSONArray();
-            elements.forEach(element -> array.add(map.get(element.getId())));
+        int size = elements.size();
+        String path = chromeHelper.jpeg(capture, wait, 0, 0, editor.getWidth(), editor.getHeight() * size,
+                100, temporary.root());
+        if (validator.isEmpty(path))
+            return null;
 
-            return array.toJSONString();
-        });
+        try {
+            List<File> list = new ArrayList<>();
+            list.add(new File(path));
+            BufferedImage bufferedImage = image.read(new FileInputStream(path));
+            if (save)
+                screenshotDao.delete(editor.getId());
+            for (int i = 0; i < size; i++) {
+                File file = new File(context.getAbsolutePath(temporary.newSavePath(".jpeg")));
+                image.write(image.subimage(bufferedImage, 0, i * editor.getHeight(), editor.getWidth(), editor.getHeight()),
+                        Image.Format.Jpeg, new FileOutputStream(file));
+                list.add(file);
+                if (i == 0 || !save)
+                    continue;
+
+                ScreenshotModel screenshot = new ScreenshotModel();
+                screenshot.setEditor(editor.getId());
+                screenshot.setIndex(i - 1);
+                screenshot.setPage(elements.get(i - 1).getId());
+                screenshot.setUri(wormholeHelper.image(null, null, null, file));
+                screenshotDao.save(screenshot);
+            }
+
+            return list;
+        } catch (Throwable throwable) {
+            logger.warn(throwable, "截取编辑器图片时发生异常！");
+
+            return null;
+        }
     }
 
     @Override
-    public Map<String, String> capture(String sid, EditorModel editor, List<ElementModel> elements, int width, int height) {
-        Map<String, String> map = new HashMap<>();
-        if (validator.isEmpty(captureNomark))
-            return map;
+    public File capture(String sid, String editor, String page, int width, int height) {
+        String capture = editorService.getCapture(sid, editor);
+        if (capture == null)
+            return null;
 
-        Map<String, Integer> index = new HashMap<>();
-        if (width > 0 && height > 0)
-            capture(captureNomark, sid, editor.getId(), "", width, height, map, index, false);
-        elements.forEach(element -> capture(captureNomark, sid, editor.getId(), element.getId(),
-                editor.getWidth(), editor.getHeight(), map, index, false));
+        String path = chromeHelper.jpeg(capture + "&page=" + page, wait, 0, 0, width, height, 100, temporary.root());
 
-        screenshotDao.delete(editor.getId());
-        map.forEach((page, uri) -> {
-            if (page.equals(""))
-                editorService.screenshot(editor.getId(), uri);
-            ScreenshotModel screenshot = new ScreenshotModel();
-            screenshot.setEditor(editor.getId());
-            screenshot.setIndex(index.get(page));
-            screenshot.setPage(page);
-            screenshot.setUri(uri);
-            screenshotDao.save(screenshot);
-        });
-
-        return map;
-    }
-
-    @Override
-    public Map<String, String> capture(String sid, EditorModel editor, List<ElementModel> elements, boolean nomark) {
-        Map<String, String> map = new HashMap<>();
-        String capture = nomark ? captureNomark : captureMark;
-        if (!validator.isEmpty(capture))
-            elements.forEach(element -> capture(capture, sid, editor.getId(), element.getId(),
-                    editor.getWidth(), editor.getHeight(), map, null, true));
-
-        return map;
-    }
-
-    private void capture(String capture, String sid, String editor, String page, int width, int height,
-                         Map<String, String> map, Map<String, Integer> index, boolean internal) {
-        String file = chromeHelper.jpeg(capture + (capture.indexOf('?') == -1 ? "?" : "&") + "sid=" + sid + "&editor=" + editor
-                + "&page=" + page, wait, 0, 0, width, height, 100, temporary.root());
-        if (validator.isEmpty(file))
-            return;
-
-        if (index != null)
-            index.put(page, index.size());
-        map.put(page, internal ? file : wormholeHelper.image(null, null, null, new File(file)));
+        return validator.isEmpty(path) ? null : new File(path);
     }
 
     @Override

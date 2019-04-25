@@ -156,14 +156,6 @@ public interface EditorService {
     String image(String id);
 
     /**
-     * 设置主截图。
-     *
-     * @param id  ID值。
-     * @param uri 主截图。
-     */
-    void screenshot(String id, String uri);
-
-    /**
      * 设置状态。
      *
      * @param id    ID值。
@@ -326,4 +318,31 @@ public interface EditorService {
      * @return 编辑器信息集。
      */
     JSONObject searchTemplate(String type, int template, String label, int size);
+
+    /**
+     * 获取截图渲染URL。
+     *
+     * @param sid Session ID。
+     * @param id  ID值。
+     * @return 截图渲染URL，未配置则返回null。
+     */
+    String getCapture(String sid, String id);
+
+    /**
+     * 获取截图渲染URL（无水印）。
+     *
+     * @param sid Session ID。
+     * @param id  ID值。
+     * @return 截图渲染URL，未配置则返回null。
+     */
+    String getCaptureNomark(String sid, String id);
+
+    /**
+     * 获取截图渲染URL（有水印）。
+     *
+     * @param sid Session ID。
+     * @param id  ID值。
+     * @return 截图渲染URL，未配置则返回null。
+     */
+    String getCaptureMark(String sid, String id);
 }

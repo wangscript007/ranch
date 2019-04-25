@@ -5,8 +5,8 @@ import com.alibaba.fastjson.JSONObject;
 import org.lpw.ranch.editor.EditorModel;
 import org.lpw.ranch.editor.element.ElementModel;
 
+import java.io.File;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author lpw
@@ -32,33 +32,26 @@ public interface ScreenshotService {
     /**
      * 截图。
      *
-     * @param editor 编辑器ID值。
-     * @return 异步ID。
-     */
-    String capture(String editor);
-
-    /**
-     * 截图。
-     *
-     * @param sid      Session ID。
-     * @param editor   编辑器。
-     * @param elements 根元素集。
-     * @param width    主页面宽度。
-     * @param height   主页面高度。
-     * @return 返回元素ID-URI集。
-     */
-    Map<String, String> capture(String sid, EditorModel editor, List<ElementModel> elements, int width, int height);
-
-    /**
-     * 截图。
-     *
      * @param sid      Session ID。
      * @param editor   编辑器。
      * @param elements 根元素集。
      * @param nomark   无水印。
-     * @return 返回元素ID-文件集。
+     * @param save     保存。
+     * @return 文件集。
      */
-    Map<String, String> capture(String sid, EditorModel editor, List<ElementModel> elements, boolean nomark);
+    List<File> capture(String sid, EditorModel editor, List<ElementModel> elements, boolean nomark, boolean save);
+
+    /**
+     * 截图。
+     *
+     * @param sid    Session ID。
+     * @param editor 编辑器。
+     * @param page   页面。
+     * @param width  宽。
+     * @param height 高。
+     * @return 图片文件；截图失败返回null。
+     */
+    File capture(String sid, String editor, String page, int width, int height);
 
     /**
      * 创建。

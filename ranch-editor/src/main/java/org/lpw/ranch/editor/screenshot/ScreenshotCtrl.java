@@ -37,15 +37,4 @@ public class ScreenshotCtrl {
     public Object find() {
         return screenshotService.find(request.get("editor"), request.get("page"));
     }
-
-    @Execute(name = "images", validates = {
-            @Validate(validator = Validators.ID, parameter = "editor", failureCode = 1),
-            @Validate(validator = UserHelper.VALIDATOR_SIGN_IN),
-            @Validate(validator = EditorService.VALIDATOR_EXISTS, parameter = "editor", failureCode = 2),
-            @Validate(validator = EditorService.VALIDATOR_EDITABLE, parameter = "editor", failureCode = 11),
-            @Validate(validator = RoleService.VALIDATOR_EDITABLE, parameter = "editor", failureCode = 41)
-    })
-    public Object images(){
-        return screenshotService.capture(request.get("editor"));
-    }
 }

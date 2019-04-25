@@ -132,12 +132,12 @@ public class EditorServiceImpl implements EditorService, HourJob, DateJob {
     private boolean autoPass;
     @Value("${" + EditorModel.NAME + ".auto.sale:false}")
     private boolean autoSale;
-    @Value("${" + EditorModel.NAME + ".image:}")
-    private String image;
-    @Value("${" + EditorModel.NAME + ".pdf.nomark:}")
-    private String pdfNomark;
-    @Value("${" + EditorModel.NAME + ".pdf.mark:}")
-    private String pdfMark;
+    @Value("${" + EditorModel.NAME + ".capture:}")
+    private String capture;
+    @Value("${" + EditorModel.NAME + ".capture.nomark:}")
+    private String captureNomark;
+    @Value("${" + EditorModel.NAME + ".capture.mark:}")
+    private String captureMark;
     private Map<String, String> random = new ConcurrentHashMap<>();
 
     @Override
@@ -330,31 +330,24 @@ public class EditorServiceImpl implements EditorService, HourJob, DateJob {
 
     @Override
     public String image(String id) {
-        if (validator.isEmpty(image))
+        List<ElementModel> elements = elementService.list(id);
+        if (validator.isEmpty(elements))
             return "";
 
         EditorModel editor = findById(id);
         String sid = session.getId();
 
-        return asyncService.submit(EditorModel.NAME + ".image." + id, "", 20, () -> {
-            String file = chromeHelper.jpeg(image + "?sid=" + sid + "&id=" + id, 10,
-                    0, 0, editor.getWidth(), editor.getHeight(), 100, temporary.root());
-            if (validator.isEmpty(file))
-                return "";
+        return asyncService.submit(EditorModel.NAME + ".image", id, 20, () -> {
+            File file = screenshotService.capture(sid, id, elements.get(0).getId(), editor.getWidth(), editor.getHeight());
+            if (file == null)
+                return "failure";
 
             EditorModel model = findById(id);
-            model.setImage(wormholeHelper.image(null, null, null, new File(file)));
+            model.setImage(wormholeHelper.image(null, null, null, file));
             save(model, 0, null, false);
 
-            return file;
+            return "success";
         });
-    }
-
-    @Override
-    public void screenshot(String id, String uri) {
-        EditorModel editor = editorDao.findById(id);
-        editor.setScreenshot(uri);
-        save(editor, editor.getState(), null, false);
     }
 
     @Override
@@ -378,20 +371,17 @@ public class EditorServiceImpl implements EditorService, HourJob, DateJob {
             if (template != null)
                 downloadService.save(user, template, "pdf", uri, path);
             sendEmail(email, new File(path), user, EditorModel.NAME + ".pdf");
-            io.delete(path);
 
             return uri;
         });
     }
 
     private String pdf(String sid, EditorModel editor, boolean nomark) {
-        StringBuilder pdf = new StringBuilder(nomark ? pdfNomark : pdfMark);
-        if (validator.isEmpty(pdf))
+        String capture = nomark ? getCaptureNomark(sid, editor.getId()) : getCaptureMark(sid, editor.getId());
+        if (capture == null)
             return "";
 
-        pdf.append(pdf.indexOf("?") == -1 ? '?' : '&').append("sid=").append(sid).append("&id=").append(editor.getId());
-
-        return chromeHelper.pdf(pdf.toString(), 30, editor.getWidth(), editor.getHeight(), "", temporary.root());
+        return chromeHelper.pdf(capture, 30, editor.getWidth(), editor.getHeight(), "", temporary.root());
     }
 
     @Override
@@ -403,15 +393,17 @@ public class EditorServiceImpl implements EditorService, HourJob, DateJob {
         List<ElementModel> elements = elementService.list(id);
 
         return asyncService.submit(EditorModel.NAME + ".images", id, 10 * elements.size(), () -> {
-            Map<String, String> map = screenshotService.capture(sid, editor, elements, nomark);
-            Map<String, File> files = new HashMap<>();
-            for (int i = 0, size = elements.size(); i < size; i++)
-                files.put(i + 1 + ".jpeg", new File(map.get(elements.get(i).getId())));
+            List<File> list = screenshotService.capture(sid, editor, elements, nomark, false);
+            if (list == null)
+                return "";
+
             String uri = temporary.newSavePath(".zip");
             File file = new File(context.getAbsolutePath(uri));
-            zipper.zip(files, file);
+            Map<String, File> map = new HashMap<>();
+            for (int i = 0, size = list.size(); i < size; i++)
+                map.put(i + ".jpeg", list.get(i));
+            zipper.zip(map, file);
             sendEmail(email, file, user, EditorModel.NAME + ".images");
-            io.delete(file);
 
             return uri;
         });
@@ -488,7 +480,7 @@ public class EditorServiceImpl implements EditorService, HourJob, DateJob {
     public void modify(String id) {
         EditorModel editor = findById(id);
         if (editor != null)
-            save(editor, editor.getTemplate() == 3 ? editor.getState() : 0, new Timestamp(System.currentTimeMillis()), false);
+            save(editor, editor.getState() == 3 ? editor.getState() : 0, new Timestamp(System.currentTimeMillis()), false);
     }
 
     @Override
@@ -582,7 +574,9 @@ public class EditorServiceImpl implements EditorService, HourJob, DateJob {
         return asyncService.submit(EditorModel.NAME + ".publish", id, 600, () -> {
             EditorModel editor = findById(id);
             List<ElementModel> elements = elementService.list(id);
-            screenshotService.capture(sid, editor, elements, width, height);
+            screenshot(sid, editor, width, height);
+            capture(sid, editor, elements, true);
+            capture(sid, editor, elements, false);
             fileService.save(id, "pdf", new File(pdf(sid, editor, true)));
             fileService.save(id, "pdf.free", new File(pdf(sid, editor, false)));
             listeners.ifPresent(set -> set.forEach(listener -> listener.publish(sid, null, editor, elements)));
@@ -606,7 +600,11 @@ public class EditorServiceImpl implements EditorService, HourJob, DateJob {
                 EditorModel editor = findById(id);
                 List<ElementModel> elements = elementService.list(id);
                 if (set.isEmpty() || set.contains("screenshot"))
-                    screenshotService.capture(sid, editor, elements, width, height);
+                    screenshot(sid, editor, width, height);
+                if (set.isEmpty() || set.contains("image"))
+                    capture(sid, editor, elements, true);
+                if (set.isEmpty() || set.contains("image.free"))
+                    capture(sid, editor, elements, false);
                 if (set.isEmpty() || set.contains("pdf"))
                     fileService.save(id, "pdf", new File(pdf(sid, editor, true)));
                 if (set.isEmpty() || set.contains("pdf.free"))
@@ -618,6 +616,27 @@ public class EditorServiceImpl implements EditorService, HourJob, DateJob {
 
             return "";
         });
+    }
+
+    private void screenshot(String sid, EditorModel editor, int width, int height) {
+        editor.setScreenshot(wormholeHelper.image(null, null, null,
+                screenshotService.capture(sid, editor.getId(), "", width, height)));
+        save(editor, editor.getState(), null, false);
+    }
+
+    private void capture(String sid, EditorModel editor, List<ElementModel> elements, boolean nomark) {
+        List<File> list = screenshotService.capture(sid, editor, elements, nomark, nomark);
+        Map<String, File> map = new HashMap<>();
+        for (int i = 0, size = list.size(); i < size; i++)
+            map.put(i + ".jpeg", list.get(i));
+        File file = new File(context.getAbsolutePath(temporary.newSavePath(".zip")));
+        try {
+            zipper.zip(map, file);
+            fileService.save(editor.getId(), nomark ? "image" : "image.free", file);
+            io.delete(file);
+        } catch (Throwable throwable) {
+            logger.warn(throwable, "生成预览截图时发生异常！");
+        }
     }
 
     @Override
@@ -732,6 +751,28 @@ public class EditorServiceImpl implements EditorService, HourJob, DateJob {
         object.put("list", array);
 
         return object;
+    }
+
+    @Override
+    public String getCapture(String sid, String id) {
+        return getCapture(capture, sid, id);
+    }
+
+    @Override
+    public String getCaptureNomark(String sid, String id) {
+        return getCapture(captureNomark, sid, id);
+    }
+
+    @Override
+    public String getCaptureMark(String sid, String id) {
+        return getCapture(captureMark, sid, id);
+    }
+
+    private String getCapture(String capture, String sid, String id) {
+        if (validator.isEmpty(capture))
+            return null;
+
+        return capture + (capture.indexOf('?') == -1 ? "?" : "&") + "sid=" + sid + "&id=" + id;
     }
 
     @Override
