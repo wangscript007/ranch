@@ -85,13 +85,13 @@ public class ScreenshotServiceImpl implements ScreenshotService {
                 image.write(image.subimage(bufferedImage, 0, i * editor.getHeight(), editor.getWidth(), editor.getHeight()),
                         Image.Format.Jpeg, new FileOutputStream(file));
                 list.add(file);
-                if (i == 0 || !save)
+                if (!save)
                     continue;
 
                 ScreenshotModel screenshot = new ScreenshotModel();
                 screenshot.setEditor(editor.getId());
-                screenshot.setIndex(i - 1);
-                screenshot.setPage(elements.get(i - 1).getId());
+                screenshot.setIndex(i);
+                screenshot.setPage(elements.get(i).getId());
                 screenshot.setUri(wormholeHelper.image(null, null, null, file));
                 screenshotDao.save(screenshot);
             }

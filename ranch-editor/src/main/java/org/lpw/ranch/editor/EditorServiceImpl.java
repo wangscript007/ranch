@@ -599,20 +599,24 @@ public class EditorServiceImpl implements EditorService, HourJob, DateJob {
             }
 
             editorDao.templates(type, 3).forEach(id -> {
-                EditorModel editor = findById(id);
-                List<ElementModel> elements = elementService.list(id);
-                if (set.isEmpty() || set.contains("screenshot"))
-                    screenshot(sid, editor, width, height);
-                if (set.isEmpty() || set.contains("image"))
-                    capture(sid, editor, elements, true);
-                if (set.isEmpty() || set.contains("image.free"))
-                    capture(sid, editor, elements, false);
-                if (set.isEmpty() || set.contains("pdf"))
-                    fileService.save(id, "pdf", new File(pdf(sid, editor, true)));
-                if (set.isEmpty() || set.contains("pdf.free"))
-                    fileService.save(id, "pdf.free", new File(pdf(sid, editor, false)));
-                listeners.ifPresent(s -> s.forEach(listener -> listener.publish(sid, set, editor, elements)));
-                editorDao.close();
+                try {
+                    EditorModel editor = findById(id);
+                    List<ElementModel> elements = elementService.list(id);
+                    if (set.isEmpty() || set.contains("screenshot"))
+                        screenshot(sid, editor, width, height);
+                    if (set.isEmpty() || set.contains("image"))
+                        capture(sid, editor, elements, true);
+                    if (set.isEmpty() || set.contains("image.free"))
+                        capture(sid, editor, elements, false);
+                    if (set.isEmpty() || set.contains("pdf"))
+                        fileService.save(id, "pdf", new File(pdf(sid, editor, true)));
+                    if (set.isEmpty() || set.contains("pdf.free"))
+                        fileService.save(id, "pdf.free", new File(pdf(sid, editor, false)));
+                    listeners.ifPresent(s -> s.forEach(listener -> listener.publish(sid, set, editor, elements)));
+                    editorDao.close();
+                } catch (Throwable throwable) {
+                    logger.warn(throwable, "发布模板[{}:{}:{}:{}:{}]时发生异常！", type, Arrays.toString(types), width, height, id);
+                }
             });
             resetRandom(type);
 
