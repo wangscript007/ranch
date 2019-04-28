@@ -1,5 +1,6 @@
 package org.lpw.ranch.editor.download;
 
+import org.lpw.ranch.editor.buy.BuyService;
 import org.lpw.ranch.user.helper.UserHelper;
 import org.lpw.tephra.scheduler.DateJob;
 import org.lpw.tephra.util.DateTime;
@@ -18,6 +19,8 @@ public class DownloadServiceImpl implements DownloadService, DateJob {
     @Inject
     private UserHelper userHelper;
     @Inject
+    private BuyService buyService;
+    @Inject
     private DownloadDao downloadDao;
 
     @Override
@@ -27,6 +30,9 @@ public class DownloadServiceImpl implements DownloadService, DateJob {
 
     @Override
     public void save(String user, String editor, String type, String uri, String temporary) {
+        if (editor == null || buyService.find(user, editor) != null)
+            return;
+
         DownloadModel download = new DownloadModel();
         download.setUser(user);
         download.setEditor(editor);

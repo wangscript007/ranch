@@ -369,9 +369,7 @@ public class EditorServiceImpl implements EditorService, HourJob, DateJob {
         return asyncService.submit(EditorModel.NAME + ".pdf", id, 60, () -> {
             String path = pdf(sid, findById(id), nomark);
             String uri = path.substring(path.lastIndexOf(temporary.root()));
-            String template = findTemplate(id);
-            if (template != null)
-                downloadService.save(user, template, "pdf", uri, path);
+            downloadService.save(user, findTemplate(id), "pdf", uri, path);
             sendEmail(email, new File(path), user, EditorModel.NAME + ".pdf");
 
             return uri;
@@ -405,6 +403,7 @@ public class EditorServiceImpl implements EditorService, HourJob, DateJob {
             for (int i = 0, size = list.size(); i < size; i++)
                 map.put(i + ".jpeg", list.get(i));
             zipper.zip(map, file);
+            downloadService.save(user, findTemplate(id), "pdf", uri, file.getAbsolutePath());
             sendEmail(email, file, user, EditorModel.NAME + ".images");
 
             return uri;
