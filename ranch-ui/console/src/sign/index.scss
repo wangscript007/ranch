@@ -1,0 +1,22 @@
+.sign {
+    min-height: 100vh;
+}
+
+.sign form {
+    width: 256px;
+    margin: 50vh auto 0 auto;
+    transform: translateY(-50%);
+}
+
+.sign form button {
+    width: 100%;
+}
+
+.sign form .in,
+.sign form .up {
+    cursor: pointer;
+}
+
+.sign form .up {
+    text-align: right;
+}
