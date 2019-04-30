@@ -26,12 +26,19 @@ public class ConsoleCtrl {
     @Inject
     private ConsoleService consoleService;
 
+    @Execute(name = "sign-up", validates = {
+            @Validate(validator = Validators.NOT_EMPTY, scope = Validate.Scope.Header, parameter = "domain", failureCode = 1)
+    })
+    public Object signUp() {
+        return consoleService.signUp(header.get("domain"));
+    }
+
     @Execute(name = "menu", validates = {
             @Validate(validator = Validators.NOT_EMPTY, scope = Validate.Scope.Header, parameter = "domain", failureCode = 1),
             @Validate(validator = UserHelper.VALIDATOR_SIGN_IN)
     })
     public Object menu() {
-        return consoleService.menu(header.get("domain"));
+        return consoleService.menus(header.get("domain"));
     }
 
     @Execute(name = "meta", validates = {
@@ -45,7 +52,7 @@ public class ConsoleCtrl {
     @Execute(name = "service", validates = {
             @Validate(validator = Validators.NOT_EMPTY, scope = Validate.Scope.Header, parameter = "key", failureCode = 2),
             @Validate(validator = UserHelper.VALIDATOR_SIGN_IN),
-            @Validate(validator = ConsoleService.VALIDATOR_PERMIT, scope = Validate.Scope.Header, parameter = "key", failureCode = 3)
+            @Validate(validator = ConsoleService.VALIDATOR_PERMIT, scope = Validate.Scope.Header, parameter = "domain", failureCode = 3)
     })
     public Object service() {
         return consoleService.service(header.get("key"), request.getMap());

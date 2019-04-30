@@ -42,7 +42,7 @@ export default class Console extends React.Component<Props, State> {
                 return;
             }
 
-            this.setState({ menus: data.menus })
+            this.setState({ menus: data })
         });
     }
 

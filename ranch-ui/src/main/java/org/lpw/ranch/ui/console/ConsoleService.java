@@ -15,11 +15,20 @@ public interface ConsoleService {
     String VALIDATOR_PERMIT = ConsoleModel.NAME + ".valiator.permit";
 
     /**
+     * 是否可注册。
+     *
+     * @param domain 所属域。
+     * @return 可注册则返回true；否则返回false。
+     */
+    boolean signUp(String domain);
+
+    /**
      * 验证用户权限。
      *
+     * @param domain 所属域。
      * @return 如果允许则返回true；否则返回fale。
      */
-    boolean permit();
+    boolean permit(String domain);
 
     /**
      * 获取菜单。
@@ -27,7 +36,7 @@ public interface ConsoleService {
      * @param domain 所属域。
      * @return 菜单。
      */
-    JSONObject menu(String domain);
+    JSONArray menus(String domain);
 
     /**
      * 获取模块元数据。

@@ -46,13 +46,28 @@ public class ConsoleServiceImpl implements ConsoleService {
     private Map<String, JSONObject> map = new ConcurrentHashMap<>();
 
     @Override
-    public boolean permit() {
-        return userHelper.grade() >= 90;
+    public boolean signUp(String domain) {
+        return json.hasTrue(menu(domain), "sign-up");
     }
 
     @Override
-    public JSONObject menu(String domain) {
-        JSONObject menu = map.computeIfAbsent(domain, key -> {
+    public boolean permit(String domain) {
+        return permit(menu(domain));
+    }
+
+    private boolean permit(JSONObject menu) {
+        return !menu.containsKey("grade") || menu.getIntValue("grade") <= userHelper.grade();
+    }
+
+    @Override
+    public JSONArray menus(String domain) {
+        JSONObject menu = menu(domain);
+
+        return permit(menu) ? menu.getJSONArray("menus") : new JSONArray();
+    }
+
+    private JSONObject menu(String domain) {
+        return map.computeIfAbsent(domain, key -> {
             JSONObject object = json.toObject(io.readAsString(context.getAbsolutePath(root + domain + "/menu.json")));
             if (object == null) {
                 logger.warn(null, "读取[{}]菜单配置失败！", key);
@@ -61,16 +76,10 @@ public class ConsoleServiceImpl implements ConsoleService {
             }
 
             if (logger.isInfoEnable())
-                if (logger.isInfoEnable())
-                    logger.info("载入菜单配置[{}:{}]。", key, object);
+                logger.info("载入菜单配置[{}:{}]。", key, object);
 
             return object;
         });
-
-        if (menu.containsKey("grade") && menu.getIntValue("grade") > userHelper.grade())
-            return new JSONObject();
-
-        return menu;
     }
 
     @Override

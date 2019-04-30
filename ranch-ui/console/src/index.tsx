@@ -3,7 +3,7 @@ import * as ReactDOM from 'react-dom';
 import { LocaleProvider } from 'antd';
 import zh_CN from 'antd/lib/locale-provider/zh_CN';
 import { user, User } from './user';
-import SignIn from './sign-in';
+import Sign from './sign';
 import Console from './console';
 import registerServiceWorker from './registerServiceWorker';
 import './index.scss';
@@ -23,7 +23,7 @@ class Index extends React.Component<object, State> {
     }
 
     public render(): JSX.Element {
-        return this.state.user.id ? <Console user={this.state.user} /> : <SignIn sign={this.sign} />;
+        return this.state.user.id ? <Console user={this.state.user} /> : <Sign sign={this.sign} />;
     }
 
     private sign(user: User): void {

@@ -18,7 +18,7 @@ class Service {
         return http.post(request.uri, merger.merge({}, request.header || {}, { domain: domain === '' ? 'console' : domain }), request.parameter || {}).then(json => {
             loading();
             if (json.code !== 0) {
-                message.error('[' + json.code + ']' + json.message);
+                this.failure(json);
                 if (json.code === 9901) {
                     location.reload();
                 }
@@ -28,6 +28,10 @@ class Service {
 
             return json.data;
         });
+    }
+
+    public failure(json: { code: number, message?: string }): void {
+        message.error('[' + json.code + ']' + json.message);
     }
 }
 

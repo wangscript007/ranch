@@ -16,7 +16,7 @@ public class PermitValidatorImpl extends ValidatorSupport {
 
     @Override
     public boolean validate(ValidateWrapper validate, String parameter) {
-        return consoleService.permit();
+        return consoleService.permit(parameter);
     }
 
     @Override
