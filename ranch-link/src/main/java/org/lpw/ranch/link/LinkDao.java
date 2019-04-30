@@ -2,6 +2,7 @@ package org.lpw.ranch.link;
 
 import org.lpw.tephra.dao.orm.PageList;
 
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -17,6 +18,10 @@ interface LinkDao {
     PageList<LinkModel> query2(String type, Set<String> id2s, int pageSize, int pageNum);
 
     int count(String type, String id1, String id2);
+
+    Map<String, Integer> count1(String type, Set<String> id1s);
+
+    Map<String, Integer> count2(String type, Set<String> id1s);
 
     LinkModel find(String type, String id1, String id2);
 

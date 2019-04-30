@@ -3,6 +3,7 @@ package org.lpw.ranch.link;
 import org.lpw.ranch.util.DaoHelper;
 import org.lpw.ranch.util.DaoOperation;
 import org.lpw.tephra.dao.jdbc.Sql;
+import org.lpw.tephra.dao.model.ModelTables;
 import org.lpw.tephra.dao.orm.PageList;
 import org.lpw.tephra.dao.orm.lite.LiteOrm;
 import org.lpw.tephra.dao.orm.lite.LiteQuery;
@@ -11,7 +12,9 @@ import org.springframework.stereotype.Repository;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -23,6 +26,8 @@ class LinkDaoImpl implements LinkDao {
     private Numeric numeric;
     @Inject
     private Sql sql;
+    @Inject
+    private ModelTables modelTables;
     @Inject
     private LiteOrm liteOrm;
     @Inject
@@ -72,6 +77,29 @@ class LinkDaoImpl implements LinkDao {
         daoHelper.where(where, args, "c_id2", DaoOperation.Equals, id2);
 
         return liteOrm.count(new LiteQuery(LinkModel.class).where(where.toString()), args.toArray());
+    }
+
+    @Override
+    public Map<String, Integer> count1(String type, Set<String> id1s) {
+        return count(type, 1, id1s);
+    }
+
+    @Override
+    public Map<String, Integer> count2(String type, Set<String> id1s) {
+        return count(type, 2, id1s);
+    }
+
+    private Map<String, Integer> count(String type, int i, Set<String> values) {
+        StringBuilder where = new StringBuilder("SELECT c_id").append(i).append(",COUNT(*) FROM ")
+                .append(modelTables.get(LinkModel.class).getTableName()).append(" WHERE ");
+        List<Object> args = new ArrayList<>();
+        daoHelper.where(where, args, "c_type", DaoOperation.Equals, type);
+        daoHelper.in(where, args, "c_id" + i, values);
+        Map<String, Integer> map = new HashMap<>();
+        sql.query(where.append(" GROUP BY c_id").append(i).toString(), args.toArray())
+                .forEach(list -> map.put((String) list.get(0), numeric.toInt(list.get(1))));
+
+        return map;
     }
 
     @Override
