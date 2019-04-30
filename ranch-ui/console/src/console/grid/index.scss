@@ -10,9 +10,12 @@
     overflow-x: auto;
 }
 
-.console .ant-layout-content .content .page .grid-table th,
-.console .ant-layout-content .content .page .grid-table td {
+.console .ant-layout-content .content .page .grid-table th {
     white-space: nowrap;
+}
+
+.console .ant-layout-content .content .page .grid-table td {
+    word-break: break-all;
 }
 
 .console .ant-layout-content .content .page .grid-img {
