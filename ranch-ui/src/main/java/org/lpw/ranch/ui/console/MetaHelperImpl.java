@@ -2,7 +2,7 @@ package org.lpw.ranch.ui.console;
 
 import com.alibaba.fastjson.JSONObject;
 import org.lpw.tephra.bean.ContextRefreshedListener;
-import org.lpw.tephra.dao.model.ModelTables;
+import org.lpw.tephra.dao.model.Model;
 import org.lpw.tephra.util.Context;
 import org.lpw.tephra.util.Io;
 import org.lpw.tephra.util.Json;
@@ -16,6 +16,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.InputStream;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -34,7 +35,7 @@ public class MetaHelperImpl implements MetaHelper, ContextRefreshedListener {
     @Inject
     private Logger logger;
     @Inject
-    private ModelTables modelTables;
+    private Set<Model> models;
     @Value("${" + ConsoleModel.NAME + ".root:/WEB-INF/ui/}")
     private String root;
     private Map<String, String> map;
@@ -53,7 +54,8 @@ public class MetaHelperImpl implements MetaHelper, ContextRefreshedListener {
     @Override
     public void onContextRefreshed() {
         map = new ConcurrentHashMap<>();
-        modelTables.getModelClasses().forEach(modelClass -> {
+        models.forEach(model -> {
+            Class<? extends Model> modelClass = model.getClass();
             try (InputStream inputStream = modelClass.getResourceAsStream("meta.json");
                  ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
                 if (inputStream == null)
