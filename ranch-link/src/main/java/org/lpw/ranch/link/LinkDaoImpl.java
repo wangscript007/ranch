@@ -110,6 +110,7 @@ class LinkDaoImpl implements LinkDao {
     @Override
     public void save(LinkModel link) {
         liteOrm.save(link);
+        liteOrm.close();
     }
 
     @Override
@@ -121,5 +122,6 @@ class LinkDaoImpl implements LinkDao {
         daoHelper.where(where, args, "c_id2", DaoOperation.Equals, id2);
 
         liteOrm.delete(new LiteQuery(LinkModel.class).where(where.toString()), args.toArray());
+        liteOrm.close();
     }
 }
