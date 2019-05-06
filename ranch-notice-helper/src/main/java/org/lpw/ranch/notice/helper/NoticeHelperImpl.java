@@ -24,7 +24,7 @@ public class NoticeHelperImpl implements NoticeHelper {
     private String sendsKey;
 
     @Override
-    public void send(String user, String type, String subject, String content) {
+    public void send(String user, String type, String subject, String content, String link) {
         if (sendKey == null)
             sendKey = key + ".send";
         Map<String, String> parameter = new HashMap<>();
@@ -32,11 +32,12 @@ public class NoticeHelperImpl implements NoticeHelper {
         parameter.put("type", type);
         parameter.put("subject", subject);
         parameter.put("content", content);
+        parameter.put("link", link);
         carousel.service(sendKey, null, parameter, false);
     }
 
     @Override
-    public void send(String[] users, String type, String subject, String content) {
+    public void send(String[] users, String type, String subject, String content, String link) {
         if (sendsKey == null)
             sendsKey = key + ".sends";
         Map<String, String> parameter = new HashMap<>();
@@ -44,6 +45,7 @@ public class NoticeHelperImpl implements NoticeHelper {
         parameter.put("type", type);
         parameter.put("subject", subject);
         parameter.put("content", content);
+        parameter.put("link", link);
         carousel.service(sendsKey, null, parameter, false);
     }
 }
