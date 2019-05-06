@@ -9,7 +9,6 @@ import org.springframework.stereotype.Component;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
-
 import java.sql.Timestamp;
 
 /**
@@ -26,6 +25,7 @@ public class NoticeModel extends ModelSupport {
     private String type; // 类型
     private String subject; // 标题
     private String content; // 内容
+    private String link; // 链接
     private int read; // 已读：0-否；1-是
     private Timestamp time; // 时间
 
@@ -67,6 +67,16 @@ public class NoticeModel extends ModelSupport {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    @Jsonable
+    @Column(name = "c_link")
+    public String getLink() {
+        return link;
+    }
+
+    public void setLink(String link) {
+        this.link = link;
     }
 
     @Jsonable

@@ -36,7 +36,7 @@ public class NoticeCtrl {
             @Validate(validator = UserHelper.VALIDATOR_EXISTS, parameter = "user", failureCode = 5)
     })
     public Object send() {
-        noticeService.send(request.get("user"), request.get("type"), request.get("subject"), request.get("content"));
+        noticeService.send(request.get("user"), request.get("type"), request.get("subject"), request.get("content"), request.get("link"));
 
         return "";
     }
@@ -49,7 +49,8 @@ public class NoticeCtrl {
             @Validate(validator = Validators.SIGN)
     })
     public Object sends() {
-        noticeService.send(request.getAsArray("users"), request.get("type"), request.get("subject"), request.get("content"));
+        noticeService.send(request.getAsArray("users"), request.get("type"), request.get("subject"), request.get("content"),
+                request.get("link"));
 
         return "";
     }

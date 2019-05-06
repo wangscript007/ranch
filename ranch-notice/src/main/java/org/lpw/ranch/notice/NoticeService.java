@@ -22,8 +22,9 @@ public interface NoticeService {
      * @param type    类型。
      * @param subject 标题。
      * @param content 内容。
+     * @param link    链接。
      */
-    void send(String user, String type, String subject, String content);
+    void send(String user, String type, String subject, String content, String link);
 
     /**
      * 发送通知。
@@ -32,8 +33,9 @@ public interface NoticeService {
      * @param type    类型。
      * @param subject 标题。
      * @param content 内容。
+     * @param link    链接。
      */
-    void send(String[] users, String type, String subject, String content);
+    void send(String[] users, String type, String subject, String content, String link);
 
     /**
      * 标记已读。

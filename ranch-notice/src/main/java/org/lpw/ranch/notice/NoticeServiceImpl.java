@@ -31,21 +31,22 @@ public class NoticeServiceImpl implements NoticeService {
     }
 
     @Override
-    public void send(String user, String type, String subject, String content) {
+    public void send(String user, String type, String subject, String content, String link) {
         NoticeModel notice = new NoticeModel();
         notice.setUser(user);
         notice.setType(type);
         notice.setSubject(subject);
         notice.setContent(content);
+        notice.setLink(link);
         notice.setTime(dateTime.now());
         noticeDao.save(notice);
     }
 
     @Override
-    public void send(String[] users, String type, String subject, String content) {
+    public void send(String[] users, String type, String subject, String content, String link) {
         for (String user : users)
             if (!validator.isEmpty(user) && userHelper.exists(user))
-                send(user, type, subject, content);
+                send(user, type, subject, content, link);
     }
 
     @Override

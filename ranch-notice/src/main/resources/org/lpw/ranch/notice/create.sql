@@ -6,6 +6,7 @@ CREATE TABLE t_notice
   c_type VARCHAR(255) DEFAULT NULL COMMENT '类型',
   c_subject VARCHAR(255) DEFAULT NULL COMMENT '标题',
   c_content TEXT DEFAULT NULL COMMENT '内容',
+  c_link TEXT DEFAULT NULL COMMENT '链接',
   c_read INT DEFAULT 0 COMMENT '已读：0-否；1-是',
   c_time DATETIME DEFAULT NULL COMMENT '时间',
 

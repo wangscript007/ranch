@@ -8,6 +8,7 @@
 |type|char(100)|类型。|
 |subject|char(100)|标题。|
 |content|string|内容。|
+|link|string|链接。|
 |read|int|已读：0-否；1-是。|
 |time|datetime|时间。|
 

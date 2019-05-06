@@ -12,6 +12,7 @@
 |type|char(100)|否|类型。|
 |subject|char(100)|否|标题。|
 |content|string|是|内容。|
+|link|string|否|链接。|
 
 返回值
 ```
