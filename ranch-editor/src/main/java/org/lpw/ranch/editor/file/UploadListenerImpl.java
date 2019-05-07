@@ -32,18 +32,21 @@ public class UploadListenerImpl implements UploadListener {
 
     @Override
     public boolean isUploadEnable(UploadReader uploadReader) {
-        String type = uploadReader.getParameter("type");
-        if (validator.isEmpty(type))
-            return false;
-
-        if (type.equals("pdf"))
-            return pdfHelper.is(uploadReader.getContentType(), uploadReader.getFileName());
-
-        return officeHelper.isPpt(uploadReader.getContentType(), uploadReader.getFileName());
+        switch (uploadReader.getParameter("type")) {
+            case "pdf":
+                return pdfHelper.is(uploadReader.getContentType(), uploadReader.getFileName());
+            case "ppt":
+                return officeHelper.isPpt(uploadReader.getContentType(), uploadReader.getFileName());
+            case "word":
+                return officeHelper.isWord(uploadReader.getContentType(), uploadReader.getFileName());
+            default:
+                return false;
+        }
     }
 
     @Override
     public JSONObject settle(UploadReader uploadReader) throws IOException {
-        return fileService.upload(uploadReader);
+        return officeHelper.isWord(uploadReader.getContentType(), uploadReader.getFileName()) ? fileService.uploadNoCapture(uploadReader)
+                : fileService.uploadCapture(uploadReader);
     }
 }

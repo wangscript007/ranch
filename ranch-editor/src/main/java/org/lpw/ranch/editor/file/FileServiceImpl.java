@@ -29,6 +29,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -106,12 +107,26 @@ public class FileServiceImpl implements FileService, org.lpw.tephra.pdf.MediaWri
     }
 
     @Override
-    public JSONObject upload(UploadReader uploadReader) throws IOException {
+    public JSONObject uploadCapture(UploadReader uploadReader) throws IOException {
+        String type = uploadReader.getParameter("type");
         File file = new File(context.getAbsolutePath(temporary.save(uploadReader.getInputStream(),
                 uploadReader.getFileName().substring(uploadReader.getFileName().lastIndexOf('.')).toLowerCase())));
-        String type = uploadReader.getParameter("type");
-        List<String> list = type.equals("pdf") ? pdfReader.pngs(new FileInputStream(file), this, false) :
-                pptxReader.pngs(new FileInputStream(file), this, false);
+
+        return upload(uploadReader, type, file, type.equals("pdf") ? pdfReader.pngs(new FileInputStream(file), this, false)
+                : pptxReader.pngs(new FileInputStream(file), this, false));
+    }
+
+    @Override
+    public JSONObject uploadNoCapture(UploadReader uploadReader) throws IOException {
+        List<String> list = new ArrayList<>();
+        for (int i = 0, size = numeric.toInt(uploadReader.getParameter("page")); i < size; i++)
+            list.add("");
+
+        return upload(uploadReader, "word", new File(context.getAbsolutePath(temporary.save(uploadReader.getInputStream(),
+                uploadReader.getFileName().substring(uploadReader.getFileName().lastIndexOf('.')).toLowerCase()))), list);
+    }
+
+    private JSONObject upload(UploadReader uploadReader, String type, File file, List<String> list) throws IOException {
         JSONObject object = new JSONObject();
         if (validator.isEmpty(list)) {
             io.delete(file);

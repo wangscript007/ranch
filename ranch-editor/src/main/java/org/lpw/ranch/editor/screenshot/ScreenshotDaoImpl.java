@@ -28,6 +28,11 @@ class ScreenshotDaoImpl implements ScreenshotDao {
     }
 
     @Override
+    public ScreenshotModel findById(String id) {
+        return liteOrm.findById(ScreenshotModel.class, id);
+    }
+
+    @Override
     public ScreenshotModel find(String editor, String page) {
         return liteOrm.findOne(new LiteQuery(ScreenshotModel.class).where("c_editor=? and c_page=?"), new Object[]{editor, page});
     }

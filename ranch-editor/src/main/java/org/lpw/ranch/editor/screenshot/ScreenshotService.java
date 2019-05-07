@@ -64,6 +64,14 @@ public interface ScreenshotService {
     void create(String editor, int index, String page, String uri);
 
     /**
+     * 设置URI。
+     *
+     * @param id  ID值。
+     * @param uri URI。
+     */
+    void uri(String id, String uri);
+
+    /**
      * 删除。
      *
      * @param editor 编辑器ID值。

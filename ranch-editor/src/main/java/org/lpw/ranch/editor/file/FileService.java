@@ -45,13 +45,22 @@ public interface FileService {
     void save(String editor, String type, File file);
 
     /**
-     * 上传。
+     * 上传并截图。
      *
      * @param uploadReader 文件读取器。
      * @return 上传结果。
      * @throws IOException 未处理IO异常。
      */
-    JSONObject upload(UploadReader uploadReader) throws IOException;
+    JSONObject uploadCapture(UploadReader uploadReader) throws IOException;
+
+    /**
+     * 上传不截图。
+     *
+     * @param uploadReader 文件读取器。
+     * @return 上传结果。
+     * @throws IOException 未处理IO异常。
+     */
+    JSONObject uploadNoCapture(UploadReader uploadReader) throws IOException;
 
     /**
      * 下载。

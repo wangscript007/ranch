@@ -10,6 +10,8 @@ import java.util.Map;
 interface ScreenshotDao {
     PageList<ScreenshotModel> query(String editor);
 
+    ScreenshotModel findById(String id);
+
     ScreenshotModel find(String editor, String page);
 
     void save(ScreenshotModel screenshot);

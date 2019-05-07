@@ -216,6 +216,8 @@
 
 [截图集](doc/screenshot/images.md)
 
+[上传](doc/screenshot/upload.md)
+
 ## 价格
 
 属性
