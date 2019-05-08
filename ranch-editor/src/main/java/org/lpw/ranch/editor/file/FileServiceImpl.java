@@ -196,8 +196,7 @@ public class FileServiceImpl implements FileService, org.lpw.tephra.pdf.MediaWri
 
     @Override
     public String download(String editor, String type, String email) {
-        boolean markable = !editorService.nomark(editor);
-        if (markable)
+        if (!editorService.nomark(editor))
             type += ".free";
         FileModel file = fileDao.find(editor, type);
         if (file == null)

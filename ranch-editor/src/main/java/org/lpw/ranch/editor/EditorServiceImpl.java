@@ -232,6 +232,8 @@ public class EditorServiceImpl implements EditorService, HourJob, DateJob {
             return false;
 
         EditorModel editor = findById(template);
+        if (editor.getTemplate() > 2)
+            return true;
 
         return (userHelper.isVip() && editor.getVipPrice() == 0) || buyService.find(userHelper.id(), template) != null;
     }
