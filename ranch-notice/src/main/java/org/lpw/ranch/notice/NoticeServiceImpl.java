@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import org.lpw.ranch.user.helper.UserHelper;
 import org.lpw.ranch.util.Pagination;
+import org.lpw.tephra.cache.Cache;
 import org.lpw.tephra.dao.model.ModelHelper;
 import org.lpw.tephra.util.DateTime;
 import org.lpw.tephra.util.Validator;
@@ -16,6 +17,8 @@ import javax.inject.Inject;
  */
 @Service(NoticeModel.NAME + ".service")
 public class NoticeServiceImpl implements NoticeService {
+    @Inject
+    private Cache cache;
     @Inject
     private DateTime dateTime;
     @Inject
@@ -31,7 +34,8 @@ public class NoticeServiceImpl implements NoticeService {
 
     @Override
     public JSONArray query(String type) {
-        return modelHelper.toJson(noticeDao.query("", type).getList());
+        return cache.computeIfAbsent(NoticeModel.NAME + ":" + type, key ->
+                modelHelper.toJson(noticeDao.query("", type).getList()), false);
     }
 
     @Override
@@ -42,6 +46,7 @@ public class NoticeServiceImpl implements NoticeService {
     @Override
     public void send(String type, String subject, String content, String link) {
         send("", type, subject, content, link);
+        cache.remove(NoticeModel.NAME + ":" + type);
     }
 
     @Override
