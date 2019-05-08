@@ -1,8 +1,10 @@
 package org.lpw.ranch.notice;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import org.lpw.ranch.user.helper.UserHelper;
 import org.lpw.ranch.util.Pagination;
+import org.lpw.tephra.dao.model.ModelHelper;
 import org.lpw.tephra.util.DateTime;
 import org.lpw.tephra.util.Validator;
 import org.springframework.stereotype.Service;
@@ -19,6 +21,8 @@ public class NoticeServiceImpl implements NoticeService {
     @Inject
     private Validator validator;
     @Inject
+    private ModelHelper modelHelper;
+    @Inject
     private Pagination pagination;
     @Inject
     private UserHelper userHelper;
@@ -26,8 +30,18 @@ public class NoticeServiceImpl implements NoticeService {
     private NoticeDao noticeDao;
 
     @Override
+    public JSONArray query(String type) {
+        return modelHelper.toJson(noticeDao.query("", type).getList());
+    }
+
+    @Override
     public JSONObject query(String type, int read) {
         return noticeDao.query(userHelper.id(), type, read, pagination.getPageSize(20), pagination.getPageNum()).toJson();
+    }
+
+    @Override
+    public void send(String type, String subject, String content, String link) {
+        send("", type, subject, content, link);
     }
 
     @Override

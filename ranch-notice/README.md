@@ -12,6 +12,10 @@
 |read|int|已读：0-否；1-是。|
 |time|datetime|时间。|
 
+[检索全局公告](doc/global.md)
+
+[发送全局公告](doc/send-global.md)
+
 [检索](doc/query.md)
 
 [发送](doc/send.md)

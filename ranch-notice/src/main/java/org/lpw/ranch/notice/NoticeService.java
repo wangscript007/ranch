@@ -1,11 +1,20 @@
 package org.lpw.ranch.notice;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
 /**
  * @author lpw
  */
 public interface NoticeService {
+    /**
+     * 检索全局通知集。
+     *
+     * @param type 类型，为空则表示全部。
+     * @return 通知集。
+     */
+    JSONArray query(String type);
+
     /**
      * 检索通知集。
      *
@@ -14,6 +23,16 @@ public interface NoticeService {
      * @return 通知集。
      */
     JSONObject query(String type, int read);
+
+    /**
+     * 发送全局通知。
+     *
+     * @param type    类型。
+     * @param subject 标题。
+     * @param content 内容。
+     * @param link    链接。
+     */
+    void send(String type, String subject, String content, String link);
 
     /**
      * 发送通知。

@@ -20,11 +20,28 @@ public class NoticeCtrl {
     @Inject
     private NoticeService noticeService;
 
+    @Execute(name = "global")
+    public Object global() {
+        return noticeService.query(request.get("type"));
+    }
+
     @Execute(name = "query", validates = {
             @Validate(validator = UserHelper.VALIDATOR_SIGN_IN)
     })
     public Object query() {
         return noticeService.query(request.get("type"), request.getAsInt("read", -1));
+    }
+
+    @Execute(name = "send-global", validates = {
+            @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "type", failureCode = 2),
+            @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "subject", failureCode = 3),
+            @Validate(validator = Validators.NOT_EMPTY, parameter = "content", failureCode = 4),
+            @Validate(validator = Validators.SIGN)
+    })
+    public Object sendGlobal() {
+        noticeService.send(request.get("type"), request.get("subject"), request.get("content"), request.get("link"));
+
+        return "";
     }
 
     @Execute(name = "send", validates = {

@@ -22,6 +22,11 @@ class NoticeDaoImpl implements NoticeDao {
     private DaoHelper daoHelper;
 
     @Override
+    public PageList<NoticeModel> query(String user, String type) {
+        return liteOrm.query(new LiteQuery(NoticeModel.class).where("c_user=? and c_type=?").order("c_time desc"), new Object[]{user, type});
+    }
+
+    @Override
     public PageList<NoticeModel> query(String user, String type, int read, int pageSize, int pageNum) {
         StringBuilder where = new StringBuilder();
         List<Object> args = new ArrayList<>();
