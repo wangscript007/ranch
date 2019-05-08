@@ -131,6 +131,8 @@ public class ScreenshotServiceImpl implements ScreenshotService {
         ScreenshotModel screenshot = screenshotDao.findById(id);
         screenshot.setUri(uri);
         screenshotDao.save(screenshot);
+        if (screenshot.getIndex() == 0)
+            editorService.image(screenshot.getEditor(), uri);
     }
 
     @Override

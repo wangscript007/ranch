@@ -353,6 +353,16 @@ public class EditorServiceImpl implements EditorService, HourJob, DateJob {
     }
 
     @Override
+    public void image(String id, String image) {
+        EditorModel editor = findById(id);
+        if (editor == null)
+            return;
+
+        editor.setImage(image);
+        save(editor, editor.getState(), null, false);
+    }
+
+    @Override
     public JSONObject state(String id, int state) {
         EditorModel editor = editorDao.findById(id);
         save(editor, state, null, false);

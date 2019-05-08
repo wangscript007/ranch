@@ -156,6 +156,14 @@ public interface EditorService {
     String image(String id);
 
     /**
+     * 设置预览图。
+     *
+     * @param id    编辑器ID。
+     * @param image 预览图。
+     */
+    void image(String id, String image);
+
+    /**
      * 设置状态。
      *
      * @param id    ID值。
