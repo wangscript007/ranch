@@ -7,10 +7,13 @@ import org.lpw.ranch.util.Pagination;
 import org.lpw.tephra.cache.Cache;
 import org.lpw.tephra.dao.model.ModelHelper;
 import org.lpw.tephra.util.DateTime;
+import org.lpw.tephra.util.Generator;
 import org.lpw.tephra.util.Validator;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author lpw
@@ -19,6 +22,8 @@ import javax.inject.Inject;
 public class NoticeServiceImpl implements NoticeService {
     @Inject
     private Cache cache;
+    @Inject
+    private Generator generator;
     @Inject
     private DateTime dateTime;
     @Inject
@@ -31,22 +36,32 @@ public class NoticeServiceImpl implements NoticeService {
     private UserHelper userHelper;
     @Inject
     private NoticeDao noticeDao;
+    private Map<String, String> random = new ConcurrentHashMap<>();
 
     @Override
     public JSONArray query(String type) {
-        return cache.computeIfAbsent(NoticeModel.NAME + ":" + type, key ->
+        return cache.computeIfAbsent(getCacheKey("", type, 0, 0, 0), key ->
                 modelHelper.toJson(noticeDao.query("", type).getList()), false);
     }
 
     @Override
     public JSONObject query(String type, int read) {
-        return noticeDao.query(userHelper.id(), type, read, pagination.getPageSize(20), pagination.getPageNum()).toJson();
+        String user = userHelper.id();
+        int pageSize = pagination.getPageSize(20);
+
+        return cache.computeIfAbsent(getCacheKey(user, type, read, pageSize, pagination.getPageNum()),
+                key -> noticeDao.query(userHelper.id(), type, read, pagination.getPageSize(20), pagination.getPageNum()).toJson(),
+                false);
+    }
+
+    private String getCacheKey(String user, String type, int read, int pageSize, int pageNum) {
+        return NoticeModel.NAME + ":" + random.computeIfAbsent(user, key -> generator.random(32))
+                + ":" + type + ":" + read + ":" + pageSize + ":" + pageNum;
     }
 
     @Override
     public void send(String type, String subject, String content, String link) {
         send("", type, subject, content, link);
-        cache.remove(NoticeModel.NAME + ":" + type);
     }
 
     @Override
@@ -59,6 +74,7 @@ public class NoticeServiceImpl implements NoticeService {
         notice.setLink(link);
         notice.setTime(dateTime.now());
         noticeDao.save(notice);
+        random.remove(user);
     }
 
     @Override
@@ -76,6 +92,7 @@ public class NoticeServiceImpl implements NoticeService {
 
         notice.setRead(1);
         noticeDao.save(notice);
+        random.remove(notice.getUser());
     }
 
     @Override
@@ -84,5 +101,6 @@ public class NoticeServiceImpl implements NoticeService {
             notice.setRead(1);
             noticeDao.save(notice);
         });
+        random.remove(userHelper.id());
     }
 }
