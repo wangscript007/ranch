@@ -1,0 +1,65 @@
+{
+    "key": "ranch.ad",
+    "uri": "/ad/",
+    "props": [
+        {
+            "name": "type"
+        },
+        {
+            "name": "sort"
+        },
+        {
+            "name": "name"
+        },
+        {
+            "name": "resource"
+        },
+        {
+            "name": "operation"
+        },
+        {
+            "name": "target"
+        },
+        {
+            "name": "state"
+        }
+    ],
+    "query": {
+        "type": "grid",
+        "ops": [
+            {
+                "type": "modify"
+            },
+            {
+                "type": "delete",
+                "service": ".delete",
+                "success": ".query"
+            }
+        ],
+        "toolbar": [
+            {
+                "type": "create"
+            }
+        ]
+    },
+    "create": {
+        "type": "form",
+        "toolbar": [
+            {
+                "type": "save",
+                "service": ".save",
+                "success": ".query"
+            }
+        ]
+    },
+    "modify": {
+        "type": "form",
+        "toolbar": [
+            {
+                "type": "save",
+                "service": ".save",
+                "success": ".query"
+            }
+        ]
+    }
+}
