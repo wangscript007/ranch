@@ -181,6 +181,12 @@ class EditorDaoImpl implements EditorDao {
     }
 
     @Override
+    public void used(String id) {
+        liteOrm.update(new LiteQuery(EditorModel.class).set("c_used=c_used+1").where("c_id=?"), new Object[]{id});
+        liteOrm.close();
+    }
+
+    @Override
     public void download(String id, int count) {
         liteOrm.update(new LiteQuery(EditorModel.class).set("c_download=?").where("c_id=?"), new Object[]{count, id});
         liteOrm.close();

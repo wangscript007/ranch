@@ -459,8 +459,8 @@ public class EditorServiceImpl implements EditorService, HourJob, DateJob {
         if (editor == null)
             return;
 
-        editor.setUsed(editor.getUsed() + 1);
-        save(editor, editor.getState(), editor.getModify(), false);
+        editorDao.used(id);
+        resetRandom(editor.getType());
     }
 
     private JSONObject toJson(EditorModel editor) {
