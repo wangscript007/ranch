@@ -95,17 +95,19 @@ public class LinkServiceImpl implements LinkService {
 
     @Override
     public JSONArray exists(String type, String[] id1s, String[] id2s) {
-        if (validator.isEmpty(id1s) || validator.isEmpty(id2s) || id1s.length != id2s.length)
+        if (validator.isEmpty(id1s) || validator.isEmpty(id2s))
             return new JSONArray();
 
         return cache.computeIfAbsent(getCacheKey(type, "exists", Arrays.toString(id1s) + ":" + Arrays.toString(id2s)), key -> {
             JSONArray array = new JSONArray();
-            for (int i = 0; i < id1s.length; i++) {
-                JSONObject object = new JSONObject();
-                object.put("id1", id1s[i]);
-                object.put("id2", id2s[i]);
-                object.put("exists", linkDao.count(type, id1s[i], id2s[i]) == 1);
-                array.add(object);
+            for (String id1 : id1s) {
+                for (String id2 : id2s) {
+                    JSONObject object = new JSONObject();
+                    object.put("id1", id1);
+                    object.put("id2", id2);
+                    object.put("exists", linkDao.count(type, id1, id2) == 1);
+                    array.add(object);
+                }
             }
 
             return array;
