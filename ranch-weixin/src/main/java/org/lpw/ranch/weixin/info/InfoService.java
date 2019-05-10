@@ -5,6 +5,15 @@ package org.lpw.ranch.weixin.info;
  */
 public interface InfoService {
     /**
+     * 查找Open ID。
+     *
+     * @param appId   APP ID。
+     * @param unionId Union ID。
+     * @return Open ID。
+     */
+    String findOpenId(String appId, String unionId);
+
+    /**
      * 保存详情信息。
      *
      * @param key     引用KEY。

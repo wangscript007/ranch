@@ -47,6 +47,8 @@
 
 [获取JS API Ticket签名](doc/jsapi-ticket-signature.md)
 
+[发送模板消息](doc/send-template-message.md)
+
 ## 回复
 
 属性

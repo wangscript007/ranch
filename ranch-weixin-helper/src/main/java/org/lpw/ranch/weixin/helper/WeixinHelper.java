@@ -66,4 +66,20 @@ public interface WeixinHelper {
      * @return 解密后的数据，如果解密失败则返回空JSON{}。
      */
     JSONObject decryptAesCbcPkcs7(String iv, String message);
+
+    /**
+     * 发送模板消息。
+     *
+     * @param key          引用key。
+     * @param receiver     接受者。
+     * @param templateId   模板ID。
+     * @param url          跳转URL。
+     * @param miniAppId    小程序APP ID。
+     * @param miniPagePath 小程序页面路径。
+     * @param data         模板数据。
+     * @param color        颜色。
+     * @return 发送结果。
+     */
+    JSONObject sendTemplateMessage(String key, String appId, String receiver, String templateId,
+                                   String url, String miniAppId, String miniPagePath, JSONObject data, String color);
 }

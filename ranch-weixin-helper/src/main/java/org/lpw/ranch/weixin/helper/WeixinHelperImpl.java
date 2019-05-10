@@ -70,4 +70,21 @@ public class WeixinHelperImpl implements WeixinHelper {
 
         return carousel.service(this.key + ".decrypt-aes-cbc-pkcs7", null, parameter, false, JSONObject.class);
     }
+
+    @Override
+    public JSONObject sendTemplateMessage(String key, String appId, String receiver, String templateId,
+                                          String url, String miniAppId, String miniPagePath, JSONObject data, String color) {
+        Map<String, String> parameter = new HashMap<>();
+        parameter.put("key", key);
+        parameter.put("appId", appId);
+        parameter.put("receiver", receiver);
+        parameter.put("templateId", templateId);
+        parameter.put("url", url);
+        parameter.put("miniAppId", miniAppId);
+        parameter.put("miniPagePath", miniPagePath);
+        parameter.put("data", data.toJSONString());
+        parameter.put("color", color);
+
+        return carousel.service(this.key + ".send-template-message", null, parameter, false, JSONObject.class);
+    }
 }

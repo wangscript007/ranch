@@ -229,6 +229,22 @@ public interface WeixinService {
     JSONObject jsapiTicketSignature(String key, JSONObject param);
 
     /**
+     * 发送模板消息。
+     *
+     * @param key          引用key。
+     * @param receiver     接受者。
+     * @param templateId   模板ID。
+     * @param url          跳转URL。
+     * @param miniAppId    小程序APP ID。
+     * @param miniPagePath 小程序页面路径。
+     * @param data         模板数据。
+     * @param color        颜色。
+     * @return 发送结果。
+     */
+    JSONObject sendTemplateMessage(String key, String appId, String receiver, String templateId,
+                                   String url, String miniAppId, String miniPagePath, JSONObject data, String color);
+
+    /**
      * 使用AccessToken请求。如果返回AccessToken过期[42001]则刷新AccessToken。
      *
      * @param weixin   微信配置。

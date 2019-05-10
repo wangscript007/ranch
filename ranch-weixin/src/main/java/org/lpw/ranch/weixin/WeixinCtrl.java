@@ -246,4 +246,18 @@ public class WeixinCtrl {
         return object == null ? templates.get().failure(2429, message.get(WeixinModel.NAME + ".param.not-json"),
                 "param", request.get("param")) : object;
     }
+
+    @Execute(name = "send-template-message", validates = {
+            @Validate(validator = Validators.NOT_EMPTY, parameter = "key", failureCode = 2),
+            @Validate(validator = Validators.NOT_EMPTY, parameter = "receiver", failureCode = 30),
+            @Validate(validator = Validators.NOT_EMPTY, parameter = "templateId", failureCode = 31),
+            @Validate(validator = Validators.NOT_EMPTY, parameter = "data", failureCode = 32),
+            @Validate(validator = Validators.SIGN, string = {"ranch-weixin"}),
+            @Validate(validator = WeixinService.VALIDATOR_EXISTS, parameter = "key", failureCode = 24)
+    })
+    public Object sendTemplateMessage() {
+        return weixinService.sendTemplateMessage(request.get("key"), request.get("appId"), request.get("receiver"), request.get("templateId"),
+                request.get("url"), request.get("miniAppId"), request.get("miniPagePath"),
+                request.getAsJsonObject("data"), request.get("color"));
+    }
 }

@@ -15,8 +15,13 @@ class InfoDaoImpl implements InfoDao {
     private LiteOrm liteOrm;
 
     @Override
-    public InfoModel findByOpenId(String openId) {
+    public InfoModel find(String openId) {
         return liteOrm.findOne(new LiteQuery(InfoModel.class).where("c_open_id=?"), new Object[]{openId});
+    }
+
+    @Override
+    public InfoModel find(String appId, String unionId) {
+        return liteOrm.findOne(new LiteQuery(InfoModel.class).where("c_union_id=? and c_app_id=?"), new Object[]{unionId, appId});
     }
 
     @Override

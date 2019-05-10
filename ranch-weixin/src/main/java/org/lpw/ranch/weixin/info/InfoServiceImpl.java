@@ -19,11 +19,18 @@ public class InfoServiceImpl implements InfoService {
     private InfoDao infoDao;
 
     @Override
+    public String findOpenId(String appId, String unionId) {
+        InfoModel info = infoDao.find(appId, unionId);
+
+        return info == null ? null : info.getOpenId();
+    }
+
+    @Override
     public void save(String key, String appId, String unionId, String openId) {
         if (validator.isEmpty(openId))
             return;
 
-        InfoModel info = infoDao.findByOpenId(openId);
+        InfoModel info = infoDao.find(openId);
         if (info == null) {
             info = new InfoModel();
             info.setKey(key);

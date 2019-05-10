@@ -251,7 +251,7 @@ public class WeixinServiceImpl implements WeixinService, ContextRefreshedListene
 
         Map<String, String> map = new HashMap<>();
         map.put("openid", openId);
-        JSONObject object = byAccessToken(weixin, (accessToken) -> {
+        JSONObject object = byAccessToken(weixin, accessToken -> {
             map.put("access_token", weixin.getAccessToken());
 
             return http.get("https://api.weixin.qq.com/cgi-bin/user/info", null, map);
@@ -287,7 +287,7 @@ public class WeixinServiceImpl implements WeixinService, ContextRefreshedListene
             JSONObject info = new JSONObject();
             info.put("scene_str", "sign-in-sid:" + session.getId());
             object.put("action_info", info);
-            JSONObject obj = byAccessToken(weixin, (accessToken) -> http.post(
+            JSONObject obj = byAccessToken(weixin, accessToken -> http.post(
                     "https://api.weixin.qq.com/cgi-bin/qrcode/create?access_token=" + accessToken,
                     null, object.toJSONString()));
             if (obj == null || !obj.containsKey("ticket") || !obj.containsKey("url")) {
@@ -383,7 +383,7 @@ public class WeixinServiceImpl implements WeixinService, ContextRefreshedListene
         WeixinModel weixin = weixinDao.findByKey(key);
         Map<String, String> map = getAuthMap(weixin);
         map.put("js_code", code);
-        String string=http.get("https://api.weixin.qq.com/sns/jscode2session", null, map);
+        String string = http.get("https://api.weixin.qq.com/sns/jscode2session", null, map);
         JSONObject object = json.toObject(string);
         if (object == null || !object.containsKey("openid")) {
             logger.warn(null, "获取微信小程序用户认证信息[{}:{}:{}]失败！", key, map, string);
@@ -652,6 +652,29 @@ public class WeixinServiceImpl implements WeixinService, ContextRefreshedListene
         param.put("signature", digest.sha1(sb.deleteCharAt(0).toString()));
 
         return param;
+    }
+
+    @Override
+    public JSONObject sendTemplateMessage(String key, String appId, String receiver, String templateId,
+                                          String url, String miniAppId, String miniPagePath, JSONObject data, String color) {
+        JSONObject object = new JSONObject();
+        String openId = infoService.findOpenId(appId, receiver);
+        object.put("touser", openId == null ? receiver : openId);
+        object.put("template_id", templateId);
+        if (!validator.isEmpty(url))
+            object.put("url", url);
+        if (!validator.isEmpty(miniAppId)) {
+            JSONObject miniprogram = new JSONObject();
+            miniprogram.put("appid", miniAppId);
+            miniprogram.put("pagepath", miniPagePath);
+            object.put("miniprogram", miniprogram);
+        }
+        object.put("data", data);
+        if (!validator.isEmpty(color))
+            object.put("color", color);
+
+        return byAccessToken(findByKey(key), accessToken -> http.post("https://api.weixin.qq.com/cgi-bin/message/template/send?access_token="
+                + accessToken, null, object.toJSONString()));
     }
 
     @Override
