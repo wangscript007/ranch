@@ -57,6 +57,7 @@ import java.util.function.Function;
 public class WeixinServiceImpl implements WeixinService, ContextRefreshedListener, HourJob, MinuteJob {
     private static final String CACHE_TICKET_SESSION_ID = WeixinModel.NAME + ".ticket-session-id:";
     private static final String SESSION_SUBSCRIBE_SIGN_IN = WeixinModel.NAME + ".subscribe-sign-in";
+    private static final String SESSION_MINI = WeixinModel.NAME + ".mini";
     private static final String SESSION_MINI_SESSION_KEY = WeixinModel.NAME + ".mini.session-key";
 
     @Inject
@@ -381,34 +382,44 @@ public class WeixinServiceImpl implements WeixinService, ContextRefreshedListene
     @Override
     public JSONObject auth(String key, String code, String iv, String message) {
         WeixinModel weixin = weixinDao.findByKey(key);
-        Map<String, String> map = getAuthMap(weixin);
-        map.put("js_code", code);
-        String string = http.get("https://api.weixin.qq.com/sns/jscode2session", null, map);
-        JSONObject object = json.toObject(string);
-        if (object == null || !object.containsKey("openid")) {
-            logger.warn(null, "获取微信小程序用户认证信息[{}:{}:{}]失败！", key, map, string);
+        boolean fromSession = code.equals("from-session");
+        JSONObject object = fromSession ? session.get(SESSION_MINI) : authCode(weixin, code);
+        if (object.isEmpty())
+            return object;
 
-            return new JSONObject();
-        }
-
-        if (logger.isDebugEnable())
-            logger.debug("获得微信小程序用户认证信息[{}:{}:{}]。", key, map, object);
-
-        String sessionKey = object.getString("session_key");
-        session.set(SESSION_MINI_SESSION_KEY, sessionKey);
-        object.remove("session_key");
         if (validator.isEmpty(iv) || validator.isEmpty(message)) {
             infoService.save(key, weixin.getAppId(), object.getString("unionid"), object.getString("openid"));
 
             return object;
         }
 
+        String sessionKey = session.get(SESSION_MINI_SESSION_KEY);
         object.putAll(decryptAesCbcPkcs7(sessionKey, iv, message));
         object.put("unionid", object.getString("unionId"));
         infoService.save(key, weixin.getAppId(), object.getString("unionid"), object.getString("openid"));
 
         if (logger.isDebugEnable())
             logger.debug("获得微信小程序用户认证信息[{}:{}:{}]。", key, code, object);
+
+        return object;
+    }
+
+    private JSONObject authCode(WeixinModel weixin, String code) {
+        Map<String, String> map = getAuthMap(weixin);
+        map.put("js_code", code);
+        String string = http.get("https://api.weixin.qq.com/sns/jscode2session", null, map);
+        JSONObject object = json.toObject(string);
+        if (object == null || !object.containsKey("openid")) {
+            logger.warn(null, "获取微信小程序用户认证信息[{}:{}:{}]失败！", weixin.getKey(), map, string);
+
+            return new JSONObject();
+        }
+
+        session.set(SESSION_MINI, object);
+        session.set(SESSION_MINI_SESSION_KEY, object.getString("session_key"));
+        object.remove("session_key");
+        if (logger.isDebugEnable())
+            logger.debug("获得微信小程序用户认证信息[{}:{}:{}]。", weixin.getKey(), map, object);
 
         return object;
     }
