@@ -382,8 +382,7 @@ public class WeixinServiceImpl implements WeixinService, ContextRefreshedListene
     @Override
     public JSONObject auth(String key, String code, String iv, String message) {
         WeixinModel weixin = weixinDao.findByKey(key);
-        boolean fromSession = code.equals("from-session");
-        JSONObject object = fromSession ? session.get(SESSION_MINI) : authCode(weixin, code);
+        JSONObject object = code.equals("decrypt-iv-message") ? session.get(SESSION_MINI) : auth(weixin, code);
         if (object.isEmpty())
             return object;
 
@@ -404,7 +403,7 @@ public class WeixinServiceImpl implements WeixinService, ContextRefreshedListene
         return object;
     }
 
-    private JSONObject authCode(WeixinModel weixin, String code) {
+    private JSONObject auth(WeixinModel weixin, String code) {
         Map<String, String> map = getAuthMap(weixin);
         map.put("js_code", code);
         String string = http.get("https://api.weixin.qq.com/sns/jscode2session", null, map);
