@@ -12,6 +12,8 @@ import org.lpw.tephra.util.Validator;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
+import java.sql.Timestamp;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -49,14 +51,32 @@ public class NoticeServiceImpl implements NoticeService {
         String user = userHelper.id();
         int pageSize = pagination.getPageSize(20);
 
-        return cache.computeIfAbsent(getCacheKey(user, type, read, pageSize, pagination.getPageNum()),
-                key -> noticeDao.query(userHelper.id(), type, read, pagination.getPageSize(20), pagination.getPageNum()).toJson(),
-                false);
+        return cache.computeIfAbsent(getCacheKey(user, type, read, pageSize, pagination.getPageNum()), key -> {
+            NoticeModel last = noticeDao.find(user, 1);
+            List<NoticeModel> list = noticeDao.query(UserHelper.SYSTEM_USER_ID, type, last == null ? null : last.getTime()).getList();
+            if (!list.isEmpty()) {
+                list.forEach(notice -> {
+                    notice.setId(null);
+                    notice.setUser(user);
+                    notice.setMarker(1);
+                    noticeDao.save(notice);
+                });
+            }
+
+            return noticeDao.query(userHelper.id(), type, null, read, new Timestamp[2],
+                    pagination.getPageSize(20), pagination.getPageNum()).toJson();
+        }, false);
     }
 
     private String getCacheKey(String user, String type, int read, int pageSize, int pageNum) {
         return NoticeModel.NAME + ":" + random.computeIfAbsent(user, key -> generator.random(32))
                 + ":" + type + ":" + read + ":" + pageSize + ":" + pageNum;
+    }
+
+    @Override
+    public JSONObject query(String type, String subject, String[] time) {
+        return noticeDao.query(UserHelper.SYSTEM_USER_ID, type, subject, -1, dateTime.toTimeRange(time),
+                pagination.getPageSize(20), pagination.getPageNum()).toJson();
     }
 
     @Override
@@ -74,7 +94,10 @@ public class NoticeServiceImpl implements NoticeService {
         notice.setLink(link);
         notice.setTime(dateTime.now());
         noticeDao.save(notice);
-        random.remove(user);
+        if (user.equals(UserHelper.SYSTEM_USER_ID))
+            random.clear();
+        else
+            random.remove(user);
     }
 
     @Override
@@ -97,7 +120,7 @@ public class NoticeServiceImpl implements NoticeService {
 
     @Override
     public void reads(String type) {
-        noticeDao.query(userHelper.id(), type, 0, 0, 0).getList().forEach(notice -> {
+        noticeDao.query(userHelper.id(), type, null, 0, new Timestamp[2], 0, 0).getList().forEach(notice -> {
             notice.setRead(1);
             noticeDao.save(notice);
         });

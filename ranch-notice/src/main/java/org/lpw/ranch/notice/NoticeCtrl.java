@@ -32,6 +32,13 @@ public class NoticeCtrl {
         return noticeService.query(request.get("type"));
     }
 
+    @Execute(name = "all", validates = {
+            @Validate(validator = Validators.SIGN)
+    })
+    public Object all() {
+        return noticeService.query(request.get("type"), request.get("subject"), request.getAsArray("time"));
+    }
+
     @Execute(name = "send", validates = {
             @Validate(validator = Validators.ID, parameter = "user", failureCode = 1),
             @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "type", failureCode = 2),
@@ -68,6 +75,18 @@ public class NoticeCtrl {
     })
     public Object sendGlobal() {
         noticeService.send(request.get("type"), request.get("subject"), request.get("content"), request.get("link"));
+
+        return "";
+    }
+
+    @Execute(name = "send-all", validates = {
+            @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "type", failureCode = 2),
+            @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "subject", failureCode = 3),
+            @Validate(validator = Validators.NOT_EMPTY, parameter = "content", failureCode = 4),
+            @Validate(validator = Validators.SIGN)
+    })
+    public Object sendAll() {
+        noticeService.send(UserHelper.SYSTEM_USER_ID, request.get("type"), request.get("subject"), request.get("content"), request.get("link"));
 
         return "";
     }

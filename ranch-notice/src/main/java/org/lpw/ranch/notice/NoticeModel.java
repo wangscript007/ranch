@@ -27,6 +27,7 @@ public class NoticeModel extends ModelSupport {
     private String content; // 内容
     private String link; // 链接
     private int read; // 已读：0-否；1-是
+    private int marker; // 标记
     private Timestamp time; // 时间
 
     @Jsonable
@@ -87,6 +88,15 @@ public class NoticeModel extends ModelSupport {
 
     public void setRead(int read) {
         this.read = read;
+    }
+
+    @Column(name = "c_marker")
+    public int getMarker() {
+        return marker;
+    }
+
+    public void setMarker(int marker) {
+        this.marker = marker;
     }
 
     @Jsonable

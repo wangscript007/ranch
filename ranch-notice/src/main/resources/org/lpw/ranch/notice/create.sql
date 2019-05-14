@@ -8,6 +8,7 @@ CREATE TABLE t_notice
   c_content TEXT DEFAULT NULL COMMENT '内容',
   c_link TEXT DEFAULT NULL COMMENT '链接',
   c_read INT DEFAULT 0 COMMENT '已读：0-否；1-是',
+  c_marker INT DEFAULT 0 COMMENT '标记',
   c_time DATETIME DEFAULT NULL COMMENT '时间',
 
   PRIMARY KEY pk(c_id) USING HASH,

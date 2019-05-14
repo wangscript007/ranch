@@ -25,6 +25,16 @@ public interface NoticeService {
     JSONObject query(String type, int read);
 
     /**
+     * 检索发送所有人通知集。
+     *
+     * @param type    类型，为空则表示全部。
+     * @param subject 标题，模糊匹配。
+     * @param time    时间范围，格式：yyyy-MM-dd或yyyy-MM-dd HH:mm:ss。
+     * @return 通知集。
+     */
+    JSONObject query(String type, String subject, String[] time);
+
+    /**
      * 发送全局通知。
      *
      * @param type    类型。
