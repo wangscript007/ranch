@@ -24,9 +24,9 @@ class NoticeDaoImpl implements NoticeDao {
 
     @Override
     public PageList<NoticeModel> query(String user, String type, int read, int pageSize, int pageNum) {
-        StringBuilder where = new StringBuilder();
+        StringBuilder where = new StringBuilder("c_user=?");
         List<Object> args = new ArrayList<>();
-        daoHelper.where(where, args, "c_user", DaoOperation.Equals, user);
+        args.add(user);
         daoHelper.where(where, args, "c_type", DaoOperation.Equals, type);
         daoHelper.where(where, args, "c_read", DaoOperation.Equals, read);
 
@@ -36,9 +36,9 @@ class NoticeDaoImpl implements NoticeDao {
 
     @Override
     public PageList<NoticeModel> query(String user, String type, String subject, int read, Timestamp[] time, int pageSize, int pageNum) {
-        StringBuilder where = new StringBuilder();
+        StringBuilder where = new StringBuilder("c_user=?");
         List<Object> args = new ArrayList<>();
-        daoHelper.where(where, args, "c_user", DaoOperation.Equals, user);
+        args.add(user);
         daoHelper.where(where, args, "c_type", DaoOperation.Equals, type);
         daoHelper.where(where, args, "c_read", DaoOperation.Equals, read);
         daoHelper.where(where, args, "c_time", DaoOperation.GreaterEquals, time[0]);
