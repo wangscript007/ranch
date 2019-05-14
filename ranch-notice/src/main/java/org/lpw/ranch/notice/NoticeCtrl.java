@@ -29,7 +29,7 @@ public class NoticeCtrl {
 
     @Execute(name = "global")
     public Object global() {
-        return noticeService.query(request.get("type"));
+        return noticeService.global(request.get("type"), request.getAsInt("read", -1));
     }
 
     @Execute(name = "all", validates = {

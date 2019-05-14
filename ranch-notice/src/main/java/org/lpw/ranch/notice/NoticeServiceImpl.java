@@ -1,6 +1,5 @@
 package org.lpw.ranch.notice;
 
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import org.lpw.ranch.user.helper.UserHelper;
 import org.lpw.ranch.util.Pagination;
@@ -41,9 +40,11 @@ public class NoticeServiceImpl implements NoticeService {
     private Map<String, String> random = new ConcurrentHashMap<>();
 
     @Override
-    public JSONArray query(String type) {
-        return cache.computeIfAbsent(getCacheKey("", type, 0, 0, 0), key ->
-                modelHelper.toJson(noticeDao.query("", type).getList()), false);
+    public JSONObject global(String type, int read) {
+        int pageSize = pagination.getPageSize(20);
+
+        return cache.computeIfAbsent(getCacheKey("", type, read, pageSize, pagination.getPageNum()),
+                key -> noticeDao.query("", type, read, pageSize, pagination.getPageNum()).toJson(), false);
     }
 
     @Override
@@ -63,8 +64,7 @@ public class NoticeServiceImpl implements NoticeService {
                 });
             }
 
-            return noticeDao.query(userHelper.id(), type, null, read, new Timestamp[2],
-                    pagination.getPageSize(20), pagination.getPageNum()).toJson();
+            return noticeDao.query(userHelper.id(), type, read, pagination.getPageSize(20), pagination.getPageNum()).toJson();
         }, false);
     }
 

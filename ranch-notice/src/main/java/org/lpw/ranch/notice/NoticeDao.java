@@ -8,7 +8,7 @@ import java.sql.Timestamp;
  * @author lpw
  */
 interface NoticeDao {
-    PageList<NoticeModel> query(String user, String type);
+    PageList<NoticeModel> query(String user, String type, int read, int pageSize, int pageNum);
 
     PageList<NoticeModel> query(String user, String type, String subject, int read, Timestamp[] time, int pageSize, int pageNum);
 
