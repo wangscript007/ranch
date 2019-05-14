@@ -13,6 +13,8 @@
 |type|int|是|认证类型：0-自有账号；1-微信公众号；2-微信小程序；3-Facebook；4-linkedin；5-google。|
 |iv|string|否|微信小程序用户授权信息加密算法的初始向量。|
 |message|string|否|微信小程序用户授权信息。|
+|iv2|string|否|微信小程序用户授权信息加密算法的初始向量。|
+|message2|string|否|微信小程序用户授权信息。|
 |redirectUri|string|否|Linkedin跳转URI地址。|
 
 > 如果`iv` & `message`均不为空，则解密用户授权信息，并返回。

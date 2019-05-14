@@ -53,7 +53,8 @@ public class WeixinMiniImpl implements Type {
         String key = "ranch.user.type.weixin-mini.uid-password:" + uid + "-" + password;
         JSONObject object = context.getThreadLocal(key);
         if (object == null)
-            context.putThreadLocal(key, object = weixinHelper.auth(password, uid, request.get("iv"), request.get("message")));
+            context.putThreadLocal(key, object = weixinHelper.auth(password, uid, request.get("iv"), request.get("message"),
+                    request.get("iv2"), request.get("message2")));
 
         return object;
     }
