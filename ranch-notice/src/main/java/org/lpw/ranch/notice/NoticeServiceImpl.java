@@ -110,7 +110,7 @@ public class NoticeServiceImpl implements NoticeService {
     @Override
     public void read(String id) {
         NoticeModel notice = noticeDao.findById(id);
-        if (notice == null || !notice.getUser().equals(userHelper.id()))
+        if (notice == null)
             return;
 
         notice.setRead(1);
