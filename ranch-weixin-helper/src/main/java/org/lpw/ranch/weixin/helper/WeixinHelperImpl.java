@@ -47,12 +47,14 @@ public class WeixinHelperImpl implements WeixinHelper {
     }
 
     @Override
-    public JSONObject auth(String key, String code, String iv, String message) {
+    public JSONObject auth(String key, String code, String iv, String message, String iv2, String message2) {
         Map<String, String> parameter = new HashMap<>();
         parameter.put("key", key);
         parameter.put("code", code);
         parameter.put("iv", iv);
         parameter.put("message", message);
+        parameter.put("iv2", iv2);
+        parameter.put("message2", message2);
 
         return carousel.service(this.key + ".auth-mini", null, parameter, false, JSONObject.class);
     }
