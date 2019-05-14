@@ -115,13 +115,15 @@ public interface WeixinService {
     /**
      * 认证小程序用户信息。
      *
-     * @param key     配置key。
-     * @param code    微信认证code。
-     * @param iv      加密算法的初始向量。
-     * @param message 加密数据。
+     * @param key      配置key。
+     * @param code     微信认证code。
+     * @param iv       加密算法的初始向量。
+     * @param message  加密数据。
+     * @param iv2      加密算法的初始向量。
+     * @param message2 加密数据。
      * @return 如果认证通过则返回用户授权信息，否则返回空JSON。
      */
-    JSONObject auth(String key, String code, String iv, String message);
+    JSONObject auth(String key, String code, String iv, String message, String iv2, String message2);
 
     /**
      * 生成支付二维码。

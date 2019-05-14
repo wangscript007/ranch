@@ -141,7 +141,8 @@ public class WeixinCtrl {
             @Validate(validator = WeixinService.VALIDATOR_EXISTS, parameter = "key", failureCode = 52)
     })
     public Object authMini() {
-        return weixinService.auth(request.get("key"), request.get("code"), request.get("iv"), request.get("message"));
+        return weixinService.auth(request.get("key"), request.get("code"), request.get("iv"), request.get("message"),
+                request.get("iv2"), request.get("message2"));
     }
 
     @Execute(name = "redirect")

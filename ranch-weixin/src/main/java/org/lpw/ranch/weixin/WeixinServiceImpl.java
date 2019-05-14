@@ -380,7 +380,7 @@ public class WeixinServiceImpl implements WeixinService, ContextRefreshedListene
     }
 
     @Override
-    public JSONObject auth(String key, String code, String iv, String message) {
+    public JSONObject auth(String key, String code, String iv, String message, String iv2, String message2) {
         WeixinModel weixin = weixinDao.findByKey(key);
         JSONObject object = code.equals("decrypt-iv-message") ? session.get(SESSION_MINI) : auth(weixin, code);
         if (object.isEmpty())
@@ -394,7 +394,8 @@ public class WeixinServiceImpl implements WeixinService, ContextRefreshedListene
 
         String sessionKey = session.get(SESSION_MINI_SESSION_KEY);
         object.putAll(decryptAesCbcPkcs7(sessionKey, iv, message));
-        object.put("unionid", object.getString("unionId"));
+        if (!validator.isEmpty(iv2) && !validator.isEmpty(message2))
+            object.putAll(decryptAesCbcPkcs7(sessionKey, iv2, message2));
         infoService.save(key, weixin.getAppId(), object.getString("unionid"), object.getString("openid"));
 
         if (logger.isDebugEnable())

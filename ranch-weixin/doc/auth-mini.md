@@ -12,6 +12,8 @@
 |code|char(100)|微信认证code。|
 |iv|string|用户授权信息加密算法的初始向量。|
 |message|string|用户授权信息。|
+|iv2|string|用户授权信息加密算法的初始向量。|
+|message2|string|用户授权信息。|
 
 > 如果`iv` & `message`均不为空，则解密用户授权信息，并返回。
 
