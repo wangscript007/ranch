@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
 import java.sql.Timestamp;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -49,20 +48,19 @@ public class NoticeServiceImpl implements NoticeService {
 
     @Override
     public JSONObject query(String type, int read) {
-        String user = userHelper.id();
+        JSONObject user = userHelper.sign();
+        String userId = user.getString("id");
         int pageSize = pagination.getPageSize(20);
 
-        return cache.computeIfAbsent(getCacheKey(user, type, read, pageSize, pagination.getPageNum()), key -> {
-            NoticeModel last = noticeDao.find(user, 1);
-            List<NoticeModel> list = noticeDao.query(UserHelper.SYSTEM_USER_ID, type, last == null ? null : last.getTime()).getList();
-            if (!list.isEmpty()) {
-                list.forEach(notice -> {
-                    notice.setId(null);
-                    notice.setUser(user);
-                    notice.setMarker(1);
-                    noticeDao.save(notice);
-                });
-            }
+        return cache.computeIfAbsent(getCacheKey(userId, type, read, pageSize, pagination.getPageNum()), key -> {
+            NoticeModel last = noticeDao.find(userId, 1);
+            noticeDao.query(UserHelper.SYSTEM_USER_ID, type, last == null ? dateTime.toTime(user.getString("register")) : last.getTime())
+                    .getList().forEach(notice -> {
+                notice.setId(null);
+                notice.setUser(userId);
+                notice.setMarker(1);
+                noticeDao.save(notice);
+            });
 
             return noticeDao.query(userHelper.id(), type, read, pagination.getPageSize(20), pagination.getPageNum()).toJson();
         }, false);
