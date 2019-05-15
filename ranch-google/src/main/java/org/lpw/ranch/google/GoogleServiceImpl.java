@@ -66,6 +66,8 @@ public class GoogleServiceImpl implements GoogleService {
             object.put("nick", payload.get("name"));
             object.put("email", payload.getEmail());
             object.put("portrait", payload.get("picture"));
+            if (logger.isDebugEnable())
+                logger.debug("获得Google登入[{}:{}]认证信息[{}:{}]。", key, token, payload, object);
 
             return object;
         } catch (Throwable throwable) {
