@@ -3,8 +3,8 @@ package org.lpw.ranch.user.type;
 import com.alibaba.fastjson.JSONObject;
 import org.lpw.ranch.google.helper.GoogleHelper;
 import org.lpw.ranch.user.UserModel;
-import org.lpw.tephra.ctrl.context.Request;
 import org.lpw.tephra.util.Context;
+import org.lpw.tephra.util.Validator;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
@@ -17,7 +17,7 @@ public class GoogleImpl implements Type {
     @Inject
     private Context context;
     @Inject
-    private Request request;
+    private Validator validator;
     @Inject
     private GoogleHelper googleHelper;
 
@@ -33,6 +33,8 @@ public class GoogleImpl implements Type {
 
     @Override
     public void signUp(UserModel user, String uid, String password) {
+        if (!validator.isEmail(user.getEmail()))
+            user.setEmail(get(uid, password, "email"));
     }
 
     @Override
