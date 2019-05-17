@@ -86,7 +86,7 @@ public class NoticeCtrl {
             @Validate(validator = Validators.SIGN)
     })
     public Object sendAll() {
-        noticeService.send(UserHelper.SYSTEM_USER_ID, request.get("type"), request.get("subject"), request.get("content"), request.get("link"));
+        noticeService.send(NoticeService.ALL_USER, request.get("type"), request.get("subject"), request.get("content"), request.get("link"));
 
         return "";
     }

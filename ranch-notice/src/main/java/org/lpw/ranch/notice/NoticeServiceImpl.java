@@ -73,7 +73,7 @@ public class NoticeServiceImpl implements NoticeService {
 
     @Override
     public JSONObject query(String type, String subject, String[] time) {
-        return noticeDao.query(UserHelper.SYSTEM_USER_ID, type, subject, -1, dateTime.toTimeRange(time),
+        return noticeDao.query(ALL_USER, type, subject, -1, dateTime.toTimeRange(time),
                 pagination.getPageSize(20), pagination.getPageNum()).toJson();
     }
 
