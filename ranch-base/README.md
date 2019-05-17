@@ -8,4 +8,6 @@
 
 [异步服务](doc/async.md)
 
+[缓存管理](doc/cache.md)
+
 [配置参数](src/main/resources/base.ranch.config)
