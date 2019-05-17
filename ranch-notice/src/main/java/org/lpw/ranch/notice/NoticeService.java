@@ -6,7 +6,7 @@ import com.alibaba.fastjson.JSONObject;
  * @author lpw
  */
 public interface NoticeService {
-    String ALL_USER = "global00-0000-0000-0000-000000000000";
+    String ALL_USER = "00000000-user-user-user-000000000000";
 
     /**
      * 检索全局通知集。
