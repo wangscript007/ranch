@@ -201,11 +201,13 @@ public interface WeixinService {
     /**
      * 解密AES-128-CBC/PKCS#7数据。
      *
+     * @param key     配置key。
+     * @param code    微信认证code。
      * @param iv      初始化参数。
      * @param message 加密数据。
      * @return 解密后的数据，如果解密失败则返回空JSON{}。
      */
-    JSONObject decryptAesCbcPkcs7(String iv, String message);
+    JSONObject decryptAesCbcPkcs7(String key, String code, String iv, String message);
 
     /**
      * 获取无限制二维码。

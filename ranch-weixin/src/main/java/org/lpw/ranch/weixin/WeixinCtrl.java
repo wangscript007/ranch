@@ -219,9 +219,13 @@ public class WeixinCtrl {
         return "<xml><return_code><![CDATA[" + code + "]]></return_code></xml>";
     }
 
-    @Execute(name = "decrypt-aes-cbc-pkcs7")
+    @Execute(name = "decrypt-aes-cbc-pkcs7", validates = {
+            @Validate(validator = Validators.NOT_EMPTY, parameter = "iv", failureCode = 33),
+            @Validate(validator = Validators.NOT_EMPTY, parameter = "message", failureCode = 34),
+            @Validate(validator = WeixinService.VALIDATOR_EXISTS, emptyable = true, parameter = "key", failureCode = 24)
+    })
     public Object decryptAesCbcPkcs7() {
-        return weixinService.decryptAesCbcPkcs7(request.get("iv"), request.get("message"));
+        return weixinService.decryptAesCbcPkcs7(request.get("key"), request.get("code"), request.get("iv"), request.get("message"));
     }
 
     @Execute(name = "wxa-code-unlimit", validates = {

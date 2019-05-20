@@ -382,7 +382,7 @@ public class WeixinServiceImpl implements WeixinService, ContextRefreshedListene
     @Override
     public JSONObject auth(String key, String code, String iv, String message, String iv2, String message2) {
         WeixinModel weixin = weixinDao.findByKey(key);
-        JSONObject object = code.equals("decrypt-iv-message") ? session.get(SESSION_MINI) : auth(weixin, code);
+        JSONObject object = code.equals("decrypt-iv-message") ? session.get(SESSION_MINI) : jscode2session(weixin, code);
         if (object.isEmpty())
             return object;
 
@@ -404,7 +404,7 @@ public class WeixinServiceImpl implements WeixinService, ContextRefreshedListene
         return object;
     }
 
-    private JSONObject auth(WeixinModel weixin, String code) {
+    private JSONObject jscode2session(WeixinModel weixin, String code) {
         Map<String, String> map = getAuthMap(weixin);
         map.put("js_code", code);
         String string = http.get("https://api.weixin.qq.com/sns/jscode2session", null, map);
@@ -584,10 +584,9 @@ public class WeixinServiceImpl implements WeixinService, ContextRefreshedListene
     }
 
     @Override
-    public JSONObject decryptAesCbcPkcs7(String iv, String message) {
-        if (validator.isEmpty(iv) || validator.isEmpty(message))
-            return new JSONObject();
-
+    public JSONObject decryptAesCbcPkcs7(String key, String code, String iv, String message) {
+        if (!validator.isEmpty(key) && !validator.isEmpty(code))
+            jscode2session(findByKey(key), code);
         String sessionKey = session.get(SESSION_MINI_SESSION_KEY);
 
         return validator.isEmpty(sessionKey) ? new JSONObject() : decryptAesCbcPkcs7(sessionKey, iv, message);
