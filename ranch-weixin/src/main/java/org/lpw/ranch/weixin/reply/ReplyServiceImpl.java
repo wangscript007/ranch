@@ -7,6 +7,7 @@ import org.lpw.ranch.weixin.WeixinModel;
 import org.lpw.ranch.weixin.WeixinService;
 import org.lpw.tephra.util.Http;
 import org.lpw.tephra.util.Validator;
+import org.lpw.tephra.wormhole.WormholeHelper;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
@@ -20,6 +21,8 @@ public class ReplyServiceImpl implements ReplyService {
     private Validator validator;
     @Inject
     private Http http;
+    @Inject
+    private WormholeHelper wormholeHelper;
     @Inject
     private Pagination pagination;
     @Inject
