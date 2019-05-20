@@ -87,3 +87,28 @@
 [保存](doc/reply/save.md)
 
 [删除](doc/reply/delete.md)
+
+## 模板消息
+
+属性
+
+|属性|类型|说明|
+|---|---|---|
+|key|char(100)|引用key。|
+|weixinKey|char(100)|微信key。|
+|type|int|类型：0-公众号；1-小程序。|
+|templateId|char(100)|模板ID。|
+|url|char(100)|跳转URL。|
+|page|char(100)|小程序页面。|
+|miniAppId|char(100)|小程序APP ID。|
+|color|char(100)|字体颜色。|
+|keyword|char(100)|放大关键词。|
+|state|int|状态：0-待审核；1-已上线。|
+
+[检索](doc/template/query.md)
+
+[保存](doc/template/save.md)
+
+[发送](doc/template/send.md)
+
+[删除](doc/template/delete.md)

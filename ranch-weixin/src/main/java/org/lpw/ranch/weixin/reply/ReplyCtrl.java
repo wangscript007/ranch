@@ -28,18 +28,18 @@ public class ReplyCtrl {
     }
 
     @Execute(name = "save", validates = {
-            @Validate(validator = Validators.NOT_EMPTY, parameter = "key", failureCode = 21),
-            @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "key", failureCode = 22),
-            @Validate(validator = Validators.NOT_EMPTY, parameter = "receiveType", failureCode = 23),
-            @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "receiveType", failureCode = 24),
-            @Validate(validator = Validators.NOT_EMPTY, parameter = "receiveMessage", failureCode = 25),
-            @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "receiveMessage", failureCode = 26),
-            @Validate(validator = Validators.NOT_EMPTY, parameter = "sendType", failureCode = 27),
-            @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "sendType", failureCode = 28),
-            @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "sendTitle", failureCode = 29),
-            @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "sendDescription", failureCode = 30),
-            @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "sendUrl", failureCode = 31),
-            @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "sendPicurl", failureCode = 32),
+            @Validate(validator = Validators.NOT_EMPTY, parameter = "key", failureCode = 41),
+            @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "key", failureCode = 42),
+            @Validate(validator = Validators.NOT_EMPTY, parameter = "receiveType", failureCode = 43),
+            @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "receiveType", failureCode = 44),
+            @Validate(validator = Validators.NOT_EMPTY, parameter = "receiveMessage", failureCode = 45),
+            @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "receiveMessage", failureCode = 46),
+            @Validate(validator = Validators.NOT_EMPTY, parameter = "sendType", failureCode = 47),
+            @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "sendType", failureCode = 48),
+            @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "sendTitle", failureCode = 49),
+            @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "sendDescription", failureCode = 50),
+            @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "sendUrl", failureCode = 51),
+            @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "sendPicurl", failureCode = 52),
             @Validate(validator = Validators.SIGN, string = {"ranch-weixin"})
     })
     public Object save() {

@@ -236,7 +236,7 @@ public interface WeixinService {
      * 发送模板消息。
      *
      * @param key          引用key。
-     * @param receiver     接受者。
+     * @param receiver     接收者。
      * @param templateId   模板ID。
      * @param url          跳转URL。
      * @param miniAppId    小程序APP ID。
@@ -245,8 +245,23 @@ public interface WeixinService {
      * @param color        颜色。
      * @return 发送结果。
      */
-    JSONObject sendTemplateMessage(String key, String appId, String receiver, String templateId,
-                                   String url, String miniAppId, String miniPagePath, JSONObject data, String color);
+    JSONObject sendTemplateMessage(String key, String receiver, String templateId, String url, String miniAppId, String miniPagePath,
+                                   JSONObject data, String color);
+
+    /**
+     * 发送小程序模板消息。
+     *
+     * @param key        引用key。
+     * @param receiver   接收者。
+     * @param templateId 模板ID。
+     * @param page       页面。
+     * @param formId     场景ID。
+     * @param data       模板数据。
+     * @param keyword    放大关键词。
+     * @return 发送结果。
+     */
+    JSONObject sendMiniTemplateMessage(String key, String receiver, String templateId, String page, String formId,
+                                       JSONObject data, String keyword);
 
     /**
      * 使用AccessToken请求。如果返回AccessToken过期[42001]则刷新AccessToken。

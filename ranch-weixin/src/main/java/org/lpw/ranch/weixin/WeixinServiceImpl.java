@@ -665,10 +665,14 @@ public class WeixinServiceImpl implements WeixinService, ContextRefreshedListene
     }
 
     @Override
-    public JSONObject sendTemplateMessage(String key, String appId, String receiver, String templateId,
-                                          String url, String miniAppId, String miniPagePath, JSONObject data, String color) {
+    public JSONObject sendTemplateMessage(String key, String receiver, String templateId, String url, String miniAppId, String miniPagePath,
+                                          JSONObject data, String color) {
+        WeixinModel weixin = findByKey(key);
+        if (weixin == null)
+            return new JSONObject();
+
         JSONObject object = new JSONObject();
-        String openId = infoService.findOpenId(appId, receiver);
+        String openId = infoService.findOpenId(weixin.getAppId(), receiver);
         object.put("touser", openId == null ? receiver : openId);
         object.put("template_id", templateId);
         if (!validator.isEmpty(url))
@@ -683,7 +687,28 @@ public class WeixinServiceImpl implements WeixinService, ContextRefreshedListene
         if (!validator.isEmpty(color))
             object.put("color", color);
 
-        return byAccessToken(findByKey(key), accessToken -> http.post("https://api.weixin.qq.com/cgi-bin/message/template/send?access_token="
+        return byAccessToken(weixin, accessToken -> http.post("https://api.weixin.qq.com/cgi-bin/message/template/send?access_token="
+                + accessToken, null, object.toJSONString()));
+    }
+
+    @Override
+    public JSONObject sendMiniTemplateMessage(String key, String receiver, String templateId, String page, String formId,
+                                              JSONObject data, String keyword) {
+        WeixinModel weixin = findByKey(key);
+        if (weixin == null)
+            return new JSONObject();
+
+        JSONObject object = new JSONObject();
+        String openId = infoService.findOpenId(weixin.getAppId(), receiver);
+        object.put("touser", openId == null ? receiver : openId);
+        object.put("template_id", templateId);
+        if (!validator.isEmpty(page))
+            object.put("page", page);
+        object.put("data", data);
+        if (!validator.isEmpty(keyword))
+            object.put("keyword", keyword);
+
+        return byAccessToken(weixin, accessToken -> http.post("https://api.weixin.qq.com/cgi-bin/message/wxopen/template/send?access_token="
                 + accessToken, null, object.toJSONString()));
     }
 
