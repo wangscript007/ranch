@@ -18,7 +18,7 @@
 |sendTitle|char(100)|否|发送标题。|
 |sendDescription|char(100)|否|发送描述。|
 |sendUrl|char(100)|否|发送链接。|
-|sendPicul|char(100)|否|发送图片链接。|
+|sendPicurl|char(100)|否|发送图片链接。|
 |state|char(100)|否|状态：0-待使用；1-使用中。|
 
 返回值

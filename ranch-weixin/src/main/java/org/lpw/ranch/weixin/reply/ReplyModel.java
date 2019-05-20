@@ -29,7 +29,7 @@ public class ReplyModel extends ModelSupport {
     private String sendTitle; // 发送标题
     private String sendDescription; // 发送描述
     private String sendUrl; // 发送链接
-    private String sendPicul; // 发送图片链接
+    private String sendPicurl; // 发送图片链接
     private int state; // 状态：0-待使用；1-使用中
 
     @Jsonable
@@ -124,12 +124,12 @@ public class ReplyModel extends ModelSupport {
 
     @Jsonable
     @Column(name = "c_send_picurl")
-    public String getSendPicul() {
-        return sendPicul;
+    public String getSendPicurl() {
+        return sendPicurl;
     }
 
-    public void setSendPicul(String sendPicul) {
-        this.sendPicul = sendPicul;
+    public void setSendPicurl(String sendPicurl) {
+        this.sendPicurl = sendPicurl;
     }
 
     @Jsonable

@@ -31,7 +31,7 @@
         "sendTitle": "发送标题",
         "sendDescription": "发送描述",
         "sendUrl": "发送链接",
-        "sendPicul": "发送图片链接",
+        "sendPicurl": "发送图片链接",
         "state": "状态：0-待使用；1-使用中"
     }]
 }
