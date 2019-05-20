@@ -261,7 +261,7 @@ public class WeixinCtrl {
             @Validate(validator = WeixinService.VALIDATOR_EXISTS, parameter = "key", failureCode = 24)
     })
     public Object sendTemplateMessage() {
-        return weixinService.sendTemplateMessage(request.get("key"), request.get("appId"), request.get("receiver"), request.get("templateId"),
+        return weixinService.sendTemplateMessage(request.get("key"), request.get("receiver"), request.get("templateId"),
                 request.get("url"), request.get("miniAppId"), request.get("miniPagePath"),
                 request.getAsJsonObject("data"), request.get("color"));
     }
