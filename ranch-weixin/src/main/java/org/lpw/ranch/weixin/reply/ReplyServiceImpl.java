@@ -71,7 +71,7 @@ public class ReplyServiceImpl implements ReplyService {
                     article.put("title", reply.getSendTitle());
                     article.put("description", reply.getSendDescription());
                     article.put("url", reply.getSendUrl());
-                    article.put("picurl", reply.getSendPicul());
+                    article.put("picurl", reply.getSendPicurl());
                     JSONArray articles = new JSONArray();
                     articles.add(article);
                     object.put("articles", articles);
