@@ -1,5 +1,6 @@
 package org.lpw.ranch.weixin.reply;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import org.lpw.ranch.util.Pagination;
 import org.lpw.ranch.weixin.WeixinModel;
@@ -49,19 +50,28 @@ public class ReplyServiceImpl implements ReplyService {
         replyDao.query(weixin.getKey(), receiveType, receiveMessage, 1, 0, 0).getList().forEach(reply -> {
             JSONObject object = new JSONObject();
             object.put("touser", openId);
+            object.put("msgtype", reply.getSendType());
             switch (reply.getSendType()) {
                 case "text":
-                    object.put("msgtype", "text");
                     JSONObject text = new JSONObject();
                     text.put("content", reply.getSendMessage());
                     object.put("text", text);
                     break;
                 case "image":
                 case "mpnews":
-                    object.put("msgtype", reply.getSendType());
                     JSONObject media = new JSONObject();
                     media.put("media_id", reply.getSendMessage());
                     object.put(reply.getSendType(), media);
+                    break;
+                case "news":
+                    JSONObject article = new JSONObject();
+                    article.put("title", reply.getSendTitle());
+                    article.put("description", reply.getSendDescription());
+                    article.put("url", reply.getSendUrl());
+                    article.put("picurl", reply.getSendPicul());
+                    JSONArray articles = new JSONArray();
+                    articles.add(article);
+                    object.put("articles", articles);
                     break;
                 default:
                     return;

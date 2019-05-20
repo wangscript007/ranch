@@ -8,6 +8,10 @@ CREATE TABLE t_weixin_reply
   c_receive_message VARCHAR(255) DEFAULT NULL COMMENT '接收消息',
   c_send_type VARCHAR(255) DEFAULT NULL COMMENT '发送类型',
   c_send_message TEXT DEFAULT NULL COMMENT '发送消息',
+  c_send_title VARCHAR(255) DEFAULT NULL COMMENT '发送标题',
+  c_send_description VARCHAR(255) DEFAULT NULL COMMENT '发送描述',
+  c_send_url VARCHAR(255) DEFAULT NULL COMMENT '发送链接',
+  c_send_picurl VARCHAR(255) DEFAULT NULL COMMENT '发送图片链接',
   c_state INT DEFAULT 0 COMMENT '状态：0-待使用；1-使用中',
 
   PRIMARY KEY pk(c_id) USING HASH,

@@ -59,8 +59,12 @@
 |sort|int|顺序。|
 |receiveType|char(100)|接收类型。|
 |receiveMessage|char(100)|接收消息。|
-|sendType|char(100)|发送类型：text-文本；image-图片；mpnews-图文。|
+|sendType|char(100)|发送类型：text-文本；image-图片；mpnews-图文；news-图文（外链）。|
 |sendMessage|string|发送消息。|
+|sendTitle|char(100)|发送标题。|
+|sendDescription|char(100)|发送描述。|
+|sendUrl|char(100)|发送链接。|
+|sendPicurl|char(100)|发送图片链接。|
 |state|int|状态：0-待使用；1-使用中。|
 
 接收类型
