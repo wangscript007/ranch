@@ -12,7 +12,7 @@ public interface ClassifyHelper {
     /**
      * 分类信息是否存在验证器Bean名称。
      */
-    String VALIDATOR_EXISTS="ranch.classify.helper.exists";
+    String VALIDATOR_EXISTS = "ranch.classify.helper.exists";
 
     /**
      * 获取分类信息。
@@ -69,6 +69,22 @@ public interface ClassifyHelper {
      * @return JSON数据集，如果未找到则返回仅包含id属性的JSON数据。
      */
     JSONArray list(String code, String key, String name);
+
+    /**
+     * 随机获取一个。
+     *
+     * @param code 编码前缀，会自动匹配【code+%】。
+     * @return 分类信息，不存在则返回空JSON。
+     */
+    JSONObject randomOne(String code);
+
+    /**
+     * 随机获取一个值。
+     *
+     * @param code 编码前缀，会自动匹配【code+%】。
+     * @return 值，不存在则返回空字符串。
+     */
+    String randomOneValue(String code);
 
     /**
      * 填充ID对应的分类信息。
