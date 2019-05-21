@@ -54,7 +54,7 @@ public class NoticeServiceImpl implements NoticeService {
 
         return cache.computeIfAbsent(getCacheKey(userId, type, read, pageSize, pagination.getPageNum()), key -> {
             NoticeModel last = noticeDao.find(userId, 1);
-            noticeDao.query(UserHelper.SYSTEM_USER_ID, type, last == null ? dateTime.toTime(user.getString("register")) : last.getTime())
+            noticeDao.query(ALL_USER, type, last == null ? dateTime.toTime(user.getString("register")) : last.getTime())
                     .getList().forEach(notice -> {
                 notice.setId(null);
                 notice.setUser(userId);
@@ -92,7 +92,7 @@ public class NoticeServiceImpl implements NoticeService {
         notice.setLink(link);
         notice.setTime(dateTime.now());
         noticeDao.save(notice);
-        if (user.equals(UserHelper.SYSTEM_USER_ID))
+        if (user.equals(ALL_USER))
             random.clear();
         else
             random.remove(user);
