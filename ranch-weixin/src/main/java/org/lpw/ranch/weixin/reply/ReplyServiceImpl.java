@@ -6,6 +6,7 @@ import org.lpw.ranch.util.Pagination;
 import org.lpw.ranch.weixin.WeixinModel;
 import org.lpw.ranch.weixin.WeixinService;
 import org.lpw.tephra.util.Http;
+import org.lpw.tephra.util.Logger;
 import org.lpw.tephra.util.Validator;
 import org.lpw.tephra.wormhole.WormholeHelper;
 import org.springframework.stereotype.Service;
@@ -21,6 +22,8 @@ public class ReplyServiceImpl implements ReplyService {
     private Validator validator;
     @Inject
     private Http http;
+    @Inject
+    private Logger logger;
     @Inject
     private WormholeHelper wormholeHelper;
     @Inject
@@ -94,9 +97,14 @@ public class ReplyServiceImpl implements ReplyService {
                 default:
                     return;
             }
-            weixinService.byAccessToken(weixin, accessToken ->
-                    http.post("https://api.weixin.qq.com/cgi-bin/message/custom/send?access_token=" + accessToken,
-                            null, object.toJSONString()));
+            weixinService.byAccessToken(weixin, accessToken -> {
+                String string = http.post("https://api.weixin.qq.com/cgi-bin/message/custom/send?access_token=" + accessToken,
+                        null, object.toJSONString());
+                if (logger.isInfoEnable())
+                    logger.info("发送微信回复[{}:{}]。", object, string);
+
+                return string;
+            });
         });
     }
 }
