@@ -760,7 +760,7 @@ public class EditorServiceImpl implements EditorService, HourJob, DateJob {
             List<LabelModel> labels = labelService.query(label);
             while (array.size() < size && !labels.isEmpty()) {
                 EditorModel editor = findById(labels.remove(generator.random(0, labels.size() - 1)).getEditor());
-                if (editor.getType().equals(type) && editor.getTemplate() == template)
+                if (editor.getType().equals(type) && editor.getTemplate() == template && editor.getState() == 3)
                     array.add(modelHelper.toJson(editor));
             }
             cache.put(cacheKey, array, false);
