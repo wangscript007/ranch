@@ -66,6 +66,7 @@
         <module>ranch-google</module>
         <module>ranch-google-helper</module>
         <module>ranch-ad</module>
+        <module>ranch-aliyun</module>
         <module>ranch-inviter</module>
         <module>ranch-ui</module>
         <module>ranch-web</module>
