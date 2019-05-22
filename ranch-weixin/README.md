@@ -82,6 +82,17 @@
 |SCAN|已关注扫码。|
 |unsubscribe|取消关注。|
 
+发送类型
+
+|值|公众号|小程序|说明|
+|---|---|---|---|
+|text|是|是|文本。|
+|image|是|是|图片。|
+|mpnews|是|否|图文。|
+|news|是|否|图文（外链）。|
+|link|否|是|图文链接。|
+|miniprogrampage|否|是|卡片。|
+
 [检索](doc/reply/query.md)
 
 [保存](doc/reply/save.md)

@@ -76,6 +76,21 @@ public class ReplyServiceImpl implements ReplyService {
                     articles.add(article);
                     object.put("articles", articles);
                     break;
+                case "link":
+                    JSONObject link = new JSONObject();
+                    link.put("title", reply.getSendTitle());
+                    link.put("description", reply.getSendDescription());
+                    link.put("url", reply.getSendUrl());
+                    link.put("thumb_url", reply.getSendPicurl());
+                    object.put("link", link);
+                    break;
+                case "miniprogrampage":
+                    JSONObject miniprogrampage = new JSONObject();
+                    miniprogrampage.put("title", reply.getSendTitle());
+                    miniprogrampage.put("pagepath", reply.getSendUrl());
+                    miniprogrampage.put("thumb_media_id", reply.getSendPicurl());
+                    object.put("miniprogrampage", miniprogrampage);
+                    break;
                 default:
                     return;
             }
