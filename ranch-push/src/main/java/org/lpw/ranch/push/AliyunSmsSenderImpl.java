@@ -45,7 +45,7 @@ public class AliyunSmsSenderImpl implements PushSender, ContextRefreshedListener
 
         try {
             SendSmsRequest request = new SendSmsRequest();
-            request.setMethod(MethodType.POST);
+            request.setSysMethod(MethodType.POST);
             request.setPhoneNumbers(receiver);
             request.setSignName(push.getName());
             request.setTemplateCode(push.getTemplate());
@@ -78,7 +78,7 @@ public class AliyunSmsSenderImpl implements PushSender, ContextRefreshedListener
 
         try {
             IClientProfile profile = DefaultProfile.getProfile("cn-hangzhou", key, secret);
-            DefaultProfile.addEndpoint("cn-hangzhou", "cn-hangzhou", "Dysmsapi", "dysmsapi.aliyuncs.com");
+            DefaultProfile.addEndpoint("cn-hangzhou", "Dysmsapi", "dysmsapi.aliyuncs.com");
             acsClient = new DefaultAcsClient(profile);
             if (logger.isInfoEnable())
                 logger.info("初始化阿里云短信接口[{}]完成。", key);
