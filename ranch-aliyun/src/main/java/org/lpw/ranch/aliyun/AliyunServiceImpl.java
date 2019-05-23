@@ -2,7 +2,9 @@ package org.lpw.ranch.aliyun;
 
 import com.alibaba.fastjson.JSONObject;
 import com.aliyun.vod.upload.impl.UploadVideoImpl;
+import com.aliyun.vod.upload.req.UploadURLStreamRequest;
 import com.aliyun.vod.upload.req.UploadVideoRequest;
+import com.aliyun.vod.upload.resp.UploadURLStreamResponse;
 import com.aliyun.vod.upload.resp.UploadVideoResponse;
 import com.aliyuncs.DefaultAcsClient;
 import com.aliyuncs.IAcsClient;
@@ -68,7 +70,7 @@ public class AliyunServiceImpl implements AliyunService {
     }
 
     @Override
-    public String uploadVideo(String key, String title, String url) {
+    public String uploadVideo(String key, String title, String fileName, String url) {
         IAcsClient acsClient = getIAcsClient(key);
         if (acsClient == null)
             return null;
@@ -77,13 +79,13 @@ public class AliyunServiceImpl implements AliyunService {
         if (aliyun == null)
             return null;
 
-        UploadVideoResponse uploadVideoResponse = new UploadVideoImpl().uploadVideo(new UploadVideoRequest(
-                aliyun.getAccessKeyId(), aliyun.getAccessKeySecret(), title, url));
-        if (uploadVideoResponse.isSuccess())
-            return uploadVideoResponse.getVideoId();
+        UploadURLStreamResponse uploadURLStreamResponse = new UploadVideoImpl().uploadURLStream(new UploadURLStreamRequest(
+                aliyun.getAccessKeyId(), aliyun.getAccessKeySecret(), title, fileName, url));
+        if (uploadURLStreamResponse.isSuccess())
+            return uploadURLStreamResponse.getVideoId();
 
         logger.warn(null, "上传视频文件[{}:{}:{}]到阿里云失败[{}:{}]！", key, title, url,
-                uploadVideoResponse.getCode(), uploadVideoResponse.getMessage());
+                uploadURLStreamResponse.getCode(), uploadURLStreamResponse.getMessage());
 
         return null;
     }
