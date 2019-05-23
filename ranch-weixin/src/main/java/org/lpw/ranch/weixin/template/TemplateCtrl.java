@@ -36,7 +36,6 @@ public class TemplateCtrl {
             @Validate(validator = Validators.IN, number = {0, 1}, parameter = "type", failureCode = 65),
             @Validate(validator = Validators.NOT_EMPTY, parameter = "templateId", failureCode = 66),
             @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "templateId", failureCode = 67),
-            @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "url", failureCode = 68),
             @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "page", failureCode = 69),
             @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "miniAppId", failureCode = 70),
             @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "color", failureCode = 71),

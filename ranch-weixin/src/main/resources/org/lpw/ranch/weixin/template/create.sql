@@ -6,7 +6,7 @@ CREATE TABLE t_weixin_template
   c_weixin_key VARCHAR(255) NOT NULL COMMENT '微信key',
   c_type INT DEFAULT 0 COMMENT '类型：0-公众号；1-小程序',
   c_template_id VARCHAR(255) DEFAULT NULL COMMENT '模板ID',
-  c_url VARCHAR(255) DEFAULT NULL COMMENT '跳转URL',
+  c_url TEXT DEFAULT NULL COMMENT '跳转URL',
   c_page VARCHAR(255) DEFAULT NULL COMMENT '小程序页面',
   c_mini_app_id VARCHAR(255) DEFAULT NULL COMMENT '小程序APP ID',
   c_color VARCHAR(255) DEFAULT NULL COMMENT '字体颜色',

@@ -38,8 +38,7 @@ public class ReplyCtrl {
             @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "sendType", failureCode = 48),
             @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "sendTitle", failureCode = 49),
             @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "sendDescription", failureCode = 50),
-            @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "sendUrl", failureCode = 51),
-            @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "sendPicurl", failureCode = 52),
+            @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "sendPicurl", failureCode = 51),
             @Validate(validator = Validators.SIGN, string = {"ranch-weixin"})
     })
     public Object save() {

@@ -687,8 +687,14 @@ public class WeixinServiceImpl implements WeixinService, ContextRefreshedListene
         if (!validator.isEmpty(color))
             object.put("color", color);
 
-        return byAccessToken(weixin, accessToken -> http.post("https://api.weixin.qq.com/cgi-bin/message/template/send?access_token="
-                + accessToken, null, object.toJSONString()));
+        return byAccessToken(weixin, accessToken -> {
+            String string = http.post("https://api.weixin.qq.com/cgi-bin/message/template/send?access_token="
+                    + accessToken, null, object.toJSONString());
+            if (logger.isInfoEnable())
+                logger.info("发送微信模板消息[{}:{}]。", object.toJSONString(), string);
+
+            return string;
+        });
     }
 
     @Override
@@ -708,8 +714,14 @@ public class WeixinServiceImpl implements WeixinService, ContextRefreshedListene
         if (!validator.isEmpty(keyword))
             object.put("keyword", keyword);
 
-        return byAccessToken(weixin, accessToken -> http.post("https://api.weixin.qq.com/cgi-bin/message/wxopen/template/send?access_token="
-                + accessToken, null, object.toJSONString()));
+        return byAccessToken(weixin, accessToken -> {
+            String string = http.post("https://api.weixin.qq.com/cgi-bin/message/wxopen/template/send?access_token="
+                    + accessToken, null, object.toJSONString());
+            if (logger.isInfoEnable())
+                logger.info("发送微信小程序模板消息[{}:{}]。", object.toJSONString(), string);
+
+            return string;
+        });
     }
 
     @Override

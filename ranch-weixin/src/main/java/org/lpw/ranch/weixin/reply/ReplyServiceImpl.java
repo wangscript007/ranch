@@ -101,7 +101,7 @@ public class ReplyServiceImpl implements ReplyService {
                 String string = http.post("https://api.weixin.qq.com/cgi-bin/message/custom/send?access_token=" + accessToken,
                         null, object.toJSONString());
                 if (logger.isInfoEnable())
-                    logger.info("发送微信回复[{}:{}]。", object, string);
+                    logger.info("发送微信回复[{}:{}]。", object.toJSONString(), string);
 
                 return string;
             });
