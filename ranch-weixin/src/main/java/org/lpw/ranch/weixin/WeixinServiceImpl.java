@@ -254,8 +254,11 @@ public class WeixinServiceImpl implements WeixinService, ContextRefreshedListene
         map.put("openid", openId);
         JSONObject object = byAccessToken(weixin, accessToken -> {
             map.put("access_token", weixin.getAccessToken());
+            String str = http.get("https://api.weixin.qq.com/cgi-bin/user/info", null, map);
+            if (logger.isInfoEnable())
+                logger.info("获取微信用户信息[{}:{}]。", map, str);
 
-            return http.get("https://api.weixin.qq.com/cgi-bin/user/info", null, map);
+            return str;
         });
         if (object == null || object.containsKey("errcode") || object.size() <= 2) {
             logger.warn(null, "获取微信[{}]用户[{}:{}]信息失败！", weixin.getKey(), map, object);
@@ -263,6 +266,8 @@ public class WeixinServiceImpl implements WeixinService, ContextRefreshedListene
             return;
         }
 
+        if (object.containsKey("unionid"))
+            infoService.save(weixin.getKey(), weixin.getAppId(), object.getString("unionid"), openId);
         session.set(sessionId, SESSION_SUBSCRIBE_SIGN_IN, object);
         replyService.send(weixin, openId, "event", event);
     }
