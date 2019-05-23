@@ -31,6 +31,16 @@ public interface AliyunService {
     /**
      * 上传视频文件。
      *
+     * @param key   引用key。
+     * @param title 标题。
+     * @param file  文件。
+     * @return 视频ID，上传失败则返回null。
+     */
+    String uploadVideo(String key, String title, String file);
+
+    /**
+     * 上传视频文件。
+     *
      * @param key      引用key。
      * @param title    标题。
      * @param fileName 文件名。

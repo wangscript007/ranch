@@ -70,11 +70,24 @@ public class AliyunServiceImpl implements AliyunService {
     }
 
     @Override
-    public String uploadVideo(String key, String title, String fileName, String url) {
-        IAcsClient acsClient = getIAcsClient(key);
-        if (acsClient == null)
+    public String uploadVideo(String key, String title, String file) {
+        AliyunModel aliyun = aliyunDao.find(key);
+        if (aliyun == null)
             return null;
 
+        UploadVideoResponse uploadURLStreamResponse = new UploadVideoImpl().uploadVideo(new UploadVideoRequest(
+                aliyun.getAccessKeyId(), aliyun.getAccessKeySecret(), title, file));
+        if (uploadURLStreamResponse.isSuccess())
+            return uploadURLStreamResponse.getVideoId();
+
+        logger.warn(null, "上传视频文件[{}:{}:{}]到阿里云失败[{}:{}]！", key, title, file,
+                uploadURLStreamResponse.getCode(), uploadURLStreamResponse.getMessage());
+
+        return null;
+    }
+
+    @Override
+    public String uploadVideo(String key, String title, String fileName, String url) {
         AliyunModel aliyun = aliyunDao.find(key);
         if (aliyun == null)
             return null;
@@ -84,7 +97,7 @@ public class AliyunServiceImpl implements AliyunService {
         if (uploadURLStreamResponse.isSuccess())
             return uploadURLStreamResponse.getVideoId();
 
-        logger.warn(null, "上传视频文件[{}:{}:{}]到阿里云失败[{}:{}]！", key, title, url,
+        logger.warn(null, "上传视频文件[{}:{}:{}:{}]到阿里云失败[{}:{}]！", key, title, fileName, url,
                 uploadURLStreamResponse.getCode(), uploadURLStreamResponse.getMessage());
 
         return null;
