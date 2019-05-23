@@ -236,6 +236,8 @@ public class WeixinServiceImpl implements WeixinService, ContextRefreshedListene
             return;
         }
 
+        replyService.send(weixin, openId, "event", event);
+
         Map<String, String> map = new HashMap<>();
         map.put("openid", openId);
         JSONObject object = byAccessToken(weixin, accessToken -> {
@@ -261,14 +263,15 @@ public class WeixinServiceImpl implements WeixinService, ContextRefreshedListene
 
             return;
         }
+
         String sessionId = cache.get(CACHE_TICKET_SESSION_ID + ticket);
         if (validator.isEmpty(sessionId)) {
             logger.warn(null, "无法获得微信消息Ticket[{}]缓存的Session ID！", ticket);
 
             return;
         }
+
         session.set(sessionId, SESSION_SUBSCRIBE_SIGN_IN, object);
-        replyService.send(weixin, openId, "event", event);
     }
 
     private String getOpenId(String string) {
