@@ -708,6 +708,7 @@ public class WeixinServiceImpl implements WeixinService, ContextRefreshedListene
         String openId = infoService.findOpenId(weixin.getAppId(), receiver);
         object.put("touser", openId == null ? receiver : openId);
         object.put("template_id", templateId);
+        object.put("form_id", formId);
         if (!validator.isEmpty(page))
             object.put("page", page);
         object.put("data", data);
