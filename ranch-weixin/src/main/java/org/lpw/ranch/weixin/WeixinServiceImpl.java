@@ -229,13 +229,6 @@ public class WeixinServiceImpl implements WeixinService, ContextRefreshedListene
     }
 
     private void signIn(WeixinModel weixin, String string, String event) {
-        String ticket = getValue(string, "<Ticket><![CDATA[", "]]></Ticket>");
-        if (ticket == null) {
-            logger.warn(null, "无法获得微信消息[{}]中Ticket信息！", string);
-
-            return;
-        }
-
         String openId = getOpenId(string);
         if (openId == null) {
             logger.warn(null, "无法获得微信消息[{}]中Open ID信息！", string);
@@ -262,6 +255,12 @@ public class WeixinServiceImpl implements WeixinService, ContextRefreshedListene
         if (object.containsKey("unionid"))
             infoService.save(weixin.getKey(), weixin.getAppId(), object.getString("unionid"), openId);
 
+        String ticket = getValue(string, "<Ticket><![CDATA[", "]]></Ticket>");
+        if (ticket == null) {
+            logger.warn(null, "无法获得微信消息[{}]中Ticket信息！", string);
+
+            return;
+        }
         String sessionId = cache.get(CACHE_TICKET_SESSION_ID + ticket);
         if (validator.isEmpty(sessionId)) {
             logger.warn(null, "无法获得微信消息Ticket[{}]缓存的Session ID！", ticket);
