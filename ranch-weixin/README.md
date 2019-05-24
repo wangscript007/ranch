@@ -62,7 +62,7 @@
 |sort|int|顺序。|
 |receiveType|char(100)|接收类型。|
 |receiveMessage|char(100)|接收消息。|
-|sendType|char(100)|发送类型：text-文本；image-图片；mpnews-图文；news-图文（外链）。|
+|sendType|char(100)|发送类型。|
 |sendMessage|string|发送消息。|
 |sendTitle|char(100)|发送标题。|
 |sendDescription|char(100)|发送描述。|
