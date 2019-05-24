@@ -271,4 +271,13 @@ public interface WeixinService {
      * @return 请求结果。
      */
     JSONObject byAccessToken(WeixinModel weixin, Function<String, String> function);
+
+    /**
+     * 获取同步数据。
+     *
+     * @param uri       同步URI。
+     * @param parameter 参数集。
+     * @return 同步数据。
+     */
+    JSONObject sync(String uri, Map<String, String> parameter);
 }

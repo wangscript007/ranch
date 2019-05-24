@@ -1,9 +1,18 @@
 package org.lpw.ranch.weixin.info;
 
+import com.alibaba.fastjson.JSONArray;
+
 /**
  * @author lpw
  */
 public interface InfoService {
+    /**
+     * 检索。
+     *
+     * @return 数据集。
+     */
+    JSONArray query();
+
     /**
      * 查找Open ID。
      *

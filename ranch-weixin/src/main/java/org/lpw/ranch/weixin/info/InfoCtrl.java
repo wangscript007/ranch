@@ -2,6 +2,8 @@ package org.lpw.ranch.weixin.info;
 
 import org.lpw.tephra.ctrl.context.Request;
 import org.lpw.tephra.ctrl.execute.Execute;
+import org.lpw.tephra.ctrl.validate.Validate;
+import org.lpw.tephra.ctrl.validate.Validators;
 import org.springframework.stereotype.Controller;
 
 import javax.inject.Inject;
@@ -16,4 +18,11 @@ public class InfoCtrl {
     private Request request;
     @Inject
     private InfoService infoService;
+
+    @Execute(name = "query", validates = {
+            @Validate(validator = Validators.SIGN, string = {"ranch-weixin"})
+    })
+    public Object query() {
+        return infoService.query();
+    }
 }

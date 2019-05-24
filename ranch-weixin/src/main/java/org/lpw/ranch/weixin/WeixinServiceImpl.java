@@ -828,29 +828,35 @@ public class WeixinServiceImpl implements WeixinService, ContextRefreshedListene
     }
 
     @Override
-    public void executeMinuteJob() {
+    public JSONObject sync(String uri, Map<String, String> parameter) {
         if (!auto || validator.isEmpty(synchUrl))
+            return null;
+
+        sign.put(parameter, synchKey);
+        String string = http.get(synchUrl + uri, null, parameter);
+        JSONObject object = json.toObject(string);
+        if (object == null || !object.containsKey("data")) {
+            logger.warn(null, "获取微信[{}:{}:{}]同步数据[{}]失败！", synchUrl, uri, parameter, string);
+
+            return null;
+        }
+
+        return object;
+    }
+
+    @Override
+    public void executeMinuteJob() {
+        JSONObject object = sync("/weixin/query", new HashMap<>());
+        if (object == null)
+            return;
+
+        JSONArray array = object.getJSONArray("data");
+        if (validator.isEmpty(array))
             return;
 
         String lockId = lockHelper.lock(WeixinModel.NAME + ".hour", 100, 60);
         if (lockId == null)
             return;
-
-        Map<String, String> parameter = new HashMap<>();
-        sign.put(parameter, synchKey);
-        JSONObject object = json.toObject(http.get(synchUrl + "/weixin/query", null, parameter));
-        if (object == null || !object.containsKey("data")) {
-            lockHelper.unlock(lockId);
-
-            return;
-        }
-
-        JSONArray array = object.getJSONArray("data");
-        if (validator.isEmpty(array)) {
-            lockHelper.unlock(lockId);
-
-            return;
-        }
 
         for (int i = 0, size = array.size(); i < size; i++) {
             JSONObject obj = array.getJSONObject(i);
