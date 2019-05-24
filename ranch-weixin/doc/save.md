@@ -15,6 +15,7 @@
 |token|char(100)|验证Token。|
 |mchId|char(100)|商户ID。|
 |mchKey|char(100)|商户密钥。|
+|menu|string|菜单配置。|
 
 返回值
 ```json
@@ -29,6 +30,7 @@
   "mchKey": "商户密钥",
   "accessToken": "当前Access Token",
   "jsapiTicket": "当前Jsapi Ticket",
+  "menu": "菜单配置",
   "time": "更新时间"
 }
 ```
