@@ -14,6 +14,7 @@
 |receiveType|char(100)|是|接收类型。|
 |receiveMessage|char(100)|是|接收消息。|
 |sendType|char(100)|是|发送类型。|
+|sendAppId|char(100)|否|小程序APP ID。|
 |sendMessage|string|是|发送消息。|
 |sendTitle|char(100)|否|发送标题。|
 |sendDescription|char(100)|否|发送描述。|

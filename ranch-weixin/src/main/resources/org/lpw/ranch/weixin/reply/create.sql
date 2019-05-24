@@ -7,6 +7,7 @@ CREATE TABLE t_weixin_reply
   c_receive_type VARCHAR(255) DEFAULT NULL COMMENT '接收类型',
   c_receive_message VARCHAR(255) DEFAULT NULL COMMENT '接收消息',
   c_send_type VARCHAR(255) DEFAULT NULL COMMENT '发送类型',
+  c_send_app_id VARCHAR(255) DEFAULT NULL COMMENT '小程序APP ID',
   c_send_message TEXT DEFAULT NULL COMMENT '发送消息',
   c_send_title VARCHAR(255) DEFAULT NULL COMMENT '发送标题',
   c_send_description VARCHAR(255) DEFAULT NULL COMMENT '发送描述',

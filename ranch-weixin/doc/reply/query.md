@@ -27,6 +27,7 @@
         "receiveType": "接收类型",
         "receiveMessage": "接收消息",
         "sendType": "发送类型",
+        "sendAppId": "小程序APP ID",
         "sendMessage": "发送消息",
         "sendTitle": "发送标题",
         "sendDescription": "发送描述",

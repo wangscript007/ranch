@@ -63,6 +63,7 @@
 |receiveType|char(100)|接收类型。|
 |receiveMessage|char(100)|接收消息。|
 |sendType|char(100)|发送类型。|
+|sendAppId|char(100)|小程序APP ID，发送小程序卡片到公众号时需提供。|
 |sendMessage|string|发送消息。|
 |sendTitle|char(100)|发送标题。|
 |sendDescription|char(100)|发送描述。|
@@ -94,7 +95,7 @@
 |mpnews|是|否|图文。|
 |news|是|否|图文（外链）。|
 |link|否|是|图文链接。|
-|miniprogrampage|否|是|卡片。|
+|miniprogrampage|是|是|小程序卡片。|
 
 [检索](doc/reply/query.md)
 

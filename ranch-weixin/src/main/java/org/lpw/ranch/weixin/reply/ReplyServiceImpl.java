@@ -89,6 +89,8 @@ public class ReplyServiceImpl implements ReplyService {
                     break;
                 case "miniprogrampage":
                     JSONObject miniprogrampage = new JSONObject();
+                    if (!validator.isEmpty(reply.getSendAppId()))
+                        miniprogrampage.put("appid", reply.getSendAppId());
                     miniprogrampage.put("title", reply.getSendTitle());
                     miniprogrampage.put("pagepath", reply.getSendUrl());
                     miniprogrampage.put("thumb_media_id", reply.getSendPicurl());

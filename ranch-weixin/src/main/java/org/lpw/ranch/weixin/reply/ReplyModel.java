@@ -25,6 +25,7 @@ public class ReplyModel extends ModelSupport {
     private String receiveType; // 接收类型
     private String receiveMessage; // 接收消息
     private String sendType; // 发送类型
+    private String sendAppId; // 小程序APP ID
     private String sendMessage; // 发送消息
     private String sendTitle; // 发送标题
     private String sendDescription; // 发送描述
@@ -80,6 +81,16 @@ public class ReplyModel extends ModelSupport {
 
     public void setSendType(String sendType) {
         this.sendType = sendType;
+    }
+
+    @Jsonable
+    @Column(name = "c_send_app_id")
+    public String getSendAppId() {
+        return sendAppId;
+    }
+
+    public void setSendAppId(String sendAppId) {
+        this.sendAppId = sendAppId;
     }
 
     @Jsonable
