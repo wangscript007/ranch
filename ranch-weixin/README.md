@@ -15,6 +15,7 @@
 |mchKey|char(100)|商户密钥。|
 |accessToken|char(100)|当前Access Token。|
 |jsapiTicket|char(100)|当前Jsapi Ticket。|
+|menu|string|菜单配置。|
 |time|timestamp|更新时间。|
 
 [检索配置集](doc/query.md)
