@@ -53,28 +53,37 @@ public class TransactionServiceImpl implements TransactionService {
         try {
             Order order = new PayPalHttpClient(new PayPalEnvironment.Live(paypal.getAppId(), paypal.getSecret()))
                     .execute(new OrdersGetRequest(tradeNo)).result();
+            if (logger.isInfoEnable())
+                logger.info("校验PayPal[{}]支付[{}]结果[{}]。", key, tradeNo, order.status());
             if (notSuccess(order.status()))
                 return null;
 
             String result = new Json().serialize(order);
-            order.purchaseUnits().forEach(purchaseUnit -> purchaseUnit.payments().captures().forEach(capture -> {
-                if (notSuccess(capture.status()) || transactionDao.count(capture.id()) > 0)
+            if (logger.isInfoEnable())
+                logger.info("校验PayPal[{}]支付[{}]结果[{}]。", key, tradeNo, result);
+            order.purchaseUnits().forEach(purchaseUnit -> {
+                if (purchaseUnit == null)
                     return;
 
-                TransactionModel transaction = new TransactionModel();
-                transaction.setKey(key);
-                transaction.setUser(userHelper.id());
-                transaction.setAmount(numeric.toInt(numeric.toDouble(capture.amount().value()) * 100));
-                transaction.setOrderNo(paymentHelper.create("paypal", paypal.getAppId(), transaction.getUser(), transaction.getAmount(),
-                        "", null, null));
-                transaction.setTradeNo(capture.id());
-                transaction.setCurrency(capture.amount().currencyCode());
-                transaction.setResponse(result);
-                transaction.setCreate(dateTime.toTime(capture.createTime(), "yyyy-MM-dd'T'HH:mm:ss'Z'"));
-                transaction.setFinish(dateTime.toTime(capture.updateTime(), "yyyy-MM-dd'T'HH:mm:ss'Z'"));
-                transactionDao.save(transaction);
-                paymentHelper.complete(transaction.getOrderNo(), transaction.getAmount(), transaction.getTradeNo(), 1, null);
-            }));
+                purchaseUnit.payments().captures().forEach(capture -> {
+                    if (capture == null || notSuccess(capture.status()) || transactionDao.count(capture.id()) > 0)
+                        return;
+
+                    TransactionModel transaction = new TransactionModel();
+                    transaction.setKey(key);
+                    transaction.setUser(userHelper.id());
+                    transaction.setAmount(numeric.toInt(numeric.toDouble(capture.amount().value()) * 100));
+                    transaction.setOrderNo(paymentHelper.create("paypal", paypal.getAppId(), transaction.getUser(), transaction.getAmount(),
+                            "", null, null));
+                    transaction.setTradeNo(capture.id());
+                    transaction.setCurrency(capture.amount().currencyCode());
+                    transaction.setResponse(result);
+                    transaction.setCreate(dateTime.toTime(capture.createTime(), "yyyy-MM-dd'T'HH:mm:ss'Z'"));
+                    transaction.setFinish(dateTime.toTime(capture.updateTime(), "yyyy-MM-dd'T'HH:mm:ss'Z'"));
+                    transactionDao.save(transaction);
+                    paymentHelper.complete(transaction.getOrderNo(), transaction.getAmount(), transaction.getTradeNo(), 1, null);
+                });
+            });
 
             return result;
         } catch (Throwable throwable) {

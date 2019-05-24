@@ -45,7 +45,7 @@ public class TransactionCtrl {
     public Object verify() {
         JSONObject object = json.toObject(transactionService.verify(request.get("key"), request.get("tradeNo")));
 
-        return object == null ? templates.get().failure(4223, message.get(TransactionModel.NAME + ".verify.illegal"),
+        return object == null ? templates.get().failure(4224, message.get(TransactionModel.NAME + ".verify.illegal"),
                 null, null) : object;
     }
 }
