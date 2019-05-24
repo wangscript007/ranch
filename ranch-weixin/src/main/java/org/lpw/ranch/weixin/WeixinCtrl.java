@@ -78,6 +78,15 @@ public class WeixinCtrl {
         return "";
     }
 
+    @Execute(name = "menu", validates = {
+            @Validate(validator = Validators.NOT_EMPTY, parameter = "key", failureCode = 2),
+            @Validate(validator = WeixinService.VALIDATOR_EXISTS, parameter = "key", failureCode = 52),
+            @Validate(validator = Validators.SIGN)
+    })
+    public Object menu() {
+        return weixinService.menu(request.get("key"));
+    }
+
     @Execute(name = "delete", validates = {
             @Validate(validator = Validators.ID, parameter = "id", failureCode = 1),
             @Validate(validator = Validators.SIGN, string = {"ranch-weixin"})

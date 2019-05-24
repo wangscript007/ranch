@@ -155,6 +155,7 @@ public class WeixinServiceImpl implements WeixinService, ContextRefreshedListene
         model.setToken(weixin.getToken());
         model.setMchId(weixin.getMchId());
         model.setMchKey(weixin.getMchKey());
+        model.setMenu(weixin.getMenu());
         weixinDao.save(model);
         if (modify && auto && validator.isEmpty(synchUrl))
             refreshAccessToken(model);
@@ -165,6 +166,22 @@ public class WeixinServiceImpl implements WeixinService, ContextRefreshedListene
     @Override
     public void refreshAccessToken(String key) {
         refreshAccessToken(findByKey(key));
+    }
+
+    @Override
+    public JSONObject menu(String key) {
+        WeixinModel weixin = findByKey(key);
+        if (weixin == null || validator.isEmpty(weixin.getMenu()))
+            return new JSONObject();
+
+        return byAccessToken(weixin, accessToken -> {
+            String string = http.post("https://api.weixin.qq.com/cgi-bin/menu/create?access_token=" + accessToken,
+                    null, weixin.getMenu());
+            if (logger.isInfoEnable())
+                logger.info("创建微信公众号菜单[{}:{}:{}]。", weixin.getKey(), weixin.getMenu(), string);
+
+            return string;
+        });
     }
 
     @Override
@@ -873,6 +890,7 @@ public class WeixinServiceImpl implements WeixinService, ContextRefreshedListene
             weixin.setMchKey(obj.getString("mchKey"));
             weixin.setAccessToken(obj.getString("accessToken"));
             weixin.setJsapiTicket(obj.getString("jsapiTicket"));
+            weixin.setMenu(obj.getString("menu"));
             weixin.setTime(dateTime.now());
             weixinDao.save(weixin);
         }

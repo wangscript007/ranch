@@ -19,7 +19,6 @@ import java.sql.Timestamp;
 @Scope(BeanDefinition.SCOPE_PROTOTYPE)
 @Entity(name = WeixinModel.NAME)
 @Table(name = "t_weixin")
-@Memory(name = "m_weixin")
 public class WeixinModel extends ModelSupport {
     static final String NAME = "ranch.weixin";
 
@@ -32,6 +31,7 @@ public class WeixinModel extends ModelSupport {
     private String mchKey; // 商户密钥
     private String accessToken; // Access Token
     private String jsapiTicket; // Jsapi Ticket
+    private String menu; // 菜单配置
     private Timestamp time; // 更新时间
 
     @Jsonable
@@ -122,6 +122,16 @@ public class WeixinModel extends ModelSupport {
 
     public void setJsapiTicket(String jsapiTicket) {
         this.jsapiTicket = jsapiTicket;
+    }
+
+    @Jsonable
+    @Column(name = "c_menu")
+    public String getMenu() {
+        return menu;
+    }
+
+    public void setMenu(String menu) {
+        this.menu = menu;
     }
 
     @Jsonable

@@ -62,6 +62,14 @@ public interface WeixinService {
     void refreshAccessToken(String key);
 
     /**
+     * 创建公众号菜单。
+     *
+     * @param key 引用key。
+     * @return 创建结果。
+     */
+    JSONObject menu(String key);
+
+    /**
      * 删除微信配置。
      *
      * @param id ID值。

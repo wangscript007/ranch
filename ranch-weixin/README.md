@@ -23,6 +23,8 @@
 
 [刷新Access Token](doc/refresh-access-token.md)
 
+[创建公众号菜单](doc/menu.md)
+
 [删除配置](doc/delete.md)
 
 [接收微信通知](doc/wx.+.md)
