@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.braintreepayments.http.serializer.Json;
 import com.paypal.core.PayPalEnvironment;
 import com.paypal.core.PayPalHttpClient;
+import com.paypal.orders.Money;
 import com.paypal.orders.Order;
 import com.paypal.orders.OrdersGetRequest;
 import org.lpw.ranch.payment.helper.PaymentHelper;
@@ -14,6 +15,7 @@ import org.lpw.ranch.util.Pagination;
 import org.lpw.tephra.util.DateTime;
 import org.lpw.tephra.util.Logger;
 import org.lpw.tephra.util.Numeric;
+import org.lpw.tephra.util.Validator;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
@@ -29,6 +31,8 @@ public class TransactionServiceImpl implements TransactionService {
     private DateTime dateTime;
     @Inject
     private Numeric numeric;
+    @Inject
+    private Validator validator;
     @Inject
     private Logger logger;
     @Inject
@@ -65,23 +69,19 @@ public class TransactionServiceImpl implements TransactionService {
                 if (purchaseUnit == null)
                     return;
 
+                if (purchaseUnit.payments() == null || validator.isEmpty(purchaseUnit.payments().captures())) {
+                    create(paypal, order.id(), purchaseUnit.amount().currencyCode(), purchaseUnit.amount().value(), result,
+                            order.createTime(), order.updateTime());
+
+                    return;
+                }
+
                 purchaseUnit.payments().captures().forEach(capture -> {
                     if (capture == null || notSuccess(capture.status()) || transactionDao.count(capture.id()) > 0)
                         return;
 
-                    TransactionModel transaction = new TransactionModel();
-                    transaction.setKey(key);
-                    transaction.setUser(userHelper.id());
-                    transaction.setAmount(numeric.toInt(numeric.toDouble(capture.amount().value()) * 100));
-                    transaction.setOrderNo(paymentHelper.create("paypal", paypal.getAppId(), transaction.getUser(), transaction.getAmount(),
-                            "", null, null));
-                    transaction.setTradeNo(capture.id());
-                    transaction.setCurrency(capture.amount().currencyCode());
-                    transaction.setResponse(result);
-                    transaction.setCreate(dateTime.toTime(capture.createTime(), "yyyy-MM-dd'T'HH:mm:ss'Z'"));
-                    transaction.setFinish(dateTime.toTime(capture.updateTime(), "yyyy-MM-dd'T'HH:mm:ss'Z'"));
-                    transactionDao.save(transaction);
-                    paymentHelper.complete(transaction.getOrderNo(), transaction.getAmount(), transaction.getTradeNo(), 1, null);
+                    create(paypal, capture.id(), capture.amount().currencyCode(), capture.amount().value(), result,
+                            capture.createTime(), capture.updateTime());
                 });
             });
 
@@ -95,5 +95,21 @@ public class TransactionServiceImpl implements TransactionService {
 
     private boolean notSuccess(String status) {
         return !status.equals("APPROVED") && !status.equals("COMPLETED");
+    }
+
+    private void create(PaypalModel paypal, String tradeNo, String currency, String amount, String response, String createTime, String updateTime) {
+        TransactionModel transaction = new TransactionModel();
+        transaction.setKey(paypal.getKey());
+        transaction.setUser(userHelper.id());
+        transaction.setAmount(numeric.toInt(numeric.toDouble(amount) * 100));
+        transaction.setOrderNo(paymentHelper.create("paypal", paypal.getAppId(), transaction.getUser(), transaction.getAmount(),
+                "", null, null));
+        transaction.setTradeNo(tradeNo);
+        transaction.setCurrency(currency);
+        transaction.setResponse(response);
+        transaction.setCreate(dateTime.toTime(createTime, "yyyy-MM-dd'T'HH:mm:ss'Z'"));
+        transaction.setFinish(dateTime.toTime(updateTime, "yyyy-MM-dd'T'HH:mm:ss'Z'"));
+        transactionDao.save(transaction);
+        paymentHelper.complete(transaction.getOrderNo(), transaction.getAmount(), transaction.getTradeNo(), 1, null);
     }
 }
