@@ -53,9 +53,8 @@ public class TemplateCtrl {
     @Execute(name = "send", validates = {
             @Validate(validator = Validators.NOT_EMPTY, parameter = "key", failureCode = 61),
             @Validate(validator = Validators.NOT_EMPTY, parameter = "receiver", failureCode = 75),
-            @Validate(validator = Validators.NOT_EMPTY, parameter = "formId", failureCode = 76),
             @Validate(validator = Validators.SIGN),
-            @Validate(validator = TemplateService.VALIDATOR_EXISTS, parameter = "key", failureCode = 77)
+            @Validate(validator = TemplateService.VALIDATOR_EXISTS, parameter = "key", failureCode = 76)
     })
     public Object send() {
         return templateService.send(request.get("key"), request.get("receiver"), request.get("formId"), request.getAsJsonObject("data"));
