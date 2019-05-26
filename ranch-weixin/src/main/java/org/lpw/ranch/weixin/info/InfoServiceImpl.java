@@ -49,17 +49,19 @@ public class InfoServiceImpl implements InfoService, MinuteJob {
     }
 
     @Override
-    public void save(String key, String appId, String unionId, String openId) {
+    public String save(String key, String appId, String unionId, String openId) {
         if (validator.isEmpty(openId))
-            return;
+            return null;
 
         InfoModel info = infoDao.find(openId);
         if (info == null)
-            create(key, appId, unionId, openId);
+            info = create(key, appId, unionId, openId);
         else if (validator.isEmpty(info.getUnionId()) && !validator.isEmpty(unionId)) {
             info.setUnionId(unionId);
             infoDao.save(info);
         }
+
+        return info.getUnionId();
     }
 
     @Override
@@ -87,7 +89,7 @@ public class InfoServiceImpl implements InfoService, MinuteJob {
         lockHelper.unlock(lockId);
     }
 
-    private void create(String key, String appId, String unionId, String openId) {
+    private InfoModel create(String key, String appId, String unionId, String openId) {
         InfoModel info = new InfoModel();
         info.setKey(key);
         info.setAppId(appId);
@@ -95,5 +97,7 @@ public class InfoServiceImpl implements InfoService, MinuteJob {
         info.setOpenId(openId);
         info.setTime(dateTime.now());
         infoDao.save(info);
+
+        return info;
     }
 }

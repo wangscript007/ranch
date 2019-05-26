@@ -271,9 +271,7 @@ public class WeixinServiceImpl implements WeixinService, ContextRefreshedListene
             return;
         }
 
-        if (object.containsKey("unionid"))
-            infoService.save(weixin.getKey(), weixin.getAppId(), object.getString("unionid"), openId);
-
+        saveInfo(weixin, object, openId);
         String ticket = getValue(string, "<Ticket><![CDATA[", "]]></Ticket>");
         if (ticket == null) {
             logger.warn(null, "无法获得微信消息[{}]中Ticket信息！", string);
@@ -395,8 +393,7 @@ public class WeixinServiceImpl implements WeixinService, ContextRefreshedListene
             if (obj != null)
                 object.putAll(obj);
         }
-        infoService.save(key, weixin.getAppId(), object.getString("unionid"), openId);
-
+        saveInfo(weixin, object, openId);
         if (logger.isDebugEnable())
             logger.debug("获得微信公众号用户认证信息[{}:{}:{}]。", key, code, object);
 
@@ -411,7 +408,7 @@ public class WeixinServiceImpl implements WeixinService, ContextRefreshedListene
             return object;
 
         if (validator.isEmpty(iv) || validator.isEmpty(message)) {
-            infoService.save(key, weixin.getAppId(), object.getString("unionid"), object.getString("openid"));
+            saveInfo(weixin, object, object.getString("openid"));
 
             return object;
         }
@@ -420,7 +417,7 @@ public class WeixinServiceImpl implements WeixinService, ContextRefreshedListene
         object.putAll(decryptAesCbcPkcs7(sessionKey, iv, message));
         if (!validator.isEmpty(iv2) && !validator.isEmpty(message2))
             object.putAll(decryptAesCbcPkcs7(sessionKey, iv2, message2));
-        infoService.save(key, weixin.getAppId(), object.getString("unionid"), object.getString("openid"));
+        saveInfo(weixin, object, object.getString("openid"));
 
         if (logger.isDebugEnable())
             logger.debug("获得微信小程序用户认证信息[{}:{}:{}]。", key, code, object);
@@ -455,6 +452,12 @@ public class WeixinServiceImpl implements WeixinService, ContextRefreshedListene
         map.put("grant_type", "authorization_code");
 
         return map;
+    }
+
+    private void saveInfo(WeixinModel weixin, JSONObject object, String openId) {
+        String unionId = infoService.save(weixin.getKey(), weixin.getAppId(), object.getString("unionid"), openId);
+        if (!validator.isEmpty(unionId) && !object.containsKey("unionid"))
+            object.put("unionid", unionId);
     }
 
     @Override

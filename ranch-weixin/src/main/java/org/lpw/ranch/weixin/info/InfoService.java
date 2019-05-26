@@ -29,6 +29,7 @@ public interface InfoService {
      * @param appId   APP ID。
      * @param unionId Union ID。
      * @param openId  Open ID。
+     * @return Union ID。
      */
-    void save(String key, String appId, String unionId, String openId);
+    String save(String key, String appId, String unionId, String openId);
 }
