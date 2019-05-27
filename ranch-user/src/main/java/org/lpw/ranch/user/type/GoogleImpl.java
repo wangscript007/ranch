@@ -13,7 +13,7 @@ import javax.inject.Inject;
  * @author lpw
  */
 @Service("ranch.user.type.google")
-public class GoogleImpl implements Type {
+public class GoogleImpl extends TypeSupport {
     @Inject
     private Context context;
     @Inject
@@ -47,11 +47,6 @@ public class GoogleImpl implements Type {
         return get(uid, password, "portrait");
     }
 
-    private String get(String uid, String password, String name) {
-        JSONObject object = getAuth(uid, password);
-
-        return object == null || !object.containsKey(name) ? null : object.getString(name);
-    }
 
     @Override
     public JSONObject getAuth(String uid, String password) {

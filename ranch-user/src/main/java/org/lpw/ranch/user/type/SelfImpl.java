@@ -31,16 +31,6 @@ public class SelfImpl implements Type {
     }
 
     @Override
-    public String getNick(String uid, String password) {
-        return null;
-    }
-
-    @Override
-    public String getPortrait(String uid, String password) {
-        return null;
-    }
-
-    @Override
     public JSONObject getAuth(String uid, String password) {
         return null;
     }

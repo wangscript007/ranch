@@ -26,13 +26,25 @@ public interface Type {
     String getUid(String uid, String password);
 
     /**
+     * 获取UID。
+     *
+     * @param uid      UID。
+     * @param password 密码。
+     * @return UID，如果获取失败则返回null。
+     */
+    default String getUid2(String uid, String password) {
+        return null;
+    }
+
+    /**
      * 注册。
      *
      * @param user     用户。
      * @param uid      UID。
      * @param password 密码。
      */
-    void signUp(UserModel user, String uid, String password);
+    default void signUp(UserModel user, String uid, String password) {
+    }
 
     /**
      * 获取第三方认证昵称。
@@ -41,7 +53,9 @@ public interface Type {
      * @param password 密码。
      * @return 昵称，不存在则返回null。
      */
-    String getNick(String uid, String password);
+    default String getNick(String uid, String password) {
+        return null;
+    }
 
     /**
      * 获取第三方头像URL。
@@ -50,7 +64,9 @@ public interface Type {
      * @param password 密码。
      * @return 头像URL，不存在则返回null。
      */
-    String getPortrait(String uid, String password);
+    default String getPortrait(String uid, String password) {
+        return null;
+    }
 
     /**
      * 获取第三方认证信息。

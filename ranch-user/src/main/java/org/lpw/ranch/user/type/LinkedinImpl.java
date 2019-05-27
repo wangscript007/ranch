@@ -13,7 +13,7 @@ import javax.inject.Inject;
  * @author lpw
  */
 @Service("ranch.user.type.linkedin")
-public class LinkedinImpl implements Type {
+public class LinkedinImpl extends TypeSupport {
     @Inject
     private Context context;
     @Inject
@@ -43,12 +43,6 @@ public class LinkedinImpl implements Type {
     @Override
     public String getPortrait(String uid, String password) {
         return get(uid, password, "pictureUrl");
-    }
-
-    private String get(String uid, String password, String name) {
-        JSONObject object = getAuth(uid, password);
-
-        return object == null || !object.containsKey(name) ? null : object.getString(name);
     }
 
     @Override

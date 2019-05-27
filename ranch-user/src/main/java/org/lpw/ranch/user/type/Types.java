@@ -49,6 +49,16 @@ public interface Types {
     String getUid(String uid, String password, int type);
 
     /**
+     * 获取UID。
+     *
+     * @param uid      UID。
+     * @param password 密码。
+     * @param type     类型。
+     * @return UID，如果获取失败则返回null。
+     */
+    String getUid2(String uid, String password, int type);
+
+    /**
      * 注册。
      *
      * @param user     用户。

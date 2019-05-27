@@ -14,9 +14,7 @@ import javax.inject.Inject;
  * @author lpw
  */
 @Service("ranch.user.type.weixin.mini")
-public class WeixinMiniImpl implements Type {
-    @Inject
-    private Validator validator;
+public class WeixinMiniImpl extends WeixinTypeSupport {
     @Inject
     private Context context;
     @Inject
@@ -30,22 +28,17 @@ public class WeixinMiniImpl implements Type {
     }
 
     @Override
-    public String getUid(String uid, String password) {
-        return weixinHelper.getId(getAuth(uid, password));
-    }
-
-    @Override
     public void signUp(UserModel user, String uid, String password) {
-    }
-
-    @Override
-    public String getNick(String uid, String password) {
-        return getAuth(uid, password).getString("nickName");
+        JSONObject object = getAuth(uid, password);
+        if (validator.isEmpty(user.getNick()))
+            user.setNick(object.getString("nickname"));
+        if (validator.isEmpty(user.getPortrait()))
+            user.setPortrait(object.getString("avatarUrl"));
     }
 
     @Override
     public String getPortrait(String uid, String password) {
-        return getAuth(uid, password).getString("avatarUrl");
+        return get(uid, password, "avatarUrl");
     }
 
     @Override

@@ -22,6 +22,11 @@ public class TypesImpl implements Types, ContextRefreshedListener {
     }
 
     @Override
+    public String getUid2(String uid, String password, int type) {
+        return map.get(type).getUid2(uid, password);
+    }
+
+    @Override
     public void signUp(UserModel user, String uid, String password, int type) {
         map.get(type).signUp(user, uid, password);
     }

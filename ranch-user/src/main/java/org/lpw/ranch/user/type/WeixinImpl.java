@@ -13,9 +13,7 @@ import javax.inject.Inject;
  * @author lpw
  */
 @Service("ranch.user.type.weixin")
-public class WeixinImpl implements Type {
-    @Inject
-    private Validator validator;
+public class WeixinImpl extends WeixinTypeSupport {
     @Inject
     private Context context;
     @Inject
@@ -24,11 +22,6 @@ public class WeixinImpl implements Type {
     @Override
     public int getKey() {
         return Types.WEIXIN;
-    }
-
-    @Override
-    public String getUid(String uid, String password) {
-        return weixinHelper.getId(getAuth(uid, password));
     }
 
     @Override
@@ -41,13 +34,8 @@ public class WeixinImpl implements Type {
     }
 
     @Override
-    public String getNick(String uid, String password) {
-        return getAuth(uid, password).getString("nickname");
-    }
-
-    @Override
     public String getPortrait(String uid, String password) {
-        return getAuth(uid, password).getString("headimgurl");
+        return get(uid, password, "headimgurl");
     }
 
     @Override

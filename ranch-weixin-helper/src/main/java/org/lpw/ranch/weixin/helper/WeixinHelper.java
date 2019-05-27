@@ -53,14 +53,6 @@ public interface WeixinHelper {
     JSONObject auth(String key, String code, String iv, String message, String iv2, String message2);
 
     /**
-     * 获取微信用户ID。优先使用unionid，如果不存在则返回openid。
-     *
-     * @param object 用户授权信息
-     * @return 如果存在则返回ID，否则返回null。
-     */
-    String getId(JSONObject object);
-
-    /**
      * 解密AES-128-CBC/PKCS#7数据。
      *
      * @param iv      初始化参数。

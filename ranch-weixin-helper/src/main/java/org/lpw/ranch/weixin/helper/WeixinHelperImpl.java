@@ -60,11 +60,6 @@ public class WeixinHelperImpl implements WeixinHelper {
     }
 
     @Override
-    public String getId(JSONObject object) {
-        return object == null ? null : object.getString(object.containsKey("unionid") ? "unionid" : "openid");
-    }
-
-    @Override
     public JSONObject decryptAesCbcPkcs7(String iv, String message) {
         Map<String, String> parameter = new HashMap<>();
         parameter.put("iv", iv);

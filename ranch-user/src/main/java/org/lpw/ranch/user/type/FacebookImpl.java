@@ -21,9 +21,8 @@ import java.io.OutputStream;
  * @author lpw
  */
 @Service("ranch.user.type.facebook")
-public class FacebookImpl implements Type {
-    @Inject
-    private Validator validator;
+public class FacebookImpl extends TypeSupport {
+    @Inject private Validator validator;
     @Inject
     private Context context;
     @Inject
@@ -46,9 +45,7 @@ public class FacebookImpl implements Type {
 
     @Override
     public String getUid(String uid, String password) {
-        JSONObject object = getAuth(uid, password);
-
-        return object == null || !object.containsKey("id") ? null : object.getString("id");
+        return get(uid, password, "id");
     }
 
     @Override
@@ -78,12 +75,7 @@ public class FacebookImpl implements Type {
 
     @Override
     public String getNick(String uid, String password) {
-        return getAuth(uid, password).getString("name");
-    }
-
-    @Override
-    public String getPortrait(String uid, String password) {
-        return null;
+        return get(uid, password, "name");
     }
 
     @Override

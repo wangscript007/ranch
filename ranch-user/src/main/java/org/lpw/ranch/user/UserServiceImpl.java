@@ -112,7 +112,9 @@ public class UserServiceImpl implements UserService {
         if (validator.isEmpty(user.getNick()))
             user.setNick(validator.isEmpty(nick) ? uid : nick);
         userDao.save(user);
-        authService.create(user.getId(), types.getUid(uid, password, type), type, nick, types.getPortrait(uid, password, type));
+        for (String ruid : new String[]{types.getUid(uid, password, type), types.getUid2(uid, password, type)})
+            if (ruid != null && authService.findByUid(ruid) == null)
+                authService.create(user.getId(), ruid, type, nick, types.getPortrait(uid, password, type));
         clearCache(user);
         signIn(user, uid);
     }
@@ -137,7 +139,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean signIn(String uid, String password, int type) {
-        String ouid=uid;
+        String ouid = uid;
         if (type > Types.SELF)
             uid = getThirdId(uid, password, type);
         if (uid == null)
@@ -163,11 +165,44 @@ public class UserServiceImpl implements UserService {
 
     private String getThirdId(String uid, String password, int type) {
         String thirdId = types.getUid(uid, password, type);
-        if (thirdId == null)
+        String thirdId2 = types.getUid2(uid, password, type);
+        if (thirdId == null && thirdId2 == null)
             return null;
 
-        if (authService.findByUid(thirdId) == null)
+        if (thirdId == null) {
+            if (authService.findByUid(thirdId2) == null)
+                signUp(uid, password, type);
+
+            return thirdId2;
+        }
+
+        if (thirdId2 == null) {
+            if (authService.findByUid(thirdId) == null)
+                signUp(uid, password, type);
+
+            return thirdId;
+        }
+
+        AuthModel auth = authService.findByUid(thirdId);
+        AuthModel auth2 = authService.findByUid(thirdId2);
+        if (auth != null && auth2 != null)
+            return thirdId;
+
+        if (auth == null && auth2 == null) {
             signUp(uid, password, type);
+
+            return thirdId;
+        }
+
+        if (auth == null) {
+            signIn(findById(auth2.getUser()), thirdId2);
+            signUp(uid, password, type);
+
+            return thirdId2;
+        }
+
+        signIn(findById(auth.getUser()), thirdId);
+        signUp(uid, password, type);
 
         return thirdId;
     }
