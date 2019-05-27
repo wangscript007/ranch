@@ -51,15 +51,7 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public AuthModel findByUid(String uid) {
-        String cacheKey = CACHE_UID + uid;
-        AuthModel auth = cache.get(cacheKey);
-        if (auth == null) {
-            auth = authDao.findByUid(uid);
-            if (auth != null)
-                cache.put(cacheKey, auth, false);
-        }
-
-        return auth;
+        return validator.isEmpty(uid) ? null : cache.computeIfAbsent(CACHE_UID + uid, key -> authDao.findByUid(uid), false);
     }
 
     @Override
