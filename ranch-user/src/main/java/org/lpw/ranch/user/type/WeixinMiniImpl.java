@@ -37,6 +37,11 @@ public class WeixinMiniImpl extends WeixinTypeSupport {
     }
 
     @Override
+    public String getNick(String uid, String password) {
+        return get(uid, password, "nickName");
+    }
+
+    @Override
     public String getPortrait(String uid, String password) {
         return get(uid, password, "avatarUrl");
     }

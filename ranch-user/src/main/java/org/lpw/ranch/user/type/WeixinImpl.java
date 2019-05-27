@@ -34,6 +34,11 @@ public class WeixinImpl extends WeixinTypeSupport {
     }
 
     @Override
+    public String getNick(String uid, String password) {
+        return get(uid, password, "nickname");
+    }
+
+    @Override
     public String getPortrait(String uid, String password) {
         return get(uid, password, "headimgurl");
     }

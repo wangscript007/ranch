@@ -21,9 +21,4 @@ abstract class WeixinTypeSupport extends TypeSupport{
     public String getUid2(String uid, String password) {
         return get(uid, password,"openid");
     }
-
-    @Override
-    public String getNick(String uid, String password) {
-        return get(uid, password, "nickname");
-    }
 }
