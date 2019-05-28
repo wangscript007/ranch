@@ -5,7 +5,6 @@ import org.lpw.ranch.user.UserModel;
 import org.lpw.ranch.weixin.helper.WeixinHelper;
 import org.lpw.tephra.ctrl.context.Request;
 import org.lpw.tephra.util.Context;
-import org.lpw.tephra.util.Validator;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
