@@ -42,7 +42,18 @@ public class InfoServiceImpl implements InfoService, MinuteJob {
     }
 
     @Override
-    public String findOpenId(String appId, String unionId) {
+    public String findOpenId(String appId, String id) {
+        InfoModel info = infoDao.find(id);
+        if (info == null)
+            return findOpenIdByUnionId(appId, id);
+
+        if (info.getAppId().equals(appId))
+            return id;
+
+        return findOpenIdByUnionId(appId, info.getUnionId());
+    }
+
+    private String findOpenIdByUnionId(String appId, String unionId) {
         InfoModel info = infoDao.find(appId, unionId);
 
         return info == null ? null : info.getOpenId();

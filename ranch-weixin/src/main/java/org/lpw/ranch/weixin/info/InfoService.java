@@ -16,11 +16,11 @@ public interface InfoService {
     /**
      * 查找Open ID。
      *
-     * @param appId   APP ID。
-     * @param unionId Union ID。
+     * @param appId APP ID。
+     * @param id    微信Open ID或Union ID。
      * @return Open ID。
      */
-    String findOpenId(String appId, String unionId);
+    String findOpenId(String appId, String id);
 
     /**
      * 保存详情信息。

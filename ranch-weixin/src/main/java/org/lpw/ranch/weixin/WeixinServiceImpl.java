@@ -698,9 +698,15 @@ public class WeixinServiceImpl implements WeixinService, ContextRefreshedListene
         if (weixin == null)
             return new JSONObject();
 
-        JSONObject object = new JSONObject();
         String openId = infoService.findOpenId(weixin.getAppId(), receiver);
-        object.put("touser", openId == null ? receiver : openId);
+        if (openId == null) {
+            logger.warn(null, "无法获得接收微信模板消息的Open ID[{}:{}]。", key, receiver);
+
+            return new JSONObject();
+        }
+
+        JSONObject object = new JSONObject();
+        object.put("touser", openId);
         object.put("template_id", templateId);
         if (!validator.isEmpty(url))
             object.put("url", url);
@@ -731,9 +737,15 @@ public class WeixinServiceImpl implements WeixinService, ContextRefreshedListene
         if (weixin == null)
             return new JSONObject();
 
-        JSONObject object = new JSONObject();
         String openId = infoService.findOpenId(weixin.getAppId(), receiver);
-        object.put("touser", openId == null ? receiver : openId);
+        if (openId == null) {
+            logger.warn(null, "无法获得接收微信小程序模板消息的Open ID[{}:{}]。", key, receiver);
+
+            return new JSONObject();
+        }
+
+        JSONObject object = new JSONObject();
+        object.put("touser", openId);
         object.put("template_id", templateId);
         object.put("form_id", formId);
         if (!validator.isEmpty(page))
