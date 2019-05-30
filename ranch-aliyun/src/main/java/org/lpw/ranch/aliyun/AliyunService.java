@@ -1,7 +1,8 @@
 package org.lpw.ranch.aliyun;
 
 import com.alibaba.fastjson.JSONObject;
-import com.aliyuncs.IAcsClient;
+
+import java.util.function.BiConsumer;
 
 /**
  * @author lpw
@@ -39,6 +40,17 @@ public interface AliyunService {
     String uploadVideo(String key, String title, String file);
 
     /**
+     * 异步上传视频文件。
+     *
+     * @param key        引用key。
+     * @param title      标题。
+     * @param file       文件。
+     * @param id         完成通知ID。
+     * @param biConsumer 完成通知函数。
+     */
+    void uploadVideo(String key, String title, String file, String id, BiConsumer<String, String> biConsumer);
+
+    /**
      * 上传视频文件。
      *
      * @param key      引用key。
@@ -48,6 +60,18 @@ public interface AliyunService {
      * @return 视频ID，上传失败则返回null。
      */
     String uploadVideo(String key, String title, String fileName, String url);
+
+    /**
+     * 异步上传视频文件。
+     *
+     * @param key        引用key。
+     * @param title      标题。
+     * @param fileName   文件名。
+     * @param url        文件URL。
+     * @param id         完成通知ID。
+     * @param biConsumer 完成通知函数。
+     */
+    void uploadVideo(String key, String title, String fileName, String url, String id, BiConsumer<String, String> biConsumer);
 
     /**
      * 获取视频播放URL地址。

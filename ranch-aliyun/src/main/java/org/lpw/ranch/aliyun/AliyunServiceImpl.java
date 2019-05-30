@@ -8,7 +8,6 @@ import com.aliyun.vod.upload.resp.UploadURLStreamResponse;
 import com.aliyun.vod.upload.resp.UploadVideoResponse;
 import com.aliyuncs.DefaultAcsClient;
 import com.aliyuncs.IAcsClient;
-import com.aliyuncs.exceptions.ClientException;
 import com.aliyuncs.profile.DefaultProfile;
 import com.aliyuncs.vod.model.v20170321.GetPlayInfoRequest;
 import com.aliyuncs.vod.model.v20170321.GetPlayInfoResponse;
@@ -24,6 +23,9 @@ import javax.inject.Inject;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.function.BiConsumer;
 
 /**
  * @author lpw
@@ -44,6 +46,7 @@ public class AliyunServiceImpl implements AliyunService {
     private Pagination pagination;
     @Inject
     private AliyunDao aliyunDao;
+    private ExecutorService executorService = Executors.newFixedThreadPool(64);
     private Map<String, IAcsClient> map = new ConcurrentHashMap<>();
 
     @Override
@@ -87,6 +90,11 @@ public class AliyunServiceImpl implements AliyunService {
     }
 
     @Override
+    public void uploadVideo(String key, String title, String file, String id, BiConsumer<String, String> biConsumer) {
+        executorService.submit(() -> biConsumer.accept(id, uploadVideo(key, title, file)));
+    }
+
+    @Override
     public String uploadVideo(String key, String title, String fileName, String url) {
         AliyunModel aliyun = aliyunDao.find(key);
         if (aliyun == null)
@@ -101,6 +109,11 @@ public class AliyunServiceImpl implements AliyunService {
                 uploadURLStreamResponse.getCode(), uploadURLStreamResponse.getMessage());
 
         return null;
+    }
+
+    @Override
+    public void uploadVideo(String key, String title, String fileName, String url, String id, BiConsumer<String, String> biConsumer) {
+        executorService.submit(() -> biConsumer.accept(id, uploadVideo(key, title, fileName, url)));
     }
 
     @Override
