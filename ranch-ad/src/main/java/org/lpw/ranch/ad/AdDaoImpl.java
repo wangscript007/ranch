@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author lpw
@@ -33,8 +34,13 @@ class AdDaoImpl implements AdDao {
     }
 
     @Override
-    public PageList<AdModel> query(String type, int state) {
-        return liteOrm.query(new LiteQuery(AdModel.class).where("c_type=? and c_state=?").order("c_sort"), new Object[]{type, state});
+    public PageList<AdModel> query(Set<String> type, int state) {
+        StringBuilder where = new StringBuilder();
+        List<Object> args = new ArrayList<>();
+        daoHelper.in(where, args, "c_type", type);
+        daoHelper.where(where, args, "c_state", DaoOperation.Equals, state);
+
+        return liteOrm.query(new LiteQuery(AdModel.class).where(where.toString()).order("c_sort"), args.toArray());
     }
 
     @Override

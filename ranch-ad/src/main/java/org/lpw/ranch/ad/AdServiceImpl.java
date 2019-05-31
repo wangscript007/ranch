@@ -9,6 +9,9 @@ import org.lpw.tephra.util.Validator;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * @author lpw
@@ -33,7 +36,17 @@ public class AdServiceImpl implements AdService {
 
     @Override
     public JSONArray publish(String type) {
-        return cache.computeIfAbsent(AdModel.NAME + ":" + type, key -> modelHelper.toJson(adDao.query(type, 1).getList()), false);
+        return cache.computeIfAbsent(AdModel.NAME + ":" + type, key -> {
+            Set<String> set = new HashSet<>();
+            if (!validator.isEmpty(type)) {
+                if (type.contains(","))
+                    set.addAll(Arrays.asList(type.split(",")));
+                else
+                    set.add(type);
+            }
+
+            return modelHelper.toJson(adDao.query(set, 1).getList());
+        }, false);
     }
 
     @Override

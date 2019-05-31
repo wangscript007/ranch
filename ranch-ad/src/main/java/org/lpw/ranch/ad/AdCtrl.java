@@ -26,9 +26,7 @@ public class AdCtrl {
         return adService.query(request.get("type"), request.getAsInt("state"));
     }
 
-    @Execute(name = "publish", validates = {
-            @Validate(validator = Validators.NOT_EMPTY, parameter = "type", failureCode = 1)
-    })
+    @Execute(name = "publish")
     public Object publish() {
         return adService.publish(request.get("type"));
     }
