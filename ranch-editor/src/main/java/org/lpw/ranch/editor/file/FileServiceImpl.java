@@ -112,8 +112,8 @@ public class FileServiceImpl implements FileService, org.lpw.tephra.pdf.MediaWri
         File file = new File(context.getAbsolutePath(temporary.save(uploadReader.getInputStream(),
                 uploadReader.getFileName().substring(uploadReader.getFileName().lastIndexOf('.')).toLowerCase())));
 
-        return upload(uploadReader, type, file, type.equals("pdf") ? pdfReader.pngs(new FileInputStream(file), this, 1.0f,
-                false) : pptxReader.pngs(new FileInputStream(file), this, false));
+        return upload(uploadReader, type, file, type.equals("pdf") ? pdfReader.pngs(new FileInputStream(file), this,
+                1.0f, 0, false) : pptxReader.pngs(new FileInputStream(file), this, false));
     }
 
     @Override
