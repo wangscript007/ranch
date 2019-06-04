@@ -7,7 +7,6 @@ import org.lpw.tephra.util.Validator;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
-import java.util.Map;
 
 /**
  * @author lpw
@@ -36,7 +35,7 @@ public class TemplateServiceImpl implements TemplateService {
     }
 
     @Override
-    public JSONObject send(String key, String receiver, String formId, JSONObject data, Map<String, String> args) {
+    public JSONObject send(String key, String receiver, String formId, JSONObject data, JSONObject args) {
         TemplateModel template = templateDao.find(key);
         if (template == null || template.getState() == 0)
             return new JSONObject();
@@ -53,12 +52,12 @@ public class TemplateServiceImpl implements TemplateService {
         }
     }
 
-    private String getUrl(String url, Map<String, String> map) {
-        if (validator.isEmpty(map))
+    private String getUrl(String url, JSONObject object) {
+        if (validator.isEmpty(object))
             return url;
 
-        for (String key : map.keySet())
-            url = url.replaceAll(key, map.get(key));
+        for (String key : object.keySet())
+            url = url.replaceAll(key, object.getString(key));
 
         return url;
     }

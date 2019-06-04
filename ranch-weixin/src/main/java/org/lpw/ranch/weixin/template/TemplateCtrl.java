@@ -57,7 +57,8 @@ public class TemplateCtrl {
             @Validate(validator = TemplateService.VALIDATOR_EXISTS, parameter = "key", failureCode = 76)
     })
     public Object send() {
-        return templateService.send(request.get("key"), request.get("receiver"), request.get("formId"), request.getAsJsonObject("data"));
+        return templateService.send(request.get("key"), request.get("receiver"), request.get("formId"),
+                request.getAsJsonObject("data"), request.getAsJsonObject("args"));
     }
 
     @Execute(name = "delete", validates = {

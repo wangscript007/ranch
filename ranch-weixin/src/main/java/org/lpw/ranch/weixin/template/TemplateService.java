@@ -2,8 +2,6 @@ package org.lpw.ranch.weixin.template;
 
 import com.alibaba.fastjson.JSONObject;
 
-import java.util.Map;
-
 /**
  * @author lpw
  */
@@ -39,7 +37,7 @@ public interface TemplateService {
      * @param args     链接参数集。
      * @return 发送结果。
      */
-    JSONObject send(String key, String receiver, String formId, JSONObject data, Map<String, String> args);
+    JSONObject send(String key, String receiver, String formId, JSONObject data, JSONObject args);
 
     /**
      * 删除。

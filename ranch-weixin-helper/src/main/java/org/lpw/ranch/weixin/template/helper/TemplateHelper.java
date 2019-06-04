@@ -13,9 +13,10 @@ public interface TemplateHelper {
      * @param receiver 接收者。
      * @param formId   表单ID，小程序必须。
      * @param data     参数集。
+     * @param args     链接参数集。
      * @return 发送结果。
      */
-    JSONObject send(String key, String receiver, String formId, JSONObject data);
+    JSONObject send(String key, String receiver, String formId, JSONObject data, JSONObject args);
 
     /**
      * 设置模板参数值。

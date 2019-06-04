@@ -23,13 +23,14 @@ public class TemplateHelperImpl implements TemplateHelper {
     private String key;
 
     @Override
-    public JSONObject send(String key, String receiver, String formId, JSONObject data) {
+    public JSONObject send(String key, String receiver, String formId, JSONObject data, JSONObject args) {
         Map<String, String> parameter = new HashMap<>();
         parameter.put("key", key);
         parameter.put("receiver", receiver);
         if (!validator.isEmpty(formId))
             parameter.put("formId", formId);
         parameter.put("data", data.toJSONString());
+        parameter.put("args", data.toJSONString());
 
         return carousel.service(this.key + ".template.send", null, parameter, false, JSONObject.class);
     }
