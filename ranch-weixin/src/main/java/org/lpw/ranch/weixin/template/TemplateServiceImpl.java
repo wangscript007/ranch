@@ -3,15 +3,19 @@ package org.lpw.ranch.weixin.template;
 import com.alibaba.fastjson.JSONObject;
 import org.lpw.ranch.util.Pagination;
 import org.lpw.ranch.weixin.WeixinService;
+import org.lpw.tephra.util.Validator;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
+import java.util.Map;
 
 /**
  * @author lpw
  */
 @Service(TemplateModel.NAME + ".service")
 public class TemplateServiceImpl implements TemplateService {
+    @Inject
+    private Validator validator;
     @Inject
     private Pagination pagination;
     @Inject
@@ -32,21 +36,31 @@ public class TemplateServiceImpl implements TemplateService {
     }
 
     @Override
-    public JSONObject send(String key, String receiver, String formId, JSONObject data) {
+    public JSONObject send(String key, String receiver, String formId, JSONObject data, Map<String, String> args) {
         TemplateModel template = templateDao.find(key);
         if (template == null || template.getState() == 0)
             return new JSONObject();
 
         switch (template.getType()) {
             case 0:
-                return weixinService.sendTemplateMessage(template.getWeixinKey(), receiver, template.getTemplateId(), template.getUrl(),
-                        template.getMiniAppId(), template.getPage(), data, template.getColor());
+                return weixinService.sendTemplateMessage(template.getWeixinKey(), receiver, template.getTemplateId(),
+                        getUrl(template.getUrl(), args), template.getMiniAppId(), getUrl(template.getPage(), args), data, template.getColor());
             case 1:
                 return weixinService.sendMiniTemplateMessage(template.getWeixinKey(), receiver, template.getTemplateId(),
-                        template.getPage(), formId, data, template.getKeyword());
+                        getUrl(template.getPage(), args), formId, data, template.getKeyword());
             default:
                 return new JSONObject();
         }
+    }
+
+    private String getUrl(String url, Map<String, String> map) {
+        if (validator.isEmpty(map))
+            return url;
+
+        for (String key : map.keySet())
+            url = url.replaceAll(key, map.get(key));
+
+        return url;
     }
 
     @Override
