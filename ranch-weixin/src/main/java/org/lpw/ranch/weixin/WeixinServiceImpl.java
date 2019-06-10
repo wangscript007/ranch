@@ -551,7 +551,7 @@ public class WeixinServiceImpl implements WeixinService, ContextRefreshedListene
         map.put("notify_url", root + "/weixin/notice");
         map.put("trade_type", type);
         if (type.equals("JSAPI"))
-            map.put("openid", openId);
+            map.put("openid", infoService.findOpenId(weixin.getAppId(), openId));
         map.put("sign", sign(map, weixin.getMchKey()));
 
         StringBuilder xml = new StringBuilder("<xml>");
