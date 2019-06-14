@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import org.lpw.ranch.util.Pagination;
 import org.lpw.ranch.weixin.WeixinModel;
 import org.lpw.ranch.weixin.WeixinService;
+import org.lpw.ranch.weixin.info.InfoService;
 import org.lpw.tephra.util.Http;
 import org.lpw.tephra.util.Logger;
 import org.lpw.tephra.util.Validator;
@@ -26,6 +27,8 @@ public class ReplyServiceImpl implements ReplyService {
     private Logger logger;
     @Inject
     private WormholeHelper wormholeHelper;
+    @Inject
+    private InfoService infoService;
     @Inject
     private Pagination pagination;
     @Inject
@@ -73,7 +76,7 @@ public class ReplyServiceImpl implements ReplyService {
                     JSONObject article = new JSONObject();
                     article.put("title", reply.getSendTitle());
                     article.put("description", reply.getSendDescription());
-                    article.put("url", reply.getSendUrl());
+                    article.put("url", formatUrl(reply.getSendUrl(), openId));
                     article.put("picurl", reply.getSendPicurl());
                     JSONArray articles = new JSONArray();
                     articles.add(article);
@@ -83,7 +86,7 @@ public class ReplyServiceImpl implements ReplyService {
                     JSONObject link = new JSONObject();
                     link.put("title", reply.getSendTitle());
                     link.put("description", reply.getSendDescription());
-                    link.put("url", reply.getSendUrl());
+                    link.put("url", formatUrl(reply.getSendUrl(), openId));
                     link.put("thumb_url", reply.getSendPicurl());
                     object.put("link", link);
                     break;
@@ -92,7 +95,7 @@ public class ReplyServiceImpl implements ReplyService {
                     if (!validator.isEmpty(reply.getSendAppId()))
                         miniprogrampage.put("appid", reply.getSendAppId());
                     miniprogrampage.put("title", reply.getSendTitle());
-                    miniprogrampage.put("pagepath", reply.getSendUrl());
+                    miniprogrampage.put("pagepath", formatUrl(reply.getSendUrl(), openId));
                     miniprogrampage.put("thumb_media_id", reply.getSendPicurl());
                     object.put("miniprogrampage", miniprogrampage);
                     break;
@@ -108,5 +111,9 @@ public class ReplyServiceImpl implements ReplyService {
                 return string;
             });
         });
+    }
+
+    private String formatUrl(String url, String openId) {
+        return url.replaceAll("OPEN_ID", openId);
     }
 }
