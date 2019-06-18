@@ -2,6 +2,7 @@ package org.lpw.ranch.weixin.reply;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import org.lpw.ranch.popular.helper.PopularHelper;
 import org.lpw.ranch.util.Pagination;
 import org.lpw.ranch.weixin.WeixinModel;
 import org.lpw.ranch.weixin.WeixinService;
@@ -28,11 +29,13 @@ public class ReplyServiceImpl implements ReplyService {
     @Inject
     private WormholeHelper wormholeHelper;
     @Inject
-    private InfoService infoService;
-    @Inject
     private Pagination pagination;
     @Inject
+    private PopularHelper popularHelper;
+    @Inject
     private WeixinService weixinService;
+    @Inject
+    private InfoService infoService;
     @Inject
     private ReplyDao replyDao;
 
@@ -111,6 +114,9 @@ public class ReplyServiceImpl implements ReplyService {
                 return string;
             });
         });
+
+        if (receiveType.equals("text"))
+            popularHelper.increase(ReplyModel.NAME + ".text", receiveMessage);
     }
 
     private String formatUrl(String url, String openId) {

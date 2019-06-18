@@ -31,6 +31,11 @@
         </dependency>
         <dependency>
             <groupId>org.lpw.ranch</groupId>
+            <artifactId>ranch-popular-helper</artifactId>
+            <version>${version.ranch}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.lpw.ranch</groupId>
             <artifactId>ranch-test</artifactId>
             <version>${version.ranch}</version>
             <scope>test</scope>
