@@ -65,6 +65,8 @@ public class ChromeServiceImpl implements ChromeService {
     public JSONObject save(ChromeModel chrome) {
         ChromeModel model = chromeDao.findByKey(chrome.getKey());
         chrome.setId(model == null ? null : model.getId());
+        if (validator.isEmpty(chrome.getPages()))
+            chrome.setPages("");
         chromeDao.save(chrome);
         cache.remove(CACHE + chrome.getKey());
 
