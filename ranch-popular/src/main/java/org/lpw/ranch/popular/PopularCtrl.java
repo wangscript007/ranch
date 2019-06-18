@@ -45,4 +45,17 @@ public class PopularCtrl {
 
         return "";
     }
+
+    @Execute(name = "increase", validates = {
+            @Validate(validator = Validators.NOT_EMPTY, parameter = "key", failureCode = 5),
+            @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "key", failureCode = 6),
+            @Validate(validator = Validators.NOT_EMPTY, parameter = "value", failureCode = 7),
+            @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "value", failureCode = 8),
+            @Validate(validator = Validators.SIGN)
+    })
+    public Object increase() {
+        popularService.increase(request.get("key"), request.get("value"));
+
+        return "";
+    }
 }
