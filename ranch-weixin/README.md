@@ -78,7 +78,7 @@
 |event|事件，如关注、扫码等。|
 |text|文本，用户在公众号输入文本信息。|
 
-> 接收的`文本`信息会保存到[热门](../ranch-popular/)模块中。
+> 接收的`文本`信息会保存到[热门](../ranch-popular/)模块中，key为`ranch.weixin.reply.text`。
 
 事件消息
 
