@@ -11,4 +11,6 @@ public interface QrcodeService {
     JSONObject find(String key, String user, String name);
 
     QrcodeModel create(String key, String user, String name, String scene);
+
+    void delete(String id);
 }

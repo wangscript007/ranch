@@ -74,4 +74,9 @@ public class QrcodeServiceImpl implements QrcodeService {
 
         return qrcode;
     }
+
+    @Override
+    public void delete(String id) {
+        qrcodeDao.delete(id);
+    }
 }

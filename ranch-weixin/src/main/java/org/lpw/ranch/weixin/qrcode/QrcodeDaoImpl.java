@@ -49,4 +49,9 @@ class QrcodeDaoImpl implements QrcodeDao {
     public void save(QrcodeModel qrcode) {
         liteOrm.save(qrcode);
     }
+
+    @Override
+    public void delete(String id) {
+        liteOrm.deleteById(QrcodeModel.class, id);
+    }
 }

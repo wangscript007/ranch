@@ -161,7 +161,7 @@
 |appId|char(100)|App ID。|
 |user|char(36)|用户ID。|
 |name|char(100)|名称。|
-|scene|char(100)|场景。|
+|scene|char(64)|场景。|
 |ticket|char(100)|Ticket。|
 |url|char(100)|微信URL。|
 |time|char(100)|时间。|
@@ -171,3 +171,5 @@
 [查找](doc/qrcode/find.md)
 
 [新增](doc/qrcode/create.md)
+
+[删除](doc/qrcode/delete.md)

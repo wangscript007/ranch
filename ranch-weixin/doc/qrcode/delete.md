@@ -1,17 +1,14 @@
-# 新增
+# 删除
 
 请求
-- Service Key - ranch.weixin.qrcode.create
-- URI - /weixin/qrcode/create
+- Service Key - ranch.weixin.qrcode.delete
+- URI - /weixin/qrcode/delete
 
 参数
 
 |名称|类型|必须|说明|
 |---|---|---|---|
-|key|char(100)|是|微信key。|
-|user|char(36)|是|用户ID。|
-|name|char(100)|是|名称。|
-|scene|char(64)|是|场景。|
+|id|char(36)|是|ID值。|
 
 返回值
 ```

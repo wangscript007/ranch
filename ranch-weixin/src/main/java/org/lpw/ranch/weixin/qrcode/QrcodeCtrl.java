@@ -48,7 +48,7 @@ public class QrcodeCtrl {
             @Validate(validator = Validators.NOT_EMPTY, parameter = "name", failureCode = 92),
             @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "name", failureCode = 93),
             @Validate(validator = Validators.NOT_EMPTY, parameter = "scene", failureCode = 94),
-            @Validate(validator = Validators.MAX_LENGTH, number = {100}, parameter = "scene", failureCode = 95),
+            @Validate(validator = Validators.MAX_LENGTH, number = {64}, parameter = "scene", failureCode = 95),
             @Validate(validator = Validators.SIGN),
             @Validate(validator = WeixinService.VALIDATOR_EXISTS, parameter = "key", failureCode = 52)
     })
@@ -57,5 +57,14 @@ public class QrcodeCtrl {
 
         return qrcode == null ? templates.get().failure(2496, message.get(QrcodeModel.NAME + ".create.failure"),
                 null, null) : "";
+    }
+
+    @Execute(name = "delete", validates = {
+            @Validate(validator = Validators.SIGN)
+    })
+    public Object delete() {
+        qrcodeService.delete(request.get("id"));
+
+        return "";
     }
 }

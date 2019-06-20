@@ -13,4 +13,6 @@ interface QrcodeDao {
     QrcodeModel find(String key, String user, String name);
 
     void save(QrcodeModel qrcode);
+
+    void delete(String id);
 }
