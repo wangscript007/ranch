@@ -39,6 +39,7 @@ public interface ReplyService {
      * @param openId         用户Open ID。
      * @param receiveType    接收类型。
      * @param receiveMessage 接收消息。
+     * @param eventKey       事件key。
      */
-    void send(WeixinModel weixin, String openId, String receiveType, String receiveMessage);
+    void send(WeixinModel weixin, String openId, String receiveType, String receiveMessage, String eventKey);
 }

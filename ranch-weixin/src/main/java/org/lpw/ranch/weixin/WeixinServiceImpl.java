@@ -230,7 +230,8 @@ public class WeixinServiceImpl implements WeixinService, ContextRefreshedListene
         if (msgType.equals("event"))
             event(weixin, string);
         else if (msgType.equals("text"))
-            replyService.send(weixin, getOpenId(string), "text", getValue(string, "<Content><![CDATA[", "]]></Content>"));
+            replyService.send(weixin, getOpenId(string), "text",
+                    getValue(string, "<Content><![CDATA[", "]]></Content>"), null);
     }
 
     private void event(WeixinModel weixin, String string) {
@@ -241,11 +242,12 @@ public class WeixinServiceImpl implements WeixinService, ContextRefreshedListene
             return;
         }
 
+        String eventKey = getValue(string, "<EventKey><![CDATA[qrscene_", "]]></EventKey>");
         if (event.equals("subscribe") || event.equals("SCAN"))
-            signIn(weixin, string, event);
+            signIn(weixin, string, event, eventKey);
     }
 
-    private void signIn(WeixinModel weixin, String string, String event) {
+    private void signIn(WeixinModel weixin, String string, String event, String eventKey) {
         String openId = getOpenId(string);
         if (openId == null) {
             logger.warn(null, "无法获得微信消息[{}]中Open ID信息！", string);
@@ -253,7 +255,7 @@ public class WeixinServiceImpl implements WeixinService, ContextRefreshedListene
             return;
         }
 
-        replyService.send(weixin, openId, "event", event);
+        replyService.send(weixin, openId, "event", event, eventKey);
 
         Map<String, String> map = new HashMap<>();
         map.put("openid", openId);
