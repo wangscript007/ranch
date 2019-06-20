@@ -129,3 +129,24 @@
 [发送](doc/template/send.md)
 
 [删除](doc/template/delete.md)
+
+## 永久素材
+
+属性
+
+|属性|类型|说明|
+|---|---|---|
+|key|char(100)|微信key。|
+|appId|char(100)|App ID。|
+|type|char(100)|类型：image-图片；voice-语音；video-视频；thumb-缩略图。|
+|name|char(100)|名称。|
+|mediaId|char(100)|媒体ID。|
+|url|char(100)|微信URL。|
+|uri|char(100)|文件URI。|
+|time|char(100)|时间。|
+
+[检索](doc/media/query.md)
+
+[新增](doc/media/save.md)
+
+[删除](doc/media/delete.md)

@@ -69,8 +69,8 @@ public class WeixinCtrl {
 
     @Execute(name = "refresh-access-token", validates = {
             @Validate(validator = Validators.NOT_EMPTY, parameter = "key", failureCode = 2),
-            @Validate(validator = WeixinService.VALIDATOR_EXISTS, parameter = "key", failureCode = 52),
-            @Validate(validator = Validators.SIGN)
+            @Validate(validator = Validators.SIGN),
+            @Validate(validator = WeixinService.VALIDATOR_EXISTS, parameter = "key", failureCode = 52)
     })
     public Object refreshAccessToken() {
         weixinService.refreshAccessToken(request.get("key"));
@@ -80,8 +80,8 @@ public class WeixinCtrl {
 
     @Execute(name = "menu", validates = {
             @Validate(validator = Validators.NOT_EMPTY, parameter = "key", failureCode = 2),
-            @Validate(validator = WeixinService.VALIDATOR_EXISTS, parameter = "key", failureCode = 52),
-            @Validate(validator = Validators.SIGN)
+            @Validate(validator = Validators.SIGN),
+            @Validate(validator = WeixinService.VALIDATOR_EXISTS, parameter = "key", failureCode = 52)
     })
     public Object menu() {
         return weixinService.menu(request.get("key"));
