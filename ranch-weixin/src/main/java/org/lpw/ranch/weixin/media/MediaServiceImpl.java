@@ -68,7 +68,7 @@ public class MediaServiceImpl implements MediaService {
             return string;
         });
         io.delete(file);
-        if (object == null)
+        if (object == null || !object.containsKey("media_id"))
             return;
 
         media.setId(null);

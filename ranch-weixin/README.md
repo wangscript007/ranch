@@ -147,6 +147,27 @@
 
 [检索](doc/media/query.md)
 
-[新增](doc/media/save.md)
+[新增](doc/media/create.md)
 
 [删除](doc/media/delete.md)
+
+## 公众号二维码
+
+属性
+
+|属性|类型|说明|
+|---|---|---|
+|key|char(100)|微信key。|
+|appId|char(100)|App ID。|
+|user|char(36)|用户ID。|
+|name|char(100)|名称。|
+|scene|char(100)|场景。|
+|ticket|char(100)|Ticket。|
+|url|char(100)|微信URL。|
+|time|char(100)|时间。|
+
+[检索](doc/qrcode/query.md)
+
+[查找](doc/qrcode/find.md)
+
+[新增](doc/qrcode/create.md)
