@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.lpw.ranch.lock.LockHelper;
 import org.lpw.ranch.payment.helper.PaymentHelper;
+import org.lpw.ranch.temporary.Temporary;
 import org.lpw.ranch.weixin.info.InfoService;
 import org.lpw.ranch.weixin.reply.ReplyService;
 import org.lpw.tephra.bean.ContextRefreshedListener;
@@ -102,6 +103,8 @@ public class WeixinServiceImpl implements WeixinService, ContextRefreshedListene
     private Header header;
     @Inject
     private Session session;
+    @Inject
+    private Temporary temporary;
     @Inject
     private LockHelper lockHelper;
     @Inject
@@ -649,7 +652,7 @@ public class WeixinServiceImpl implements WeixinService, ContextRefreshedListene
         object.put("line_color", lineColor);
         object.put("is_hyaline", hyaline);
         Map<String, String> responseHeaders = new HashMap<>();
-        File file = new File(context.getAbsoluteRoot() + "/" + generator.random(32) + ".jpg");
+        File file = new File(context.getAbsolutePath(temporary.newSavePath(".jpg")));
         try {
             OutputStream outputStream = new FileOutputStream(file);
             http.post("https://api.weixin.qq.com/wxa/getwxacodeunlimit?access_token="
