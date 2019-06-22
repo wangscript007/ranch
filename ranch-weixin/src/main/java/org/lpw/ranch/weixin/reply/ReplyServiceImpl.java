@@ -14,6 +14,8 @@ import org.lpw.tephra.wormhole.WormholeHelper;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
+import java.util.Optional;
+import java.util.Set;
 
 /**
  * @author lpw
@@ -36,6 +38,8 @@ public class ReplyServiceImpl implements ReplyService {
     private WeixinService weixinService;
     @Inject
     private InfoService infoService;
+    @Inject
+    private Optional<Set<ReplyAlter>> alters;
     @Inject
     private ReplyDao replyDao;
 
@@ -60,6 +64,7 @@ public class ReplyServiceImpl implements ReplyService {
     @Override
     public void send(WeixinModel weixin, String openId, String receiveType, String receiveMessage, String eventKey) {
         replyDao.query(weixin.getKey(), receiveType, receiveMessage, 1, 0, 0).getList().forEach(reply -> {
+            alters.ifPresent(set -> set.forEach(alter -> alter.alter(weixin, openId, receiveType, receiveMessage, eventKey, reply)));
             JSONObject object = new JSONObject();
             object.put("touser", openId);
             object.put("msgtype", reply.getSendType());
