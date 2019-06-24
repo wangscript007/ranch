@@ -216,12 +216,19 @@ public class WeixinServiceImpl implements WeixinService, ContextRefreshedListene
 
     @Override
     public void notice(String appId, String string) {
+        if (validator.isEmpty(string))
+            return;
+
         WeixinModel weixin = weixinDao.findByAppId(appId);
         if (weixin == null) {
             logger.warn(null, "无法获得微信[{}:{}]配置！", appId, string);
 
             return;
         }
+
+        string = string.replaceAll(">\\s+<", "><");
+        if (logger.isDebugEnable())
+            logger.debug("收到微信[{}:{}]通知[{}]。", weixin.getKey(), weixin.getAppId(), string);
 
         String msgType = getValue(string, "<MsgType><![CDATA[", "]]></MsgType>");
         if (msgType == null) {
