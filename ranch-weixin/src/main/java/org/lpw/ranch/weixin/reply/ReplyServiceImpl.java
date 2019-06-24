@@ -63,6 +63,10 @@ public class ReplyServiceImpl implements ReplyService {
 
     @Override
     public void send(WeixinModel weixin, String openId, String receiveType, String receiveMessage, String eventKey) {
+        if (logger.isDebugEnable())
+            logger.debug("自动回复微信[{}:{}:{}]通知[{}:{}:{}]。", weixin.getKey(), weixin.getAppId(), openId,
+                    receiveType, receiveMessage, eventKey);
+
         replyDao.query(weixin.getKey(), receiveType, receiveMessage, 1, 0, 0).getList().forEach(reply -> {
             alters.ifPresent(set -> set.forEach(alter -> alter.alter(weixin, openId, receiveType, receiveMessage, eventKey, reply)));
             JSONObject object = new JSONObject();
