@@ -252,7 +252,9 @@ public class WeixinServiceImpl implements WeixinService, ContextRefreshedListene
             return;
         }
 
-        String eventKey = getValue(string, "<EventKey><![CDATA[qrscene_", "]]></EventKey>");
+        String eventKey = getValue(string, "<EventKey><![CDATA[", "]]></EventKey>");
+        if (eventKey != null && eventKey.startsWith("qrscene_"))
+            eventKey = eventKey.substring(8);
         if (event.equals("subscribe") || event.equals("SCAN"))
             signIn(weixin, string, event, eventKey);
     }
