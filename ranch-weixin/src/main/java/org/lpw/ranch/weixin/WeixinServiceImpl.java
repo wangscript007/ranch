@@ -418,18 +418,16 @@ public class WeixinServiceImpl implements WeixinService, ContextRefreshedListene
         if (object.isEmpty())
             return object;
 
-        if (validator.isEmpty(iv) || validator.isEmpty(message)) {
-            saveInfo(weixin, object, object.getString("openid"));
-
-            return object;
-        }
-
         String sessionKey = session.get(SESSION_MINI_SESSION_KEY);
-        object.putAll(decryptAesCbcPkcs7(sessionKey, iv, message));
+        if (!validator.isEmpty(iv) && !validator.isEmpty(message))
+            object.putAll(decryptAesCbcPkcs7(sessionKey, iv, message));
         if (!validator.isEmpty(iv2) && !validator.isEmpty(message2))
             object.putAll(decryptAesCbcPkcs7(sessionKey, iv2, message2));
-        saveInfo(weixin, object, object.getString("openid"));
+        String openId = object.getString("openid");
+        if (!object.containsKey("unionid") && getInfoFail(weixin, object, openId))
+            return new JSONObject();
 
+        saveInfo(weixin, object, openId);
         if (logger.isDebugEnable())
             logger.debug("获得微信小程序用户认证信息[{}:{}:{}]。", key, code, object);
 
@@ -446,9 +444,6 @@ public class WeixinServiceImpl implements WeixinService, ContextRefreshedListene
 
             return new JSONObject();
         }
-
-        if (getInfoFail(weixin, object, object.getString("openid")))
-            return new JSONObject();
 
         session.set(SESSION_MINI, object);
         session.set(SESSION_MINI_SESSION_KEY, object.getString("session_key"));
