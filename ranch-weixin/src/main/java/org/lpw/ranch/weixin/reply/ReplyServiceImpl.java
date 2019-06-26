@@ -73,7 +73,8 @@ public class ReplyServiceImpl implements ReplyService {
         map.put("openId", openId);
         map.put("receiveType", receiveType);
         map.put("receiveMessage", receiveMessage);
-        map.put("eventKey", eventKey);
+        if (eventKey != null)
+            map.put("eventKey", eventKey);
         alters.ifPresent(set -> set.forEach(alter -> alter.alter(weixin, map)));
 
         replyDao.query(weixin.getKey(), map.get("receiveType"), map.get("receiveMessage"), 1, 0, 0).getList().forEach(reply -> {
