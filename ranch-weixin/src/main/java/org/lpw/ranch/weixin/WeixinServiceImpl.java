@@ -249,6 +249,10 @@ public class WeixinServiceImpl implements WeixinService, ContextRefreshedListene
         else if (msgType.equals("text"))
             replyService.send(weixin, getOpenId(string), "text",
                     getValue(string, "<Content><![CDATA[", "]]></Content>"), null);
+        else if (msgType.equals("miniprogrampage"))
+            replyService.send(weixin, getOpenId(string), "miniprogrampage",
+                    getValue(string, "<AppId><![CDATA[", "]]></AppId>"),
+                    getValue(string, "<PagePath><![CDATA[", "]]></PagePath>"));
     }
 
     private void event(WeixinModel weixin, String string) {
