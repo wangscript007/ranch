@@ -30,6 +30,8 @@ import org.lpw.tephra.util.Json;
 import org.lpw.tephra.util.Logger;
 import org.lpw.tephra.util.Numeric;
 import org.lpw.tephra.util.QrCode;
+import org.lpw.tephra.util.Thread;
+import org.lpw.tephra.util.TimeUnit;
 import org.lpw.tephra.util.Validator;
 import org.lpw.tephra.util.Xml;
 import org.lpw.tephra.wormhole.WormholeHelper;
@@ -84,6 +86,8 @@ public class WeixinServiceImpl implements WeixinService, ContextRefreshedListene
     @Inject
     private Sign sign;
     @Inject
+    private Thread thread;
+    @Inject
     private QrCode qrCode;
     @Inject
     private Coder coder;
@@ -123,6 +127,8 @@ public class WeixinServiceImpl implements WeixinService, ContextRefreshedListene
     private String synchUrl;
     @Value("${" + WeixinModel.NAME + ".synch.key:}")
     private String synchKey;
+    @Value("${" + WeixinModel.NAME + ".require-union-id:false}")
+    private boolean requireUnionId;
     @Value("${" + WeixinModel.NAME + ".qr-code.size:256}")
     private int qrCodeSize;
     @Value("${" + WeixinModel.NAME + ".qr-code.logo:}")
@@ -268,22 +274,9 @@ public class WeixinServiceImpl implements WeixinService, ContextRefreshedListene
         }
 
         replyService.send(weixin, openId, "event", event, eventKey);
-
-        Map<String, String> map = new HashMap<>();
-        map.put("openid", openId);
-        JSONObject object = byAccessToken(weixin, accessToken -> {
-            map.put("access_token", weixin.getAccessToken());
-            String str = http.get("https://api.weixin.qq.com/cgi-bin/user/info", null, map);
-            if (logger.isInfoEnable())
-                logger.info("获取微信用户信息[{}:{}]。", map, str);
-
-            return str;
-        });
-        if (object == null || object.containsKey("errcode") || object.size() <= 2) {
-            logger.warn(null, "获取微信[{}]用户[{}:{}]信息失败！", weixin.getKey(), map, object);
-
+        JSONObject object = new JSONObject();
+        if (getInfoFail(weixin, object, openId))
             return;
-        }
 
         saveInfo(weixin, object, openId);
         String ticket = getValue(string, "<Ticket><![CDATA[", "]]></Ticket>");
@@ -450,6 +443,9 @@ public class WeixinServiceImpl implements WeixinService, ContextRefreshedListene
             return new JSONObject();
         }
 
+        if (getInfoFail(weixin, object, object.getString("openid")))
+            return new JSONObject();
+
         session.set(SESSION_MINI, object);
         session.set(SESSION_MINI_SESSION_KEY, object.getString("session_key"));
         object.remove("session_key");
@@ -466,6 +462,29 @@ public class WeixinServiceImpl implements WeixinService, ContextRefreshedListene
         map.put("grant_type", "authorization_code");
 
         return map;
+    }
+
+    private boolean getInfoFail(WeixinModel weixin, JSONObject object, String openId) {
+        for (int i = 0; i < 5; i++) {
+            Map<String, String> map = new HashMap<>();
+            map.put("openid", openId);
+            JSONObject obj = byAccessToken(weixin, accessToken -> {
+                map.put("access_token", weixin.getAccessToken());
+
+                return http.get("https://api.weixin.qq.com/cgi-bin/user/info", null, map);
+            });
+            if (obj == null || obj.containsKey("errcode") || obj.size() <= 2)
+                logger.warn(null, "获取微信[{}]用户[{}:{}]信息失败！", weixin.getKey(), map, obj);
+            else if (!requireUnionId || obj.containsKey("unionid")) {
+                object.putAll(obj);
+
+                return false;
+            }
+
+            thread.sleep(1, TimeUnit.Second);
+        }
+
+        return true;
     }
 
     private void saveInfo(WeixinModel weixin, JSONObject object, String openId) {
