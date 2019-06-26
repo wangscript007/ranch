@@ -23,6 +23,14 @@ public interface InfoService {
     String findOpenId(String appId, String id);
 
     /**
+     * 查找信息。
+     *
+     * @param openId Open ID。
+     * @return 信息，不存在则返回null。
+     */
+    InfoModel find(String openId);
+
+    /**
      * 保存详情信息。
      *
      * @param key     引用KEY。

@@ -6,6 +6,7 @@ import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.lpw.ranch.lock.LockHelper;
 import org.lpw.ranch.payment.helper.PaymentHelper;
 import org.lpw.ranch.temporary.Temporary;
+import org.lpw.ranch.weixin.info.InfoModel;
 import org.lpw.ranch.weixin.info.InfoService;
 import org.lpw.ranch.weixin.reply.ReplyService;
 import org.lpw.tephra.bean.ContextRefreshedListener;
@@ -465,6 +466,13 @@ public class WeixinServiceImpl implements WeixinService, ContextRefreshedListene
     }
 
     private boolean getInfoFail(WeixinModel weixin, JSONObject object, String openId) {
+        InfoModel info = infoService.find(openId);
+        if (info != null && !validator.isEmpty(info.getUnionId())) {
+            object.put("unionid", info.getUnionId());
+
+            return false;
+        }
+
         for (int i = 0; i < 5; i++) {
             Map<String, String> map = new HashMap<>();
             map.put("openid", openId);

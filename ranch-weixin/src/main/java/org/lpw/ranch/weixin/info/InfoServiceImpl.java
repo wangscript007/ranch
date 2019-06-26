@@ -60,6 +60,11 @@ public class InfoServiceImpl implements InfoService, MinuteJob {
     }
 
     @Override
+    public InfoModel find(String openId) {
+        return infoDao.find(openId);
+    }
+
+    @Override
     public String save(String key, String appId, String unionId, String openId) {
         if (validator.isEmpty(openId))
             return null;
