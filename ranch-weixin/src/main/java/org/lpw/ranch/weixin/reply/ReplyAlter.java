@@ -2,6 +2,8 @@ package org.lpw.ranch.weixin.reply;
 
 import org.lpw.ranch.weixin.WeixinModel;
 
+import java.util.Map;
+
 /**
  * 回复修改器。
  *
@@ -11,12 +13,17 @@ public interface ReplyAlter {
     /**
      * 修改回复。
      *
-     * @param weixin         微信配置。
-     * @param openId         用户Open ID。
-     * @param receiveType    接收类型。
-     * @param receiveMessage 接收消息。
-     * @param eventKey       事件key。
-     * @param reply          回复。
+     * @param weixin 微信配置。
+     * @param map    参数集。
      */
-    void alter(WeixinModel weixin, String openId, String receiveType, String receiveMessage, String eventKey, ReplyModel reply);
+    void alter(WeixinModel weixin, Map<String, String> map);
+
+    /**
+     * 修改回复。
+     *
+     * @param weixin 微信配置。
+     * @param map    参数集。
+     * @param reply  回复。
+     */
+    void alter(WeixinModel weixin, Map<String, String> map, ReplyModel reply);
 }

@@ -14,6 +14,8 @@ import org.lpw.tephra.wormhole.WormholeHelper;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
@@ -67,8 +69,15 @@ public class ReplyServiceImpl implements ReplyService {
             logger.debug("自动回复微信[{}:{}:{}]通知[{}:{}:{}]。", weixin.getKey(), weixin.getAppId(), openId,
                     receiveType, receiveMessage, eventKey);
 
-        replyDao.query(weixin.getKey(), receiveType, receiveMessage, 1, 0, 0).getList().forEach(reply -> {
-            alters.ifPresent(set -> set.forEach(alter -> alter.alter(weixin, openId, receiveType, receiveMessage, eventKey, reply)));
+        Map<String, String> map = new HashMap<>();
+        map.put("openId", openId);
+        map.put("receiveType", receiveType);
+        map.put("receiveMessage", receiveMessage);
+        map.put("eventKey", eventKey);
+        alters.ifPresent(set -> set.forEach(alter -> alter.alter(weixin, map)));
+
+        replyDao.query(weixin.getKey(), map.get("receiveType"), map.get("receiveMessage"), 1, 0, 0).getList().forEach(reply -> {
+            alters.ifPresent(set -> set.forEach(alter -> alter.alter(weixin, map, reply)));
             JSONObject object = new JSONObject();
             object.put("touser", openId);
             object.put("msgtype", reply.getSendType());
