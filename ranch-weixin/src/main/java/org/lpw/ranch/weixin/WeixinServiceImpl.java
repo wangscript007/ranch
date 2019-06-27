@@ -244,14 +244,18 @@ public class WeixinServiceImpl implements WeixinService, ContextRefreshedListene
             return;
         }
 
-        if (msgType.equals("event"))
-            event(weixin, string);
-        else if (msgType.equals("text"))
-            replyService.send(weixin, getOpenId(string), "text",
-                    getValue(string, "<Content><![CDATA[", "]]></Content>"), null);
-        else if (msgType.equals("miniprogrampage"))
-            replyService.send(weixin, getOpenId(string), "miniprogrampage",
-                    getValue(string, "<PagePath><![CDATA[", "]]></PagePath>"), null);
+        switch (msgType) {
+            case "event":
+                event(weixin, string);
+                break;
+            case "text":
+                replyService.send(weixin, getOpenId(string), "text",
+                        getValue(string, "<Content><![CDATA[", "]]></Content>"), null);
+                break;
+            case "miniprogrampage":
+                replyService.send(weixin, getOpenId(string), "miniprogrampage",
+                        getValue(string, "<PagePath><![CDATA[", "]]></PagePath>"), null);
+        }
     }
 
     private void event(WeixinModel weixin, String string) {
@@ -309,6 +313,36 @@ public class WeixinServiceImpl implements WeixinService, ContextRefreshedListene
         int suffixIndexOf = string.indexOf(suffix);
 
         return prefixIndexOf == -1 || suffixIndexOf == -1 ? null : string.substring(prefixIndexOf + prefix.length(), suffixIndexOf);
+    }
+
+    private boolean getInfoFail(WeixinModel weixin, JSONObject object, String openId) {
+        InfoModel info = infoService.find(openId);
+        if (info != null && !validator.isEmpty(info.getUnionId())) {
+            object.put("unionid", info.getUnionId());
+
+            return false;
+        }
+
+        for (int i = 0; i < 5; i++) {
+            Map<String, String> map = new HashMap<>();
+            map.put("openid", openId);
+            JSONObject obj = byAccessToken(weixin, accessToken -> {
+                map.put("access_token", weixin.getAccessToken());
+
+                return http.get("https://api.weixin.qq.com/cgi-bin/user/info", null, map);
+            });
+            if (obj == null || obj.containsKey("errcode") || obj.size() <= 2)
+                logger.warn(null, "获取微信[{}]用户[{}:{}]信息失败！", weixin.getKey(), map, obj);
+            else if (!requireUnionId || obj.containsKey("unionid")) {
+                object.putAll(obj);
+
+                return false;
+            }
+
+            thread.sleep(1, TimeUnit.Second);
+        }
+
+        return true;
     }
 
     @Override
@@ -423,10 +457,7 @@ public class WeixinServiceImpl implements WeixinService, ContextRefreshedListene
             object.putAll(decryptAesCbcPkcs7(sessionKey, iv, message));
         if (!validator.isEmpty(iv2) && !validator.isEmpty(message2))
             object.putAll(decryptAesCbcPkcs7(sessionKey, iv2, message2));
-        String openId = object.getString("openid");
-        if (!object.containsKey("unionid") && getInfoFail(weixin, object, openId))
-            return new JSONObject();
-
+        String openId = object.getString(object.containsKey("openid") ? "openid" : "openId");
         saveInfo(weixin, object, openId);
         if (logger.isDebugEnable())
             logger.debug("获得微信小程序用户认证信息[{}:{}:{}]。", key, code, object);
@@ -463,38 +494,9 @@ public class WeixinServiceImpl implements WeixinService, ContextRefreshedListene
         return map;
     }
 
-    private boolean getInfoFail(WeixinModel weixin, JSONObject object, String openId) {
-        InfoModel info = infoService.find(openId);
-        if (info != null && !validator.isEmpty(info.getUnionId())) {
-            object.put("unionid", info.getUnionId());
-
-            return false;
-        }
-
-        for (int i = 0; i < 5; i++) {
-            Map<String, String> map = new HashMap<>();
-            map.put("openid", openId);
-            JSONObject obj = byAccessToken(weixin, accessToken -> {
-                map.put("access_token", weixin.getAccessToken());
-
-                return http.get("https://api.weixin.qq.com/cgi-bin/user/info", null, map);
-            });
-            if (obj == null || obj.containsKey("errcode") || obj.size() <= 2)
-                logger.warn(null, "获取微信[{}]用户[{}:{}]信息失败！", weixin.getKey(), map, obj);
-            else if (!requireUnionId || obj.containsKey("unionid")) {
-                object.putAll(obj);
-
-                return false;
-            }
-
-            thread.sleep(1, TimeUnit.Second);
-        }
-
-        return true;
-    }
-
     private void saveInfo(WeixinModel weixin, JSONObject object, String openId) {
-        String unionId = infoService.save(weixin.getKey(), weixin.getAppId(), object.getString("unionid"), openId);
+        String unionId = infoService.save(weixin.getKey(), weixin.getAppId(),
+                object.getString(object.containsKey("unionid") ? "unionid" : "unionId"), openId);
         if (!validator.isEmpty(unionId) && !object.containsKey("unionid"))
             object.put("unionid", unionId);
     }
@@ -665,8 +667,11 @@ public class WeixinServiceImpl implements WeixinService, ContextRefreshedListene
             Cipher cipher = Cipher.getInstance("AES/CBC/PKCS7Padding", "BC");
             cipher.init(Cipher.DECRYPT_MODE, new SecretKeySpec(coder.decodeBase64(sessionKey), "AES"),
                     new IvParameterSpec(coder.decodeBase64(iv)));
+            String string = new String(cipher.doFinal(coder.decodeBase64(message)));
+            if (logger.isDebugEnable())
+                logger.debug("获得decryptAesCbcPkcs7解密[{}:{}:{}]数据[{}]。", sessionKey, iv, message, string);
 
-            return json.toObject(new String(cipher.doFinal(coder.decodeBase64(message))), false);
+            return json.toObject(string, false);
         } catch (Exception e) {
             logger.warn(e, "解密微信数据[{}:{}:{}]时发生异常！", sessionKey, iv, message);
 
