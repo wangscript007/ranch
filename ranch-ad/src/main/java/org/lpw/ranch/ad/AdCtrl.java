@@ -23,7 +23,7 @@ public class AdCtrl {
             @Validate(validator = Validators.SIGN)
     })
     public Object query() {
-        return adService.query(request.get("type"), request.getAsInt("state"));
+        return adService.query(request.get("type"), request.getAsInt("state", -1));
     }
 
     @Execute(name = "publish")
