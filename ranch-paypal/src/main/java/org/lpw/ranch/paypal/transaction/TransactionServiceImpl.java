@@ -70,8 +70,8 @@ public class TransactionServiceImpl implements TransactionService {
                     return;
 
                 if (purchaseUnit.payments() == null || validator.isEmpty(purchaseUnit.payments().captures())) {
-                    create(paypal, order.id(), purchaseUnit.amount().currencyCode(), purchaseUnit.amount().value(), result,
-                            order.createTime(), order.updateTime());
+//                    create(paypal, order.id(), purchaseUnit.amount().currencyCode(), purchaseUnit.amount().value(), result,
+//                            order.createTime(), order.updateTime());
 
                     return;
                 }
