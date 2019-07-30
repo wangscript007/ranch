@@ -7,7 +7,4 @@
     <groupId>com.aliyun</groupId>
     <artifactId>aliyun-java-vod-upload</artifactId>
     <version>1.4.7</version>
-
-    <name>ranch-aliyun</name>
-    <url>http://www.example.com</url>
 </project>
