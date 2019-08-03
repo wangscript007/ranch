@@ -756,7 +756,7 @@ public class WeixinServiceImpl implements WeixinService, ContextRefreshedListene
         if (!validator.isEmpty(miniAppId)) {
             JSONObject miniprogram = new JSONObject();
             miniprogram.put("appid", miniAppId);
-            miniprogram.put("pagepath", miniPagePath);
+            miniprogram.put("path", miniPagePath);
             object.put("miniprogram", miniprogram);
         }
         object.put("data", data);
