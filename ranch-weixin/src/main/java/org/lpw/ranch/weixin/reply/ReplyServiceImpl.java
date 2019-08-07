@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
@@ -79,7 +80,9 @@ public class ReplyServiceImpl implements ReplyService {
             map.put("eventKey", eventKey);
         alters.ifPresent(set -> set.forEach(alter -> alter.alter(weixin, map)));
 
-        replyDao.query(weixin.getKey(), map.get("receiveType"), map.get("receiveMessage"), 1, 0, 0).getList().forEach(reply -> {
+        List<ReplyModel> list = replyDao.query(weixin.getKey(), map.get("receiveType"), map.get("receiveMessage"),
+                1, 0, 0).getList();
+        list.forEach(reply -> {
             alters.ifPresent(set -> set.forEach(alter -> alter.alter(weixin, map, reply)));
             JSONObject object = new JSONObject();
             object.put("touser", openId);
@@ -138,7 +141,7 @@ public class ReplyServiceImpl implements ReplyService {
 
         if (receiveType.equals("text")) {
             popularHelper.increase(ReplyModel.NAME + ".text", receiveMessage);
-            questions.ifPresent(set -> set.forEach(question -> question.question(openId, receiveMessage)));
+            questions.ifPresent(set -> set.forEach(question -> question.question(openId, receiveMessage, !list.isEmpty())));
         }
     }
 

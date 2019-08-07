@@ -11,6 +11,7 @@ public interface Question {
      *
      * @param openId  Open ID。
      * @param message 内容。
+     * @param reply   是否自动回复。
      */
-    void question(String openId, String message);
+    void question(String openId, String message, boolean reply);
 }
