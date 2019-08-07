@@ -43,6 +43,8 @@ public class ReplyServiceImpl implements ReplyService {
     @Inject
     private Optional<Set<ReplyAlter>> alters;
     @Inject
+    private Optional<Set<Question>> questions;
+    @Inject
     private ReplyDao replyDao;
 
     @Override
@@ -134,8 +136,10 @@ public class ReplyServiceImpl implements ReplyService {
             });
         });
 
-        if (receiveType.equals("text"))
+        if (receiveType.equals("text")) {
             popularHelper.increase(ReplyModel.NAME + ".text", receiveMessage);
+            questions.ifPresent(set -> set.forEach(question -> question.question(openId, receiveMessage)));
+        }
     }
 
     private String formatUrl(String url, String openId, String eventKey) {
