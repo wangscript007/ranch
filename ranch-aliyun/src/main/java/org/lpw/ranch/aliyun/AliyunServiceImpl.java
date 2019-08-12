@@ -129,7 +129,11 @@ public class AliyunServiceImpl implements AliyunService {
             if (validator.isEmpty(playInfoList))
                 return null;
 
-            return playInfoList.get(generator.random(0, playInfoList.size() - 1)).getPlayURL();
+            String url = playInfoList.get(generator.random(0, playInfoList.size() - 1)).getPlayURL();
+            if (logger.isDebugEnable())
+                logger.debug("获取阿里云视频地址[{}:{}]。", videoId, url);
+
+            return url;
         } catch (Throwable throwable) {
             logger.warn(throwable, "获取视频播放URL地址时发生异常！");
 
