@@ -96,7 +96,7 @@ public class ReplyServiceImpl implements ReplyService {
                 case "image":
                 case "mpnews":
                     JSONObject media = new JSONObject();
-                    media.put("media_id", reply.getSendMessage());
+                    media.put("media_id", reply.getSendPicurl());
                     object.put(reply.getSendType(), media);
                     break;
                 case "news":
