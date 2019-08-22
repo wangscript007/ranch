@@ -720,7 +720,6 @@ public class WeixinServiceImpl implements WeixinService, ContextRefreshedListene
             return null;
 
         WeixinModel weixin = findByKey(key);
-        param.put("appid", weixin.getAppId());
         param.put("noncestr", generator.random(32));
         param.put("jsapi_ticket", weixin.getJsapiTicket());
         param.put("timestamp", System.currentTimeMillis() / 1000);
@@ -730,6 +729,7 @@ public class WeixinServiceImpl implements WeixinService, ContextRefreshedListene
         list.forEach(k -> sb.append('&').append(k).append('=').append(param.get(k)));
         param.remove("jsapi_ticket");
         param.put("signature", digest.sha1(sb.deleteCharAt(0).toString()));
+        param.put("appid", weixin.getAppId());
 
         return param;
     }
