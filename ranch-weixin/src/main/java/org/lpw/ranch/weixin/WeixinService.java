@@ -272,6 +272,16 @@ public interface WeixinService {
                                        JSONObject data, String keyword);
 
     /**
+     * 发送文本消息。
+     *
+     * @param key     引用key。
+     * @param openId  接受者Open ID。
+     * @param message 消息。
+     * @return 发送结果。
+     */
+    JSONObject sendTextMessage(String key, String openId, String message);
+
+    /**
      * 使用AccessToken请求。如果返回AccessToken过期[42001]则刷新AccessToken。
      *
      * @param weixin   微信配置。

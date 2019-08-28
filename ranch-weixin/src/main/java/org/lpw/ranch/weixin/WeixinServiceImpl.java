@@ -808,6 +808,29 @@ public class WeixinServiceImpl implements WeixinService, ContextRefreshedListene
     }
 
     @Override
+    public JSONObject sendTextMessage(String key, String openId, String message) {
+        WeixinModel weixin = findByKey(key);
+        if (weixin == null)
+            return null;
+
+        JSONObject object = new JSONObject();
+        object.put("touser", openId);
+        object.put("msgtype", "text");
+        JSONObject text = new JSONObject();
+        text.put("content", message);
+        object.put("text", text);
+
+        return byAccessToken(weixin, accessToken -> {
+            String string = http.post("https://api.weixin.qq.com/cgi-bin/message/custom/send?access_token=" + accessToken,
+                    null, object.toJSONString());
+            if (logger.isInfoEnable())
+                logger.info("发送微信文本消息[{}:{}]。", object.toJSONString(), string);
+
+            return string;
+        });
+    }
+
+    @Override
     public JSONObject byAccessToken(WeixinModel weixin, Function<String, String> function) {
         String string = function.apply(weixin.getAccessToken());
         JSONObject object = json.toObject(string);
