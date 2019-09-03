@@ -317,11 +317,8 @@ public class WeixinServiceImpl implements WeixinService, ContextRefreshedListene
 
     private boolean getInfoFail(WeixinModel weixin, JSONObject object, String openId) {
         InfoModel info = infoService.find(openId);
-        if (info != null && !validator.isEmpty(info.getUnionId())) {
+        if (info != null && !validator.isEmpty(info.getUnionId()))
             object.put("unionid", info.getUnionId());
-
-            return false;
-        }
 
         for (int i = 0; i < 5; i++) {
             Map<String, String> map = new HashMap<>();
@@ -342,7 +339,7 @@ public class WeixinServiceImpl implements WeixinService, ContextRefreshedListene
             thread.sleep(1, TimeUnit.Second);
         }
 
-        return true;
+        return object.containsKey("unionid") || object.containsKey("unionId");
     }
 
     @Override
