@@ -18,7 +18,7 @@ import javax.inject.Inject;
  * @author lpw
  */
 @Controller(FileModel.NAME + ".ctrl")
-@Execute(name = "/editor/file/", key = FileModel.NAME, code = "32")
+@Execute(name = "/editor/file/", key = FileModel.NAME, code = "132")
 public class FileCtrl {
     @Inject
     private Message message;

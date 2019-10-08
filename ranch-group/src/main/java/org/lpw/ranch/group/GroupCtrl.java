@@ -13,7 +13,7 @@ import javax.inject.Inject;
  * @author lpw
  */
 @Controller(GroupModel.NAME + ".ctrl")
-@Execute(name = "/group/", key = GroupModel.NAME, code = "17")
+@Execute(name = "/group/", key = GroupModel.NAME, code = "117")
 public class GroupCtrl {
     @Inject
     private Request request;

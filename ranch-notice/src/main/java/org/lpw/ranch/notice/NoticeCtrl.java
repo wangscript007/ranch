@@ -13,7 +13,7 @@ import javax.inject.Inject;
  * @author lpw
  */
 @Controller(NoticeModel.NAME + ".ctrl")
-@Execute(name = "/notice/", key = NoticeModel.NAME, code = "36")
+@Execute(name = "/notice/", key = NoticeModel.NAME, code = "136")
 public class NoticeCtrl {
     @Inject
     private Request request;

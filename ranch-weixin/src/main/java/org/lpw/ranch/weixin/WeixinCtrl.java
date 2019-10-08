@@ -21,7 +21,7 @@ import java.util.Map;
  * @author lpw
  */
 @Controller(WeixinModel.NAME + ".ctrl")
-@Execute(name = "/weixin/", key = WeixinModel.NAME, code = "24")
+@Execute(name = "/weixin/", key = WeixinModel.NAME, code = "124")
 public class WeixinCtrl {
     @Inject
     private Validator validator;

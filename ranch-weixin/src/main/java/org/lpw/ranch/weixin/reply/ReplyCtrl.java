@@ -12,7 +12,7 @@ import javax.inject.Inject;
  * @author lpw
  */
 @Controller(ReplyModel.NAME + ".ctrl")
-@Execute(name = "/weixin/reply/", key = ReplyModel.NAME, code = "24")
+@Execute(name = "/weixin/reply/", key = ReplyModel.NAME, code = "124")
 public class ReplyCtrl {
     @Inject
     private Request request;

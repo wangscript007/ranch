@@ -14,7 +14,7 @@ import javax.inject.Inject;
  * @author lpw
  */
 @Controller(AddressModel.NAME + ".ctrl")
-@Execute(name = "/address/", key = AddressModel.NAME, code = "21")
+@Execute(name = "/address/", key = AddressModel.NAME, code = "121")
 public class AddressCtrl {
     @Inject
     private Request request;

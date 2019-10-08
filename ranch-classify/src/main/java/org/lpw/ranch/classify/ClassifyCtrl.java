@@ -14,7 +14,7 @@ import javax.inject.Inject;
  * @author lpw
  */
 @Controller(ClassifyModel.NAME + ".ctrl")
-@Execute(name = "/classify/", key = ClassifyModel.NAME, code = "12")
+@Execute(name = "/classify/", key = ClassifyModel.NAME, code = "112")
 public class ClassifyCtrl extends RecycleCtrlSupport {
     @Inject
     private Templates templates;

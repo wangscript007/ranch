@@ -14,7 +14,7 @@ import javax.inject.Inject;
  * @author lpw
  */
 @Controller(FriendModel.NAME + ".ctrl")
-@Execute(name = "/friend/", key = FriendModel.NAME, code = "16")
+@Execute(name = "/friend/", key = FriendModel.NAME, code = "116")
 public class FriendCtrl {
     @Inject
     private ModelHelper modelHelper;

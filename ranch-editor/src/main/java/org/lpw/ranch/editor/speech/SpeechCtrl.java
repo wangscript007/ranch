@@ -17,7 +17,7 @@ import javax.inject.Inject;
  * @author lpw
  */
 @Controller(SpeechModel.NAME + ".ctrl")
-@Execute(name = "/editor/speech/", key = SpeechModel.NAME, code = "32")
+@Execute(name = "/editor/speech/", key = SpeechModel.NAME, code = "132")
 public class SpeechCtrl {
     @Inject
     private Message message;

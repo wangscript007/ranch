@@ -12,7 +12,7 @@ import javax.inject.Inject;
  * @author lpw
  */
 @Controller(PaypalModel.NAME + ".ctrl")
-@Execute(name = "/paypal/", key = PaypalModel.NAME, code = "42")
+@Execute(name = "/paypal/", key = PaypalModel.NAME, code = "142")
 public class PaypalCtrl {
     @Inject
     private Request request;

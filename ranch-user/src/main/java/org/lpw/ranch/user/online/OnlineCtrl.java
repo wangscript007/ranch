@@ -12,7 +12,7 @@ import javax.inject.Inject;
  * @author lpw
  */
 @Controller(OnlineModel.NAME + ".ctrl")
-@Execute(name = "/user/online/", key = OnlineModel.NAME, code = "15")
+@Execute(name = "/user/online/", key = OnlineModel.NAME, code = "115")
 public class OnlineCtrl {
     @Inject
     private Request request;

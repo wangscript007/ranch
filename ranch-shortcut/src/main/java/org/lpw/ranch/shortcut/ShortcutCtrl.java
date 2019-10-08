@@ -14,7 +14,7 @@ import javax.inject.Inject;
  * @author lpw
  */
 @Controller(ShortcutModel.NAME + ".ctrl")
-@Execute(name = "/shortcut/", key = ShortcutModel.NAME, code = "35")
+@Execute(name = "/shortcut/", key = ShortcutModel.NAME, code = "135")
 public class ShortcutCtrl {
     @Inject
     private Message message;

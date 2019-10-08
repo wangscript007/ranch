@@ -13,7 +13,7 @@ import javax.inject.Inject;
  * @author lpw
  */
 @Controller(PriceModel.NAME + ".ctrl")
-@Execute(name = "/editor/price/", key = PriceModel.NAME, code = "32")
+@Execute(name = "/editor/price/", key = PriceModel.NAME, code = "132")
 public class PriceCtrl {
     @Inject
     private Request request;

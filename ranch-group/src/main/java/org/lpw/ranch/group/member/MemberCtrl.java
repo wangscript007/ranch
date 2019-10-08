@@ -14,7 +14,7 @@ import javax.inject.Inject;
  * @author lpw
  */
 @Controller(MemberModel.NAME + ".ctrl")
-@Execute(name = "/group/member/", key = MemberModel.NAME, code = "17")
+@Execute(name = "/group/member/", key = MemberModel.NAME, code = "117")
 public class MemberCtrl {
     @Inject
     private Request request;

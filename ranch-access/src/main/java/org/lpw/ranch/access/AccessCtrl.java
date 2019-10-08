@@ -12,7 +12,7 @@ import javax.inject.Inject;
  * @author lpw
  */
 @Controller(AccessModel.NAME + ".ctrl")
-@Execute(name = "/access/", key = AccessModel.NAME, code = "34")
+@Execute(name = "/access/", key = AccessModel.NAME, code = "134")
 public class AccessCtrl {
     @Inject
     private Request request;

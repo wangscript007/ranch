@@ -12,7 +12,7 @@ import javax.inject.Inject;
  * @author lpw
  */
 @Controller(AliyunModel.NAME + ".ctrl")
-@Execute(name = "/aliyun/", key = AliyunModel.NAME, code = "47")
+@Execute(name = "/aliyun/", key = AliyunModel.NAME, code = "147")
 public class AliyunCtrl {
     @Inject
     private Request request;

@@ -10,7 +10,7 @@ import javax.inject.Inject;
  * @author lpw
  */
 @Controller(BuyModel.NAME + ".ctrl")
-@Execute(name = "/editor/buy/", key = BuyModel.NAME, code = "0")
+@Execute(name = "/editor/buy/", key = BuyModel.NAME, code = "10")
 public class BuyCtrl {
     @Inject
     private Request request;

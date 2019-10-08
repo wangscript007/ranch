@@ -9,7 +9,7 @@ import javax.inject.Inject;
  * @author lpw
  */
 @Controller(TestRecycleModel.NAME + ".ctrl")
-@Execute(name = "/recycle/", key = TestRecycleModel.NAME, code = "99")
+@Execute(name = "/recycle/", key = TestRecycleModel.NAME, code = "199")
 public class TestRecycleCtrl extends RecycleCtrlSupport {
     @Inject
     private TestRecycleService recycleService;

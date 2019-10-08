@@ -10,7 +10,7 @@ import javax.inject.Inject;
  * @author lpw
  */
 @Controller(TestAuditModel.NAME + ".ctrl")
-@Execute(name = "/audit/", key = TestAuditModel.NAME, code = "99")
+@Execute(name = "/audit/", key = TestAuditModel.NAME, code = "199")
 public class TestAuditCtrl extends AuditCtrlSupport {
     @Inject
     private TestAuditService auditService;

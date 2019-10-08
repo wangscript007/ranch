@@ -12,7 +12,7 @@ import javax.inject.Inject;
  * @author lpw
  */
 @Controller(FacebookModel.NAME + ".ctrl")
-@Execute(name = "/facebook/", key = FacebookModel.NAME, code = "39")
+@Execute(name = "/facebook/", key = FacebookModel.NAME, code = "139")
 public class FacebookCtrl {
     @Inject
     private Request request;

@@ -15,7 +15,7 @@ import javax.inject.Inject;
  * @author lpw
  */
 @Controller(QrcodeModel.NAME + ".ctrl")
-@Execute(name = "/weixin/qrcode/", key = QrcodeModel.NAME, code = "24")
+@Execute(name = "/weixin/qrcode/", key = QrcodeModel.NAME, code = "124")
 public class QrcodeCtrl {
     @Inject
     private Message message;

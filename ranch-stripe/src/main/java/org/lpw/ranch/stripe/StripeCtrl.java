@@ -12,7 +12,7 @@ import javax.inject.Inject;
  * @author lpw
  */
 @Controller(StripeModel.NAME + ".ctrl")
-@Execute(name = "/stripe/", key = StripeModel.NAME, code = "44")
+@Execute(name = "/stripe/", key = StripeModel.NAME, code = "144")
 public class StripeCtrl {
     @Inject
     private Request request;

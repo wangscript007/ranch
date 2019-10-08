@@ -18,7 +18,7 @@ import javax.inject.Inject;
  * @author lpw
  */
 @Controller(UserModel.NAME + ".ctrl")
-@Execute(name = "/user/", key = UserModel.NAME, code = "15")
+@Execute(name = "/user/", key = UserModel.NAME, code = "115")
 public class UserCtrl {
     @Inject
     private Message message;

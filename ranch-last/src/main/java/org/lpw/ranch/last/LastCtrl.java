@@ -13,7 +13,7 @@ import javax.inject.Inject;
  * @author lpw
  */
 @Controller(LastModel.NAME + ".ctrl")
-@Execute(name = "/last/", key = LastModel.NAME, code = "20")
+@Execute(name = "/last/", key = LastModel.NAME, code = "120")
 public class LastCtrl {
     @Inject
     private Request request;

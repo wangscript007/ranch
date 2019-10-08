@@ -9,7 +9,7 @@ import org.springframework.stereotype.Controller;
  * @author lpw
  */
 @Controller("ranch.user.helper.ctrl")
-@Execute(name = "/user/",key = "ranch.user.helper", code = "10")
+@Execute(name = "/user/",key = "ranch.user.helper", code = "110")
 public class TestUserCtrl {
     @Execute(name = "sign", validates = {
             @Validate(validator = UserHelper.VALIDATOR_SIGN_IN)

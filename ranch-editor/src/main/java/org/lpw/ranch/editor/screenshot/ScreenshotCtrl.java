@@ -15,7 +15,7 @@ import javax.inject.Inject;
  * @author lpw
  */
 @Controller(ScreenshotModel.NAME + ".ctrl")
-@Execute(name = "/editor/screenshot/", key = ScreenshotModel.NAME, code = "32")
+@Execute(name = "/editor/screenshot/", key = ScreenshotModel.NAME, code = "132")
 public class ScreenshotCtrl {
     @Inject
     private Request request;

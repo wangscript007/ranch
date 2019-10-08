@@ -15,7 +15,7 @@ import javax.inject.Inject;
  * @author lpw
  */
 @Controller(TransferModel.NAME + ".ctrl")
-@Execute(name = "/transfer/", key = TransferModel.NAME, code = "30")
+@Execute(name = "/transfer/", key = TransferModel.NAME, code = "130")
 public class TransferCtrl {
     @Inject
     private Validator validator;

@@ -13,7 +13,7 @@ import javax.inject.Inject;
  * @author lpw
  */
 @Controller(LogModel.NAME + ".ctrl")
-@Execute(name = "/account/log/", key = LogModel.NAME, code = "22")
+@Execute(name = "/account/log/", key = LogModel.NAME, code = "122")
 public class LogCtrl {
     @Inject
     private Validator validator;

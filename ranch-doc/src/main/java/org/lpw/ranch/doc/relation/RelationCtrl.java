@@ -10,7 +10,7 @@ import javax.inject.Inject;
  * @author lpw
  */
 @Controller(RelationModel.NAME + ".ctrl")
-@Execute(name = "/doc/refresh/", key = RelationModel.NAME, code = "0")
+@Execute(name = "/doc/refresh/", key = RelationModel.NAME, code = "10")
 public class RelationCtrl {
     @Inject
     private Request request;

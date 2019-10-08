@@ -12,7 +12,7 @@ import javax.inject.Inject;
  * @author lpw
  */
 @Controller(SnapshotModel.NAME + ".ctrl")
-@Execute(name = "/snapshot/", key = SnapshotModel.NAME, code = "19")
+@Execute(name = "/snapshot/", key = SnapshotModel.NAME, code = "119")
 public class SnapshotCtrl {
     @Inject
     private Request request;

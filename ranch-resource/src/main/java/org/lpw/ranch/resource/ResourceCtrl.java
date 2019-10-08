@@ -13,7 +13,7 @@ import javax.inject.Inject;
  * @author lpw
  */
 @Controller(ResourceModel.NAME + ".ctrl")
-@Execute(name = "/resource/", key = ResourceModel.NAME, code = "33")
+@Execute(name = "/resource/", key = ResourceModel.NAME, code = "133")
 public class ResourceCtrl {
     @Inject
     private Request request;

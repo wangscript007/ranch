@@ -19,7 +19,7 @@ import javax.inject.Inject;
  * @author lpw
  */
 @Controller(ChromeModel.NAME + ".ctrl")
-@Execute(name = "/chrome/", key = ChromeModel.NAME, code = "29")
+@Execute(name = "/chrome/", key = ChromeModel.NAME, code = "129")
 public class ChromeCtrl {
     @Inject
     private Validator validator;

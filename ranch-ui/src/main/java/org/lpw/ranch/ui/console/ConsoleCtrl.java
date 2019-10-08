@@ -15,7 +15,7 @@ import javax.inject.Inject;
  * @author lpw
  */
 @Controller(ConsoleModel.NAME + ".ctrl")
-@Execute(name = "/ui/console/", key = ConsoleModel.NAME, code = "91")
+@Execute(name = "/ui/console/", key = ConsoleModel.NAME, code = "191")
 public class ConsoleCtrl {
     @Inject
     private Validator validator;

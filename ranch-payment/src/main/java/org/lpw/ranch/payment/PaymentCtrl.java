@@ -15,7 +15,7 @@ import javax.inject.Inject;
  * @author lpw
  */
 @Controller(PaymentModel.NAME + ".ctrl")
-@Execute(name = "/payment/", key = PaymentModel.NAME, code = "25")
+@Execute(name = "/payment/", key = PaymentModel.NAME, code = "125")
 public class PaymentCtrl {
     @Inject
     private Validator validator;

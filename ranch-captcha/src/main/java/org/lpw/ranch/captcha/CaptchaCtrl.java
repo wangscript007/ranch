@@ -13,7 +13,7 @@ import javax.inject.Inject;
  * @author lpw
  */
 @Controller(CaptchaModel.NAME + ".ctrl")
-@Execute(name = "/captcha/", key = CaptchaModel.NAME, code = "28")
+@Execute(name = "/captcha/", key = CaptchaModel.NAME, code = "128")
 public class CaptchaCtrl {
     @Inject
     private Request request;

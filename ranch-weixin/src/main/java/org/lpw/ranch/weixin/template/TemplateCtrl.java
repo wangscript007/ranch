@@ -13,7 +13,7 @@ import javax.inject.Inject;
  * @author lpw
  */
 @Controller(TemplateModel.NAME + ".ctrl")
-@Execute(name = "/weixin/template/", key = TemplateModel.NAME, code = "24")
+@Execute(name = "/weixin/template/", key = TemplateModel.NAME, code = "124")
 public class TemplateCtrl {
     @Inject
     private Request request;

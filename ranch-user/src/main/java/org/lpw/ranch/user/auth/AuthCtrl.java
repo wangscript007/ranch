@@ -14,7 +14,7 @@ import javax.inject.Inject;
  * @author lpw
  */
 @Controller(AuthModel.NAME + ".ctrl")
-@Execute(name = "/user/auth/", key = AuthModel.NAME, code = "15")
+@Execute(name = "/user/auth/", key = AuthModel.NAME, code = "115")
 public class AuthCtrl {
     @Inject
     private Request request;

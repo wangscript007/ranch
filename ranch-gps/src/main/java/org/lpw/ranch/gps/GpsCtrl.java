@@ -12,7 +12,7 @@ import javax.inject.Inject;
  * @author lpw
  */
 @Controller(GpsModel.NAME + ".ctrl")
-@Execute(name = "/gps/", key = GpsModel.NAME, code = "11")
+@Execute(name = "/gps/", key = GpsModel.NAME, code = "111")
 public class GpsCtrl {
     @Inject
     private Request request;

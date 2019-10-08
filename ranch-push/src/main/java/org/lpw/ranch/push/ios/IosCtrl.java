@@ -12,7 +12,7 @@ import javax.inject.Inject;
  * @author lpw
  */
 @Controller(IosModel.NAME + ".ctrl")
-@Execute(name = "/push/ios/", key = IosModel.NAME, code = "31")
+@Execute(name = "/push/ios/", key = IosModel.NAME, code = "131")
 public class IosCtrl {
     @Inject
     private Request request;

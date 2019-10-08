@@ -15,7 +15,7 @@ import javax.inject.Inject;
  * @author lpw
  */
 @Controller(MediaModel.NAME + ".ctrl")
-@Execute(name = "/editor/media/", key = MediaModel.NAME, code = "32")
+@Execute(name = "/editor/media/", key = MediaModel.NAME, code = "132")
 public class MediaCtrl {
     @Inject
     private Request request;

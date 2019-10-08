@@ -10,7 +10,7 @@ import javax.inject.Inject;
  * @author lpw
  */
 @Controller(ColumnModel.NAME + ".ctrl")
-@Execute(name = "/dbtool/column/", key = ColumnModel.NAME, code = "23")
+@Execute(name = "/dbtool/column/", key = ColumnModel.NAME, code = "123")
 public class ColumnCtrl {
     @Inject
     private Request request;

@@ -10,7 +10,7 @@ import javax.inject.Inject;
  * @author lpw
  */
 @Controller(DownloadModel.NAME + ".ctrl")
-@Execute(name = "/editor/download/", key = DownloadModel.NAME, code = "32")
+@Execute(name = "/editor/download/", key = DownloadModel.NAME, code = "132")
 public class DownloadCtrl {
     @Inject
     private Request request;

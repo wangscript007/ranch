@@ -17,7 +17,7 @@ import javax.inject.Inject;
  * @author lpw
  */
 @Controller(TransactionModel.NAME + ".ctrl")
-@Execute(name = "/paypal/transaction/", key = TransactionModel.NAME, code = "42")
+@Execute(name = "/paypal/transaction/", key = TransactionModel.NAME, code = "142")
 public class TransactionCtrl {
     @Inject
     private Json json;

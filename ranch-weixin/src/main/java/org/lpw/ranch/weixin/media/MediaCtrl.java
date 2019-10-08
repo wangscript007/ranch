@@ -13,7 +13,7 @@ import javax.inject.Inject;
  * @author lpw
  */
 @Controller(MediaModel.NAME + ".ctrl")
-@Execute(name = "/weixin/media/", key = MediaModel.NAME, code = "24")
+@Execute(name = "/weixin/media/", key = MediaModel.NAME, code = "124")
 public class MediaCtrl {
     @Inject
     private Request request;

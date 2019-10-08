@@ -12,7 +12,7 @@ import javax.inject.Inject;
  * @author lpw
  */
 @Controller(SchemaModel.NAME + ".ctrl")
-@Execute(name = "/dbtool/schema/", key = SchemaModel.NAME, code = "23")
+@Execute(name = "/dbtool/schema/", key = SchemaModel.NAME, code = "123")
 public class SchemaCtrl {
     @Inject
     private Request request;

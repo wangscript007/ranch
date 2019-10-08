@@ -12,7 +12,7 @@ import javax.inject.Inject;
  * @author lpw
  */
 @Controller(AppstoreModel.NAME + ".ctrl")
-@Execute(name = "/appstore/", key = AppstoreModel.NAME, code = "38")
+@Execute(name = "/appstore/", key = AppstoreModel.NAME, code = "138")
 public class AppstoreCtrl {
     @Inject
     private Request request;

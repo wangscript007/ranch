@@ -20,7 +20,7 @@ import java.util.Map;
  * @author lpw
  */
 @Controller(DocModel.NAME + ".ctrl")
-@Execute(name = "/doc/", key = DocModel.NAME, code = "14")
+@Execute(name = "/doc/", key = DocModel.NAME, code = "114")
 public class DocCtrl extends AuditCtrlSupport {
     @Inject
     private Request request;

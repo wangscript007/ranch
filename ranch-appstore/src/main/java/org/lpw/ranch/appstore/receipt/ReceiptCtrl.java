@@ -13,7 +13,7 @@ import javax.inject.Inject;
  * @author lpw
  */
 @Controller(ReceiptModel.NAME + ".ctrl")
-@Execute(name = "/appstore/receipt/", key = ReceiptModel.NAME, code = "38")
+@Execute(name = "/appstore/receipt/", key = ReceiptModel.NAME, code = "138")
 public class ReceiptCtrl {
     @Inject
     private Request request;

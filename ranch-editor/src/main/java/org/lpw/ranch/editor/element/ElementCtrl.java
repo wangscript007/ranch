@@ -15,7 +15,7 @@ import javax.inject.Inject;
  * @author lpw
  */
 @Controller(ElementModel.NAME + ".ctrl")
-@Execute(name = "/editor/element/", key = ElementModel.NAME, code = "32")
+@Execute(name = "/editor/element/", key = ElementModel.NAME, code = "132")
 public class ElementCtrl {
     @Inject
     private Request request;

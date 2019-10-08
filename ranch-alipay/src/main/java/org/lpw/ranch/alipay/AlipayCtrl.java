@@ -17,7 +17,7 @@ import java.util.Map;
  * @author lpw
  */
 @Controller(AlipayModel.NAME + ".ctrl")
-@Execute(name = "/alipay/", key = AlipayModel.NAME, code = "26")
+@Execute(name = "/alipay/", key = AlipayModel.NAME, code = "126")
 public class AlipayCtrl {
     @Inject
     private Message message;

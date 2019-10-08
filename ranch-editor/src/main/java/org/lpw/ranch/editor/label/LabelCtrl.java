@@ -12,7 +12,7 @@ import javax.inject.Inject;
  * @author lpw
  */
 @Controller(LabelModel.NAME + ".ctrl")
-@Execute(name = "/editor/label/", key = LabelModel.NAME, code = "32")
+@Execute(name = "/editor/label/", key = LabelModel.NAME, code = "132")
 public class LabelCtrl {
     @Inject
     private Request request;

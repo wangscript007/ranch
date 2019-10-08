@@ -12,7 +12,7 @@ import javax.inject.Inject;
  * @author lpw
  */
 @Controller(TransactionModel.NAME + ".ctrl")
-@Execute(name = "/appstore/transaction/", key = TransactionModel.NAME, code = "38")
+@Execute(name = "/appstore/transaction/", key = TransactionModel.NAME, code = "138")
 public class TransactionCtrl {
     @Inject
     private Request request;

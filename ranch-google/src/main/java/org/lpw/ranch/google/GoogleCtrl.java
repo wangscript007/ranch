@@ -12,7 +12,7 @@ import javax.inject.Inject;
  * @author lpw
  */
 @Controller(GoogleModel.NAME + ".ctrl")
-@Execute(name = "/google/", key = GoogleModel.NAME, code = "45")
+@Execute(name = "/google/", key = GoogleModel.NAME, code = "145")
 public class GoogleCtrl {
     @Inject
     private Request request;

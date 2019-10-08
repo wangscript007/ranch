@@ -16,7 +16,7 @@ import javax.inject.Inject;
  * @author lpw
  */
 @Controller(CommentModel.NAME + ".ctrl")
-@Execute(name = "/comment/", key = CommentModel.NAME, code = "13")
+@Execute(name = "/comment/", key = CommentModel.NAME, code = "113")
 public class CommentCtrl extends AuditCtrlSupport {
     @Inject
     private DateTime dateTime;

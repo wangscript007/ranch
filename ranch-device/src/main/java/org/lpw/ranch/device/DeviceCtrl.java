@@ -13,7 +13,7 @@ import javax.inject.Inject;
  * @author lpw
  */
 @Controller(DeviceModel.NAME + ".ctrl")
-@Execute(name = "/device/", key = DeviceModel.NAME, code = "32")
+@Execute(name = "/device/", key = DeviceModel.NAME, code = "132")
 public class DeviceCtrl {
     @Inject
     private Request request;

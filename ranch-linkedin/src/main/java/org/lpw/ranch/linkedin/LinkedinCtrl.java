@@ -12,7 +12,7 @@ import javax.inject.Inject;
  * @author lpw
  */
 @Controller(LinkedinModel.NAME + ".ctrl")
-@Execute(name = "/linkedin/", key = LinkedinModel.NAME, code = "40")
+@Execute(name = "/linkedin/", key = LinkedinModel.NAME, code = "140")
 public class LinkedinCtrl {
     @Inject
     private Request request;

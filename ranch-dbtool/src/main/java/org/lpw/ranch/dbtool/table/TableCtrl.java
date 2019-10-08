@@ -13,7 +13,7 @@ import javax.inject.Inject;
  * @author lpw
  */
 @Controller(TableModel.NAME + ".ctrl")
-@Execute(name = "/dbtool/table/", key = TableModel.NAME, code = "23")
+@Execute(name = "/dbtool/table/", key = TableModel.NAME, code = "123")
 public class TableCtrl {
     @Inject
     private Request request;

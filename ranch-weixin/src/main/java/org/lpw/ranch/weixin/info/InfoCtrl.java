@@ -12,7 +12,7 @@ import javax.inject.Inject;
  * @author lpw
  */
 @Controller(InfoModel.NAME + ".ctrl")
-@Execute(name = "/weixin/info/", key = InfoModel.NAME, code = "24")
+@Execute(name = "/weixin/info/", key = InfoModel.NAME, code = "124")
 public class InfoCtrl {
     @Inject
     private Request request;
