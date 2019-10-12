@@ -18,7 +18,7 @@
         <dependency>
             <groupId>com.paypal.sdk</groupId>
             <artifactId>checkout-sdk</artifactId>
-            <version>LATEST</version>
+            <version>1.0.1</version>
         </dependency>
         <dependency>
             <groupId>org.lpw.ranch</groupId>

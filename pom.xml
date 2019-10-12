@@ -68,7 +68,6 @@
         <module>ranch-google-helper</module>
         <module>ranch-ad</module>
         <module>ranch-aliyun</module>
-        <module>ranch-inviter</module>
         <module>ranch-ui</module>
         <module>ranch-web</module>
         <module>ranch-test</module>
@@ -83,13 +82,13 @@
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
-            <version>LATEST</version>
+            <version>4.0.1</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>javax</groupId>
             <artifactId>javaee-api</artifactId>
-            <version>LATEST</version>
+            <version>8.0.1</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>

@@ -17,23 +17,23 @@
         <dependency>
             <groupId>org.lpw.tephra</groupId>
             <artifactId>tephra-ctrl-http</artifactId>
-            <version>LATEST</version>
+            <version>1.0.0-RELEASE</version>
         </dependency>
         <dependency>
             <groupId>org.lpw.tephra</groupId>
             <artifactId>tephra-carousel</artifactId>
-            <version>LATEST</version>
+            <version>1.0.0-RELEASE</version>
         </dependency>
         <dependency>
             <groupId>org.lpw.tephra</groupId>
             <artifactId>tephra-test</artifactId>
-            <version>LATEST</version>
+            <version>1.0.0-RELEASE</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.lpw.tephra</groupId>
             <artifactId>tephra-carousel-test</artifactId>
-            <version>LATEST</version>
+            <version>1.0.0-RELEASE</version>
             <scope>test</scope>
         </dependency>
     </dependencies>

@@ -17,12 +17,12 @@
         <dependency>
             <groupId>com.vladsch.flexmark</groupId>
             <artifactId>flexmark-all</artifactId>
-            <version>0.34.22</version>
+            <version>0.50.40</version>
         </dependency>
         <dependency>
             <groupId>org.lpw.tephra</groupId>
             <artifactId>tephra-lucene</artifactId>
-            <version>LATEST</version>
+            <version>1.0.0-RELEASE</version>
         </dependency>
         <dependency>
             <groupId>org.lpw.ranch</groupId>
