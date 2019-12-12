@@ -29,12 +29,12 @@
         <dependency>
             <groupId>com.aliyun</groupId>
             <artifactId>aliyun-java-sdk-core</artifactId>
-            <version>4.4.6</version>
+            <version>4.4.9</version>
         </dependency>
         <dependency>
             <groupId>com.aliyun.oss</groupId>
             <artifactId>aliyun-sdk-oss</artifactId>
-            <version>3.7.1-a</version>
+            <version>3.8.0</version>
         </dependency>
         <dependency>
             <groupId>com.aliyun</groupId>
