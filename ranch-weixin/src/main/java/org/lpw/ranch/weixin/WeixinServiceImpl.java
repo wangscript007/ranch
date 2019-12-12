@@ -16,25 +16,13 @@ import org.lpw.tephra.crypto.Sign;
 import org.lpw.tephra.ctrl.context.Header;
 import org.lpw.tephra.ctrl.context.Session;
 import org.lpw.tephra.ctrl.http.ServiceHelper;
+import org.lpw.tephra.ctrl.upload.UploadService;
 import org.lpw.tephra.dao.model.ModelHelper;
 import org.lpw.tephra.scheduler.HourJob;
 import org.lpw.tephra.scheduler.MinuteJob;
 import org.lpw.tephra.storage.Storages;
-import org.lpw.tephra.util.Coder;
-import org.lpw.tephra.util.Context;
-import org.lpw.tephra.util.Converter;
-import org.lpw.tephra.util.DateTime;
-import org.lpw.tephra.util.Generator;
-import org.lpw.tephra.util.Http;
-import org.lpw.tephra.util.Io;
-import org.lpw.tephra.util.Json;
-import org.lpw.tephra.util.Logger;
-import org.lpw.tephra.util.Numeric;
-import org.lpw.tephra.util.QrCode;
 import org.lpw.tephra.util.Thread;
-import org.lpw.tephra.util.TimeUnit;
-import org.lpw.tephra.util.Validator;
-import org.lpw.tephra.util.Xml;
+import org.lpw.tephra.util.*;
 import org.lpw.tephra.wormhole.WormholeHelper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -47,11 +35,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.security.Security;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Function;
 
 /**
@@ -108,6 +92,8 @@ public class WeixinServiceImpl implements WeixinService, ContextRefreshedListene
     private Header header;
     @Inject
     private Session session;
+    @Inject
+    private UploadService uploadService;
     @Inject
     private Temporary temporary;
     @Inject
@@ -693,9 +679,17 @@ public class WeixinServiceImpl implements WeixinService, ContextRefreshedListene
             http.post("https://api.weixin.qq.com/wxa/getwxacodeunlimit?access_token="
                     + findByKey(key).getAccessToken(), headers, object.toJSONString(), null, responseHeaders, outputStream);
             outputStream.close();
-            if ("image/jpeg".equals(responseHeaders.get("Content-Type")))
-                return wormholeHelper.image(null, null, null, file);
-            else {
+            if ("image/jpeg".equals(responseHeaders.get("Content-Type"))) {
+                String uri = wormholeHelper.image(null, null, null, file);
+                if (validator.isEmpty(uri)) {
+                    uri = uploadService.newSavePath("image/jpeg", "", ".jpg");
+                    File f = new File((context.getAbsolutePath(uri)));
+                    io.mkdirs(f.getParentFile());
+                    file.renameTo(f);
+                }
+
+                return uri;
+            } else {
                 String failure = io.readAsString(file.getAbsolutePath());
                 logger.warn(null, "获取微信二维码[{}:{}:{}]失败！", object, converter.toString(responseHeaders), failure);
 
