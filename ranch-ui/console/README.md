@@ -3,6 +3,13 @@
 TypeScript + React + ant.design
 
 ```
+curl -sL https://rpm.nodesource.com/setup_13.x | bash -
+dnf install -y nodejs
+npm install -g yarn@berry
+npm install -g typescript
+
+yarn create react-app console --template typescript
+
 yarn start
 ```
 
