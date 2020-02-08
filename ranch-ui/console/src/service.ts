@@ -19,7 +19,7 @@ class Service {
             loading();
             if (json.code !== 0) {
                 this.failure(json);
-                if (json.code === 9901) {
+                if (json.code === 115901) {
                     location.reload();
                 }
 
