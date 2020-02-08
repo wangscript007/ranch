@@ -21,7 +21,7 @@ public class SignInValidatorImpl extends ValidatorSupport {
 
     @Override
     public int getFailureCode(ValidateWrapper validate) {
-        return 999901;
+        return 115901;
     }
 
     @Override
