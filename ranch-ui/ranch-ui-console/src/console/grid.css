@@ -1,0 +1,27 @@
+.console-grid-search .ant-form-item {
+    display: flex;
+    margin: 0;
+}
+
+.console-grid-search .ant-form-item-control-wrapper {
+    flex: 1;
+}
+
+
+.console-grid-search-btn {
+    width: auto;
+}
+
+.console-grid-toolbar {
+    padding-bottom: 4px;
+}
+
+.console-grid td img {
+    max-width: 200px;
+    max-height: 150px;
+}
+
+.console-grid-op {
+    color: #1890ff;
+    cursor: pointer;
+}

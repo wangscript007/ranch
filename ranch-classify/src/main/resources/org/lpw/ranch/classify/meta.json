@@ -1,5 +1,6 @@
 {
     "key": "ranch.classify",
+    "uri": "/classify/",
     "props": [
         {
             "name": "code",
@@ -86,11 +87,20 @@
     "find-editor": {
         "service": "find",
         "type": "form",
+        "columns": [
+            {
+                "name": "name"
+            },
+            {
+                "name": "value",
+                "type": "editor"
+            }
+        ],
         "toolbar": [
             {
                 "type": "save",
-                "service": ".save",
-                "success": ".find-editor"
+                "service": "save",
+                "success": "find-editor"
             }
         ]
     }

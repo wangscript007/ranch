@@ -1,5 +1,6 @@
 {
     "key": "ranch.user.online",
+    "uri": "/user/online/",
     "props": [
         {
             "name": "user.portrait",
@@ -43,10 +44,8 @@
         "type": "grid",
         "ops": [
             {
-                "type": "post",
-                "service": ".sign-out",
-                "label": "ranch.user.online.sign-out",
-                "success": ".query"
+                "service": "sign-out",
+                "reload": true
             }
         ]
     }

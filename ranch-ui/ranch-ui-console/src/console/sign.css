@@ -1,0 +1,24 @@
+.console-header .console-sign {
+    float: right;
+}
+
+.console-header .console-sign>div {
+    display: inline-block;
+    margin-left: 16px;
+}
+
+.console-header .console-sign .console-sign-avatar{
+    cursor: pointer;
+}
+
+.console-header .console-sign .console-sign-avatar>span {
+    margin-left: 8px;
+}
+
+.console-header .console-sign .console-sign-out {
+    cursor: pointer;
+}
+
+.console-header .console-sign .console-sign-out span {
+    padding-left: 4px;
+}

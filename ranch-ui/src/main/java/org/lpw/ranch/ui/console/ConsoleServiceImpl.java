@@ -123,8 +123,9 @@ public class ConsoleServiceImpl implements ConsoleService {
                 label = prefix + label;
         } else if (key != null && object.containsKey(key))
             label = prefix + "." + object.getString(key);
-        if (label != null)
-            object.put("label", message.get(label));
+        else
+            label = prefix + "." + object.getString("service");
+        object.put("label", message.get(label));
 
         if (object.containsKey("labels")) {
             String labels = object.getString("labels");

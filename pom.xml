@@ -63,7 +63,7 @@
         <module>ranch-paypal</module>
         <module>ranch-popular</module>
         <module>ranch-popular-helper</module>
-        <module>ranch-stripe</module>
+<!--        <module>ranch-stripe</module>-->
         <module>ranch-google</module>
         <module>ranch-google-helper</module>
         <module>ranch-ad</module>

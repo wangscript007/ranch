@@ -83,13 +83,12 @@
         ],
         "ops": [
             {
-                "type": "modify",
-                "service": ".update"
+                "service": "update"
             },
             {
                 "type": "post",
                 "label": "ranch.user.state.enable",
-                "service": ".state",
+                "service": "state",
                 "parameter": {
                     "state": 0
                 },
@@ -140,10 +139,41 @@
     },
     "sign": {
         "type": "form",
+        "columns": [
+            {
+                "name": "portrait"
+            },
+            {
+                "name": "idcard"
+            },
+            {
+                "name": "name"
+            },
+            {
+                "name": "nick"
+            },
+            {
+                "name": "mobile"
+            },
+            {
+                "name": "email"
+            },
+            {
+                "name": "gender"
+            },
+            {
+                "name": "birthday"
+            },
+            {
+                "name": "code"
+            },
+            {
+                "name": "register"
+            }
+        ],
         "toolbar": [
             {
-                "type": "modify",
-                "icon": "save"
+                "service": "modify"
             }
         ]
     },

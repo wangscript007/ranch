@@ -1,0 +1,22 @@
+.sign-in-header {
+    padding-top: 32px;
+    text-align: center;
+    font-size: 32px;
+    line-height: 200%;
+    color: rgba(0, 0, 0, 0.45);
+}
+
+.sign-in-form {
+    width: 368px;
+    margin: 0 auto;
+}
+
+.sign-in-form .sign-in-button {
+    width: 100%;
+}
+
+.sign-in-footer {
+    text-align: center;
+    color: rgba(0, 0, 0, 0.45);
+    font-size: 14px;
+}

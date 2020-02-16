@@ -1,5 +1,6 @@
 {
     "key": "ranch.weixin",
+    "uri": "/weixin/",
     "props": [
         {
             "name": "key"

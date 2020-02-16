@@ -1,5 +1,6 @@
 {
     "key": "ranch.alipay",
+    "uri": "/alipay/",
     "props": [
         {
             "name": "key"
@@ -11,10 +12,12 @@
             "name": "appId"
         },
         {
-            "name": "privateKey"
+            "name": "privateKey",
+            "type": "text-area"
         },
         {
-            "name": "publicKey"
+            "name": "publicKey",
+            "type": "text-area"
         }
     ],
     "query": {
@@ -24,8 +27,7 @@
                 "type": "modify"
             },
             {
-                "type": "delete",
-                "success": ".query"
+                "type": "delete"
             }
         ],
         "toolbar": [
@@ -39,7 +41,7 @@
         "toolbar": [
             {
                 "type": "save",
-                "success": ".query"
+                "success": "query"
             }
         ]
     },
@@ -48,7 +50,7 @@
         "toolbar": [
             {
                 "type": "save",
-                "success": ".query"
+                "success": "query"
             }
         ]
     }

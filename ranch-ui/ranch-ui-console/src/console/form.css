@@ -1,0 +1,11 @@
+.console-form-item {
+    margin: 0;
+}
+
+.console-form-item-odd {
+    background-color: #f8f8f8;
+}
+
+.console-form-toolbar label {
+    display: none;
+}
