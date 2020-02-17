@@ -2,7 +2,7 @@ import {
     message
 } from 'antd';
 
-const url = 'http://192.168.0.106:8080';
+const root = 'http://192.168.7.5:8080';
 
 const service = (uri, body) => {
     return post(uri, body).then(json => {
@@ -19,8 +19,25 @@ const service = (uri, body) => {
     });
 }
 
-const post = (uri, body) => {
-    var tsid = localStorage.getItem('tephra-session-id');
+const post = (uri, body) => fetch(root + uri, {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json',
+        'tephra-session-id': tsid()
+    },
+    body: JSON.stringify(body)
+}).then(response => {
+    if (response.ok) return response.json();
+
+    message.warn('[' + response.status + ']' + response.statusText);
+
+    return null;
+});
+
+const url = uri => root + uri;
+
+const tsid = () => {
+    let tsid = localStorage.getItem('tephra-session-id');
     if (!tsid) {
         tsid = '';
         while (tsid.length < 64) tsid += Math.random().toString(36).substring(2);
@@ -28,23 +45,12 @@ const post = (uri, body) => {
         localStorage.setItem('tephra-session-id', tsid);
     }
 
-    return fetch(url + uri, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'tephra-session-id': tsid
-        },
-        body: JSON.stringify(body)
-    }).then(response => {
-        if (response.ok) return response.json();
-
-        message.warn('[' + response.status + ']' + response.statusText);
-
-        return null;
-    });
+    return tsid;
 }
 
 export {
     service,
-    post
+    post,
+    url,
+    tsid
 };

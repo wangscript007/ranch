@@ -1,13 +1,10 @@
 package org.lpw.ranch.ui.console;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import org.lpw.tephra.bean.ContextRefreshedListener;
 import org.lpw.tephra.dao.model.Model;
-import org.lpw.tephra.util.Context;
-import org.lpw.tephra.util.Io;
-import org.lpw.tephra.util.Json;
-import org.lpw.tephra.util.Logger;
-import org.lpw.tephra.util.Validator;
+import org.lpw.tephra.util.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -104,6 +101,14 @@ public class MetaHelperImpl implements MetaHelper, ContextRefreshedListener {
         JSONObject object = json.toObject(string);
         if (object == null)
             return;
+
+        String prefix = object.getString("key") + ".";
+        JSONArray props = object.getJSONArray("props");
+        for (int i = 0, size = props.size(); i < size; i++) {
+            JSONObject prop = props.getJSONObject(i);
+            if (json.has(prop, "type", "image") && !prop.containsKey("upload"))
+                prop.put("upload", prefix + prop.getString("name"));
+        }
 
         string = object.toJSONString();
         if (object.containsKey("key"))

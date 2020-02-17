@@ -126,7 +126,7 @@ class FieldForm extends React.Component {
 
         if (column.type === 'text-area') return <TextArea />;
 
-        if (column.type === 'image') return <Image />;
+        if (column.type === 'image') return <Image name={column.upload} />;
 
         return <Input />
     }
