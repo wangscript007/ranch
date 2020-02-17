@@ -3,7 +3,7 @@ import { Form, Radio, Select, DatePicker, Input, Button } from 'antd';
 import moment from 'moment';
 import { service } from '../http';
 import meta from './meta';
-import Image from './image';
+import { Image, getImageUri } from './image';
 import './form.css';
 
 const { Option } = Select;
@@ -45,9 +45,15 @@ class FieldForm extends React.Component {
         let values = getFieldsValue();
         if (this.props.data && this.props.data.id) values.id = this.props.data.id;
         for (let column of meta.props(this.props.columns, this.props.meta.columns)) {
+            if (column.type === 'image') {
+                values[column.name] = getImageUri(column.upload);
+
+                continue;
+            }
+
             let value = values[column.name];
             if (!value) {
-                if (value === null) delete values[column.name];
+                delete values[column.name];
 
                 continue;
             };
@@ -73,7 +79,9 @@ class FieldForm extends React.Component {
             let value = data[column.name];
             if (column.type === 'read-only')
                 element = value || '';
-            else {
+            else if (column.type === 'image') {
+                element = <Image upload={column.upload} value={value} />;
+            } else {
                 let option = {};
                 if (column.type === 'date') {
                     if (value) option.initialValue = moment(value, 'YYYY-MM-DD');
@@ -125,8 +133,6 @@ class FieldForm extends React.Component {
         if (column.type === 'datetime') return <DatePicker showTime={true} />;
 
         if (column.type === 'text-area') return <TextArea />;
-
-        if (column.type === 'image') return <Image name={column.upload} />;
 
         return <Input />
     }

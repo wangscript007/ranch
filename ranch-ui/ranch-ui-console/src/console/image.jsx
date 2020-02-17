@@ -1,6 +1,6 @@
 import React from 'react';
 import { Upload, Icon } from 'antd';
-import { url, tsid } from '../http';
+import { url, service } from '../http';
 import './image.css';
 
 class Image extends React.Component {
@@ -9,57 +9,50 @@ class Image extends React.Component {
     };
 
     upload = (uploader) => {
-        console.log(uploader);
-        let form = new FormData();
-        form.append(this.props.name, uploader.file);
-        let xhr = new XMLHttpRequest();
-        xhr.open("POST", url('/tephra/ctrl-http/upload'));
-        xhr.setRequestHeader('Content-Type', 'application/json');
-        xhr.setRequestHeader('tephra-session-id', tsid(), true);
-        // xhr.onload = e => {
-        //     console.log(e.currentTarget.response);
-        //     console.log(xhr.responseText);
-        // }
-        xhr.onreadystatechange = e => {
-            console.log(e.currentTarget.response);
-            console.log(xhr.responseText);
+        this.setState({ loading: true });
+
+        let reader = new FileReader();
+        reader.onload = () => {
+            if (!reader.result || typeof reader.result !== 'string') {
+                return;
+            }
+
+            service('/tephra/ctrl/upload', {
+                name: this.props.upload,
+                fileName: uploader.file.name,
+                contentType: uploader.file.type,
+                base64: reader.result.substring(reader.result.indexOf(',') + 1)
+            }).then(data => {
+                if (data === null) return;
+
+                this.setState({
+                    loading: false,
+                    uri: data.path
+                });
+            });
         };
-        xhr.send(form);
+        reader.readAsDataURL(uploader.file);
     }
 
-    change = info => {
-        if (info.file.status === 'uploading') {
-            this.setState({ loading: true });
+    render = () => {
+        let uri = this.state.uri || this.props.value;
 
-            return;
-        }
-
-        if (info.file.status === 'done') {
-            this.setState({ loading: false });
-            // Get this url from response in real world.
-            // getBase64(info.file.originFileObj, imageUrl =>
-            //     this.setState({
-            //         imageUrl,
-            //         loading: false,
-            //     }),
-            // );
-        }
-    };
-
-    render = () => (
-        <Upload
-            name={this.props.name}
-            listType="picture-card"
-            className="image-uploader"
-            showUploadList={false}
-            customRequest={this.upload}
-            // action={url('/tephra/ctrl-http/upload')}
-            action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-            onChange={this.change}
-        >
-            {this.state.uri ? <img src={url(this.state.uri)} alt="upload" style={{ width: '100%' }} /> : <Icon type={this.state.loading ? 'loading' : 'plus'} />}
-        </Upload>
-    );
+        return (
+            <Upload listType="picture-card" className="image-uploader" showUploadList={false} customRequest={this.upload} >
+                <input type="hidden" id={'image-' + this.props.upload.replace(/[^a-zA-Z0-9]+/g, '_')} value={uri || ''} />
+                {uri ? <img src={url(uri)} alt="upload" style={{ width: '100%' }} /> : <Icon type={this.state.loading ? 'loading' : 'plus'} />}
+            </Upload>
+        );
+    }
 }
 
-export default Image;
+const getImageUri = upload => {
+    let input = document.querySelector('#image-' + upload.replace(/[^a-zA-Z0-9]+/g, '_'));
+
+    return input ? input.value : '';
+}
+
+export {
+    Image,
+    getImageUri
+};

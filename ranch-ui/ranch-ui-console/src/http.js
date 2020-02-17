@@ -2,7 +2,7 @@ import {
     message
 } from 'antd';
 
-const root = 'http://192.168.7.5:8080';
+const root = 'http://192.168.0.106:8080';
 
 const service = (uri, body) => {
     return post(uri, body).then(json => {
@@ -51,6 +51,5 @@ const tsid = () => {
 export {
     service,
     post,
-    url,
-    tsid
+    url
 };
