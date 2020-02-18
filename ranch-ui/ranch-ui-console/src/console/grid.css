@@ -17,8 +17,9 @@
 }
 
 .console-grid td img {
-    max-width: 200px;
-    max-height: 150px;
+    max-width: 128px;
+    max-height: 96px;
+    cursor: pointer;
 }
 
 .console-grid-op {

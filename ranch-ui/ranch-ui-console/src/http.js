@@ -2,22 +2,20 @@ import {
     message
 } from 'antd';
 
-const root = 'http://192.168.0.106:8080';
+const root = 'http://192.168.7.5:8080';
 
-const service = (uri, body) => {
-    return post(uri, body).then(json => {
-        if (json === null) return null;
+const service = (uri, body) => post(uri, body).then(json => {
+    if (json === null) return null;
 
-        if (json.code === 0) return json.data;
+    if (json.code === 0) return json.data;
 
-        message.warn('[' + json.code + ']' + json.message);
-        if (json.code === 115901) {
-            window.location.reload();
-        }
+    message.warn('[' + json.code + ']' + json.message);
+    if (json.code === 115901) {
+        window.location.reload();
+    }
 
-        return null;
-    });
-}
+    return null;
+});
 
 const post = (uri, body) => fetch(root + uri, {
     method: 'POST',
@@ -27,6 +25,12 @@ const post = (uri, body) => fetch(root + uri, {
     },
     body: JSON.stringify(body)
 }).then(response => {
+    if (post.loader) {
+        post.loader.setState({
+            loading: false
+        });
+    }
+
     if (response.ok) return response.json();
 
     message.warn('[' + response.status + ']' + response.statusText);
@@ -37,6 +41,12 @@ const post = (uri, body) => fetch(root + uri, {
 const url = uri => root + uri;
 
 const tsid = () => {
+    if (post.loader) {
+        post.loader.setState({
+            loading: true
+        });
+    }
+
     let tsid = localStorage.getItem('tephra-session-id');
     if (!tsid) {
         tsid = '';
@@ -48,8 +58,11 @@ const tsid = () => {
     return tsid;
 }
 
+const loader = loader => post.loader = loader;
+
 export {
     service,
     post,
-    url
+    url,
+    loader
 };

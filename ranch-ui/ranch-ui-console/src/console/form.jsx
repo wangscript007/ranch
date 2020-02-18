@@ -80,7 +80,7 @@ class FieldForm extends React.Component {
             if (column.type === 'read-only')
                 element = value || '';
             else if (column.type === 'image') {
-                element = <Image upload={column.upload} value={value} />;
+                element = <Image upload={column.upload} size={column.size || 1} value={value} />;
             } else {
                 let option = {};
                 if (column.type === 'date') {

@@ -1,6 +1,6 @@
 import React from 'react';
-import { Form, Row, Col, Radio, Select, DatePicker, Input, Button, Table, Divider, Menu, Dropdown } from 'antd';
-import { service } from '../http';
+import { Form, Row, Col, Radio, Select, DatePicker, Input, Button, Table, Divider, Menu, Dropdown, Modal } from 'antd';
+import { service, url } from '../http';
 import meta from './meta';
 import './grid.css';
 
@@ -28,7 +28,7 @@ class Grid extends React.Component {
             if (prop.labels) {
                 column.render = model => prop.labels[model[prop.name]];
             } else if (prop.type === 'image') {
-                column.render = model => <img src={model[prop.name]} alt="" />;
+                column.render = model => <img src={url(model[prop.name])} alt="" onClick={this.preview} />;
             } else {
                 column.dataIndex = prop.name;
             }
@@ -59,9 +59,9 @@ class Grid extends React.Component {
         }
 
         this.state = {
-            loading: true,
             list: [],
-            pagination: false
+            pagination: false,
+            preview: null
         };
         this.load(null);
     }
@@ -90,9 +90,11 @@ class Grid extends React.Component {
         this.props.body.load(this.props.body.uri(this.props.uri, op.service || op.type), this.props.parameter, model);
     }
 
+    preview = e => this.setState({ preview: e.currentTarget.src });
+
+    cancel = () => this.setState({ preview: null });
+
     load = pagination => {
-        if (!this.state.loading)
-            this.setState({ loading: true });
         let parameter = {};
         if (this.searchValues) {
             parameter = { ...parameter, ...this.searchValues };
@@ -104,21 +106,15 @@ class Grid extends React.Component {
             parameter = { ...parameter, ...this.props.parameter };
         }
         service(this.props.uri, parameter).then(data => {
-            if (data === null) {
-                this.setState({ loading: false });
-
-                return;
-            }
+            if (data === null) return;
 
             if (data instanceof Array) {
                 this.setState({
-                    loading: false,
                     list: data
                 });
             } else {
                 this.pageNum = data.number;
                 this.setState({
-                    loading: false,
                     list: data.list,
                     pagination: data.count <= data.size ? false : {
                         total: data.count,
@@ -135,7 +131,12 @@ class Grid extends React.Component {
         if (this.search) elements.push(this.search);
         if (this.toolbar) elements.push(this.toolbar);
         elements.push(<Table key="table" columns={this.columns} dataSource={this.state.list} rowKey={(record, index) => index} pagination={this.state.pagination}
-            loading={this.state.loading} onChange={this.load} className="console-grid" />);
+            onChange={this.load} className="console-grid" />);
+        elements.push(
+            <Modal key="preview" visible={this.state.preview != null} footer={null} onCancel={this.cancel}>
+                <img style={{ width: '100%' }} src={this.state.preview} alt="" />
+            </Modal>
+        );
 
         return elements;
     }
