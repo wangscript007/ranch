@@ -8,13 +8,10 @@ import org.lpw.tephra.util.Context;
 import org.lpw.tephra.util.Io;
 import org.lpw.tephra.util.Json;
 import org.lpw.tephra.util.Logger;
-import org.lpw.tephra.util.Message;
-import org.lpw.tephra.util.Validator;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
-import java.util.Arrays;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -24,15 +21,11 @@ import java.util.concurrent.ConcurrentHashMap;
 @Service(ConsoleModel.NAME + ".service")
 public class ConsoleServiceImpl implements ConsoleService {
     @Inject
-    private Validator validator;
-    @Inject
     private Context context;
     @Inject
     private Io io;
     @Inject
     private Json json;
-    @Inject
-    private Message message;
     @Inject
     private Logger logger;
     @Inject
@@ -84,65 +77,7 @@ public class ConsoleServiceImpl implements ConsoleService {
 
     @Override
     public JSONObject meta(String domain, String key) {
-        JSONObject meta = metaHelper.get(domain, key);
-        if (meta == null)
-            return new JSONObject();
-
-        String prefix = meta.getString("key");
-        setLabel(prefix, meta, "props", "name");
-        for (String k : meta.keySet()) {
-            if (k.equals("key") || k.equals("uri") || k.equals("props"))
-                continue;
-
-            JSONObject object = meta.getJSONObject(k);
-            if (object.containsKey("search"))
-                setLabel(prefix, object, "search", "name");
-            if (object.containsKey("ops"))
-                setLabel(ConsoleModel.NAME + ".op", object, "ops", "type");
-            if (object.containsKey("toolbar"))
-                setLabel(ConsoleModel.NAME + ".op", object, "toolbar", "type");
-        }
-
-        return meta;
-    }
-
-    private void setLabel(String prefix, JSONObject object, String key, String k) {
-        if (!object.containsKey(key))
-            return;
-
-        JSONArray array = object.getJSONArray(key);
-        for (int i = 0, size = array.size(); i < size; i++)
-            setLabel(prefix, array.getJSONObject(i), k);
-    }
-
-    private void setLabel(String prefix, JSONObject object, String key) {
-        String label = null;
-        if (object.containsKey("label")) {
-            label = object.getString("label");
-            if (label.charAt(0) == '.')
-                label = prefix + label;
-        } else if (key != null && object.containsKey(key))
-            label = prefix + "." + object.getString(key);
-        else
-            label = prefix + "." + object.getString("service");
-        object.put("label", message.get(label));
-
-        if (object.containsKey("labels")) {
-            String labels = object.getString("labels");
-            if (labels.charAt(0) == '.')
-                labels = prefix + labels;
-            JSONArray array = new JSONArray();
-            array.addAll(Arrays.asList(message.getAsArray(labels)));
-            object.put("labels", array);
-        } else if (object.containsKey("values")) {
-            JSONObject values = object.getJSONObject("values");
-            for (String k : values.keySet()) {
-                String v = values.getString(k);
-                if (v.charAt(0) == '.')
-                    v = label + v;
-                values.put(k, message.get(v));
-            }
-        }
+        return metaHelper.get(domain, key);
     }
 
     @Override
