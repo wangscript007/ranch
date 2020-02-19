@@ -12,6 +12,6 @@ dnf install yarn make g++
 
 yarn create react-app ranch-ui-console
 cd ranch-ui-console
-yarn add antd react-app-rewired customize-cra babel-plugin-import draft-js es6-shim
+yarn add antd react-app-rewired customize-cra babel-plugin-import
 sed -i 's/react-scripts /react-app-rewired /g' package.json
 ```

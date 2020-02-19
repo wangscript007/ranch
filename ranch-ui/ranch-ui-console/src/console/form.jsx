@@ -40,7 +40,7 @@ class FieldForm extends React.Component {
         }
     }
 
-    button = (mt) => {
+    button = mt => {
         const { getFieldsValue } = this.props.form;
         let values = getFieldsValue();
         if (this.props.data && this.props.data.id) values.id = this.props.data.id;
@@ -68,6 +68,10 @@ class FieldForm extends React.Component {
 
             this.props.body.load(this.props.body.uri(this.props.uri, mt.success), this.props.parameter);
         });
+    }
+
+    cancel = mt => {
+        this.props.body.load(this.props.body.uri(this.props.uri, mt.success), this.props.parameter);
     }
 
     render = () => {
@@ -98,6 +102,8 @@ class FieldForm extends React.Component {
         if (this.props.meta.toolbar) {
             for (let toolbar of this.props.meta.toolbar) {
                 buttons.push(<Button key={toolbar.label} onClick={this.button.bind(this, toolbar)}>{toolbar.label}</Button>);
+                if (toolbar.success && buttons.length === this.props.meta.toolbar.length)
+                    buttons.push(<Button key="cancel" type="dashed" onClick={this.cancel.bind(this, toolbar)}>取消</Button>);
             }
         }
 

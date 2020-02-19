@@ -5,12 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import org.lpw.tephra.bean.ContextRefreshedListener;
 import org.lpw.tephra.cache.Cache;
 import org.lpw.tephra.dao.model.Model;
-import org.lpw.tephra.util.Context;
-import org.lpw.tephra.util.Io;
-import org.lpw.tephra.util.Json;
-import org.lpw.tephra.util.Logger;
-import org.lpw.tephra.util.Message;
-import org.lpw.tephra.util.Validator;
+import org.lpw.tephra.util.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -56,25 +51,25 @@ public class MetaHelperImpl implements MetaHelper, ContextRefreshedListener {
                 return new JSONObject();
 
             String prefix = meta.getString("key");
-            setLabel(prefix, meta, "props", "name");
+            setLabel(new String[]{prefix}, meta, "props", new String[]{"name"});
             for (String mk : meta.keySet()) {
                 if (mk.equals("key") || mk.equals("uri") || mk.equals("props"))
                     continue;
 
                 JSONObject object = meta.getJSONObject(mk);
                 if (object.containsKey("search"))
-                    setLabel(prefix, object, "search", "name");
+                    setLabel(new String[]{prefix}, object, "search", new String[]{"name"});
                 if (object.containsKey("ops"))
-                    setLabel(ConsoleModel.NAME + ".op", object, "ops", "service");
+                    setLabel(new String[]{prefix, ConsoleModel.NAME + ".op"}, object, "ops", new String[]{"label", "service", "type"});
                 if (object.containsKey("toolbar"))
-                    setLabel(ConsoleModel.NAME + ".op", object, "toolbar", "service");
+                    setLabel(new String[]{prefix, ConsoleModel.NAME + ".op"}, object, "toolbar", new String[]{"label", "service", "type"});
             }
 
             return meta;
         }, false);
     }
 
-    private void setLabel(String prefix, JSONObject object, String key, String k) {
+    private void setLabel(String[] prefix, JSONObject object, String key, String[] k) {
         if (!object.containsKey(key))
             return;
 
@@ -84,20 +79,10 @@ public class MetaHelperImpl implements MetaHelper, ContextRefreshedListener {
     }
 
     private void setLabel(String[] prefix, JSONObject object, String[] key) {
-        String label = null;
-        if (object.containsKey("label")) {
-            label = object.getString("label");
-            if (label.charAt(0) == '.')
-                label = prefix + label;
-        } else if (object.containsKey(key))
-            label = prefix + "." + object.getString(key);
-        if (label != null)
-            object.put("label", message.get(label));
-
         if (object.containsKey("labels")) {
             String labels = object.getString("labels");
             if (labels.charAt(0) == '.')
-                labels = prefix + labels;
+                labels = prefix[0] + labels;
             JSONArray array = new JSONArray();
             array.addAll(Arrays.asList(message.getAsArray(labels)));
             object.put("labels", array);
@@ -105,17 +90,30 @@ public class MetaHelperImpl implements MetaHelper, ContextRefreshedListener {
             JSONObject values = object.getJSONObject("values");
             for (String k : values.keySet()) {
                 String v = values.getString(k);
-                if (v.charAt(0) == '.')
-                    v = label + v;
+                int index = v.indexOf('.');
+                if (index == -1)
+                    v = prefix[0] + "." + v;
+                else if (index == 0)
+                    v = prefix[0] + v;
                 values.put(k, message.get(v));
             }
         }
 
-        for(String p:prefix){
-            for (String k:key){
-                if(object.containsKey(k)){
-                    String value=object.getString(k);
-                    if(value.charAt(0)=='.')
+        for (String p : prefix) {
+            for (String k : key) {
+                if (object.containsKey(k)) {
+                    String label = object.getString(k);
+                    int index = label.indexOf('.');
+                    if (index == -1)
+                        label = p + "." + label;
+                    else if (index == 0)
+                        label = p + label;
+                    String msg = message.get(label);
+                    if (!msg.equals(label)) {
+                        object.put("label", msg);
+
+                        return;
+                    }
                 }
             }
         }

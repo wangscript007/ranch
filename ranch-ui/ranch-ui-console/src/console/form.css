@@ -9,3 +9,7 @@
 .console-form-toolbar label {
     display: none;
 }
+
+.console-form-toolbar button{
+    margin-right: 4px;
+}

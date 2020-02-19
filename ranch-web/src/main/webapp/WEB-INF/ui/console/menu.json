@@ -79,7 +79,7 @@
                 },
                 {
                     "icon": "user",
-                    "label": "用户",
+                    "label": "普通用户",
                     "service": "ranch.user.query",
                     "parameter": {
                         "maxGrade": 49

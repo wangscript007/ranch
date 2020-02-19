@@ -28,7 +28,7 @@ class Grid extends React.Component {
             if (prop.labels) {
                 column.render = model => prop.labels[model[prop.name]];
             } else if (prop.type === 'image') {
-                column.render = model => <img src={url(model[prop.name])} alt="" onClick={this.preview} />;
+                column.render = model => !model[prop.name] ? '' : <img src={url(model[prop.name])} alt="" onClick={this.preview} />;
             } else {
                 column.dataIndex = prop.name;
             }
@@ -37,18 +37,24 @@ class Grid extends React.Component {
         if (props.meta.ops && props.meta.ops.length > 0) {
             this.columns.push({
                 title: '', fixed: 'right', render: model => {
+                    let mops = [];
+                    for (let op of props.meta.ops)
+                        // eslint-disable-next-line
+                        if (!op.when || eval(op.when))
+                            mops.push(op);
+
                     let ops = [];
-                    if (props.meta.ops.length <= 2) {
-                        for (let op of props.meta.ops) {
+                    if (mops.length <= 2) {
+                        for (let op of mops) {
                             if (ops.length > 0) ops.push(<Divider key="divider" type="vertical" />);
                             ops.push(this.action(op, model));
                         }
                     } else {
-                        ops.push(this.action(props.meta.ops[0]));
+                        ops.push(this.action(mops[0], model));
                         ops.push(<Divider key="divider" type="vertical" />);
                         let items = [];
-                        for (let i = 1; i < props.meta.ops.length; i++) {
-                            items.push(<Menu.Item key={props.meta.ops[i].label}>{this.action(props.meta.ops[i], model)}</Menu.Item>);
+                        for (let i = 1; i < mops.length; i++) {
+                            items.push(<Menu.Item key={mops[i].label}>{this.action(mops[i], model)}</Menu.Item>);
                         }
                         ops.push(<Dropdown key="more" overlay={<Menu>{items}</Menu>}><span className="console-grid-op">更多</span></Dropdown>);
                     }
@@ -74,17 +80,22 @@ class Grid extends React.Component {
         if (op.type === 'create') {
             this.props.body.load(this.props.body.uri(this.props.uri, op.service || 'create'), this.props.parameter, {});
 
-            return
+            return;
         }
 
         if (op.type === 'delete' || op.reload) {
-            service(this.props.body.uri(this.props.uri, op.service || op.type), { ...this.props.parameter, ...{ id: model.id } }).then(data => {
+            let parameter = { id: model.id };
+            if (op.parameter)
+                parameter = { ...parameter, ...op.parameter };
+            if (this.props.parameter)
+                parameter = { ...parameter, ...this.props.parameter };
+            service(this.props.body.uri(this.props.uri, op.service || op.type), parameter).then(data => {
                 if (data === null) return;
 
                 this.load({ current: this.pageNum || 1 });
             });
 
-            return
+            return;
         }
 
         this.props.body.load(this.props.body.uri(this.props.uri, op.service || op.type), this.props.parameter, model);

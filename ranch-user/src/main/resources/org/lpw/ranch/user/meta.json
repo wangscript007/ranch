@@ -83,46 +83,43 @@
         ],
         "ops": [
             {
+                "type": "modify",
                 "service": "update"
             },
             {
-                "type": "post",
-                "label": "ranch.user.state.enable",
+                "label": ".state.enable",
                 "service": "state",
                 "parameter": {
                     "state": 0
                 },
-                "success": "search",
+                "reload": true,
                 "when": "model.state==1"
             },
             {
-                "type": "post",
-                "label": "ranch.user.state.disable",
-                "service": ".state",
+                "label": ".state.disable",
+                "service": "state",
                 "parameter": {
                     "state": 1
                 },
-                "success": "search",
+                "reload": true,
                 "when": "model.state==0"
             },
             {
-                "type": "post",
-                "label": "ranch.user.manager",
-                "service": ".grade",
+                "label": ".manager",
+                "service": "grade",
                 "parameter": {
                     "grade": 90
                 },
-                "success": "search",
+                "reload": true,
                 "when": "model.grade<90"
             },
             {
-                "type": "post",
-                "label": "ranch.user.manager.cancel",
-                "service": ".grade",
+                "label": ".manager.cancel",
+                "service": "grade",
                 "parameter": {
                     "grade": 0
                 },
-                "success": "search",
+                "reload": true,
                 "when": "model.grade>=90"
             }
         ]
@@ -132,8 +129,8 @@
         "toolbar": [
             {
                 "type": "save",
-                "service": ".update",
-                "success": ".query"
+                "service": "update",
+                "success": "query"
             }
         ]
     },
