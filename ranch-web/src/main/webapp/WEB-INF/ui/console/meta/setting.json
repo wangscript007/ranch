@@ -1,5 +1,6 @@
 {
-    "key": "settings",
+    "key": "setting",
+    "uri": "/setting/",
     "props": [
         {
             "name": "console.title"
@@ -11,11 +12,6 @@
         }
     ],
     "query": {
-        "type": "settings",
-        "toolbar": [
-            {
-                "type": "save"
-            }
-        ]
+        "type": "setting"
     }
 }

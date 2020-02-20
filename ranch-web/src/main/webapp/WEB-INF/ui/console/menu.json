@@ -74,8 +74,8 @@
             "items": [
                 {
                     "icon": "profile",
-                    "label": "设置",
-                    "service": "settings.query"
+                    "label": "全局设置",
+                    "service": "setting.query"
                 },
                 {
                     "icon": "user",

@@ -15,7 +15,7 @@ class FieldForm extends React.Component {
 
         this.state = {};
         if (props.uri && !props.data) {
-            service(this.props.body.uri(this.props.uri, props.meta.service), props.parameter).then(data => {
+            this.load().then(data => {
                 if (data === null) return;
 
                 this.data = data;
@@ -40,6 +40,8 @@ class FieldForm extends React.Component {
         }
     }
 
+    load = () => service(this.props.body.uri(this.props.uri, this.props.meta.service), this.props.parameter);
+
     button = mt => {
         const { getFieldsValue } = this.props.form;
         let values = getFieldsValue();
@@ -63,12 +65,14 @@ class FieldForm extends React.Component {
             else if (column.type === 'datetime')
                 values[column.name] = value.format("YYYY-MM-DD HH:mm:ss");
         }
-        service(this.props.body.uri(this.props.uri, mt.service || mt.type), { ...values, ...this.props.parameter }).then(data => {
+        this.submit(mt, values).then(data => {
             if (data === null || !mt.success) return;
 
             this.props.body.load(this.props.body.uri(this.props.uri, mt.success), this.props.parameter);
         });
     }
+
+    submit = (mt, values) => service(this.props.body.uri(this.props.uri, mt.service || mt.type), { ...values, ...this.props.parameter });
 
     cancel = mt => {
         this.props.body.load(this.props.body.uri(this.props.uri, mt.success), this.props.parameter);

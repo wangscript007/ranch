@@ -2,6 +2,7 @@ import React from 'react';
 import meta from './meta';
 import Grid from './grid';
 import Form from './form';
+import Setting from './setting';
 
 class Body {
     setIndex = index => this.index = index;
@@ -26,6 +27,8 @@ class Body {
                 this.setState(<Grid columns={mt.props} meta={m} uri={uri} parameter={parameter} data={data} body={this} />);
             } else if (m.type === 'form') {
                 this.setState(<Form columns={mt.props} meta={m} uri={uri} parameter={parameter} data={data} body={this} />);
+            } else if (m.type === 'setting') {
+                this.setState(<Setting code={mt.key} columns={mt.props} meta={m} uri={uri} parameter={parameter} data={data} body={this} />);
             }
         });
     }
