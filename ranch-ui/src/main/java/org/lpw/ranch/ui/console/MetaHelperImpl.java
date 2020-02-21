@@ -117,6 +117,7 @@ public class MetaHelperImpl implements MetaHelper, ContextRefreshedListener {
                 }
             }
         }
+        object.put("label", "");
     }
 
     @Override

@@ -59,12 +59,12 @@
                 {
                     "icon": "alipay",
                     "label": "支付宝",
-                    "service": "ranch.alipay.query"
+                    "service": "/alipay/query"
                 },
                 {
                     "icon": "wechat",
                     "label": "微信",
-                    "service": "ranch.weixin.query"
+                    "service": "/weixin/query"
                 }
             ]
         },
@@ -75,12 +75,12 @@
                 {
                     "icon": "profile",
                     "label": "全局设置",
-                    "service": "setting.query"
+                    "service": "/setting/query"
                 },
                 {
                     "icon": "user",
                     "label": "普通用户",
-                    "service": "ranch.user.query",
+                    "service": "/user/query",
                     "parameter": {
                         "maxGrade": 49
                     }
@@ -88,7 +88,7 @@
                 {
                     "icon": "audit",
                     "label": "管理员",
-                    "service": "ranch.user.query",
+                    "service": "/user/query",
                     "parameter": {
                         "minGrade": 50
                     }
@@ -96,7 +96,7 @@
                 {
                     "icon": "bulb",
                     "label": "在线用户",
-                    "service": "ranch.user.online.query"
+                    "service": "/user/online/query"
                 }
             ]
         }

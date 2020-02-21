@@ -9,12 +9,11 @@ import './form.css';
 const { Option } = Select;
 const { TextArea } = Input;
 
-class FieldForm extends React.Component {
-    constructor(props) {
-        super(props);
+class BaseForm extends React.Component {
+    state = {};
 
-        this.state = {};
-        if (props.uri && !props.data) {
+    componentDidMount = () => {
+        if (this.props.uri && !this.props.data) {
             this.load().then(data => {
                 if (data === null) return;
 
@@ -39,8 +38,6 @@ class FieldForm extends React.Component {
             });
         }
     }
-
-    load = () => service(this.props.body.uri(this.props.uri, this.props.meta.service), this.props.parameter);
 
     button = mt => {
         const { getFieldsValue } = this.props.form;
@@ -72,8 +69,6 @@ class FieldForm extends React.Component {
         });
     }
 
-    submit = (mt, values) => service(this.props.body.uri(this.props.uri, mt.service || mt.type), { ...values, ...this.props.parameter });
-
     cancel = mt => {
         this.props.body.load(this.props.body.uri(this.props.uri, mt.success), this.props.parameter);
     }
@@ -102,19 +97,11 @@ class FieldForm extends React.Component {
             }
             items.push(<Form.Item key={column.name} className={'console-form-item console-form-item-' + (items.length % 2 === 0 ? 'even' : 'odd')} label={column.label}>{element}</Form.Item>);
         }
-        let buttons = [];
-        if (this.props.meta.toolbar) {
-            for (let toolbar of this.props.meta.toolbar) {
-                buttons.push(<Button key={toolbar.label} onClick={this.button.bind(this, toolbar)}>{toolbar.label}</Button>);
-                if (toolbar.success && buttons.length === this.props.meta.toolbar.length)
-                    buttons.push(<Button key="cancel" type="dashed" onClick={this.cancel.bind(this, toolbar)}>取消</Button>);
-            }
-        }
 
         return (
             <Form labelCol={{ xs: { span: 24 }, sm: { span: 6 } }} wrapperCol={{ xs: { span: 24 }, sm: { span: 12 }, }}>
                 {items}
-                <Form.Item className="console-form-toolbar" label="toolbar">{buttons}</Form.Item>
+                <Form.Item className="console-form-toolbar" label="toolbar">{this.toolbar()}</Form.Item>
             </Form>
         );
     }
@@ -148,6 +135,27 @@ class FieldForm extends React.Component {
     }
 }
 
-const WrappedFieldForm = Form.create({ name: 'form' })(FieldForm);
+class NormalForm extends BaseForm {
+    load = () => service(this.props.body.uri(this.props.uri, this.props.meta.service), this.props.parameter);
 
-export default WrappedFieldForm;
+    toolbar = () => {
+        let buttons = [];
+        if (this.props.meta.toolbar) {
+            for (let toolbar of this.props.meta.toolbar) {
+                buttons.push(<Button key={toolbar.label} onClick={this.button.bind(this, toolbar)}>{toolbar.label}</Button>);
+                if (toolbar.success && buttons.length === this.props.meta.toolbar.length)
+                    buttons.push(<Button key="cancel" type="dashed" onClick={this.cancel.bind(this, toolbar)}>取消</Button>);
+            }
+        }
+
+        return buttons;
+    }
+
+    submit = (mt, values) => service(this.props.body.uri(this.props.uri, mt.service || mt.type), { ...values, ...this.props.parameter });
+}
+
+const Normal = Form.create({ name: 'normal-form' })(NormalForm);
+
+export default Normal;
+
+export { BaseForm };
