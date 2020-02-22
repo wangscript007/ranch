@@ -47,6 +47,11 @@ class ClassifyDaoImpl implements ClassifyDao {
     }
 
     @Override
+    public PageList<ClassifyModel> query(String code) {
+        return liteOrm.query(new LiteQuery(ClassifyModel.class).where(Recycle.No.getSql() + " and c_code=?"), new Object[]{code});
+    }
+
+    @Override
     public ClassifyModel findById(String id) {
         return liteOrm.findById(ClassifyModel.class, id);
     }

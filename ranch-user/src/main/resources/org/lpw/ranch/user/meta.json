@@ -136,7 +136,7 @@
     },
     "sign": {
         "type": "form",
-        "columns": [
+        "props": [
             {
                 "name": "portrait"
             },

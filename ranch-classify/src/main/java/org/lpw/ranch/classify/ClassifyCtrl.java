@@ -57,6 +57,13 @@ public class ClassifyCtrl extends RecycleCtrlSupport {
         return classifyService.list(request.get("code"), request.get("key"), request.get("name"));
     }
 
+    @Execute(name = "kvs", validates = {
+            @Validate(validator = Validators.NOT_EMPTY, parameter = "code", failureCode = 2)
+    })
+    public Object kvs() {
+        return classifyService.kvs(request.get("code"));
+    }
+
     @Execute(name = "save", validates = {
             @Validate(validator = Validators.ID, emptyable = true, parameter = "id", failureCode = 8),
             @Validate(validator = Validators.NOT_EMPTY, parameter = "code", failureCode = 2),

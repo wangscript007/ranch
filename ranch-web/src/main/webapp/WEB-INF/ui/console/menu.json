@@ -75,7 +75,7 @@
                 {
                     "icon": "profile",
                     "label": "全局设置",
-                    "service": "/setting/query"
+                    "service": "/setting/global"
                 },
                 {
                     "icon": "user",

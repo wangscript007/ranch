@@ -1,18 +1,16 @@
 {
     "key": "setting",
     "uri": "/setting/",
-    "props": [
-        {
-            "name": "console-title"
-        },
-        {
-            "name": "console-logo",
-            "type": "image",
-            "upload": "ranch.classify.image"
-        }
-    ],
-    "query": {
-        "type": "setting",
-        "code": "setting.global"
+    "global": {
+        "props": [
+            {
+                "name": "console-title"
+            },
+            {
+                "name": "console-logo",
+                "type": "image",
+                "upload": "ranch.classify.image"
+            }
+        ]
     }
 }

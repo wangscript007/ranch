@@ -87,7 +87,7 @@
     "find-editor": {
         "service": "find",
         "type": "form",
-        "columns": [
+        "props": [
             {
                 "name": "name"
             },

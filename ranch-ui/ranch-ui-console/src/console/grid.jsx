@@ -11,9 +11,9 @@ class Grid extends React.Component {
     constructor(props) {
         super(props);
 
-        let columns = meta.props(props.columns, props.meta.columns);
+        let columns = meta.props(props.props, props.meta.props);
         if (props.meta.search && props.meta.search.length > 0) {
-            this.search = <SearchForm key="search" columns={meta.props(columns, props.meta.search)} toolbar={props.meta.toolbar} grid={this} />;
+            this.search = <SearchForm key="search" props={meta.props(columns, props.meta.search)} toolbar={props.meta.toolbar} grid={this} />;
         } else if (props.meta.toolbar && props.meta.toolbar.length > 0) {
             let buttons = [];
             for (let toolbar of props.meta.toolbar) {
@@ -157,7 +157,7 @@ class Search extends React.Component {
     render = () => {
         const { getFieldDecorator } = this.props.form;
         let cols = [];
-        for (let column of this.props.columns) {
+        for (let column of this.props.props) {
             cols.push(
                 <Col span={6} key={column.name}>
                     <Form.Item label={column.label}>
@@ -212,9 +212,8 @@ class Search extends React.Component {
         e.preventDefault();
         const { getFieldsValue } = this.props.form;
         let values = getFieldsValue();
-        for (let column of this.props.columns) {
+        for (let column of this.props.props) {
             let value = values[column.name];
-            console.log(value);
             if (!value) continue;
 
             if (column.type === 'date') {

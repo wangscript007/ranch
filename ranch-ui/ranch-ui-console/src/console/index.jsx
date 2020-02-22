@@ -1,5 +1,6 @@
 import React from 'react';
 import { Layout } from 'antd';
+import { url } from '../http';
 import Menu from './menu';
 import Sign from './sign';
 import body from './body';
@@ -21,10 +22,7 @@ class Console extends React.Component {
   render = () => (
     <Layout style={{ minHeight: '100vh' }}>
       <Sider>
-        <div className="console-logo">
-          <div>Ranch UI</div>
-          <div>Console</div>
-        </div>
+        <div className="console-logo">{this.props.logo ? [<img key="img" src={url(this.props.logo)} alt="" />, <div key="div"></div>] : null}</div>
         {this.state.menu}
       </Sider>
       <Layout>

@@ -23,16 +23,16 @@ class BaseForm extends React.Component {
                 for (let key in values) {
                     values[key] = data[key];
                 }
-                for (let column of meta.props(this.props.columns, this.props.meta.columns)) {
-                    let value = values[column.name];
+                for (let prop of meta.props(this.props.props, this.props.meta.props)) {
+                    let value = values[prop.name];
                     if (!value) continue;
 
-                    if (column.labels)
-                        values[column.name] = '' + value;
-                    else if (column.type === 'date')
-                        values[column.name] = moment(value, 'YYYY-MM-DD');
-                    else if (column.type === 'datetime')
-                        values[column.name] = moment(value, 'YYYY-MM-DD HH:mm:ss');
+                    if (prop.labels)
+                        values[prop.name] = '' + value;
+                    else if (prop.type === 'date')
+                        values[prop.name] = moment(value, 'YYYY-MM-DD');
+                    else if (prop.type === 'datetime')
+                        values[prop.name] = moment(value, 'YYYY-MM-DD HH:mm:ss');
                 }
                 setFieldsValue(values);
             });
@@ -43,24 +43,24 @@ class BaseForm extends React.Component {
         const { getFieldsValue } = this.props.form;
         let values = getFieldsValue();
         if (this.props.data && this.props.data.id) values.id = this.props.data.id;
-        for (let column of meta.props(this.props.columns, this.props.meta.columns)) {
-            if (column.type === 'image') {
-                values[column.name] = getImageUri(column.upload);
+        for (let prop of meta.props(this.props.props, this.props.meta.props)) {
+            if (prop.type === 'image') {
+                values[prop.name] = getImageUri(prop.upload);
 
                 continue;
             }
 
-            let value = values[column.name];
+            let value = values[prop.name];
             if (!value) {
-                delete values[column.name];
+                delete values[prop.name];
 
                 continue;
             };
 
-            if (column.type === 'date')
-                values[column.name] = value.format("YYYY-MM-DD");
-            else if (column.type === 'datetime')
-                values[column.name] = value.format("YYYY-MM-DD HH:mm:ss");
+            if (prop.type === 'date')
+                values[prop.name] = value.format("YYYY-MM-DD");
+            else if (prop.type === 'datetime')
+                values[prop.name] = value.format("YYYY-MM-DD HH:mm:ss");
         }
         this.submit(mt, values).then(data => {
             if (data === null || !mt.success) return;
@@ -77,25 +77,25 @@ class BaseForm extends React.Component {
         const { getFieldDecorator } = this.props.form;
         let items = [];
         let data = this.data || this.props.data || {};
-        for (let column of meta.props(this.props.columns, this.props.meta.columns)) {
+        for (let prop of meta.props(this.props.props, this.props.meta.props)) {
             let element = '';
-            let value = data[column.name];
-            if (column.type === 'read-only')
+            let value = data[prop.name];
+            if (prop.type === 'read-only')
                 element = value || '';
-            else if (column.type === 'image') {
-                element = <Image upload={column.upload} size={column.size || 1} value={value} />;
+            else if (prop.type === 'image') {
+                element = <Image upload={prop.upload} size={prop.size || 1} value={value} />;
             } else {
                 let option = {};
-                if (column.type === 'date') {
+                if (prop.type === 'date') {
                     if (value) option.initialValue = moment(value, 'YYYY-MM-DD');
-                } else if (column.type === 'datetime') {
+                } else if (prop.type === 'datetime') {
                     if (value) option.initialValue = moment(value, 'YYYY-MM-DD HH:mm:ss');
                 } else {
                     option.initialValue = value || '';
                 }
-                element = getFieldDecorator(column.name, option)(this.input(column))
+                element = getFieldDecorator(prop.name, option)(this.input(prop))
             }
-            items.push(<Form.Item key={column.name} className={'console-form-item console-form-item-' + (items.length % 2 === 0 ? 'even' : 'odd')} label={column.label}>{element}</Form.Item>);
+            items.push(<Form.Item key={prop.name} className={'console-form-item console-form-item-' + (items.length % 2 === 0 ? 'even' : 'odd')} label={prop.label}>{element}</Form.Item>);
         }
 
         return (
@@ -106,30 +106,30 @@ class BaseForm extends React.Component {
         );
     }
 
-    input = column => {
-        if (column.labels) {
-            if (column.labels.length < 5) {
+    input = prop => {
+        if (prop.labels) {
+            if (prop.labels.length < 5) {
                 let radios = [];
-                for (let index in column.labels) {
-                    radios.push(<Radio key={index} value={index}>{column.labels[index]}</Radio>);
+                for (let index in prop.labels) {
+                    radios.push(<Radio key={index} value={index}>{prop.labels[index]}</Radio>);
                 }
 
                 return <Radio.Group>{radios}</Radio.Group>;
             }
 
             let options = [];
-            for (let index in column.labels) {
-                options.push(<Option key={index} value={index}>{column.labels[index]}</Option>);
+            for (let index in prop.labels) {
+                options.push(<Option key={index} value={index}>{prop.labels[index]}</Option>);
             }
 
             return <Select>{options}</Select>
         }
 
-        if (column.type === 'date') return <DatePicker />;
+        if (prop.type === 'date') return <DatePicker />;
 
-        if (column.type === 'datetime') return <DatePicker showTime={true} />;
+        if (prop.type === 'datetime') return <DatePicker showTime={true} />;
 
-        if (column.type === 'text-area') return <TextArea />;
+        if (prop.type === 'text-area') return <TextArea />;
 
         return <Input />
     }

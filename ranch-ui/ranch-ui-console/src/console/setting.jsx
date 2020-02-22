@@ -4,7 +4,7 @@ import { service } from '../http';
 import { BaseForm } from './form';
 
 class SettingForm extends BaseForm {
-    load = () => service('/classify/list', { code: this.props.meta.code }).then(data => {
+    load = () => service('/classify/list', { code: this.code() }).then(data => {
         if (data === null) return null;
 
         let kvs = {};
@@ -15,9 +15,23 @@ class SettingForm extends BaseForm {
         return kvs;
     });
 
-    toolbar = () => <Button onClick={this.submit}>保存</Button>;
+    toolbar = () => <Button onClick={this.button.bind(this, this.props.meta)}>保存</Button>;
 
-    submit = (mt, values) => service(this.props.body.uri(this.props.uri, mt.service || mt.type), { ...values, ...this.props.parameter });
+    submit = (mt, values) => {
+        let array = [];
+        let code = this.code();
+        for (let prop of mt.props) {
+            array.push({
+                code: code,
+                key: prop.name,
+                value: values[prop.name] || ''
+            });
+        }
+
+        return service('/classify/saves', { classifies: JSON.stringify(array) });
+    }
+
+    code = () => this.props.uri.substring(1).replace(/\//g, '.');
 }
 
 const Setting = Form.create({ name: 'setting-form' })(SettingForm);

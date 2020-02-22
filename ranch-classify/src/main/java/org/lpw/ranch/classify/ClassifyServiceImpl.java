@@ -26,6 +26,7 @@ public class ClassifyServiceImpl implements ClassifyService, DateJob {
     private static final String CACHE_JSON = ClassifyModel.NAME + ".service.json:";
     private static final String CACHE_GET = ClassifyModel.NAME + ".service.get:";
     private static final String CACHE_LIST = ClassifyModel.NAME + ".service.list:";
+    private static final String CACHE_KVS = ClassifyModel.NAME + ".service.kvs:";
 
     @Inject
     private Cache cache;
@@ -164,6 +165,16 @@ public class ClassifyServiceImpl implements ClassifyService, DateJob {
     }
 
     @Override
+    public JSONObject kvs(String code) {
+        return cache.computeIfAbsent(CACHE_KVS + getRandom() + code, key -> {
+            JSONObject object = new JSONObject();
+            classifyDao.query(code).getList().forEach(classify -> object.put(classify.getKey(), classify.getValue()));
+
+            return object;
+        }, false);
+    }
+
+    @Override
     public JSONObject save(ClassifyModel classify) {
         ClassifyModel model = save(classify.getId(), classify.getCode(), classify.getKey(), classify.getValue(),
                 classify.getName(), classify.getJson());
@@ -197,9 +208,8 @@ public class ClassifyServiceImpl implements ClassifyService, DateJob {
             JSONObject object = array.getJSONObject(i);
             String code = object.getString("code");
             String key = object.getString("key");
-            String name = object.getString("name");
-            if (nonEmptyMaxLength(code) && nonEmptyMaxLength(key) && nonEmptyMaxLength(name))
-                save(object.getString("id"), code, key, object.getString("value"), name, null);
+            if (nonEmptyMaxLength(code) && nonEmptyMaxLength(key))
+                save(object.getString("id"), code, key, object.getString("value"), object.getString("name"), null);
         }
         resetRandom();
     }

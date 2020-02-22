@@ -5,7 +5,12 @@ import com.alibaba.fastjson.JSONObject;
 import org.lpw.tephra.bean.ContextRefreshedListener;
 import org.lpw.tephra.cache.Cache;
 import org.lpw.tephra.dao.model.Model;
-import org.lpw.tephra.util.*;
+import org.lpw.tephra.util.Context;
+import org.lpw.tephra.util.Io;
+import org.lpw.tephra.util.Json;
+import org.lpw.tephra.util.Logger;
+import org.lpw.tephra.util.Message;
+import org.lpw.tephra.util.Validator;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -57,6 +62,8 @@ public class MetaHelperImpl implements MetaHelper, ContextRefreshedListener {
                     continue;
 
                 JSONObject object = meta.getJSONObject(mk);
+                if (object.containsKey("props"))
+                    setLabel(new String[]{prefix}, object, "props", new String[]{"name"});
                 if (object.containsKey("search"))
                     setLabel(new String[]{prefix}, object, "search", new String[]{"name"});
                 if (object.containsKey("ops"))
@@ -179,12 +186,14 @@ public class MetaHelperImpl implements MetaHelper, ContextRefreshedListener {
         if (object == null)
             return;
 
-        String prefix = object.getString("key") + ".";
-        JSONArray props = object.getJSONArray("props");
-        for (int i = 0, size = props.size(); i < size; i++) {
-            JSONObject prop = props.getJSONObject(i);
-            if (json.has(prop, "type", "image") && !prop.containsKey("upload"))
-                prop.put("upload", prefix + prop.getString("name"));
+        if (object.containsKey("props")) {
+            String prefix = object.getString("key") + ".";
+            JSONArray props = object.getJSONArray("props");
+            for (int i = 0, size = props.size(); i < size; i++) {
+                JSONObject prop = props.getJSONObject(i);
+                if (json.has(prop, "type", "image") && !prop.containsKey("upload"))
+                    prop.put("upload", prefix + prop.getString("name"));
+            }
         }
 
         string = object.toJSONString();

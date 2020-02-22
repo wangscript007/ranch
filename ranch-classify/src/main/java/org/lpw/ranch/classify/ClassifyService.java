@@ -64,6 +64,14 @@ public interface ClassifyService extends RecycleService {
     JSONArray list(String code, String key, String name);
 
     /**
+     * 检索指定编码的分类数据。
+     *
+     * @param code 编码。
+     * @return key-value对象。
+     */
+    JSONObject kvs(String code);
+
+    /**
      * 保存分类。
      * 如果code+key已存在则修改；否则新增。
      *

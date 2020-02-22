@@ -10,6 +10,8 @@ interface ClassifyDao {
 
     PageList<ClassifyModel> query(String code, String key, String value, String name, int pageSize, int pageNum);
 
+    PageList<ClassifyModel> query(String code);
+
     ClassifyModel findById(String id);
 
     ClassifyModel findByCodeKey(String code, String key);

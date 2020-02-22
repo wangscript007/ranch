@@ -28,6 +28,8 @@ class Meta {
     }
 
     props = (full, sub) => {
+        if (!full) return sub;
+
         if (!sub) return full;
 
         let ps = [];

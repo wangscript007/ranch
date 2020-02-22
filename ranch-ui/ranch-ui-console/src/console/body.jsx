@@ -24,11 +24,11 @@ class Body {
             if (!m) return;
 
             if (m.type === 'grid') {
-                this.setState(<Grid columns={mt.props} meta={m} uri={uri} parameter={parameter} data={data} body={this} />);
+                this.setState(<Grid props={mt.props} meta={m} uri={uri} parameter={parameter} data={data} body={this} />);
             } else if (m.type === 'form') {
-                this.setState(<Form columns={mt.props} meta={m} uri={uri} parameter={parameter} data={data} body={this} />);
-            } else if (m.type === 'setting') {
-                this.setState(<Setting code={mt.key} columns={mt.props} meta={m} uri={uri} parameter={parameter} data={data} body={this} />);
+                this.setState(<Form props={mt.props} meta={m} uri={uri} parameter={parameter} data={data} body={this} />);
+            } else if (mt.key === 'setting') {
+                this.setState(<Setting props={mt.props} meta={m} uri={uri} parameter={parameter} data={data} body={this} />);
             }
         });
     }
