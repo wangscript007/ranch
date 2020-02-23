@@ -4,16 +4,13 @@ import { url, service } from '../http';
 import './image.css';
 
 class Image extends React.Component {
-    constructor(props) {
-        super(props);
-
-        this.uri = undefined;
-        this.state = {
-            loading: false,
-            preview: null,
-            remove: 0
-        };
-    }
+    state = {
+        uri: null,
+        changed: false,
+        loading: false,
+        preview: null,
+        remove: 0
+    };
 
     upload = (uploader) => {
         this.setState({ loading: true });
@@ -32,8 +29,18 @@ class Image extends React.Component {
             }).then(data => {
                 if (data === null) return;
 
-                this.uri = this.uri ? (this.uri + ',' + data.path) : data.path;
-                this.setState({ loading: false });
+                let uri = this.state.changed ? this.state.uri : this.props.value;
+                console.log(uri);
+                uri = uri ? (uri + ',' + data.path) : data.path;
+                console.log(uri);
+                this.setState({
+                    uri: uri,
+                    changed: true,
+                    loading: false
+                }, () => {
+                    console.log(this.state);
+                    this.props.form.value(this.props.name, this.state.uri)
+                });
             });
         };
         reader.readAsDataURL(uploader.file);
@@ -48,22 +55,31 @@ class Image extends React.Component {
     }
 
     remove = file => {
-        let uris = this.uri.split(',');
-        this.uri = '';
+        let uri = this.state.changed ? this.state.uri : this.props.value;
+        if (!uri) return;
+
+        let uris = uri.split(',');
+        let u = '';
         for (let i in uris) {
             if (i === file.uid) continue;
 
-            if (this.uri.length > 0) this.uri += ',';
-            this.uri += uris[i];
+            if (u.length > 0) u += ',';
+            u += uris[i];
         }
-        this.setState({ remove: this.state.remove + 1 });
+        this.setState({
+            uri: u,
+            changed: true
+        }, () => this.props.form.value(this.props.name, this.state.uri));
     }
 
     render = () => {
-        if (this.uri === undefined) this.uri = this.props.value;
+        let uri = this.state.changed ? this.state.uri : this.props.value;
+        if (!this.state.changed && this.props.value) {
+            this.props.form.value(this.props.name, this.props.value);
+        }
         let list = [];
-        if (this.uri) {
-            let uris = this.uri.split(',');
+        if (uri) {
+            let uris = uri.split(',');
             for (let i in uris) {
                 list.push({
                     uid: '' + i,
@@ -76,7 +92,6 @@ class Image extends React.Component {
 
         return (
             <div className="clearfix">
-                <input type="hidden" id={'image-' + this.props.upload.replace(/[^a-zA-Z0-9]+/g, '_')} value={this.uri || ''} />
                 <Upload listType="picture-card" fileList={list} className="image-uploader" customRequest={this.upload} onPreview={this.preview} onRemove={this.remove} >
                     {this.props.size > 0 && list.length >= this.props.size ? null : <Icon type={this.state.loading ? 'loading' : 'plus'} />}
                 </Upload>
@@ -88,13 +103,4 @@ class Image extends React.Component {
     }
 }
 
-const getImageUri = upload => {
-    let input = document.querySelector('#image-' + upload.replace(/[^a-zA-Z0-9]+/g, '_'));
-
-    return input ? input.value : '';
-}
-
-export {
-    Image,
-    getImageUri
-};
+export default Image;

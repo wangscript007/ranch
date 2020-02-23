@@ -3,7 +3,8 @@ import { Form, Radio, Select, DatePicker, Input, Button } from 'antd';
 import moment from 'moment';
 import { service } from '../http';
 import meta from './meta';
-import { Image, getImageUri } from './image';
+import Image from './image';
+import Editor from './editor';
 import './form.css';
 
 const { Option } = Select;
@@ -11,6 +12,7 @@ const { TextArea } = Input;
 
 class BaseForm extends React.Component {
     state = {};
+    values = {};
 
     componentDidMount = () => {
         if (this.props.uri && !this.props.data) {
@@ -39,17 +41,13 @@ class BaseForm extends React.Component {
         }
     }
 
+    value = (name, value) => this.values[name] = value;
+
     button = mt => {
         const { getFieldsValue } = this.props.form;
         let values = getFieldsValue();
         if (this.props.data && this.props.data.id) values.id = this.props.data.id;
         for (let prop of meta.props(this.props.props, this.props.meta.props)) {
-            if (prop.type === 'image') {
-                values[prop.name] = getImageUri(prop.upload);
-
-                continue;
-            }
-
             let value = values[prop.name];
             if (!value) {
                 delete values[prop.name];
@@ -62,7 +60,7 @@ class BaseForm extends React.Component {
             else if (prop.type === 'datetime')
                 values[prop.name] = value.format("YYYY-MM-DD HH:mm:ss");
         }
-        this.submit(mt, values).then(data => {
+        this.submit(mt, { ...values, ...this.values }).then(data => {
             if (data === null || !mt.success) return;
 
             this.props.body.load(this.props.body.uri(this.props.uri, mt.success), this.props.parameter);
@@ -83,7 +81,9 @@ class BaseForm extends React.Component {
             if (prop.type === 'read-only')
                 element = value || '';
             else if (prop.type === 'image') {
-                element = <Image upload={prop.upload} size={prop.size || 1} value={value} />;
+                element = <Image name={prop.name} upload={prop.upload} size={prop.size || 1} value={value} form={this} />;
+            } else if (prop.type === 'editor') {
+                element = <Editor name={prop.name} value={value || ''} form={this} />;
             } else {
                 let option = {};
                 if (prop.type === 'date') {
