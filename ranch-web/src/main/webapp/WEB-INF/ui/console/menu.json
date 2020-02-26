@@ -102,6 +102,11 @@
                     }
                 },
                 {
+                    "icon": "number",
+                    "label": "权限设置",
+                    "service": "/user/crosier"
+                },
+                {
                     "icon": "bulb",
                     "label": "在线用户",
                     "service": "/user/online/query"

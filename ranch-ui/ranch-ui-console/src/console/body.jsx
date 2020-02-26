@@ -3,6 +3,7 @@ import meta from './meta';
 import Grid from './grid';
 import Form from './form';
 import Setting from './setting';
+import Crosier from './crosier';
 
 class Body {
     setIndex = index => this.index = index;
@@ -17,6 +18,12 @@ class Body {
 
     load = (uri, parameter, data) => {
         if (!uri.startsWith('/')) uri = uri.substring(uri.indexOf('.')).replace(/\./g, '/');
+        if (uri === '/user/crosier') {
+            this.setState(<Crosier />);
+
+            return;
+        }
+
         meta.get(uri).then(mt => {
             if (mt === null) return;
 
