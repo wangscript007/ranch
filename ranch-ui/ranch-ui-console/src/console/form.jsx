@@ -46,7 +46,6 @@ class BaseForm extends React.Component {
     button = mt => {
         const { getFieldsValue } = this.props.form;
         let values = getFieldsValue();
-        if (this.props.data && this.props.data.id) values.id = this.props.data.id;
         for (let prop of meta.props(this.props.props, this.props.meta.props)) {
             let value = values[prop.name];
             if (!value) {
@@ -60,6 +59,10 @@ class BaseForm extends React.Component {
             else if (prop.type === 'datetime')
                 values[prop.name] = value.format("YYYY-MM-DD HH:mm:ss");
         }
+        if (this.props.data)
+            for (let key in this.props.data)
+                if (!(key in values))
+                    values[key] = this.props.data[key];
         this.submit(mt, { ...values, ...this.values }).then(data => {
             if (data === null || !mt.success) return;
 

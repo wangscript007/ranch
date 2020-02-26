@@ -28,6 +28,14 @@
                         "code": "setting.doc",
                         "key": "contact-us"
                     }
+                },
+                {
+                    "icon": "apartment",
+                    "label": "分类",
+                    "service": "/category/query",
+                    "parameter": {
+                        "key": "category"
+                    }
                 }
             ]
         },

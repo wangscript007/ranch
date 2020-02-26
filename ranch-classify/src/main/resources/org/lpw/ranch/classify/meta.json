@@ -3,37 +3,16 @@
     "uri": "/classify/",
     "props": [
         {
-            "name": "code",
-            "ignore": [
-                "find",
-                "find-editor"
-            ]
+            "name": "code"
         },
         {
-            "name": "key",
-            "ignore": [
-                "find",
-                "find-editor"
-            ]
+            "name": "key"
         },
         {
             "name": "name"
         },
         {
-            "name": "value",
-            "type": "text-area",
-            "ignore": [
-                "find-editor"
-            ]
-        },
-        {
-            "name": "value",
-            "type": "editor",
-            "ignore": [
-                "create",
-                "modify",
-                "find"
-            ]
+            "name": "value"
         }
     ],
     "query": {
@@ -43,9 +22,27 @@
                 "type": "modify"
             },
             {
+                "type": "delete"
+            }
+        ],
+        "toolbar": [
+            {
+                "type": "create"
+            }
+        ]
+    },
+    "tree": {
+        "type": "grid",
+        "ops": [
+            {
+                "type": "modify"
+            },
+            {
+                "type": "create"
+            },
+            {
                 "type": "delete",
-                "service": ".delete",
-                "success": ".query"
+                "when": "!model.children||model.children.length==0"
             }
         ],
         "toolbar": [
@@ -58,9 +55,8 @@
         "type": "form",
         "toolbar": [
             {
-                "type": "save",
-                "service": ".save",
-                "success": ".query"
+                "service": "save",
+                "success": "query"
             }
         ]
     },
@@ -69,8 +65,8 @@
         "toolbar": [
             {
                 "type": "save",
-                "service": ".save",
-                "success": ".query"
+                "service": "save",
+                "success": "query"
             }
         ]
     },

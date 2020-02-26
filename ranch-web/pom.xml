@@ -128,7 +128,7 @@
         </dependency>
         <dependency>
             <groupId>org.lpw.ranch</groupId>
-            <artifactId>ranch-editor</artifactId>
+            <artifactId>ranch-category</artifactId>
             <version>${version.ranch}</version>
         </dependency>
         <dependency>

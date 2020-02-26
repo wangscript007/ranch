@@ -1,0 +1,57 @@
+{
+    "key": "ranch.category",
+    "uri": "/category/",
+    "props": [
+        {
+            "name": "sort"
+        },
+        {
+            "name": "name"
+        },
+        {
+            "name": "value"
+        },
+        {
+            "name": "image",
+            "type": "image"
+        }
+    ],
+    "query": {
+        "type": "grid",
+        "ops": [
+            {
+                "type": "create"
+            },
+            {
+                "type": "modify"
+            },
+            {
+                "type": "delete",
+                "when": "!model.children||model.children.length===0"
+            }
+        ],
+        "toolbar": [
+            {
+                "type": "create"
+            }
+        ]
+    },
+    "create": {
+        "type": "form",
+        "toolbar": [
+            {
+                "service": "save",
+                "success": "query"
+            }
+        ]
+    },
+    "modify": {
+        "type": "form",
+        "toolbar": [
+            {
+                "service": "save",
+                "success": "query"
+            }
+        ]
+    }
+}

@@ -72,13 +72,13 @@ class Grid extends React.Component {
         this.load(null);
     }
 
-    button = op => <Button key={op.label} onClick={this.operate.bind(this, op)}>{op.label}</Button>;
+    button = op => <Button key={op.label} onClick={this.operate.bind(this, op, {})}>{op.label}</Button>;
 
     action = (op, model) => <span key={op.label} className="console-grid-op" onClick={this.operate.bind(this, op, model)}>{op.label}</span>;
 
     operate = (op, model) => {
         if (op.type === 'create') {
-            this.props.body.load(this.props.body.uri(this.props.uri, op.service || 'create'), this.props.parameter, {});
+            this.props.body.load(this.props.body.uri(this.props.uri, op.service || op.type), this.props.parameter, model && model.id ? { parent: model.id } : {});
 
             return;
         }
@@ -141,7 +141,7 @@ class Grid extends React.Component {
         let elements = [];
         if (this.search) elements.push(this.search);
         if (this.toolbar) elements.push(this.toolbar);
-        elements.push(<Table key="table" columns={this.columns} dataSource={this.state.list} rowKey={(record, index) => index} pagination={this.state.pagination}
+        elements.push(<Table key="table" columns={this.columns} dataSource={this.state.list} rowKey="id" pagination={this.state.pagination}
             onChange={this.load} className="console-grid" />);
         elements.push(
             <Modal key="preview" visible={this.state.preview != null} footer={null} onCancel={this.cancel}>
