@@ -19,9 +19,7 @@ public class CrosierCtrl {
     @Inject
     private CrosierService crosierService;
 
-    @Execute(name = "grades", validates = {
-            @Validate(validator = Validators.SIGN)
-    })
+    @Execute(name = "grades")
     public Object grades() {
         return crosierService.grades();
     }

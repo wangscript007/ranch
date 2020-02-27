@@ -3,7 +3,6 @@ package org.lpw.ranch.ui.console;
 import org.lpw.ranch.user.helper.UserHelper;
 import org.lpw.tephra.ctrl.context.Request;
 import org.lpw.tephra.ctrl.execute.Execute;
-import org.lpw.tephra.ctrl.validate.SignValidator;
 import org.lpw.tephra.ctrl.validate.Validate;
 import org.lpw.tephra.ctrl.validate.Validators;
 import org.lpw.tephra.util.Validator;
@@ -19,7 +18,6 @@ import javax.inject.Inject;
 public class ConsoleCtrl {
     @Inject
     private Validator validator;
-    @Inject private SignValidator signValidator;
     @Inject
     private Request request;
     @Inject
@@ -37,8 +35,6 @@ public class ConsoleCtrl {
             @Validate(validator = UserHelper.VALIDATOR_SIGN_IN)
     })
     public Object menu() {
-        signValidator.setSignEnable(false);
-
         return consoleService.menus(request.get("domain"));
     }
 
