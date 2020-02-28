@@ -1,6 +1,5 @@
 package org.lpw.ranch.ui.console;
 
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
 import java.util.Map;
@@ -29,23 +28,6 @@ public interface ConsoleService {
      * @return 如果允许则返回true；否则返回fale。
      */
     boolean permit(String domain);
-
-    /**
-     * 获取菜单。
-     *
-     * @param domain 所属域。
-     * @return 菜单。
-     */
-    JSONArray menus(String domain);
-
-    /**
-     * 获取模块元数据。
-     *
-     * @param domain 所属域。
-     * @param key    模块key。
-     * @return 模块元数据；如果不存在则返回空JSON。
-     */
-    JSONObject meta(String domain, String key);
 
     /**
      * 执行服务。

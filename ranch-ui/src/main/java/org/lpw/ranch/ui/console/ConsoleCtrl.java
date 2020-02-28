@@ -22,6 +22,8 @@ public class ConsoleCtrl {
     private Request request;
     @Inject
     private ConsoleService consoleService;
+    @Inject private MenuHelper menuHelper;
+    @Inject private MetaHelper metaHelper;
 
     @Execute(name = "sign-up", validates = {
             @Validate(validator = Validators.NOT_EMPTY, parameter = "domain", failureCode = 1)
@@ -35,7 +37,7 @@ public class ConsoleCtrl {
             @Validate(validator = UserHelper.VALIDATOR_SIGN_IN)
     })
     public Object menu() {
-        return consoleService.menus(request.get("domain"));
+        return menuHelper.get(request.get("domain"),request.getAsBoolean("all"));
     }
 
     @Execute(name = "meta", validates = {
@@ -43,7 +45,7 @@ public class ConsoleCtrl {
             @Validate(validator = Validators.NOT_EMPTY, parameter = "key", failureCode = 2)
     })
     public Object meta() {
-        return consoleService.meta(request.get("domain"), request.get("key"));
+        return metaHelper.get(request.get("domain"), request.get("key"));
     }
 
     @Execute(name = "service", validates = {
