@@ -4,7 +4,11 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import org.lpw.ranch.user.helper.UserHelper;
 import org.lpw.tephra.cache.Cache;
-import org.lpw.tephra.util.*;
+import org.lpw.tephra.util.Context;
+import org.lpw.tephra.util.Io;
+import org.lpw.tephra.util.Json;
+import org.lpw.tephra.util.Logger;
+import org.lpw.tephra.util.Validator;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -93,22 +97,28 @@ public class MenuHelperImpl implements MenuHelper {
             if (index == 0)
                 continue;
 
-            JSONObject meta = metaHelper.get(domain, service.substring(0, index));
-            String name = service.substring(index);
-            if (!meta.containsKey(name))
-                continue;
-
-            JSONObject m = meta.getJSONObject(name);
             JSONArray items = new JSONArray();
-            operation(m, "toolbar", items);
-            operation(m, "ops", items);
+            operation(metaHelper.get(domain, service.substring(0, index)), service.substring(index), new String[]{"toolbar", "ops"}, items, 0);
             if (!items.isEmpty())
                 menu.put("items", items);
         }
     }
 
-    private void operation(JSONObject meta, String name, JSONArray items) {
-        if (meta.containsKey(name))
-            items.addAll(meta.getJSONArray(name));
+    private void operation(JSONObject meta, String name, String[] ops, JSONArray items, int depth) {
+        if (meta == null || depth > 1 || validator.isEmpty(name) || !meta.containsKey(name))
+            return;
+
+        JSONObject m = meta.getJSONObject(name);
+        for (String op : ops) {
+            if (!m.containsKey(op))
+                continue;
+
+            JSONArray is = m.getJSONArray(op);
+            items.addAll(is);
+            for (int i = 0, size = is.size(); i < size; i++) {
+                JSONObject obj = is.getJSONObject(i);
+                operation(meta, obj.getString(obj.containsKey("service") ? "service" : "type"), ops, items, depth + 1);
+            }
+        }
     }
 }

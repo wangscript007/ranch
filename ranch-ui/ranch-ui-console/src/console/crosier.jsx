@@ -28,13 +28,17 @@ class Crosier extends React.Component {
         console.log(grade);
     }
 
+    check = selects => {
+        console.log(selects);
+    }
+
     render = () => {
         let elements = [];
         if (!this.state.grades || this.state.grades.length === 0) return elements;
 
         elements.push(this.grades());
         if (this.state.menu && this.state.menu.length > 0)
-            elements.push(<Tree key="menu" checkable={true} selectable={false} showIcon={true}>{this.nodes(this.state.menu, null)}</Tree>);
+            elements.push(<Tree key="menu" checkable={true} selectable={false} showIcon={true} onCheck={this.check}>{this.nodes(this.state.menu, '')}</Tree>);
 
         return elements;
     }
@@ -45,27 +49,22 @@ class Crosier extends React.Component {
             options.push(<Select.Option key={grade.grade} value={grade.grade}>{grade.name}</Select.Option>);
         }
 
-        return <Select key="grades" defaultValue={this.state.grade || 0} style={{ width: '100%' }} onChange={this.grade}>{options}</Select>
+        return <Select key="grades" defaultValue={this.state.grade || 0} style={{ width: '100%' }} onChange={this.grade}>{options}</Select>;
     }
 
     nodes = (menus, parentKey) => {
         let nodes = [];
         if (!menus || menus.length === 0) return nodes;
 
-        let label = parentKey ? (parentKey + '-') : '';
         let keys = {};
         for (let menu of menus) {
-            let l = label + menu.label;
-            let key = l;
-            if (menu.service) {
-                key = menu.service;
-                if (menu.parameter)
-                    key += ":" + JSON.stringify(menu.parameter);
-            }
+            let key = parentKey + (menu.service || menu.type || menu.label);
+            if (menu.parameter)
+                key += JSON.stringify(menu.parameter);
             if (key in keys) continue;
 
             keys[key] = true;
-            nodes.push(<Tree.TreeNode icon={<Icon type={menu.icon || 'blank'} />} title={menu.label} key={key}>{this.nodes(menu.items, l)}</Tree.TreeNode>);
+            nodes.push(<Tree.TreeNode icon={<Icon type={menu.icon || 'blank'} />} title={menu.label} key={key}>{this.nodes(menu.items, key + ';')}</Tree.TreeNode>);
         }
 
         return nodes;

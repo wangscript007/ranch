@@ -11,6 +11,11 @@
                 "type": "image",
                 "upload": "ranch.classify.image"
             }
+        ],
+        "toolbar": [
+            {
+                "service": "save"
+            }
         ]
     }
 }
