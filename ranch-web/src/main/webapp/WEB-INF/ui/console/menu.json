@@ -104,7 +104,7 @@
                 {
                     "icon": "number",
                     "label": "权限设置",
-                    "service": "/user/crosier"
+                    "service": "/user/crosier/query"
                 },
                 {
                     "icon": "bulb",

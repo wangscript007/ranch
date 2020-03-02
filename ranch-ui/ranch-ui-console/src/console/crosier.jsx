@@ -53,6 +53,7 @@ class Crosier extends React.Component {
         if (!menus || menus.length === 0) return nodes;
 
         let label = parentKey ? (parentKey + '-') : '';
+        let keys = {};
         for (let menu of menus) {
             let l = label + menu.label;
             let key = l;
@@ -61,6 +62,9 @@ class Crosier extends React.Component {
                 if (menu.parameter)
                     key += ":" + JSON.stringify(menu.parameter);
             }
+            if (key in keys) continue;
+
+            keys[key] = true;
             nodes.push(<Tree.TreeNode icon={<Icon type={menu.icon || 'blank'} />} title={menu.label} key={key}>{this.nodes(menu.items, l)}</Tree.TreeNode>);
         }
 

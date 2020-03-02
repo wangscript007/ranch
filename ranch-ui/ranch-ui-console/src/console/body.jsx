@@ -18,22 +18,18 @@ class Body {
 
     load = (uri, parameter, data) => {
         if (!uri.startsWith('/')) uri = uri.substring(uri.indexOf('.')).replace(/\./g, '/');
-        if (uri === '/user/crosier') {
-            this.setState(<Crosier />);
-
-            return;
-        }
-
         meta.get(uri).then(mt => {
             if (mt === null) return;
 
-            let m = mt[uri.substring(uri.lastIndexOf('/') + 1)]
+            let m = mt[uri.substring(uri.lastIndexOf('/') + 1)];
             if (!m) return;
 
             if (m.type === 'grid') {
                 this.setState(<Grid props={mt.props} meta={m} uri={uri} parameter={parameter} data={data} body={this} />);
             } else if (m.type === 'form') {
                 this.setState(<Form props={mt.props} meta={m} uri={uri} parameter={parameter} data={data} body={this} />);
+            } else if (m.type === 'crosier') {
+                this.setState(<Crosier />);
             } else if (mt.key === 'setting') {
                 this.setState(<Setting props={mt.props} meta={m} uri={uri} parameter={parameter} data={data} body={this} />);
             }
