@@ -1,5 +1,5 @@
 import React from 'react';
-import { Select, Tree, Icon } from 'antd';
+import { Select, Tree, Icon, Button } from 'antd';
 import { service } from '../http';
 import './crosier.css';
 
@@ -14,7 +14,7 @@ class Crosier extends React.Component {
             this.setState({
                 grades: data,
                 grade: 0
-            });
+            }, () => this.grade(0));
         });
         service('/ui/console/menu', { domain: "console", all: true }).then(data => {
             if (data === null) return;
@@ -24,12 +24,27 @@ class Crosier extends React.Component {
     }
 
     grade = grade => {
-        console.log(typeof grade);
-        console.log(grade);
+        service('/user/crosier/pathes', { grade: grade }).then(data => {
+            if (data === null) return;
+
+            this.setState({
+                grade: grade,
+                pathes: data
+            });
+        });
     }
 
     check = selects => {
-        console.log(selects);
+        this.setState({
+            selects: selects,
+            pathes: selects
+        });
+    }
+
+    save = () => {
+        if (this.state.selects === undefined) return;
+
+        service('/user/crosier/save', { grade: this.state.grade, pathes: this.state.selects.join(',,') });
     }
 
     render = () => {
@@ -38,7 +53,8 @@ class Crosier extends React.Component {
 
         elements.push(this.grades());
         if (this.state.menu && this.state.menu.length > 0)
-            elements.push(<Tree key="menu" checkable={true} selectable={false} showIcon={true} onCheck={this.check}>{this.nodes(this.state.menu, '')}</Tree>);
+            elements.push(<Tree key="menu" checkable={true} selectable={false} showIcon={true} checkedKeys={this.state.pathes} onCheck={this.check}>{this.nodes(this.state.menu, '')}</Tree>);
+        elements.push(<div key="toolbar" className="console-crosier-toolbar"><Button type="primary" onClick={this.save}>保存</Button></div>);
 
         return elements;
     }

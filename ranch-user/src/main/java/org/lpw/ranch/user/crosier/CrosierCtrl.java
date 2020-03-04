@@ -19,8 +19,26 @@ public class CrosierCtrl {
     @Inject
     private CrosierService crosierService;
 
-    @Execute(name = "grades")
+    @Execute(name = "grades", validates = {
+            @Validate(validator = Validators.SIGN)
+    })
     public Object grades() {
         return crosierService.grades();
+    }
+
+    @Execute(name = "pathes", validates = {
+            @Validate(validator = Validators.SIGN)
+    })
+    public Object pathes() {
+        return crosierService.pathes(request.getAsInt("grade"));
+    }
+
+    @Execute(name = "save", validates = {
+            @Validate(validator = Validators.SIGN)
+    })
+    public Object save() {
+        crosierService.save(request.getAsInt("grade"), request.get("pathes"));
+
+        return "";
     }
 }

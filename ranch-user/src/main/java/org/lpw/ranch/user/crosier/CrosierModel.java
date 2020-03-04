@@ -23,6 +23,7 @@ public class CrosierModel extends ModelSupport {
     private int grade; // 等级
     private String uri; // URI
     private String parameter; // 参数
+    private String path; // 路径
 
     @Jsonable
     @Column(name = "c_grade")
@@ -52,5 +53,15 @@ public class CrosierModel extends ModelSupport {
 
     public void setParameter(String parameter) {
         this.parameter = parameter;
+    }
+
+    @Jsonable
+    @Column(name = "c_path")
+    public String getPath() {
+        return path;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
     }
 }
