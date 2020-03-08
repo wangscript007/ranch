@@ -1,0 +1,14 @@
+## 设置不需要校验权限的URI地址。
+## 每行一个配置，格式为：{uri}:{grade}。
+## * uri为URI地址；
+## * grade为最低等级，为空表示未登陆用户。
+/tephra/ctrl/status
+/tephra/ctrl/upload:0
+/tephra/ctrl-http/upload:0
+/user/inviter
+/user/sign-in
+/user/sign-up
+/user/sign
+/user/modify:0
+/user/password:0
+/user/sign-out
