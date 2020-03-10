@@ -143,10 +143,9 @@ public class CrosierServiceImpl implements CrosierService, StorageListener {
 
         for (Map<String, String> param : list) {
             int count = 0;
-            for (String key : param.keySet()) {
+            for (String key : param.keySet())
                 if (parameter.containsKey(key) && parameter.get(key).equals(param.get(key)))
                     count++;
-            }
             if (count == param.size())
                 return true;
         }

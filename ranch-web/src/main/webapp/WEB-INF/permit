@@ -5,6 +5,7 @@
 /tephra/ctrl/status
 /tephra/ctrl/upload:0
 /tephra/ctrl-http/upload:0
+/classify/kvs
 /user/inviter
 /user/sign-in
 /user/sign-up
@@ -12,3 +13,7 @@
 /user/modify:0
 /user/password:0
 /user/sign-out
+/user/crosier/grades:0
+/user/crosier/pathes:0
+/ui/console/menu:0
+/ui/console/meta:0

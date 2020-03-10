@@ -98,7 +98,8 @@
                     "label": "管理员",
                     "service": "/user/query",
                     "parameter": {
-                        "minGrade": 50
+                        "minGrade": 50,
+                        "maxGrade": 98
                     }
                 },
                 {

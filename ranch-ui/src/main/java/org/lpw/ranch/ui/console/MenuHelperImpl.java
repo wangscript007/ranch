@@ -2,9 +2,11 @@ package org.lpw.ranch.ui.console;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import org.lpw.ranch.user.crosier.CrosierService;
 import org.lpw.ranch.user.helper.UserHelper;
 import org.lpw.tephra.cache.Cache;
 import org.lpw.tephra.util.Context;
+import org.lpw.tephra.util.Converter;
 import org.lpw.tephra.util.Io;
 import org.lpw.tephra.util.Json;
 import org.lpw.tephra.util.Logger;
@@ -13,6 +15,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -29,7 +32,11 @@ public class MenuHelperImpl implements MenuHelper {
     @Inject
     private Validator validator;
     @Inject
+    private Converter converter;
+    @Inject
     private Logger logger;
+    @Inject
+    private CrosierService crosierService;
     @Inject
     private UserHelper userHelper;
     @Inject
@@ -55,12 +62,8 @@ public class MenuHelperImpl implements MenuHelper {
 
         return cache.computeIfAbsent(ConsoleModel.NAME + ".menu:" + domain + ":" + userHelper.grade(), key -> {
             JSONObject menu = menu(domain);
-            if (!menu.containsKey("menus"))
-                return new JSONArray();
 
-            JSONArray menus = json.toArray(menu.getJSONArray("menus").toJSONString());
-
-            return menus;
+            return menu.containsKey("menus") ? permit(json.toArray(menu.getJSONArray("menus").toJSONString())) : new JSONArray();
         }, false);
     }
 
@@ -120,5 +123,29 @@ public class MenuHelperImpl implements MenuHelper {
                 operation(meta, obj.getString(obj.containsKey("service") ? "service" : "type"), ops, items, depth + 1);
             }
         }
+    }
+
+    private JSONArray permit(JSONArray menus) {
+        JSONArray array = new JSONArray();
+        for (int i = 0, size = menus.size(); i < size; i++) {
+            JSONObject object = menus.getJSONObject(i);
+            if (object.containsKey("items")) {
+                JSONArray items = permit(object.getJSONArray("items"));
+                if (!items.isEmpty()) {
+                    object.put("items", items);
+                    array.add(object);
+                }
+
+                continue;
+            }
+
+            Map<String, String> parameter = new HashMap<>();
+            if (object.containsKey("parameter"))
+                object.getJSONObject("parameter").forEach((key, value) -> parameter.put(key, converter.toString(value)));
+            if (crosierService.permit(object.getString("service"), parameter))
+                array.add(object);
+        }
+
+        return array;
     }
 }
