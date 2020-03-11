@@ -129,21 +129,13 @@ public class MenuHelperImpl implements MenuHelper {
         JSONArray array = new JSONArray();
         for (int i = 0, size = menus.size(); i < size; i++) {
             JSONObject object = menus.getJSONObject(i);
-            if (object.containsKey("items")) {
-                JSONArray items = permit(object.getJSONArray("items"));
-                if (!items.isEmpty()) {
-                    object.put("items", items);
-                    array.add(object);
-                }
-
+            Map<String, String> parameter = object.containsKey("parameter") ? json.toMap(object.getJSONObject("parameter")) : new HashMap<>();
+            if (!crosierService.permit(object.getString("service"), parameter))
                 continue;
-            }
 
-            Map<String, String> parameter = new HashMap<>();
-            if (object.containsKey("parameter"))
-                object.getJSONObject("parameter").forEach((key, value) -> parameter.put(key, converter.toString(value)));
-            if (crosierService.permit(object.getString("service"), parameter))
-                array.add(object);
+            if (object.containsKey("items"))
+                object.put("items", permit(object.getJSONArray("items")));
+            array.add(object);
         }
 
         return array;

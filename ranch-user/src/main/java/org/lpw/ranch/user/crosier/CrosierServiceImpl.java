@@ -20,10 +20,10 @@ import org.springframework.stereotype.Service;
 import javax.inject.Inject;
 import java.io.BufferedReader;
 import java.io.FileReader;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -55,7 +55,7 @@ public class CrosierServiceImpl implements CrosierService, StorageListener {
     private String permit;
     private int[] grades = {0, 90};
     private Map<String, Integer> permits = new HashMap<>();
-    private Map<Integer, Map<String, List<Map<String, String>>>> map = new ConcurrentHashMap<>();
+    private Map<Integer, Map<String, Set<Map<String, String>>>> map = new ConcurrentHashMap<>();
 
     @Override
     public JSONArray grades() {
@@ -133,15 +133,15 @@ public class CrosierServiceImpl implements CrosierService, StorageListener {
         if (!map.containsKey(user.getGrade()))
             return false;
 
-        Map<String, List<Map<String, String>>> map = this.map.get(user.getGrade());
+        Map<String, Set<Map<String, String>>> map = this.map.get(user.getGrade());
         if (!map.containsKey(uri))
             return false;
 
-        List<Map<String, String>> list = map.get(uri);
-        if (list.isEmpty())
+        Set<Map<String, String>> set = map.get(uri);
+        if (set.isEmpty())
             return true;
 
-        for (Map<String, String> param : list) {
+        for (Map<String, String> param : set) {
             int count = 0;
             for (String key : param.keySet())
                 if (parameter.containsKey(key) && parameter.get(key).equals(param.get(key)))
@@ -154,17 +154,21 @@ public class CrosierServiceImpl implements CrosierService, StorageListener {
     }
 
     private void load(int grade) {
-        Map<String, List<Map<String, String>>> map = new HashMap<>();
+        Map<String, Set<Map<String, String>>> map = new HashMap<>();
         crosierDao.query(grade).getList().forEach(crosier -> {
-            List<Map<String, String>> list = map.computeIfAbsent(crosier.getUri(), key -> new ArrayList<>());
-            if (!validator.isEmpty(crosier.getParameter())) {
-                JSONObject parameter = json.toObject(crosier.getParameter());
-                if (parameter != null)
-                    list.add(json.toMap(parameter));
+            for (String path : converter.toArray(crosier.getPath(), ";")) {
+                String[] uriParameter = uriParameter(path);
+                Set<Map<String, String>> set = map.computeIfAbsent(uriParameter[0], key -> new HashSet<>());
+                if (!validator.isEmpty(uriParameter[1])) {
+                    set.add(json.toMap(json.toObject(uriParameter[1])));
+                }
+                map.put(uriParameter[0], set);
             }
-            map.put(crosier.getUri(), list);
         });
         this.map.put(grade, map);
+        System.out.println("#####################################################");
+        System.out.println(this.map);
+        System.out.println("#####################################################");
     }
 
     @Override
