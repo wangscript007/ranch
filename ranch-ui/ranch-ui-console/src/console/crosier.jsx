@@ -24,27 +24,47 @@ class Crosier extends React.Component {
     }
 
     grade = grade => {
+        this.setState({ show: false });
         service('/user/crosier/pathes', { grade: grade }).then(data => {
             if (data === null) return;
 
             this.setState({
+                show: true,
                 grade: grade,
                 pathes: data
             });
         });
     }
 
-    check = selects => {
+    check = e => {
         this.setState({
-            selects: selects,
-            pathes: selects
+            pathes: e.checked
         });
     }
 
     save = () => {
-        if (this.state.selects === undefined) return;
+        this.setState({ show: false }, () => service('/user/crosier/save', { grade: this.state.grade, pathes: this.state.pathes.join(',,') }).then(data => this.setState({ show: true })));
+    }
 
-        service('/user/crosier/save', { grade: this.state.grade, pathes: this.state.selects.join(',,') });
+    expands = () => {
+        let map = {};
+        for (let path of this.state.pathes) {
+            while (true) {
+                map[path] = true;
+                let index = path.lastIndexOf(';');
+                if (index === -1)
+                    break;
+
+                path = path.substring(0, index);
+            }
+        }
+
+        let expands = [];
+        for (let key in map) {
+            expands.push(key);
+        }
+
+        return expands;
     }
 
     render = () => {
@@ -52,8 +72,8 @@ class Crosier extends React.Component {
         if (!this.state.grades || this.state.grades.length === 0) return elements;
 
         elements.push(this.grades());
-        if (this.state.menu && this.state.menu.length > 0)
-            elements.push(<Tree key="menu" checkable={true} selectable={false} showIcon={true} checkedKeys={this.state.pathes} onCheck={this.check}>{this.nodes(this.state.menu, '')}</Tree>);
+        if (this.state.show && this.state.menu && this.state.menu.length > 0)
+            elements.push(<Tree key="menu" checkable={true} selectable={false} showIcon={true} checkStrictly={true} defaultExpandedKeys={this.expands()} defaultCheckedKeys={this.state.pathes} onCheck={this.check}>{this.nodes(this.state.menu, '')}</Tree>);
         elements.push(<div key="toolbar" className="console-crosier-toolbar"><Button type="primary" onClick={this.save}>保存</Button></div>);
 
         return elements;

@@ -1,118 +1,114 @@
-{
-    "sign-up": false,
-    "grade": 90,
-    "menus": [
-        {
-            "label": "文档",
-            "items": [
-                {
-                    "label": "文章资讯",
-                    "service": "ranch.doc.lite-query",
-                    "parameter": {
-                        "key": "setting.doc"
-                    }
-                },
-                {
-                    "label": "关于我们",
-                    "service": "ranch.classify.find-editor",
-                    "parameter": {
-                        "code": "setting.doc",
-                        "key": "about-us"
-                    }
-                },
-                {
-                    "icon": "contacts",
-                    "label": "联系我们",
-                    "service": "ranch.classify.find-editor",
-                    "parameter": {
-                        "code": "setting.doc",
-                        "key": "contact-us"
-                    }
-                },
-                {
-                    "icon": "apartment",
-                    "label": "分类",
-                    "service": "/category/query",
-                    "parameter": {
-                        "key": "category"
-                    }
+[
+    {
+        "label": "文档",
+        "items": [
+            {
+                "label": "文章资讯",
+                "service": "ranch.doc.lite-query",
+                "parameter": {
+                    "key": "setting.doc"
                 }
-            ]
-        },
-        {
-            "icon": "global",
-            "label": "配置",
-            "items": [
-                {
-                    "icon": "notification",
-                    "label": "推送",
-                    "service": "ranch.push.query"
-                },
-                {
-                    "icon": "apple-o",
-                    "label": "iOS推送",
-                    "service": "ranch.push.ios.query"
-                },
-                {
-                    "icon": "aliyun",
-                    "label": "阿里云推送",
-                    "service": "ranch.push.aliyun.query"
+            },
+            {
+                "label": "关于我们",
+                "service": "ranch.classify.find-editor",
+                "parameter": {
+                    "code": "setting.doc",
+                    "key": "about-us"
                 }
-            ]
-        },
-        {
-            "icon": "bank",
-            "label": "交易",
-            "items": [
-                {
-                    "icon": "alipay",
-                    "label": "支付宝",
-                    "service": "/alipay/query"
-                },
-                {
-                    "icon": "wechat",
-                    "label": "微信",
-                    "service": "/weixin/query"
+            },
+            {
+                "icon": "contacts",
+                "label": "联系我们",
+                "service": "ranch.classify.find-editor",
+                "parameter": {
+                    "code": "setting.doc",
+                    "key": "contact-us"
                 }
-            ]
-        },
-        {
-            "icon": "setting",
-            "label": "系统",
-            "items": [
-                {
-                    "icon": "profile",
-                    "label": "全局设置",
-                    "service": "/setting/global"
-                },
-                {
-                    "icon": "user",
-                    "label": "普通用户",
-                    "service": "/user/query",
-                    "parameter": {
-                        "maxGrade": 49
-                    }
-                },
-                {
-                    "icon": "audit",
-                    "label": "管理员",
-                    "service": "/user/query",
-                    "parameter": {
-                        "minGrade": 50,
-                        "maxGrade": 98
-                    }
-                },
-                {
-                    "icon": "number",
-                    "label": "权限设置",
-                    "service": "/user/crosier/query"
-                },
-                {
-                    "icon": "bulb",
-                    "label": "在线用户",
-                    "service": "/user/online/query"
+            },
+            {
+                "icon": "apartment",
+                "label": "分类",
+                "service": "/category/query",
+                "parameter": {
+                    "key": "category"
                 }
-            ]
-        }
-    ]
-}
+            }
+        ]
+    },
+    {
+        "icon": "global",
+        "label": "配置",
+        "items": [
+            {
+                "icon": "notification",
+                "label": "推送",
+                "service": "ranch.push.query"
+            },
+            {
+                "icon": "apple-o",
+                "label": "iOS推送",
+                "service": "ranch.push.ios.query"
+            },
+            {
+                "icon": "aliyun",
+                "label": "阿里云推送",
+                "service": "ranch.push.aliyun.query"
+            }
+        ]
+    },
+    {
+        "icon": "bank",
+        "label": "交易",
+        "items": [
+            {
+                "icon": "alipay",
+                "label": "支付宝",
+                "service": "/alipay/query"
+            },
+            {
+                "icon": "wechat",
+                "label": "微信",
+                "service": "/weixin/query"
+            }
+        ]
+    },
+    {
+        "icon": "setting",
+        "label": "系统",
+        "items": [
+            {
+                "icon": "profile",
+                "label": "全局设置",
+                "service": "/setting/global"
+            },
+            {
+                "icon": "user",
+                "label": "普通用户",
+                "service": "/user/query",
+                "parameter": {
+                    "maxGrade": 49
+                }
+            },
+            {
+                "icon": "audit",
+                "label": "管理员",
+                "service": "/user/query",
+                "parameter": {
+                    "minGrade": 50,
+                    "maxGrade": 98
+                }
+            },
+            {
+                "icon": "number",
+                "label": "权限设置",
+                "service": "/user/crosier/query"
+            },
+            {
+                "icon": "bulb",
+                "label": "在线用户",
+                "service": "/user/online/query"
+            }
+        ]
+    }
+]

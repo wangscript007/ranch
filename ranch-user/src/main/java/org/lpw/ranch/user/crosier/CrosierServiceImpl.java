@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import org.lpw.ranch.user.UserModel;
 import org.lpw.ranch.user.UserService;
+import org.lpw.tephra.bean.ContextRefreshedListener;
 import org.lpw.tephra.cache.Cache;
 import org.lpw.tephra.storage.StorageListener;
 import org.lpw.tephra.storage.Storages;
@@ -23,6 +24,7 @@ import java.io.FileReader;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -30,7 +32,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @author lpw
  */
 @Service(CrosierModel.NAME + ".service")
-public class CrosierServiceImpl implements CrosierService, StorageListener {
+public class CrosierServiceImpl implements CrosierService, StorageListener, ContextRefreshedListener {
     @Inject
     private Context context;
     @Inject
@@ -49,6 +51,8 @@ public class CrosierServiceImpl implements CrosierService, StorageListener {
     private Logger logger;
     @Inject
     private UserService userService;
+    @Inject
+    private Optional<Set<CrosierValid>> valids;
     @Inject
     private CrosierDao crosierDao;
     @Value("${" + CrosierModel.NAME + ".permit:/WEB-INF/permit}")
@@ -87,19 +91,11 @@ public class CrosierServiceImpl implements CrosierService, StorageListener {
             return;
 
         for (String path : converter.toArray(pathes, ",,")) {
-            String[] array = converter.toArray(path, ";");
-            String[] uriParameter = uriParameter(array[array.length - 1]);
-            if (!uriParameter[0].startsWith("/")) {
-                String[] parentUriParameter = uriParameter(array[array.length - 2]);
-                uriParameter[0] = parentUriParameter[0].substring(0, parentUriParameter[0].lastIndexOf('/') + 1) + uriParameter[0];
-            }
             CrosierModel crosier = new CrosierModel();
             crosier.setGrade(grade);
-            crosier.setUri(uriParameter[0]);
-            crosier.setParameter(uriParameter[1]);
             crosier.setPath(path);
             crosierDao.save(crosier);
-            load(grade);
+            valid(grade);
         }
     }
 
@@ -113,10 +109,6 @@ public class CrosierServiceImpl implements CrosierService, StorageListener {
 
     @Override
     public boolean permit(String uri, Map<String, String> parameter) {
-        if (map.isEmpty())
-            for (int grade : grades)
-                load(grade);
-
         UserModel user = userService.fromSession();
         if (permits.containsKey(uri)) {
             int grade = permits.get(uri);
@@ -153,24 +145,6 @@ public class CrosierServiceImpl implements CrosierService, StorageListener {
         return false;
     }
 
-    private void load(int grade) {
-        Map<String, Set<Map<String, String>>> map = new HashMap<>();
-        crosierDao.query(grade).getList().forEach(crosier -> {
-            for (String path : converter.toArray(crosier.getPath(), ";")) {
-                String[] uriParameter = uriParameter(path);
-                Set<Map<String, String>> set = map.computeIfAbsent(uriParameter[0], key -> new HashSet<>());
-                if (!validator.isEmpty(uriParameter[1])) {
-                    set.add(json.toMap(json.toObject(uriParameter[1])));
-                }
-                map.put(uriParameter[0], set);
-            }
-        });
-        this.map.put(grade, map);
-        System.out.println("#####################################################");
-        System.out.println(this.map);
-        System.out.println("#####################################################");
-    }
-
     @Override
     public String getStorageType() {
         return Storages.TYPE_DISK;
@@ -203,5 +177,37 @@ public class CrosierServiceImpl implements CrosierService, StorageListener {
         } catch (Throwable throwable) {
             logger.warn(throwable, "读取权限配置[{}:{}]文件失败！", path, absolutePath);
         }
+    }
+
+    @Override
+    public int getContextRefreshedSort() {
+        return 115;
+    }
+
+    @Override
+    public void onContextRefreshed() {
+        for (int grade : grades)
+            valid(grade);
+    }
+
+    private void valid(int grade) {
+        Map<String, Set<Map<String, String>>> map = new HashMap<>();
+        crosierDao.query(grade).getList().forEach(crosier -> {
+            String[] pathes = converter.toArray(crosier.getPath(), ";");
+            String parent = "";
+            for (String path : pathes) {
+                int index = path.indexOf('{');
+                String uri = index == -1 ? path : path.substring(0, index);
+                if (uri.charAt(0) != '/')
+                    uri = parent + uri;
+                if (uri.charAt(0) == '/')
+                    parent = uri.substring(0, uri.lastIndexOf('/') + 1);
+                Set<Map<String, String>> set = map.computeIfAbsent(uri, key -> new HashSet<>());
+                if (index > -1)
+                    set.add(json.toMap(json.toObject(path.substring(index))));
+            }
+        });
+        this.map.put(grade, map);
+        valids.ifPresent(set -> set.forEach(valid -> valid.crosierValid(grade)));
     }
 }

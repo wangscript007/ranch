@@ -33,19 +33,17 @@ public class ConsoleCtrl {
     }
 
     @Execute(name = "menu", validates = {
-            @Validate(validator = Validators.NOT_EMPTY, parameter = "domain", failureCode = 1),
             @Validate(validator = UserHelper.VALIDATOR_SIGN_IN)
     })
     public Object menu() {
-        return menuHelper.get(request.get("domain"),request.getAsBoolean("all"));
+        return menuHelper.get(request.getAsBoolean("all"));
     }
 
     @Execute(name = "meta", validates = {
-            @Validate(validator = Validators.NOT_EMPTY, parameter = "domain", failureCode = 1),
             @Validate(validator = Validators.NOT_EMPTY, parameter = "key", failureCode = 2)
     })
     public Object meta() {
-        return metaHelper.get(request.get("domain"), request.get("key"));
+        return metaHelper.get(request.get("key"));
     }
 
     @Execute(name = "service", validates = {

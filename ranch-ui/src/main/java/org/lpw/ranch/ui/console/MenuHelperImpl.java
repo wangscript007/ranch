@@ -3,6 +3,7 @@ package org.lpw.ranch.ui.console;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import org.lpw.ranch.user.crosier.CrosierService;
+import org.lpw.ranch.user.crosier.CrosierValid;
 import org.lpw.ranch.user.helper.UserHelper;
 import org.lpw.tephra.cache.Cache;
 import org.lpw.tephra.util.Context;
@@ -10,6 +11,7 @@ import org.lpw.tephra.util.Converter;
 import org.lpw.tephra.util.Io;
 import org.lpw.tephra.util.Json;
 import org.lpw.tephra.util.Logger;
+import org.lpw.tephra.util.Numeric;
 import org.lpw.tephra.util.Validator;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -20,7 +22,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Service(ConsoleModel.NAME + ".menu.helper")
-public class MenuHelperImpl implements MenuHelper {
+public class MenuHelperImpl implements MenuHelper, CrosierValid {
     @Inject
     private Context context;
     @Inject
@@ -34,6 +36,8 @@ public class MenuHelperImpl implements MenuHelper {
     @Inject
     private Converter converter;
     @Inject
+    private Numeric numeric;
+    @Inject
     private Logger logger;
     @Inject
     private CrosierService crosierService;
@@ -41,56 +45,36 @@ public class MenuHelperImpl implements MenuHelper {
     private UserHelper userHelper;
     @Inject
     private MetaHelper metaHelper;
-    @Value("${" + ConsoleModel.NAME + ".root:/WEB-INF/ui/}")
-    private String root;
-    private Map<String, JSONObject> map = new ConcurrentHashMap<>();
+    @Value("${" + ConsoleModel.NAME + ".console:/WEB-INF/ui/console/}")
+    private String console;
+    private Map<String, JSONArray> map = new ConcurrentHashMap<>();
 
     @Override
-    public JSONArray get(String domain, boolean all) {
+    public JSONArray get(boolean all) {
         if (all) {
-            return cache.computeIfAbsent(ConsoleModel.NAME + ".menu:" + domain, key -> {
-                JSONObject menu = menu(domain);
-                if (!menu.containsKey("menus"))
-                    return new JSONArray();
-
-                JSONArray menus = json.toArray(menu.getJSONArray("menus").toJSONString());
-                operation(domain, menus);
+            return map.computeIfAbsent("all", key -> {
+                JSONArray menus = get();
+                operation(menus);
 
                 return menus;
-            }, false);
+            });
         }
 
-        return cache.computeIfAbsent(ConsoleModel.NAME + ".menu:" + domain + ":" + userHelper.grade(), key -> {
-            JSONObject menu = menu(domain);
-
-            return menu.containsKey("menus") ? permit(json.toArray(menu.getJSONArray("menus").toJSONString())) : new JSONArray();
-        }, false);
+        return map.computeIfAbsent(numeric.toString(userHelper.grade(), "0"), key -> permit(get()));
     }
 
-    private JSONObject menu(String domain) {
-        return map.computeIfAbsent(domain, key -> {
-            JSONObject object = json.toObject(io.readAsString(context.getAbsolutePath(root + domain + "/menu.json")));
-            if (object == null) {
-                logger.warn(null, "读取[{}]菜单配置失败！", key);
-
-                return new JSONObject();
-            }
-
-            if (logger.isInfoEnable())
-                logger.info("载入菜单配置[{}:{}]。", key, object);
-
-            return object;
-        });
+    private JSONArray get() {
+        return json.toArray(map.get("").toJSONString());
     }
 
-    private void operation(String domain, JSONArray menus) {
+    private void operation(JSONArray menus) {
         if (validator.isEmpty(menus))
             return;
 
         for (int i = 0, size = menus.size(); i < size; i++) {
             JSONObject menu = menus.getJSONObject(i);
             if (menu.containsKey("items")) {
-                operation(domain, menu.getJSONArray("items"));
+                operation(menu.getJSONArray("items"));
 
                 continue;
             }
@@ -101,7 +85,7 @@ public class MenuHelperImpl implements MenuHelper {
                 continue;
 
             JSONArray items = new JSONArray();
-            operation(metaHelper.get(domain, service.substring(0, index)), service.substring(index), new String[]{"toolbar", "ops"}, items, 0);
+            operation(metaHelper.get(service.substring(0, index)), service.substring(index), new String[]{"toolbar", "ops"}, items, 0);
             if (!items.isEmpty())
                 menu.put("items", items);
         }
@@ -130,13 +114,38 @@ public class MenuHelperImpl implements MenuHelper {
         for (int i = 0, size = menus.size(); i < size; i++) {
             JSONObject object = menus.getJSONObject(i);
             Map<String, String> parameter = object.containsKey("parameter") ? json.toMap(object.getJSONObject("parameter")) : new HashMap<>();
-            if (!crosierService.permit(object.getString("service"), parameter))
+            if (object.containsKey("service") && !crosierService.permit(object.getString("service"), parameter))
                 continue;
 
-            if (object.containsKey("items"))
-                object.put("items", permit(object.getJSONArray("items")));
-            array.add(object);
+            if (object.containsKey("items")) {
+                JSONArray items = permit(object.getJSONArray("items"));
+                if (!items.isEmpty()) {
+                    object.put("items", items);
+                    array.add(object);
+                }
+            } else
+                array.add(object);
         }
+
+        return array;
+    }
+
+    @Override
+    public void crosierValid(int grade) {
+        map.computeIfAbsent("", key -> load());
+        map.remove(numeric.toString(grade, "0"));
+    }
+
+    private JSONArray load() {
+        JSONArray array = json.toArray(io.readAsString(context.getAbsolutePath(console + "menu.json")));
+        if (array == null) {
+            logger.warn(null, "读取菜单配置失败！");
+
+            return new JSONArray();
+        }
+
+        if (logger.isInfoEnable())
+            logger.info("载入菜单配置[{}]。", array);
 
         return array;
     }

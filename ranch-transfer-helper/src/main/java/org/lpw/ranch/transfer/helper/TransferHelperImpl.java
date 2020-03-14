@@ -99,7 +99,7 @@ public class TransferHelperImpl implements TransferHelper, SecondsJob, ContextRe
         parameter.put("pageNum", "1");
         sign.put(parameter, null);
         JSONArray array = carousel.service(key + ".query", null, parameter, false, JSONObject.class).getJSONArray("list");
-        if (array.isEmpty()) {
+        if (validator.isEmpty(array)) {
             lockHelper.unlock(lockId);
 
             return;

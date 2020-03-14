@@ -44,14 +44,14 @@ public class MetaHelperImpl implements MetaHelper, ContextRefreshedListener {
     private Logger logger;
     @Inject
     private Set<Model> models;
-    @Value("${" + ConsoleModel.NAME + ".root:/WEB-INF/ui/}")
-    private String root;
+    @Value("${" + ConsoleModel.NAME + ".console:/WEB-INF/ui/console/}")
+    private String console;
     private Map<String, String> map;
 
     @Override
-    public JSONObject get(String domain, String key) {
-        return cache.computeIfAbsent(ConsoleModel.NAME + ".meta:" + domain + ":" + key + ":" + context.getLocale().toString(), k -> {
-            JSONObject meta = json.toObject(map.computeIfAbsent(domain + ":" + key, mk -> domain.equals("console") ? "" : map.getOrDefault("console:" + key, "")));
+    public JSONObject get(String key) {
+        return cache.computeIfAbsent(ConsoleModel.NAME + ".meta:" + key + ":" + context.getLocale().toString(), k -> {
+            JSONObject meta = json.toObject(map.computeIfAbsent(key, mk -> ""));
             if (meta == null)
                 return new JSONObject();
 
@@ -143,24 +143,13 @@ public class MetaHelperImpl implements MetaHelper, ContextRefreshedListener {
                     return;
 
                 io.copy(inputStream, outputStream);
-                put("console:", outputStream.toString());
+                put("", outputStream.toString());
             } catch (Throwable throwable) {
                 logger.warn(throwable, "解析Model[{}]元数据时发生异常！", modelClass);
             }
         });
 
-        File[] files = new File(context.getAbsolutePath(root)).listFiles();
-        if (files != null)
-            for (File file : files)
-                meta(file);
-    }
-
-    private void meta(File file) {
-        File[] files = file.listFiles();
-        if (files != null)
-            for (File f : files)
-                if (f.getName().equals("meta") && f.isDirectory())
-                    meta(file.getName() + ":", f.listFiles());
+        meta("meta:", new File(context.getAbsolutePath(console + "meta")).listFiles());
     }
 
     private void meta(String domain, File[] files) {
