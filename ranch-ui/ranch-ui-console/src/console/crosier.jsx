@@ -74,7 +74,8 @@ class Crosier extends React.Component {
         elements.push(this.grades());
         if (this.state.show && this.state.menu && this.state.menu.length > 0)
             elements.push(<Tree key="menu" checkable={true} selectable={false} showIcon={true} checkStrictly={true} defaultExpandedKeys={this.expands()} defaultCheckedKeys={this.state.pathes} onCheck={this.check}>{this.nodes(this.state.menu, '')}</Tree>);
-        elements.push(<div key="toolbar" className="console-crosier-toolbar"><Button type="primary" onClick={this.save}>保存</Button></div>);
+        if (this.props.meta.toolbar && this.props.meta.toolbar.length > 0)
+            elements.push(<div key="toolbar" className="console-crosier-toolbar"><Button type="primary" onClick={this.save}>保存</Button></div>);
 
         return elements;
     }

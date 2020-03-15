@@ -29,7 +29,7 @@ class Body {
             } else if (m.type === 'form') {
                 this.setState(<Form props={mt.props} meta={m} uri={uri} parameter={parameter} data={data} body={this} />);
             } else if (m.type === 'crosier') {
-                this.setState(<Crosier />);
+                this.setState(<Crosier meta={m} />);
             } else if (mt.key === 'setting') {
                 this.setState(<Setting props={mt.props} meta={m} uri={uri} parameter={parameter} data={data} body={this} />);
             }

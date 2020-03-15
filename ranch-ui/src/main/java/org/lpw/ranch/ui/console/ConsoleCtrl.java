@@ -22,8 +22,10 @@ public class ConsoleCtrl {
     private Request request;
     @Inject
     private ConsoleService consoleService;
-    @Inject private MenuHelper menuHelper;
-    @Inject private MetaHelper metaHelper;
+    @Inject
+    private MenuHelper menuHelper;
+    @Inject
+    private MetaHelper metaHelper;
 
     @Execute(name = "sign-up", validates = {
             @Validate(validator = Validators.NOT_EMPTY, parameter = "domain", failureCode = 1)
@@ -43,7 +45,7 @@ public class ConsoleCtrl {
             @Validate(validator = Validators.NOT_EMPTY, parameter = "key", failureCode = 2)
     })
     public Object meta() {
-        return metaHelper.get(request.get("key"));
+        return metaHelper.get(request.get("key"), false);
     }
 
     @Execute(name = "service", validates = {

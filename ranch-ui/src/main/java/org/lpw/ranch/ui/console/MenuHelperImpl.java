@@ -85,7 +85,7 @@ public class MenuHelperImpl implements MenuHelper, CrosierValid {
                 continue;
 
             JSONArray items = new JSONArray();
-            operation(metaHelper.get(service.substring(0, index)), service.substring(index), new String[]{"toolbar", "ops"}, items, 0);
+            operation(metaHelper.get(service.substring(0, index), true), service.substring(index), new String[]{"toolbar", "ops"}, items, 0);
             if (!items.isEmpty())
                 menu.put("items", items);
         }

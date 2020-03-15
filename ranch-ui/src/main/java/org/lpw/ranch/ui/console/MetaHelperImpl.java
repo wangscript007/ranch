@@ -2,6 +2,9 @@ package org.lpw.ranch.ui.console;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import org.lpw.ranch.user.crosier.CrosierService;
+import org.lpw.ranch.user.crosier.CrosierValid;
+import org.lpw.ranch.user.helper.UserHelper;
 import org.lpw.tephra.bean.ContextRefreshedListener;
 import org.lpw.tephra.cache.Cache;
 import org.lpw.tephra.dao.model.Model;
@@ -19,7 +22,10 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.InputStream;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -27,7 +33,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @author lpw
  */
 @Service(ConsoleModel.NAME + ".meta.helper")
-public class MetaHelperImpl implements MetaHelper, ContextRefreshedListener {
+public class MetaHelperImpl implements MetaHelper, ContextRefreshedListener, CrosierValid {
     @Inject
     private Cache cache;
     @Inject
@@ -43,46 +49,69 @@ public class MetaHelperImpl implements MetaHelper, ContextRefreshedListener {
     @Inject
     private Logger logger;
     @Inject
-    private Set<Model> models;
+    private Optional<Set<Model>> models;
+    @Inject
+    private UserHelper userHelper;
+    @Inject
+    private CrosierService crosierService;
     @Value("${" + ConsoleModel.NAME + ".console:/WEB-INF/ui/console/}")
     private String console;
-    private Map<String, String> map;
+    private Map<String, String> map = new ConcurrentHashMap<>();
+    private Map<Integer, Set<String>> cacheKeys = new ConcurrentHashMap<>();
+    private String[] actions = {"ops", "toolbar"};
 
     @Override
-    public JSONObject get(String key) {
-        return cache.computeIfAbsent(ConsoleModel.NAME + ".meta:" + key + ":" + context.getLocale().toString(), k -> {
-            JSONObject meta = json.toObject(map.computeIfAbsent(key, mk -> ""));
+    public JSONObject get(String key, boolean all) {
+        String cacheKey = ConsoleModel.NAME + ".meta:" + key + ":" + all + ":" + userHelper.grade() + ":" + context.getLocale().toString();
+        if (!all)
+            cacheKeys.computeIfAbsent(userHelper.grade(), k -> new HashSet<>()).add(cacheKey);
+
+        return cache.computeIfAbsent(cacheKey, k -> {
+            JSONObject meta = json.toObject(map.get(key));
             if (meta == null)
                 return new JSONObject();
 
+            String uri = meta.getString("uri");
             String prefix = meta.getString("key");
-            setLabel(new String[]{prefix}, meta, "props", new String[]{"name"});
+            setLabel(all, uri, new String[]{prefix}, meta, "props", new String[]{"name"});
             for (String mk : meta.keySet()) {
                 if (mk.equals("key") || mk.equals("uri") || mk.equals("props"))
                     continue;
 
                 JSONObject object = meta.getJSONObject(mk);
                 if (object.containsKey("props"))
-                    setLabel(new String[]{prefix}, object, "props", new String[]{"name"});
+                    setLabel(all, uri, new String[]{prefix}, object, "props", new String[]{"name"});
                 if (object.containsKey("search"))
-                    setLabel(new String[]{prefix}, object, "search", new String[]{"name"});
-                if (object.containsKey("ops"))
-                    setLabel(new String[]{prefix, ConsoleModel.NAME + ".op"}, object, "ops", new String[]{"label", "service", "type"});
-                if (object.containsKey("toolbar"))
-                    setLabel(new String[]{prefix, ConsoleModel.NAME + ".op"}, object, "toolbar", new String[]{"label", "service", "type"});
+                    setLabel(all, uri, new String[]{prefix}, object, "search", new String[]{"name"});
+                for (String action : actions)
+                    if (object.containsKey(action))
+                        setLabel(all, uri, new String[]{prefix, ConsoleModel.NAME + ".op"}, object, action, new String[]{"label", "service", "type"});
             }
 
             return meta;
         }, false);
     }
 
-    private void setLabel(String[] prefix, JSONObject object, String key, String[] k) {
+    private void setLabel(boolean all, String uri, String[] prefix, JSONObject object, String key, String[] k) {
         if (!object.containsKey(key))
             return;
 
         JSONArray array = object.getJSONArray(key);
-        for (int i = 0, size = array.size(); i < size; i++)
-            setLabel(prefix, array.getJSONObject(i), k);
+        for (int i = array.size() - 1; i >= 0; i--) {
+            JSONObject obj = array.getJSONObject(i);
+            String service = obj.getString(obj.containsKey("service") ? "service" : "type");
+            if (!all && !validator.isEmpty(service)) {
+                if (service.charAt(0) != '/')
+                    service = uri + service;
+                if (!crosierService.permit(service, obj.containsKey("parameter") ? json.toMap(obj.getJSONObject("parameter")) : new HashMap<>())) {
+                    array.remove(i);
+
+                    continue;
+                }
+            }
+
+            setLabel(prefix, obj, k);
+        }
     }
 
     private void setLabel(String[] prefix, JSONObject object, String[] key) {
@@ -134,8 +163,7 @@ public class MetaHelperImpl implements MetaHelper, ContextRefreshedListener {
 
     @Override
     public void onContextRefreshed() {
-        map = new ConcurrentHashMap<>();
-        models.forEach(model -> {
+        models.ifPresent(set -> set.forEach(model -> {
             Class<? extends Model> modelClass = model.getClass();
             try (InputStream inputStream = modelClass.getResourceAsStream("meta.json");
                  ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
@@ -143,22 +171,22 @@ public class MetaHelperImpl implements MetaHelper, ContextRefreshedListener {
                     return;
 
                 io.copy(inputStream, outputStream);
-                put("", outputStream.toString());
+                put(outputStream.toString());
             } catch (Throwable throwable) {
                 logger.warn(throwable, "解析Model[{}]元数据时发生异常！", modelClass);
             }
-        });
+        }));
 
-        meta("meta:", new File(context.getAbsolutePath(console + "meta")).listFiles());
+        meta(new File(context.getAbsolutePath(console + "meta")).listFiles());
     }
 
-    private void meta(String domain, File[] files) {
+    private void meta(File[] files) {
         if (files == null)
             return;
 
         for (File file : files) {
             if (file.isDirectory()) {
-                meta(domain, file.listFiles());
+                meta(file.listFiles());
 
                 continue;
             }
@@ -166,11 +194,11 @@ public class MetaHelperImpl implements MetaHelper, ContextRefreshedListener {
             if (!file.isFile() || !file.getName().endsWith(".json"))
                 continue;
 
-            put(domain, io.readAsString(file.getAbsolutePath()));
+            put(io.readAsString(file.getAbsolutePath()));
         }
     }
 
-    private void put(String domain, String string) {
+    private void put(String string) {
         JSONObject object = json.toObject(string);
         if (object == null)
             return;
@@ -187,8 +215,14 @@ public class MetaHelperImpl implements MetaHelper, ContextRefreshedListener {
 
         string = object.toJSONString();
         if (object.containsKey("key"))
-            map.put(domain + object.getString("key"), string);
+            map.put(object.getString("key"), string);
         if (object.containsKey("uri"))
-            map.put(domain + object.getString("uri"), string);
+            map.put(object.getString("uri"), string);
+    }
+
+    @Override
+    public void crosierValid(int grade) {
+        if (cacheKeys.containsKey(grade))
+            cacheKeys.remove(grade).forEach(cache::remove);
     }
 }

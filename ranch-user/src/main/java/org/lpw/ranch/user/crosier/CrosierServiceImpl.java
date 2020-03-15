@@ -91,20 +91,28 @@ public class CrosierServiceImpl implements CrosierService, StorageListener, Cont
             return;
 
         for (String path : converter.toArray(pathes, ",,")) {
+            String[] ps = converter.toArray(path, ";");
+            String up = ps[ps.length - 1];
+            int index = up.indexOf('{');
+            String uri = index == -1 ? up : up.substring(0, index);
+            if (uri.charAt(0) != '/' && ps.length > 1) {
+                String parent = ps[ps.length - 2];
+                int i = parent.indexOf('{');
+                if (i > -1)
+                    parent = parent.substring(0, i);
+                i = parent.lastIndexOf('/');
+                if (i > 0)
+                    uri = parent.substring(0, i + 1) + uri;
+            }
+
             CrosierModel crosier = new CrosierModel();
             crosier.setGrade(grade);
+            crosier.setUri(uri);
+            crosier.setParameter(index == -1 ? null : up.substring(index));
             crosier.setPath(path);
             crosierDao.save(crosier);
             valid(grade);
         }
-    }
-
-    private String[] uriParameter(String path) {
-        int index = path.indexOf('{');
-        if (index == -1)
-            return new String[]{path, ""};
-
-        return new String[]{path.substring(0, index), path.substring(index)};
     }
 
     @Override
@@ -193,19 +201,9 @@ public class CrosierServiceImpl implements CrosierService, StorageListener, Cont
     private void valid(int grade) {
         Map<String, Set<Map<String, String>>> map = new HashMap<>();
         crosierDao.query(grade).getList().forEach(crosier -> {
-            String[] pathes = converter.toArray(crosier.getPath(), ";");
-            String parent = "";
-            for (String path : pathes) {
-                int index = path.indexOf('{');
-                String uri = index == -1 ? path : path.substring(0, index);
-                if (uri.charAt(0) != '/')
-                    uri = parent + uri;
-                if (uri.charAt(0) == '/')
-                    parent = uri.substring(0, uri.lastIndexOf('/') + 1);
-                Set<Map<String, String>> set = map.computeIfAbsent(uri, key -> new HashSet<>());
-                if (index > -1)
-                    set.add(json.toMap(json.toObject(path.substring(index))));
-            }
+            Set<Map<String, String>> set = map.computeIfAbsent(crosier.getUri(), key -> new HashSet<>());
+            if (!validator.isEmpty(crosier.getParameter()))
+                set.add(json.toMap(json.toObject(crosier.getParameter())));
         });
         this.map.put(grade, map);
         valids.ifPresent(set -> set.forEach(valid -> valid.crosierValid(grade)));
